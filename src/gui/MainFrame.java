@@ -34,9 +34,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	//Panels
 	private BuildingView buildingViewPanel;
+	private CityView cityViewPanel;
+
 	private InfoList buildingList;
 	private InfoList personList;
-	private CityView cityViewPanel;
+	
+	//TODO Create infoDisplayPanel (all button lists access this)
 	
 	//TODO Test
 	//JButton b = new JButton("test1");
@@ -44,9 +47,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	
     //TODO Add timer here
     
+	
+	//NOTICE: buttons won't add to buildingList when created in constructor
 	public MainFrame(){
 		
-		//TODO FullScreen?
+		//TODO FullScreen frame?
 		//Toolkit tk = Toolkit.getDefaultToolkit();  
 		//WINDOWX = ((int) tk.getScreenSize().getWidth());  
 		//WINDOWY = ((int) tk.getScreenSize().getHeight()); 
@@ -73,7 +78,7 @@ public class MainFrame extends JFrame implements ActionListener {
         cityViewPanel = new CityView(cityDim.width, cityDim.height);
         cityViewSlot.add(cityViewPanel);
         
-        /*/TODO Test
+        /*/TODO Test buttons
         b.addActionListener(this);
         b2.addActionListener(this);
         cityViewSlot.add(b);
@@ -87,7 +92,7 @@ public class MainFrame extends JFrame implements ActionListener {
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
         //TODO Add infoPanel to infoPanelSlot
         
-        //List of Buildings //TODO rename list to InfoList
+        //List of Buildings/People buttons
         Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
         InfoListSlot.setPreferredSize(listDim);
         InfoListSlot.setMaximumSize(listDim);
@@ -118,20 +123,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		add(cityViewSlot, BorderLayout.WEST);
 		add(infoHolder, BorderLayout.SOUTH);	
 
-		//test
+		//cardLayout test
 		/*JPanel blank2 = new JPanel();
 		blank2.setBackground(Color.red);
 		buildingViewPanel.addCard(blank2, "blank2");*/
 	}
 	
-	//NOTICE: buttons won't add to buildingList when created in constructor	<--------------------------------
 	//TODO add animation panels here
 	public void addAnimationPanel(JPanel panel, String name){
 		buildingViewPanel.addCard(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		/*/TODO Test
+		/*/TODO Test buttons
 		if(e.getSource() == b2){
 			buildingViewPanel.showCard("blank2");
 			buildingList.addToList("blank2");

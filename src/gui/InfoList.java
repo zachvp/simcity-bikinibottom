@@ -19,13 +19,13 @@ import javax.swing.JScrollPane;
  * @author Victoria Dea
  *
  */
-public class BuildingList extends JPanel implements ActionListener {
+public class InfoList extends JPanel implements ActionListener { //TODO rename to InfoList
 
 	private JScrollPane pane;
 	private JPanel view = new JPanel();
 	private List<JButton> list = new ArrayList<JButton>();
 
-	public BuildingList(int w, int h){
+	public InfoList(int w, int h){
 		Dimension d = new Dimension(w-40, h-40);
 		view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
 		pane = new JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -37,7 +37,7 @@ public class BuildingList extends JPanel implements ActionListener {
 	 * Adds a new building button to the list of buildings.
 	 * @param name Name on the button
 	 */
-	public void addBuilding(String name) {
+	public void addToList(String name) {
 		//TODO modify to add more building details to button (picture, etc.)
 		if (name != null) {
 			JButton button = new JButton(name);

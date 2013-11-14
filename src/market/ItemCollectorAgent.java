@@ -15,6 +15,13 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 	private String name;
 	private Cashier cashier;
 	private Map<String,Item> InventoryList = new HashMap<String,Item>();
+	{		//Initially The market has 100 inventory on each Item
+		InventoryList.put("CheapCar",		 new Item("CheapCar", 100));
+		InventoryList.put("ExpensiveCar", 	 new Item("ExpensiveCar", 100));
+		InventoryList.put("Pizza",			 new Item("Pizza", 100));
+		InventoryList.put("Sandwich",		 new Item("Sandwich", 100));
+		InventoryList.put("Chicken",		 new Item("Chicken", 100));
+	}
 	private List<Order> Orders = new ArrayList<Order>();
 	
 	private class Order {
@@ -22,15 +29,12 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	//Messages	
-	public String getMaitreDName(){
-		return name;
-	}
-
-	public String getName(){
-		return name;
+	ItemCollectorAgent(String na){
+		name = na;
 	}
 	
+	
+	//Messages	
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
 		Order o = new Order();
 		o.c = c;
@@ -63,16 +67,12 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 			Item CurrentItem = InventoryList.get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
 			if (CurrentItem.amount >= o.ItemList.get(i).amount){	//enough inventories to satisfy
 				CurrentItem.ItemConsumed(o.ItemList.get(i).amount);
-				Item tempitem = new Item();
-				tempitem.amount = o.ItemList.get(i).amount;
-				tempitem.name = o.ItemList.get(i).name;
+				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
 			else		//not enough inventories to satisfy the order
 			{			//Add into it anyway (Try to satisfy the order)
-				Item tempitem = new Item();
-				tempitem.amount = CurrentItem.amount;
-				tempitem.name = o.ItemList.get(i).name;
+				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem.amount);
 				CurrentItem.ItemConsumed(CurrentItem.amount);
 				DeliverList.add(tempitem);
 			}
@@ -81,4 +81,16 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 		return;
 	}
 
+	//Utilities
+	public String getMaitreDName(){
+		return name;
+	}
+
+	public String getName(){
+		return name;
+	}
+	
+	public void setCashier(Cashier ca){
+		cashier = ca;
+	}
 }

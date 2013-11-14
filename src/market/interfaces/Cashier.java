@@ -6,9 +6,7 @@ import market.Item;
 
 public interface Cashier {
 
-	public abstract String getMaitreDName();
 
-	public abstract String getName();
 
 	// Messages
 	public abstract void msgPhoneOrder(List<Item>ShoppingList, Customer C, CityBuilding building);
@@ -19,4 +17,12 @@ public interface Cashier {
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
 
+	//Utilities
+	public abstract void setDGList(List<DeliveryGuy> list);
+	public abstract void addDGList(DeliveryGuy DG);
+	public abstract void setICList(List<ItemCollector> list);
+	public abstract void addDGList(ItemCollector IC);
+	public abstract String getMaitreDName();
+	public abstract String getName();
+	
 }

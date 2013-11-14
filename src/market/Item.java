@@ -6,6 +6,12 @@ public class Item{
 	public String name;
 	public int amount;
 	
+	Item (String NA, int am){
+		name = NA;
+		amount = am;
+	}
+	
+
 	public void ItemConsumed(int i){
 		amount = amount - i;
 	}

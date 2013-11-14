@@ -15,11 +15,12 @@ import agent.Agent;
 public class CashierAgent extends Agent implements Cashier{
 
 //public EventLog log = new EventLog();
+	
 	private String name;
 	double cash;
 	private List<MyCustomer> MyCustomerList = new ArrayList<MyCustomer>();
-	private List<ItemCollector> ICList;
-	private List<DeliveryGuy> DGList;
+	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
+	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
 	{
 		double CheapCar = 100;
@@ -45,18 +46,14 @@ public class CashierAgent extends Agent implements Cashier{
 		ItemCollector itemCollector;
 		DeliveryGuy deliveryGuy;
 		Customerstate state = Customerstate.Arrived;
-
+	}
+	
+	CashierAgent(String NA, double money){
+		name = NA;
+		cash = money;
 	}
 	
 	//Cashier Message 
-	public String getMaitreDName(){
-		return name;
-	}
-
-	public String getName(){
-		return name;
-	}
-	
 	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CityBuilding building)	
 	{				//The Customer will be the phone calling guy
 		MyCustomer MC = new MyCustomer();
@@ -146,8 +143,8 @@ public class CashierAgent extends Agent implements Cashier{
 	
 	//Actions
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
-		IC.msgGetTheseItem(MC.OrderList, MC.c);
 		MC.itemCollector = IC;
+		MC.itemCollector.msgGetTheseItem(MC.OrderList, MC.c);
 		MC.state = Customerstate.OrderPlaced;
 	}
 
@@ -167,11 +164,31 @@ public class CashierAgent extends Agent implements Cashier{
 		else
 			for (int i=0;i<DGList.size();i++){
 				if(DGList.get(i).msgAreYouAvailable()){
-					DGList.get(i).msgDeliverIt(MC.DeliveryList, MC.Building);
+					MC.deliveryGuy = DGList.get(i);
+					MC.deliveryGuy.msgDeliverIt(MC.DeliveryList, MC.c, MC.Building);
 				}
 			}
 	}
 
+	//Utilities
+	public void setDGList(List<DeliveryGuy> list){
+		DGList = list;
+	}
+	public void addDGList(DeliveryGuy DG){
+		DGList.add(DG);
+	}
+	public void setICList(List<ItemCollector> list){
+		ICList = list;
+	}
+	public void addDGList(ItemCollector IC){
+		ICList.add(IC);
+	}
+	public String getMaitreDName(){
+		return name;
+	}
+	public String getName(){
+		return name;
+	}
 	
 	
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -11,8 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-
+import javax.swing.JTabbedPane;
 
 
 /** 
@@ -26,17 +26,21 @@ public class MainFrame extends JFrame implements ActionListener {
 	private int WINDOWX = 1500;
 	private int WINDOWY = 800;
 	
+	//Panel Slots
 	private JPanel cityViewSlot = new JPanel();
 	private JPanel buildingViewSlot = new JPanel();
 	private JPanel infoPanelSlot = new JPanel();
-	private JPanel buildingListSlot	= new JPanel();
+	private JPanel InfoListSlot	= new JPanel();
 	
+	//Panels
 	private BuildingView buildingViewPanel;
-	private BuildingList buildingList;
+	private InfoList buildingList;
+	private InfoList personList;
+	private CityView cityViewPanel;
 	
 	//TODO Test
-	//JButton b = new JButton("grey");
-    //JButton b2 = new JButton("red");
+	//JButton b = new JButton("test1");
+    //JButton b2 = new JButton("test2");
 	
     //TODO Add timer here
     
@@ -66,7 +70,8 @@ public class MainFrame extends JFrame implements ActionListener {
         cityViewSlot.setMaximumSize(cityDim);
         cityViewSlot.setMinimumSize(cityDim);
         cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
-        //TODO Add cityViewPanel to cityViewSlot
+        cityViewPanel = new CityView(cityDim.width, cityDim.height);
+        cityViewSlot.add(cityViewPanel);
         
         /*/TODO Test
         b.addActionListener(this);
@@ -82,14 +87,21 @@ public class MainFrame extends JFrame implements ActionListener {
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
         //TODO Add infoPanel to infoPanelSlot
         
-        //List of Buildings
+        //List of Buildings //TODO rename list to InfoList
         Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
-        buildingListSlot.setPreferredSize(listDim);
-        buildingListSlot.setMaximumSize(listDim);
-        buildingListSlot.setMinimumSize(listDim);
-        buildingListSlot.setBorder(BorderFactory.createTitledBorder("Building List"));
-        buildingList = new BuildingList(listDim.width, listDim.height);
-        buildingListSlot.add(buildingList);
+        InfoListSlot.setPreferredSize(listDim);
+        InfoListSlot.setMaximumSize(listDim);
+        InfoListSlot.setMinimumSize(listDim);
+        //buildingListSlot.setBorder(BorderFactory.createTitledBorder("Building List"));
+        //buildingListSlot.setLayout(new CardLayout());
+        JTabbedPane tabbedPane = new JTabbedPane();
+        buildingList = new InfoList(listDim.width, listDim.height);
+        personList = new InfoList(listDim.width, listDim.height);
+        tabbedPane.addTab("Buildings", buildingList);
+        tabbedPane.addTab("People", personList);
+        InfoListSlot.add(tabbedPane);
+        //buildingListSlot.add(buildingList);
+                
         buildingViewPanel.setBuildingList(buildingList);
         
         //JPanel to hold infoPanelSlot and buildingListSlot
@@ -100,7 +112,7 @@ public class MainFrame extends JFrame implements ActionListener {
         infoHolder.setMinimumSize(infoHolderDim);
         infoHolder.setLayout(new BorderLayout(5,10));
         infoHolder.add(infoPanelSlot, BorderLayout.WEST);
-        infoHolder.add(buildingListSlot, BorderLayout.EAST);
+        infoHolder.add(InfoListSlot, BorderLayout.EAST);
         
 		add(buildingViewSlot, BorderLayout.EAST);
 		add(cityViewSlot, BorderLayout.WEST);
@@ -112,22 +124,23 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingViewPanel.addCard(blank2, "blank2");*/
 	}
 	
-	//buttons won't add to buildingList when created in constructor
+	//NOTICE: buttons won't add to buildingList when created in constructor	<--------------------------------
 	//TODO add animation panels here
 	public void addAnimationPanel(JPanel panel, String name){
 		buildingViewPanel.addCard(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		//TODO Test
-		/*if(e.getSource() == b2){
+		/*/TODO Test
+		if(e.getSource() == b2){
 			buildingViewPanel.showCard("blank2");
-			buildingList.addBuilding("blank2");
+			buildingList.addToList("blank2");
+			personList.addToList("adf");
 		}
 		
 		if(e.getSource() == b){
 			buildingViewPanel.showCard("blank");
-			buildingList.addBuilding("blank");
+			buildingList.addToList("blank");
 		}//*/
 		
 	}

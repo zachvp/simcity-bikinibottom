@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class BuildingView extends JPanel implements ActionListener{
 
 	private Dimension d;
-	private BuildingList buildingList;
+	private InfoList buildingList;
 
 	public BuildingView(int w, int h){
 		d = new Dimension(w-15, h-70);
@@ -36,7 +36,7 @@ public class BuildingView extends JPanel implements ActionListener{
 		add(blankCard, "blank");
 	}
 	
-	public void setBuildingList(BuildingList b){
+	public void setBuildingList(InfoList b){
 		buildingList = b;
 	}
 
@@ -47,7 +47,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	 */
 	public void addCard(JPanel card, String name){
 		add(card, name);
-		buildingList.addBuilding(name);
+		buildingList.addToList(name);
 	}
 
 	/**

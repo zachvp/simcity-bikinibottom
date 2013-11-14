@@ -1,19 +1,24 @@
-package role;
-
-import agent.Agent;
-
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+package agent;
 
 /**
  * Base class for simple roles
+ * 
+ * @author Erik Strottmann
  */
 public abstract class Role {
-    private Agent agent;
+    protected Agent agent;
     private boolean active = false;
 
     protected Role() {
+    	
+    }
+    
+    protected Role(Agent agent) {
+    	setAgent(agent);
+    }
+    
+    public void setAgent(Agent agent) {
+    	this.agent = agent;
     }
 
     /**
@@ -47,7 +52,7 @@ public abstract class Role {
     /**
      * Allows the role's scheduler to be called upon agent state change.
      * 
-     * @see #isActive
+     * @see #isActive()
      */
     public void activate() {
         this.active = true;
@@ -56,7 +61,7 @@ public abstract class Role {
     /**
      * Prevents the role's scheduler from being called.
      * 
-     * @see #isActive
+     * @see #isActive()
      */
     public void deactivate() {
         this.active = false;
@@ -66,36 +71,28 @@ public abstract class Role {
      * Return role name for messages.  Default is to return agent name.
      */
     public String getName() {
-        return agent.getName());
+        return agent.getName();
     }
 
     /**
      * The simulated action code
      */
     protected void Do(String msg) {
-        print(msg, null);
+        agent.Do(msg);
     }
 
     /**
      * Print message
      */
     protected void print(String msg) {
-        print(msg, null);
+        agent.print(msg);
     }
 
     /**
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        sb.append(": ");
-        sb.append(msg);
-        sb.append("\n");
-        if (e != null) {
-            sb.append(StringUtil.stackTraceString(e));
-        }
-        System.out.print(sb.toString());
+        agent.print(msg);
     }
 
 }

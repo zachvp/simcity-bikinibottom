@@ -1,10 +1,12 @@
 package transportation.interfaces;
 
+import CommonSimpleClasses.CityLocation;
+
 /*Handles interaction for waiting for a bus, and what 
  * to do on its arrival. Note: Position is generated 
  * from the corner's position and the direction.
  */
-public interface Busstop {
+public interface Busstop extends CityLocation {
 	
 	/* Message from Passenger that tells 
 	 * the bus stop that he's waiting for the bus.

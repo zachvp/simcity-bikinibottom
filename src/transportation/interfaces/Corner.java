@@ -1,12 +1,13 @@
 package transportation.interfaces;
 
+import CommonSimpleClasses.CityLocation;
 import transportation.IntersectionAction;
 
 /* Node of a grid defining the city's roads. Handles all 
  * necessary interactions when people or vehicles reach 
  * a corner.
  */
-public interface Corner {
+public interface Corner extends CityLocation {
 	
 	/* Message a vehicle sends to a corner 
 	 * to request crossing the intersection.

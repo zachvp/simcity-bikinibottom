@@ -8,6 +8,11 @@ import transportation.interfaces.Vehicle;
  */
 public class IntersectionAction {
 	
+	public IntersectionAction(Corner destination, Vehicle v) {
+		this.destination = destination;
+		this.v = v;
+	}
+	
 	//Corner the Vehicle wants to drive to.
 	Corner destination;
 	

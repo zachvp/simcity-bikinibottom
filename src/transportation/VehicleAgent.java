@@ -12,12 +12,17 @@ import CommonSimpleClasses.DirectionEnum;
 import agent.Agent;
 
 public abstract class VehicleAgent extends Agent implements Vehicle {
+	
+	VehicleStateEnum state = VehicleStateEnum.Initial;
 	enum VehicleStateEnum {
 		Initial,
 		OnStreet,
 		Requesting, // TODO Add to DD
 		OnCorner
 	}
+	
+	//Events triggered. TODO Add to DD
+	protected VehicleEventEnum event = VehicleEventEnum.None;
 	enum VehicleEventEnum {// TODO Add to DD
 		None,
 		StartedVehicle,
@@ -26,23 +31,18 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		AuthorizedToCross
 	}
 	
-	VehicleStateEnum state = VehicleStateEnum.Initial;
 	
 	// List of corners to traverse to get to the destination.
 	protected Corner currentCorner;
 	
-	//Events triggered. TODO Add to DD
-	protected VehicleEventEnum event = VehicleEventEnum.None;
 	
 	//List of corners to traverse to get to the destination.
 	protected List<Corner> currentPath;
 	
-	//
-	
 	//List of corners adjacent to currentCorner. TODO add to DD.
 	private List<MyCorner> adjCorners;
 
-	private DirectionEnum currentDirection;
+	private DirectionEnum currentDirection; //TODO Remove from DD
 
 	
 	@Override

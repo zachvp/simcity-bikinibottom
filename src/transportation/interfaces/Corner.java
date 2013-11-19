@@ -1,6 +1,7 @@
 package transportation.interfaces;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.DirectionEnum;
 import transportation.IntersectionAction;
 
 /* Node of a grid defining the city's roads. Handles all 
@@ -28,5 +29,9 @@ public interface Corner extends CityLocation {
 	 * the intersection. Sets crossroadBusy to false.
 	 */
 	public void msgDoneCrossing();
+	
+	/* Return the corner that sits at the given direction
+	 */
+	public Corner getCornerForDir(DirectionEnum dir);
 	
 }

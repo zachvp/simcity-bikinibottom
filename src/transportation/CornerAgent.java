@@ -111,4 +111,10 @@ public class CornerAgent extends Agent implements Corner {
 		return pos;
 	}
 
+	@Override
+	public Corner getCornerForDir(DirectionEnum dir) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

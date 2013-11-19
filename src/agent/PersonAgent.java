@@ -128,6 +128,26 @@ public class PersonAgent extends Agent {
 	public void addRole(Role r) {
 		this.roles.add(r);
 	}
+
+	/**
+	 * Adds the given dollar amount to the PersonAgent's wallet.
+	 */
+	public void addMoney(double dollars) {
+		this.wallet.setCashOnHand(this.wallet.getCashOnHand() + dollars);
+	}
+
+	/**
+	 * Attempts to remove the given dollar amount from the PersonAgent's wallet.
+	 *
+	 * @return true if the person has enough money, false otherwise
+	 */
+	public boolean removeMoney(double dollars) {
+		if (this.wallet.getCashOnHand() >= dollars) {
+			this.wallet.setCashOnHand(this.wallet.getCashOnHand() - dollars);
+			return true;
+		}
+		return false;
+	}
 	
 	// TODO Implement a general PersonGui?
 	/*
@@ -143,6 +163,11 @@ public class PersonAgent extends Agent {
 	/*
 	PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
+		for (Role r : roles) {
+			if (r instanceof PassengerRole) {
+				return r;
+			}
+		}
 	}
 	*/
 	

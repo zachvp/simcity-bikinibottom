@@ -8,6 +8,7 @@ package agent;
 public abstract class Role {
     protected Agent agent;
     private boolean active = false;
+    private boolean waitingInput = false;
 
     protected Role() {
     	
@@ -46,7 +47,7 @@ public abstract class Role {
      * {@link #pickAndExecuteAnAction} should be called.
      */
     public boolean isActive() {
-        return this.active;
+        return this.active && !this.waitingInput;
     }
 
     /**
@@ -65,6 +66,15 @@ public abstract class Role {
      */
     public void deactivate() {
         this.active = false;
+    }
+    
+    public void waitForInput() {
+    	this.waitingInput = true;
+    }
+    
+    public void doneWaitingForInput() {
+    	this.waitingInput = false;
+    	stateChanged();
     }
 
     /**

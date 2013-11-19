@@ -62,6 +62,7 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 				Orders.remove(i);
 			}
 		}
+		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
 		for(int i=0;i<o.ItemList.size();i++){
 			Item CurrentItem = InventoryList.get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
@@ -75,9 +76,11 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem.amount);
 				CurrentItem.ItemConsumed(CurrentItem.amount);
 				DeliverList.add(tempitem);
+				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem.amount);
+				MissingList.add(Missingitem);
 			}
 		}
-		cashier.msgHereAreItems(DeliverList, o.c);
+		cashier.msgHereAreItems(DeliverList, MissingList, o.c);
 		return;
 	}
 

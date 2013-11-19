@@ -17,7 +17,7 @@ public class CashierAgent extends Agent implements Cashier{
 //public EventLog log = new EventLog();
 	
 	private String name;
-	double cash;
+	private double cash;
 	private List<MyCustomer> MyCustomerList = new ArrayList<MyCustomer>();
 	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
 	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
@@ -36,21 +36,28 @@ public class CashierAgent extends Agent implements Cashier{
 		
 	}
 	
-	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck}
+	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck, GivenItems, Failed, EpicFailed}
 	
-	private class MyCustomer {
+	public class MyCustomer {
 		Customer c;
 		CityBuilding Building;
 		List<Item> OrderList = new ArrayList<Item>();
-		List<Item> DeliveryList = new ArrayList<Item>();
+		private List<Item> DeliveryList = new ArrayList<Item>();
+		private List<Item> MissingItemList = new ArrayList<Item>();
 		ItemCollector itemCollector;
 		DeliveryGuy deliveryGuy;
-		Customerstate state = Customerstate.Arrived;
+		public Customerstate state = Customerstate.Arrived;
+		public List<Item> getDeliveryList() {
+			return DeliveryList;
+		}
+		public void setDeliveryList(List<Item> deliveryList) {
+			DeliveryList = deliveryList;
+		}
 	}
 	
-	CashierAgent(String NA, double money){
+    public CashierAgent(String NA, double money){
 		name = NA;
-		cash = money;
+		setCash(money);
 	}
 	
 	//Cashier Message 
@@ -63,7 +70,7 @@ public class CashierAgent extends Agent implements Cashier{
 		for (int i=0;i<ShoppingList.size();i++){
 			MC.OrderList.add(ShoppingList.get(i));
 		}
-		MyCustomerList.add(MC);
+		getMyCustomerList().add(MC);
 		stateChanged();
 	}
 	
@@ -76,30 +83,50 @@ public class CashierAgent extends Agent implements Cashier{
 		for (int i=0;i<ShoppingList.size();i++){
 			MC.OrderList.add(ShoppingList.get(i));
 		}
-		MyCustomerList.add(MC);
+		getMyCustomerList().add(MC);
 		stateChanged();
 	}
 
-	public void msgHereAreItems(List<Item> Items, Customer c)
+	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
 
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MyCustomerList.get(i).c == c)
+		
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).c == c)
 			{
-				MyCustomerList.get(i).state = Customerstate.Collected;
-				MyCustomerList.get(i).DeliveryList = Items;
+				//When there is no item in the shoppinglist can be satisified
+				if (Items.isEmpty()){
+					getMyCustomerList().get(i).state = Customerstate.EpicFailed;
+					getMyCustomerList().get(i).MissingItemList = MissingItems;
+					break;
+				}
+				//When there is some items that cannot be fulfilled
+				else if (!MissingItems.isEmpty()){
+					getMyCustomerList().get(i).state = Customerstate.Failed;
+					getMyCustomerList().get(i).MissingItemList = MissingItems;
+					getMyCustomerList().get(i).setDeliveryList(Items);
+					break;
+				}
+				//All items can be fulfilled
+				else
+					getMyCustomerList().get(i).state = Customerstate.Collected;
+					getMyCustomerList().get(i).setDeliveryList(Items);
 			}
+			
+				
 		}
+		
+		
 		
 		stateChanged();
 	}			
 	
 	public void msgHereIsPayment(double payment, Customer c)
 	{
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MyCustomerList.get(i).c == c){
-				MyCustomerList.get(i).state = Customerstate.Paid;
-				cash += payment;
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).c == c){
+				getMyCustomerList().get(i).state = Customerstate.Paid;
+				setCash(getCash() + payment);
 			}
 		}
 		stateChanged();
@@ -107,32 +134,39 @@ public class CashierAgent extends Agent implements Cashier{
 
 
 	//Scheduler
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MyCustomerList.get(i).state == Customerstate.Ordered){
-				ItemCollector tempIC = ICList.get(0);
-				for (int j=1;j<ICList.size();j++){
-					if (ICList.get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
-						tempIC = ICList.get(j);
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).state == Customerstate.Ordered){
+				ItemCollector tempIC = getICList().get(0);
+				for (int j=1;j<getICList().size();j++){
+					if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
+						tempIC = getICList().get(j);
 					else
 						continue;
 				}
-				GoGetItems(MyCustomerList.get(i),tempIC);
+				GoGetItems(getMyCustomerList().get(i),tempIC);
+				return true;
+			}
+		}
+		//No item is fulfilled
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).state == Customerstate.EpicFailed){
+				TellCustomerEpicFail(getMyCustomerList().get(i));
+				return true;
+			}
+		}
+		//Some or All items are fulfilled
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).state == Customerstate.Collected){
+				CalculatePayment(getMyCustomerList().get(i));
 				return true;
 			}
 		}
 		
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MyCustomerList.get(i).state == Customerstate.Collected){
-				CalculatePayment(MyCustomerList.get(i));
-				return true;
-			}
-		}
-		
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MyCustomerList.get(i).state == Customerstate.Paid){
-				GiveItems(MyCustomerList.get(i));
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).state == Customerstate.Paid){
+				GiveItems(getMyCustomerList().get(i));
 				return true;
 			}
 		}
@@ -144,28 +178,50 @@ public class CashierAgent extends Agent implements Cashier{
 	//Actions
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
 		MC.itemCollector = IC;
-		MC.itemCollector.msgGetTheseItem(MC.OrderList, MC.c);
 		MC.state = Customerstate.OrderPlaced;
+		MC.itemCollector.msgGetTheseItem(MC.OrderList, MC.c);
+		
 	}
 
+	private void TellCustomerEpicFail(MyCustomer MC){
+		MC.state = Customerstate.Paid;
+		MC.c.msgNoItem();
+		
+	}
+	
 	private void CalculatePayment(MyCustomer MC){
 		double total = 0;
-		for (int i=0;i<MC.DeliveryList.size();i++){
-			double CurrentPrice = PriceList.get(MC.DeliveryList.get(i).name);
-			total += CurrentPrice*MC.DeliveryList.get(i).amount;
+		for (int i=0;i<MC.getDeliveryList().size();i++){
+			double CurrentPrice = PriceList.get(MC.getDeliveryList().get(i).name);
+			total += CurrentPrice*MC.getDeliveryList().get(i).amount;
 		}
-		MC.c.msgHereisYourTotal(total);
 		MC.state = Customerstate.WaitingForCheck;
+		MC.c.msgHereisYourTotal(total, MC.MissingItemList);
+		
 	}
 
 	private void GiveItems (MyCustomer MC){
-		if (MC.Building != null)
-			MC.c.msgHereisYourItem(MC.DeliveryList);
+		MC.state = Customerstate.GivenItems;
+		if (MC.Building == null){
+			MC.c.msgHereisYourItem(MC.getDeliveryList());
+			for (int i=0;i<MyCustomerList.size();i++){
+				if (MC == MyCustomerList.get(i)){
+					MyCustomerList.remove(i);
+				}
+			}
+		}
 		else
-			for (int i=0;i<DGList.size();i++){
-				if(DGList.get(i).msgAreYouAvailable()){
-					MC.deliveryGuy = DGList.get(i);
-					MC.deliveryGuy.msgDeliverIt(MC.DeliveryList, MC.c, MC.Building);
+			for (int i=0;i<getDGList().size();i++){
+				if(getDGList().get(i).msgAreYouAvailable()){
+					MC.deliveryGuy = getDGList().get(i);
+					MC.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.c, MC.Building);
+					for (int j=0;j<MyCustomerList.size();j++){
+						if (MC == MyCustomerList.get(j)){
+							MyCustomerList.remove(j);
+							break;
+						}
+					}
+					break;
 				}
 			}
 	}
@@ -175,19 +231,42 @@ public class CashierAgent extends Agent implements Cashier{
 		DGList = list;
 	}
 	public void addDGList(DeliveryGuy DG){
-		DGList.add(DG);
+		getDGList().add(DG);
 	}
 	public void setICList(List<ItemCollector> list){
 		ICList = list;
 	}
-	public void addDGList(ItemCollector IC){
-		ICList.add(IC);
+	public void addICList(ItemCollector IC){
+		getICList().add(IC);
 	}
 	public String getMaitreDName(){
 		return name;
 	}
 	public String getName(){
 		return name;
+	}
+
+	public List<MyCustomer> getMyCustomerList() {
+		return MyCustomerList;
+	}
+	public void setMyCustomerList(List<MyCustomer> myCustomerList) {
+		MyCustomerList = myCustomerList;
+	}
+
+	public List<ItemCollector> getICList() {
+		return ICList;
+	}
+
+	public List<DeliveryGuy> getDGList() {
+		return DGList;
+	}
+
+	public double getCash() {
+		return cash;
+	}
+
+	public void setCash(double cash) {
+		this.cash = cash;
 	}
 	
 	

@@ -51,7 +51,13 @@ public class CustomerAgent extends Agent implements Customer{
 	}
 	
 	//Message
-	public void msgHereisYourTotal(double cost){		
+	public void msgHereisYourTotal(double cost, List<Item> MissingItems){	
+		/*
+		 *   ** NOW GOING TO BUY ANYWAY **
+		 * 
+		 * if MissingItems!=Empty()?
+		 * 		Leave or Continue to Buy
+		 */
 		ActualCost = cost;
 		event = Customerevent.Paying;
 		stateChanged();
@@ -69,6 +75,12 @@ public class CustomerAgent extends Agent implements Customer{
 		}
 			state = Customerstate.Paid;
 			event = Customerevent.Leaving;
+		stateChanged();
+	}
+	
+	public void msgNoItem(){
+		state = Customerstate.Paid;
+		event = Customerevent.Leaving;
 		stateChanged();
 	}
 	
@@ -147,6 +159,10 @@ public class CustomerAgent extends Agent implements Customer{
 
 	public String getName(){
 		return name;
+	}
+
+	public void setShoppingList(List<Item> SL) {
+		ShoppingList = SL;
 	}
 	
 

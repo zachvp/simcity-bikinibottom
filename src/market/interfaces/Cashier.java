@@ -13,7 +13,7 @@ public interface Cashier {
 
 	public abstract void msgIWantItem(List<Item> ShoppingList, Customer C);
 
-	public abstract void msgHereAreItems(List<Item> Items, Customer c);
+	public abstract void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c);
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
 
@@ -21,8 +21,9 @@ public interface Cashier {
 	public abstract void setDGList(List<DeliveryGuy> list);
 	public abstract void addDGList(DeliveryGuy DG);
 	public abstract void setICList(List<ItemCollector> list);
-	public abstract void addDGList(ItemCollector IC);
+	public abstract void addICList(ItemCollector IC);
 	public abstract String getMaitreDName();
 	public abstract String getName();
+	
 	
 }

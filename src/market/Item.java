@@ -6,7 +6,7 @@ public class Item{
 	public String name;
 	public int amount;
 	
-	Item (String NA, int am){
+	public Item (String NA, int am){
 		name = NA;
 		amount = am;
 	}

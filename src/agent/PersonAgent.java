@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
-import com.sun.accessibility.internal.resources.accessibility;
-
 import agent.Role;
 
 /**
@@ -284,7 +282,6 @@ public class PersonAgent extends Agent {
 	public boolean wantsToEatOut() {
 		return timeManager.timeUntil(lastTimeEatingOut) >= this.eatingOutWaitPeriod;
 	}
-	
 	
 	public boolean hasFoodAtHome() {
 		// TODO uncomment when ResidentRole is available

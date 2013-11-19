@@ -7,11 +7,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import housing.interfaces.Resident;
+import housing.test.mock.EventLog;
 import agent.PersonAgent;
 import agent.Role;
 
 public class ResidentRole extends Role implements Resident {
 	/** DATA */
+	public EventLog log = new EventLog();
 	/** Person Data */
 	PersonAgent person;
 	
@@ -49,6 +51,7 @@ public class ResidentRole extends Role implements Resident {
 	/** Messages */
 	@Override
 	public void msgPaymentDue(double amount, Map<Resident, Double> d) {
+		log.add("Received message 'payment due'");
 		this.moneyOwed = amount;
 		this.landlordDropbox = d;
 	}
@@ -77,12 +80,18 @@ public class ResidentRole extends Role implements Resident {
 	
 	/** Actions */
 	private void makePayment(){
-		landlordDropbox.put(this, moneyOwed);
+		log.add("Attempting to make payment.");
+		Wallet w = person.getWallet();
+//		double money = person.getWallet().getCashOnHand();
+		if(person.getWallet().getCashOnHand() >= moneyOwed){
+			landlordDropbox.put(this, moneyOwed);
+		}
 //		double money = person.wallet.getCashOnHand();
 //		money -= moneyOwed;
 		moneyOwed = 0;
 	}
 	private void eatFood(){
+		log.add("Eating food");
 //		TODO: ANIMATION DETAILS
 //		DoGoToStove();
 //		acquire(performingTasks);
@@ -100,6 +109,7 @@ public class ResidentRole extends Role implements Resident {
 		EAT_TIME * 1000);//how long to wait before running task
 	}
 	private void cookFood(Food f){
+		log.add("Cooking food");
 //		TODO: Animation details		
 //		DoGoToRefrigerator();
 		f.amount--;
@@ -116,16 +126,18 @@ public class ResidentRole extends Role implements Resident {
 		},
 		cookTimes.get(f) * 1000);
 		f.state = FoodState.COOKED;
+		log.add("Food is cooked.");
 	}
 	
 	/** Utility Functions */
 	public boolean thereIsFoodAtHome(){
-		boolean foodAtHome = false;
 		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 			if(entry.getValue().amount > 0){
-				foodAtHome = true;
+				log.add("There is food at home.");
+				return true;
 			}
 		}
-		return foodAtHome;
+		log.add("There is no food at home");
+		return false;
 	}
 }

@@ -3,7 +3,9 @@ package housing.interfaces;
 import java.util.Map;
 
 public interface Resident {
-	/** Normative Messages from Payment Collector
-	 * Examples: landlord, bank */
-	public void msgPaymentDue(double amount, Map<Resident, Double> dropBox);
+	/* ----- Normative Messages  ----- */
+	/** From payment collector
+	 * @param amount is how much the resident owes
+	 */
+	public void msgPaymentDue(double amount);
 }

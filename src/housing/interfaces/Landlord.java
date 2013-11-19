@@ -6,14 +6,13 @@ package housing.interfaces;
  * The landlord interfaces with tenants and the Bank Manager.
  * */
 public interface Landlord {
-	/** Normative Messages */
+	/* ----- Normative Messages ----- */
 	/** From Bank Manager
 	 * @param payment
 	 * @param accountNumber
 	*/
-	public void msgReceivedPayment(double payment, int accountNumber);
 	
-	/** Non-Normative Messages */
+	/* ----- Non-Normative Messages ----- */
 	/** From Tenant
 	 * @param complainant
 	 * @param unitNumber

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.test.mock.EventLog;
 import agent.PersonAgent;
@@ -14,28 +15,28 @@ import agent.Role;
 public class ResidentRole extends Role implements Resident {
 	/** DATA */
 	public EventLog log = new EventLog();
-	/** Person Data */
+	/* ----- Person Data ----- */
 	PersonAgent person;
 	
-	/** Temporary Hacks */
+	/* ----- Temporary Hacks ----- */
 	//TODO: un-hack these
 	private boolean hungry = true;
 	
-	/** Rent Data */
+	/* ----- Rent Data ----- */
 	double moneyOwed = 0;
-	private Map<Resident, Double> landlordDropbox = Collections.synchronizedMap(new HashMap<Resident, Double>());
+	private PayRecipient payee;
 	
-	/** Food Data */
+	/* ----- Food Data ----- */
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>());
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null; //the food the resident is currently eating
 	private Timer timer = new Timer(); //used to cook food and time eat period
 	private Map<String, Integer> cookTimes = Collections.synchronizedMap(new HashMap<String, Integer>());
 	
-	/** Constant Variables */
+	/* ----- Constant Variables ----- */
 	private final int EAT_TIME = 6; 
 	
-	/** Class Data */
+	/* ----- Class Data ----- */
 	enum FoodState { COOKED };
 	private class Food{
 		String type;
@@ -48,15 +49,15 @@ public class ResidentRole extends Role implements Resident {
 		this.person = pa;
 	}
 	
-	/** Messages */
+	/* ----- Messages ----- */
 	@Override
-	public void msgPaymentDue(double amount, Map<Resident, Double> d) {
+	public void msgPaymentDue(double amount) {
 		log.add("Received message 'payment due'");
 		this.moneyOwed = amount;
-		this.landlordDropbox = d;
+		stateChanged();
 	}
 
-	/** Scheduler */
+	/* ----- Scheduler ----- */
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		if(moneyOwed > 0){
@@ -73,18 +74,16 @@ public class ResidentRole extends Role implements Resident {
 					cookFood(f);
 				}
 			}
-			
 		}
 		return false;
 	}
 	
-	/** Actions */
+	/* ----- Actions ----- */
 	private void makePayment(){
 		log.add("Attempting to make payment.");
-		Wallet w = person.getWallet();
 //		double money = person.getWallet().getCashOnHand();
 		if(person.getWallet().getCashOnHand() >= moneyOwed){
-			landlordDropbox.put(this, moneyOwed);
+			payee.msgHereIsPayment(moneyOwed, this);
 		}
 //		double money = person.wallet.getCashOnHand();
 //		money -= moneyOwed;
@@ -103,6 +102,7 @@ public class ResidentRole extends Role implements Resident {
 		timer.schedule(new TimerTask() {
 			public void run() {
 				food = null;
+				hungry = false;
 				stateChanged();
 			}
 		},
@@ -129,7 +129,7 @@ public class ResidentRole extends Role implements Resident {
 		log.add("Food is cooked.");
 	}
 	
-	/** Utility Functions */
+	/* ----- Utility Functions ----- */
 	public boolean thereIsFoodAtHome(){
 		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 			if(entry.getValue().amount > 0){

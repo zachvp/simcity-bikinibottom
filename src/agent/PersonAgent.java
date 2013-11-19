@@ -23,8 +23,17 @@ public class PersonAgent extends Agent {
 	private Timer timer;
 	
 	private Date lastTimeEatingOut;
-	/** How long this person likes to wait between each time eating out. */
+	/**
+	 * How long this person likes to wait between each time eating out (in game
+	 * time, not real time)
+	 */
 	private long eatingOutWaitPeriod;
+	
+	/**
+	 * If there is less than this much time before work starts, the person
+	 * considers work to be starting soon. (In game time, not real time.)
+	 */
+	private long workStartThreshold;
 	
 	private Wallet wallet;
 	
@@ -130,7 +139,7 @@ public class PersonAgent extends Agent {
 	*/
 	
 	/* -------- Utilities -------- */
-
+	
 	public String getName() {
 		return name;
 	}
@@ -150,16 +159,21 @@ public class PersonAgent extends Agent {
 	public Wallet getWallet() {
 		return this.wallet;
 	}
-		
-	/** @return how long this person likes to wait between each time eating out */
+	
+	// Eating out
+	
+	/**
+	 * @return how long this person likes to wait between each time eating out
+	 * 		   (in game time, not real time)
+	 * */
 	public long getEatingOutWaitPeriod() {
 		return this.eatingOutWaitPeriod;
 	}
 	
 	/**
 	 * @param newWait how long this person will now like to wait between each
-	 * time eating out
-	 * */
+	 * time eating out (in game time, not real time)
+	 */
 	public void setEatingOutWaitPeriod(long newWait) {
 		this.eatingOutWaitPeriod = newWait;
 	}
@@ -174,12 +188,16 @@ public class PersonAgent extends Agent {
 		this.lastTimeEatingOut = newLastTime;
 	}
 	
+	// Hunger
+	
 	public HungerLevel getHungerLevel() {
 		return this.hungerLevel;
 	}
 	
 	/**
-	 * Sets the hunger level to the given; if eatingOut, updates lastTimeEatingOut.
+	 * Sets the hunger level to the given; if eatingOut, updates
+	 * lastTimeEatingOut.
+	 * 
 	 * @param newHungerLevel
 	 * @param eatingOut whether this hunger modification was due to eating out
 	 * @see #getLastTimeEatingOut()
@@ -195,6 +213,25 @@ public class PersonAgent extends Agent {
 		setHungerLevel(newHungerLevel, false);
 	}
 	
+	// Work starting soon
+	
+	/**
+	 * If there is less than this much time before work starts, the person
+	 * considers work to be starting soon. (In game time, not real time.)
+	 */
+	public long getWorkStartThreshold() {
+		return this.workStartThreshold;
+	}
+	
+	/**
+	 * @param if there is less than this much time before work starts, the
+	 * person will now consider work to be starting soon. (In game time, not
+	 * real time.)
+	 */
+	public void setWorkStartThreshold(long newThresh) {
+		this.workStartThreshold = newThresh;
+	}
+	
 	// TODO Implement a general PersonGui?
 	/*
 	public void setGui(PersonGui g) {
@@ -206,9 +243,12 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
+	
+	// Convenience for finding special roles
+	
 	/**
-	 * Returns the PersonAgent's PassengerRole, or the first one if there's more
-	 * than one for some reason.
+	 * Returns the PersonAgent's PassengerRole, or the first one if there's
+	 * more than one for some reason.
 	 * 
 	 * @return the PassengerRole; null if none exists
 	 */
@@ -242,16 +282,20 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
-	public Role getWorkRole() {
+	/*
+	public WorkRole getWorkRole() {
 		// TODO implement getWorkRole()
 		return null;
 	}
+	*/
 	
 	/*
 	public void activateRole(CityLocation loc) {
 		// TODO implement activateRole()
 	}
 	*/
+	
+	// Choosing locations to patronize
 	
 	/*
 	Restaurant chooseRestaurant() {
@@ -271,8 +315,14 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
+	// Booleans for determining which action should be called
+	
 	public boolean workStartsSoon() {
 		// TODO implement workStartsSoon()
+		/*
+		Date workStartTime = getWorkRole.startTime();
+		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
+		*/
 		return false;
 	}
 	
@@ -286,7 +336,8 @@ public class PersonAgent extends Agent {
 	 * eating out.
 	 */
 	public boolean wantsToEatOut() {
-		return timeManager.timeUntil(lastTimeEatingOut) >= this.eatingOutWaitPeriod;
+		return timeManager.timeUntil(lastTimeEatingOut)
+				>= this.eatingOutWaitPeriod;
 	}
 	
 	public boolean hasFoodAtHome() {
@@ -301,9 +352,14 @@ public class PersonAgent extends Agent {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
 	
+	// Enumerations
+	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
-	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED, FULL}
-		
+	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
+			FULL}
+	
+	// Inner classes
+	
 	public class Wallet {
 		private double cashOnHand;
 		private double tooMuch;

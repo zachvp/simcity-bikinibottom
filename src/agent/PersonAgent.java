@@ -14,7 +14,7 @@ public class PersonAgent extends Agent {
 	private int hunger; // lower values are hungrier - TODO use byte instead of int? or maybe an enum?
 	List<Role> roles;
 	Watch watch;
-	Wallet wallet;
+	private Wallet wallet;
 	
 	PersonEvent event;
 	

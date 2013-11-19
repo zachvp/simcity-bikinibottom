@@ -128,6 +128,10 @@ public class PersonAgent extends Agent {
 	public void addRole(Role r) {
 		this.roles.add(r);
 	}
+
+	public Wallet getWallet() {
+		return this.wallet;
+	}
 	
 	// TODO Implement a general PersonGui?
 	/*
@@ -140,9 +144,39 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
+	/**
+	 * Returns the PersonAgent's PassengerRole, or the first one if there's more
+	 * than one for some reason.
+	 * 
+	 * @return the PassengerRole; null if none exists
+	 */
 	/*
-	PassengerRole getPassengerRole() {
+	public PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
+		for (Role r : roles) {
+			if (r instanceof PassengerRole) {
+				return r;
+			}
+		}
+		return null;
+	}
+	*/
+
+	/**
+	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
+	 * than one for some reason.
+	 * 
+	 * @return the ResidentRole; null if none exists
+	 */
+	/*
+	public ResidentRole getResidentRole() {
+		// TODO uncomment when ResidentRole is available
+		for (Role r : roles) {
+			if (r instanceof ResidentRole) {
+				return r;
+			}
+		}
+		return null;
 	}
 	*/
 	
@@ -179,8 +213,12 @@ public class PersonAgent extends Agent {
 		return true;
 	}
 	
+	
 	boolean thereIsFoodAtHome() {
-		// TODO implement thereIsFoodAtHome();
+		// TODO uncomment when ResidentRole is available
+		/*
+		return getResidentRole().thereIsFoodAtHome();
+		*/
 		return false;
 	}
 	
@@ -213,19 +251,19 @@ public class PersonAgent extends Agent {
 			this.tooLittle = tooLittle;
 		}
 		
-		private double getCashOnHand() { return this.cashOnHand; }
-		private double getTooMuch() { return this.tooMuch; }
-		private double getTooLittle() { return this.tooLittle; }
+		public double getCashOnHand() { return this.cashOnHand; }
+		public double getTooMuch() { return this.tooMuch; }
+		public double getTooLittle() { return this.tooLittle; }
 		
-		private void setCashOnHand(double coh) { this.cashOnHand = coh; }
-		private void setTooMuch(double tm) { this.tooMuch = tm; }
-		private void setTooLittle(double tl) { this.tooLittle = tl; }
+		public void setCashOnHand(double coh) { this.cashOnHand = coh; }
+		public void setTooMuch(double tm) { this.tooMuch = tm; }
+		public void setTooLittle(double tl) { this.tooLittle = tl; }
 		
-		private boolean hasTooMuch() {
+		public boolean hasTooMuch() {
 			return cashOnHand > tooMuch;
 		}
 		
-		private boolean hasTooLittle() {
+		public boolean hasTooLittle() {
 			return cashOnHand < tooLittle;
 		}
 	}

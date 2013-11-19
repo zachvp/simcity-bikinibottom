@@ -235,7 +235,7 @@ public class PersonAgent extends Agent {
 		}
 	}
 	
-	class Wallet {
+	public class Wallet {
 		private double cashOnHand;
 		private double tooMuch;
 		private double tooLittle;

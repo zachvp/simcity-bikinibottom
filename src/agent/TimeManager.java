@@ -21,7 +21,7 @@ public class TimeManager {
 	
 	private static TimeManager instance;
 	
-	public TimeManager getInstance() {
+	public static TimeManager getInstance() {
 		if (instance == null) {
 			instance = new TimeManager();
 		}
@@ -60,8 +60,7 @@ public class TimeManager {
 	}
 	
 	/**
-	 * The in-world time, as a java.util.Date. Included just in case it comes in
-	 * handy.
+	 * The in-world time, as a java.util.Date. Included for convenience.
 	 */
 	public Date currentSimDate() {
 		return new Date(currentSimTimeMillis());

@@ -144,14 +144,39 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
+	/**
+	 * Returns the PersonAgent's PassengerRole, or the first one if there's more
+	 * than one for some reason.
+	 * 
+	 * @return the PassengerRole; null if none exists
+	 */
 	/*
-	PassengerRole getPassengerRole() {
+	public PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
 		for (Role r : roles) {
 			if (r instanceof PassengerRole) {
 				return r;
 			}
 		}
+		return null;
+	}
+	*/
+
+	/**
+	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
+	 * than one for some reason.
+	 * 
+	 * @return the ResidentRole; null if none exists
+	 */
+	/*
+	public ResidentRole getResidentRole() {
+		// TODO uncomment when ResidentRole is available
+		for (Role r : roles) {
+			if (r instanceof ResidentRole) {
+				return r;
+			}
+		}
+		return null;
 	}
 	*/
 	
@@ -188,8 +213,12 @@ public class PersonAgent extends Agent {
 		return true;
 	}
 	
+	
 	boolean thereIsFoodAtHome() {
-		// TODO implement thereIsFoodAtHome();
+		// TODO uncomment when ResidentRole is available
+		/*
+		return getResidentRole().thereIsFoodAtHome();
+		*/
 		return false;
 	}
 	

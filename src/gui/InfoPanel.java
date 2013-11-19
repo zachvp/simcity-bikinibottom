@@ -33,11 +33,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 		info = new JLabel();
 		//TODO test text
 		info.setText("<html><div>&nbsp;</div><div> "
-				+ "Name: "+ "hjhbgf" +"</div><div>&nbsp;</div>"
-				+ "<div> Job: "+"hjhbgf" +"</div><div>&nbsp;</div>"
-				+ "<div> Residence: "+ "hjhbgf" + "</div><div>&nbsp;</div>"
-				+ "<div> Money: $"+ "hjhbgf" +"</div><div>&nbsp;</div>"
-				+ "<div> Hunger Level: "+"hjhbgf" +"</div></html>"
+				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
+				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
+				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
+				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
+				+ "<div> Hunger Level: "+"2" +"</div></html>"
 		);
 		textPanel.add(info);
 		add(textPanel, BorderLayout.WEST);

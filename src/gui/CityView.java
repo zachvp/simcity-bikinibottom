@@ -11,12 +11,13 @@ import javax.swing.JScrollPane;
 //provides scrolling view of city map
 
 public class CityView extends JPanel implements ActionListener{
-	
+	private MainFrame mainFrame;
 	private JScrollPane pane;
 	private CityMap map;
 	Dimension d;
 
-	public CityView(int w, int h){
+	public CityView(int w, int h, MainFrame main){
+		mainFrame = main;
 		d = new Dimension(w-20, h-65);
 		
 		//setSize(d);

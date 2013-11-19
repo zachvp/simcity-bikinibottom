@@ -8,8 +8,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -71,7 +73,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		//setLayout(new BorderLayout(5,10));
 		
 		//TODO change filepath to make local to project
-		setContentPane(new JLabel(new ImageIcon("C:\\Users\\Victoria Dea\\Desktop\\SimCity201\\src\\gui\\sky_background.png")));
+		try {
+			setContentPane(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("sky_background.png")))));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//setContentPane(new JLabel(new ImageIcon("C:\\Users\\Victoria Dea\\Desktop\\SimCity201\\src\\gui\\sky_background.png")));
 		//add(background);
 		setLayout(new BorderLayout(5,10));
 		 
@@ -92,7 +100,7 @@ public class MainFrame extends JFrame implements ActionListener {
         cityViewSlot.setMinimumSize(cityDim);
         cityViewSlot.setOpaque(false);
         cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
-        cityViewPanel = new CityView(cityDim.width, cityDim.height);
+        cityViewPanel = new CityView(cityDim.width, cityDim.height, this);
         cityViewPanel.setBuildingView(buildingViewPanel);
         cityViewSlot.add(cityViewPanel);
         
@@ -123,7 +131,8 @@ public class MainFrame extends JFrame implements ActionListener {
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);
         personList = new InfoList(listDim.width, listDim.height);
-        
+        buildingList.setBuildingView(buildingViewPanel);
+        personList.setBuildingView(buildingViewPanel);
         //TODO addInfoPanel(infoPanel)?
        // buildingList.setInfoPanel(buildingInfoPanel);
        // personList.setInfoPanel(personInfoPanel);
@@ -162,15 +171,22 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		
 		//TODO animation panel/map test
+		String name = "Magenta";
 		JPanel testAnimationPanel = new JPanel();
-		testAnimationPanel.setBackground(Color.red);
-		buildingViewPanel.addCard(testAnimationPanel, "Test");
-		cityViewPanel.addBuildingToMap("Test");
+		testAnimationPanel.setSize(buildingViewPanel.getDim());
+		testAnimationPanel.setBackground(Color.magenta);
+		buildingViewPanel.addCard(testAnimationPanel, name);//creates card and corresponding button
+		cityViewPanel.addBuildingToMap(name); //creates building on map
 		
+		String name2 = "Cyan";
 		JPanel testAnimationPanel2 = new JPanel();
-		testAnimationPanel2.setBackground(Color.black);
-		buildingViewPanel.addCard(testAnimationPanel2, "Test2");
-		cityViewPanel.addBuildingToMap("Test2");
+		testAnimationPanel2.setBackground(Color.CYAN);
+		buildingViewPanel.addCard(testAnimationPanel2, name2);
+		cityViewPanel.addBuildingToMap(name2);
+		for(int i=0; i<8; i++){
+			cityViewPanel.addBuildingToMap(name);
+			cityViewPanel.addBuildingToMap(name2);
+		}
 		
 		//make buildingAnimationPanels example
 		//BankAnimation bankAnimation = new BuildingAnimation("Bank");
@@ -182,6 +198,10 @@ public class MainFrame extends JFrame implements ActionListener {
 	//TODO add animation panels here
 	public void addAnimationPanel(JPanel panel, String name){
 		buildingViewPanel.addCard(panel, name);
+	}
+	
+	public void addPersonToCity(PersonAgent p){
+		//TODO
 	}
 	
 	public void actionPerformed(ActionEvent e) {

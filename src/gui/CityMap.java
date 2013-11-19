@@ -6,29 +6,47 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class CityMap extends JPanel implements MouseListener {
 
-	private final int MAP_WIDTH = 800;
-	private final int MAP_HEIGHT = 800;
-	private final int MAX_COL = 5;
-	private final int MAX_ROW = 4;	
+	private final int MAP_WIDTH = 900;
+	private final int MAP_HEIGHT = 700;
+	private final int MAX_COL = 6;
+	//private final int MAX_ROW = 4;	
 	private int col, row = 0;
 	
 	ArrayList<Building> buildings;
 	BuildingView buildingView; //Ref to buildingview
-
+	BufferedImage image;
+	ImageIcon icon;
 
 	public CityMap(){
 		Dimension panelDim = new Dimension(MAP_WIDTH, MAP_HEIGHT);
 		setPreferredSize(panelDim);
-		setMaximumSize(panelDim);
-		setMinimumSize(panelDim);
-		setBackground(Color.gray);
+		//setMaximumSize(panelDim);
+		//setMinimumSize(panelDim);
+		//setBackground(Color.gray);
+		
+		
+		try {
+			image = ImageIO.read(getClass().getResource("map_background.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JLabel backgroundImage;
+		icon = new ImageIcon(image);
+		backgroundImage = new JLabel(icon);
 
+		//add(backgroundImage);
 		buildings = new ArrayList<Building>();
 
 		addMouseListener(this);
@@ -39,12 +57,12 @@ public class CityMap extends JPanel implements MouseListener {
 	}
 	
 	public void addBuildingToMap(String name){
-		if (col > MAX_COL){
+		if (col >= MAX_COL){
 			row++;
 			col = 0;
-			if (row > MAX_ROW){ System.out.println("at max map capacity");}
+			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
-		Building b = new Building(col*150 +10, row*150 +10, 100, 100);
+		Building b = new Building(col*150 +10, row*150 +10, 90, 90);
 		b.setName(name);
 		buildings.add(b);
 		col++;
@@ -52,14 +70,15 @@ public class CityMap extends JPanel implements MouseListener {
 
 
 	public void paintComponent( Graphics g ) {
-		System.out.println("paint");
-
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(getBackground());
-        g2.fillRect(0, 0, getWidth(), getHeight());
+		g2.fillRect(0, 0, getWidth(), getHeight());
+		g2.drawImage(icon.getImage(), 0, 0, null);
+		//g2.setColor(getBackground());
+		
+        
 		
 		
-		g2.setColor( Color.black );
+		g2.setColor(Color.DARK_GRAY);
 
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);

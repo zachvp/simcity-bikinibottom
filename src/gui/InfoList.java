@@ -21,13 +21,17 @@ import javax.swing.JScrollPane;
  */
 public class InfoList extends JPanel implements ActionListener {
 
+	private BuildingView buildingView;
 	private JScrollPane pane;
-	private JPanel view = new JPanel();
-	private List<JButton> list = new ArrayList<JButton>();
+	private JPanel view;
+	private List<JButton> list;
 	private InfoPanel infoPanel;
+	Dimension d;
 
 	public InfoList(int w, int h){
-		Dimension d = new Dimension(w-40, h-40);
+		view = new JPanel();
+		list = new ArrayList<JButton>();
+		d = new Dimension(w-40, h-40);
 		view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
 		pane = new JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		pane.setPreferredSize(d);
@@ -39,23 +43,25 @@ public class InfoList extends JPanel implements ActionListener {
 	 * @param name Name on the button
 	 */
 	public void addToList(String name) {
-		//TODO modify to add more building details to button? (picture, etc.)
+		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
+			System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
 			button.setBackground(Color.white);
-
-			Dimension paneSize = pane.getSize();
-			Dimension buttonSize = new Dimension(paneSize.width - 19, (int) (paneSize.height / 5));
+			Dimension buttonSize = new Dimension(d.width - 19, (int) (d.height / 5));
 			button.setPreferredSize(buttonSize);
 			button.setMinimumSize(buttonSize);
 			button.setMaximumSize(buttonSize);
 			button.addActionListener(this);
 			list.add(button);
 			view.add(button);
-			validate();
 		}
+		validate();		
 	}
 	
+	public void setBuildingView(BuildingView v){
+		buildingView = v;
+	}
 	public void setInfoPanel(InfoPanel p){
 		infoPanel = p;
 	}
@@ -71,9 +77,11 @@ public class InfoList extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		for (JButton b: list){
 			if(e.getSource() == b){
+				System.out.println("button press " + b.getText());
+				buildingView.showCard(b.getText());
 				//TODO showInfo from building's panel ie RestaurantPanel where
 				//		PersonAgents are instanciated
-				//infoPanel.showInfo(b.getName());
+				//infoPanel.showInfo(b.getText());
 			}
 		}
 		

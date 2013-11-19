@@ -18,6 +18,10 @@ public abstract class Role {
     	setAgent(agent);
     }
     
+    public Agent getAgent() {
+    	return this.agent;
+    }
+    
     public void setAgent(Agent agent) {
     	this.agent = agent;
     }

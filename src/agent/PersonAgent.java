@@ -1,7 +1,12 @@
 package agent;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+
+import com.sun.accessibility.internal.resources.accessibility;
+
 import agent.Role;
 
 /**
@@ -11,12 +16,19 @@ import agent.Role;
  */
 public class PersonAgent extends Agent {
 	private String name;
-	private int hunger; // lower values are hungrier - TODO use byte instead of int? or maybe an enum?
-	List<Role> roles;
-	Watch watch;
-	Wallet wallet;
+	private List<Role> roles;
 	
-	PersonEvent event;
+	private PersonEvent event;
+	private HungerLevel hungerLevel;
+	
+	private TimeManager timeManager;
+	private Timer timer;
+	
+	private Date lastTimeEatingOut;
+	/** How long this person likes to wait between each time eating out. */
+	private long eatingOutWaitPeriod;
+	
+	private Wallet wallet;
 	
 	public PersonAgent(String name){
 		super();
@@ -24,18 +36,21 @@ public class PersonAgent extends Agent {
 		this.name = name;
 		this.roles = new ArrayList<Role>();
 		
-		// TODO Add meaningful defaults for wallet and watch
+		this.event = PersonEvent.NONE;
+		this.hungerLevel = HungerLevel.NEUTRAL;
+		
+		this.timeManager = TimeManager.getInstance();
+		this.timer = new Timer();
+		
+		this.lastTimeEatingOut = timeManager.fakeStartDate();
+		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
+		
+		// TODO Add meaningful defaults for wallet
 		this.wallet = new Wallet(20.00, 50.00, 10.00);
-		this.watch = new Watch();
 	}
 	
 	/* -------- Messages -------- */
-	/* From an ActionListener on a Timer (probably the JFrame). The ActionListner updates all Persons every time the timer goes off. See the note below for more info. */
-	void msgUpdateTime(Watch w) {
-		this.watch = w;	
-		stateChanged();
-	}
-
+	
 	// from PassengerRole
 	void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
@@ -70,11 +85,11 @@ public class PersonAgent extends Agent {
 			goToWork();
 			return true;
 		} else if (isStarving()) {
-			if (wantToEatOut()) {
+			if (wantsToEatOut()) {
 				// Restaurant r = chooseRestaurant();
 				// goToRestaurant(r);
 				return true;
-			} else if (thereIsFoodAtHome()) {
+			} else if (hasFoodAtHome()) {
 				goHome();
 				return true;
 			} else {
@@ -93,6 +108,7 @@ public class PersonAgent extends Agent {
 	}
 
 	/* -------- Actions -------- */
+	
 	void goHome() {
 		// TODO implement goHome()
 	}
@@ -125,12 +141,60 @@ public class PersonAgent extends Agent {
 		return "person " + getName();
 	}
 	
+	/**
+	 * Adds the given Role to the PersonAgent's list. The person will not call
+	 * the Role's scheduler if the Role is inactive.
+	 */
 	public void addRole(Role r) {
 		this.roles.add(r);
 	}
-
+	
 	public Wallet getWallet() {
 		return this.wallet;
+	}
+		
+	/** @return how long this person likes to wait between each time eating out */
+	public long getEatingOutWaitPeriod() {
+		return this.eatingOutWaitPeriod;
+	}
+	
+	/**
+	 * @param newWait how long this person will now like to wait between each
+	 * time eating out
+	 * */
+	public void setEatingOutWaitPeriod(long newWait) {
+		this.eatingOutWaitPeriod = newWait;
+	}
+	
+	/** @return the date and time of the last time the person ate out. */
+	public Date getLastTimeEatingOut() {
+		return this.lastTimeEatingOut;
+	}
+	
+	/** Modifies the last time the person thinks he or she ate out. */
+	public void setLastTimeEatingOut(Date newLastTime) {
+		this.lastTimeEatingOut = newLastTime;
+	}
+	
+	public HungerLevel getHungerLevel() {
+		return this.hungerLevel;
+	}
+	
+	/**
+	 * Sets the hunger level to the given; if eatingOut, updates lastTimeEatingOut.
+	 * @param newHungerLevel
+	 * @param eatingOut whether this hunger modification was due to eating out
+	 * @see #getLastTimeEatingOut()
+	 */
+	public void setHungerLevel(HungerLevel newHungerLevel, boolean eatingOut) {
+		if (eatingOut) {
+			this.lastTimeEatingOut = timeManager.currentSimDate();
+		}
+		this.hungerLevel = newHungerLevel;
+	}
+	
+	public void setHungerLevel(HungerLevel newHungerLevel) {
+		setHungerLevel(newHungerLevel, false);
 	}
 	
 	// TODO Implement a general PersonGui?
@@ -180,6 +244,11 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
+	public Role getWorkRole() {
+		// TODO implement getWorkRole()
+		return null;
+	}
+	
 	/*
 	Restaurant chooseRestaurant() {
 		// TODO implement chooseRestaurant()
@@ -198,23 +267,26 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
-	boolean workStartsSoon() {
-		// TODO implement workStartsSoon
+	public boolean workStartsSoon() {
+		// TODO implement workStartsSoon()
 		return false;
 	}
 	
-	boolean isStarving() {
-		// TODO implement isStarving
-		return false;
+	public boolean isStarving() {
+		return hungerLevel == HungerLevel.STARVING;
 	}
 	
-	boolean wantToEatOut() {
-		// TODO implement wantToEatOut
-		return true;
+	/**
+	 * Whether this person wants to eat out. Based on the last time this person
+	 * ate out and on how long this person likes to wait between each time
+	 * eating out.
+	 */
+	public boolean wantsToEatOut() {
+		return timeManager.timeUntil(lastTimeEatingOut) >= this.eatingOutWaitPeriod;
 	}
 	
 	
-	boolean thereIsFoodAtHome() {
+	public boolean hasFoodAtHome() {
 		// TODO uncomment when ResidentRole is available
 		/*
 		return getResidentRole().thereIsFoodAtHome();
@@ -226,15 +298,9 @@ public class PersonAgent extends Agent {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
 	
-	enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
-	
-	class Watch {
-		// Contains information about time. Updated by msgUpdateTime.
-		public Watch() {
-			// TODO implement watch
-		}
-	}
-	
+	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
+	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED, FULL}
+		
 	public class Wallet {
 		private double cashOnHand;
 		private double tooMuch;

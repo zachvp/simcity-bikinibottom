@@ -31,8 +31,8 @@ public class TimeManager {
 	// -------- Static and member data -------- */
 	
 	/**
-	 * Multiply a time period in ms by this number to convert to game time.
-	 * One hour of game time corresponds to thirty seconds of real time.
+	 * Multiply a time period in milliseconds by this number to convert to game
+	 * time. One hour of game time corresponds to thirty seconds of real time.
 	 * */
 	public static final int CONVERSION_RATE =  60 * 2; // 60 minutes per hour * 2 thirty-second periods per minute
 	/**
@@ -48,7 +48,23 @@ public class TimeManager {
 	 */
 	public final long realStartTime;
 	
-	/* -------- Current time -------- */
+	/* -------- Simple time getters -------- */
+	
+	/**
+	 * @return the simulation "start" time in milliseconds
+	 * @see #FAKE_START_TIME
+	 */
+	public long fakeStartTimeMillis() {
+		return FAKE_START_TIME;
+	}
+	
+	/**
+	 * @return the simulation "start" date
+	 * @see #FAKE_START_TIME
+	 */
+	public Date fakeStartDate() {
+		return new Date(fakeStartTimeMillis());
+	}
 	
 	/**
 	 * The in-world time, in milliseconds.
@@ -66,7 +82,7 @@ public class TimeManager {
 		return new Date(currentSimTimeMillis());
 	}
 	
-	/* -------- Time until -------- */
+	/* -------- Time comparisons -------- */
 	
 	/**
 	 * Returns how much time is between now and the given time.

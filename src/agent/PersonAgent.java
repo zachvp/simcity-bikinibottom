@@ -69,7 +69,7 @@ public class PersonAgent extends Agent {
 			}
 		}
 
-		// Next, make sure you're not already doing something
+		// If you just arrived somewhere, activate the appropriate Role. 
 		
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			// TODO uncomment scheduler
@@ -77,7 +77,7 @@ public class PersonAgent extends Agent {
 		}
 		
 
-		// If not, decide what to do next.
+		// If you didn't just arrive somewhere, decide what to do next.
 		
 		if (workStartsSoon()) {
 			goToWork();
@@ -246,6 +246,12 @@ public class PersonAgent extends Agent {
 		// TODO implement getWorkRole()
 		return null;
 	}
+	
+	/*
+	public void activateRole(CityLocation loc) {
+		// TODO implement activateRole()
+	}
+	*/
 	
 	/*
 	Restaurant chooseRestaurant() {

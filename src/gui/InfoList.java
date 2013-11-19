@@ -24,6 +24,7 @@ public class InfoList extends JPanel implements ActionListener {
 	private JScrollPane pane;
 	private JPanel view = new JPanel();
 	private List<JButton> list = new ArrayList<JButton>();
+	private InfoPanel infoPanel;
 
 	public InfoList(int w, int h){
 		Dimension d = new Dimension(w-40, h-40);
@@ -54,6 +55,10 @@ public class InfoList extends JPanel implements ActionListener {
 			validate();
 		}
 	}
+	
+	public void setInfoPanel(InfoPanel p){
+		infoPanel = p;
+	}
 
 	/**
 	 * Returns the list of information buttons
@@ -63,9 +68,15 @@ public class InfoList extends JPanel implements ActionListener {
 		return list;
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void actionPerformed(ActionEvent e) {
+		for (JButton b: list){
+			if(e.getSource() == b){
+				//TODO showInfo from building's panel ie RestaurantPanel where
+				//		PersonAgents are instanciated
+				//infoPanel.showInfo(b.getName());
+			}
+		}
+		
 	}
 
 }

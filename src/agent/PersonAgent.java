@@ -52,6 +52,8 @@ public class PersonAgent extends Agent {
 		this.lastTimeEatingOut = timeManager.fakeStartDate();
 		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
 		
+		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
+		
 		// TODO Add meaningful defaults for wallet
 		this.wallet = new Wallet(20.00, 50.00, 10.00);
 	}

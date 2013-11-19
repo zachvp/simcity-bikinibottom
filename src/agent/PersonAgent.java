@@ -129,24 +129,8 @@ public class PersonAgent extends Agent {
 		this.roles.add(r);
 	}
 
-	/**
-	 * Adds the given dollar amount to the PersonAgent's wallet.
-	 */
-	public void addMoney(double dollars) {
-		this.wallet.setCashOnHand(this.wallet.getCashOnHand() + dollars);
-	}
-
-	/**
-	 * Attempts to remove the given dollar amount from the PersonAgent's wallet.
-	 *
-	 * @return true if the person has enough money, false otherwise
-	 */
-	public boolean removeMoney(double dollars) {
-		if (this.wallet.getCashOnHand() >= dollars) {
-			this.wallet.setCashOnHand(this.wallet.getCashOnHand() - dollars);
-			return true;
-		}
-		return false;
+	public Wallet getWallet() {
+		return this.wallet;
 	}
 	
 	// TODO Implement a general PersonGui?
@@ -238,19 +222,19 @@ public class PersonAgent extends Agent {
 			this.tooLittle = tooLittle;
 		}
 		
-		private double getCashOnHand() { return this.cashOnHand; }
-		private double getTooMuch() { return this.tooMuch; }
-		private double getTooLittle() { return this.tooLittle; }
+		public double getCashOnHand() { return this.cashOnHand; }
+		public double getTooMuch() { return this.tooMuch; }
+		public double getTooLittle() { return this.tooLittle; }
 		
-		private void setCashOnHand(double coh) { this.cashOnHand = coh; }
-		private void setTooMuch(double tm) { this.tooMuch = tm; }
-		private void setTooLittle(double tl) { this.tooLittle = tl; }
+		public void setCashOnHand(double coh) { this.cashOnHand = coh; }
+		public void setTooMuch(double tm) { this.tooMuch = tm; }
+		public void setTooLittle(double tl) { this.tooLittle = tl; }
 		
-		private boolean hasTooMuch() {
+		public boolean hasTooMuch() {
 			return cashOnHand > tooMuch;
 		}
 		
-		private boolean hasTooLittle() {
+		public boolean hasTooLittle() {
 			return cashOnHand < tooLittle;
 		}
 	}

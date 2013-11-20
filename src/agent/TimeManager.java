@@ -88,25 +88,41 @@ public class TimeManager {
 	/* -------- Time comparisons -------- */
 	
 	/**
-	 * Returns how much time is between now and the given time.
+	 * Calculates how much time is between now and the given time.
 	 * 
 	 * @param otherSimTime some other time in milliseconds since the epoch
 	 * @return the time between now and otherSimTime; negative if otherSimTime
 	 * 		   is in the past
 	 */
 	public long timeUntil(long otherSimTime) {
-		return otherSimTime - currentSimTimeMillis();
+		return timeBetween(currentSimTimeMillis(), otherSimTime);
 	}
 	
 	/**
-	 * Returns how much time is between now and the given time.
+	 * Calculates how much time is between now and the given time.
 	 * 
-	 * @param otherSimTime a java.util.Date representing some other time
+	 * @param otherSimDate a java.util.Date representing some other time
 	 * @return the time between now and otherSimTime; negative if otherSimTime
 	 * 		   is in the past
 	 */
-	public long timeUntil(Date otherSimTime) {
-		return timeUntil(otherSimTime.getTime());
+	public long timeUntil(Date otherSimDate) {
+		return timeBetween(currentSimDate(), otherSimDate);
+	}
+	
+	/**
+	 * Calculates how much time is between the given two times; if firstTime
+	 * comes after secondTime, this value is negative.
+	 */
+	public static long timeBetween(long firstTime, long secondTime) {
+		return secondTime - firstTime;
+	}
+	
+	/**
+	 * Calculates how much time is between the given two times; if firstTime
+	 * comes after secondTime, this value is negative.
+	 */
+	public static long timeBetween(Date firstDate, Date secondDate) {
+		return timeBetween(firstDate.getTime(), secondDate.getTime());
 	}
 	
 }

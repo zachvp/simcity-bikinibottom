@@ -64,4 +64,13 @@ public interface Constants {
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
 
+    
+    public static final int BUILDING_WIDTH = 90;
+	public static final int BUILDING_HEIGHT = 90;
+	
+	public final int MAP_WIDTH = 900;
+	public final int MAP_HEIGHT = 700;
+	public final int MAX_BLOCK_COL = 6;
+
+
 }

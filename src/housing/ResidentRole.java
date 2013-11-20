@@ -52,8 +52,8 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount) {
-		log.add("Received message 'payment due'");
 		this.moneyOwed = amount;
+		log.add("Received message 'payment due' amount is " + amount);
 		stateChanged();
 	}
 
@@ -62,9 +62,11 @@ public class ResidentRole extends Role implements Resident {
 	protected boolean pickAndExecuteAnAction() {
 		if(moneyOwed > 0){
 			makePayment();
+			return true;
 		}
 		if(food != null && food.state == FoodState.COOKED){
 			eatFood();
+			return true;
 		}
 		//TODO: The conditions for the below event need to be modified
 		if(hungry){
@@ -72,6 +74,7 @@ public class ResidentRole extends Role implements Resident {
 				Food f = entry.getValue();
 				if(f.amount > 0){
 					cookFood(f);
+					return true;
 				}
 			}
 		}
@@ -80,10 +83,17 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Actions ----- */
 	private void makePayment(){
-		log.add("Attempting to make payment.");
+		log.add("Attempting to make payment. Cash amount is "
+				+ person.getWallet().getCashOnHand());
 //		double money = person.getWallet().getCashOnHand();
-		if(person.getWallet().getCashOnHand() >= moneyOwed){
+		double cash = person.getWallet().getCashOnHand();
+		if(cash >= moneyOwed){
 			payee.msgHereIsPayment(moneyOwed, this);
+			cash -= moneyOwed;
+		}
+		else{
+			payee.msgHereIsPayment(cash, this);
+			cash = 0;
 		}
 //		double money = person.wallet.getCashOnHand();
 //		money -= moneyOwed;

@@ -49,12 +49,14 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		for(MyResident mr : residents){
 			if(mr.state == PaymentState.PAYMENT_PAID){
 				checkResidentPayment(mr);
+				return true;
 			}
 		}
 		//TODO implement actual time mechanic
 //		if(globalTime%monthlyTime == 0){
 			for(MyResident mr : residents){
 				chargeResident(mr);
+				return true;
 			}
 //		}
 		return false;

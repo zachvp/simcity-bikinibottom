@@ -1,18 +1,20 @@
 package housing.test;
 
+import housing.PayRecipientRole;
+import housing.ResidentRole;
 import junit.framework.TestCase;
 
 public class ResidentTest extends TestCase {
-//	ResidentRole resident;
-//	MockPaymentStructure paymentStructure;
-//	MockAccountManager accountManager;
+	/* --- Testing Roles and Agents --- */
+//	PersonAgent person;
+	ResidentRole resident;
+	PayRecipientRole payRecipient;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
 		
 //		resident = new ResidentRole("Resident");
-//		landlord = new MockPaymentStructure("Payment Structure");
-//		accountManager = new MockAccountManager("Account Manager");
+//		payRecipient = new PayRecipient("Pay Recipient");
 	}
 	
 	/** Tests the simplest case of the resident paying */

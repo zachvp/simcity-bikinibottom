@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-//provides scrolling view of city map
-
+/**
+ * Provides scrolling view of city map
+ * @author Victoria Dea
+ *
+ */
 public class CityView extends JPanel implements ActionListener{
 	private MainFrame mainFrame;
 	private JScrollPane pane;
@@ -30,17 +33,29 @@ public class CityView extends JPanel implements ActionListener{
 		
 	}
 	
+	/**
+	 * Adds a building to the city map
+	 * @param name Name of the building
+	 */
 	public void addBuildingToMap(String name){
 		map.addBuildingToMap(name);
 	}
+	/**
+	 * Sets reference to the BuildingView panel
+	 * @param panel BuildingView panel
+	 */
 	public void setBuildingView(BuildingView panel){
 		map.setBuildingView(panel);
 	}
 	
+	/**
+	 * Returns the list of Buildings on the map
+	 * @return ArrayList of Buildings
+	 */
 	public ArrayList<Building> getBuildings() {
 		return map.getBuildings();
 	}
-	@Override
+	
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		

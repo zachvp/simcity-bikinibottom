@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.gui.CashierGui;
+import market.gui.Gui;
 import market.interfaces.Cashier;
 import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
@@ -15,12 +17,22 @@ import agent.Agent;
 public class CashierAgent extends Agent implements Cashier{
 
 //public EventLog log = new EventLog();
-	
+	private CashierGui cashierGui = null;
 	private String name;
 	private double cash;
 	private List<MyCustomer> MyCustomerList = new ArrayList<MyCustomer>();
 	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
 	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
+	
+	private Map<String,Item> InventoryList = new HashMap<String,Item>();
+	{		//Initially The market has 100 inventory on each Item
+		InventoryList.put("CheapCar",		 new Item("CheapCar", 100));
+		InventoryList.put("ExpensiveCar", 	 new Item("ExpensiveCar", 100));
+		InventoryList.put("Pizza",			 new Item("Pizza", 100));
+		InventoryList.put("Sandwich",		 new Item("Sandwich", 100));
+		InventoryList.put("Chicken",		 new Item("Chicken", 100));
+	}
+	
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
 	{
 		double CheapCar = 100;
@@ -227,6 +239,15 @@ public class CashierAgent extends Agent implements Cashier{
 	}
 
 	//Utilities
+	public Map<String,Item> getInventoryList(){
+		return InventoryList;
+	}
+	public void setGui(CashierGui caGui){
+		cashierGui = caGui;
+	}
+	public Gui getGui(){
+		return cashierGui;
+	}
 	public void setDGList(List<DeliveryGuy> list){
 		DGList = list;
 	}
@@ -236,7 +257,8 @@ public class CashierAgent extends Agent implements Cashier{
 	public void setICList(List<ItemCollector> list){
 		ICList = list;
 	}
-	public void addICList(ItemCollector IC){
+	public void addICList(ItemCollector IC, Map<String,Item> InventoryList){
+		IC.setInventoryList(InventoryList);
 		getICList().add(IC);
 	}
 	public String getMaitreDName(){

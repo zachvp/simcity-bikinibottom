@@ -2,6 +2,8 @@ package market;
 
 import java.util.List;
 
+import market.gui.DeliveryGuyGui;
+import market.gui.Gui;
 import market.interfaces.Cashier;
 import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
@@ -9,13 +11,13 @@ import market.interfaces.DeliveryGuy;
 import agent.Agent;
 
 public class DeliveryGuyAgent extends Agent implements DeliveryGuy{
-
+	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available;
 	private Cashier cashier;
 	private CityBuilding Market;
 	
-	DeliveryGuyAgent(String NA, CityBuilding MA){
+	public DeliveryGuyAgent(String NA, CityBuilding MA){
 		name = NA;
 		Market = MA;
 	}
@@ -45,7 +47,12 @@ public class DeliveryGuyAgent extends Agent implements DeliveryGuy{
 		 Available = true;
 	}
 
-	@Override
+	public void setGui (DeliveryGuyGui dgGui){
+		deliveryguyGui = dgGui;
+	}
+	public Gui getGui (){
+		return deliveryguyGui;
+	}
 	public String getMaitreDName() {
 		// TODO Auto-generated method stub
 		return name;

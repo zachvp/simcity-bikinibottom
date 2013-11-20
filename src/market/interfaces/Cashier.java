@@ -1,6 +1,7 @@
 package market.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import market.Item;
 
@@ -21,7 +22,7 @@ public interface Cashier {
 	public abstract void setDGList(List<DeliveryGuy> list);
 	public abstract void addDGList(DeliveryGuy DG);
 	public abstract void setICList(List<ItemCollector> list);
-	public abstract void addICList(ItemCollector IC);
+	public abstract void addICList(ItemCollector IC, Map<String,Item> IList);
 	public abstract String getMaitreDName();
 	public abstract String getName();
 	

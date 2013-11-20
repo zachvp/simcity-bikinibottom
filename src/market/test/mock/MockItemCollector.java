@@ -3,6 +3,7 @@ package market.test.mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import market.test.mock.LoggedEvent;
 import market.test.mock.EventLog;
@@ -53,6 +54,12 @@ public class MockItemCollector extends Mock implements ItemCollector {
 
 	@Override
 	public void setCashier(Cashier ca) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setInventoryList(Map<String, Item> inventoryList) {
 		// TODO Auto-generated method stub
 		
 	}

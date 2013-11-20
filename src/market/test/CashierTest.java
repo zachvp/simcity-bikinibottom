@@ -65,7 +65,7 @@ public class CashierTest extends TestCase
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
 		//Step 1
-			Cashier.addICList(ItemCollector1);
+			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
 		//Check MyIClist
 			assertEquals("Cashier should have 1 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -169,7 +169,7 @@ public class CashierTest extends TestCase
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
 		//Step 1
-			Cashier.addICList(ItemCollector1);
+			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
 		//Check MyIClist
 			assertEquals("Cashier should have 1 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check Cashier.PaEaA calls no function (Do nothing)

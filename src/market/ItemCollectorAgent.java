@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.gui.Gui;
+import market.gui.ItemCollectorGui;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
@@ -12,16 +14,10 @@ import agent.Agent;
 
 public class ItemCollectorAgent extends Agent implements ItemCollector{
 
+	private ItemCollectorGui itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;
-	private Map<String,Item> InventoryList = new HashMap<String,Item>();
-	{		//Initially The market has 100 inventory on each Item
-		InventoryList.put("CheapCar",		 new Item("CheapCar", 100));
-		InventoryList.put("ExpensiveCar", 	 new Item("ExpensiveCar", 100));
-		InventoryList.put("Pizza",			 new Item("Pizza", 100));
-		InventoryList.put("Sandwich",		 new Item("Sandwich", 100));
-		InventoryList.put("Chicken",		 new Item("Chicken", 100));
-	}
+	private Map<String,Item> InventoryList = null;
 	private List<Order> Orders = new ArrayList<Order>();
 	
 	private class Order {
@@ -29,7 +25,7 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	ItemCollectorAgent(String na){
+	public ItemCollectorAgent(String na){
 		name = na;
 	}
 	
@@ -48,7 +44,7 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 	}
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
-		if(Orders.get(0)!=null){
+		if(Orders.size()!=0){
 			GoGetItems(Orders.get(0));
 			return true;
 		}
@@ -85,6 +81,15 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 	}
 
 	//Utilities
+	public void setInventoryList(Map<String,Item> IList){
+		InventoryList = IList;
+	}
+	public void setGui (ItemCollectorGui icGui){
+		itemcollectorGui = icGui;
+	}
+	public Gui getGui (){
+		return itemcollectorGui;
+	}
 	public String getMaitreDName(){
 		return name;
 	}

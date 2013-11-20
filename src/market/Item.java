@@ -19,4 +19,8 @@ public class Item{
 	public void ItemAdded(int i){
 		amount = amount + i;
 	}
+	
+	public void ItemEqual (int i){
+		amount = i;
+	}
 }

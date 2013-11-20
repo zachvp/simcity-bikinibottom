@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import market.gui.CustomerGui;
+import market.gui.Gui;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import agent.Agent;
 
 public class CustomerAgent extends Agent implements Customer{
 	String name;
+	private CustomerGui customerGui = null;
 	private List<Item> tempInventoryList = new ArrayList<Item>();
 	{
 		tempInventoryList.add(new Item("CheapCar", 0));
@@ -149,6 +152,12 @@ public class CustomerAgent extends Agent implements Customer{
 	}
 	
 	//Utilities
+	public void setGui (CustomerGui cuGui){
+		customerGui = cuGui;
+	}
+	public Gui getGui (){
+		return customerGui;
+	}
 	public void setCashier(Cashier ca){
 		cashier = ca;
 	}

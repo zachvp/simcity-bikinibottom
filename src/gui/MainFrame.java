@@ -53,6 +53,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	private InfoList buildingList;
 	private InfoList personList;
+	private CitizenRecords citizenRecords = new CitizenRecords();
 	
 	//TODO Create infoDisplayPanel (all button lists access this)
 	
@@ -109,6 +110,7 @@ public class MainFrame extends JFrame implements ActionListener {
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
         infoPanelSlot.setOpaque(false);
         infoPanel = new InfoPanel(infoDim.width, infoDim.height);
+        infoPanel.setCitizenRecords(citizenRecords);
         infoPanelSlot.add(infoPanel);
         
         //List of Buildings/People buttons
@@ -122,6 +124,7 @@ public class MainFrame extends JFrame implements ActionListener {
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);
         personList = new InfoList(listDim.width, listDim.height);
+        citizenRecords.setPersonInfoList(personList);
         buildingList.setBuildingView(buildingViewPanel);
         
         
@@ -136,6 +139,7 @@ public class MainFrame extends JFrame implements ActionListener {
         buildingViewPanel.setBuildingList(buildingList);
         //TODO
         personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+        personCreationPanel.setRecords(citizenRecords);
         buildingViewPanel.addCard(personCreationPanel, "Hospital");
         cityViewPanel.addBuildingToMap("Hospital");
         
@@ -199,6 +203,17 @@ public class MainFrame extends JFrame implements ActionListener {
 	public void addPersonToCity(PersonAgent p){
 		//TODO
 	}
+	
+	//from personinfolist, later cityMap/animationpanel
+	public void displayPersonInfo(){
+		
+	}
+	//from citymap and buildinginfolist
+	public void displayBuildingInfo(String name){
+		
+		//infoPanel.updateInfoPanel(building);
+	}
+	
 	
 	public void actionPerformed(ActionEvent e) {
 		/*/TODO Test buttons

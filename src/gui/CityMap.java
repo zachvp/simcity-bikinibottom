@@ -14,13 +14,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import agent.Constants;
 
 public class CityMap extends JPanel implements MouseListener {
 
-	private final int MAP_WIDTH = 900;
-	private final int MAP_HEIGHT = 700;
-	private final int MAX_COL = 6;
-	//private final int MAX_ROW = 4;	
+		
 	private int col, row = 0;
 	
 	ArrayList<Building> buildings;
@@ -29,7 +27,7 @@ public class CityMap extends JPanel implements MouseListener {
 	ImageIcon icon;
 
 	public CityMap(){
-		Dimension panelDim = new Dimension(MAP_WIDTH, MAP_HEIGHT);
+		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
 		//setMaximumSize(panelDim);
 		//setMinimumSize(panelDim);
@@ -57,12 +55,12 @@ public class CityMap extends JPanel implements MouseListener {
 	}
 	
 	public void addBuildingToMap(String name){
-		if (col >= MAX_COL){
+		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
 			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
-		Building b = new Building(col*150 +10, row*150 +10, 90, 90);
+		Building b = new Building(col*150 +10, row*150 +10, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 		b.setName(name);
 		buildings.add(b);
 		col++;

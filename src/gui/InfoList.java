@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 
 /**
@@ -82,6 +83,7 @@ public class InfoList extends JPanel implements ActionListener {
 		for (JButton b: list){
 			if(e.getSource() == b){
 				System.out.println("button press " + b.getText());
+				//b.set
 				if (isBuildingList){
 					buildingView.showCard(b.getText());
 				}
@@ -89,8 +91,12 @@ public class InfoList extends JPanel implements ActionListener {
 				//		PersonAgents are instanciated
 				//infoPanel.showInfo(b.getText());
 			}
+			else{
+				
+			}
 		}
 		
 	}
-
+	
+	
 }

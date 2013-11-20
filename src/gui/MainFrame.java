@@ -1,5 +1,6 @@
 package gui;
 
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -7,12 +8,19 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import agent.PersonAgent;
 
 
 /** 
@@ -22,6 +30,10 @@ import javax.swing.JTabbedPane;
  *
  */
 public class MainFrame extends JFrame implements ActionListener {
+	
+	
+	//TODO  write down steps to test GUI manually 
+	
 	
 	private int WINDOWX = 1500;
 	private int WINDOWY = 800;
@@ -35,20 +47,21 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Panels
 	private BuildingView buildingViewPanel;
 	private CityView cityViewPanel;
+	private InfoPanel infoPanel;
+	
+	private PersonCreationPanel personCreationPanel;
 
 	private InfoList buildingList;
 	private InfoList personList;
 	
 	//TODO Create infoDisplayPanel (all button lists access this)
 	
-	//TODO Test
-	//JButton b = new JButton("test1");
-    //JButton b2 = new JButton("test2");
-	
     //TODO Add timer here
     
 	
-	//NOTICE: buttons won't add to buildingList when created in constructor
+	//TODO test agent
+	private PersonAgent person = new PersonAgent("Steve");
+	
 	public MainFrame(){
 		
 		//TODO FullScreen frame?
@@ -58,6 +71,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		//setExtendedState(Frame.MAXIMIZED_BOTH);
 		
 		setBounds(50,50, WINDOWX, WINDOWY);
+		
+		//TODO clone repo to ensure image shows up
+		try {
+			setContentPane(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("sky_background.png")))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setLayout(new BorderLayout(5,10));
 		 
 		//Internal Building View
@@ -66,6 +86,7 @@ public class MainFrame extends JFrame implements ActionListener {
         buildingViewSlot.setMaximumSize(buildingDim);
         buildingViewSlot.setMinimumSize(buildingDim);
         buildingViewSlot.setBorder(BorderFactory.createTitledBorder("Building View"));
+        buildingViewSlot.setOpaque(false);
         buildingViewPanel = new BuildingView(buildingDim.width, buildingDim.height);
         buildingViewSlot.add(buildingViewPanel);
         
@@ -74,40 +95,49 @@ public class MainFrame extends JFrame implements ActionListener {
         cityViewSlot.setPreferredSize(cityDim);
         cityViewSlot.setMaximumSize(cityDim);
         cityViewSlot.setMinimumSize(cityDim);
+        cityViewSlot.setOpaque(false);
         cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
-        cityViewPanel = new CityView(cityDim.width, cityDim.height);
+        cityViewPanel = new CityView(cityDim.width, cityDim.height, this);
+        cityViewPanel.setBuildingView(buildingViewPanel);
         cityViewSlot.add(cityViewPanel);
-        
-        /*/TODO Test buttons
-        b.addActionListener(this);
-        b2.addActionListener(this);
-        cityViewSlot.add(b);
-        cityViewSlot.add(b2);//*/
-             
+                    
         //Information Panel
         Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
         infoPanelSlot.setPreferredSize(infoDim);
         infoPanelSlot.setMaximumSize(infoDim);
         infoPanelSlot.setMinimumSize(infoDim);
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
-        //TODO Add infoPanel to infoPanelSlot
+        infoPanelSlot.setOpaque(false);
+        infoPanel = new InfoPanel(infoDim.width, infoDim.height);
+        infoPanelSlot.add(infoPanel);
         
         //List of Buildings/People buttons
         Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
         InfoListSlot.setPreferredSize(listDim);
         InfoListSlot.setMaximumSize(listDim);
         InfoListSlot.setMinimumSize(listDim);
+        InfoListSlot.setOpaque(false);
         //buildingListSlot.setBorder(BorderFactory.createTitledBorder("Building List"));
         //buildingListSlot.setLayout(new CardLayout());
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);
         personList = new InfoList(listDim.width, listDim.height);
+        buildingList.setBuildingView(buildingViewPanel);
+        
+        
+        //TODO addInfoPanel(infoPanel)?
+       // buildingList.setInfoPanel(buildingInfoPanel);
+       // personList.setInfoPanel(personInfoPanel);
         tabbedPane.addTab("Buildings", buildingList);
         tabbedPane.addTab("People", personList);
         InfoListSlot.add(tabbedPane);
         //buildingListSlot.add(buildingList);
                 
         buildingViewPanel.setBuildingList(buildingList);
+        //TODO
+        personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+        buildingViewPanel.addCard(personCreationPanel, "Hospital");
+        cityViewPanel.addBuildingToMap("Hospital");
         
         //JPanel to hold infoPanelSlot and buildingListSlot
         JPanel infoHolder = new JPanel();
@@ -115,6 +145,7 @@ public class MainFrame extends JFrame implements ActionListener {
         infoHolder.setPreferredSize(infoHolderDim);
         infoHolder.setMaximumSize(infoHolderDim);
         infoHolder.setMinimumSize(infoHolderDim);
+        infoHolder.setOpaque(false);
         infoHolder.setLayout(new BorderLayout(5,10));
         infoHolder.add(infoPanelSlot, BorderLayout.WEST);
         infoHolder.add(InfoListSlot, BorderLayout.EAST);
@@ -122,16 +153,51 @@ public class MainFrame extends JFrame implements ActionListener {
 		add(buildingViewSlot, BorderLayout.EAST);
 		add(cityViewSlot, BorderLayout.WEST);
 		add(infoHolder, BorderLayout.SOUTH);	
-
-		//cardLayout test
-		/*JPanel blank2 = new JPanel();
-		blank2.setBackground(Color.red);
-		buildingViewPanel.addCard(blank2, "blank2");*/
+		
+	//	ArrayList<Building> buildings = cityViewPanel.getBuildings();
+		//for (int i=0; i<buildings.size(); i++ ) {
+			//Building b = buildings.get(i);
+			//BuildingPanel bp = new BuildingPanel( b, i, this );
+			//b.setBuildingPanel( bp );
+			//buildingPanels.add( bp, "" + i );
+		//}
+		
+		//TODO personagent test
+		//person.
+		
+		
+		//TODO animation panel/map test
+		String name = "Magenta";
+		JPanel testAnimationPanel = new JPanel();
+		testAnimationPanel.setSize(buildingViewPanel.getDim());
+		testAnimationPanel.setBackground(Color.magenta);
+		buildingViewPanel.addCard(testAnimationPanel, name);//creates card and corresponding button
+		cityViewPanel.addBuildingToMap(name); //creates building on map
+		
+		String name2 = "Cyan";
+		JPanel testAnimationPanel2 = new JPanel();
+		testAnimationPanel2.setBackground(Color.CYAN);
+		buildingViewPanel.addCard(testAnimationPanel2, name2);
+		cityViewPanel.addBuildingToMap(name2);
+		for(int i=0; i<8; i++){
+			cityViewPanel.addBuildingToMap(name);
+			cityViewPanel.addBuildingToMap(name2);
+		}
+		personList.addToList("Steve");
+		//make buildingAnimationPanels example
+		//BankAnimation bankAnimation = new BuildingAnimation("Bank");
+		//addAnimationPanel(bankAnimation, "Bank");
+		//buildingViewPanel.showCard("Bank")
+		
 	}
 	
 	//TODO add animation panels here
 	public void addAnimationPanel(JPanel panel, String name){
 		buildingViewPanel.addCard(panel, name);
+	}
+	
+	public void addPersonToCity(PersonAgent p){
+		//TODO
 	}
 	
 	public void actionPerformed(ActionEvent e) {

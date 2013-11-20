@@ -1,5 +1,7 @@
 package transportation.interfaces;
 
+import java.util.List;
+
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.DirectionEnum;
 import transportation.IntersectionAction;
@@ -7,7 +9,7 @@ import transportation.IntersectionAction;
 /* Node of a grid defining the city's roads. Handles all 
  * necessary interactions when people or vehicles reach 
  * a corner.
- */
+ */ // TODO Update
 public interface Corner extends CityLocation {
 	
 	/* Message a vehicle sends to a corner 
@@ -33,5 +35,9 @@ public interface Corner extends CityLocation {
 	/* Return the corner that sits at the given direction
 	 */
 	public Corner getCornerForDir(DirectionEnum dir);
+
+	public List<Busstop> getBusstops();
+
+	public Busstop getBusstopWithDirection(boolean busDirection);
 	
 }

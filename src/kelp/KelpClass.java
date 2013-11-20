@@ -1,6 +1,7 @@
 package kelp;
 
 import java.awt.Point;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
@@ -9,6 +10,7 @@ import java.util.TreeMap;
 import javax.management.modelmbean.InvalidTargetObjectTypeException;
 import javax.naming.InitialContext;
 
+import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 
 import com.sun.org.apache.xml.internal.security.utils.IgnoreAllErrorHandler;
@@ -19,6 +21,7 @@ import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 
+// TODO Make methods return something other than maps to avoid overwriting
 public class KelpClass implements Kelp {
 	
 	// TODO SET CORRECT CONSTANTS
@@ -27,6 +30,8 @@ public class KelpClass implements Kelp {
 	private static final double WALKING_SPEED = 0;
 	private static final int DISTANCE_THRESHOLD_FOR_SAME_COORDINATE = 0;
 	List<CityLocation> locations;
+	
+	List<Corner> busRoute;
 
 	@Override
 	public List<CityLocation> routeFromAToB(XYPos A, CityLocation B) {
@@ -46,6 +51,8 @@ public class KelpClass implements Kelp {
 		} else {
 			response = pathWithoutBus;
 		}
+		
+		response.add(B);
 		
 		return response;
 	}
@@ -90,8 +97,68 @@ public class KelpClass implements Kelp {
 	}
 
 	private List<CityLocation> routeWithBus(XYPos posA, XYPos posB) {
-		// TODO Auto-generated method stub
-		return null;
+		SortedMap<Integer, CityLocation> nearBusstops = placesNearMe(posA, 
+				LocationTypeEnum.Busstop);
+		Busstop nearestBusstop = (Busstop)nearBusstops.get(nearBusstops.firstKey());
+		Corner nearestCornerWithBusstopStart = nearestBusstop.corner();
+		
+		nearBusstops = placesNearMe(posB, 
+				LocationTypeEnum.Busstop);
+		nearestBusstop = (Busstop)nearBusstops.get(nearBusstops.firstKey());
+		Corner nearestCornerWithBusstopEnd = nearestBusstop.corner();
+		
+		List<CityLocation> path = new ArrayList<CityLocation>();
+		
+		Busstop busstopToTake;
+		boolean busDirection;
+		
+		try {
+			busDirection = isBusstopDistancePositive
+					(nearestCornerWithBusstopStart,
+					nearestCornerWithBusstopEnd);
+		} catch (Exception e) {
+			busDirection = false;
+			e.printStackTrace();
+		}
+		
+		busstopToTake = nearestCornerWithBusstopStart.getBusstopWithDirection
+				(busDirection);
+		
+		
+		List<CityLocation> fromAToBusstop = routeWithoutBus
+				(posA, busstopToTake.position());
+		List<CityLocation> fromCornerToB = routeWithoutBus
+				(nearestCornerWithBusstopEnd.position(), posB);
+		
+		for (CityLocation location : fromAToBusstop) {
+			path.add(location);
+		}
+		path.add(busstopToTake);
+		for (CityLocation location : fromCornerToB) {
+			path.add(location);
+		}
+		
+		return path;
+	}
+	
+	// TODO make it use actual distance?
+	private boolean isBusstopDistancePositive(
+			Corner nearestCornerWithBusstopStart,
+			Corner nearestCornerWithBusstopEnd) throws Exception {
+		int startIndex = busRoute.indexOf(nearestCornerWithBusstopStart);
+		int endIndex = busRoute.indexOf(nearestCornerWithBusstopEnd);
+		
+		if (startIndex < 0 || endIndex < 0) {
+			throw new Exception("isBusstopDistancePositiveOrNegative "
+					+ "method received a corner that is not part of"
+					+ "the bus route");
+		}
+		
+		if (((endIndex - startIndex) % busRoute.size())
+				<= busRoute.size()/2) {
+			return true;
+		} else return false;
+				
 	}
 
 	private List<CityLocation> routeWithoutBus(XYPos posA, XYPos posB) {
@@ -150,10 +217,20 @@ public class KelpClass implements Kelp {
 		while (Math.abs(currentCorner.position().x - 
 				currentCorner.getCornerForDir(horizontalDir).position().x)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
-			
+			currentCorner = currentCorner.getCornerForDir(horizontalDir);
+			path.add(currentCorner);
 		}
 		
-		return null;
+		
+		while (Math.abs(currentCorner.position().y - 
+				currentCorner.getCornerForDir(verticalDir).position().y)
+				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
+			currentCorner = currentCorner.getCornerForDir(verticalDir);
+			path.add(currentCorner);
+		}
+		
+		
+		return path;
 	}
 
 	@Override
@@ -163,12 +240,14 @@ public class KelpClass implements Kelp {
 	}
 
 	@Override
-	public SortedMap<Integer, CityLocation> placesNearMe(XYPos me, LocationTypeEnum type) {
-		SortedMap<Integer, CityLocation> response = new TreeMap<Integer, CityLocation>();
-		for (CityLocation loc : locations) {
-			if (loc.type() == type) {
-				response.put(distanceHeuristic(me, getEntrancePosition(loc)), loc);
-			}
+	public SortedMap<Integer, CityLocation> placesNearMe
+								(XYPos me, LocationTypeEnum type) {
+		
+		SortedMap<Integer, CityLocation> response = 
+				new TreeMap<Integer, CityLocation>();
+		
+		for (CityLocation loc : locations) if (loc.type() == type) {
+			response.put(distanceHeuristic(me, getEntrancePosition(loc)),loc);
 		}
 		
 		return response;

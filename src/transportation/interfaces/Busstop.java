@@ -21,4 +21,6 @@ public interface Busstop extends CityLocation {
 	 * people waiting for the bus.
 	 */
 	public void msgGiveMePeople(Bus b);
+
+	public Corner corner();
 }

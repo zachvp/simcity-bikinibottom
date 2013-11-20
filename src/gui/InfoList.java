@@ -21,12 +21,14 @@ import javax.swing.JScrollPane;
  */
 public class InfoList extends JPanel implements ActionListener {
 
-	private BuildingView buildingView;
 	private JScrollPane pane;
 	private JPanel view;
 	private List<JButton> list;
 	private InfoPanel infoPanel;
-	Dimension d;
+	private Dimension d;
+	private BuildingView buildingView;
+	private boolean isBuildingList = false;
+	
 
 	public InfoList(int w, int h){
 		view = new JPanel();
@@ -55,12 +57,14 @@ public class InfoList extends JPanel implements ActionListener {
 			button.addActionListener(this);
 			list.add(button);
 			view.add(button);
+			//TODO create person
 		}
 		validate();		
 	}
 	
 	public void setBuildingView(BuildingView v){
 		buildingView = v;
+		isBuildingList = true;
 	}
 	public void setInfoPanel(InfoPanel p){
 		infoPanel = p;
@@ -78,7 +82,9 @@ public class InfoList extends JPanel implements ActionListener {
 		for (JButton b: list){
 			if(e.getSource() == b){
 				System.out.println("button press " + b.getText());
-				buildingView.showCard(b.getText());
+				if (isBuildingList){
+					buildingView.showCard(b.getText());
+				}
 				//TODO showInfo from building's panel ie RestaurantPanel where
 				//		PersonAgents are instanciated
 				//infoPanel.showInfo(b.getText());

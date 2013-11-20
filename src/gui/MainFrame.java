@@ -31,6 +31,10 @@ import agent.PersonAgent;
  */
 public class MainFrame extends JFrame implements ActionListener {
 	
+	
+	//TODO  write down steps to test GUI manually 
+	
+	
 	private int WINDOWX = 1500;
 	private int WINDOWY = 800;
 	
@@ -44,15 +48,13 @@ public class MainFrame extends JFrame implements ActionListener {
 	private BuildingView buildingViewPanel;
 	private CityView cityViewPanel;
 	private InfoPanel infoPanel;
+	
+	private PersonCreationPanel personCreationPanel;
 
 	private InfoList buildingList;
 	private InfoList personList;
 	
 	//TODO Create infoDisplayPanel (all button lists access this)
-	
-	//TODO Test
-	//JButton b = new JButton("test1");
-    //JButton b2 = new JButton("test2");
 	
     //TODO Add timer here
     
@@ -60,7 +62,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	//TODO test agent
 	private PersonAgent person = new PersonAgent("Steve");
 	
-	//NOTICE: buttons won't add to buildingList when created in constructor
 	public MainFrame(){
 		
 		//TODO FullScreen frame?
@@ -70,17 +71,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		//setExtendedState(Frame.MAXIMIZED_BOTH);
 		
 		setBounds(50,50, WINDOWX, WINDOWY);
-		//setLayout(new BorderLayout(5,10));
 		
-		//TODO change filepath to make local to project
+		//TODO clone repo to ensure image shows up
 		try {
 			setContentPane(new JLabel(new ImageIcon(ImageIO.read(getClass().getResource("sky_background.png")))));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//setContentPane(new JLabel(new ImageIcon("C:\\Users\\Victoria Dea\\Desktop\\SimCity201\\src\\gui\\sky_background.png")));
-		//add(background);
 		setLayout(new BorderLayout(5,10));
 		 
 		//Internal Building View
@@ -103,13 +100,7 @@ public class MainFrame extends JFrame implements ActionListener {
         cityViewPanel = new CityView(cityDim.width, cityDim.height, this);
         cityViewPanel.setBuildingView(buildingViewPanel);
         cityViewSlot.add(cityViewPanel);
-        
-        /*/TODO Test buttons
-        b.addActionListener(this);
-        b2.addActionListener(this);
-        cityViewSlot.add(b);
-        cityViewSlot.add(b2);//*/
-             
+                    
         //Information Panel
         Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
         infoPanelSlot.setPreferredSize(infoDim);
@@ -132,7 +123,8 @@ public class MainFrame extends JFrame implements ActionListener {
         buildingList = new InfoList(listDim.width, listDim.height);
         personList = new InfoList(listDim.width, listDim.height);
         buildingList.setBuildingView(buildingViewPanel);
-        personList.setBuildingView(buildingViewPanel);
+        
+        
         //TODO addInfoPanel(infoPanel)?
        // buildingList.setInfoPanel(buildingInfoPanel);
        // personList.setInfoPanel(personInfoPanel);
@@ -142,6 +134,9 @@ public class MainFrame extends JFrame implements ActionListener {
         //buildingListSlot.add(buildingList);
                 
         buildingViewPanel.setBuildingList(buildingList);
+        //TODO
+        personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+        buildingViewPanel.addCard(personCreationPanel, "Hospital");
         
         //JPanel to hold infoPanelSlot and buildingListSlot
         JPanel infoHolder = new JPanel();
@@ -187,7 +182,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			cityViewPanel.addBuildingToMap(name);
 			cityViewPanel.addBuildingToMap(name2);
 		}
-		
+		personList.addToList("Steve");
 		//make buildingAnimationPanels example
 		//BankAnimation bankAnimation = new BuildingAnimation("Bank");
 		//addAnimationPanel(bankAnimation, "Bank");

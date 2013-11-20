@@ -3,7 +3,6 @@ package housing;
 import housing.ResidentRole.FoodState;
 import housing.interfaces.Landlord;
 import housing.interfaces.Resident;
-import housing.test.mock.EventLog;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.TimerTask;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.mock.EventLog;
 
 public class LandLordRole extends Role implements Landlord {
 	/** DATA */

@@ -1,4 +1,4 @@
-package housing.test.mock;
+package agent.mock;
 
 import java.text.DateFormat;
 import java.util.Date;

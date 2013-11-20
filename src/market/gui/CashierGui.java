@@ -16,6 +16,9 @@ public class CashierGui implements Gui {
     
     private static final int CashierWidth = 15;
     private static final int CashierHeight = 15;
+    
+    private static final int FrontDeskX = 15;
+    private static final int FrontDeskY = 15;
 
     public CashierGui(Cashier ca) {
         this.agent = ca;
@@ -33,6 +36,10 @@ public class CashierGui implements Gui {
             yPos--;
 
 
+    }
+    public void GoToFrontDesk(){
+    	xDestination = FrontDeskX;
+    	yDestination = FrontDeskY;
     }
 
     public void draw(Graphics2D g) {

@@ -14,8 +14,6 @@ public class CustomerGui implements Gui{
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	
-	private String Food = null;
-	
 	public static final int OffScreenX = 340;
 	public static final int OffScreenY = 50;
 	public static final int CustomerWidth = 20;
@@ -80,25 +78,10 @@ public class CustomerGui implements Gui{
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, CustomerWidth, CustomerHeight);
-		if (Food == null){
-			g.drawString("?", xPos, yPos);
-		}
-		if (Food != null){
-			g.drawString(Food, xPos, yPos);
-		}
+
 	}
 
-	public void Food(String s){
-    	Food = s;
-    }
-    
-    public void FinishFood(){
-    	Food = "!!";
-    }
-    
-    public void FinishCheck(){
-    	Food = null;
-    }
+
     
 	public boolean isPresent() {
 		return isPresent;

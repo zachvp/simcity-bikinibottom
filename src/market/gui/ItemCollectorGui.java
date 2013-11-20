@@ -16,6 +16,9 @@ public class ItemCollectorGui implements Gui {
     
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
+    
+    private static final int CollectItemX = 10;
+    private static final int CollectItemY = 10;
 
     public ItemCollectorGui(ItemCollector ic) {
         this.agent = ic;
@@ -33,6 +36,11 @@ public class ItemCollectorGui implements Gui {
             yPos--;
 
 
+    }
+    
+    public void CollectItems(){
+    	xDestination = CollectItemX;
+    	yDestination = CollectItemY;
     }
 
     public void draw(Graphics2D g) {

@@ -15,6 +15,9 @@ public class DeliveryGuyGui implements Gui {
     
     private static final int DeliveryGuyWidth = 10;
     private static final int DeliveryGuyHeight = 10;
+    
+    private static final int ExitX = 10;
+    private static final int ExitY = 10;
 
     public DeliveryGuyGui(DeliveryGuy dg) {
         this.agent = dg;
@@ -32,6 +35,10 @@ public class DeliveryGuyGui implements Gui {
             yPos--;
 
 
+    }
+    public void GoDeliver(){
+    	xDestination = ExitX;
+    	yDestination = ExitY;
     }
 
     public void draw(Graphics2D g) {

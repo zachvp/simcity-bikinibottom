@@ -137,6 +137,7 @@ public class MainFrame extends JFrame implements ActionListener {
         //TODO
         personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
         buildingViewPanel.addCard(personCreationPanel, "Hospital");
+        cityViewPanel.addBuildingToMap("Hospital");
         
         //JPanel to hold infoPanelSlot and buildingListSlot
         JPanel infoHolder = new JPanel();

@@ -77,12 +77,19 @@ public class CityMap extends JPanel implements MouseListener {
 		
         
 		
-		
-		g2.setColor(Color.DARK_GRAY);
+	
 
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			g2.fill(b);
+			if(b.getName().equals("Hospital")){
+				g2.setColor(Color.white);
+				g2.fill(b);
+				
+			}else{
+				g2.setColor(Color.DARK_GRAY);
+				g2.fill(b);
+			}
+			
 		}
 	}
 

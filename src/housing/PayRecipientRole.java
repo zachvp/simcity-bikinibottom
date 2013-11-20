@@ -15,7 +15,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public EventLog log = new EventLog();
 	
 	/* ----- Person Data ----- */
-	private PersonAgent person;
+	PersonAgent person;
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());

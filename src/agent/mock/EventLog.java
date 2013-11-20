@@ -25,6 +25,7 @@ public class EventLog {
 	 */
 	public void add(String log){
 		events.add(new LoggedEvent(log));
+		System.out.println(log);//TODO this is for testing purposes and should be removed later
 	}
 
 	/**

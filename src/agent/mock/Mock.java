@@ -1,4 +1,4 @@
-package housing.test.mock;
+package agent.mock;
 
 /**
  * This is the base class for all mocks.

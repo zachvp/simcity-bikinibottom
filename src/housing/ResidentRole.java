@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
-import housing.test.mock.EventLog;
+import agent.mock.EventLog;
 import agent.PersonAgent;
 import agent.Role;
 

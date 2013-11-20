@@ -7,7 +7,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +23,13 @@ import javax.swing.JTextField;
  *
  */
 public class PersonCreationPanel extends JPanel implements ActionListener{
+	
+	JTextField nameText;
+	JComboBox<String> occupations;
+	JComboBox<String> residences;
+	JComboBox<String> wealth;
+	JComboBox<String> car;
+	JButton createButton;
 
 	public PersonCreationPanel(Dimension d){
 		setPreferredSize(d);
@@ -38,38 +48,64 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		welcomeText.setFont(font);
 		
 		JPanel inputPanel = new JPanel();
-		Dimension inputDim = new Dimension((int)(d.width*0.5), (int)(d.height*0.3));
+		Dimension inputDim = new Dimension(d.width, (int)(d.height*0.3));
 		inputPanel.setPreferredSize(inputDim);
 		inputPanel.setMaximumSize(inputDim);
 		inputPanel.setMinimumSize(inputDim);
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
+		inputPanel.setBackground(Color.white);
 		
-		JTextField nameText = new JTextField();
-		JComboBox<String> occupations = new JComboBox<String>();
-		JComboBox<String> residences = new JComboBox<String>();
-		JComboBox<String> wealth = new JComboBox<String>(new String[] {"Rich", "Middle", "Poor"});
-		JComboBox<String> car = new JComboBox<String>(new String[] {"Yes", "No"});
-		
+		nameText = new JTextField("Enter a name");
+		occupations = new JComboBox<String>(new String[] {"Select an Occupation"});
+		residences = new JComboBox<String>(new String[] {"Select a Residence"});
+		wealth = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
+		car = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
+
+		nameText.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				nameText.setText(null);
+			}
+		});
+
 		inputPanel.add(new JLabel("Name: "));
 		inputPanel.add(nameText);
-		inputPanel.add(new JLabel("Select an Occupation: "));
+		inputPanel.add(new JLabel("Occupation: "));
 		inputPanel.add(occupations);
-		inputPanel.add(new JLabel("Select a Residence: "));
+		inputPanel.add(new JLabel("Residence: "));
 		inputPanel.add(residences);
-		inputPanel.add(new JLabel("Select a Status: "));
+		inputPanel.add(new JLabel("Status: "));
 		inputPanel.add(wealth);
-		inputPanel.add(new JLabel("Has a Car: "));
+		inputPanel.add(new JLabel("Car: "));
 		inputPanel.add(car);
 		
+		createButton = new JButton("Create");
+		createButton.addActionListener(this);
+		
 		add(welcomeText);
-		add(inputPanel);//, BorderLayout.CENTER);
+		add(inputPanel);
+		add(createButton);
 		
 	}
 
 	
 	
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == createButton){
+			String name = nameText.getText();
+			String job = (String)occupations.getSelectedItem();
+			String home = (String)residences.getSelectedItem();
+			String wealthStatus = (String)wealth.getSelectedItem();
+			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
+			
+			nameText.setText("");
+			occupations.setSelectedIndex(0);
+			residences.setSelectedIndex(0);
+			wealth.setSelectedIndex(0);
+			car.setSelectedIndex(0);
+			
+			//TODO Create personAgent
+			//TODO Add to person InfoList
+		}
 		
 	}
 	

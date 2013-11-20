@@ -1,5 +1,7 @@
 package agent;
 
+import housing.ResidentRole;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -272,17 +274,14 @@ public class PersonAgent extends Agent {
 	 * 
 	 * @return the ResidentRole; null if none exists
 	 */
-	/*
 	public ResidentRole getResidentRole() {
-		// TODO uncomment when ResidentRole is available
 		for (Role r : roles) {
 			if (r instanceof ResidentRole) {
-				return r;
+				return (ResidentRole) r;
 			}
 		}
 		return null;
 	}
-	*/
 	
 	/*
 	public WorkRole getWorkRole() {
@@ -343,11 +342,7 @@ public class PersonAgent extends Agent {
 	}
 	
 	public boolean hasFoodAtHome() {
-		// TODO uncomment when ResidentRole is available
-		/*
 		return getResidentRole().thereIsFoodAtHome();
-		*/
-		return false;
 	}
 	
 	boolean needToGoToBank() {

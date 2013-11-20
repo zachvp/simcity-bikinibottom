@@ -16,13 +16,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import agent.PersonAgent;
+
 /**
  * Panel for creating PersonAgents from UI
- * Treated as a "Hospital" Building
+ * Disguised as a "Hospital" Building
  * @author Victoria Dea
  *
  */
 public class PersonCreationPanel extends JPanel implements ActionListener{
+	
+	private CitizenRecords citizenRecords;
+
 	
 	JTextField nameText;
 	JComboBox<String> occupations;
@@ -56,8 +61,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setBackground(Color.white);
 		
 		nameText = new JTextField("Enter a name");
-		occupations = new JComboBox<String>(new String[] {"Select an Occupation"});
-		residences = new JComboBox<String>(new String[] {"Select a Residence"});
+		occupations = new JComboBox<String>(new String[] {"Select an Occupation", "None"});
+		residences = new JComboBox<String>(new String[] {"Select a Residence", "None"});
 		wealth = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
 		car = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
 
@@ -97,16 +102,30 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			String wealthStatus = (String)wealth.getSelectedItem();
 			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
 			
+			//reset input fields
 			nameText.setText("");
 			occupations.setSelectedIndex(0);
 			residences.setSelectedIndex(0);
 			wealth.setSelectedIndex(0);
 			car.setSelectedIndex(0);
 			
-			//TODO Create personAgent
-			//TODO Add to person InfoList
+			//create new PersonAgent
+			PersonAgent newPerson = new PersonAgent(name);
+			//TODO add all person info
+			citizenRecords.addCitizen(newPerson);
+			System.out.println(name +" has been added to your city!");
+			
+			//TODO pull up newPerson's infopanel
 		}
 		
+	}
+
+	/**
+	 * Gives hospital reference to the CitizenRecords
+	 * @param records the CitizenRecords
+	 */
+	public void setRecords(CitizenRecords records) {
+		citizenRecords = records;		
 	}
 	
 	

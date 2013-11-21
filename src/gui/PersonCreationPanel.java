@@ -16,13 +16,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import agent.PersonAgent;
+
 /**
  * Panel for creating PersonAgents from UI
- * Treated as a "Hospital" Building
+ * Disguised as a "Hospital" Building
  * @author Victoria Dea
  *
  */
 public class PersonCreationPanel extends JPanel implements ActionListener{
+	
+	private CitizenRecords citizenRecords;
+
 	
 	JTextField nameText;
 	JComboBox<String> occupations;
@@ -30,6 +35,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 	JComboBox<String> wealth;
 	JComboBox<String> car;
 	JButton createButton;
+	
+	JLabel msg;
 
 	public PersonCreationPanel(Dimension d){
 		setPreferredSize(d);
@@ -56,8 +63,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setBackground(Color.white);
 		
 		nameText = new JTextField("Enter a name");
-		occupations = new JComboBox<String>(new String[] {"Select an Occupation"});
-		residences = new JComboBox<String>(new String[] {"Select a Residence"});
+		occupations = new JComboBox<String>(new String[] {"Select an Occupation", "None"});
+		residences = new JComboBox<String>(new String[] {"Select a Residence", "None"});
 		wealth = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
 		car = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
 
@@ -81,9 +88,16 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
 		
+		msg = new JLabel("");
+		Dimension msgDim = new Dimension(d.width, (int)(d.height*0.2));
+		msg.setPreferredSize(msgDim);
+		msg.setMaximumSize(msgDim);
+		msg.setMinimumSize(msgDim);
+		
 		add(welcomeText);
 		add(inputPanel);
 		add(createButton);
+		add(msg);
 		
 	}
 
@@ -94,19 +108,52 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			String name = nameText.getText();
 			String job = (String)occupations.getSelectedItem();
 			String home = (String)residences.getSelectedItem();
-			String wealthStatus = (String)wealth.getSelectedItem();
+			String status = (String)wealth.getSelectedItem();
 			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
 			
-			nameText.setText("");
-			occupations.setSelectedIndex(0);
-			residences.setSelectedIndex(0);
-			wealth.setSelectedIndex(0);
-			car.setSelectedIndex(0);
-			
-			//TODO Create personAgent
-			//TODO Add to person InfoList
+			if(!verifyInputs(name, job, home, status, (String)car.getSelectedItem())){
+											
+				//reset input fields
+				nameText.setText("");
+				occupations.setSelectedIndex(0);
+				residences.setSelectedIndex(0);
+				wealth.setSelectedIndex(0);
+				car.setSelectedIndex(0);
+				
+				//create new PersonAgent
+				//PersonAgent newPerson = new PersonAgent(name);
+				//TODO add all person info
+				citizenRecords.addCitizen(name, job, home, status, hasCar);
+				System.out.println(name +" has been added to your city!");
+				
+				//TODO pull up newPerson's infopanel
+				msg.setText(name + " was created");
+			}
+			else{
+				msg.setText("Please complete all inputs");
+			}
 		}
 		
+	}
+
+	private boolean verifyInputs(String name, String job, String home,
+			String wealthStatus, String car) {
+		return (name == null) ||(name.equals("Enter a name")) ||(name.equals(""))
+				|| (job.equals("Select an Occupation")) 
+				|| (home.equals("Select a Residence") 
+				|| (wealth.equals("Select a Status"))
+				|| (car.equals("Has a Car")));
+		
+	}
+
+
+
+	/**
+	 * Gives hospital reference to the CitizenRecords
+	 * @param records the CitizenRecords
+	 */
+	public void setRecords(CitizenRecords records) {
+		citizenRecords = records;		
 	}
 	
 	

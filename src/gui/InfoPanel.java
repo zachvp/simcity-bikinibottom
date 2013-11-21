@@ -10,15 +10,22 @@ import javax.swing.JPanel;
 
 import agent.PersonAgent;
 
+/**
+ * A Panel that displays information about the person or building
+ * Also contains some person/building controls
+ * @author Victoria Dea
+ *
+ */
 public class InfoPanel extends JPanel implements ActionListener{
 	
+	private CitizenRecords citizenRecords;
 	private Dimension d;
 	private JLabel info;
-	private JPanel textPanel;
-	private JPanel controlPanel;
+	private JPanel textPanel; //info display
+	private JPanel controlPanel; //gui controls
 
 	public InfoPanel(int w, int h){
-		d = new Dimension(w-10, h-25);
+		d = new Dimension(w-20, h-25);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
@@ -43,10 +50,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 		add(textPanel, BorderLayout.WEST);
 	}
 
-	public void updateInfoPanel(PersonAgent p){
-		//or get from Kelp? if E PersonAgent per c per==p
+	/**
+	 * Displays the Person information
+	 * @param p Person name
+	 */
+	public void updatePersonInfoPanel(String name){
+		System.out.println(name);
+		PersonAgent person = citizenRecords.findPerson(name);
 		
-		PersonAgent person = p;
+		
+		//TODO Fix nullPointerException w/ person
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
 						//+ "<div> Job: "+ person.getJob() +"</div><div>&nbsp;</div>"
@@ -60,9 +73,22 @@ public class InfoPanel extends JPanel implements ActionListener{
 		validate();
 	}
 	
-	public void updateInfoPanel(Building b){
-		Building building = b;
+	/**
+	 * Displays the Building information
+	 * @param b Building name
+	 */
+	public void updateBuildingInfoPanel(String name){
+		//Building building = b;
+		System.out.println(name+ " update info panel");
 		
+	}
+	
+	/**
+	 * Sets reference to citizen records
+	 * @param records CitizenRecords
+	 */
+	public void setCitizenRecords(CitizenRecords records){
+		citizenRecords = records;
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {

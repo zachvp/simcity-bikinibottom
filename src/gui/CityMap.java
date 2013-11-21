@@ -16,6 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import agent.Constants;
 
+/**
+ * A panel containing the map of the city
+ * @author Victoria Dea
+ *
+ */
 public class CityMap extends JPanel implements MouseListener {
 
 		
@@ -50,10 +55,18 @@ public class CityMap extends JPanel implements MouseListener {
 		addMouseListener(this);
 	}
 	
+	/**
+	 * Reference to the panel that holds all the internal building views
+	 * @param panel A BuildingView panel
+	 */
 	public void setBuildingView(BuildingView panel){
 		buildingView = panel;
 	}
 	
+	/**
+	 * Adds a new building to the map
+	 * @param name Name of the building
+	 */
 	public void addBuildingToMap(String name){
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
@@ -66,7 +79,9 @@ public class CityMap extends JPanel implements MouseListener {
 		col++;
 	}
 
-
+	/**
+	 * Paints the images on the map
+	 */
 	public void paintComponent( Graphics g ) {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
@@ -91,11 +106,17 @@ public class CityMap extends JPanel implements MouseListener {
 		}
 	}
 
+	/**
+	 * Returns an ArrayList of Buildings
+	 * @return an ArrayList of Buildings
+	 */
 	public ArrayList<Building> getBuildings() {
 		return buildings;
 	}
 
-
+	/**
+	 * Handles mouse clicks on the map
+	 */
 	public void mouseClicked(MouseEvent me) {
 		//Check to see which building was clicked
 

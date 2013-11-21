@@ -20,12 +20,15 @@ public class HousingGui extends JFrame {
 	ResidentGui residentGui = new ResidentGui(residentRole);
 	
 	public HousingGui() {
-		// TODO Auto-generated constructor stub
-//		this.setSize(main.getBuildingViewPanel().getDim());
+		/* --- Set up the dimensions of the frame --- */
+        int WINDOWX = 550;
+        int WINDOWY = 600;
+        setBounds(50, 50, WINDOWX, WINDOWY);
+        
 		AnimationPanel housingAnimationPanel = new AnimationPanel();
 		this.add(housingAnimationPanel);
 		
-		/* -- Add to Lists --- */
+		/* -- Set up people --- */
 		people.add(residentPerson);
 		startAndActivate(residentPerson, residentRole);
 		housingAnimationPanel.addGui(residentGui);

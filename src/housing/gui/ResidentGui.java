@@ -13,8 +13,7 @@ public class ResidentGui implements Gui {
 	private boolean canRelease = false;//this prevents excessive releases from occurring
 	private boolean waiting = false;//checks if resident is going to be idle
 
-	String orderName="Test";//text of customer order
-	private boolean holdingOrder = false;
+	String guiName = "Resident";//text of customer order
 
 	private int xPos = 20, yPos = 20;//default resident position
 	private int xDestination = 50, yDestination = 50;//default start position
@@ -44,10 +43,8 @@ public class ResidentGui implements Gui {
 		g.setColor(Color.GRAY);
 		g.fillRect(xPos, yPos, 20, 20);
 	    	
-		if(holdingOrder && orderName != null){
-			g.setColor(Color.BLACK);
-			g.drawString(orderName, xPos, yPos);
-		}
+		g.setColor(Color.BLACK);
+		g.drawString(guiName, xPos, yPos);
 	}
 
 	public boolean isPresent() {

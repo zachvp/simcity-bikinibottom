@@ -1,4 +1,4 @@
-package agent.mock;
+package market.test.mock;
 
 /**
  * This is the base class for all mocks.
@@ -20,4 +20,5 @@ public class Mock {
 	public String toString() {
 		return this.getClass().getName() + ": " + name;
 	}
+
 }

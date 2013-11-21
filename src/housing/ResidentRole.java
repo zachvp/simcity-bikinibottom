@@ -16,37 +16,51 @@ public class ResidentRole extends Role implements Resident {
 	/** DATA */
 	public EventLog log = new EventLog();
 	/* ----- Person Data ----- */
-	PersonAgent person;
+	private PersonAgent person;
 	
 	/* ----- Temporary Hacks ----- */
 	//TODO: un-hack these
-	private boolean hungry = true;
+	private boolean hungry = false;
 	
 	/* ----- Rent Data ----- */
-	double moneyOwed = 0;
+	private double moneyOwed = 0;
 	private PayRecipient payee;
 	
 	/* ----- Food Data ----- */
-	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>());
+	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
+		{
+			put("Krabby Patty", new Food("Krabby Patty", 2, 1, 4, 5));
+		}
+	});
+	
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null; //the food the resident is currently eating
 	private Timer timer = new Timer(); //used to cook food and time eat period
-	private Map<String, Integer> cookTimes = Collections.synchronizedMap(new HashMap<String, Integer>());
 	
 	/* ----- Constant Variables ----- */
 	private final int EAT_TIME = 6; 
 	
 	/* ----- Class Data ----- */
-	enum FoodState { COOKED };
+	enum FoodState { RAW, COOKED, COOKING };
 	private class Food{
 		String type;
 		FoodState state;
 		int amount, cookTime, low, capacity;
+		
+		private Food(String type, int amt, int low, int cap, int cookTime){
+			this.type = type;
+			this.amount = amt;
+			this.low = low;
+			this.capacity = cap;
+			this.cookTime = cookTime;
+			
+			state = FoodState.RAW;
+		}
 	}
 	
-	public ResidentRole(PersonAgent pa) {
-		super();
-		this.person = pa;
+	public ResidentRole(PersonAgent agent) {
+		super(agent);
+		this.person = agent;
 	}
 	
 	/* ----- Messages ----- */
@@ -59,7 +73,7 @@ public class ResidentRole extends Role implements Resident {
 
 	/* ----- Scheduler ----- */
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if(moneyOwed > 0){
 			makePayment();
 			return true;
@@ -108,11 +122,12 @@ public class ResidentRole extends Role implements Resident {
 //		acquire(performingTasks);
 //		DoEatFood();
 //		acquire(performingTasks);
-		
+		hungry = false;
+		food = null;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				food = null;
 				hungry = false;
+				food = null;
 				stateChanged();
 			}
 		},
@@ -120,26 +135,33 @@ public class ResidentRole extends Role implements Resident {
 	}
 	private void cookFood(Food f){
 		log.add("Cooking food");
+		food = f;
+		refrigerator.remove(food);
 //		TODO: Animation details		
 //		DoGoToRefrigerator();
 		f.amount--;
+		food.state = FoodState.COOKING;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
 //		DoGoToStove();
 //		DoCooking(f.type);
+		food.state = FoodState.COOKED;
+		log.add("Food is cooked.");
 		timer.schedule(new TimerTask() {
 			public void run() {
-				food = null;
-				stateChanged();
+				timerDoneCooking();
 			}
 		},
-		cookTimes.get(f) * 1000);
-		f.state = FoodState.COOKED;
-		log.add("Food is cooked.");
+		f.cookTime * 1000);
 	}
 	
 	/* ----- Utility Functions ----- */
+	private void timerDoneCooking(){
+		food.state = FoodState.COOKED;
+		log.add("Food is cooked.");
+		stateChanged();
+	}
 	public boolean thereIsFoodAtHome(){
 		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 			if(entry.getValue().amount > 0){
@@ -149,5 +171,62 @@ public class ResidentRole extends Role implements Resident {
 		}
 		log.add("There is no food at home");
 		return false;
+	}
+	
+	/* --- Getters and Setters (mostly used for testing) --- */
+	public PayRecipient getPayee() {
+		return payee;
+	}
+
+	public void setPayee(PayRecipient payee) {
+		this.payee = payee;
+	}
+
+	public double getMoneyOwed() {
+		return moneyOwed;
+	}
+
+	public void setMoneyOwed(double moneyOwed) {
+		this.moneyOwed = moneyOwed;
+	}
+
+	public PersonAgent getPerson() {
+		return person;
+	}
+
+	public void setPerson(PersonAgent person) {
+		this.person = person;
+	}
+
+	public boolean isHungry() {
+		return hungry;
+	}
+
+	public void setHungry(boolean hungry) {
+		this.hungry = hungry;
+	}
+
+	public Food getFood() {
+		return food;
+	}
+
+	public void setFood(Food food) {
+		this.food = food;
+	}
+
+	public Map<String, Integer> getGroceries() {
+		return groceries;
+	}
+
+	public void setGroceries(Map<String, Integer> groceries) {
+		this.groceries = groceries;
+	}
+
+	public Map<String, Food> getRefrigerator() {
+		return refrigerator;
+	}
+
+	public void setRefrigerator(Map<String, Food> refrigerator) {
+		this.refrigerator = refrigerator;
 	}
 }

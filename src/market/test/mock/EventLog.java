@@ -1,6 +1,7 @@
-package agent.mock;
+package market.test.mock;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class should be used by Mock agents to log significant events. For
@@ -21,11 +22,10 @@ public class EventLog {
 	/**
 	 * Add a new event to the log.
 	 *
-	 * @param log
+	 * @param e
 	 */
-	public void add(String log){
-		events.add(new LoggedEvent(log));
-		System.out.println(log);//TODO this is for testing purposes and should be removed later
+	public void add(LoggedEvent e) {
+		events.add(e);
 	}
 
 	/**

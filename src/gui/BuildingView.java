@@ -36,6 +36,10 @@ public class BuildingView extends JPanel implements ActionListener{
 		add(blankCard, "blank");
 	}
 	
+	/**
+	 * Gives reference to the list of Buildings
+	 * @param b InfoList of Buildings
+	 */
 	public void setBuildingList(InfoList b){
 		buildingList = b;
 	}
@@ -69,7 +73,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	}
 
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 

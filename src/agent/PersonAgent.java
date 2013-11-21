@@ -177,6 +177,7 @@ public class PersonAgent extends Agent implements Person {
 	 * the Role's scheduler if the Role is inactive. Also calls
 	 * {@link #stateChanged()}.
 	 */
+	@Override
 	public void addRole(Role r) {
 		this.roles.add(r);
 		stateChanged();

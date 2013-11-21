@@ -13,9 +13,6 @@ public abstract class Agent {
     
     private boolean pause = false;
     
-    private boolean paused = false;
-    Semaphore pausedsem = new Semaphore(0);
-    
     protected Agent() {}
 
     /**
@@ -40,6 +37,7 @@ public abstract class Agent {
      * Return agent name for messages.  Default is to return java instance
      * name.
      */
+    
     public String getName() {
         return StringUtil.shortName(this);
     }
@@ -116,7 +114,7 @@ public abstract class Agent {
     
     /**
      * Agent scheduler thread, calls respondToStateChange() whenever a state
-     * change has been signalled.
+     * change has been signaled.
      */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
@@ -140,7 +138,7 @@ public abstract class Agent {
                     //repeatedly until it returns FALSE.
                     //You will see that pickAndExecuteAnAction() is the agent scheduler.
                     while (!pause && pickAndExecuteAnAction());
-
+                    
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
                 } catch (Exception e) {

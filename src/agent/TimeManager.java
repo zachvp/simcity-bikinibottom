@@ -1,5 +1,6 @@
 package agent;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -41,9 +42,9 @@ public class TimeManager {
 	 * The time and date at which the simulation "starts". Added to the actual
 	 * elapsed time to calculate the in-world date and time. Currently set to
 	 * the date of the first airing of SpongeBob SquarePants:
-	 * Saturday, 5/1/1999, 6:00:00 AM PDT (UTC-7)
+	 * Sat May 01 1999 06:00:00 GMT-0700 (PDT)
 	 */
-	public static final long FAKE_START_TIME = 925563600000L;
+	private static final long FAKE_START_TIME = 925563600000L;
 	
 	/**
 	 * The time at which the simulation actually started. Used to calculate the
@@ -57,34 +58,19 @@ public class TimeManager {
 	 * @return the simulation "start" time in milliseconds
 	 * @see #FAKE_START_TIME
 	 */
-	public long fakeStartTimeMillis() {
+	public long fakeStartTime() {
 		return FAKE_START_TIME;
 	}
-	
-	/**
-	 * @return the simulation "start" date
-	 * @see #FAKE_START_TIME
-	 */
-	public Date fakeStartDate() {
-		return new Date(fakeStartTimeMillis());
-	}
-	
+		
 	/**
 	 * The in-world time, in milliseconds.
 	 */
-	public long currentSimTimeMillis() {
+	public long currentSimTime() {
 		long currentSimTime = FAKE_START_TIME +
 				(System.currentTimeMillis() - realStartTime) * CONVERSION_RATE;
 		return currentSimTime;
 	}
-	
-	/**
-	 * The in-world time, as a java.util.Date. Included for convenience.
-	 */
-	public Date currentSimDate() {
-		return new Date(currentSimTimeMillis());
-	}
-	
+		
 	/* -------- Time comparisons -------- */
 	
 	/**
@@ -95,34 +81,199 @@ public class TimeManager {
 	 * 		   is in the past
 	 */
 	public long timeUntil(long otherSimTime) {
-		return timeBetween(currentSimTimeMillis(), otherSimTime);
+		return howLongBetween(currentSimTime(), otherSimTime);
 	}
-	
-	/**
-	 * Calculates how much time is between now and the given time.
-	 * 
-	 * @param otherSimDate a java.util.Date representing some other time
-	 * @return the time between now and otherSimTime; negative if otherSimTime
-	 * 		   is in the past
-	 */
-	public long timeUntil(Date otherSimDate) {
-		return timeBetween(currentSimDate(), otherSimDate);
-	}
-	
+		
 	/**
 	 * Calculates how much time is between the given two times; if firstTime
 	 * comes after secondTime, this value is negative.
 	 */
-	public static long timeBetween(long firstTime, long secondTime) {
+	public static long howLongBetween(long firstTime, long secondTime) {
 		return secondTime - firstTime;
 	}
 	
+	/** Determines whether firstTime is strictly before secondTime. */
+	public static boolean isTimeBefore(long firstTime, long secondTime) {
+		return howLongBetween(firstTime, secondTime) > 0;
+	}
+	/** Determines whether firstTime is strictly after secondTime. */
+	public static boolean isTimeAfter(long firstTime, long secondTime) {
+		return howLongBetween(firstTime, secondTime) < 0;
+	}
+		
 	/**
-	 * Calculates how much time is between the given two times; if firstTime
-	 * comes after secondTime, this value is negative.
+	 * Determines whether "now" is between "otherOne" and "otherTwo". Works
+	 * whether otherOne or otherTwo comes first, and even if any of the three
+	 * times are equal.
+	 * 
+	 * @param now the time in question: is now between otherOne and otherTwo?
+	 * @param otherOne
+	 * @param otherTwo
 	 */
-	public static long timeBetween(Date firstDate, Date secondDate) {
-		return timeBetween(firstDate.getTime(), secondDate.getTime());
+	public static boolean isTimeBetween(long now, long otherOne, long otherTwo) {
+		if (now == otherOne || isTimeBefore(now, otherOne)) {
+			// Now is equal to or before otherOne, so now should be equal to or
+			// after otherTwo.
+			return now == otherTwo || isTimeAfter(now, otherTwo);
+		} else {
+			// Now is after otherOne, so now should be equal to or before
+			// otherTwo.
+			return now == otherTwo || isTimeBefore(now, otherTwo);
+		}
 	}
 	
+	/**
+	 * Determines whether the current sim time is between "otherOne" and
+	 * "otherTwo". Works whether otherOne or otherTwo comes first, and even if
+	 * any of the three times are equal.
+	 */
+	public boolean isNowBetween(long otherOne, long otherTwo) {
+		return isTimeBetween(currentSimTime(), otherOne, otherTwo);
+	}
+	
+	/* -------- Occurrence of a time in h:m on a given day -------- */
+	
+	/**
+	 * Given a reference time (in milliseconds since the epoch) and a second
+	 * time (in hours and seconds), calculates the time (in milliseconds) that
+	 * the second time occurred on the same day as the first time.
+	 * 
+	 * @param now a reference time, in milliseconds since the epoch
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public static long timeOnSameDay(long now, int hours, int minutes) {
+		// Set up a Calendar with the current simulation time
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(now);
+				
+		// Adjust the Calendar to the appropriate time of day
+		cal.set(Calendar.HOUR_OF_DAY, hours);
+		cal.set(Calendar.MINUTE, minutes);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		return cal.getTimeInMillis();
+	}
+	
+	/**
+	 * Calculates the time (in milliseconds since the epoch) that the given
+	 * hours and minutes occurred or will occur, n days from now. Negative
+	 * values of n are treated as "n days ago".
+	 * 
+	 * @param now a reference time, in milliseconds since the epoch
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 * @param n how many days in the future to consider, with negative values
+	 * 		  representing days in the past
+	 */
+	public static long timeNDaysFromNow(long now, int hours, int minutes,
+			int n) {
+		
+		// Set up a Calendar with the given time on the same day as now
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timeOnSameDay(now, hours, minutes));
+		
+		// Adjust the calendar to n days from now
+		cal.add(Calendar.DAY_OF_YEAR, n);
+		
+		return cal.getTimeInMillis();
+	}
+		
+	/**
+	 * Calculates the time today (in milliseconds since the epoch) that the
+	 * given hours and minutes occurred or will occur.
+	 * 
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public long timeToday(int hours, int minutes) {
+		return timeOnSameDay(currentSimTime(), hours, minutes);
+	}
+	
+	/**
+	 * Calculates the time tomorrow (in milliseconds since the epoch) that the
+	 * given hours and minutes will occur.
+	 * 
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public long timeTomorrow(int hours, int minutes) {
+		return timeNDaysFromNow(currentSimTime(), hours, minutes, 1);
+	}
+	
+	/**
+	 * Calculates the time today (in milliseconds since the epoch) that the
+	 * given hours and minutes occurred.
+	 * 
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public long timeYesterday(int hours, int minutes) {
+		return timeNDaysFromNow(currentSimTime(), hours, minutes, -1);
+	}
+	
+	/* -------- Next/previous occurrence of a time in h:m -------- */
+	
+	/**
+	 * Calculates the next time the given hours and minutes will occur,
+	 * relative to "now". Will be either later today or tomorrow.
+	 * 
+	 * @param now a reference time, in milliseconds since the epoch
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public static long nextSuchTime(long now, int hours, int minutes) {
+		long timeToday = timeOnSameDay(now, hours, minutes);
+		if (howLongBetween(now, timeToday) >= 0) {
+			// This time today hasn't yet passed.
+			return timeToday;
+		} else {
+			// This time today has already passed. Use tomorrow instead.
+			return timeNDaysFromNow(now, hours, minutes, 1);
+		}
+	}
+	
+	/**
+	 * Calculates the next time the given hours and minutes will occur,
+	 * relative to the current sim time. Will be either later today or tomorrow.
+	 * 
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public long nextSuchTime(int hours, int minutes) {
+		return nextSuchTime(currentSimTime(), hours, minutes);
+	}
+	
+	/**
+	 * Calculates the previous time the given hours and minutes occurred,
+	 * relative to "now". Will be either yesterday or earlier today.
+	 * 
+	 * @param now a reference time, in milliseconds since the epoch
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public static long previousSuchTime(long now, int hours, int minutes) {
+		long timeToday = timeOnSameDay(now, hours, minutes);
+		if (howLongBetween(now, timeToday) <= 0) {
+			// This time today has already passed.
+			return timeToday;
+		} else {
+			// This time today hasn't yet passed. Use yesterday instead.
+			return timeNDaysFromNow(now, hours, minutes, -1);
+		}
+	}
+	
+	/**
+	 * Calculates the previous time the given hours and minutes occurred,
+	 * relative to the current sim time. Will be either yesterday or earlier
+	 * today.
+	 * 
+	 * @param hours in 24-hour time (e.g. 14 instead of 2 PM)
+	 * @param minutes
+	 */
+	public long previousSuchTime(int hours, int minutes) {
+		return previousSuchTime(currentSimTime(), hours, minutes);
+	}
+		
 }

@@ -24,7 +24,7 @@ public class PersonAgent extends Agent {
 	private TimeManager timeManager;
 	private Timer timer;
 	
-	private Date lastTimeEatingOut;
+	private long lastTimeEatingOut;
 	/**
 	 * How long this person likes to wait between each time eating out (in game
 	 * time, not real time)
@@ -51,7 +51,7 @@ public class PersonAgent extends Agent {
 		this.timeManager = TimeManager.getInstance();
 		this.timer = new Timer();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartDate();
+		this.lastTimeEatingOut = timeManager.fakeStartTime();
 		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
 		
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
@@ -183,12 +183,12 @@ public class PersonAgent extends Agent {
 	}
 	
 	/** @return the date and time of the last time the person ate out. */
-	public Date getLastTimeEatingOut() {
+	public long getLastTimeEatingOut() {
 		return this.lastTimeEatingOut;
 	}
 	
 	/** Modifies the last time the person thinks he or she ate out. */
-	public void setLastTimeEatingOut(Date newLastTime) {
+	public void setLastTimeEatingOut(long newLastTime) {
 		this.lastTimeEatingOut = newLastTime;
 	}
 	
@@ -208,7 +208,7 @@ public class PersonAgent extends Agent {
 	 */
 	public void setHungerLevel(HungerLevel newHungerLevel, boolean eatingOut) {
 		if (eatingOut) {
-			this.lastTimeEatingOut = timeManager.currentSimDate();
+			this.lastTimeEatingOut = timeManager.currentSimTime();
 		}
 		this.hungerLevel = newHungerLevel;
 	}
@@ -283,12 +283,14 @@ public class PersonAgent extends Agent {
 		return null;
 	}
 	
-	/*
 	public WorkRole getWorkRole() {
-		// TODO implement getWorkRole()
+		for (Role r : roles) {
+			if (r instanceof WorkRole) {
+				return (WorkRole) r;
+			}
+		}
 		return null;
 	}
-	*/
 	
 	/*
 	public void activateRole(CityLocation loc) {
@@ -319,12 +321,8 @@ public class PersonAgent extends Agent {
 	// Booleans for determining which action should be called
 	
 	public boolean workStartsSoon() {
-		// TODO implement workStartsSoon()
-		/*
-		Date workStartTime = getWorkRole.startTime();
+		long workStartTime = getWorkRole().startTime();
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
-		*/
-		return false;
 	}
 	
 	public boolean isStarving() {

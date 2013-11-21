@@ -15,10 +15,18 @@ public interface Customer {
 	public abstract void msgHereisYourItem(List<Item> Items);
 	
 	public abstract void msgNoItem();
+	
+	public abstract void goingToBuy();
 
 	//Utilities
 	public abstract String getMaitreDName();
 	public abstract String getName();
 	public abstract void setCashier(Cashier ca);
 	public abstract void setShoppingList(List<Item>SL);
+
+	//Animations
+	public abstract void msgAnimationFinishedGoToCashier();
+	public abstract void msgAnimationFinishedLeaveMarket();
+
+	
 }

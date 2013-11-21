@@ -27,12 +27,16 @@ in this Software without prior written authorization from Stanford University.
 */
 package agent;
 
-import java.util.*;
-
 /**
  * Constants of general use
  */
 public interface Constants {
+	/**
+	 * True only for development versions of this program.
+	 */
+	// TODO disable before final release
+	public static final boolean DEBUG = true;
+	
     /**
      * The number of milliseconds in a second
      */

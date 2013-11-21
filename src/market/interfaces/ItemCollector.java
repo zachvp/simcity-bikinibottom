@@ -18,4 +18,8 @@ public interface ItemCollector {
 		public abstract void setCashier(Cashier ca);
 
 		public abstract void setInventoryList(Map<String, Item> inventoryList);
+
+	//Animations
+		public abstract void AtCollectStation();
+		public abstract void Ready();
 }

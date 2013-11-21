@@ -2,6 +2,7 @@ package kelp;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityBuilding;
@@ -87,8 +88,15 @@ public class KelpClass implements Kelp {
 		List<CityLocation> pathWithoutBus = routeWithoutBus(posA,posB);
 		
 		if (tryBus) {
-			List<CityLocation> pathWithBus = routeWithBus(posA,posB);
-			response = returnFastestPath(pathWithBus,pathWithoutBus, posA);
+			try {
+				List<CityLocation> pathWithBus = routeWithBus(posA,posB);
+				response = returnFastestPath(pathWithBus,pathWithoutBus, posA);
+			} catch (Exception e){
+				e.printStackTrace();
+				System.out.println("Exception when routing with bus, "
+						+ "will walk instead.");
+				response = pathWithoutBus;
+			}
 		} else {
 			response = pathWithoutBus;
 		}
@@ -145,7 +153,7 @@ public class KelpClass implements Kelp {
 		return time;
 	}
 
-	private List<CityLocation> routeWithBus(XYPos posA, XYPos posB) {
+	private List<CityLocation> routeWithBus(XYPos posA, XYPos posB) throws Exception {
 		List<CityLocation> nearBusstops = placesNearMe(posA, 
 				LocationTypeEnum.Busstop);
 		Busstop nearestBusstop = 
@@ -242,6 +250,8 @@ public class KelpClass implements Kelp {
 		List<CityLocation> path = new ArrayList<CityLocation>();
 		path.add(startCorner);
 		Corner currentCorner = startCorner;
+		
+		try {
 		while (Math.abs(currentCorner.position().x - 
 				currentCorner.getCornerForDir(horizontalDir).position().x)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
@@ -255,6 +265,12 @@ public class KelpClass implements Kelp {
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
 			currentCorner = currentCorner.getCornerForDir(verticalDir);
 			path.add(currentCorner);
+		}
+		} catch (Exception x) {
+			x.printStackTrace();
+			System.out.println("Exception will cause an empty path "
+					+ "to be returned now, a passenger might get lost.");
+			return new ArrayList<CityLocation>();
 		}
 		
 		
@@ -299,6 +315,11 @@ public class KelpClass implements Kelp {
 		
 		return response;
 		
+	}
+
+	@Override
+	public List<Corner> busRoute() {
+		return new ArrayList<Corner>(busRoute);
 	}
 
 }

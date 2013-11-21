@@ -13,8 +13,8 @@ import java.util.ArrayList;
  *  */
 public class AnimationPanel extends JPanel implements ActionListener {
 
-    private final int WINDOWX = this.getParent().getWidth();
-    private final int WINDOWY = this.getParent().getHeight();
+    private final int WINDOWX = 550;//this.getParent().getWidth();
+    private final int WINDOWY = 600;//this.getParent().getHeight();
     Timer timer;
     private final int REFRESH_RATE = 20;
 

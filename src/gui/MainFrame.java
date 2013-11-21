@@ -1,15 +1,20 @@
 package gui;
 
 
+import static org.junit.Assert.fail;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -20,6 +25,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import market.gui.AnimationPanel;
+import parser.BuildingDef;
+import parser.BuildingPosParser;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 
 
@@ -35,9 +44,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	//TODO  write down steps to test GUI manually 
 	
 	
-	private int WINDOWX = 1500;
-	private int WINDOWY = 800;
+	private int WINDOWX = 1200;
+	private int WINDOWY = 700;
 	
+	BufferedInputStream stream;
+	List<BuildingDef> needToBuild;
+		
 	//Panel Slots
 	private JPanel cityViewSlot = new JPanel();
 	private JPanel buildingViewSlot = new JPanel();
@@ -53,15 +65,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	private InfoList buildingList;
 	private InfoList personList;
-	private CitizenRecords citizenRecords = new CitizenRecords();
+	private CitizenRecords citizenRecords;
 	
-	//TODO Create infoDisplayPanel (all button lists access this)
+	//TODO Create infoDisplayPanel (all button lists access this)?
 	
-    //TODO Add timer here
+    //TODO Add timer here?
     
 	
 	//TODO test agent
-	private PersonAgent person = new PersonAgent("Steve");
 	
 	public MainFrame(){
 		
@@ -80,6 +91,17 @@ public class MainFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		setLayout(new BorderLayout(5,10));
+		
+	
+		try {
+			stream = (BufferedInputStream)getClass().getResource("BuildingConfig.csv").getContent();
+			needToBuild = BuildingPosParser.parseBuildingPos(stream);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
+
 		 
 		//Internal Building View
         Dimension buildingDim = new Dimension((int)(WINDOWX * .5), (int) (WINDOWY * .7));
@@ -109,8 +131,8 @@ public class MainFrame extends JFrame implements ActionListener {
         infoPanelSlot.setMinimumSize(infoDim);
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
         infoPanelSlot.setOpaque(false);
-        infoPanel = new InfoPanel(infoDim.width, infoDim.height);
-        infoPanel.setCitizenRecords(citizenRecords);
+        infoPanel = new InfoPanel(infoDim.width, infoDim.height, this);
+        
         infoPanelSlot.add(infoPanel);
         
         //List of Buildings/People buttons
@@ -123,10 +145,18 @@ public class MainFrame extends JFrame implements ActionListener {
         //buildingListSlot.setLayout(new CardLayout());
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);
-        personList = new InfoList(listDim.width, listDim.height);
-        citizenRecords.setPersonInfoList(personList);
-        buildingList.setBuildingView(buildingViewPanel);
         
+        
+        personList = new InfoList(listDim.width, listDim.height);
+        buildingList.setInfoPanel(infoPanel);
+        personList.setInfoPanel(infoPanel);
+        citizenRecords = new CitizenRecords(this);
+        personList.setCitizenRecords(citizenRecords);
+        infoPanel.setCitizenList(citizenRecords.getCitizenList());
+        citizenRecords.setInfoPanel(infoPanel);
+        //citizenRecords.setPersonInfoList(personList);
+        buildingList.setBuildingView(buildingViewPanel);
+    
         
         //TODO addInfoPanel(infoPanel)?
        // buildingList.setInfoPanel(buildingInfoPanel);
@@ -138,10 +168,10 @@ public class MainFrame extends JFrame implements ActionListener {
                 
         buildingViewPanel.setBuildingList(buildingList);
         //TODO
-        personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
-        personCreationPanel.setRecords(citizenRecords);
-        buildingViewPanel.addCard(personCreationPanel, "Hospital");
-        cityViewPanel.addBuildingToMap("Hospital");
+        //personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+        //personCreationPanel.setRecords(citizenRecords);
+       // buildingViewPanel.addCard(personCreationPanel, "Hospital");
+       // cityViewPanel.addBuildingToMap("Hospital");
         
         //JPanel to hold infoPanelSlot and buildingListSlot
         JPanel infoHolder = new JPanel();
@@ -166,43 +196,56 @@ public class MainFrame extends JFrame implements ActionListener {
 			//buildingPanels.add( bp, "" + i );
 		//}
 		
-		//TODO personagent test
-		//person.
 		
+		//build buildings from config file
+		populateMap(needToBuild);
 		
-		//TODO animation panel/map test
-		String name = "Magenta";
-		JPanel testAnimationPanel = new JPanel();
-		testAnimationPanel.setSize(buildingViewPanel.getDim());
-		testAnimationPanel.setBackground(Color.magenta);
-		buildingViewPanel.addCard(testAnimationPanel, name);//creates card and corresponding button
-		cityViewPanel.addBuildingToMap(name); //creates building on map
-		
-		String name2 = "Cyan";
-		JPanel testAnimationPanel2 = new JPanel();
-		testAnimationPanel2.setBackground(Color.CYAN);
-		buildingViewPanel.addCard(testAnimationPanel2, name2);
-		cityViewPanel.addBuildingToMap(name2);
-		for(int i=0; i<8; i++){
-			cityViewPanel.addBuildingToMap(name);
-			cityViewPanel.addBuildingToMap(name2);
+	}
+	
+	private void populateMap(List<BuildingDef> list) {
+		for(BuildingDef b: list){
+			String buildingName = b.getName();
+			LocationTypeEnum type = b.getType();
+			
+			if(type == LocationTypeEnum.Bank){
+				JPanel BankAnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				BankAnimationPanel.setBackground(Color.blue);
+				buildingViewPanel.addCard(BankAnimationPanel, buildingName);//creates card and corresponding button
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.House){
+				JPanel HouseAnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				HouseAnimationPanel.setBackground(Color.green);
+				buildingViewPanel.addCard(HouseAnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Restaurant){
+				JPanel AnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				AnimationPanel.setBackground(Color.darkGray);
+				buildingViewPanel.addCard(AnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Market){
+				JPanel AnimationPanel = new JPanel();
+				//market.gui.AnimationPanel AnimationPanel = new AnimationPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				buildingViewPanel.addCard(AnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Hospital){
+				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+				personCreationPanel.setRecords(citizenRecords);
+				buildingViewPanel.addCard(personCreationPanel, "Hospital");
+				cityViewPanel.addBuildingToMap("Hospital");
+			}
+
 		}
-		personList.addToList("Steve");
-		//make buildingAnimationPanels example
-		//BankAnimation bankAnimation = new BuildingAnimation("Bank");
-		//addAnimationPanel(bankAnimation, "Bank");
-		//buildingViewPanel.showCard("Bank")
 		
 	}
 	
-	//TODO add animation panels here
-	public void addAnimationPanel(JPanel panel, String name){
-		buildingViewPanel.addCard(panel, name);
-	}
-	
-	public void addPersonToCity(PersonAgent p){
-		//TODO
-	}
 	
 	//from personinfolist, later cityMap/animationpanel
 	public void displayPersonInfo(){
@@ -215,18 +258,14 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 	
 	
+	public InfoList getPersonInfoList(){
+		return personList;
+	}
+	public CitizenRecords getCitizenRecords(){
+		return citizenRecords;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
-		/*/TODO Test buttons
-		if(e.getSource() == b2){
-			buildingViewPanel.showCard("blank2");
-			buildingList.addToList("blank2");
-			personList.addToList("adf");
-		}
-		
-		if(e.getSource() == b){
-			buildingViewPanel.showCard("blank");
-			buildingList.addToList("blank");
-		}//*/
 		
 	}
 	

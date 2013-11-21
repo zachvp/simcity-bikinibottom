@@ -29,6 +29,7 @@ public class InfoList extends JPanel implements ActionListener {
 	private Dimension d;
 	private BuildingView buildingView;
 	private boolean isBuildingList = false;
+	CitizenRecords citizenRecords;
 	
 
 	public InfoList(int w, int h){
@@ -48,7 +49,7 @@ public class InfoList extends JPanel implements ActionListener {
 	public void addToList(String name) {
 		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
-			System.out.println("adding "+name+" to list");
+			//System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
 			button.setBackground(Color.white);
 			Dimension buttonSize = new Dimension(d.width - 19, (int) (d.height / 5));
@@ -88,26 +89,33 @@ public class InfoList extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		for (JButton b: list){
-			if(e.getSource() == b){
-				System.out.println("button press " + b.getText());
-				//b.set
-				if (isBuildingList){
+		if (isBuildingList){
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println("button press " + b.getText());
+
 					buildingView.showCard(b.getText());
-					infoPanel.updateBuildingInfoPanel(b.getText());
-					//TODO showInfo from building's panel ie RestaurantPanel where
-					//		PersonAgents are instanciated
+					infoPanel.updateBuildingInfoPanel(b.getText());					
 				}
-				else{//it is a person
-					infoPanel.updatePersonInfoPanel(b.getText());
-				}
-			}
-			else{
-				
 			}
 		}
-		
+		else{//it is a PersonAgent
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println(b.getText());
+					//infoPanel.updatePersonInfoPanel(b.getText());
+					citizenRecords.showInfo(b.getText());
+				}
+			}
+
+
+		}
+
 	}
+
+	public void setCitizenRecords(CitizenRecords r) {
+		citizenRecords = r;
+	}
+
 	
-	
-}
+}//end class

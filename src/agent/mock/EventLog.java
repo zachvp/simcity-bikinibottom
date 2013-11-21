@@ -2,6 +2,8 @@ package agent.mock;
 
 import java.util.LinkedList;
 
+import agent.Constants;
+
 /**
  * This class should be used by Mock agents to log significant events. For
  * example, you might write a log entry every time a Mock receives a message.
@@ -25,7 +27,9 @@ public class EventLog {
 	 */
 	public void add(String log){
 		events.add(new LoggedEvent(log));
-		System.out.println(log);//TODO this is for testing purposes and should be removed later
+		if (Constants.DEBUG) {
+			System.out.println(log);
+		}
 	}
 
 	/**

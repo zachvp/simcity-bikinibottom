@@ -22,4 +22,11 @@ public class BuildingDef {
 		}
 		return false;
 	}
+	
+	public String getName(){
+		return name;
+	}
+	public LocationTypeEnum getType(){
+		return type;
+	}
 }

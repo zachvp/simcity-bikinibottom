@@ -1,6 +1,8 @@
 package gui;
 
 
+import static org.junit.Assert.fail;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -9,8 +11,10 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -21,6 +25,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import parser.BuildingDef;
+import parser.BuildingPosParser;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 
 
@@ -39,6 +46,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	private int WINDOWX = 1200;
 	private int WINDOWY = 700;
 	
+	BufferedInputStream stream;
+	List<BuildingDef> needToBuild;
+		
 	//Panel Slots
 	private JPanel cityViewSlot = new JPanel();
 	private JPanel buildingViewSlot = new JPanel();
@@ -80,6 +90,17 @@ public class MainFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		setLayout(new BorderLayout(5,10));
+		
+	
+		try {
+			stream = (BufferedInputStream)getClass().getResource("BuildingPosTest.csv").getContent();
+			needToBuild = BuildingPosParser.parseBuildingPos(stream);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
+
 		 
 		//Internal Building View
         Dimension buildingDim = new Dimension((int)(WINDOWX * .5), (int) (WINDOWY * .7));
@@ -143,10 +164,10 @@ public class MainFrame extends JFrame implements ActionListener {
                 
         buildingViewPanel.setBuildingList(buildingList);
         //TODO
-        personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
-        personCreationPanel.setRecords(citizenRecords);
-        buildingViewPanel.addCard(personCreationPanel, "Hospital");
-        cityViewPanel.addBuildingToMap("Hospital");
+        //personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+        //personCreationPanel.setRecords(citizenRecords);
+       // buildingViewPanel.addCard(personCreationPanel, "Hospital");
+       // cityViewPanel.addBuildingToMap("Hospital");
         
         //JPanel to hold infoPanelSlot and buildingListSlot
         JPanel infoHolder = new JPanel();
@@ -172,6 +193,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		//}
 		
 		
+		//build buildings from config file
+		populateMap(needToBuild);
 		
 		
 		//TODO animation panel/map test
@@ -196,21 +219,50 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 	}
 	
-	//TODO read in from config file, building (type, name)
-	//make buildingAnimationPanels example
-	//BankAnimation bankAnimation = new BuildingAnimation("Bank");
-	//addAnimationPanel(bankAnimation, "Bank");
-	//buildingViewPanel.showCard("Bank")
-	
-	
-	//TODO add animation panels here?
-	public void addAnimationPanel(JPanel panel, String name){
-		buildingViewPanel.addCard(panel, name);
+	private void populateMap(List<BuildingDef> list) {
+		for(BuildingDef b: list){
+			String buildingName = b.getName();
+			LocationTypeEnum type = b.getType();
+			
+			if(type == LocationTypeEnum.Bank){
+				JPanel BankAnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				BankAnimationPanel.setBackground(Color.blue);
+				buildingViewPanel.addCard(BankAnimationPanel, buildingName);//creates card and corresponding button
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.House){
+				JPanel HouseAnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				HouseAnimationPanel.setBackground(Color.green);
+				buildingViewPanel.addCard(HouseAnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Restaurant){
+				JPanel AnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				AnimationPanel.setBackground(Color.darkGray);
+				buildingViewPanel.addCard(AnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Market){
+				JPanel AnimationPanel = new JPanel();
+				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
+				AnimationPanel.setBackground(Color.darkGray);
+				buildingViewPanel.addCard(AnimationPanel, buildingName);
+				cityViewPanel.addBuildingToMap(buildingName); 
+			}
+			if(type == LocationTypeEnum.Hospital){
+				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+				personCreationPanel.setRecords(citizenRecords);
+				buildingViewPanel.addCard(personCreationPanel, "Hospital");
+				cityViewPanel.addBuildingToMap("Hospital");
+			}
+
+		}
+		
 	}
 	
-	public void addPersonToCity(PersonAgent p){
-		//TODO
-	}
 	
 	//from personinfolist, later cityMap/animationpanel
 	public void displayPersonInfo(){

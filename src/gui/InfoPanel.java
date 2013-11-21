@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		setLayout(new BorderLayout());
 		
 		textPanel = new JPanel();
-		Dimension textDim = new Dimension(w/5, h-25);
+		Dimension textDim = new Dimension((int)(w*0.5), h-25);
 		textPanel.setPreferredSize(textDim);
 		textPanel.setMaximumSize(textDim);
 		textPanel.setMinimumSize(textDim);
@@ -47,7 +47,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
 		);
 		textPanel.add(info);
+		
+		controlPanel = new JPanel();
+		Dimension controlDim = new Dimension((int)(w*0.5), h-25);
+		controlPanel.setPreferredSize(controlDim);
+		controlPanel.setMaximumSize(controlDim);
+		controlPanel.setMinimumSize(controlDim);
+		
 		add(textPanel, BorderLayout.WEST);
+		add(controlPanel, BorderLayout.EAST);
 	}
 
 	/**

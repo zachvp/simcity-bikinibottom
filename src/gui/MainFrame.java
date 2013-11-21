@@ -187,11 +187,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		testAnimationPanel2.setBackground(Color.CYAN);
 		buildingViewPanel.addCard(testAnimationPanel2, name2);
 		cityViewPanel.addBuildingToMap(name2);
-		for(int i=0; i<8; i++){
+		/*for(int i=0; i<8; i++){
 			cityViewPanel.addBuildingToMap(name);
 			cityViewPanel.addBuildingToMap(name2);
 		}
-		
+		*/
 	
 		
 	}

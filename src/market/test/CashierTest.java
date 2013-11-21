@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
-import market.CashierAgent;
+import market.CashierRole;
 import market.Item;
-import market.CashierAgent.Customerstate;
+import market.CashierRole.Customerstate;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
 
 public class CashierTest extends TestCase
 {
-	CashierAgent Cashier;
+	CashierRole Cashier;
 	MockCustomer Customer1;
 	MockCustomer Customer2;
 	MockItemCollector ItemCollector1;
@@ -24,7 +24,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		Cashier = new CashierAgent("John", 100);		
+		Cashier = new CashierRole("John", 100);		
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");
 		ItemCollector1 = new MockItemCollector("ItemCollector1");

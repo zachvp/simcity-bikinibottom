@@ -1,16 +1,20 @@
 package market.gui;
 
-import market.CashierAgent;
-import market.CustomerAgent;
+import market.CashierRole;
+import market.CustomerRole;
 import market.Item;
-import market.ItemCollectorAgent;
-import market.DeliveryGuyAgent;
+import market.ItemCollectorRole;
+import market.DeliveryGuyRole;
 import market.interfaces.*;
 
 import javax.swing.*;
 
+import agent.PersonAgent;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -35,8 +39,8 @@ public class MarketPanel extends JPanel {
 	public JTextField PizzaText = null;
 	public JTextField SandwichText = null;
 	
-    
-    private CashierAgent ca = new CashierAgent("Cashier", 100);
+    private PersonAgent CashierPerson = new PersonAgent("Cashier");
+    private CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
     private CashierGui cashierGui = new CashierGui(ca);
     
     private String ExpensiveCarInventoryLevel = "Current Inventory Level";
@@ -45,15 +49,20 @@ public class MarketPanel extends JPanel {
     private String SandwichInventoryLevel = "Current Inventory Level";
     private String ChickenInventoryLevel = "Current Inventory Level";
     
-    private Vector<ItemCollectorAgent> ItemCollectors = new Vector<ItemCollectorAgent>();
-    private Vector<DeliveryGuyAgent> DeliveryGuys = new Vector<DeliveryGuyAgent>();
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
+    private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
+    private List<Customer> customers = new Vector<Customer>();
     
-    private ItemCollectorAgent ic = new ItemCollectorAgent("ItemCollector1");
-    private ItemCollectorGui icGui = new ItemCollectorGui(ic);
-    private DeliveryGuyAgent dg = new DeliveryGuyAgent("DeliveryGuy1", CityBuilding );
+    private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
+    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+    private ItemCollectorGui icGui = new ItemCollectorGui(ic, this);
+   
+    private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
+    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", CityBuilding , DeliveryGuyPerson);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
     
+    
+
 
     //private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
@@ -74,10 +83,20 @@ public class MarketPanel extends JPanel {
 
     public MarketPanel(MarketGui gui) {
         this.gui = gui;
-        ca.setGui(cashierGui);
+        
+            ic.setGui(icGui);
+            dg.setGui(dgGui);
+            ca.setGui(cashierGui);
+
         
         ItemCollectors.add(ic);
         DeliveryGuys.add(dg);
+        
+        ca.setICList(ItemCollectors);
+        ca.setDGList(DeliveryGuys);
+        ic.setCashier(ca);
+        dg.setCashier(ca);
+        ic.setInventoryList(ca.getInventoryList());
         
 
         //ItemCollector Gui
@@ -89,10 +108,24 @@ public class MarketPanel extends JPanel {
         //DeliveryGuy Gui
         gui.animationPanel.addGui(dgGui);
         
+        CashierPerson.startThread();
+        CashierPerson.addRole(ca);
+        ca.activate();
+        
+        DeliveryGuyPerson.startThread();
+        DeliveryGuyPerson.addRole(dg);
+        dg.activate();
+        
+        ItemCollectorPerson.startThread();
+        ItemCollectorPerson.addRole(ic);
+        ic.activate();
+        
         //Start the thread
+        /*
         ca.startThread();
         ic.startThread();
         dg.startThread();
+		*/
 
         setLayout(new GridLayout(1, 2, 20, 20));
         group.setLayout(new GridLayout(2, 2, 10, 10));
@@ -101,7 +134,22 @@ public class MarketPanel extends JPanel {
         initMarketLabel();
         add(marketLabel);
 
-      
+       
+		
+        
+        List<Item> tempInventoryList = new ArrayList<Item>();
+    	{
+    		tempInventoryList.add(new Item("CheapCar", 1));
+    		tempInventoryList.add(new Item("ExpensiveCar", 0));
+    		tempInventoryList.add(new Item("Pizza", 1));
+    		tempInventoryList.add(new Item("Sandwich", 0));
+    		tempInventoryList.add(new Item("Chicken", 0));
+    	}
+    	PersonAgent SB = new PersonAgent("Customer");
+        CustomerRole c = new CustomerRole ("DemoCustomer", 100, tempInventoryList, SB);
+        //c.startThread();
+        ca.msgIWantItem(tempInventoryList, c);
+        ca.msgPhoneOrder(tempInventoryList, c, null);
       
     }
 

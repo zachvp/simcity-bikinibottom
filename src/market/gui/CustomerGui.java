@@ -1,6 +1,6 @@
 package market.gui;
 
-import market.CashierAgent;
+import market.CashierRole;
 import market.interfaces.Customer;
 
 import java.awt.*;
@@ -12,26 +12,24 @@ public class CustomerGui implements Gui{
 
 	private Customer agent = null;
 	private boolean isPresent = false;
-	private boolean isHungry = false;
+	private boolean isBuying = false;
 	
 	public static final int OffScreenX = 340;
 	public static final int OffScreenY = 50;
 	public static final int CustomerWidth = 20;
 	public static final int CustomerHeight = 20;
 	
-	public static final int xCashier =-40;
-    public static final int yCashier =-40;
+	public static final int xFrontDesk =170;
+    public static final int yFrontDesk =210;
 
 	//private HostAgent host;
 	MarketGui gui;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, GoToSeat, LeaveRestaurant, GoToCashier};
+	private enum Command {noCommand, GoToCashier, LeaveMarket};
 	private Command command=Command.noCommand;
 
-	private int Xlist[];
-	private int Ylist[];
 	public static final int xTable = 50;
 	public static final int yTable = 50;
 
@@ -56,23 +54,19 @@ public class CustomerGui implements Gui{
 		else if (yPos > yDestination)
 			yPos--;
 
-		/*
+		
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
-			else if (command == Command.GoToCashier){
+			if (command==Command.GoToCashier) 
 				agent.msgAnimationFinishedGoToCashier();
-			}
-			else if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("about to call gui.setCustomerEnabled(agent);");
-				isHungry = false;
-				gui.setCustomerEnabled(agent);
+			else if (command==Command.LeaveMarket) {
+				agent.msgAnimationFinishedLeaveMarket();
+				isBuying = false;
 			}
 			
 			
 			command=Command.noCommand;
 		}
-		*/
+		
 	}
  
 	public void draw(Graphics2D g) {
@@ -86,50 +80,33 @@ public class CustomerGui implements Gui{
 	public boolean isPresent() {
 		return isPresent;
 	}
-	/*
-	public void setHungry() {
-		System.out.print("SetHungry?");
-		isHungry = true;
-		agent.gotHungry();
+	
+	public void setBuying() {
+		System.out.print("SetBuying?");
+		isBuying = true;
+		agent.goingToBuy();
 		setPresent(true);
 	}
-	*/
-	public boolean isHungry() {
-		return isHungry;
+	
+	
+	public boolean isBuying() {
+		return isBuying;
 	}
 
 	public void setPresent(boolean p) {
 		isPresent = p;
 	}
 
-	public void DoGoToCashier(){
-		xDestination = xCashier;
-        yDestination = yCashier;
+	public void DoGoToFrontDesk(){
+		xDestination = xFrontDesk;
+        yDestination = yFrontDesk;
 		command = Command.GoToCashier;
 	}
 	
-	public void DoGoToSeat(int seatnumber) {//later you will map seatnumber to table coordinates.
-		if (seatnumber == 1){
-		xDestination = xTable;
-		yDestination = yTable;
-		command = Command.GoToSeat;
-		}
-		if (seatnumber == 2){
-			xDestination = xTable+100;
-			yDestination = yTable;
-			command = Command.GoToSeat;
-		}
-		if (seatnumber == 3){
-			xDestination = xTable+200;
-			yDestination = yTable;
-			command = Command.GoToSeat;
-		}
-	}
-
 	
-	public void DoExitRestaurant() {
+	public void DoExitMarket() {
 		xDestination = 340;
 		yDestination = -20;
-		command = Command.LeaveRestaurant;
+		command = Command.LeaveMarket;
 	}
 }

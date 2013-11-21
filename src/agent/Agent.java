@@ -10,10 +10,10 @@ import java.util.concurrent.*;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
+    
     private boolean pause = false;
-
-    protected Agent() {
-    }
+    
+    protected Agent() {}
 
     /**
      * This should be called whenever state has changed that might cause
@@ -37,6 +37,7 @@ public abstract class Agent {
      * Return agent name for messages.  Default is to return java instance
      * name.
      */
+    
     public String getName() {
         return StringUtil.shortName(this);
     }
@@ -110,10 +111,10 @@ public abstract class Agent {
     	pause = false;
     	stateChanged();
     }
-
+    
     /**
      * Agent scheduler thread, calls respondToStateChange() whenever a state
-     * change has been signalled.
+     * change has been signaled.
      */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
@@ -136,7 +137,8 @@ public abstract class Agent {
                     //When the agent wakes up it will call respondToStateChange()
                     //repeatedly until it returns FALSE.
                     //You will see that pickAndExecuteAnAction() is the agent scheduler.
-                    while (!pause && pickAndExecuteAnAction()) ;
+                    while (!pause && pickAndExecuteAnAction());
+                    
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
                 } catch (Exception e) {

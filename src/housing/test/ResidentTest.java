@@ -26,7 +26,7 @@ public class ResidentTest extends TestCase {
 	 * PayRecipient will notify the resident that a payment is due
 	 * and the resident will have enough money to pay it.
 	 * */
-	public void testNormativeCaseResidentPaysDues(){
+	public void testNormativeResidentPaysDues(){
 		resident.setPayee(mockPayRecipient);
 		resident.getPerson().getWallet().setCashOnHand(PAYMENT_AMOUNT);;
 		/* --- Test Preconditions --- */

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,13 +19,18 @@ import agent.PersonAgent;
  */
 public class InfoPanel extends JPanel implements ActionListener{
 	
+	private MainFrame main;
 	private CitizenRecords citizenRecords;
+	private Vector<PersonAgent> citizens;
 	private Dimension d;
 	private JLabel info;
 	private JPanel textPanel; //info display
 	private JPanel controlPanel; //gui controls
 
-	public InfoPanel(int w, int h){
+	public InfoPanel(int w, int h, MainFrame m){
+		main = m;
+		citizenRecords = main.getCitizenRecords();
+		//citizens = citizenRecords.getCitizenList();
 		d = new Dimension(w-20, h-25);
 		setPreferredSize(d);
 		setMaximumSize(d);
@@ -62,9 +68,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * Displays the Person information
 	 * @param p Person name
 	 */
-	public void updatePersonInfoPanel(String name){
-		System.out.println(name);
-		PersonAgent person = citizenRecords.findPerson(name);
+	public void updatePersonInfoPanel(PersonAgent person){
+		//System.out.println("update info with "+person.getName());
+		//PersonAgent person = new PersonAgent("not found");
+		//person = citizenRecords.findPerson(name);
+		
+		/*for (PersonAgent p: citizens){
+			if (p.getName() == name){
+				person = p;
+			}
+		}*/
 		
 		
 		//TODO Fix nullPointerException w/ person
@@ -79,6 +92,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 
 		validate();
+		
 	}
 	
 	/**
@@ -95,12 +109,21 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * Sets reference to citizen records
 	 * @param records CitizenRecords
 	 */
-	public void setCitizenRecords(CitizenRecords records){
-		citizenRecords = records;
-	}
+	//public void setCitizenRecords(CitizenRecords records){
+		//citizenRecords = records;
+	//}
 	
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * Sets reference to citizenlist in CitizenRecords
+	 * @param citizenList citizenList
+	 */
+	public void setCitizenList(Vector<PersonAgent> citizenList) {
+		citizens = citizenList;
 		
 	}
 

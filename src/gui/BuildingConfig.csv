@@ -10,9 +10,9 @@
 #,
 #Make sure not to leave empty lines, or lines with data that do not start
 #with an digit,
-0,Cero
+6,Hospital
 1,Restaurant
 4,House
 3,Market
 2,Bank
-6,Hospital
+0,Cero

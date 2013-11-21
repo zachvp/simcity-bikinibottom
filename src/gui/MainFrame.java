@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import market.gui.AnimationPanel;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
@@ -93,7 +94,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 	
 		try {
-			stream = (BufferedInputStream)getClass().getResource("BuildingPosTest.csv").getContent();
+			stream = (BufferedInputStream)getClass().getResource("BuildingConfig.csv").getContent();
 			needToBuild = BuildingPosParser.parseBuildingPos(stream);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,8 +131,8 @@ public class MainFrame extends JFrame implements ActionListener {
         infoPanelSlot.setMinimumSize(infoDim);
         infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
         infoPanelSlot.setOpaque(false);
-        infoPanel = new InfoPanel(infoDim.width, infoDim.height);
-        infoPanel.setCitizenRecords(citizenRecords);
+        infoPanel = new InfoPanel(infoDim.width, infoDim.height, this);
+        
         infoPanelSlot.add(infoPanel);
         
         //List of Buildings/People buttons
@@ -150,6 +151,9 @@ public class MainFrame extends JFrame implements ActionListener {
         buildingList.setInfoPanel(infoPanel);
         personList.setInfoPanel(infoPanel);
         citizenRecords = new CitizenRecords(this);
+        personList.setCitizenRecords(citizenRecords);
+        infoPanel.setCitizenList(citizenRecords.getCitizenList());
+        citizenRecords.setInfoPanel(infoPanel);
         //citizenRecords.setPersonInfoList(personList);
         buildingList.setBuildingView(buildingViewPanel);
     
@@ -196,27 +200,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		//build buildings from config file
 		populateMap(needToBuild);
 		
-		
-		//TODO animation panel/map test
-		String name = "Magenta";
-		JPanel testAnimationPanel = new JPanel();
-		testAnimationPanel.setSize(buildingViewPanel.getSize());
-		testAnimationPanel.setBackground(Color.magenta);
-		buildingViewPanel.addCard(testAnimationPanel, name);//creates card and corresponding button
-		cityViewPanel.addBuildingToMap(name); //creates building on map
-		
-		String name2 = "Cyan";
-		JPanel testAnimationPanel2 = new JPanel();
-		testAnimationPanel2.setBackground(Color.CYAN);
-		buildingViewPanel.addCard(testAnimationPanel2, name2);
-		cityViewPanel.addBuildingToMap(name2);
-		/*for(int i=0; i<8; i++){
-			cityViewPanel.addBuildingToMap(name);
-			cityViewPanel.addBuildingToMap(name2);
-		}
-		*/
-	
-		
 	}
 	
 	private void populateMap(List<BuildingDef> list) {
@@ -247,8 +230,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 			if(type == LocationTypeEnum.Market){
 				JPanel AnimationPanel = new JPanel();
+				//market.gui.AnimationPanel AnimationPanel = new AnimationPanel();
 				//BankAnimationPanel.setSize(buildingViewPanel.getSize());
-				AnimationPanel.setBackground(Color.darkGray);
 				buildingViewPanel.addCard(AnimationPanel, buildingName);
 				cityViewPanel.addBuildingToMap(buildingName); 
 			}
@@ -277,6 +260,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	public InfoList getPersonInfoList(){
 		return personList;
+	}
+	public CitizenRecords getCitizenRecords(){
+		return citizenRecords;
 	}
 	
 	public void actionPerformed(ActionEvent e) {

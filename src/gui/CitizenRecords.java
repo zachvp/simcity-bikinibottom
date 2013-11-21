@@ -13,6 +13,7 @@ public class CitizenRecords {
 	 private MainFrame main;
 	 private Vector<PersonAgent> citizens = new Vector<PersonAgent>();
 	 private InfoList personInfoList;
+	 private InfoPanel infoPanel;
 	 
 	private PersonAgent person = new PersonAgent("Steve");
 	
@@ -36,7 +37,7 @@ public class CitizenRecords {
 		 PersonAgent newPerson  = new PersonAgent(name);
 		 //TODO add all attributes to person
 		 
-		 citizens.add(person);
+		 citizens.add(newPerson);
 		 personInfoList.addToList(newPerson.getName());
 		 //start Thread
 
@@ -44,7 +45,7 @@ public class CitizenRecords {
 		}
 	 
 	 public PersonAgent findPerson(String name){
-		 PersonAgent person = null;
+		 PersonAgent person = new PersonAgent("");
 		 for (PersonAgent p: citizens){
 			 if(p.getName() == (name)){
 				 person = p;
@@ -56,6 +57,24 @@ public class CitizenRecords {
 	public void setPersonInfoList(InfoList personList) {
 		personInfoList = personList;
 		
+	}
+
+	public Vector<PersonAgent> getCitizenList() {
+		return citizens;
+		
+	}
+
+	public void showInfo(String name) {
+		 for (PersonAgent p: citizens){
+			 if(p.getName() == (name)){
+				 infoPanel.updatePersonInfoPanel(p);
+				 //System.out.println("showing info for "+p.getName());
+			 }
+		 }
+	}
+
+	public void setInfoPanel(InfoPanel p) {
+		infoPanel = p;
 	}
 
 	

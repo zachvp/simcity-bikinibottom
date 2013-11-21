@@ -154,10 +154,12 @@ public class PersonAgent extends Agent {
 	
 	/**
 	 * Adds the given Role to the PersonAgent's list. The person will not call
-	 * the Role's scheduler if the Role is inactive.
+	 * the Role's scheduler if the Role is inactive. Also calls
+	 * {@link #stateChanged()}.
 	 */
 	public void addRole(Role r) {
 		this.roles.add(r);
+		stateChanged();
 	}
 	
 	public Wallet getWallet() {

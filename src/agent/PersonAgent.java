@@ -56,8 +56,7 @@ public class PersonAgent extends Agent {
 		
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
 		
-		// TODO Add meaningful defaults for wallet
-		this.wallet = new Wallet(20.00, 50.00, 10.00);
+		this.wallet = new Wallet(); // medium income level
 	}
 	
 	/* -------- Messages -------- */
@@ -359,20 +358,52 @@ public class PersonAgent extends Agent {
 	
 	// Inner classes
 	
-	public class Wallet {
+	public static class Wallet {
 		private double cashOnHand;
 		private double tooMuch;
 		private double tooLittle;
 		
+		private IncomeLevel incomeLevel;
+		
+		public enum IncomeLevel {POOR, MEDIUM, RICH}
+		
 		/**
-		 * @param cashOnHand
-		 * @param tooMuch when cashOnHand > tooMuch, Person goes to bank
-		 * @param tooLittle when cashOnHand < tooLittle, Person goes to bank
+		 * Creates a wallet with amounts of money corresponding to the
+		 * income level.
+		 * 
+		 * @param incomeLevel one of POOR, MEDIUM, or RICH
 		 */
-		public Wallet(double cashOnHand, double tooMuch, double tooLittle) {
-			this.cashOnHand = cashOnHand;
-			this.tooMuch = tooMuch;
-			this.tooLittle = tooLittle;
+		public Wallet(IncomeLevel incomeLevel) {
+			this.incomeLevel = incomeLevel;
+			
+			switch (incomeLevel) {
+				case POOR:
+					this.cashOnHand = 5;
+					this.tooMuch = 50;
+					this.tooLittle = 0;
+					break;
+				case RICH:
+					this.cashOnHand = 100;
+					this.tooMuch = 300;
+					this.tooLittle = 50;
+					break;
+				case MEDIUM:
+					this.cashOnHand = 30;
+					this.tooMuch = 60;
+					this.tooLittle = 15;
+					// fall through to default
+				default:
+					break;
+			}
+		}
+		
+		/**
+		 * Creates a new medium income level wallet.
+		 * 
+		 * @see #Wallet(IncomeLevel)
+		 */
+		public Wallet() {
+			this(IncomeLevel.MEDIUM);
 		}
 		
 		public double getCashOnHand() { return this.cashOnHand; }

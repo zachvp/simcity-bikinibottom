@@ -26,8 +26,11 @@ public class CashierGui implements Gui {
     private enum Command {noCommand, GoToCashier, GoToBench};
 	private Command command=Command.noCommand;
 
-    public CashierGui(Cashier ca) {
+	private MarketPanel panel;
+	
+    public CashierGui(Cashier ca, MarketPanel p) {
         this.agent = ca;
+        panel = p;
     }
 
     public void updatePosition() {
@@ -64,6 +67,10 @@ public class CashierGui implements Gui {
     	command=Command.GoToBench;
     }
 
+    public void Update() {
+		panel.UpdateInventoryLevelWithoutButton();
+	}
+    
     public void draw(Graphics2D g) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, CashierWidth, CashierHeight);
@@ -80,4 +87,6 @@ public class CashierGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	
 }

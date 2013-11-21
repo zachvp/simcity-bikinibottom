@@ -39,6 +39,7 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	
 	//Messages	
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
+		print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
@@ -70,8 +71,8 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	
 	//Actions
 	private void GoGetItems(Order o){
+		print("Going to get items");
 		itemcollectorGui.CollectItems();
-		print ("Collecting Items");
 		try {
 			atStation.acquire();
 		} catch (InterruptedException e) {

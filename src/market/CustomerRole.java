@@ -62,6 +62,7 @@ public class CustomerRole extends Role implements Customer{
 	
 	//Message
 	public void goingToBuy(){
+		print ("In function 'going to buy'");
 		state = Customerstate.EnteringMarket;
 		event = Customerevent.GoingToLine;
 		stateChanged();
@@ -80,6 +81,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 
 	public void msgHereisYourItem(List<Item> Items) {
+		print ("Receive items from Cashier");
 		
 		for (int i=0;i<Inventory.size();i++){
 			Item CurrentItem = Inventory.get(i);
@@ -101,6 +103,8 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	public void msgAnimationFinishedGoToCashier(){
+		print ("At FrontDesk now");
+		atFrontDesk.release();
 		state = Customerstate.GoingToOrder;
 		event = Customerevent.WaitingInLine;
 		stateChanged();
@@ -115,7 +119,7 @@ public class CustomerRole extends Role implements Customer{
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
 		
-		if (state == Customerstate.GoingToOrder && event == Customerevent.WaitingInLine) 
+		if (state == Customerstate.EnteringMarket && event == Customerevent.GoingToLine) 
 		{
 			GoToFindCashier();
 			return true;
@@ -141,6 +145,7 @@ public class CustomerRole extends Role implements Customer{
 	
 	//Action
 	private void GoToFindCashier(){
+		print ("Going to the Front Desk");
 		customerGui.DoGoToFrontDesk();
 		try {
 			atFrontDesk.acquire();
@@ -151,7 +156,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	private void OrderItems(List<Item> ShoppingList){
-		
+		print ("Order Items");
 		cashier.msgIWantItem(ShoppingList, this);
 		ExpectedCost = 0;
 		for (int i=0;i<ShoppingList.size();i++){
@@ -162,6 +167,8 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	private void PayItems(double cost){
+		print ("Pay Items");
+		state = Customerstate.Paid;
 		if (cost == ExpectedCost){
 			if (cash >= cost){
 				cashier.msgHereIsPayment(cost, this);
@@ -173,11 +180,19 @@ public class CustomerRole extends Role implements Customer{
 				cash = 0;
 		}
 		if (cost != ExpectedCost){	//doesn’t match with the expected cost
-			//What to Do?
+			if (cash >= cost){
+				cashier.msgHereIsPayment(cost, this);
+				cash -= cost;
+				state = Customerstate.Paid;
+			}
+			else	//not enough money
+				cashier.msgHereIsPayment(cash, this);
+				cash = 0;
 		}
 	}
 	
 	private void Leaving() {
+		print ("Leaving Market");
 		customerGui.DoExitMarket();
 		try {
 			atExit.acquire();

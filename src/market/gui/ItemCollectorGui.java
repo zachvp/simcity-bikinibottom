@@ -56,14 +56,18 @@ public class ItemCollectorGui implements Gui {
 			command=Command.noCommand;
         }
 
-        panel.UpdateInventoryLevel();
         
+        
+    }
+    public void UpdateInventoryLevel(){
+    	panel.UpdateInventoryLevelWithoutButton();
     }
     
     public void BackReadyStation(){
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command=Command.GoHome;
+    	UpdateInventoryLevel();
     }
     
     public void CollectItems(){

@@ -204,7 +204,7 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
-	// Eating out
+	// ---- Eating out
 	
 	/**
 	 * @return how long this person likes to wait between each time eating out

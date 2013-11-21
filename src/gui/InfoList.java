@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 
 /**
@@ -22,11 +23,18 @@ import javax.swing.JScrollPane;
 public class InfoList extends JPanel implements ActionListener {
 
 	private JScrollPane pane;
-	private JPanel view = new JPanel();
-	private List<JButton> list = new ArrayList<JButton>();
+	private JPanel view;
+	private List<JButton> list;
+	private InfoPanel infoPanel;
+	private Dimension d;
+	private BuildingView buildingView;
+	private boolean isBuildingList = false;
+	
 
 	public InfoList(int w, int h){
-		Dimension d = new Dimension(w-40, h-40);
+		view = new JPanel();
+		list = new ArrayList<JButton>();
+		d = new Dimension(w-40, h-40);
 		view.setLayout(new BoxLayout((Container) view, BoxLayout.Y_AXIS));
 		pane = new JScrollPane(view, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		pane.setPreferredSize(d);
@@ -38,21 +46,37 @@ public class InfoList extends JPanel implements ActionListener {
 	 * @param name Name on the button
 	 */
 	public void addToList(String name) {
-		//TODO modify to add more building details to button? (picture, etc.)
+		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
+			System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
 			button.setBackground(Color.white);
-
-			Dimension paneSize = pane.getSize();
-			Dimension buttonSize = new Dimension(paneSize.width - 19, (int) (paneSize.height / 5));
+			Dimension buttonSize = new Dimension(d.width - 19, (int) (d.height / 5));
 			button.setPreferredSize(buttonSize);
 			button.setMinimumSize(buttonSize);
 			button.setMaximumSize(buttonSize);
 			button.addActionListener(this);
 			list.add(button);
 			view.add(button);
-			validate();
+			//TODO create person
 		}
+		validate();		
+	}
+	
+	/**
+	 * Sets reference to BuildingView Panel
+	 * @param v BuildingView Panel
+	 */
+	public void setBuildingView(BuildingView v){
+		buildingView = v;
+		isBuildingList = true;
+	}
+	/**
+	 * Sets reference to Info Panel
+	 * @param p InfoPanel
+	 */
+	public void setInfoPanel(InfoPanel p){
+		infoPanel = p;
 	}
 
 	/**
@@ -63,9 +87,31 @@ public class InfoList extends JPanel implements ActionListener {
 		return list;
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		if (isBuildingList){
+			for (JButton b: list){
+				if(e.getSource() == b){
+					System.out.println("button press " + b.getText());
+
+					buildingView.showCard(b.getText());
+					infoPanel.updateBuildingInfoPanel(b.getText());
+					//TODO showInfo from building's panel ie RestaurantPanel where
+					//		PersonAgents are instanciated
+				}
+			}
+		}
+		else{//it is a PersonAgent
+			for (JButton b: list){
+				if(e.getSource() == b){
+					System.out.println(b.getText());
+					infoPanel.updatePersonInfoPanel(b.getText());
+				}
+			}
+
+
+		}
 
 	}
 
-}
+	
+}//end class

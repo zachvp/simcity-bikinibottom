@@ -63,5 +63,24 @@ public interface Constants {
      * The default encoding used when none is detected
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
+<<<<<<< HEAD
+    
+    /**
+     * Dimensions of a building on a map
+     */
+    public static final int BUILDING_WIDTH = 90;
+	public static final int BUILDING_HEIGHT = 90;
+	
+	/**
+	 * Dimensions of the City Map
+	 */
+	public static final int MAP_WIDTH = 900;
+	public static final int MAP_HEIGHT = 700;
+	/**
+	 * Maximum number of Columns in the Map
+	 */
+	public static final int MAX_BLOCK_COL = 6;
+=======
+>>>>>>> market
 
 }

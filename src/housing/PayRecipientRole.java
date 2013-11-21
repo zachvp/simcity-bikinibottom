@@ -15,7 +15,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public EventLog log = new EventLog();
 	
 	/* ----- Person Data ----- */
-	private PersonAgent person;
+	PersonAgent person;
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -29,9 +29,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		PaymentState state;
 	}
 	
-	public PayRecipientRole(PersonAgent pa ) {
-		super();
-		this.person = pa;
+	public PayRecipientRole(PersonAgent agent) {
+		super(agent);
 	}
 	
 	/* ----- Messages ----- */
@@ -49,12 +48,14 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		for(MyResident mr : residents){
 			if(mr.state == PaymentState.PAYMENT_PAID){
 				checkResidentPayment(mr);
+				return true;
 			}
 		}
 		//TODO implement actual time mechanic
 //		if(globalTime%monthlyTime == 0){
 			for(MyResident mr : residents){
 				chargeResident(mr);
+				return true;
 			}
 //		}
 		return false;

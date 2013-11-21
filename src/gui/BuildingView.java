@@ -36,6 +36,10 @@ public class BuildingView extends JPanel implements ActionListener{
 		add(blankCard, "blank");
 	}
 	
+	/**
+	 * Gives reference to the list of Buildings
+	 * @param b InfoList of Buildings
+	 */
 	public void setBuildingList(InfoList b){
 		buildingList = b;
 	}
@@ -55,6 +59,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	 * @param name The name to reference the JPanel with (ie. name of the building) 
 	 */
 	public void showCard(String name) {
+		System.out.println("showing card " + name);
 		CardLayout cl = (CardLayout)(this.getLayout());
 		cl.show(this, name);
 	}
@@ -68,7 +73,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	}
 
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 

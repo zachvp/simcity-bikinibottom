@@ -76,7 +76,7 @@ public class PersonAgent extends Agent {
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
 		for (Role r : roles) {
-			if (r.isActive() && r.pickAndExecuteAnAction()) {
+			if (r.isReady() && r.pickAndExecuteAnAction()) {
 				return true;
 				// Note: only one role should be active at a time
 			}
@@ -351,7 +351,11 @@ public class PersonAgent extends Agent {
 	// Booleans for determining which action should be called
 	
 	public boolean workStartsSoon() {
-		long workStartTime = getWorkRole().startTime();
+		WorkRole workRole = getWorkRole();
+		if (workRole == null) {
+			return false;
+		}
+		long workStartTime = workRole.startTime();
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
 	}
 	

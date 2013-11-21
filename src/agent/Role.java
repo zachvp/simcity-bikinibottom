@@ -8,7 +8,7 @@ package agent;
 public abstract class Role {
     protected Agent agent;
     private boolean active = false;
-    private boolean waitingInput = false;
+    private boolean awaitingInput = false;
 
     protected Role() {
     	
@@ -47,11 +47,28 @@ public abstract class Role {
     protected abstract boolean pickAndExecuteAnAction();
 
     /**
-     * Returns whether the role is active; that is, whether the role's
-     * {@link #pickAndExecuteAnAction} should be called.
+     * Returns whether the role is active. To determine whether
+     * {@link #pickAndExecuteAnAction} should be called, instead use
+     * {@link #isReady}.
      */
     public boolean isActive() {
-        return this.active && !this.waitingInput;
+        return this.active;
+    }
+    
+    /**
+     * Returns whether the role is awaiting input. If true, this usually means
+     * that the Role is waiting for GUI input of some kind, especially 
+     */
+    public boolean isAwaitingInput() {
+        return this.awaitingInput;
+    }
+    
+    /**
+     * Returns whether the role is active and ready; that is, whether the role's
+     * {@link #pickAndExecuteAnAction} should be called.
+     */
+    public boolean isReady() {
+        return this.active && !this.awaitingInput;
     }
 
     /**
@@ -72,12 +89,23 @@ public abstract class Role {
         this.active = false;
     }
     
+    /**
+     * Temporarily pauses the Role.
+     * 
+     * @see #isAwaitingInput()
+     */
     public void waitForInput() {
-    	this.waitingInput = true;
+    	this.awaitingInput = true;
     }
     
+    /**
+     * Resumes the Role after it has been temporarily paused by
+     * {@link #waitForInput}.
+     * 
+     * @see #isAwaitingInput()
+     */
     public void doneWaitingForInput() {
-    	this.waitingInput = false;
+    	this.awaitingInput = false;
     	stateChanged();
     }
 

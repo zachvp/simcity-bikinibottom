@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,8 +36,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	//TODO  write down steps to test GUI manually 
 	
 	
-	private int WINDOWX = 1500;
-	private int WINDOWY = 800;
+	private int WINDOWX = 1200;
+	private int WINDOWY = 700;
 	
 	//Panel Slots
 	private JPanel cityViewSlot = new JPanel();
@@ -53,15 +54,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	private InfoList buildingList;
 	private InfoList personList;
-	private CitizenRecords citizenRecords = new CitizenRecords();
+	private CitizenRecords citizenRecords;
 	
-	//TODO Create infoDisplayPanel (all button lists access this)
+	//TODO Create infoDisplayPanel (all button lists access this)?
 	
-    //TODO Add timer here
+    //TODO Add timer here?
     
 	
 	//TODO test agent
-	private PersonAgent person = new PersonAgent("Steve");
 	
 	public MainFrame(){
 		
@@ -123,10 +123,15 @@ public class MainFrame extends JFrame implements ActionListener {
         //buildingListSlot.setLayout(new CardLayout());
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);
-        personList = new InfoList(listDim.width, listDim.height);
-        citizenRecords.setPersonInfoList(personList);
-        buildingList.setBuildingView(buildingViewPanel);
         
+        
+        personList = new InfoList(listDim.width, listDim.height);
+        buildingList.setInfoPanel(infoPanel);
+        personList.setInfoPanel(infoPanel);
+        citizenRecords = new CitizenRecords(this);
+        //citizenRecords.setPersonInfoList(personList);
+        buildingList.setBuildingView(buildingViewPanel);
+    
         
         //TODO addInfoPanel(infoPanel)?
        // buildingList.setInfoPanel(buildingInfoPanel);
@@ -166,14 +171,13 @@ public class MainFrame extends JFrame implements ActionListener {
 			//buildingPanels.add( bp, "" + i );
 		//}
 		
-		//TODO personagent test
-		//person.
+		
 		
 		
 		//TODO animation panel/map test
 		String name = "Magenta";
 		JPanel testAnimationPanel = new JPanel();
-		testAnimationPanel.setSize(buildingViewPanel.getDim());
+		testAnimationPanel.setSize(buildingViewPanel.getSize());
 		testAnimationPanel.setBackground(Color.magenta);
 		buildingViewPanel.addCard(testAnimationPanel, name);//creates card and corresponding button
 		cityViewPanel.addBuildingToMap(name); //creates building on map
@@ -183,19 +187,23 @@ public class MainFrame extends JFrame implements ActionListener {
 		testAnimationPanel2.setBackground(Color.CYAN);
 		buildingViewPanel.addCard(testAnimationPanel2, name2);
 		cityViewPanel.addBuildingToMap(name2);
-		for(int i=0; i<8; i++){
+		/*for(int i=0; i<8; i++){
 			cityViewPanel.addBuildingToMap(name);
 			cityViewPanel.addBuildingToMap(name2);
 		}
-		personList.addToList("Steve");
-		//make buildingAnimationPanels example
-		//BankAnimation bankAnimation = new BuildingAnimation("Bank");
-		//addAnimationPanel(bankAnimation, "Bank");
-		//buildingViewPanel.showCard("Bank")
+		*/
+	
 		
 	}
 	
-	//TODO add animation panels here
+	//TODO read in from config file, building (type, name)
+	//make buildingAnimationPanels example
+	//BankAnimation bankAnimation = new BuildingAnimation("Bank");
+	//addAnimationPanel(bankAnimation, "Bank");
+	//buildingViewPanel.showCard("Bank")
+	
+	
+	//TODO add animation panels here?
 	public void addAnimationPanel(JPanel panel, String name){
 		buildingViewPanel.addCard(panel, name);
 	}
@@ -215,18 +223,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 	
 	
+	public InfoList getPersonInfoList(){
+		return personList;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
-		/*/TODO Test buttons
-		if(e.getSource() == b2){
-			buildingViewPanel.showCard("blank2");
-			buildingList.addToList("blank2");
-			personList.addToList("adf");
-		}
-		
-		if(e.getSource() == b){
-			buildingViewPanel.showCard("blank");
-			buildingList.addToList("blank");
-		}//*/
 		
 	}
 	

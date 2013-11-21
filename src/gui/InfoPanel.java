@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		setLayout(new BorderLayout());
 		
 		textPanel = new JPanel();
-		Dimension textDim = new Dimension(w/5, h-25);
+		Dimension textDim = new Dimension((int)(w*0.5), h-25);
 		textPanel.setPreferredSize(textDim);
 		textPanel.setMaximumSize(textDim);
 		textPanel.setMinimumSize(textDim);
@@ -47,7 +47,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
 		);
 		textPanel.add(info);
+		
+		controlPanel = new JPanel();
+		Dimension controlDim = new Dimension((int)(w*0.5), h-25);
+		controlPanel.setPreferredSize(controlDim);
+		controlPanel.setMaximumSize(controlDim);
+		controlPanel.setMinimumSize(controlDim);
+		
 		add(textPanel, BorderLayout.WEST);
+		add(controlPanel, BorderLayout.EAST);
 	}
 
 	/**
@@ -55,8 +63,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * @param p Person name
 	 */
 	public void updatePersonInfoPanel(String name){
+		System.out.println(name);
 		PersonAgent person = citizenRecords.findPerson(name);
 		
+		
+		//TODO Fix nullPointerException w/ person
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
 						//+ "<div> Job: "+ person.getJob() +"</div><div>&nbsp;</div>"
@@ -76,6 +87,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void updateBuildingInfoPanel(String name){
 		//Building building = b;
+		System.out.println(name+ " update info panel");
 		
 	}
 	

@@ -1,0 +1,18 @@
+#Specifies type of building and name,
+"#Building types: enter 0 for no building, 1 for restaurant, 2 for bank",
+"#3 for market, 4 for house, 5 for apartment, 6 for hospital",
+#,
+#Names must not contain commas,
+#Comments start with #,
+#First cell must be only a digit/character,
+#,
+"#enter buildings in order, left to right, then top to bottom",
+#,
+#Make sure not to leave empty lines, or lines with data that do not start
+#with an digit,
+0,Cero
+1,Restaurant
+4,House
+3,Market
+2,Bank
+6,Hospital

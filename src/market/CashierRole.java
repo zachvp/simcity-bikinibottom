@@ -83,6 +83,7 @@ public class CashierRole extends Role implements Cashier{
 	//Cashier Message 
 	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CityBuilding building)	
 	{				//The Customer will be the phone calling guy
+		print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -96,6 +97,7 @@ public class CashierRole extends Role implements Cashier{
 	
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) //[Customer to Cashier]
 	{
+		print ("Received Msg from Customer");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -109,19 +111,34 @@ public class CashierRole extends Role implements Cashier{
 
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
-
+		print ("Received Items from ItemCollector");
+		
+		
+		int ShoppingListSize = 0;
+		for (int i=0;i<Items.size();i++){
+			ShoppingListSize += Items.get(i).amount;
+		}
+		int MissingItemListSize = 0;
+		for (int i=0;i<MissingItems.size();i++){
+			MissingItemListSize += MissingItems.get(i).amount;
+		}
+		//print ("ShoppingListSize : " + ShoppingListSize);
+		//print ("MissingItemListSize : " + MissingItemListSize);
+		
 		
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).c == c)
 			{
 				//When there is no item in the shoppinglist can be satisified
-				if (Items.isEmpty()){
+				if (ShoppingListSize == 0){
+					//print ("Epic Failed");
 					getMyCustomerList().get(i).state = Customerstate.EpicFailed;
 					getMyCustomerList().get(i).MissingItemList = MissingItems;
 					break;
 				}
 				//When there is some items that cannot be fulfilled
-				else if (!MissingItems.isEmpty()){
+				else if (MissingItemListSize != 0){
+					//print ("failed");
 					getMyCustomerList().get(i).state = Customerstate.Failed;
 					getMyCustomerList().get(i).MissingItemList = MissingItems;
 					getMyCustomerList().get(i).setDeliveryList(Items);
@@ -129,8 +146,10 @@ public class CashierRole extends Role implements Cashier{
 				}
 				//All items can be fulfilled
 				else
+					//print ("no problem");
 					getMyCustomerList().get(i).state = Customerstate.Collected;
 					getMyCustomerList().get(i).setDeliveryList(Items);
+					break;
 			}
 			
 				
@@ -143,12 +162,14 @@ public class CashierRole extends Role implements Cashier{
 	
 	public void msgHereIsPayment(double payment, Customer c)
 	{
+		print ("Receive payment from Customer ");
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).c == c){
 				getMyCustomerList().get(i).state = Customerstate.Paid;
 				setCash(getCash() + payment);
 			}
 		}
+		cashierGui.Update();
 		stateChanged();
 	}
 
@@ -186,7 +207,7 @@ public class CashierRole extends Role implements Cashier{
 		}
 		//Some or All items are fulfilled
 		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.Collected){
+			if (getMyCustomerList().get(i).state == Customerstate.Collected || getMyCustomerList().get(i).state == Customerstate.Failed){
 				CalculatePayment(getMyCustomerList().get(i));
 				return true;
 			}
@@ -205,6 +226,7 @@ public class CashierRole extends Role implements Cashier{
 	
 	//Actions
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
+		print ("Going to ask ItemCollector to get Items");
 		cashierGui.GoToBench();
 		try {
 			atBench.acquire();
@@ -227,12 +249,14 @@ public class CashierRole extends Role implements Cashier{
 	}
 
 	private void TellCustomerEpicFail(MyCustomer MC){
+		print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		MC.c.msgNoItem();
 		
 	}
 	
 	private void CalculatePayment(MyCustomer MC){
+		print ("Calculating the total for the customer");
 		double total = 0;
 		for (int i=0;i<MC.getDeliveryList().size();i++){
 			double CurrentPrice = PriceList.get(MC.getDeliveryList().get(i).name);
@@ -244,6 +268,7 @@ public class CashierRole extends Role implements Cashier{
 	}
 
 	private void GiveItems (MyCustomer MC){
+		print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
 		if (MC.Building == null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());

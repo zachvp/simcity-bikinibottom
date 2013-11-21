@@ -123,15 +123,13 @@ public class MarketGui extends JFrame implements ActionListener {
 
         
         if (e.getSource() == UpdateButton) {
-        	marketPanel.UpdateInventoryLevel();
+        	marketPanel.UpdateInventoryLevelWithButton();
         }
         
         
     }
     
-    public void UpdateInventory() {
-    	marketPanel.UpdateInventoryLevel();
-    }
+
     /**
      * Message sent from a customer gui to enable that customer's
      * "I'm hungry" checkbox.

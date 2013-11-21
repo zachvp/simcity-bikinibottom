@@ -10,11 +10,17 @@ import agent.PersonAgent;
  *
  */
 public class CitizenRecords {
+	 private MainFrame main;
 	 private Vector<PersonAgent> citizens = new Vector<PersonAgent>();
 	 private InfoList personInfoList;
 	 
-	 public CitizenRecords(){
-		 
+	private PersonAgent person = new PersonAgent("Steve");
+	
+	 
+	 public CitizenRecords(MainFrame m){
+		 main = m;
+		 personInfoList = main.getPersonInfoList();
+		 addCitizen(person);
 	 }
 	 
 	 /**
@@ -22,14 +28,25 @@ public class CitizenRecords {
 	  * @param person A PersonAgent
 	  */
 	 public void addCitizen(PersonAgent person){
-		 citizens.add(person);
-		 personInfoList.addToList(person.getName());
+		citizens.add(person);
+		personInfoList.addToList(person.getName());
 	 }
+	 public void addCitizen(String name, String job, String home, String status,
+				boolean hasCar) {
+		 PersonAgent newPerson  = new PersonAgent(name);
+		 //TODO add all attributes to person
+		 
+		 citizens.add(person);
+		 personInfoList.addToList(newPerson.getName());
+		 //start Thread
+
+			
+		}
 	 
 	 public PersonAgent findPerson(String name){
 		 PersonAgent person = null;
 		 for (PersonAgent p: citizens){
-			 if(p.getName() == name){
+			 if(p.getName() == (name)){
 				 person = p;
 			 }
 		 }
@@ -40,4 +57,6 @@ public class CitizenRecords {
 		personInfoList = personList;
 		
 	}
+
+	
 }

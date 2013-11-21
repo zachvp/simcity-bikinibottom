@@ -1,7 +1,6 @@
 package housing.test;
 
 import agent.PersonAgent;
-import housing.PayRecipientRole;
 import housing.ResidentRole;
 import housing.test.mock.MockPayRecipient;
 import junit.framework.TestCase;
@@ -18,15 +17,13 @@ public class ResidentTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		resident.activate();
-		residentPerson.startThread();
 	}
 	
 	/** Tests the simplest case of the resident paying
 	 * PayRecipient will notify the resident that a payment is due
 	 * and the resident will have enough money to pay it.
 	 * */
-	public void testNormativeCaseResidentPaysDues(){
+	public void testNormativeResidentPaysDues(){
 		resident.setPayee(mockPayRecipient);
 		resident.getPerson().getWallet().setCashOnHand(PAYMENT_AMOUNT);;
 		/* --- Test Preconditions --- */

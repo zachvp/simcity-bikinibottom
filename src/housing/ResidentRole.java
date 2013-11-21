@@ -58,10 +58,9 @@ public class ResidentRole extends Role implements Resident {
 		}
 	}
 	
-	public ResidentRole(PersonAgent pa) {
-		super();
-		this.setAgent(pa);
-		this.person = pa;
+	public ResidentRole(PersonAgent agent) {
+		super(agent);
+		this.person = agent;
 	}
 	
 	/* ----- Messages ----- */

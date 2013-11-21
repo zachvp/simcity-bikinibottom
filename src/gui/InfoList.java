@@ -88,26 +88,30 @@ public class InfoList extends JPanel implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		for (JButton b: list){
-			if(e.getSource() == b){
-				System.out.println("button press " + b.getText());
-				//b.set
-				if (isBuildingList){
+		if (isBuildingList){
+			for (JButton b: list){
+				if(e.getSource() == b){
+					System.out.println("button press " + b.getText());
+
 					buildingView.showCard(b.getText());
 					infoPanel.updateBuildingInfoPanel(b.getText());
 					//TODO showInfo from building's panel ie RestaurantPanel where
 					//		PersonAgents are instanciated
 				}
-				else{//it is a person
+			}
+		}
+		else{//it is a PersonAgent
+			for (JButton b: list){
+				if(e.getSource() == b){
+					System.out.println(b.getText());
 					infoPanel.updatePersonInfoPanel(b.getText());
 				}
 			}
-			else{
-				
-			}
+
+
 		}
-		
+
 	}
+
 	
-	
-}
+}//end class

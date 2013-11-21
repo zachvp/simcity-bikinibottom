@@ -1,6 +1,8 @@
 package housing.gui;
 
-public class HousingPanel {
+import agent.gui.AnimationPanel;
+
+public class HousingPanel extends AnimationPanel {
 
 	public HousingPanel() {
 		// TODO list of agents

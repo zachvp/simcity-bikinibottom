@@ -406,6 +406,10 @@ public class PersonAgent extends Agent {
 			this(IncomeLevel.MEDIUM);
 		}
 		
+		public IncomeLevel getIncomeLevel() {
+			return this.incomeLevel;
+		}
+		
 		public double getCashOnHand() { return this.cashOnHand; }
 		public double getTooMuch() { return this.tooMuch; }
 		public double getTooLittle() { return this.tooLittle; }

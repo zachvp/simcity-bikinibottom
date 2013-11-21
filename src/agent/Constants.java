@@ -27,8 +27,6 @@ in this Software without prior written authorization from Stanford University.
 */
 package agent;
 
-import java.util.*;
-
 /**
  * Constants of general use
  */
@@ -63,7 +61,6 @@ public interface Constants {
      * The default encoding used when none is detected
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
-<<<<<<< HEAD
     
     /**
      * Dimensions of a building on a map
@@ -80,7 +77,5 @@ public interface Constants {
 	 * Maximum number of Columns in the Map
 	 */
 	public static final int MAX_BLOCK_COL = 6;
-=======
->>>>>>> market
 
 }

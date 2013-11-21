@@ -176,6 +176,7 @@ public class PersonAgent extends Agent implements Person {
 	 * the Role's scheduler if the Role is inactive. Also calls
 	 * {@link #stateChanged()}.
 	 */
+	@Override
 	public void addRole(Role r) {
 		this.roles.add(r);
 		stateChanged();
@@ -202,7 +203,7 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
-	// Eating out
+	// ---- Eating out
 	
 	/**
 	 * @return how long this person likes to wait between each time eating out

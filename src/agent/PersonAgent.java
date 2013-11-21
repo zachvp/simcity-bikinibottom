@@ -85,7 +85,7 @@ public class PersonAgent extends Agent {
 		
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			// TODO uncomment scheduler
-			// activateRole(getPassengerRole().getLocation());
+			// activateRoleForLoc(getPassengerRole().getLocation());
 		}
 		
 
@@ -322,8 +322,8 @@ public class PersonAgent extends Agent {
 	}
 	
 	/*
-	public void activateRole(CityLocation loc) {
-		// TODO implement activateRole()
+	public void activateRoleForLoc(CityLocation loc) {
+		// TODO implement activateRoleForLoc()
 	}
 	*/
 	

@@ -1,7 +1,7 @@
 package market.gui;
 
-import market.CashierAgent;
-import market.CustomerAgent;
+import market.CashierRole;
+import market.CustomerRole;
 import market.interfaces.DeliveryGuy;
 
 import java.awt.*;
@@ -36,6 +36,14 @@ public class DeliveryGuyGui implements Gui {
             yPos++;
         else if (yPos > yDestination)
             yPos--;
+        
+        if (xPos == HomePosX && yPos == HomePosY){
+        	agent.Ready();
+        }
+        
+        if (xPos == ExitX && yPos == ExitY){
+        	agent.AtExit();
+        }
 
 
     }

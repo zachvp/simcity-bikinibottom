@@ -1,5 +1,7 @@
 package agent;
 
+import CommonSimpleClasses.CityLocation;
+
 /**
  * Common interface for jobs that people can work at. Provides a couple of
  * convenience methods for finding the next time work starts.
@@ -48,8 +50,7 @@ public abstract class WorkRole extends Role {
 	 */
 	public abstract boolean isOnBreak();
 	
-	// TODO uncomment when CityLocation is available
-	// public abstract CityLocation workLocation();
+	public abstract CityLocation workLocation();
 	
 	/**
 	 * The duration of work, in milliseconds. Accounts for daily and hourly

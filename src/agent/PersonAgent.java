@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 
 /**
@@ -321,11 +322,11 @@ public class PersonAgent extends Agent {
 		return null;
 	}
 	
-	/*
+	
 	public void activateRoleForLoc(CityLocation loc) {
 		// TODO implement activateRoleForLoc()
 	}
-	*/
+	
 	
 	// Choosing locations to patronize
 	

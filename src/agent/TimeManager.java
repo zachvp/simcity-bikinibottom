@@ -1,7 +1,6 @@
 package agent;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Singleton that keeps track of time in the Agent world.

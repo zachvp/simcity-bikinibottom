@@ -19,7 +19,7 @@ public abstract class Agent {
      * This should be called whenever state has changed that might cause
      * the agent to do something.
      */
-    public void stateChanged() {
+    protected void stateChanged() {
         stateChange.release();
     }
 

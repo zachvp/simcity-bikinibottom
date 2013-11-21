@@ -19,6 +19,9 @@ public class DeliveryGuyGui implements Gui {
     private static final int ExitX = 10;
     private static final int ExitY = 10;
 
+    private static final int HomePosX = 10;
+    private static final int HomePosY = 10;
+    
     public DeliveryGuyGui(DeliveryGuy dg) {
         this.agent = dg;
     }
@@ -36,6 +39,11 @@ public class DeliveryGuyGui implements Gui {
 
 
     }
+    public void BackReadyStation(){
+    	xDestination = HomePosX;
+    	yDestination = HomePosY;
+    }
+    
     public void GoDeliver(){
     	xDestination = ExitX;
     	yDestination = ExitY;

@@ -17,6 +17,9 @@ public class ItemCollectorGui implements Gui {
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
     
+    private static final int HomePosX = 10;
+    private static final int HomePosY = 10;
+    
     private static final int CollectItemX = 10;
     private static final int CollectItemY = 10;
 
@@ -36,6 +39,11 @@ public class ItemCollectorGui implements Gui {
             yPos--;
 
 
+    }
+    
+    public void BackReadyStation(){
+    	xDestination = HomePosX;
+    	yDestination = HomePosY;
     }
     
     public void CollectItems(){

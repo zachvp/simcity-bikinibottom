@@ -10,8 +10,15 @@ import java.util.concurrent.*;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
+<<<<<<< HEAD
     private boolean pause = false;
 
+=======
+     
+    private boolean paused = false;
+    Semaphore pausedsem = new Semaphore(0);
+    
+>>>>>>> market
     protected Agent() {
     }
 
@@ -37,7 +44,11 @@ public abstract class Agent {
      * Return agent name for messages.  Default is to return java instance
      * name.
      */
+<<<<<<< HEAD
     public String getName() {
+=======
+    protected String getName() {
+>>>>>>> market
         return StringUtil.shortName(this);
     }
 
@@ -93,6 +104,7 @@ public abstract class Agent {
             agentThread = null;
         }
     }
+<<<<<<< HEAD
     
     /**
      * Temporarily pause agent scheduler thread.
@@ -110,6 +122,8 @@ public abstract class Agent {
     	pause = false;
     	stateChanged();
     }
+=======
+>>>>>>> market
 
     /**
      * Agent scheduler thread, calls respondToStateChange() whenever a state
@@ -130,13 +144,23 @@ public abstract class Agent {
                 try {
                     // The agent sleeps here until someone calls, stateChanged(),
                     // which causes a call to stateChange.give(), which wakes up agent.
+<<<<<<< HEAD
+=======
+                	if (paused){
+                		pausedsem.acquire();
+                	}
+>>>>>>> market
                     stateChange.acquire();
                     
                     //The next while clause is the key to the control flow.
                     //When the agent wakes up it will call respondToStateChange()
                     //repeatedly until it returns FALSE.
                     //You will see that pickAndExecuteAnAction() is the agent scheduler.
+<<<<<<< HEAD
                     while (!pause && pickAndExecuteAnAction()) ;
+=======
+                    while (pickAndExecuteAnAction()) ;
+>>>>>>> market
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
                 } catch (Exception e) {
@@ -150,5 +174,16 @@ public abstract class Agent {
             this.interrupt();
         }
     }
+<<<<<<< HEAD
+=======
+    public void pause(){
+    	paused = true;
+    }
+    
+    public void restart(){
+    	paused = false;
+    	pausedsem.release();
+    }
+>>>>>>> market
 }
 

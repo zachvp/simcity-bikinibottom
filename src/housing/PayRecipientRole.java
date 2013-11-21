@@ -29,9 +29,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		PaymentState state;
 	}
 	
-	public PayRecipientRole(PersonAgent pa ) {
-		super();
-		this.person = pa;
+	public PayRecipientRole(PersonAgent agent) {
+		super(agent);
 	}
 	
 	/* ----- Messages ----- */

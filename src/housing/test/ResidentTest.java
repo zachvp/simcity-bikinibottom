@@ -1,7 +1,6 @@
 package housing.test;
 
 import agent.PersonAgent;
-import housing.PayRecipientRole;
 import housing.ResidentRole;
 import housing.test.mock.MockPayRecipient;
 import junit.framework.TestCase;
@@ -18,8 +17,6 @@ public class ResidentTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		resident.activate();
-		residentPerson.startThread();
 	}
 	
 	/** Tests the simplest case of the resident paying

@@ -1,7 +1,10 @@
 package transportation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 import CommonSimpleClasses.DirectionEnum;
 import transportation.VehicleAgent.VehicleEventEnum;
@@ -11,10 +14,11 @@ import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 
+//TODO will instantly get and remove passengers, should fix?
 public class BusAgent extends VehicleAgent implements Bus {
 
 	//List of Passengers in the bus.
-	List<Passenger> passengerList; 
+	List<Passenger> passengerList = new ArrayList<Passenger>(); 
 	
 	//List of Passengers waiting in the current Busstop TODO add to DD
 	List<Passenger> waitingPassengerList; 
@@ -27,6 +31,9 @@ public class BusAgent extends VehicleAgent implements Bus {
 		
 	//State the bus is in.
 	BusStateEnum busState = BusStateEnum.Moving; 
+	
+	boolean direction;
+	
 	enum BusStateEnum { // TODO Update DD
 		Moving,
 		RequestingBusstop,
@@ -47,24 +54,46 @@ public class BusAgent extends VehicleAgent implements Bus {
 	
 	@Override
 	public void msgMyBusStop(List<Busstop> bsList) {
+		DirectionEnum myDir;
+		try {
+			myDir = myDirection();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception: Failed to find bus "
+					+ "direction, will skip a busstop.");
+			busEvent = BusEventEnum.PassengersOnBus;
+			busState = BusStateEnum.CallingPassengers;
+			return;
+		} 
 		for (Busstop bs : bsList) {
-			if (bs.direction() == myDirection()) {
+			if (bs.direction() == myDir) {
 				currentBusstop = bs;
 				busEvent = BusEventEnum.ReceivedBusstop;
 				stateChanged();
 				return;
 			}
 		}
-		busState = BusStateEnum.CallingPassengers;
-		busEvent = BusEventEnum.PassengersOnBus;
+		busState = BusStateEnum.RequestingBusstop;
+		busEvent = BusEventEnum.ReceivedBusstop;
 		stateChanged();
 		return;
 
 	}
 
-	private DirectionEnum myDirection() {
-		// TODO Auto-generated method stub
-		return null;
+	private DirectionEnum myDirection() throws Exception {
+		Corner nextCorner = currentPath.get(0);
+		int i;
+		for (i = 0; i < adjCorners.size(); i++) {
+			if (adjCorners.get(i).c == nextCorner) {
+				break;
+			}
+		}
+		
+		if (i == adjCorners.size()) {
+			throw new Exception("Next corner was not found "
+					+ "in adjCorners");
+		}
+		return adjCorners.get(i).d;
 	}
 	
 
@@ -80,12 +109,13 @@ public class BusAgent extends VehicleAgent implements Bus {
 		stateChanged();
 	}
 
+	// TODO this does nothing cause we're not synchronizing the exiting of passengers.
 	@Override
-	public void msgExiting() {
-		/* TODO count number of exits, check against number of gui
-		 * messages to know if everyone that's leaving left
+	public void msgExiting(Passenger p) {
+		passengerList.remove(p);
+		/* TODO add counting mechanism if going to make 
+		 * passengers exit in order
 		 */
-		
 	}
 	
 	@Override
@@ -123,19 +153,29 @@ public class BusAgent extends VehicleAgent implements Bus {
 	}
 
 	private void letPassengersExit() {
-		// TODO Auto-generated method stub
+		for (Passenger passenger : passengerList) {
+			passenger.msgWeHaveArrived(currentCorner);
+		}
 		
+		//TODO here we're not waiting for passengers to exit
+		busEvent = BusEventEnum.PassengersLeft;
 	}
 	
 	private void letPassengersIn() {
-		// TODO Auto-generated method stub
-		
+		for (Passenger passenger : waitingPassengerList) {
+			passenger.msgWelcomeToBus(this, 0); //TODO give fare?
+			passengerList.add(passenger);
+		}
+		// TODO Everyone will come in instantly
+		busEvent = BusEventEnum.PassengersOnBus;
 	}
 
 	@Override
 	void endTravel() {
-		// TODO Auto-generated method stub
-
+		currentPath = new ArrayList<Corner> (busRoute);
+		if (!direction) { 
+			java.util.Collections.reverse(currentPath);
+		}
 	}
 
 }

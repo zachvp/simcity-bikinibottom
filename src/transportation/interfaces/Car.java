@@ -8,5 +8,5 @@ import CommonSimpleClasses.CityLocation;
 public interface Car extends Vehicle {
 	
 	//Message to set a destination.
-	public void msgTakeMeHere(List<Corner> path);
+	public void msgTakeMeHere(List<Corner> path, Passenger driver);
 }

@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
+import transportation.interfaces.Car;
+import transportation.interfaces.Vehicle;
 import agent.Role;
 
 /**
@@ -425,6 +427,11 @@ public class PersonAgent extends Agent {
 		public boolean hasTooLittle() {
 			return cashOnHand < tooLittle;
 		}
+	}
+
+	public Car car() {
+		// TODO ERIK RETURN CAR PLS KTHXBY
+		return null;
 	}
 }
 

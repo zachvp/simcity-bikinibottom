@@ -23,9 +23,6 @@ public class FakePassengerRole extends Role implements Passenger {
 	}
 
 	@Override
-	public void msgMyBusStop(List<Busstop> bsList) {}
-
-	@Override
 	public void msgGoToLocation(CityLocation loc) {
 		destination = loc;
 		stateChanged();

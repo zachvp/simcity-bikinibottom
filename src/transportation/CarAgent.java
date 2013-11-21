@@ -16,8 +16,9 @@ public class CarAgent extends VehicleAgent implements Car {
 	Passenger driver;
 	
 	@Override
-	public void msgTakeMeHere(List<Corner> path) {
+	public void msgTakeMeHere(List<Corner> path, Passenger driver) {
 		currentPath = new ArrayList<Corner> (path);
+		this.driver = driver;
 		event = VehicleEventEnum.StartedVehicle;
 		stateChanged();
 	}

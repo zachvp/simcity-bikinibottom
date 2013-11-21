@@ -212,8 +212,38 @@ public class PersonAgent extends Agent {
 		this.hungerLevel = newHungerLevel;
 	}
 	
+	/**
+	 * Sets the hunger level to the given, without modifying lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @see #getLastTimeEatingOut()
+	 */
 	public void setHungerLevel(HungerLevel newHungerLevel) {
 		setHungerLevel(newHungerLevel, false);
+	}
+	
+	/**
+	 * Sets the hunger level to full; if eatingOut, updates lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @param eatingOut whether this hunger modification was due to eating out
+	 * @see #getLastTimeEatingOut()
+	 */
+	public void setHungerToFull(boolean eatingOut) {
+		setHungerLevel(HungerLevel.FULL, eatingOut);
+	}
+	
+	/**
+	 * Sets the hunger level to full, without modifying lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @see #getLastTimeEatingOut()
+	 */
+	public void setHungerToFull() {
+		setHungerToFull(false);
 	}
 	
 	// Work starting soon

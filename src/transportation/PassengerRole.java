@@ -19,6 +19,7 @@ public class PassengerRole extends Role implements Passenger {
 	//Path to follow to get to destination. TODO add to DD
 	List<Corner> path;
 	
+	// TODO add to DD?
 	CityLocation currentLocation;
 	
 	//Stores what the Passenger is doing.

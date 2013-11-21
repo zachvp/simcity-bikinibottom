@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+import kelp.Kelp;
+import kelp.KelpClass;
 import transportation.interfaces.AdjCornerRequester;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.BusstopRequester;
@@ -41,6 +43,9 @@ public class CornerAgent extends Agent implements Corner {
 	
 	//List of entities waiting to get a copy of adjacentCorners.
 	Queue<AdjCornerRequester> waitingForCorners; 
+	
+	//Reference to Kelp TODO add to DD
+	Kelp kelp;
 
 
 	@Override
@@ -112,9 +117,71 @@ public class CornerAgent extends Agent implements Corner {
 	}
 
 	@Override
-	public Corner getCornerForDir(DirectionEnum dir) {
-		// TODO Auto-generated method stub
-		return null;
+	public Corner getCornerForDir(DirectionEnum dir) throws Exception {
+		for (MyCorner corner : adjacentCorners) {
+			if (corner.d == dir) {
+				return corner.c;
+			}
+		}
+		throw new Exception("Corner not found for the given directon");
+	}
+
+	@Override
+	public List<Busstop> getBusstops() {
+		return busstopList;
+	}
+
+	@Override
+	public Busstop getBusstopWithDirection
+		(boolean busDirection) throws Exception {
+		if (busstopList.isEmpty()) throw new Exception
+			("Busstop to a direction was requested, corner has "
+					+ "no busstops.");
+		List<Corner> busRoute = kelp.busRoute();
+		
+		int currIndex;
+		for(currIndex = 0; currIndex < busRoute.size();
+				currIndex++) {
+			if (busRoute.get(currIndex) == this) {
+				break;
+			}
+		}
+		if (currIndex == busRoute.size()) throw new Exception
+			("Corner with busstops not found in busroute");
+		
+		int nextIndex;
+		
+		if (busDirection) {
+			nextIndex = (currIndex + 1) % busRoute.size();
+		} else {
+			nextIndex = (currIndex - 1) % busRoute.size();
+		}
+		
+		Corner nextCornerInRoute = busRoute.get(nextIndex);
+		
+		for (currIndex = 0; currIndex < adjacentCorners.size();
+				currIndex++) {
+			Corner currCorner = adjacentCorners.get(currIndex).c;
+			if (currCorner == nextCornerInRoute) {
+				break;
+			}
+		}
+		if (currIndex == adjacentCorners.size()) throw new Exception
+			("Couldn't find nextCorner in adjCorners.");
+		
+		DirectionEnum directionToGo = adjacentCorners.get(currIndex).d;
+		
+		for (currIndex = 0; currIndex < busstopList.size();
+				currIndex++){
+			Busstop currentBusstop = busstopList.get(currIndex);
+			if (currentBusstop.direction() == directionToGo){
+				break;
+			}
+		}
+		if (currIndex == busstopList.size()) throw new Exception
+			("Couldn't find a busstop that goes in the right direction.");
+		
+		return busstopList.get(currIndex);
 	}
 
 }

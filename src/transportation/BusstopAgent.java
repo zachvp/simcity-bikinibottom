@@ -64,4 +64,9 @@ public class BusstopAgent extends Agent implements Busstop {
 		return false;
 	}
 
+	@Override
+	public Corner corner() {
+		return corner;
+	}
+
 }

@@ -63,7 +63,7 @@ public class PersonAgent extends Agent {
 	/* -------- Messages -------- */
 	
 	// from PassengerRole
-	void msgArrivedAtDestination() {
+	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
 	}

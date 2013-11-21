@@ -7,16 +7,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
+import transportation.PassengerRole;
 import transportation.interfaces.Car;
-import transportation.interfaces.Vehicle;
+
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
- * Person Agent.
+ * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
+ * the city are between PersonAgents and the {@link Role}s they control.
  * 
  * @author Erik Strottmann
  */
-public class PersonAgent extends Agent {
+public class PersonAgent extends Agent implements Person {
 	private String name;
 	private List<Role> roles;
 	
@@ -41,6 +44,8 @@ public class PersonAgent extends Agent {
 	
 	private Wallet wallet;
 	
+	private Car car;
+	
 	public PersonAgent(String name){
 		super();
 		
@@ -64,6 +69,7 @@ public class PersonAgent extends Agent {
 	/* -------- Messages -------- */
 	
 	// from PassengerRole
+	@Override
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
@@ -121,34 +127,48 @@ public class PersonAgent extends Agent {
 
 	/* -------- Actions -------- */
 	
-	void goHome() {
+	public void goHome() {
 		// TODO implement goHome()
 	}
-	void goToWork() {
+	
+	public void goToWork() {
 		// TODO implement goToWork()
 	}
+	
+	// TODO uncomment when Restaurant interface exists
 	/*
-	void goToRestaurant(Restaurant r) {
+	public void goToRestaurant(Restaurant r) {
 		// TODO implement goToRestaurant
 	}
 	*/
+	
+	// TODO uncomment when Market interface exists
 	/*
-	void goToMarket(Market m) {
+	public void goToMarket(Market m) {
 		// TODO implement goToMarket
 	}
 	*/
+	
+	// TODO uncomment when Bank interface exists
 	/*
-	void goToBank(Bank b) {
+	public void goToBank(Bank b) {
 		// TODO implement goToBank
 	}
 	*/
 	
 	/* -------- Utilities -------- */
 	
+	@Override
+	/** Return the PersonAgent's name for output e.g. messages. */
 	public String getName() {
 		return name;
 	}
 	
+	@Override
+	/**
+	 * Returns the string representation of this person: the word "person"
+	 * followed by the person's name.
+	 */
 	public String toString() {
 		return "person " + getName();
 	}
@@ -163,8 +183,25 @@ public class PersonAgent extends Agent {
 		stateChanged();
 	}
 	
+	/*
+	void activateRole(CityLocation loc) {
+		// TODO implement activateRole()
+	}
+	*/
+	
+	@Override
 	public Wallet getWallet() {
 		return this.wallet;
+	}
+	
+	@Override
+	public Car getCar() {
+		return this.car;
+	}
+	
+	@Override
+	public void setCar(Car car) {
+		this.car = car;
 	}
 	
 	// Eating out
@@ -172,7 +209,7 @@ public class PersonAgent extends Agent {
 	/**
 	 * @return how long this person likes to wait between each time eating out
 	 * 		   (in game time, not real time)
-	 * */
+	 */
 	public long getEatingOutWaitPeriod() {
 		return this.eatingOutWaitPeriod;
 	}
@@ -195,7 +232,8 @@ public class PersonAgent extends Agent {
 		this.lastTimeEatingOut = newLastTime;
 	}
 	
-	// Hunger
+	
+	// ---- Hunger
 	
 	public HungerLevel getHungerLevel() {
 		return this.hungerLevel;
@@ -220,7 +258,7 @@ public class PersonAgent extends Agent {
 		setHungerLevel(newHungerLevel, false);
 	}
 	
-	// Work starting soon
+	// ---- Work starting soon
 	
 	/**
 	 * If there is less than this much time before work starts, the person
@@ -251,7 +289,7 @@ public class PersonAgent extends Agent {
 	*/
 	
 	
-	// Convenience for finding special roles
+	// ---- Methods for finding special roles
 	
 	/**
 	 * Returns the PersonAgent's PassengerRole, or the first one if there's
@@ -259,17 +297,16 @@ public class PersonAgent extends Agent {
 	 * 
 	 * @return the PassengerRole; null if none exists
 	 */
-	/*
+	@Override
 	public PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
 		for (Role r : roles) {
 			if (r instanceof PassengerRole) {
-				return r;
+				return (PassengerRole) r;
 			}
 		}
 		return null;
 	}
-	*/
 
 	/**
 	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
@@ -277,6 +314,7 @@ public class PersonAgent extends Agent {
 	 * 
 	 * @return the ResidentRole; null if none exists
 	 */
+	@Override
 	public ResidentRole getResidentRole() {
 		for (Role r : roles) {
 			if (r instanceof ResidentRole) {
@@ -287,19 +325,14 @@ public class PersonAgent extends Agent {
 	}
 	
 	/*
+	@Override
 	public WorkRole getWorkRole() {
-		// TODO implement getWorkRole()
+		// TODO implement when WorkRole is merged into master
 		return null;
 	}
 	*/
-	
-	/*
-	public void activateRole(CityLocation loc) {
-		// TODO implement activateRole()
-	}
-	*/
-	
-	// Choosing locations to patronize
+		
+	// ---- Choosing locations to patronize
 	
 	/*
 	Restaurant chooseRestaurant() {
@@ -319,8 +352,9 @@ public class PersonAgent extends Agent {
 	}
 	*/
 	
-	// Booleans for determining which action should be called
+	// ---- Boolean methods (for deciding what to do next)
 	
+	@Override
 	public boolean workStartsSoon() {
 		// TODO implement workStartsSoon()
 		/*
@@ -330,6 +364,7 @@ public class PersonAgent extends Agent {
 		return false;
 	}
 	
+	@Override
 	public boolean isStarving() {
 		return hungerLevel == HungerLevel.STARVING;
 	}
@@ -348,90 +383,15 @@ public class PersonAgent extends Agent {
 		return getResidentRole().thereIsFoodAtHome();
 	}
 	
-	boolean needToGoToBank() {
+	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
 	
-	// Enumerations
+	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
 	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
 			FULL}
 	
-	// Inner classes
-	
-	public static class Wallet {
-		private double cashOnHand;
-		private double tooMuch;
-		private double tooLittle;
-		
-		private IncomeLevel incomeLevel;
-		
-		public enum IncomeLevel {POOR, MEDIUM, RICH}
-		
-		/**
-		 * Creates a wallet with amounts of money corresponding to the
-		 * income level.
-		 * 
-		 * @param incomeLevel one of POOR, MEDIUM, or RICH
-		 */
-		public Wallet(IncomeLevel incomeLevel) {
-			this.incomeLevel = incomeLevel;
-			
-			switch (incomeLevel) {
-				case POOR:
-					this.cashOnHand = 5;
-					this.tooMuch = 50;
-					this.tooLittle = 0;
-					break;
-				case RICH:
-					this.cashOnHand = 100;
-					this.tooMuch = 300;
-					this.tooLittle = 50;
-					break;
-				case MEDIUM:
-					this.cashOnHand = 30;
-					this.tooMuch = 60;
-					this.tooLittle = 15;
-					// fall through to default
-				default:
-					break;
-			}
-		}
-		
-		/**
-		 * Creates a new medium income level wallet.
-		 * 
-		 * @see #Wallet(IncomeLevel)
-		 */
-		public Wallet() {
-			this(IncomeLevel.MEDIUM);
-		}
-		
-		public IncomeLevel getIncomeLevel() {
-			return this.incomeLevel;
-		}
-		
-		public double getCashOnHand() { return this.cashOnHand; }
-		public double getTooMuch() { return this.tooMuch; }
-		public double getTooLittle() { return this.tooLittle; }
-		
-		public void setCashOnHand(double coh) { this.cashOnHand = coh; }
-		public void setTooMuch(double tm) { this.tooMuch = tm; }
-		public void setTooLittle(double tl) { this.tooLittle = tl; }
-		
-		public boolean hasTooMuch() {
-			return cashOnHand > tooMuch;
-		}
-		
-		public boolean hasTooLittle() {
-			return cashOnHand < tooLittle;
-		}
-	}
-
-	public Car car() {
-		// TODO ERIK RETURN CAR PLS KTHXBY
-		return null;
-	}
 }
 

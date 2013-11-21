@@ -13,7 +13,8 @@ import agent.Role;
 import agent.interfaces.Person;
 
 /**
- * Person Agent.
+ * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
+ * the city are between PersonAgents and the {@link Role}s they control.
  * 
  * @author Erik Strottmann
  */

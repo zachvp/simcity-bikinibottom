@@ -5,22 +5,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
+import housing.gui.ResidentGui;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.mock.EventLog;
 import agent.PersonAgent;
 import agent.Role;
 
+/**
+ * ResidentRole is a more abstract class that can be extended by
+ * either a home owner or an apartment tenant. Both share the core functionality
+ * of monthly payments (rent or mortgage) and household duties such as cooking
+ * and maintenance.
+ * @author Zach VP
+ *
+ */
 public class ResidentRole extends Role implements Resident {
 	/** DATA */
 	public EventLog log = new EventLog();
+	
 	/* ----- Person Data ----- */
 	private PersonAgent person;
+	private Semaphore multiStepAction = new Semaphore(0, true);
+	private ResidentGui gui;
 	
 	/* ----- Temporary Hacks ----- */
 	//TODO: un-hack these
-	private boolean hungry = false;
+	private boolean hungry = true;
 	
 	/* ----- Rent Data ----- */
 	private double moneyOwed = 0;
@@ -29,29 +42,33 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Food Data ----- */
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 2, 1, 4, 5));
+			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 5));
 		}
 	});
 	
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null; //the food the resident is currently eating
-	private Timer timer = new Timer(); //used to cook food and time eat period
+	private Timer timer = new Timer();
 	
 	/* ----- Constant Variables ----- */
 	private final int EAT_TIME = 6; 
 	
 	/* ----- Class Data ----- */
+	/**
+	 * Food is kept in the refrigerator and encapsulates all
+	 * the relevant data needed for inventory management.
+	 */
 	enum FoodState { RAW, COOKED, COOKING };
 	private class Food{
 		String type;
 		FoodState state;
 		int amount, cookTime, low, capacity;
 		
-		private Food(String type, int amt, int low, int cap, int cookTime){
+		private Food(String type, int amount, int low, int capacity, int cookTime){
 			this.type = type;
-			this.amount = amt;
+			this.amount = amount;
 			this.low = low;
-			this.capacity = cap;
+			this.capacity = capacity;
 			this.cookTime = cookTime;
 			
 			state = FoodState.RAW;
@@ -70,6 +87,10 @@ public class ResidentRole extends Role implements Resident {
 		log.add("Received message 'payment due' amount is " + amount);
 		stateChanged();
 	}
+	
+	public void msgAtDest(){
+		multiStepAction.release();
+	}
 
 	/* ----- Scheduler ----- */
 	@Override
@@ -84,11 +105,13 @@ public class ResidentRole extends Role implements Resident {
 		}
 		//TODO: The conditions for the below event need to be modified
 		if(hungry){
-			for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
-				Food f = entry.getValue();
-				if(f.amount > 0){
-					cookFood(f);
-					return true;
+			synchronized(refrigerator){
+				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
+					Food f = entry.getValue();
+					if(f.amount > 0){
+						cookFood(f);
+						return true;
+					}
 				}
 			}
 		}
@@ -99,7 +122,6 @@ public class ResidentRole extends Role implements Resident {
 	private void makePayment(){
 		log.add("Attempting to make payment. Cash amount is "
 				+ person.getWallet().getCashOnHand());
-//		double money = person.getWallet().getCashOnHand();
 		double cash = person.getWallet().getCashOnHand();
 		if(cash >= moneyOwed){
 			payee.msgHereIsPayment(moneyOwed, this);
@@ -109,45 +131,45 @@ public class ResidentRole extends Role implements Resident {
 			payee.msgHereIsPayment(cash, this);
 			cash = 0;
 		}
-//		double money = person.wallet.getCashOnHand();
 //		money -= moneyOwed;
 		moneyOwed = 0;
 	}
+	
 	private void eatFood(){
 		log.add("Eating food");
 //		TODO: ANIMATION DETAILS
-//		DoGoToStove();
-//		acquire(performingTasks);
+		DoGoToStove();
+		acquire(multiStepAction);
 //		DoGoToTable();
-//		acquire(performingTasks);
+		acquire(multiStepAction);
 //		DoEatFood();
-//		acquire(performingTasks);
+		acquire(multiStepAction);
 		hungry = false;
 		food = null;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				hungry = false;
 				food = null;
 				stateChanged();
 			}
 		},
 		EAT_TIME * 1000);//how long to wait before running task
 	}
+	
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
-		refrigerator.remove(food);
 //		TODO: Animation details		
 //		DoGoToRefrigerator();
 		f.amount--;
+		Do("Food amount is " + f.amount);
 		food.state = FoodState.COOKING;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
 //		DoGoToStove();
 //		DoCooking(f.type);
-		food.state = FoodState.COOKED;
-		log.add("Food is cooked.");
+//		food.state = FoodState.COOKED;
+//		log.add("Food is cooked.");
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDoneCooking();
@@ -156,12 +178,18 @@ public class ResidentRole extends Role implements Resident {
 		f.cookTime * 1000);
 	}
 	
+	/* --- Animation Routines --- */
+	private void DoGoToStove(){
+		gui.DoGoToStove();
+	}
+	
 	/* ----- Utility Functions ----- */
 	private void timerDoneCooking(){
 		food.state = FoodState.COOKED;
 		log.add("Food is cooked.");
 		stateChanged();
 	}
+	
 	public boolean thereIsFoodAtHome(){
 		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 			if(entry.getValue().amount > 0){
@@ -173,7 +201,19 @@ public class ResidentRole extends Role implements Resident {
 		return false;
 	}
 	
-	/* --- Getters and Setters (mostly used for testing) --- */
+	private void acquire(Semaphore sem){
+		try {
+			sem.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/* --- Getters and Setters (mostly used for unit testing) --- */
+	public void setGui(ResidentGui gui){
+		this.gui = gui;
+	}
+	
 	public PayRecipient getPayee() {
 		return payee;
 	}

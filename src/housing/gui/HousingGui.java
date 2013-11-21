@@ -1,5 +1,6 @@
 package housing.gui;
 
+import housing.PayRecipientRole;
 import housing.ResidentRole;
 
 import java.util.ArrayList;
@@ -15,9 +16,13 @@ public class HousingGui extends JFrame {
 	/* --- Keeps track of all the elements --- */
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
 	
+	/* -- Add People to test --- */
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole residentRole = new ResidentRole(residentPerson);
 	ResidentGui residentGui = new ResidentGui(residentRole);
+	
+	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
+	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
 	
 	public HousingGui() {
 		/* --- Set up the dimensions of the frame --- */
@@ -30,7 +35,14 @@ public class HousingGui extends JFrame {
 		
 		/* -- Set up people --- */
 		people.add(residentPerson);
+		people.add(payRecipientPerson);
+		
 		startAndActivate(residentPerson, residentRole);
+		startAndActivate(payRecipientPerson, payRecipientRole);
+		
+		residentRole.setGui(residentGui);
+		
+		/* --- Add to Animation Panel --- */
 		housingAnimationPanel.addGui(residentGui);
 	}
 	

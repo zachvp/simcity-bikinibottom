@@ -7,6 +7,13 @@ import java.awt.Graphics2D;
 
 import agent.gui.Gui;
 
+/**
+ * ResidentGui displays the Resident role of a PersonAgent
+ * when that agent returns home. The gui moves around and performs tasks,
+ * waking up the PersonAgent upon reaching a destination. 
+ * @author Zach VP
+ *
+ */
 public class ResidentGui implements Gui {
 
 	private Resident resident = null;
@@ -15,13 +22,21 @@ public class ResidentGui implements Gui {
 
 	String guiName = "Resident";//text of customer order
 
+	/* --- Hardcoded Positions --- */
 	private int xPos = 20, yPos = 20;//default resident position
-	private int xDestination = 50, yDestination = 50;//default start position
+	private int xDestination = 20, yDestination = 20;//default start position
+	
+	private final int STOVE_X = 120;
+	private final int STOVE_Y = 200;
 
 	public ResidentGui(Resident resident) {
 		this.resident = resident;
 	}
 
+	/**
+	 * So long as the gui is not at the destination coordinates,
+	 * it will move toward the destination.
+	 */
 	public void updatePosition() {
 		if (xPos < xDestination)
 			xPos++;
@@ -35,7 +50,7 @@ public class ResidentGui implements Gui {
 
 		if (xPos == xDestination && yPos == yDestination && canRelease && !waiting ) {
 			canRelease = false;
-//			agent.msgAtDest();
+			resident.msgAtDest();
 		}
 	}
 
@@ -55,10 +70,10 @@ public class ResidentGui implements Gui {
 		return resident;
 	}
 
-	public void DoGoToSomeWhere(int x, int y) {
+	public void DoGoToStove() {
 		waiting = false;
-		xDestination = x + 20;
-		yDestination = y - 20;
+		xDestination = STOVE_X;
+		yDestination = STOVE_Y;
 		canRelease = true;
 	}
 

@@ -59,6 +59,24 @@ public class MockCustomer extends Mock implements Customer {
 		
 	}
 
+	@Override
+	public void goingToBuy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationFinishedGoToCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationFinishedLeaveMarket() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 	

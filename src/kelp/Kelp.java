@@ -1,6 +1,8 @@
 package kelp;
 
 import java.util.List;
+
+import transportation.interfaces.Corner;
 import CommonSimpleClasses.*;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
@@ -24,5 +26,8 @@ public interface Kelp {
 	// TODO Update DD
 	public List<CityLocation> placesNearMe(CityLocation me,
 			LocationTypeEnum type);
+	
+	// TODO Update DD
+	public List<Corner> busRoute();
 
 }

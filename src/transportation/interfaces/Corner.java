@@ -9,7 +9,8 @@ import transportation.IntersectionAction;
 /* Node of a grid defining the city's roads. Handles all 
  * necessary interactions when people or vehicles reach 
  * a corner.
- */ // TODO Update
+ */
+// TODO Update DD!!!
 public interface Corner extends CityLocation {
 	
 	/* Message a vehicle sends to a corner 
@@ -34,10 +35,10 @@ public interface Corner extends CityLocation {
 	
 	/* Return the corner that sits at the given direction
 	 */
-	public Corner getCornerForDir(DirectionEnum dir);
+	public Corner getCornerForDir(DirectionEnum dir) throws Exception;
 
 	public List<Busstop> getBusstops();
 
-	public Busstop getBusstopWithDirection(boolean busDirection);
+	public Busstop getBusstopWithDirection(boolean busDirection) throws Exception;
 	
 }

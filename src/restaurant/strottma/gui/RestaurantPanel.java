@@ -180,6 +180,7 @@ public class RestaurantPanel extends JPanel {
     		agents.add(p);
     		customers.add(c);
     		roles.add(c);
+    		c.activate();
     		p.addRole(c);
     		p.startThread();
     		
@@ -195,6 +196,7 @@ public class RestaurantPanel extends JPanel {
     		agents.add(p);
     		waiters.add(w);
     		roles.add(w);
+    		w.activate();
     		host.addWaiter(w);
     		p.addRole(w);
     		p.startThread();

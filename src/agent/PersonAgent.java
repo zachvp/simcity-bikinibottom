@@ -377,6 +377,11 @@ public class PersonAgent extends Agent implements Person {
 		return hungerLevel == HungerLevel.STARVING;
 	}
 	
+	public boolean isHungry() {
+		return hungerLevel == HungerLevel.STARVING ||
+				hungerLevel == HungerLevel.HUNGRY; 
+	}
+	
 	/**
 	 * Whether this person wants to eat out. Based on the last time this person
 	 * ate out and on how long this person likes to wait between each time

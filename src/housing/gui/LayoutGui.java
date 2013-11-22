@@ -1,4 +1,4 @@
-package housing.test.mock;
+package housing.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,7 +31,7 @@ public class LayoutGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GRAY);
+		g.setColor(Color.RED);
 		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, 20, 20);
 		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, 20, 20);
 		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, 20, 20);

@@ -2,7 +2,6 @@ package housing.gui;
 
 import housing.PayRecipientRole;
 import housing.ResidentRole;
-import housing.test.mock.LayoutGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +47,7 @@ public class HousingGui extends JFrame {
 		residentGui.setLayoutGui(layoutGui);
 		
 		/* --- Add to Animation Panel --- */
+		housingAnimationPanel.addGui(layoutGui);
 		housingAnimationPanel.addGui(residentGui);
 	}
 	

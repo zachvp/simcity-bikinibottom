@@ -77,7 +77,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
-		this.person = agent;
 		Do("Praying to Shrek");
 	}
 	
@@ -133,12 +132,10 @@ public class ResidentRole extends Role implements Resident {
 			payee.msgHereIsPayment(cash, this);
 			cash = 0;
 		}
-//		money -= moneyOwed;
 		moneyOwed = 0;
 	}
 	
 	private void eatFood(){
-//		TODO: ANIMATION DETAILS
 		DoGoToStove();
 		acquire(multiStepAction);
 		DoSetFood(food.type);
@@ -159,7 +156,6 @@ public class ResidentRole extends Role implements Resident {
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
-//		TODO: Animation details		
 		DoGoToRefrigerator();
 		acquire(multiStepAction);
 		DoSetFood(food.type);
@@ -171,11 +167,11 @@ public class ResidentRole extends Role implements Resident {
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
-		/* --- Include for testing because JUnit doesn't recognize timers --- */
-//		DoGoToStove();
-//		DoCooking(f.type);
-//		food.state = FoodState.COOKED;
-//		log.add("Food is cooked.");
+		/* --- Include for testing because JUnit doesn't recognize timers ---
+		DoCooking(f.type);
+		food.state = FoodState.COOKED;
+		log.add("Food is cooked.");
+ 		*/
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDoneCooking();

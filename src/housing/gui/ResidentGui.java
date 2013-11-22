@@ -1,7 +1,6 @@
 package housing.gui;
 
 import housing.interfaces.Resident;
-import housing.test.mock.LayoutGui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -25,7 +24,7 @@ public class ResidentGui implements Gui {
 	LayoutGui layoutGui;
 
 	String guiName = "Resident";
-	String eatingFood = "";
+	String eatingFood = "null";
 
 	/* --- Hardcoded Positions --- */
 	private int xPos = 20, yPos = 20;//default resident position

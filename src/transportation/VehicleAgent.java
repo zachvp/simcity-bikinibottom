@@ -6,6 +6,7 @@ import java.util.List;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParseException;
 
 import transportation.CornerAgent.MyCorner;
+import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
 import CommonSimpleClasses.DirectionEnum;
@@ -31,19 +32,24 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		AuthorizedToCross
 	}
 	
+	//Pointer to Vehicle GUI TODO add to DD
+	VehicleGui gui;
+	
+	//True when animating
+	boolean isAnimating = false;
 	
 	// List of corners to traverse to get to the destination.
 	protected Corner currentCorner;
-	
 	
 	//List of corners to traverse to get to the destination.
 	protected List<Corner> currentPath;
 	
 	//List of corners adjacent to currentCorner. TODO add to DD.
-	private List<MyCorner> adjCorners;
+	protected List<MyCorner> adjCorners;
 
 	private DirectionEnum currentDirection; //TODO Remove from DD
-
+	
+	
 	
 	@Override
 	public void msgMyAdjCorners(List<MyCorner> cList) {
@@ -53,8 +59,10 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	}
 
 	@Override
+	// TODO is argument necessary?
 	public void msgArrivedAtCorner(Corner c) {
-		currentCorner = c;
+		currentCorner = c; // could be currentCorner = currentPath.get(0);
+		currentPath.remove(c);
 		event = VehicleEventEnum.ArrivedAtCorner;
 		stateChanged();
 	}
@@ -66,39 +74,40 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 
 	@Override
 	protected boolean pickAndExecuteAnAction() { // TODO Update DD
-		if (currentPath.isEmpty() && 
-				event == VehicleEventEnum.ArrivedAtCorner) {
-			endTravel();
-			return true;
-		} else if (state == VehicleStateEnum.Initial && 
-				event == VehicleEventEnum.StartedVehicle) {
-			moveToCorner(currentPath.get(0));
-		
-		} else if (state == VehicleStateEnum.OnStreet
-				&& event == VehicleEventEnum.ArrivedAtCorner
-				&& !currentPath.isEmpty()) {
-			currentCorner.msgYourAdjCorners(this);
-			state = VehicleStateEnum.Requesting;
-			return true;
-		} else if (state == VehicleStateEnum.Requesting 
-				&& event == VehicleEventEnum.ReceivedAdjCorners) {
-			
-			try {
-				verifyDirection();
-			} catch (ParseException e) {
-				e.printStackTrace();
-				state = VehicleStateEnum.OnStreet;
-				event = VehicleEventEnum.None;
+		if (!isAnimating) {
+			if (currentPath.isEmpty()) {
 				endTravel();
+				return true;
+			} else if (state == VehicleStateEnum.Initial && 
+					event == VehicleEventEnum.StartedVehicle) {
+				moveToCorner(currentPath.get(0));
+				return true;
+			} else if (state == VehicleStateEnum.OnStreet
+					&& event == VehicleEventEnum.ArrivedAtCorner
+					&& !currentPath.isEmpty()) {
+				currentCorner.msgYourAdjCorners(this);
+				state = VehicleStateEnum.Requesting;
+				return true;
+			} else if (state == VehicleStateEnum.Requesting 
+					&& event == VehicleEventEnum.ReceivedAdjCorners) {
+
+				try {
+					verifyDirection();
+				} catch (ParseException e) {
+					e.printStackTrace();
+					state = VehicleStateEnum.OnStreet;
+					event = VehicleEventEnum.None;
+					endTravel();
+				}
+				askPermissionToCross();
+				state = VehicleStateEnum.OnCorner;
+				return true;
+			} else if (state == VehicleStateEnum.OnCorner &&
+					event == VehicleEventEnum.AuthorizedToCross) {
+				traverseCorner();
+				state = VehicleStateEnum.OnStreet;
+				return true;
 			}
-			askPermissionToCross();
-			state = VehicleStateEnum.OnCorner;
-			return true;
-		} else if (state == VehicleStateEnum.OnCorner &&
-				event == VehicleEventEnum.AuthorizedToCross) {
-			traverseCorner();
-			state = VehicleStateEnum.OnStreet;
-			return true;
 		}
 		return false;
 	}
@@ -107,7 +116,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	
 	// TODO ADD to DD
 	private void moveToCorner(Corner corner) {
-		// TODO Auto-generated method stub
+		gui.doMoveToCorner(corner);
+		isAnimating = true;
 		
 	}
 
@@ -138,8 +148,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 
 	// TODO Add to DD? or is it there?
 	protected void traverseCorner() {
-		// TODO Auto-generated method stub
-		moveToCorner(currentPath.get(0));
+		gui.doTraverseAndMoveToCorner(currentCorner, currentPath.get(0));
 	}
 
 }

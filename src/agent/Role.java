@@ -101,8 +101,8 @@ public abstract class Role {
 
     /**
      * Returns whether the role is active. To determine whether
-     * {@link #pickAndExecuteAnAction} should be called, instead use
-     * {@link #isReady}.
+     * {@link #pickAndExecuteAnAction} should be called, use both this and
+     * {@link #isAwaitingInput()}.
      */
     public boolean isActive() {
         return this.active;
@@ -110,20 +110,15 @@ public abstract class Role {
     
     /**
      * Returns whether the role is awaiting input. If true, this usually means
-     * that the Role is waiting for GUI input of some kind, especially 
+     * that the Role is waiting for GUI input of some kind, especially moving
+     * for a multi-step action. Use this in conjunction with
+     * {@link #isActive()} to determine whether
+     * {@link #pickAndExecuteAnAction()} should be called.
      */
     public boolean isAwaitingInput() {
         return this.awaitingInput;
     }
     
-    /**
-     * Returns whether the role is active and ready; that is, whether the role's
-     * {@link #pickAndExecuteAnAction} should be called.
-     */
-    public boolean isReady() {
-        return this.active && !this.awaitingInput;
-    }
-
     /**
      * Allows the role's scheduler to be called upon agent state change.
      * 

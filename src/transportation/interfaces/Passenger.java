@@ -5,9 +5,10 @@ import CommonSimpleClasses.CityLocation;
 /* Role a person takes when he needs to move between 
  * two places in the city.
  */
-public interface Passenger extends BusstopRequester {
+// TODO Update DD, passenger no longer busstoprequester
+public interface Passenger {
 	
-	//Message from Person that sets the destination.
+	// Message from Person that sets the destination.
 	public void msgGoToLocation(CityLocation loc);
 	
 	/* Message a Passenger receives when the bus he is
@@ -15,8 +16,9 @@ public interface Passenger extends BusstopRequester {
 	 */
 	public void msgWelcomeToBus(Bus b, double fare);
 	
+	// TODO Update DD
 	/*Message a Passenger receives when the bus he is 
-	 * on arrives to each Busstop.
+	 * on arrives to each corner with a busstop.
 	 */
 	public void msgWeHaveArrived(CityLocation loc);
 	

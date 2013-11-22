@@ -18,29 +18,40 @@ public class KelpClass implements Kelp {
 	private static final double BUS_SPEED = 80; 
 	private static final double WALKING_SPEED = 30;
 	private static final int DISTANCE_THRESHOLD_FOR_SAME_COORDINATE = 8;
-	List<CityLocation> locations;
 	
+	List<CityLocation> locations;
 	List<Corner> busRoute;
 	
 	static KelpClass instance = null;
 	
-	static KelpClass getKelpInstance() throws Exception {
+	static public KelpClass getKelpInstance() {
 		if (instance != null) return instance;
-		else throw new Exception("Tried to grab a Kelp instance "
-				+ "without it having been instantiated.");
+		else {
+			try {
+				instance = new KelpClass();
+			} catch (Exception e) {
+				System.out.println("This exception should be impossible.");
+				e.printStackTrace();
+			}
+			return instance;
+		}
 	}
 	
-	public KelpClass(List<CityLocation> locations, 
+	public KelpClass() throws Exception {
+		if (instance != null) 
+			throw new Exception("Tried to create a second instance of "
+					+ "Kelp, Kelp is a singleton. You should be using "
+					+ "getKelpInstance() to get a pointer to Kelp.");
+		else {
+			instance = this;
+		}
+	}
+	
+	public void setData(List<CityLocation> locations, 
 			List<Corner> busRoute) throws Exception {
 		
-		if (instance == null) {
-			this.locations = new ArrayList<CityLocation> (locations);
-			this.busRoute = new ArrayList<Corner> (busRoute);
-			instance = this;
-		} else {
-			throw new Exception("Tried to create a second instance of Kelp, "
-					+ "Kelp is a singleton.");
-		}
+		this.locations = new ArrayList<CityLocation> (locations);
+		this.busRoute = new ArrayList<Corner> (busRoute);
 	}
 
 	@Override

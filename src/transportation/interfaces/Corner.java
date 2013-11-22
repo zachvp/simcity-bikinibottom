@@ -40,5 +40,12 @@ public interface Corner extends CityLocation {
 	public List<Busstop> getBusstops();
 
 	public Busstop getBusstopWithDirection(boolean busDirection) throws Exception;
+
+	void addAdjacentCorner(Corner c, DirectionEnum d);
+
+	void addBusstop(Busstop b);
+
+	public void startThreads();
+
 	
 }

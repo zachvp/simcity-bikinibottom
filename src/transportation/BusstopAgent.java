@@ -26,6 +26,11 @@ public class BusstopAgent extends Agent implements Busstop {
 	Bus currentBus = null;
 	
 	XYPos pos; //TODO add to DD
+	
+	public BusstopAgent(Corner corner, DirectionEnum direction) {
+		this.corner = corner;
+		this.direction = direction;
+	}
 
 	@Override
 	public LocationTypeEnum type() {

@@ -36,6 +36,8 @@ public class HousingGui extends JFrame {
 		AnimationPanel housingAnimationPanel = new AnimationPanel();
 		this.add(housingAnimationPanel);
 		
+		payRecipientRole.addResident(residentRole);
+		
 		/* -- Set up people --- */
 		people.add(residentPerson);
 		people.add(payRecipientPerson);

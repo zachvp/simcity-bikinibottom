@@ -291,4 +291,9 @@ public class ResidentRole extends Role implements Resident {
 	public void setRefrigerator(Map<String, Food> refrigerator) {
 		this.refrigerator = refrigerator;
 	}
+
+	@Override
+	public String getRoleType() {
+		return "ResidentRole";
+	}
 }

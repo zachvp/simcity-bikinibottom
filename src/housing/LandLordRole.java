@@ -50,6 +50,11 @@ public class LandLordRole extends Role implements Landlord {
 		return false;
 	}
 
+	@Override
+	public String getRoleType() {
+		return "LandlordRole";
+	}
+
 	/* ----- Actions ----- */
 
 	

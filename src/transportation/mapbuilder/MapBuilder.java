@@ -17,7 +17,8 @@ import transportation.interfaces.Corner;
  * Usage: Call createMap() passing down the number of blocks
  * the city map has, and a set of all the corners that should have
  * bus stops. When that method returns, call getCreatedCorners() and
- * getBusRoute() to get the generated data. 
+ * getBusRoute() to get the generated data, and startThreads() to
+ * start the threads for all Corners and Busstops. 
  * 
  * NOTE: You have to make sure to set the bus stops following
  * the rules about bus routes described in the 'Da Rules' section
@@ -38,7 +39,8 @@ public class MapBuilder {
 	private static List<XYPos> cornersWithBusstopsGrid =
 			new ArrayList<XYPos>();
 	
-	static void createMap(int numberOfBlocks, Set<Integer> cornersWithBusstops)
+	static public void createMap(int numberOfBlocks, 
+			Set<Integer> cornersWithBusstops)
 			throws Exception {
 		if (numberOfBlocks % Constants.MAX_BLOCK_COL != 0) {
 			throw new Exception("numberOfBlocks should be multiple "
@@ -49,7 +51,8 @@ public class MapBuilder {
 			hasBeenCreated = true;
 			
 			MapBuilder.numberOfBlocks = numberOfBlocks;
-			MapBuilder.buildingRows = numberOfBlocks / Constants.MAX_BLOCK_COL;
+			MapBuilder.buildingRows = numberOfBlocks 
+										/ Constants.MAX_BLOCK_COL;
 			MapBuilder.numCornerRows = buildingRows-1;
 			MapBuilder.numCornerCols = Constants.MAX_BLOCK_COL-1;
 			MapBuilder.cornersWithBusstops = cornersWithBusstops;
@@ -58,7 +61,6 @@ public class MapBuilder {
 			connectCorners();
 			addBusstops();
 			buildBusroute();
-			startThreads();
 			
 		} else {
 			throw new Exception("Tried to create a second map");
@@ -73,8 +75,8 @@ public class MapBuilder {
 					curCol++) {
 	
 				int cornerX = Constants.MAP_MARGIN_X 
-						+ curRow*Constants.BUILDING_WIDTH
-						+ (curRow-1)*Constants.SPACE_BETWEEN_BUILDINGS
+						+ curCol*Constants.BUILDING_WIDTH
+						+ (curCol-1)*Constants.SPACE_BETWEEN_BUILDINGS
 						+ Constants.SPACE_BETWEEN_BUILDINGS/2;
 				int cornerY = Constants.MAP_MARGIN_Y 
 						+ curRow*Constants.BUILDING_HEIGHT
@@ -160,10 +162,13 @@ public class MapBuilder {
 		//Checking for first corner needing busstop on left edge
 		int i, j;
 		i = j = 0;
+		
+		outerloop:
 		for (i = 0; i < numCornerCols; i++) {
 			for (j = 0; j < numCornerRows; j++) {
-				if (cornersWithBusstops.contains(getIndex2D(i, j))){
-					break;
+				int index = getIndex2D(i, j);
+				if (cornersWithBusstops.contains(index)){
+					break outerloop;
 				}
 			}
 		}
@@ -187,10 +192,11 @@ public class MapBuilder {
 		
 		
 		//Checking for first corner needing busstop on bottom edge
+		outerloop:
 		for (j = numCornerRows-1; j > 0; j--) {
 			for (i = 0; i < numCornerCols; i++) {
 				if (cornersWithBusstops.contains(getIndex2D(i, j))){
-					break;
+					break outerloop;
 				}
 			}
 		}
@@ -213,10 +219,11 @@ public class MapBuilder {
 		
 		
 		//Checking for first corner needing busstop on right edge
+		outerloop:
 		for (i = numCornerCols-1; i > 0; i--) {
 			for (j = numCornerRows-1; j > 0; j--) {
 				if (cornersWithBusstops.contains(getIndex2D(i, j))){
-					break;
+					break outerloop;
 				}
 			}
 		}
@@ -238,11 +245,11 @@ public class MapBuilder {
 		
 		
 		//Checking for first corner needing busstop on top edge
-		
+		outerloop:
 		for (j = 0; j < numCornerRows; j++){
 			for (i = numCornerCols-1; i > 0; i--) {
 				if (cornersWithBusstops.contains(getIndex2D(i, j))){
-					break;
+					break outerloop;
 				}
 			}
 		}
@@ -255,7 +262,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(; i >= 0; i--) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, true);
+				addBusstopsToCorner(i, j, false);
 		}
 
 	}
@@ -329,7 +336,7 @@ public class MapBuilder {
 		}
 	}
 
-	private static void startThreads() {
+	public static void startThreads() {
 		for (Corner corner : createdCorners) {
 			corner.startThreads();
 		}

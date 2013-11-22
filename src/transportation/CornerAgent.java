@@ -17,9 +17,9 @@ import agent.Agent;
 
 public class CornerAgent extends Agent implements Corner {
 	public class MyCorner {
-		Corner c;
+		public Corner c;
 		//Direction in which the Corner is.
-		DirectionEnum d; // TODO add Direction enum as DD standalone?
+		public DirectionEnum d; // TODO add Direction enum as DD standalone?
 		
 		public MyCorner(Corner c, DirectionEnum d) {
 			this.c = c;
@@ -31,7 +31,7 @@ public class CornerAgent extends Agent implements Corner {
 	boolean crossroadBusy = false;
 	
 	//List of corners adjacent to this one.
-	List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
+	private List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
 	
 	//List of all the bus stops in this corner.
 	List<Busstop> busstopList = new ArrayList<Busstop>();
@@ -55,9 +55,12 @@ public class CornerAgent extends Agent implements Corner {
 	
 	//Reference to Kelp TODO add to DD
 	Kelp kelp;
+
+	private String name;
 	
-	public CornerAgent(XYPos pos) {
+	public CornerAgent(String name, XYPos pos) {
 		this.pos = pos;
+		this.name = name;
 		try {
 			kelp = KelpClass.getKelpInstance();
 		} catch (Exception e) {
@@ -66,6 +69,12 @@ public class CornerAgent extends Agent implements Corner {
 					+ " buses will misbehave and NullPointerExceptions"
 					+ " will be thrown.");
 		}
+		
+	}
+	
+	public String toString() {
+		return name + " " + position();
+		
 	}
 	
 	public void addAdjacentCorner(Corner c, DirectionEnum d) {
@@ -152,7 +161,7 @@ public class CornerAgent extends Agent implements Corner {
 				return corner.c;
 			}
 		}
-		throw new Exception("Corner not found for the given directon");
+		throw new Exception("Corner not found for the given directon.");
 	}
 
 	@Override
@@ -221,6 +230,13 @@ public class CornerAgent extends Agent implements Corner {
 		
 		startThread();
 		
+	}
+
+	/**
+	 * @return the adjacentCorners
+	 */
+	public List<MyCorner> getAdjacentCorners() {
+		return adjacentCorners;
 	}
 
 

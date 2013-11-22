@@ -47,7 +47,7 @@ public class KelpClass implements Kelp {
 		}
 	}
 	
-	public void setData(List<CityLocation> locations, 
+	public void setData (List<CityLocation> locations, 
 			List<Corner> busRoute) throws Exception {
 		
 		this.locations = new ArrayList<CityLocation> (locations);
@@ -254,8 +254,8 @@ public class KelpClass implements Kelp {
 			horizontalDir = DirectionEnum.East;
 		} else horizontalDir = DirectionEnum.West;
 		if (endCorner.position().y > startCorner.position().y) {
-			verticalDir = DirectionEnum.North;
-		} else verticalDir = DirectionEnum.South;
+			verticalDir = DirectionEnum.South;
+		} else verticalDir = DirectionEnum.North;
 		
 		//Building path
 		List<CityLocation> path = new ArrayList<CityLocation>();
@@ -264,7 +264,7 @@ public class KelpClass implements Kelp {
 		
 		try {
 		while (Math.abs(currentCorner.position().x - 
-				currentCorner.getCornerForDir(horizontalDir).position().x)
+				endCorner.position().x)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
 			currentCorner = currentCorner.getCornerForDir(horizontalDir);
 			path.add(currentCorner);
@@ -272,7 +272,7 @@ public class KelpClass implements Kelp {
 		
 		
 		while (Math.abs(currentCorner.position().y - 
-				currentCorner.getCornerForDir(verticalDir).position().y)
+				endCorner.position().y)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
 			currentCorner = currentCorner.getCornerForDir(verticalDir);
 			path.add(currentCorner);
@@ -309,6 +309,9 @@ public class KelpClass implements Kelp {
 	}
 
 	private int distanceHeuristic(XYPos A, XYPos B) {
+		if (A == null || B == null) {
+			throw new NullPointerException();
+		}
 		return Math.abs(A.x - B.x) + Math.abs(A.y - B.y);
 	}
 	

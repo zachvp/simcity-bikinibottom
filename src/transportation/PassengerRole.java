@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kelp.Kelp;
-
+import kelp.KelpClass;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
@@ -32,7 +32,7 @@ public class PassengerRole extends Role implements Passenger {
 	PassengerGui gui;
 	
 	//Pointer to Kelp TODO Add to DD
-	Kelp kelp;
+	Kelp kelp = KelpClass.getKelpInstance();
 	
 	//TODO update DD
 	//Stores what the Passenger is doing.
@@ -44,6 +44,7 @@ public class PassengerRole extends Role implements Passenger {
 		WaitingForBus,
 		InBus,
 		GettingInCar,
+		StartingCar,
 		InCar
 	}
 	
@@ -78,14 +79,20 @@ public class PassengerRole extends Role implements Passenger {
 		state = PassengerStateEnum.DecisionTime;
 		stateChanged();
 	}
+	
+	//From GUI
+	public void msgGotInCar() {
+		state = PassengerStateEnum.StartingCar;
+		stateChanged();
+	}
 
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		if (state == PassengerStateEnum.DecisionTime) {
 			decide();
 			return true;
-		} else if (state == PassengerStateEnum.GettingInCar) {
-			getInCar();
+		} else if (state == PassengerStateEnum.StartingCar) {
+			startCar();
 			return true;
 		}
 		
@@ -146,28 +153,29 @@ public class PassengerRole extends Role implements Passenger {
 				return;
 			} else {
 				gui.bringOutCar();
-				Car car = ((Person)getAgent()).getCar();
-				currentVehicle = car;
-				
-				List<Corner> carPath = new ArrayList<Corner>();
-				int i = 0;
-				while (path.get(i).type() == LocationTypeEnum.Corner
-						&& i < path.size()) {
-					carPath.add((Corner) path.get(i));
-					i++;
-				}
-				for (int j = 0; j < i-1; j++) {
-					path.remove(0);
-				}
-				car.msgTakeMeHere(carPath,this);
-				state = PassengerStateEnum.InCar;
+				state = PassengerStateEnum.GettingInCar;
 			}
 		}
 	}
 
-	private void getInCar() {
-		// TODO Auto-generated method stub
+	private void startCar() {
+		state = PassengerStateEnum.InCar;
+		Car car = ((Person)getAgent()).getCar();
+		currentVehicle = car;
 		
+		List<Corner> carPath = new ArrayList<Corner>();
+		int i = 0;
+		while (path.get(i).type() == LocationTypeEnum.Corner
+				&& i < path.size()) {
+			carPath.add((Corner) path.get(i));
+			i++;
+		}
+		for (int j = 0; j < i-1; j++) {
+			path.remove(0);
+		}
+		car.msgTakeMeHere(carPath,this);
 	}
+
+
 
 }

@@ -1,7 +1,6 @@
 package parser;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -18,7 +17,8 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
  * for an example, look at the first few lines of the unit test.
  * 
  * For instructions on how to build the file and an example,
- * open BuildingPosTest.csv using Excel or your favorite text editor.
+ * open parser/test/BuildingPosTest.csv using Excel or your 
+ * favorite text editor.
  * 
  * MAY throw exceptions for incorrectly formated files. May also ignore
  * the incorrect line, so look out.
@@ -74,7 +74,7 @@ public class BuildingPosParser {
 			
 		}
 		
-		if(scanner!=null) scanner.close();
+		if (scanner != null) scanner.close();
 		
 		return response;
 	}

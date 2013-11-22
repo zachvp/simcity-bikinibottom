@@ -1,14 +1,9 @@
 package transportation;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
 import CommonSimpleClasses.DirectionEnum;
-import transportation.VehicleAgent.VehicleEventEnum;
-import transportation.VehicleAgent.VehicleStateEnum;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;

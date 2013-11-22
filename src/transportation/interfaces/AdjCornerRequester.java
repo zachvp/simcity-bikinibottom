@@ -1,6 +1,5 @@
 package transportation.interfaces;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import transportation.CornerAgent.MyCorner;

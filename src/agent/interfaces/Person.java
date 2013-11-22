@@ -71,6 +71,9 @@ public interface Person {
 	 */
 	public boolean isStarving();
 	
+	/** If hungry, the person should try to get food! */
+	public boolean isHungry();
+	
 	
 	// ---- Inner classes
 	

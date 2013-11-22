@@ -1,10 +1,6 @@
 package transportation;
 
-import java.util.List;
-
 import transportation.interfaces.Bus;
-import transportation.interfaces.Busstop;
-import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;

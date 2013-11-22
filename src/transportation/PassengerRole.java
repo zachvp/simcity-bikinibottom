@@ -5,8 +5,6 @@ import java.util.List;
 
 import kelp.Kelp;
 
-import com.sun.org.apache.xpath.internal.axes.WalkerFactory;
-
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
@@ -16,7 +14,6 @@ import transportation.interfaces.Passenger;
 import transportation.interfaces.Vehicle;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 

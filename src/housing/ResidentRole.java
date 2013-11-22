@@ -78,6 +78,7 @@ public class ResidentRole extends Role implements Resident {
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
 		this.person = agent;
+		Do("Praying to Shrek");
 	}
 	
 	/* ----- Messages ----- */
@@ -115,6 +116,7 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
+		DoJazzercise();
 		return false;
 	}
 	
@@ -136,36 +138,40 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void eatFood(){
-		log.add("Eating food");
 //		TODO: ANIMATION DETAILS
 		DoGoToStove();
 		acquire(multiStepAction);
-//		DoGoToTable();
+		DoSetFood(food.type);
+		DoGoToTable();
 		acquire(multiStepAction);
-//		DoEatFood();
-		acquire(multiStepAction);
+		log.add("Eating food");
 		hungry = false;
 		food = null;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				food = null;
+				DoSetFood("");
 				stateChanged();
 			}
 		},
-		EAT_TIME * 1000);//how long to wait before running task
+		EAT_TIME * 1000);
 	}
 	
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
 //		TODO: Animation details		
-//		DoGoToRefrigerator();
+		DoGoToRefrigerator();
+		acquire(multiStepAction);
+		DoSetFood(food.type);
+		DoGoToStove();
+		acquire(multiStepAction);
+		DoSetFood("");
 		f.amount--;
-		Do("Food amount is " + f.amount);
 		food.state = FoodState.COOKING;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
+		/* --- Include for testing because JUnit doesn't recognize timers --- */
 //		DoGoToStove();
 //		DoCooking(f.type);
 //		food.state = FoodState.COOKED;
@@ -180,7 +186,26 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* --- Animation Routines --- */
 	private void DoGoToStove(){
+		log.add("Going to stove.");
 		gui.DoGoToStove();
+	}
+	
+	private void DoGoToTable(){
+		log.add("Going to table.");
+		gui.DoGoToTable();
+	}
+	
+	private void DoGoToRefrigerator(){
+		log.add("Going to refrigerator.");
+		gui.DoGoToRefrigerator();
+	}
+	
+	private void DoSetFood(String type){
+		gui.setFood(type);
+	}
+	
+	private void DoJazzercise(){
+		gui.DoJazzercise();
 	}
 	
 	/* ----- Utility Functions ----- */

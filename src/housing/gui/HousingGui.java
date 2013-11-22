@@ -2,6 +2,7 @@ package housing.gui;
 
 import housing.PayRecipientRole;
 import housing.ResidentRole;
+import housing.test.mock.LayoutGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,9 @@ public class HousingGui extends JFrame {
 	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
 	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
 	
+	/* --- Create an instance of the LayoutGui --- */
+	LayoutGui layoutGui = new LayoutGui();
+	
 	public HousingGui() {
 		/* --- Set up the dimensions of the frame --- */
         int WINDOWX = 550;
@@ -41,6 +45,7 @@ public class HousingGui extends JFrame {
 		startAndActivate(payRecipientPerson, payRecipientRole);
 		
 		residentRole.setGui(residentGui);
+		residentGui.setLayoutGui(layoutGui);
 		
 		/* --- Add to Animation Panel --- */
 		housingAnimationPanel.addGui(residentGui);

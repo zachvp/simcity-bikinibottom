@@ -1,7 +1,5 @@
 package agent;
 
-import java.io.*;
-import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -21,6 +19,11 @@ public abstract class Agent {
      */
     protected void stateChanged() {
         stateChange.release();
+    }
+    
+    /** The number of permits the stateChange semaphore has. */
+    public int getStateChangePermits() {
+    	return stateChange.availablePermits();
     }
 
     /**

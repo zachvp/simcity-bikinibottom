@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import agent.PersonAgent;
+import agent.PersonAgent.HungerLevel;
 import agent.Role;
 
 /**
@@ -59,6 +60,7 @@ public class CustomerRole extends Role implements Customer {
 	private Cashier cashier;
 	
 	// money
+	// TODO use PersonAgent's money
 	double money;
 	double bill;
 	
@@ -111,6 +113,7 @@ public class CustomerRole extends Role implements Customer {
 	public void gotHungry() { // from gui
 		print("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
+		person.setHungerLevel(HungerLevel.HUNGRY);
 		stateChanged();
 	}
 
@@ -158,7 +161,7 @@ public class CustomerRole extends Role implements Customer {
 	
 	public void msgDoneEating() { // from eatFood timer
 		event = CustomerEvent.DONE_EATING;
-		//isHungry = false;
+		person.setHungerLevel(HungerLevel.FULL);
 		stateChanged();
 	}
 	
@@ -476,6 +479,11 @@ public class CustomerRole extends Role implements Customer {
 		public void setX(int y) { this.x = x; }
 		public void setY(int y) { this.y = y; }
 		
+	}
+
+	@Override
+	public String getRoleType() {
+		return "restaurant.strottma.CustomerRole";
 	}
 }
 

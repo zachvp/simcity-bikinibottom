@@ -243,6 +243,11 @@ public class CashierRole extends Role implements Cashier {
 		
 		public Market getMarket() { return market; }
 	}
+
+	@Override
+	public String getRoleType() {
+		return "restaurant.strottma.CashierRole";
+	}
 	
 }
 

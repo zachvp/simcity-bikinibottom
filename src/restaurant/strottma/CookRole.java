@@ -385,6 +385,11 @@ public class CookRole extends Role implements Cook {
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
 	}
+
+	@Override
+	public String getRoleType() {
+		return "restaurant.strottma.CookRole";
+	}
 	
 }
 

@@ -20,6 +20,11 @@ public abstract class Agent {
     protected void stateChanged() {
         stateChange.release();
     }
+    
+    /** The number of permits the stateChange semaphore has. */
+    public int getStateChangePermits() {
+    	return stateChange.availablePermits();
+    }
 
     /**
      * Agents must implement this scheduler to perform any actions appropriate for the

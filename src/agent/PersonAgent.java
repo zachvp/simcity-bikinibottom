@@ -83,17 +83,22 @@ public class PersonAgent extends Agent implements Person {
 		// First, the Role rules.
 		for (Role r : roles) {
 			if (r.isActive()) {
+				Do(r + " is active!");
 				if (r.isAwaitingInput()) {
 					// The Role is paused. Return false, but don't activate
 					// another Role!
+					Do(r + " is paused!");
 					return false;
 				} else {
+					Do("Calling " + r + "'s scheduler!");
 					return r.pickAndExecuteAnAction();
 				}
 				
 				// Note: only one role should be active at a time
 			}
 		}
+		
+		Do("No Role is active.");
 
 		// If you just arrived somewhere, activate the appropriate Role. 
 		
@@ -108,7 +113,7 @@ public class PersonAgent extends Agent implements Person {
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
-		} else if (isStarving()) {
+		} else if (isHungry()) {
 			if (wantsToEatOut()) {
 				// Restaurant r = chooseRestaurant();
 				// goToRestaurant(r);
@@ -426,7 +431,9 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public boolean hasFoodAtHome() {
-		return getResidentRole().thereIsFoodAtHome();
+		return false;
+		// TODO give every person a ResidentRole
+		// return getResidentRole().thereIsFoodAtHome();
 	}
 	
 	public boolean needToGoToBank() {

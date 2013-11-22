@@ -24,7 +24,7 @@ public class KelpClass implements Kelp {
 	
 	static KelpClass instance = null;
 	
-	static KelpClass getKelpInstance() throws Exception {
+	static public KelpClass getKelpInstance() throws Exception {
 		if (instance != null) return instance;
 		else throw new Exception("Tried to grab a Kelp instance "
 				+ "without it having been instantiated.");

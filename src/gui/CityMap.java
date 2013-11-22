@@ -24,6 +24,8 @@ import agent.Constants;
 public class CityMap extends JPanel implements MouseListener {
 
 		
+	
+
 	private int col, row = 0;
 	
 	ArrayList<Building> buildings;
@@ -73,7 +75,12 @@ public class CityMap extends JPanel implements MouseListener {
 			col = 0;
 			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
-		Building b = new Building(col*150 +10, row*150 +10, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+		Building b = new Building
+				(col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_X,
+				row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_Y, 
+				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 		b.setName(name);
 		buildings.add(b);
 		col++;

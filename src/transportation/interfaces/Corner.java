@@ -4,6 +4,7 @@ import java.util.List;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.DirectionEnum;
+import transportation.CornerAgent.MyCorner;
 import transportation.IntersectionAction;
 
 /* Node of a grid defining the city's roads. Handles all 
@@ -40,5 +41,12 @@ public interface Corner extends CityLocation {
 	public List<Busstop> getBusstops();
 
 	public Busstop getBusstopWithDirection(boolean busDirection) throws Exception;
+
+	void addAdjacentCorner(Corner c, DirectionEnum d);
+
+	void addBusstop(Busstop b);
+
+	public void startThreads();
+
 	
 }

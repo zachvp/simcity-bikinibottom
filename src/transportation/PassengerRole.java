@@ -18,6 +18,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 public class PassengerRole extends Role implements Passenger {
 	
@@ -105,7 +106,7 @@ public class PassengerRole extends Role implements Passenger {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
-			((PersonAgent) getAgent()).msgArrivedAtDestination();
+			((Person) getAgent()).msgArrivedAtDestination();
 			return;
 		}
 		
@@ -148,7 +149,7 @@ public class PassengerRole extends Role implements Passenger {
 				return;
 			} else {
 				gui.bringOutCar();
-				Car car = ((PersonAgent)getAgent()).car();
+				Car car = ((Person)getAgent()).getCar();
 				currentVehicle = car;
 				
 				List<Corner> carPath = new ArrayList<Corner>();

@@ -7,6 +7,8 @@ import CommonSimpleClasses.DirectionEnum;
  * to do on its arrival. Note: Position is generated 
  * from the corner's position and the direction.
  */
+
+// TODO Update DD
 public interface Busstop extends CityLocation {
 	
 	//Direction the bus is going when it reaches this stop.
@@ -23,4 +25,6 @@ public interface Busstop extends CityLocation {
 	public void msgGiveMePeople(Bus b);
 
 	public Corner corner();
+
+	public void startThread();
 }

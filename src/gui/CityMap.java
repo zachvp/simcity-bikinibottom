@@ -4,32 +4,38 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
 import agent.Constants;
+import agent.gui.Gui;
 
 /**
  * A panel containing the map of the city
  * @author Victoria Dea
  *
  */
-public class CityMap extends JPanel implements MouseListener {
+public class CityMap extends JPanel implements MouseListener, ActionListener {
 
-		
 	private int col, row = 0;
 	
 	ArrayList<Building> buildings;
 	BuildingView buildingView; //Ref to buildingview
 	BufferedImage image;
 	ImageIcon icon;
+	
+	private List<Gui> guis = new ArrayList<Gui>();
 
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
@@ -42,17 +48,16 @@ public class CityMap extends JPanel implements MouseListener {
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JLabel backgroundImage;
 		icon = new ImageIcon(image);
-		backgroundImage = new JLabel(icon);
 
-		//add(backgroundImage);
 		buildings = new ArrayList<Building>();
 
 		addMouseListener(this);
+		
+		Timer timer = new Timer(10, this);
+    	timer.start();
 	}
 	
 	/**
@@ -73,7 +78,12 @@ public class CityMap extends JPanel implements MouseListener {
 			col = 0;
 			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
-		Building b = new Building(col*150 +10, row*150 +10, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+		Building b = new Building
+				(col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_X,
+				row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_Y, 
+				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 		b.setName(name);
 		buildings.add(b);
 		col++;
@@ -86,12 +96,20 @@ public class CityMap extends JPanel implements MouseListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-		//g2.setColor(getBackground());
 		
-        
-		
-	
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
 
+        for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.draw(g2);
+            }
+        }
+		
+		
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
 			if(b.getName().equals("Hospital")){
@@ -118,7 +136,6 @@ public class CityMap extends JPanel implements MouseListener {
 	 * Handles mouse clicks on the map
 	 */
 	public void mouseClicked(MouseEvent me) {
-		//Check to see which building was clicked
 
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
@@ -143,4 +160,17 @@ public class CityMap extends JPanel implements MouseListener {
 
 	public void mouseReleased(MouseEvent arg0) {		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		repaint();
+		
+	}
+	
+	
+	public void addGui(Gui gui) {
+        guis.add(gui);
+    }
+
+    
 }

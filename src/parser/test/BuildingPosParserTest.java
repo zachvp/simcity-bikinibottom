@@ -3,7 +3,6 @@ package parser.test;
 import static org.junit.Assert.*;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.util.List;
 
 import org.junit.Before;

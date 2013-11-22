@@ -1,6 +1,7 @@
 package transportation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -19,16 +20,21 @@ public class CornerAgent extends Agent implements Corner {
 		Corner c;
 		//Direction in which the Corner is.
 		DirectionEnum d; // TODO add Direction enum as DD standalone?
+		
+		public MyCorner(Corner c, DirectionEnum d) {
+			this.c = c;
+			this.d = d;
+		}
 	}
 	
 	//True when a Vehicle is crossing through the intersection.
 	boolean crossroadBusy = false;
 	
 	//List of corners adjacent to this one.
-	List<MyCorner> adjacentCorners;
+	List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
 	
 	//List of all the bus stops in this corner.
-	List<Busstop> busstopList;
+	List<Busstop> busstopList = new ArrayList<Busstop>();
 	
 	//Position of the center of the intersection in the city map.
 	XYPos pos;
@@ -36,16 +42,39 @@ public class CornerAgent extends Agent implements Corner {
 	/*List of Vehicles waiting to cross and the Corners they 
 	 * want to drive to.
 	 */
-	Queue<IntersectionAction> waitingToCross;
+	Queue<IntersectionAction> waitingToCross =
+			new LinkedList<IntersectionAction>();
 	
 	//List of entities waiting to get a copy of busstopList.
-	Queue<BusstopRequester> waitingForBusstops;
+	Queue<BusstopRequester> waitingForBusstops =
+			new LinkedList<BusstopRequester>();
 	
 	//List of entities waiting to get a copy of adjacentCorners.
-	Queue<AdjCornerRequester> waitingForCorners; 
+	Queue<AdjCornerRequester> waitingForCorners =
+			new LinkedList<AdjCornerRequester>();
 	
 	//Reference to Kelp TODO add to DD
 	Kelp kelp;
+	
+	public CornerAgent(XYPos pos) {
+		this.pos = pos;
+		try {
+			kelp = KelpClass.getKelpInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Corner was instantiated before Kelp,"
+					+ " buses will misbehave and NullPointerExceptions"
+					+ " will be thrown.");
+		}
+	}
+	
+	public void addAdjacentCorner(Corner c, DirectionEnum d) {
+		adjacentCorners.add(new MyCorner(c, d));
+	}
+	
+	public void addBusstop(Busstop b){
+		busstopList.add(b);
+	}
 
 
 	@Override
@@ -183,5 +212,16 @@ public class CornerAgent extends Agent implements Corner {
 		
 		return busstopList.get(currIndex);
 	}
+
+	@Override
+	public void startThreads() {
+		for(Busstop busstop : busstopList) {
+			busstop.startThread();
+		}
+		
+		startThread();
+		
+	}
+
 
 }

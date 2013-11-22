@@ -13,6 +13,16 @@ import transportation.interfaces.Corner;
 
 /* Handles the construction of the underlying 
  * Corner node map.
+ * 
+ * Usage: Call createMap() passing down the number of blocks
+ * the city map has, and a set of all the corners that should have
+ * bus stops. When that method returns, call getCreatedCorners() and
+ * getBusRoute() to get the generated data. 
+ * 
+ * NOTE: You have to make sure to set the bus stops following
+ * the rules about bus routes described in the 'Da Rules' section
+ * of the wiki. Corners are counted left to right, then top to bottom,
+ * and only corners that lead to 4 roads are counted.
  */
 
 // TODO add comments
@@ -20,15 +30,14 @@ public class MapBuilder {
 	static boolean hasBeenCreated = false;
 	static int numberOfBlocks = 0;
 	static int buildingRows = 0;
-	static List<Corner> createdCorners = new ArrayList<Corner>();
-	static List<Corner> busRoute = new ArrayList<Corner>();
+	private static List<Corner> createdCorners = new ArrayList<Corner>();
+	private static List<Corner> busRoute = new ArrayList<Corner>();
 	private static Set<Integer> cornersWithBusstops;
 	private static int numCornerRows = 0;
 	private static int numCornerCols = 0;
 	private static List<XYPos> cornersWithBusstopsGrid =
 			new ArrayList<XYPos>();
 	
-	// Check bus stop rules before calling!
 	static void createMap(int numberOfBlocks, Set<Integer> cornersWithBusstops)
 			throws Exception {
 		if (numberOfBlocks % Constants.MAX_BLOCK_COL != 0) {
@@ -325,5 +334,20 @@ public class MapBuilder {
 			corner.startThreads();
 		}
 	}
+
+	/**
+	 * @return the createdCorners
+	 */
+	public static List<Corner> getCreatedCorners() {
+		return createdCorners;
+	}
+
+	/**
+	 * @return the busRoute
+	 */
+	public static List<Corner> getBusRoute() {
+		return busRoute;
+	}
+
 
 }

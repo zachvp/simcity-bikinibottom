@@ -2,7 +2,6 @@ package housing.gui;
 
 import housing.PayRecipientRole;
 import housing.ResidentRole;
-import housing.test.mock.LayoutGui;
 
 import java.util.ArrayList;
 import java.util.List;

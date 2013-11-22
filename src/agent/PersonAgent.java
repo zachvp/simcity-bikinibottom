@@ -203,6 +203,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public Timer getTimer() {
+		return this.timer;
+	}
+	
 	/*
 	void activateRole(CityLocation loc) {
 		// TODO implement activateRole()

@@ -27,8 +27,6 @@ public class ResidentRole extends Role implements Resident {
 	public EventLog log = new EventLog();
 	
 	/* ----- Person Data ----- */
-	private PersonAgent person;
-	private Semaphore multiStepAction = new Semaphore(0, true);
 	private ResidentGui gui;
 	
 	/* ----- Temporary Hacks ----- */
@@ -77,7 +75,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
-		this.person = agent;
 	}
 	
 	/* ----- Messages ----- */
@@ -89,7 +86,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public void msgAtDest(){
-		multiStepAction.release();
+		doneWaitingForInput();
 	}
 
 	/* ----- Scheduler ----- */
@@ -104,7 +101,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		//TODO: The conditions for the below event need to be modified
-		if(hungry){
+		if(isHungry()){
 			synchronized(refrigerator){
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 					Food f = entry.getValue();
@@ -114,6 +111,9 @@ public class ResidentRole extends Role implements Resident {
 					}
 				}
 			}
+		}
+		else{
+			DoJazzercise();
 		}
 		return false;
 	}
@@ -131,45 +131,46 @@ public class ResidentRole extends Role implements Resident {
 			payee.msgHereIsPayment(cash, this);
 			cash = 0;
 		}
-//		money -= moneyOwed;
 		moneyOwed = 0;
 	}
 	
 	private void eatFood(){
-		log.add("Eating food");
-//		TODO: ANIMATION DETAILS
 		DoGoToStove();
-		acquire(multiStepAction);
-//		DoGoToTable();
-		acquire(multiStepAction);
-//		DoEatFood();
-		acquire(multiStepAction);
+		waitForInput();
+		DoSetFood(food.type);
+		DoGoToTable();
+		waitForInput();
+		log.add("Eating food");
 		hungry = false;
 		food = null;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				food = null;
+				DoSetFood("");
 				stateChanged();
 			}
 		},
-		EAT_TIME * 1000);//how long to wait before running task
+		EAT_TIME * 1000);
 	}
 	
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
-//		TODO: Animation details		
-//		DoGoToRefrigerator();
+		DoGoToRefrigerator();
+		waitForInput();
+		DoSetFood(food.type);
+		DoGoToStove();
+		waitForInput();
+		DoSetFood("");
 		f.amount--;
-		Do("Food amount is " + f.amount);
 		food.state = FoodState.COOKING;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
-//		DoGoToStove();
-//		DoCooking(f.type);
-//		food.state = FoodState.COOKED;
-//		log.add("Food is cooked.");
+		/* --- Include for testing because JUnit doesn't recognize timers ---
+		DoCooking(f.type);
+		food.state = FoodState.COOKED;
+		log.add("Food is cooked.");
+ 		*/
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDoneCooking();
@@ -180,7 +181,26 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* --- Animation Routines --- */
 	private void DoGoToStove(){
+		log.add("Going to stove.");
 		gui.DoGoToStove();
+	}
+	
+	private void DoGoToTable(){
+		log.add("Going to table.");
+		gui.DoGoToTable();
+	}
+	
+	private void DoGoToRefrigerator(){
+		log.add("Going to refrigerator.");
+		gui.DoGoToRefrigerator();
+	}
+	
+	private void DoSetFood(String type){
+		gui.setFood(type);
+	}
+	
+	private void DoJazzercise(){
+		gui.DoJazzercise();
 	}
 	
 	/* ----- Utility Functions ----- */
@@ -191,10 +211,12 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public boolean thereIsFoodAtHome(){
-		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
-			if(entry.getValue().amount > 0){
-				log.add("There is food at home.");
-				return true;
+		synchronized(refrigerator){
+			for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
+				if(entry.getValue().amount > 0){
+					log.add("There is food at home.");
+					return true;
+				}
 			}
 		}
 		log.add("There is no food at home");

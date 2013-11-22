@@ -14,9 +14,6 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	
-	/* ----- Person Data ----- */
-	PersonAgent person;
-	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
 	enum PaymentState { PAYMENT_DUE, PAYMENT_PAID, DONE };

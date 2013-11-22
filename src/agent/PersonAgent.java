@@ -3,13 +3,12 @@ package agent;
 import housing.ResidentRole;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
-
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -29,7 +28,7 @@ public class PersonAgent extends Agent implements Person {
 	private TimeManager timeManager;
 	private Timer timer;
 	
-	private Date lastTimeEatingOut;
+	private long lastTimeEatingOut;
 	/**
 	 * How long this person likes to wait between each time eating out (in game
 	 * time, not real time)
@@ -58,7 +57,7 @@ public class PersonAgent extends Agent implements Person {
 		this.timeManager = TimeManager.getInstance();
 		this.timer = new Timer();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartDate();
+		this.lastTimeEatingOut = timeManager.fakeStartTime();
 		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
 		
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
@@ -83,17 +82,24 @@ public class PersonAgent extends Agent implements Person {
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
 		for (Role r : roles) {
-			if (r.isActive() && r.pickAndExecuteAnAction()) {
-				return true;
+			if (r.isActive()) {
+				if (r.isAwaitingInput()) {
+					// The Role is paused. Return false, but don't activate
+					// another Role!
+					return false;
+				} else {
+					return r.pickAndExecuteAnAction();
+				}
+				
 				// Note: only one role should be active at a time
 			}
 		}
-
+		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			// TODO uncomment scheduler
-			// activateRole(getPassengerRole().getLocation());
+			// activateRoleForLoc(getPassengerRole().getLocation());
 		}
 		
 
@@ -102,7 +108,7 @@ public class PersonAgent extends Agent implements Person {
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
-		} else if (isStarving()) {
+		} else if (isHungry()) {
 			if (wantsToEatOut()) {
 				// Restaurant r = chooseRestaurant();
 				// goToRestaurant(r);
@@ -127,8 +133,21 @@ public class PersonAgent extends Agent implements Person {
 
 	/* -------- Actions -------- */
 	
+	/**
+	 * Starts up the {@link PassengerRole} to take the Person to the given
+	 * {@link CityLocation}. This is one of PersonAgent's most important
+	 * actions - and several other actions can simply call this one.
+	 */
+	private void goToLoc(CityLocation loc) {
+		PassengerRole pass = getPassengerRole();
+		pass.msgGoToLocation(loc);
+		pass.activate();
+	}
+	
 	private void goHome() {
-		// TODO implement goHome()
+		// TODO implement goHome
+		// CityLocation home = getResidentRole().getLocation();
+		// goToLoc(home);
 	}
 	
 	private void goToWork() {
@@ -184,6 +203,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public Timer getTimer() {
+		return this.timer;
+	}
+	
 	/*
 	void activateRole(CityLocation loc) {
 		// TODO implement activateRole()
@@ -224,12 +247,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/** @return the date and time of the last time the person ate out. */
-	public Date getLastTimeEatingOut() {
+	public long getLastTimeEatingOut() {
 		return this.lastTimeEatingOut;
 	}
 	
 	/** Modifies the last time the person thinks he or she ate out. */
-	public void setLastTimeEatingOut(Date newLastTime) {
+	public void setLastTimeEatingOut(long newLastTime) {
 		this.lastTimeEatingOut = newLastTime;
 	}
 	
@@ -250,16 +273,46 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setHungerLevel(HungerLevel newHungerLevel, boolean eatingOut) {
 		if (eatingOut) {
-			this.lastTimeEatingOut = timeManager.currentSimDate();
+			this.lastTimeEatingOut = timeManager.currentSimTime();
 		}
 		this.hungerLevel = newHungerLevel;
 	}
 	
+	/**
+	 * Sets the hunger level to the given, without modifying lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @see #getLastTimeEatingOut()
+	 */
 	public void setHungerLevel(HungerLevel newHungerLevel) {
 		setHungerLevel(newHungerLevel, false);
 	}
 	
-	// ---- Work starting soon
+	/**
+	 * Sets the hunger level to full; if eatingOut, updates lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @param eatingOut whether this hunger modification was due to eating out
+	 * @see #getLastTimeEatingOut()
+	 */
+	public void setHungerToFull(boolean eatingOut) {
+		setHungerLevel(HungerLevel.FULL, eatingOut);
+	}
+	
+	/**
+	 * Sets the hunger level to full, without modifying lastTimeEatingOut.
+	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
+	 * 
+	 * @param newHungerLevel
+	 * @see #getLastTimeEatingOut()
+	 */
+	public void setHungerToFull() {
+		setHungerToFull(false);
+	}
+	
+	// Work starting soon
 	
 	/**
 	 * If there is less than this much time before work starts, the person
@@ -292,12 +345,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	// ---- Methods for finding special roles
 	
-	/**
-	 * Returns the PersonAgent's PassengerRole, or the first one if there's
-	 * more than one for some reason.
-	 * 
-	 * @return the PassengerRole; null if none exists
-	 */
 	@Override
 	public PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
@@ -309,12 +356,6 @@ public class PersonAgent extends Agent implements Person {
 		return null;
 	}
 
-	/**
-	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
-	 * than one for some reason.
-	 * 
-	 * @return the ResidentRole; null if none exists
-	 */
 	@Override
 	public ResidentRole getResidentRole() {
 		for (Role r : roles) {
@@ -325,13 +366,16 @@ public class PersonAgent extends Agent implements Person {
 		return null;
 	}
 	
-	/*
 	@Override
 	public WorkRole getWorkRole() {
-		// TODO implement when WorkRole is merged into master
+		for (Role r : roles) {
+			if (r instanceof WorkRole) {
+				return (WorkRole) r;
+			}
+		}
 		return null;
 	}
-	*/
+	
 		
 	// ---- Choosing locations to patronize
 	
@@ -357,17 +401,22 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public boolean workStartsSoon() {
-		// TODO implement workStartsSoon()
-		/*
-		Date workStartTime = getWorkRole.startTime();
+		WorkRole workRole = getWorkRole();
+		if (workRole == null) {
+			return false;
+		}
+		long workStartTime = workRole.startTime();
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
-		*/
-		return false;
 	}
 	
 	@Override
 	public boolean isStarving() {
 		return hungerLevel == HungerLevel.STARVING;
+	}
+	
+	public boolean isHungry() {
+		return hungerLevel == HungerLevel.STARVING ||
+				hungerLevel == HungerLevel.HUNGRY; 
 	}
 	
 	/**
@@ -381,7 +430,9 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public boolean hasFoodAtHome() {
-		return getResidentRole().thereIsFoodAtHome();
+		return false;
+		// TODO give every person a ResidentRole
+		// return getResidentRole().thereIsFoodAtHome();
 	}
 	
 	public boolean needToGoToBank() {

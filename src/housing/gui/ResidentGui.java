@@ -19,16 +19,19 @@ public class ResidentGui implements Gui {
 	private Resident resident = null;
 	private boolean canRelease = false;//this prevents excessive releases from occurring
 	private boolean waiting = false;//checks if resident is going to be idle
+	
+	
+	LayoutGui layoutGui;
 
-	String guiName = "Resident";//text of customer order
+	String guiName = "Resident";
+	String eatingFood = "null";
 
 	/* --- Hardcoded Positions --- */
 	private int xPos = 20, yPos = 20;//default resident position
 	private int xDestination = 20, yDestination = 20;//default start position
+	private final int JAZZER_SPOT_X = 0;
+	private final int JAZZER_SPOT_Y = 0;
 	
-	private final int STOVE_X = 120;
-	private final int STOVE_Y = 200;
-
 	public ResidentGui(Resident resident) {
 		this.resident = resident;
 	}
@@ -60,6 +63,8 @@ public class ResidentGui implements Gui {
 	    	
 		g.setColor(Color.BLACK);
 		g.drawString(guiName, xPos, yPos);
+		
+		g.drawString(eatingFood, xPos+5, yPos+15);
 	}
 
 	public boolean isPresent() {
@@ -72,9 +77,33 @@ public class ResidentGui implements Gui {
 
 	public void DoGoToStove() {
 		waiting = false;
-		xDestination = STOVE_X;
-		yDestination = STOVE_Y;
+		xDestination = layoutGui.getStovePosition().width;
+		yDestination = layoutGui.getStovePosition().height;
 		canRelease = true;
+	}
+	
+	public void DoGoToTable(){
+		waiting = false;
+		xDestination = layoutGui.getTablePosition().width;
+		yDestination = layoutGui.getTablePosition().height;
+		canRelease = true;
+	}
+	
+	public void DoGoToRefrigerator(){
+		waiting = false;
+		xDestination = layoutGui.getTablePosition().width;
+		yDestination = layoutGui.getTablePosition().height;
+		canRelease = true;
+	}
+	
+	public void DoJazzercise(){
+		waiting = true;
+		xDestination = JAZZER_SPOT_X;
+		yDestination = JAZZER_SPOT_Y;
+	}
+	
+	public void setFood(String foodType){
+		eatingFood = foodType;
 	}
 
 	public int getXPos() {
@@ -83,6 +112,10 @@ public class ResidentGui implements Gui {
 
 	public int getYPos() {
 		return yPos;
+	}
+	
+	public void setLayoutGui(LayoutGui gui){
+		layoutGui = gui;
 	}
 
 //	public void pause(){

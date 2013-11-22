@@ -83,8 +83,15 @@ public class PersonAgent extends Agent implements Person {
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
 		for (Role r : roles) {
-			if (r.isActive() && r.pickAndExecuteAnAction()) {
-				return true;
+			if (r.isActive()) {
+				if (r.isAwaitingInput()) {
+					// The Role is paused. Return false, but don't activate
+					// another Role!
+					return false;
+				} else {
+					return r.pickAndExecuteAnAction();
+				}
+				
 				// Note: only one role should be active at a time
 			}
 		}

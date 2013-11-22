@@ -127,31 +127,31 @@ public class PersonAgent extends Agent implements Person {
 
 	/* -------- Actions -------- */
 	
-	public void goHome() {
+	private void goHome() {
 		// TODO implement goHome()
 	}
 	
-	public void goToWork() {
+	private void goToWork() {
 		// TODO implement goToWork()
 	}
 	
 	// TODO uncomment when Restaurant interface exists
 	/*
-	public void goToRestaurant(Restaurant r) {
+	private void goToRestaurant(Restaurant r) {
 		// TODO implement goToRestaurant
 	}
 	*/
 	
 	// TODO uncomment when Market interface exists
 	/*
-	public void goToMarket(Market m) {
+	private void goToMarket(Market m) {
 		// TODO implement goToMarket
 	}
 	*/
 	
 	// TODO uncomment when Bank interface exists
 	/*
-	public void goToBank(Bank b) {
+	private void goToBank(Bank b) {
 		// TODO implement goToBank
 	}
 	*/
@@ -178,6 +178,7 @@ public class PersonAgent extends Agent implements Person {
 	 * the Role's scheduler if the Role is inactive. Also calls
 	 * {@link #stateChanged()}.
 	 */
+	@Override
 	public void addRole(Role r) {
 		this.roles.add(r);
 		stateChanged();
@@ -204,7 +205,7 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
-	// Eating out
+	// ---- Eating out
 	
 	/**
 	 * @return how long this person likes to wait between each time eating out

@@ -4,6 +4,7 @@ import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.Role;
+import agent.WorkRole;
 
 public interface Person {
 	/* -------- Messages -------- */
@@ -41,7 +42,7 @@ public interface Person {
 	 * Returns the PersonAgent's PassengerRole, or the first one if there's
 	 * more than one for some reason.
 	 * 
-	 * @return the PassengerRole; null if none exists
+	 * @return the first PassengerRole; null if none exists
 	 */
 	public PassengerRole getPassengerRole();
 	
@@ -49,12 +50,17 @@ public interface Person {
 	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
 	 * than one for some reason.
 	 * 
-	 * @return the ResidentRole; null if none exists
+	 * @return the first ResidentRole; null if none exists
 	 */
 	public ResidentRole getResidentRole();
 	
-	// TODO uncomment and add JavaDoc when WorkRole is merged into master
-	// public WorkRole getWorkRole();
+	/**
+	 * Returns the PersonAgent's WorkRole, or the first one if there's more
+	 * than one. Multiple-job support is planned for v3.
+	 * 
+	 * @return the first WorkRole; null if none exists
+	 */
+	public WorkRole getWorkRole();
 	
 	
 	// ---- Boolean methods (for deciding what to do next)

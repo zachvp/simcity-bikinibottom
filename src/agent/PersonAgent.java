@@ -8,6 +8,7 @@ import java.util.Timer;
 
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -125,8 +126,21 @@ public class PersonAgent extends Agent implements Person {
 
 	/* -------- Actions -------- */
 	
+	/**
+	 * Starts up the {@link PassengerRole} to take the Person to the given
+	 * {@link CityLocation}. This is one of PersonAgent's most important
+	 * actions - and several other actions can simply call this one.
+	 */
+	private void goToLoc(CityLocation loc) {
+		PassengerRole pass = getPassengerRole();
+		pass.msgGoToLocation(loc);
+		pass.activate();
+	}
+	
 	private void goHome() {
-		// TODO implement goHome()
+		// TODO implement goHome
+		// CityLocation home = getResidentRole().getLocation();
+		// goToLoc(home);
 	}
 	
 	private void goToWork() {
@@ -320,12 +334,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	// ---- Methods for finding special roles
 	
-	/**
-	 * Returns the PersonAgent's PassengerRole, or the first one if there's
-	 * more than one for some reason.
-	 * 
-	 * @return the PassengerRole; null if none exists
-	 */
 	@Override
 	public PassengerRole getPassengerRole() {
 		// TODO implement getPassengerRole
@@ -337,12 +345,6 @@ public class PersonAgent extends Agent implements Person {
 		return null;
 	}
 
-	/**
-	 * Returns the PersonAgent's ResidentRole, or the first one if there's more
-	 * than one for some reason.
-	 * 
-	 * @return the ResidentRole; null if none exists
-	 */
 	@Override
 	public ResidentRole getResidentRole() {
 		for (Role r : roles) {
@@ -353,6 +355,7 @@ public class PersonAgent extends Agent implements Person {
 		return null;
 	}
 	
+	@Override
 	public WorkRole getWorkRole() {
 		for (Role r : roles) {
 			if (r instanceof WorkRole) {
@@ -361,7 +364,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return null;
 	}
-	*/
+	
 		
 	// ---- Choosing locations to patronize
 	

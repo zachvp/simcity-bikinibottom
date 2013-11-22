@@ -27,8 +27,6 @@ public class ResidentRole extends Role implements Resident {
 	public EventLog log = new EventLog();
 	
 	/* ----- Person Data ----- */
-	private PersonAgent person;
-	private Semaphore multiStepAction = new Semaphore(0, true);
 	private ResidentGui gui;
 	
 	/* ----- Temporary Hacks ----- */
@@ -77,7 +75,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
-		Do("Praying to Shrek");
 	}
 	
 	/* ----- Messages ----- */
@@ -89,7 +86,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public void msgAtDest(){
-		multiStepAction.release();
+		doneWaitingForInput();
 	}
 
 	/* ----- Scheduler ----- */
@@ -115,7 +112,8 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		DoJazzercise();
+//		DoJazzercise();
+		Do("Nothing to do");
 		return false;
 	}
 	
@@ -137,10 +135,10 @@ public class ResidentRole extends Role implements Resident {
 	
 	private void eatFood(){
 		DoGoToStove();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood(food.type);
 		DoGoToTable();
-		acquire(multiStepAction);
+		waitForInput();
 		log.add("Eating food");
 		hungry = false;
 		food = null;
@@ -157,10 +155,10 @@ public class ResidentRole extends Role implements Resident {
 		log.add("Cooking food");
 		food = f;
 		DoGoToRefrigerator();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood(food.type);
 		DoGoToStove();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood("");
 		f.amount--;
 		food.state = FoodState.COOKING;
@@ -208,7 +206,7 @@ public class ResidentRole extends Role implements Resident {
 	private void timerDoneCooking(){
 		food.state = FoodState.COOKED;
 		log.add("Food is cooked.");
-		stateChanged();
+//		stateChanged();
 	}
 	
 	public boolean thereIsFoodAtHome(){

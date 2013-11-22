@@ -47,6 +47,7 @@ public class HousingGui extends JFrame {
 		residentGui.setLayoutGui(layoutGui);
 		
 		/* --- Add to Animation Panel --- */
+		housingAnimationPanel.addGui(layoutGui);
 		housingAnimationPanel.addGui(residentGui);
 	}
 	

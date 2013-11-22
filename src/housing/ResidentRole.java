@@ -27,8 +27,6 @@ public class ResidentRole extends Role implements Resident {
 	public EventLog log = new EventLog();
 	
 	/* ----- Person Data ----- */
-	private PersonAgent person;
-	private Semaphore multiStepAction = new Semaphore(0, true);
 	private ResidentGui gui;
 	
 	/* ----- Temporary Hacks ----- */
@@ -77,8 +75,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
-		this.person = agent;
-		Do("Praying to Shrek");
 	}
 	
 	/* ----- Messages ----- */
@@ -90,7 +86,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public void msgAtDest(){
-		multiStepAction.release();
+		doneWaitingForInput();
 	}
 
 	/* ----- Scheduler ----- */
@@ -105,7 +101,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		//TODO: The conditions for the below event need to be modified
-		if(hungry){
+		if(isHungry()){
 			synchronized(refrigerator){
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 					Food f = entry.getValue();
@@ -116,7 +112,9 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		DoJazzercise();
+		else{
+			DoJazzercise();
+		}
 		return false;
 	}
 	
@@ -133,17 +131,15 @@ public class ResidentRole extends Role implements Resident {
 			payee.msgHereIsPayment(cash, this);
 			cash = 0;
 		}
-//		money -= moneyOwed;
 		moneyOwed = 0;
 	}
 	
 	private void eatFood(){
-//		TODO: ANIMATION DETAILS
 		DoGoToStove();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood(food.type);
 		DoGoToTable();
-		acquire(multiStepAction);
+		waitForInput();
 		log.add("Eating food");
 		hungry = false;
 		food = null;
@@ -159,23 +155,22 @@ public class ResidentRole extends Role implements Resident {
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
-//		TODO: Animation details		
 		DoGoToRefrigerator();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood(food.type);
 		DoGoToStove();
-		acquire(multiStepAction);
+		waitForInput();
 		DoSetFood("");
 		f.amount--;
 		food.state = FoodState.COOKING;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
-		/* --- Include for testing because JUnit doesn't recognize timers --- */
-//		DoGoToStove();
-//		DoCooking(f.type);
-//		food.state = FoodState.COOKED;
-//		log.add("Food is cooked.");
+		/* --- Include for testing because JUnit doesn't recognize timers ---
+		DoCooking(f.type);
+		food.state = FoodState.COOKED;
+		log.add("Food is cooked.");
+ 		*/
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDoneCooking();

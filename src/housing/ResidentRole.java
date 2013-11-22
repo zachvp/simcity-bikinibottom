@@ -216,10 +216,12 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public boolean thereIsFoodAtHome(){
-		for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
-			if(entry.getValue().amount > 0){
-				log.add("There is food at home.");
-				return true;
+		synchronized(refrigerator){
+			for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
+				if(entry.getValue().amount > 0){
+					log.add("There is food at home.");
+					return true;
+				}
 			}
 		}
 		log.add("There is no food at home");

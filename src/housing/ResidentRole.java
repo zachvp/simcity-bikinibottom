@@ -101,7 +101,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		//TODO: The conditions for the below event need to be modified
-		if(hungry){
+		if(isHungry()){
 			synchronized(refrigerator){
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 					Food f = entry.getValue();
@@ -112,8 +112,9 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-//		DoJazzercise();
-		Do("Nothing to do");
+		else{
+			DoJazzercise();
+		}
 		return false;
 	}
 	
@@ -206,7 +207,7 @@ public class ResidentRole extends Role implements Resident {
 	private void timerDoneCooking(){
 		food.state = FoodState.COOKED;
 		log.add("Food is cooked.");
-//		stateChanged();
+		stateChanged();
 	}
 	
 	public boolean thereIsFoodAtHome(){

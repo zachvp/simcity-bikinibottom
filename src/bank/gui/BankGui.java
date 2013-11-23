@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
@@ -34,21 +33,10 @@ import bank.TellerRole;
  * Contains the main frame and subsequent panels
  */
 public class BankGui extends JFrame implements ActionListener {
-    /* The GUI has two frames, the control frame (in variable gui) 
-     * and the animation frame, (in variable animationFrame within gui)
-     */
-//	JFrame animationFrame = new JFrame("Bank Animation");
+
 	AnimationPanel animationPanel = new AnimationPanel();
 	JFrame optionFrame;// = new JFrame();
-    /* restPanel holds 2 panels
-     * 1) the staff listing, menu, and lists of current customers all constructed
-     *    in RestaurantPanel()
-     * 2) the infoPanel about the clicked Customer (created just below)
-     */    
-    //private RestaurantPanel restPanel = new RestaurantPanel(this);
-    
-    /* infoPanel holds information about the clicked customer, if there is one*/
-    
+
     private JLabel infoLabel; //part of infoPanel
     private JPanel graphicPanel; //added for Lab1
     private JLabel graphicLabel;
@@ -64,9 +52,6 @@ public class BankGui extends JFrame implements ActionListener {
     private JButton resumeWorkButton;
     private JTextField text1;
     private JTextField text2;
-    
-    
-    //private Image image;
 
     private Object currentPerson;/* Holds the agent that the info is about.
     								Seems like a hack */
@@ -133,17 +118,12 @@ public class BankGui extends JFrame implements ActionListener {
         
    
         optionFrame.add(addCustomerButton);
-//        this.add(addCustomer);
     	setBounds(50, 50, WINDOWX, WINDOWY);
 
         setLayout(new BoxLayout((Container) getContentPane(), 
         		BoxLayout.Y_AXIS));
 
         Dimension restDim = new Dimension(WINDOWX, (int) (WINDOWY * .3));
-//        restPanel.setPreferredSize(restDim);
-//        restPanel.setMinimumSize(restDim);
-//        restPanel.setMaximumSize(restDim);
-//        add(restPanel);
 
         
         PersonAgent accountManagerPerson = new PersonAgent("accountManager");
@@ -168,16 +148,6 @@ public class BankGui extends JFrame implements ActionListener {
         securityGuardPerson.startThread();
         securityGuard = new SecurityGuardRole(securityGuardPerson);
         
-//        PersonAgent tellerPerson = new PersonAgent("teller");
-//        tellerPerson.startThread();
-//        teller = new TellerRole(tellerPerson, accountManager, loanManager, tellerDesk);
-//        securityGuard.addTeller(teller, tellerDesk);
-//        tellerDesk++;
-//        tellerGui = new TellerGui(teller);
-//        teller.setGui(tellerGui);
-//        animationPanel.addGui(tellerGui);
-//        tellerPerson.addRole(teller);
-//        teller.activate();
         
 
         securityGuardGui = new SecurityGuardGui(securityGuard);
@@ -193,20 +163,9 @@ public class BankGui extends JFrame implements ActionListener {
         workRoles.add(loanManager);
         workRoles.add(accountManager);
         
-//        teller.setSecurityGuard(securityGuard);
        
         
         
-//        PersonAgent bankCustomerPerson = new PersonAgent("bankCustomer");
-//        bankCustomerPerson.startThread();
-//        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson);
-//        bankCustomer.addTeller(teller);
-//        bankCustomerPerson.addRole(bankCustomer);
-//        bankCustomer.activate();
-//        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-//        bankCustomer.setGui(bankCustomergui);
-//        animationPanel.addGui(bankCustomergui);
-//        bankCustomer.msgGoToTeller(250);
 
         // Now, setup the info panel
         Dimension infoDim = new Dimension(WINDOWX, (int) (WINDOWY * .125));
@@ -219,14 +178,9 @@ public class BankGui extends JFrame implements ActionListener {
         graphicPanel.setBorder(BorderFactory.createTitledBorder("Graphic"));
         
         graphicPanel.setLayout(new BorderLayout(1,2));
-       
-       // graphicLabel.setText("This is my graphic addded for Lab 1");//added for lab 1
-//        graphicPanel.add(graphicLabel);
-//        graphicPanel.add(graphicLabel, BorderLayout.NORTH);
         graphicPanel.setBackground(Color.red);
         add(animationPanel);//animation panel added here FIXIT
-//        
-        //add(graphicPanel);
+
     }
     /**
      * updateInfoPanel() takes the given customer (or, for v3, Host) object and
@@ -238,21 +192,7 @@ public class BankGui extends JFrame implements ActionListener {
     public void showCB() {
     	stateCB.setVisible(true);
     }
-    /**
-     * Message sent from a customer gui to enable that customer's
-     * "I'm hungry" checkbox.
-     *
-     * @param c reference to the customer
-     */
-//    public void setCustomerEnabled(CustomerAgent c) {
-//        if (currentPerson instanceof CustomerAgent) {
-//            CustomerAgent cust = (CustomerAgent) currentPerson;
-//            if (c.equals(cust)) {
-//                stateCB.setEnabled(true);
-//                stateCB.setSelected(false);
-//            }
-//        }
-//    }
+
     /**
      * Main routine to get gui started
      */

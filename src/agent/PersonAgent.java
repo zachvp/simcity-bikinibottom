@@ -75,6 +75,7 @@ public class PersonAgent extends Agent {
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
+		
 		for (Role r : roles) {
 			if (r.isActive() && r.pickAndExecuteAnAction()) {
 				return true;

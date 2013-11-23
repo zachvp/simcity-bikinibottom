@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.CashierGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;

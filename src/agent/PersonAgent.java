@@ -358,7 +358,6 @@ public class PersonAgent extends Agent implements Person {
 	
 		
 	// ---- Choosing locations to patronize
-	
 
 	private CityLocation chooseRestaurant() {
 		// get a list of nearby restaurants
@@ -436,7 +435,7 @@ public class PersonAgent extends Agent implements Person {
 	 * eating out.
 	 */
 	public boolean wantsToEatOut() {
-		return timeManager.timeUntil(lastTimeEatingOut)
+		return -timeManager.timeUntil(lastTimeEatingOut)
 				>= this.eatingOutWaitPeriod;
 	}
 	

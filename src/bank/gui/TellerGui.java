@@ -111,6 +111,18 @@ public class TellerGui implements Gui{
 		yDestination = deskYPos;
 	}
 	
+    public void DoGoToWorkstation(int xFactor) {
+    	canRelease = false;
+    	xDestination = deskXPos + (xFactor * 50);
+    	yDestination = deskYPos;
+    }
+    
+    public void DoEndWorkDay(){
+    	canRelease = true;
+    	xDestination = 300;
+    	yDestination = 500;
+    }
+	
 	public void DoLeaveBank() {
 		canRelease = true;
 		xDestination = 500;

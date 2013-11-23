@@ -83,7 +83,6 @@ public class CashierGui implements Gui {
     }
     
     public void GoToBench(){
-    	System.out.println ("Going to Bench");
     	xDestination = BenchX;
     	yDestination = BenchY;
     	command=Command.GoToBench;

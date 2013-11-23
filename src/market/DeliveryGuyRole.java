@@ -42,7 +42,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
-				msgOffWork();
+				msgLeaveWork();
 			
 			}
 		};

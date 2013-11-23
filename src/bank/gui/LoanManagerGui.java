@@ -107,6 +107,12 @@ public class LoanManagerGui implements Gui{
 		yDestination = deskYPos;
 	}
 	
+    public void DoEndWorkDay(){
+    	canRelease = true;
+    	xDestination = 300;
+    	yDestination = 500;
+    }
+    
 	public void DoLeaveBank() {
 		canRelease = true;
 		xDestination = 500;

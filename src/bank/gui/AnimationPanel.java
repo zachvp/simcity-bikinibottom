@@ -1,20 +1,23 @@
 package bank.gui;
 
-import javax.swing.*;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /** This panel will be used for displaying animation within buildings after.
  * Panel will display in a cardlayout after the user has clicked on a building.
  *  */
 public class AnimationPanel extends JPanel implements ActionListener {
 
-    private final int WINDOWX = 550;//this.getParent().getWidth();
-    private final int WINDOWY = 600;//this.getParent().getHeight();
+    private final int WINDOWX = 600;//this.getParent().getWidth();
+    private final int WINDOWY = 490;//this.getParent().getHeight();
     Timer timer;
     private final int REFRESH_RATE = 20;
 

@@ -14,6 +14,7 @@ import transportation.interfaces.Passenger;
 import transportation.interfaces.Vehicle;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -36,7 +37,7 @@ public class PassengerRole extends Role implements Passenger {
 	
 	//TODO update DD
 	//Stores what the Passenger is doing.
-	PassengerStateEnum state;
+	PassengerStateEnum state = PassengerStateEnum.Initial;
 	enum PassengerStateEnum {
 		Initial,
 		DecisionTime,
@@ -53,6 +54,12 @@ public class PassengerRole extends Role implements Passenger {
 	//TODO implement passing down from person
 	boolean hasCar = false;
 	boolean useBus = true;
+	
+	public PassengerRole(Person person, CityLocation location,
+			PassengerGui gui) {
+		super((PersonAgent)person, location);
+		currentLocation = location;
+	}
 
 	//TODO add input for if has car, if want bus, etc
 	@Override

@@ -1,9 +1,12 @@
 package market;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.gui.Gui;
@@ -12,10 +15,13 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import agent.Agent;
+import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
+import agent.TimeManager;
+import agent.WorkRole;
 
-public class ItemCollectorRole extends Role implements ItemCollector{
+public class ItemCollectorRole extends WorkRole implements ItemCollector{
 
 	private ItemCollectorGui itemcollectorGui = null;
 	private String name;
@@ -25,6 +31,10 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 
 	private Semaphore atStation = new Semaphore (0,true);
 	private Semaphore atHome = new Semaphore (0,true);
+	private Semaphore atExit = new Semaphore (0,true);
+	
+	public enum ItemCollectorstate {GoingToWork, Idle, OffWork, GettingItem};
+	ItemCollectorstate state = ItemCollectorstate.GoingToWork;
 	
 	private class Order {
 		public Customer c;
@@ -34,20 +44,40 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	public ItemCollectorRole(String na, PersonAgent person){
 		super(person);
 		name = na;
+		Timer timer = person.getTimer();
+		
+		TimerTask task = new TimerTask(){
+			public void run() {
+				msgOffWork();
+			
+			}
+		};
+		
+		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(18, 0));
+		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+				
+		timer.schedule(task, firstTime, period);
 	}
 	
 	
 	//Messages	
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
+		print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
 		Orders.add(o);
+		state = ItemCollectorstate.Idle;
 		stateChanged();
 	}
 
 	public int msgHowManyOrdersYouHave(){
 		return Orders.size();
+	}
+	
+	public void msgOffWork(){
+		state = ItemCollectorstate.OffWork;
+		stateChanged();
 	}
 	
 	//Animations
@@ -56,13 +86,25 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	}
 	
 	public void Ready(){
+		state = ItemCollectorstate.Idle;
 		atHome.release();
 	}
 	
+	public void AtExit(){
+		atExit.release();
+	}
+	
+	
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
+		if (state == ItemCollectorstate.Idle)
 		if(Orders.size()!=0){
 			GoGetItems(Orders.get(0));
+			return true;
+		}
+		
+		if (state == ItemCollectorstate.OffWork && Orders.size()==0){
+			OffWork();
 			return true;
 		}
 		return false;
@@ -70,8 +112,8 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	
 	//Actions
 	private void GoGetItems(Order o){
+		print("Going to get items");
 		itemcollectorGui.CollectItems();
-		print ("Collecting Items");
 		try {
 			atStation.acquire();
 		} catch (InterruptedException e) {
@@ -113,6 +155,18 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 		
 		return;
 	}
+	
+	private void OffWork(){
+		itemcollectorGui.OffWork();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.deactivate();
+	}
+	
 
 	//Utilities
 	public void setInventoryList(Map<String,Item> IList){
@@ -134,5 +188,27 @@ public class ItemCollectorRole extends Role implements ItemCollector{
 	
 	public void setCashier(Cashier ca){
 		cashier = ca;
+	}
+	//Shifts
+	public int getShiftStartHour(){
+		return 8;
+	}
+	public int getShiftStartMinute(){
+		return 29;
+	}
+	public int getShiftEndHour(){
+		return 18;
+	}
+	public int getShiftEndMinute(){
+		return 0;
+	}
+	public boolean isAtWork(){
+		if (this.isActive())
+			return true;
+		else
+			return false;
+	}
+	public boolean isOnBreak(){
+		return false;
 	}
 }

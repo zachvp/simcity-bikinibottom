@@ -1,7 +1,5 @@
 package agent;
 
-import java.io.*;
-import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -10,12 +8,10 @@ import java.util.concurrent.*;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
-     
-    private boolean paused = false;
-    Semaphore pausedsem = new Semaphore(0);
     
-    protected Agent() {
-    }
+    private boolean pause = false;
+    
+    protected Agent() {}
 
     /**
      * This should be called whenever state has changed that might cause
@@ -23,6 +19,11 @@ public abstract class Agent {
      */
     protected void stateChanged() {
         stateChange.release();
+    }
+    
+    /** The number of permits the stateChange semaphore has. */
+    public int getStateChangePermits() {
+    	return stateChange.availablePermits();
     }
 
     /**
@@ -39,7 +40,7 @@ public abstract class Agent {
      * Return agent name for messages.  Default is to return java instance
      * name.
      */
-    protected String getName() {
+    public String getName() {
         return StringUtil.shortName(this);
     }
 
@@ -95,10 +96,27 @@ public abstract class Agent {
             agentThread = null;
         }
     }
-
+    
+    /**
+     * Temporarily pause agent scheduler thread.
+     */
+    public void pauseThread() {
+    	pause = true;
+    }
+    
+    /**
+     * Resume a previously paused agent scheduler thread.
+     * 
+     * @pre must have previously called pauseThread()
+     */
+    public void resumeThread() {
+    	pause = false;
+    	stateChanged();
+    }
+    
     /**
      * Agent scheduler thread, calls respondToStateChange() whenever a state
-     * change has been signalled.
+     * change has been signaled.
      */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
@@ -115,16 +133,14 @@ public abstract class Agent {
                 try {
                     // The agent sleeps here until someone calls, stateChanged(),
                     // which causes a call to stateChange.give(), which wakes up agent.
-                	if (paused){
-                		pausedsem.acquire();
-                	}
                     stateChange.acquire();
                     
                     //The next while clause is the key to the control flow.
                     //When the agent wakes up it will call respondToStateChange()
                     //repeatedly until it returns FALSE.
                     //You will see that pickAndExecuteAnAction() is the agent scheduler.
-                    while (pickAndExecuteAnAction()) ;
+                    while (!pause && pickAndExecuteAnAction());
+                    
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
                 } catch (Exception e) {
@@ -137,14 +153,6 @@ public abstract class Agent {
             goOn = false;
             this.interrupt();
         }
-    }
-    public void pause(){
-    	paused = true;
-    }
-    
-    public void restart(){
-    	paused = false;
-    	pausedsem.release();
     }
 }
 

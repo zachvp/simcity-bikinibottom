@@ -27,12 +27,16 @@ in this Software without prior written authorization from Stanford University.
 */
 package agent;
 
-import java.util.*;
-
 /**
  * Constants of general use
  */
 public interface Constants {
+	/**
+	 * True only for development versions of this program.
+	 */
+	// TODO disable before final release
+	public static final boolean DEBUG = true;
+	
     /**
      * The number of milliseconds in a second
      */
@@ -63,5 +67,36 @@ public interface Constants {
      * The default encoding used when none is detected
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
+    
+    /**
+     * Dimensions of a building on a map
+     */
+    public static final int BUILDING_WIDTH = 90;
+	public static final int BUILDING_HEIGHT = 90;
+	
+	/**
+	 * Dimensions of the City Map
+	 */
+	public static final int MAP_WIDTH = 900;
+	public static final int MAP_HEIGHT = 700;
+	
+	/**
+	 * Margins of the City Map
+	 */
+	public static final int MAP_MARGIN_Y = 10;
+	public static final int MAP_MARGIN_X = 10;
+	/**
+	 * Maximum number of Columns in the Map
+	 */
+	public static final int MAX_BLOCK_COL = 6;
+
+	/** Space between 2 building on the city map, a.k.a. 
+	 *  the width of the road and sidewalks.
+	 */
+	public static final int SPACE_BETWEEN_BUILDINGS = 60;
+
+	public static final int BUSSTOP_OFFESET_PERPENDICULAR = (SPACE_BETWEEN_BUILDINGS/2);
+
+	public static final int BUSSTOP_OFFESET_PARALLEL = (SPACE_BETWEEN_BUILDINGS/2);
 
 }

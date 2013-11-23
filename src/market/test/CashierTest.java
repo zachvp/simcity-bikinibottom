@@ -3,6 +3,7 @@ package market.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import agent.PersonAgent;
 import junit.framework.TestCase;
 import market.CashierRole;
 import market.Item;
@@ -24,7 +25,12 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+<<<<<<< HEAD
 		Cashier = new CashierRole("John", 100);		
+=======
+		PersonAgent cashier = new PersonAgent ("John");
+		Cashier = new CashierRole("John", 100, cashier);		
+>>>>>>> master
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");
 		ItemCollector1 = new MockItemCollector("ItemCollector1");

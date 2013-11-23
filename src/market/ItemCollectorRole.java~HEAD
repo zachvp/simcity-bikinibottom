@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import market.gui.Gui;
 import market.gui.ItemCollectorGui;
@@ -11,21 +12,27 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import agent.Agent;
+import agent.PersonAgent;
+import agent.Role;
 
-public class ItemCollectorAgent extends Agent implements ItemCollector{
+public class ItemCollectorRole extends Role implements ItemCollector{
 
 	private ItemCollectorGui itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;
 	private Map<String,Item> InventoryList = null;
 	private List<Order> Orders = new ArrayList<Order>();
+
+	private Semaphore atStation = new Semaphore (0,true);
+	private Semaphore atHome = new Semaphore (0,true);
 	
 	private class Order {
 		public Customer c;
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	public ItemCollectorAgent(String na){
+	public ItemCollectorRole(String na, PersonAgent person){
+		super(person);
 		name = na;
 	}
 	
@@ -42,6 +49,16 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 	public int msgHowManyOrdersYouHave(){
 		return Orders.size();
 	}
+	
+	//Animations
+	public void AtCollectStation(){
+		atStation.release();
+	}
+	
+	public void Ready(){
+		atHome.release();
+	}
+	
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
 		if(Orders.size()!=0){
@@ -53,6 +70,14 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 	
 	//Actions
 	private void GoGetItems(Order o){
+		itemcollectorGui.CollectItems();
+		print ("Collecting Items");
+		try {
+			atStation.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (int i=0;i<Orders.size();i++){
 			if (o == Orders.get(i)){
 				Orders.remove(i);
@@ -76,7 +101,16 @@ public class ItemCollectorAgent extends Agent implements ItemCollector{
 				MissingList.add(Missingitem);
 			}
 		}
+		itemcollectorGui.BackReadyStation();
+		try {
+			atHome.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		cashier.msgHereAreItems(DeliverList, MissingList, o.c);
+		
 		return;
 	}
 

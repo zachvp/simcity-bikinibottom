@@ -22,6 +22,9 @@ public class DeliveryGuyGui implements Gui {
     private static final int HomePosX = 10;
     private static final int HomePosY = 10;
     
+    private enum Command {noCommand, GoHome, GoDeliver, GoToExit};
+	private Command command=Command.noCommand;
+    
     public DeliveryGuyGui(DeliveryGuy dg) {
         this.agent = dg;
     }
@@ -37,6 +40,7 @@ public class DeliveryGuyGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
         
+<<<<<<< HEAD
         if (xPos == HomePosX && yPos == HomePosY){
         	agent.Ready();
         }
@@ -44,17 +48,36 @@ public class DeliveryGuyGui implements Gui {
         if (xPos == ExitX && yPos == ExitY){
         	agent.AtExit();
         }
+=======
+        if (xPos == xDestination && yPos == yDestination){
+        	if (command==Command.GoHome) 
+				agent.Ready();
+			else if (command==Command.GoDeliver || command==Command.GoToExit) {
+				agent.AtExit();
+			}
+        	command=Command.noCommand;
+        }
+        
+>>>>>>> master
 
 
     }
     public void BackReadyStation(){
     	xDestination = HomePosX;
     	yDestination = HomePosY;
+    	command = command.GoHome;
     }
     
     public void GoDeliver(){
     	xDestination = ExitX;
     	yDestination = ExitY;
+    	command = command.GoDeliver;
+    }
+    
+    public void OffWork(){
+    	xDestination = ExitX;
+    	yDestination = ExitY;
+    	command = command.GoToExit;
     }
 
     public void draw(Graphics2D g) {

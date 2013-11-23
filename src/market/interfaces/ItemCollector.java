@@ -12,6 +12,8 @@ public interface ItemCollector {
 		
 		public abstract int msgHowManyOrdersYouHave();
 		
+		public abstract void msgOffWork();
+		
 	//Utilities
 		public abstract String getMaitreDName();
 		public abstract String getName();
@@ -22,4 +24,8 @@ public interface ItemCollector {
 	//Animations
 		public abstract void AtCollectStation();
 		public abstract void Ready();
+<<<<<<< HEAD
+=======
+		public abstract void AtExit();
+>>>>>>> master
 }

@@ -17,6 +17,8 @@ public interface Cashier {
 	public abstract void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c);
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
+	
+	public abstract void msgOffWork();
 
 	//Utilities
 	public abstract void setDGList(List<DeliveryGuy> list);
@@ -29,6 +31,10 @@ public interface Cashier {
 	//Animations
 	public abstract void AtFrontDesk();
 	public abstract void AtBench();
+<<<<<<< HEAD
+=======
+	public abstract void AtExit();
+>>>>>>> master
 	
 	
 	

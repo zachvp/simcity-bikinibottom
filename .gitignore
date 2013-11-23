@@ -5,3 +5,10 @@
 *.war
 *.ear
 /bin
+<<<<<<< HEAD
+
+# Eclipse Files #
+.classpath
+.project
+=======
+>>>>>>> market

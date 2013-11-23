@@ -14,15 +14,19 @@ public class CustomerGui implements Gui{
 	private boolean isPresent = false;
 	private boolean isBuying = false;
 	
-	public static final int OffScreenX = 340;
+	public static final int OffScreenX = 180;
 	public static final int OffScreenY = 50;
-	public static final int CustomerWidth = 20;
-	public static final int CustomerHeight = 20;
+	public static final int CustomerWidth = 15;
+	public static final int CustomerHeight = 15;
 	
+<<<<<<< HEAD
 	public static final int xFrontDesk =170;
     public static final int yFrontDesk =210;
+=======
+	public static final int xFrontDesk =180;
+    public static final int yFrontDesk =200;
+>>>>>>> master
 
-	//private HostAgent host;
 	MarketGui gui;
 
 	private int xPos, yPos;
@@ -33,14 +37,14 @@ public class CustomerGui implements Gui{
 	public static final int xTable = 50;
 	public static final int yTable = 50;
 
-	public CustomerGui(Customer c, MarketGui gui){ //HostAgent m) {
+	public CustomerGui(Customer c){ //HostAgent m) {
 		agent = c;
 		xPos = OffScreenX;
 		yPos = OffScreenY;
 		xDestination = OffScreenX;
 		yDestination = OffScreenY;
 		//maitreD = m;
-		this.gui = gui;
+		//this.gui = gui;
 	}
 
 	public void updatePosition() {
@@ -70,7 +74,7 @@ public class CustomerGui implements Gui{
 	}
  
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
+		g.setColor(Color.YELLOW);
 		g.fillRect(xPos, yPos, CustomerWidth, CustomerHeight);
 
 	}
@@ -82,7 +86,10 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void setBuying() {
+<<<<<<< HEAD
 		System.out.print("SetBuying?");
+=======
+>>>>>>> master
 		isBuying = true;
 		agent.goingToBuy();
 		setPresent(true);

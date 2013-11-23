@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import market.gui.CustomerGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import agent.Agent;
+import agent.PersonAgent;
+import agent.Role;
 
-public class CustomerAgent extends Agent implements Customer{
+public class CustomerRole extends Role implements Customer{
 	String name;
 	private CustomerGui customerGui = null;
 	private List<Item> tempInventoryList = new ArrayList<Item>();
@@ -44,16 +47,26 @@ public class CustomerAgent extends Agent implements Customer{
 		PriceList.put("ExpensiveCar", ExpensiveCar);
 		PriceList.put("CheapCar", CheapCar);	
 	}
-	public enum Customerstate {Idle, GoingToOrder, Waiting, Paid};
-	public enum Customerevent {Nothing, WaitingInLine, Paying, Leaving, doneLeaving};
 	
-	CustomerAgent(String NA, double money, List<Item>SL){
+	private Semaphore atFrontDesk = new Semaphore (0,true);
+	private Semaphore atExit = new Semaphore (0,true);
+	public enum Customerstate {Idle, GoingToOrder, Waiting, Paid, EnteringMarket, NotAtMarket};
+	public enum Customerevent {Nothing, WaitingInLine, Paying, Leaving, doneLeaving, GoingToLine};
+	
+	public CustomerRole(String NA, double money, List<Item>SL, PersonAgent person){
+		super(person);
 		cash = money;
 		name = NA;
 		ShoppingList = SL;
 	}
 	
 	//Message
+	public void goingToBuy(){
+		state = Customerstate.EnteringMarket;
+		event = Customerevent.GoingToLine;
+		stateChanged();
+	}
+	
 	public void msgHereisYourTotal(double cost, List<Item> MissingItems){	
 		/*
 		 *   ** NOW GOING TO BUY ANYWAY **
@@ -87,15 +100,26 @@ public class CustomerAgent extends Agent implements Customer{
 		stateChanged();
 	}
 	
-	public void msgAtMarket() {
+	public void msgAnimationFinishedGoToCashier(){
 		state = Customerstate.GoingToOrder;
 		event = Customerevent.WaitingInLine;
 		stateChanged();
 	}
 
+	public void msgAnimationFinishedLeaveMarket(){
+		atExit.release();
+		state = Customerstate.NotAtMarket;
+		event = Customerevent.doneLeaving;
+	}
 	
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
+		
+		if (state == Customerstate.GoingToOrder && event == Customerevent.WaitingInLine) 
+		{
+			GoToFindCashier();
+			return true;
+		}
 		if (state == Customerstate.GoingToOrder && event == Customerevent.WaitingInLine) 
 		{
 			OrderItems(ShoppingList);
@@ -116,7 +140,18 @@ public class CustomerAgent extends Agent implements Customer{
 	}
 	
 	//Action
+	private void GoToFindCashier(){
+		customerGui.DoGoToFrontDesk();
+		try {
+			atFrontDesk.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private void OrderItems(List<Item> ShoppingList){
+		
 		cashier.msgIWantItem(ShoppingList, this);
 		ExpectedCost = 0;
 		for (int i=0;i<ShoppingList.size();i++){
@@ -143,12 +178,13 @@ public class CustomerAgent extends Agent implements Customer{
 	}
 	
 	private void Leaving() {
-		/*
-		if (InMarket)
-			//Animation to leave the market
-		Event = doneLeaving;
-		return;
-		*/
+		customerGui.DoExitMarket();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Utilities
@@ -173,7 +209,8 @@ public class CustomerAgent extends Agent implements Customer{
 	public void setShoppingList(List<Item> SL) {
 		ShoppingList = SL;
 	}
-	
+
+
 
 	
 }

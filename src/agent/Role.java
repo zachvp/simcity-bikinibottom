@@ -203,8 +203,8 @@ public abstract class Role {
 	public void scheduleDailyTask(Runnable command, int hour, int minute) {
 		long initialDelay =
 				TimeManager.getInstance().nextSuchTime(hour, minute);
-		long delay = 1;
-		TimeUnit unit = TimeUnit.DAYS;
+		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+		TimeUnit unit = TimeUnit.MILLISECONDS;
 		executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
 	}
 	

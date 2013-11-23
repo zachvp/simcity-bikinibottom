@@ -25,6 +25,11 @@ public interface Cashier {
 	public abstract void addICList(ItemCollector IC, Map<String,Item> IList);
 	public abstract String getMaitreDName();
 	public abstract String getName();
+
+	//Animations
+	public abstract void AtFrontDesk();
+	public abstract void AtBench();
+	
 	
 	
 }

@@ -10,6 +10,7 @@ import transportation.interfaces.Passenger;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
+import agent.Constants;
 
 public class BusstopAgent extends Agent implements Busstop {
 	
@@ -22,10 +23,18 @@ public class BusstopAgent extends Agent implements Busstop {
 	//Direction the bus is going when it reaches this stop.
 	DirectionEnum direction;
 	
+	//Direction in route
+	boolean directionInRoute;
+	
 	//Bus currently in the Busstop.
 	Bus currentBus = null;
 	
-	XYPos pos; //TODO add to DD
+	public BusstopAgent(Corner corner, DirectionEnum direction,
+			boolean directionInRoute) {
+		this.corner = corner;
+		this.direction = direction;
+		this.directionInRoute = directionInRoute;
+	}
 
 	@Override
 	public LocationTypeEnum type() {
@@ -34,7 +43,32 @@ public class BusstopAgent extends Agent implements Busstop {
 
 	@Override
 	public XYPos position() {
-		return pos;
+		int x = corner.position().x;
+		int y = corner.position().y;
+		
+		switch (direction) {
+		case North:
+			x += Constants.BUSSTOP_OFFESET_PERPENDICULAR;
+			y += Constants.BUSSTOP_OFFESET_PARALLEL;
+			break;
+		case South:
+			x -= Constants.BUSSTOP_OFFESET_PERPENDICULAR;
+			y -= Constants.BUSSTOP_OFFESET_PARALLEL;
+			break;
+		case East:
+			x -= Constants.BUSSTOP_OFFESET_PARALLEL;
+			y += Constants.BUSSTOP_OFFESET_PERPENDICULAR;
+			break;
+		case West:
+			x += Constants.BUSSTOP_OFFESET_PARALLEL;
+			y -= Constants.BUSSTOP_OFFESET_PERPENDICULAR;
+			break;
+			
+		default:
+			break;
+		}
+		
+		return new XYPos(x,y);
 	}
 
 	@Override
@@ -62,6 +96,11 @@ public class BusstopAgent extends Agent implements Busstop {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Corner corner() {
+		return corner;
 	}
 
 }

@@ -29,6 +29,8 @@ public class InfoList extends JPanel implements ActionListener {
 	private Dimension d;
 	private BuildingView buildingView;
 	private boolean isBuildingList = false;
+	CitizenRecords citizenRecords;
+	private ArrayList<Building>buildingList;
 	
 
 	public InfoList(int w, int h){
@@ -48,7 +50,7 @@ public class InfoList extends JPanel implements ActionListener {
 	public void addToList(String name) {
 		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
-			System.out.println("adding "+name+" to list");
+			//System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
 			button.setBackground(Color.white);
 			Dimension buttonSize = new Dimension(d.width - 19, (int) (d.height / 5));
@@ -58,10 +60,36 @@ public class InfoList extends JPanel implements ActionListener {
 			button.addActionListener(this);
 			list.add(button);
 			view.add(button);
-			//TODO create person
 		}
 		validate();		
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (isBuildingList){
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println("button press " + b.getText());
+					
+					for(Building a: buildingList){
+						if(a.getName() == b.getText()){
+							infoPanel.updateBuildingInfoPanel(a);	
+						}
+					}
+					buildingView.showCard(b.getText());									
+				}
+			}
+		}
+		else{//it is a PersonAgent
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println(b.getText());
+					citizenRecords.showInfo(b.getText());
+				}
+			}
+		}
+	}
+	
+	/** Utilities **/
 	
 	/**
 	 * Sets reference to BuildingView Panel
@@ -86,31 +114,21 @@ public class InfoList extends JPanel implements ActionListener {
 	public List<JButton> getBuildingButtonList(){
 		return list;
 	}
+	
+	/**
+	 * Sets Reference to the CitizenRecords
+	 * @param r CitizenRecords
+	 */
+	public void setCitizenRecords(CitizenRecords r) {
+		citizenRecords = r;
+	}
 
-	public void actionPerformed(ActionEvent e) {
-		if (isBuildingList){
-			for (JButton b: list){
-				if(e.getSource() == b){
-					System.out.println("button press " + b.getText());
-
-					buildingView.showCard(b.getText());
-					infoPanel.updateBuildingInfoPanel(b.getText());
-					//TODO showInfo from building's panel ie RestaurantPanel where
-					//		PersonAgents are instanciated
-				}
-			}
-		}
-		else{//it is a PersonAgent
-			for (JButton b: list){
-				if(e.getSource() == b){
-					System.out.println(b.getText());
-					infoPanel.updatePersonInfoPanel(b.getText());
-				}
-			}
-
-
-		}
-
+	/**
+	 * Sets Reference to the list of Buildings in the City
+	 * @param buildings An ArrayList of Buildings
+	 */
+	public void setBuildingList(ArrayList<Building> buildings) {
+		buildingList = buildings;
 	}
 
 	

@@ -2,6 +2,7 @@ package kelp;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityBuilding;
@@ -17,29 +18,40 @@ public class KelpClass implements Kelp {
 	private static final double BUS_SPEED = 80; 
 	private static final double WALKING_SPEED = 30;
 	private static final int DISTANCE_THRESHOLD_FOR_SAME_COORDINATE = 8;
-	List<CityLocation> locations;
 	
+	List<CityLocation> locations;
 	List<Corner> busRoute;
 	
 	static KelpClass instance = null;
 	
-	static KelpClass getKelpInstance() throws Exception {
+	static public KelpClass getKelpInstance() {
 		if (instance != null) return instance;
-		else throw new Exception("Tried to grab a Kelp instance "
-				+ "without it having been instantiated.");
+		else {
+			try {
+				instance = new KelpClass();
+			} catch (Exception e) {
+				System.out.println("This exception should be impossible.");
+				e.printStackTrace();
+			}
+			return instance;
+		}
 	}
 	
-	public KelpClass(List<CityLocation> locations, 
+	private KelpClass() throws Exception {
+		if (instance != null) 
+			throw new Exception("Tried to create a second instance of "
+					+ "Kelp, Kelp is a singleton. You should be using "
+					+ "getKelpInstance() to get a pointer to Kelp.");
+		else {
+			instance = this;
+		}
+	}
+	
+	public void setData (List<CityLocation> locations, 
 			List<Corner> busRoute) throws Exception {
 		
-		if (instance == null) {
-			this.locations = new ArrayList<CityLocation> (locations);
-			this.busRoute = new ArrayList<Corner> (busRoute);
-			instance = this;
-		} else {
-			throw new Exception("Tried to create a second instance of Kelp, "
-					+ "Kelp is a singleton.");
-		}
+		this.locations = new ArrayList<CityLocation> (locations);
+		this.busRoute = new ArrayList<Corner> (busRoute);
 	}
 
 	@Override
@@ -87,8 +99,15 @@ public class KelpClass implements Kelp {
 		List<CityLocation> pathWithoutBus = routeWithoutBus(posA,posB);
 		
 		if (tryBus) {
-			List<CityLocation> pathWithBus = routeWithBus(posA,posB);
-			response = returnFastestPath(pathWithBus,pathWithoutBus, posA);
+			try {
+				List<CityLocation> pathWithBus = routeWithBus(posA,posB);
+				response = returnFastestPath(pathWithBus,pathWithoutBus, posA);
+			} catch (Exception e){
+				e.printStackTrace();
+				System.out.println("Exception when routing with bus, "
+						+ "will walk instead.");
+				response = pathWithoutBus;
+			}
 		} else {
 			response = pathWithoutBus;
 		}
@@ -145,7 +164,7 @@ public class KelpClass implements Kelp {
 		return time;
 	}
 
-	private List<CityLocation> routeWithBus(XYPos posA, XYPos posB) {
+	private List<CityLocation> routeWithBus(XYPos posA, XYPos posB) throws Exception {
 		List<CityLocation> nearBusstops = placesNearMe(posA, 
 				LocationTypeEnum.Busstop);
 		Busstop nearestBusstop = 
@@ -235,15 +254,17 @@ public class KelpClass implements Kelp {
 			horizontalDir = DirectionEnum.East;
 		} else horizontalDir = DirectionEnum.West;
 		if (endCorner.position().y > startCorner.position().y) {
-			verticalDir = DirectionEnum.North;
-		} else verticalDir = DirectionEnum.South;
+			verticalDir = DirectionEnum.South;
+		} else verticalDir = DirectionEnum.North;
 		
 		//Building path
 		List<CityLocation> path = new ArrayList<CityLocation>();
 		path.add(startCorner);
 		Corner currentCorner = startCorner;
+		
+		try {
 		while (Math.abs(currentCorner.position().x - 
-				currentCorner.getCornerForDir(horizontalDir).position().x)
+				endCorner.position().x)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
 			currentCorner = currentCorner.getCornerForDir(horizontalDir);
 			path.add(currentCorner);
@@ -251,10 +272,16 @@ public class KelpClass implements Kelp {
 		
 		
 		while (Math.abs(currentCorner.position().y - 
-				currentCorner.getCornerForDir(verticalDir).position().y)
+				endCorner.position().y)
 				> DISTANCE_THRESHOLD_FOR_SAME_COORDINATE) {
 			currentCorner = currentCorner.getCornerForDir(verticalDir);
 			path.add(currentCorner);
+		}
+		} catch (Exception x) {
+			x.printStackTrace();
+			System.out.println("Exception will cause an empty path "
+					+ "to be returned now, a passenger might get lost.");
+			return new ArrayList<CityLocation>();
 		}
 		
 		
@@ -282,6 +309,9 @@ public class KelpClass implements Kelp {
 	}
 
 	private int distanceHeuristic(XYPos A, XYPos B) {
+		if (A == null || B == null) {
+			throw new NullPointerException();
+		}
 		return Math.abs(A.x - B.x) + Math.abs(A.y - B.y);
 	}
 	
@@ -299,6 +329,11 @@ public class KelpClass implements Kelp {
 		
 		return response;
 		
+	}
+
+	@Override
+	public List<Corner> busRoute() {
+		return new ArrayList<Corner>(busRoute);
 	}
 
 }

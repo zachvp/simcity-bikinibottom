@@ -21,4 +21,9 @@ public class MockResident extends Mock implements Resident {
 		log.add("Received message 'payment due' amount is " + amount);
 	}
 
+	@Override
+	public void msgAtDest() {
+		log.add("Released mvement semaphore");
+	}
+
 }

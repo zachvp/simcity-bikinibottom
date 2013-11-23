@@ -12,6 +12,6 @@ public interface Bus extends Vehicle, BusstopRequester {
 	public void msgPayingFare(double fare);
 	
 	//Message from Passenger when exiting the bus.
-	public void msgExiting();
+	public void msgExiting(Passenger p);
 	
 }

@@ -59,7 +59,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	 * @param name The name to reference the JPanel with (ie. name of the building) 
 	 */
 	public void showCard(String name) {
-		System.out.println("showing card " + name);
+		//System.out.println("showing card " + name);
 		CardLayout cl = (CardLayout)(this.getLayout());
 		cl.show(this, name);
 	}

@@ -1,16 +1,20 @@
 package market.gui;
 
-import market.CashierAgent;
-import market.CustomerAgent;
+import market.CashierRole;
+import market.CustomerRole;
 import market.Item;
-import market.ItemCollectorAgent;
-import market.DeliveryGuyAgent;
+import market.ItemCollectorRole;
+import market.DeliveryGuyRole;
 import market.interfaces.*;
 
 import javax.swing.*;
 
+import agent.PersonAgent;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -22,6 +26,7 @@ public class MarketPanel extends JPanel {
 
     private static final CityBuilding CityBuilding = null;
 
+    private JLabel MarketLabel;
     //Market Label
 	private JLabel ExpensiveCarInvent = null;
 	private JLabel CheapCarInvent = null;
@@ -35,9 +40,9 @@ public class MarketPanel extends JPanel {
 	public JTextField PizzaText = null;
 	public JTextField SandwichText = null;
 	
-    
-    private CashierAgent ca = new CashierAgent("Cashier", 100);
-    private CashierGui cashierGui = new CashierGui(ca);
+    private PersonAgent CashierPerson = new PersonAgent("Cashier");
+    private CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
+    private CashierGui cashierGui = new CashierGui(ca, this);
     
     private String ExpensiveCarInventoryLevel = "Current Inventory Level";
     private String CheapCarInventoryLevel = "Current Inventory Level";
@@ -45,15 +50,31 @@ public class MarketPanel extends JPanel {
     private String SandwichInventoryLevel = "Current Inventory Level";
     private String ChickenInventoryLevel = "Current Inventory Level";
     
-    private Vector<ItemCollectorAgent> ItemCollectors = new Vector<ItemCollectorAgent>();
-    private Vector<DeliveryGuyAgent> DeliveryGuys = new Vector<DeliveryGuyAgent>();
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
+    private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
+    private List<Customer> customers = new Vector<Customer>();
     
-    private ItemCollectorAgent ic = new ItemCollectorAgent("ItemCollector1");
-    private ItemCollectorGui icGui = new ItemCollectorGui(ic);
-    private DeliveryGuyAgent dg = new DeliveryGuyAgent("DeliveryGuy1", CityBuilding );
+    private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
+    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+    private ItemCollectorGui icGui = new ItemCollectorGui(ic, this);
+   
+    private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
+    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", CityBuilding , DeliveryGuyPerson);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
     
+    List<Item> tempInventoryList = new ArrayList<Item>();
+	{
+		tempInventoryList.add(new Item("CheapCar", 1));
+		tempInventoryList.add(new Item("ExpensiveCar", 0));
+		tempInventoryList.add(new Item("Pizza", 1));
+		tempInventoryList.add(new Item("Sandwich", 0));
+		tempInventoryList.add(new Item("Chicken", 0));
+	}
+    
+    private PersonAgent CustomerPerson = new PersonAgent("Customer1");
+    private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
+    private CustomerGui custGui = new CustomerGui(cust);
+
 
     //private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
     //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
@@ -74,11 +95,26 @@ public class MarketPanel extends JPanel {
 
     public MarketPanel(MarketGui gui) {
         this.gui = gui;
-        ca.setGui(cashierGui);
+        
+            ic.setGui(icGui);
+            dg.setGui(dgGui);
+            ca.setGui(cashierGui);
+            cust.setGui(custGui);
+
         
         ItemCollectors.add(ic);
         DeliveryGuys.add(dg);
+        customers.add(cust);
         
+        ca.setICList(ItemCollectors);
+        ca.setDGList(DeliveryGuys);
+        ic.setCashier(ca);
+        dg.setCashier(ca);
+        cust.setCashier(ca);
+        ic.setInventoryList(ca.getInventoryList());
+        
+        //Customer Gui
+        gui.animationPanel.addGui(custGui);
 
         //ItemCollector Gui
         gui.animationPanel.addGui(icGui);
@@ -89,10 +125,24 @@ public class MarketPanel extends JPanel {
         //DeliveryGuy Gui
         gui.animationPanel.addGui(dgGui);
         
+        CashierPerson.startThread();
+        CashierPerson.addRole(ca);
+        ca.activate();
+        
+        DeliveryGuyPerson.startThread();
+        DeliveryGuyPerson.addRole(dg);
+        dg.activate();
+        
+        ItemCollectorPerson.startThread();
+        ItemCollectorPerson.addRole(ic);
+        ic.activate();
+        
         //Start the thread
+        /*
         ca.startThread();
         ic.startThread();
         dg.startThread();
+		*/
 
         setLayout(new GridLayout(1, 2, 20, 20));
         group.setLayout(new GridLayout(2, 2, 10, 10));
@@ -101,7 +151,14 @@ public class MarketPanel extends JPanel {
         initMarketLabel();
         add(marketLabel);
 
-      
+        
+        CustomerPerson.startThread();
+        CustomerPerson.addRole(cust);
+        cust.activate();
+        custGui.setBuying();
+        
+        //ca.msgIWantItem(tempInventoryList, cust);
+        //ca.msgPhoneOrder(tempInventoryList, cust, null);
       
     }
 
@@ -113,12 +170,13 @@ public class MarketPanel extends JPanel {
     	
     	
     	//Creating the header of the UI
+    	double cash = ca.getCash();
     	JPanel NorthPanel = new JPanel();
     	NorthPanel.setLayout(new FlowLayout());
-    	JLabel label = new JLabel();
-    	label.setText("Today's Staff :    " + ca.getName());
+    	MarketLabel = new JLabel();
+    	MarketLabel.setText("Today's Staff :    " + ca.getName() + "                     " + "Market's Current Cash :   " + cash);
     	NorthPanel.add(new JLabel("               "));
-    	NorthPanel.add(label);
+    	NorthPanel.add(MarketLabel);
     	NorthPanel.add(new JLabel("               "));
     	
     	//Creating the UI
@@ -213,7 +271,7 @@ public class MarketPanel extends JPanel {
     	marketLabel.add(NorthPanel, BorderLayout.NORTH);
     	marketLabel.add(panel, BorderLayout.CENTER);
     	
-    	UpdateInventoryLevel();
+    	UpdateInventoryLevelWithoutButton();
     	
     	/*
         JLabel label = new JLabel();
@@ -228,7 +286,7 @@ public class MarketPanel extends JPanel {
         */
     }
 
-	 public void UpdateInventoryLevel(){
+	 public void UpdateInventoryLevelWithButton(){
 		 Map<String,Item> IList = ca.getInventoryList();
 		 
 		 if(  isInteger(ExpensiveCarText.getText())  )
@@ -259,6 +317,26 @@ public class MarketPanel extends JPanel {
 	    	PizzaText.setText("");
 	    	ChickenText.setText("");
 	    	SandwichText.setText("");
+	    	
+	    	MarketLabel.setText("Today's Staff :    " + ca.getName() + "                     " + "Market's Current Cash :   " + ca.getCash());
+	    	
+	 }
+	 
+	 public void UpdateInventoryLevelWithoutButton(){
+		 Map<String,Item> IList = ca.getInventoryList();
+		 	ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar").amount);
+	    	CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar").amount);
+	    	PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza").amount);
+	    	SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich").amount);
+	    	ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken").amount);
+	    	ExpensiveCarInvent.setText("                    " + ExpensiveCarInventoryLevel);
+	    	CheapCarInvent.setText("                    " + CheapCarInventoryLevel);
+	    	ChickenInvent.setText("                    " + ChickenInventoryLevel);
+	    	PizzaInvent.setText("                    " + PizzaInventoryLevel);
+	    	SandwichInvent.setText("                    " + SandwichInventoryLevel);
+	    	
+	    	MarketLabel.setText("Today's Staff :    " + ca.getName() + "                     " + "Market's Current Cash :   " + ca.getCash());
+	    	System.out.println (ca.getCash());
 	    	
 	 }
 
@@ -323,11 +401,7 @@ public class MarketPanel extends JPanel {
     	
     }
     */
-    
-    public void GetHungry(ActionEvent e){
-    	System.out.print("Get Hungry, Restaurant Panel ");
-    	gui.actionPerformed(e);
-    } 
+
     
 
 }

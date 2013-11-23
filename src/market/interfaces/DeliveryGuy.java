@@ -15,4 +15,8 @@ public interface DeliveryGuy {
 		public abstract String getMaitreDName();
 		public abstract String getName();
 		public abstract void setCashier(Cashier ca);
+
+	//Animations
+		public abstract void Ready();
+		public abstract void AtExit();
 }

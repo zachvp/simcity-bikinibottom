@@ -1,6 +1,6 @@
 package market.gui;
 
-import market.CustomerAgent;
+import market.CustomerRole;
 import market.interfaces.Customer;
 
 import javax.swing.*;
@@ -123,12 +123,13 @@ public class MarketGui extends JFrame implements ActionListener {
 
         
         if (e.getSource() == UpdateButton) {
-        	marketPanel.UpdateInventoryLevel();
+        	marketPanel.UpdateInventoryLevelWithButton();
         }
         
         
     }
     
+
     /**
      * Message sent from a customer gui to enable that customer's
      * "I'm hungry" checkbox.

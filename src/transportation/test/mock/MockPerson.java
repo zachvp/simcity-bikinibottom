@@ -2,6 +2,8 @@ package transportation.test.mock;
 
 import java.util.Timer;
 
+import com.xuggle.mediatool.IMediaDebugListener.Event;
+
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -9,9 +11,12 @@ import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import agent.mock.EventLog;
 import agent.mock.Mock;
 
 public class MockPerson extends Mock implements Person{
+	
+	public EventLog log = new EventLog();
 
 	public MockPerson(String name) {
 		super(name);
@@ -20,7 +25,7 @@ public class MockPerson extends Mock implements Person{
 
 	@Override
 	public void msgArrivedAtDestination() {
-		// TODO Auto-generated method stub
+		log.add("Received msgArrivedAtDestination()");
 		
 	}
 

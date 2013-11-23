@@ -3,6 +3,7 @@ package transportation.test;
 import static org.junit.Assert.*;
 
 import java.io.BufferedInputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import parser.test.BuildingPosParserTest;
 import parser.test.mock.MockCityBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.PassengerRole;
+import transportation.PassengerRole.PassengerStateEnum;
 import transportation.RealPassengerRole;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Busstop;
@@ -36,12 +38,12 @@ import agent.Constants;
 
 public class PassengerRoleTest {
 	
-	PassengerRole passenger;
+	RealPassengerRole passenger;
 	MockPerson person;
 	static List<CityLocation> locations;
 	private static List<Corner> busRoute;
 	private static List<Corner> corners;
-	private PassengerGui mockGui;
+	private MockPassengerGui mockGui;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -107,7 +109,7 @@ public class PassengerRoleTest {
 		}
 
 		KelpClass.getKelpInstance().setData(locations, busRoute);
-
+		
 	}
 
 	@Before
@@ -122,13 +124,63 @@ public class PassengerRoleTest {
 
 	@Test
 	public void testOneWalk() {
+		assertTrue(!passenger.isActive());
+		
+		passenger.activate();
+		
+		assertTrue(passenger.isActive());
+		
 		assertEquals(locations.get(12), passenger.getLocation());
 		
-		passenger.msgGoToLocation(locations.get(21));
+		passenger.msgGoToLocation(locations.get(35));
+		
+		assertEquals(passenger.destination(), locations.get(35));
+		assertEquals(PassengerStateEnum.DecisionTime, passenger.state());
 		
 		passenger.pickAndExecuteAnAction();
 		
+		assertNotEquals(0, passenger.path().size());
 		
+		while(passenger.path().size() > 0) {
+
+			CityLocation nextLocation = passenger.path().get(0);
+			assertEquals(PassengerStateEnum.DecisionTime, passenger.state());
+
+			passenger.pickAndExecuteAnAction();
+
+			assertEquals("Walking to " + nextLocation,
+					mockGui.log.getLastLoggedEvent().getMessage());
+			assertEquals(PassengerStateEnum.Walking, passenger.state());
+
+			passenger.pickAndExecuteAnAction();
+
+			assertEquals("Walking to " + nextLocation,
+					mockGui.log.getLastLoggedEvent().getMessage());
+			assertEquals(PassengerStateEnum.Walking, passenger.state());
+
+			try {
+				passenger.msgWeHaveArrived(nextLocation);
+			} catch (Exception e) {
+				e.printStackTrace();
+				fail(e.toString());
+			}
+
+			assertEquals(nextLocation, passenger.getLocation());
+			assertEquals(PassengerStateEnum.DecisionTime, passenger.state());
+
+			passenger.pickAndExecuteAnAction();
+
+		}
+		
+		assertEquals(PassengerStateEnum.DecisionTime, passenger.state());
+
+		passenger.pickAndExecuteAnAction();
+		
+		assertEquals(PassengerStateEnum.Initial, passenger.state());
+		assertTrue(!passenger.isActive());
+		
+		assertEquals("Received msgArrivedAtDestination()",
+				person.log.getLastLoggedEvent().getMessage());
 	}
 
 }

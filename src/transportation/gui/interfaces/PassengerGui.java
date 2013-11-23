@@ -12,8 +12,6 @@ public interface PassengerGui extends Gui {
 
 	void doExitVehicle();
 
-	void doUpdateLoc(CityLocation loc);
-
 	void bringOutCar();
 
 }

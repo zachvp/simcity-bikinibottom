@@ -32,5 +32,10 @@ public class MockCityBuilding extends Mock implements CityBuilding {
 	public XYPos entrancePos() {
 		return entrancePos;
 	}
+	
+	public String toString() {
+		return "MockCityBuilding of type " + type + ", position " +
+				position + " and entrance position " + entrancePos;
+	}
 
 }

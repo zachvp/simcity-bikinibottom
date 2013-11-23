@@ -21,7 +21,11 @@ public class CarAgent extends VehicleAgent implements Car {
 
 	@Override
 	void endTravel() {
-		driver.msgWeHaveArrived(currentCorner);
+		try {
+			driver.msgWeHaveArrived(currentCorner);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		state = VehicleStateEnum.Initial;
 		event = VehicleEventEnum.None;
 	}

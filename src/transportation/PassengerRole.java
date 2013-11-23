@@ -14,7 +14,7 @@ public abstract class PassengerRole extends Role implements Passenger {
 		super();
 	}
 	
-	enum PassengerStateEnum {
+	public enum PassengerStateEnum {
 		Initial,
 		DecisionTime,
 		Walking,

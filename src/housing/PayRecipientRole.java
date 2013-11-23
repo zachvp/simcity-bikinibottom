@@ -117,9 +117,4 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		residents.add(new MyResident(dwelling));
 		stateChanged();
 	}
-
-	@Override
-	public String getRoleType() {
-		return "PayRecipientRole";
-	}
 }

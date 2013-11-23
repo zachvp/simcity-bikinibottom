@@ -34,9 +34,15 @@ public class MockCityBuilding extends Mock implements CityBuilding {
 		return entrancePos;
 	}
 	
+	public String toString() {
+		return "MockCityBuilding of type " + type + ", position " +
+				position + " and entrance position " + entrancePos;
+	}
+
 	@Override
 	public Role getGreeter() {
 		return null;
+
 	}
 
 }

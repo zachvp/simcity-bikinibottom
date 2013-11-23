@@ -445,7 +445,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public boolean needToGoToBank() {
-		return wallet.hasTooMuch() || wallet.hasTooLittle();
+		return wallet.hasTooMuch() || wallet.hasTooLittle()
+				|| wallet.needsMoney();
 	}
 		
 	// ---- Enumerations

@@ -82,21 +82,21 @@ public class TellerRole extends WorkRole implements Teller {
 		super(person);
 		
 		// ask everyone for rent
-		Runnable command = new Runnable(){
-			@Override
-			public void run() {
-				//do stuff
-				
-				msgLeaveWork();
-				}
-			
-		};
-		
-		// every day at noon
-		int hour = 17;
-		int minute = 0;
-		
-		scheduleDailyTask(command, hour, minute);
+//		Runnable command = new Runnable(){
+//			@Override
+//			public void run() {
+//				//do stuff
+//				
+//				msgLeaveWork();
+//				}
+//			
+//		};
+//		
+//		// every day at TIME
+//		int hour = 17;
+//		int minute = 0;
+//		
+//		scheduleDailyTask(command, hour, minute);
 	}
 	
 //	public TellerRole(PersonAgent person, AccountManager am, LoanManager lm, int deskPosition){
@@ -323,7 +323,6 @@ public class TellerRole extends WorkRole implements Teller {
 		try {
 			s.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

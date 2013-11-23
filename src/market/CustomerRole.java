@@ -13,20 +13,12 @@ import market.interfaces.Customer;
 import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 public class CustomerRole extends Role implements Customer{
 	String name;
 	private CustomerGui customerGui = null;
-	private List<Item> tempInventoryList = new ArrayList<Item>();
-	{
-		tempInventoryList.add(new Item("CheapCar", 0));
-		tempInventoryList.add(new Item("ExpensiveCar", 0));
-		tempInventoryList.add(new Item("Pizza", 0));
-		tempInventoryList.add(new Item("Sandwich", 0));
-		tempInventoryList.add(new Item("Chicken", 0));
-	}
 	
-	private List<Item> Inventory = tempInventoryList;
 	private List<Item> ShoppingList = new ArrayList<Item>();
 	private double cash;
 	private double ExpectedCost;
@@ -53,7 +45,7 @@ public class CustomerRole extends Role implements Customer{
 	public enum Customerstate {Idle, GoingToOrder, Waiting, Paid, EnteringMarket, NotAtMarket};
 	public enum Customerevent {Nothing, WaitingInLine, Paying, Leaving, doneLeaving, GoingToLine};
 	
-	public CustomerRole(String NA, double money, List<Item>SL, PersonAgent person){
+	public CustomerRole(String NA, double money, List<Item>SL, Person person){
 		super(person);
 		cash = person.getWallet().getCashOnHand();
 		cash = money;
@@ -84,6 +76,17 @@ public class CustomerRole extends Role implements Customer{
 	public void msgHereisYourItem(List<Item> Items) {
 		print ("Receive items from Cashier");
 		
+		for (int i=0;i<Items.size();i++){
+			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
+		}
+		Map<String,Item> CurrentInvent = person.getInventory();
+		print ("I have " + CurrentInvent.get("Chicken").amount + "Chicken in my inventory");
+		print ("I have " + CurrentInvent.get("Pizza").amount + "Pizza in my inventory");
+		print ("I have " + CurrentInvent.get("CheapCar").amount + "CheapCar in my inventory");
+		print ("I have " + CurrentInvent.get("ExpensiveCar").amount + "ExpensiveCar in my inventory");
+		print ("I have " + CurrentInvent.get("Sandwich").amount + "Sandwich in my inventory");
+		
+		/*
 		for (int i=0;i<Inventory.size();i++){
 			Item CurrentItem = Inventory.get(i);
 			for (int j=0;j<Items.size();j++){
@@ -92,6 +95,7 @@ public class CustomerRole extends Role implements Customer{
 				}
 			}
 		}
+		*/
 			state = Customerstate.Paid;
 			event = Customerevent.Leaving;
 		stateChanged();

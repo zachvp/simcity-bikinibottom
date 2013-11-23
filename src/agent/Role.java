@@ -210,7 +210,7 @@ public abstract class Role {
 		
 		if (Constants.DEBUG) {
 			Do("next occurrence of " + hour + ":" + minute + " is in " +
-					initialDelay + " milliseconds");
+					initialDelay/1000 + " seconds");
 		}
 	}
 	

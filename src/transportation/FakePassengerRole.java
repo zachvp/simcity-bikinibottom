@@ -6,7 +6,7 @@ import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.Role;
 
-public class FakePassengerRole extends Role implements Passenger {
+public class FakePassengerRole extends PassengerRole {
 
 	//CityLocation the Passenger is ultimately trying to get to.
 	CityLocation destination = null;
@@ -28,7 +28,7 @@ public class FakePassengerRole extends Role implements Passenger {
 	public void msgWeHaveArrived(CityLocation loc) {}
 
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if (destination != null) {
 			location = destination;
 			destination = null;

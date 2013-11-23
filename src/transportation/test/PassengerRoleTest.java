@@ -20,6 +20,7 @@ import parser.test.BuildingPosParserTest;
 import parser.test.mock.MockCityBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.PassengerRole;
+import transportation.RealPassengerRole;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
@@ -113,7 +114,7 @@ public class PassengerRoleTest {
 	public void setUp() throws Exception {
 		person = new MockPerson("MockPerson");
 		mockGui = new MockPassengerGui();
-		passenger = new PassengerRole(person,
+		passenger = new RealPassengerRole(person,
 				KelpClass.getKelpInstance().placesNearMe(
 						new XYPos(0,0), LocationTypeEnum.Hospital)
 						.get(0), mockGui);

@@ -136,4 +136,10 @@ public abstract class WorkRole extends Role {
 			return nextShiftStartTime();
 		}
 	}
+	
+	/**
+	 * Ends the work day as soon as possible - for example, when a Waiter
+	 * finishes helping all customers.
+	 */
+	public abstract void msgEndWorkDay();
 }

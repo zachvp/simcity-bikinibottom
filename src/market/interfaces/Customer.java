@@ -17,10 +17,6 @@ public interface Customer {
 	public abstract void msgNoItem();
 	
 	public abstract void goingToBuy();
-<<<<<<< HEAD
-=======
-	
->>>>>>> master
 
 	//Utilities
 	public abstract String getMaitreDName();

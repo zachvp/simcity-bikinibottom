@@ -24,8 +24,5 @@ public interface ItemCollector {
 	//Animations
 		public abstract void AtCollectStation();
 		public abstract void Ready();
-<<<<<<< HEAD
-=======
 		public abstract void AtExit();
->>>>>>> master
 }

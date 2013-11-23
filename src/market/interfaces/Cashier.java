@@ -31,10 +31,7 @@ public interface Cashier {
 	//Animations
 	public abstract void AtFrontDesk();
 	public abstract void AtBench();
-<<<<<<< HEAD
-=======
 	public abstract void AtExit();
->>>>>>> master
 	
 	
 	

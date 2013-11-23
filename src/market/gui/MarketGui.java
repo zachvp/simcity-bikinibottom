@@ -129,13 +129,7 @@ public class MarketGui extends JFrame implements ActionListener {
         
     }
     
-<<<<<<< HEAD
-    public void UpdateInventory() {
-    	marketPanel.UpdateInventoryLevel();
-    }
-=======
 
->>>>>>> master
     /**
      * Message sent from a customer gui to enable that customer's
      * "I'm hungry" checkbox.

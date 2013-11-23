@@ -89,19 +89,19 @@ public class CashierRole extends WorkRole implements Cashier {
     	super(person);
 		name = NA;
 		setCash(money);
-		Timer timer = person.getTimer();
 		
-		TimerTask task = new TimerTask(){
+		Runnable command = new Runnable(){
+			@Override
 			public void run() {
 				msgOffWork();
 			
 			}
 		};
 		
-		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(18, 0));
-		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
-				
-		timer.schedule(task, firstTime, period);
+		int hour = 18;
+		int minute = 0;
+		
+		scheduleDailyTask(command, hour, minute);
 			
 	}
 	

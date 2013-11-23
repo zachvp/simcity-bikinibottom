@@ -40,15 +40,6 @@ public class DeliveryGuyGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
         
-<<<<<<< HEAD
-        if (xPos == HomePosX && yPos == HomePosY){
-        	agent.Ready();
-        }
-        
-        if (xPos == ExitX && yPos == ExitY){
-        	agent.AtExit();
-        }
-=======
         if (xPos == xDestination && yPos == yDestination){
         	if (command==Command.GoHome) 
 				agent.Ready();
@@ -58,7 +49,6 @@ public class DeliveryGuyGui implements Gui {
         	command=Command.noCommand;
         }
         
->>>>>>> master
 
 
     }

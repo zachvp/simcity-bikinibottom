@@ -22,16 +22,6 @@ public class ItemCollectorGui implements Gui {
     
     private static final int HomePosX = 140;
     private static final int HomePosY = 320;
-<<<<<<< HEAD
-    
-    private static final int CollectItemX = 120;
-    private static final int CollectItemY = 360;
-
-    private MarketPanel panel;
-    
-    private enum Command {noCommand, GoHome, CollectItem};
-	private Command command=Command.noCommand;
-=======
     
     private static final int CollectItemX = 120;
     private static final int CollectItemY = 360;
@@ -46,7 +36,6 @@ public class ItemCollectorGui implements Gui {
     
     private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork};
 	private Command command=Command.GoToWork;
->>>>>>> master
     
     public ItemCollectorGui(ItemCollector ic, MarketPanel p) {
         this.agent = ic;
@@ -65,18 +54,7 @@ public class ItemCollectorGui implements Gui {
             yPos--;
         
         if (xPos == xDestination && yPos == yDestination) {
-<<<<<<< HEAD
-			if (command==Command.GoHome) 
-				agent.Ready();
-			else if (command==Command.CollectItem) {
-				agent.AtCollectStation();
-			}
-			command=Command.noCommand;
-        }
 
-        panel.UpdateInventoryLevel();
-        
-=======
         	if (command==Command.GoToWork){
         		BackReadyStation();
         	}
@@ -107,25 +85,19 @@ public class ItemCollectorGui implements Gui {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = command.GoToWork;
->>>>>>> master
     }
     
     public void BackReadyStation(){
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command=Command.GoHome;
-<<<<<<< HEAD
-=======
     	UpdateInventoryLevel();
->>>>>>> master
     }
     
     public void CollectItems(){
     	xDestination = CollectItemX;
     	yDestination = CollectItemY;
     	command=Command.CollectItem;
-<<<<<<< HEAD
-=======
     }
     
     public void OffWork(){
@@ -138,7 +110,6 @@ public class ItemCollectorGui implements Gui {
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command=Command.GoToExit;
->>>>>>> master
     }
 
     public void draw(Graphics2D g) {

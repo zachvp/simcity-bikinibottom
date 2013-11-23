@@ -19,13 +19,9 @@ public class CustomerGui implements Gui{
 	public static final int CustomerWidth = 15;
 	public static final int CustomerHeight = 15;
 	
-<<<<<<< HEAD
-	public static final int xFrontDesk =170;
-    public static final int yFrontDesk =210;
-=======
+
 	public static final int xFrontDesk =180;
     public static final int yFrontDesk =200;
->>>>>>> master
 
 	MarketGui gui;
 
@@ -86,10 +82,6 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void setBuying() {
-<<<<<<< HEAD
-		System.out.print("SetBuying?");
-=======
->>>>>>> master
 		isBuying = true;
 		agent.goingToBuy();
 		setPresent(true);

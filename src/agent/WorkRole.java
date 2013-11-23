@@ -12,6 +12,10 @@ import CommonSimpleClasses.CityLocation;
 public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
+	/**
+	 * When this is true, a WorkRole should leave work when all tasks are complete.
+	 */
+	protected boolean offWork;
 	
 	public WorkRole() {
 		super();
@@ -141,5 +145,8 @@ public abstract class WorkRole extends Role {
 	 * Ends the work day as soon as possible - for example, when a Waiter
 	 * finishes helping all customers.
 	 */
-	public abstract void msgEndWorkDay();
+	public void msgEndWorkDay() {
+		this.offWork = true;
+		stateChanged();
+	}
 }

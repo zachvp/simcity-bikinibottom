@@ -109,6 +109,12 @@ public class AccountManagerGui implements Gui{
 		yDestination = deskYPos -30;
 	}
 	
+    public void DoEndWorkDay(){
+    	canRelease = true;
+    	xDestination = 300;
+    	yDestination = 500;
+    }
+	
 	public void DoLeaveBank() {
 		canRelease = true;
 		xDestination = 500;

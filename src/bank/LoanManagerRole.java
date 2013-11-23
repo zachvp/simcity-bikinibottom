@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import bank.gui.LoanManagerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -15,10 +16,12 @@ import bank.interfaces.LoanManager;
  */
 
 //Build should not be problem
-public class LoanManagerRole extends Role implements LoanManager {
+public class LoanManagerRole extends WorkRole implements LoanManager {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
+	
+	private boolean endWorkShift = false;
 	
 	class LoanTask {
 		LoanTask(BankCustomer bc, double loanAmount) {
@@ -46,6 +49,10 @@ public class LoanManagerRole extends Role implements LoanManager {
 		loanTasks.add(new LoanTask(bc, loanAmount));
 		stateChanged();
 	}
+	public void msgLeaveWork() {
+		endWorkShift = true;
+		stateChanged();
+	}
 	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -54,6 +61,11 @@ public class LoanManagerRole extends Role implements LoanManager {
 		
 		if(!loanTasks.isEmpty()) {
 			processLoan(loanTasks.get(0));
+			return true;
+		}
+		
+		if(endWorkShift) {
+			goOffWork();
 			return true;
 		}
 		
@@ -69,6 +81,13 @@ public class LoanManagerRole extends Role implements LoanManager {
 		lt.bc.msgLoanApproved(lt.loanAmount);
 		loanTasks.remove(lt);
 	}
+	private void goOffWork() {
+		doEndWorkDay();
+		acquireSemaphore(active);
+		
+		this.deactivate();
+		
+	}
 	
 	//ANIMATION #####################
 	public void msgAtDestination() {
@@ -82,6 +101,10 @@ public class LoanManagerRole extends Role implements LoanManager {
 	}
 	private void doLeaveBank(){ //call at end of shift
 		loanManagerGui.DoLeaveBank();
+	}
+	
+	private void doEndWorkDay() {
+		loanManagerGui.DoEndWorkDay();
 	}
 	
 	public void setGui(LoanManagerGui lmg) {
@@ -104,6 +127,42 @@ public class LoanManagerRole extends Role implements LoanManager {
 	
 	public String toString() {
 		return "customer " + getName();
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

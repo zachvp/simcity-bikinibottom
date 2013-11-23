@@ -1,7 +1,5 @@
 package agent.interfaces;
 
-import java.util.Timer;
-
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;

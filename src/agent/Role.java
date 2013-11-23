@@ -199,7 +199,9 @@ public abstract class Role {
     }
     
 	// ---- Schedule tasks
-	
+    /**
+     * Executes the command every day at hour:minute.
+     */
 	public void scheduleDailyTask(Runnable command, int hour, int minute) {
 		TimeManager tm = TimeManager.getInstance();		
 		long initialDelay =(int) tm.timeUntil(tm.nextSuchTime(hour, minute))
@@ -211,6 +213,42 @@ public abstract class Role {
 		if (Constants.DEBUG) {
 			Do("next occurrence of " + hour + ":" + minute + " is in " +
 					initialDelay/1000 + " seconds");
+		}
+	}
+	
+	/**
+	 * Executes the command one time, at the next occurrence of hour:minute.
+	 */
+	public void scheduleTaskAtTime(Runnable command, int hour, int minute) {
+		TimeManager tm = TimeManager.getInstance();		
+		long delay =(int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+				/TimeManager.CONVERSION_RATE;
+		TimeUnit unit = TimeUnit.MILLISECONDS;
+		executor.schedule(command, delay, unit);
+		
+		if (Constants.DEBUG) {
+			Do("next occurrence of " + hour + ":" + minute + " is in " +
+					delay/1000 + " seconds");
+		}
+	}
+	
+	/**
+	 * Executes the command one time with the given delay.
+	 * 
+	 * @param command
+	 * @param delay IMPORTANT: this is game time delay, not real time delay.
+	 * 				To make the task execute in 1 minute of game time (half a
+	 * 				second real time), delay should be 60000.
+	 */
+	public void scheduleTaskWithDelay(Runnable command, long delay) {
+		TimeManager tm = TimeManager.getInstance();		
+		long convDelay = (int) delay/TimeManager.CONVERSION_RATE;
+		TimeUnit unit = TimeUnit.MILLISECONDS;
+		executor.schedule(command, delay, unit);
+		
+		if (Constants.DEBUG) {
+			Do("executing in " + delay*TimeManager.CONVERSION_RATE / 1000 +
+					" seconds");
 		}
 	}
 	

@@ -221,7 +221,7 @@ public abstract class Role {
 	 */
 	public void scheduleTaskAtTime(Runnable command, int hour, int minute) {
 		TimeManager tm = TimeManager.getInstance();		
-		long delay =(int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+		long delay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
 				/TimeManager.CONVERSION_RATE;
 		TimeUnit unit = TimeUnit.MILLISECONDS;
 		executor.schedule(command, delay, unit);
@@ -241,13 +241,12 @@ public abstract class Role {
 	 * 				second real time), delay should be 60000.
 	 */
 	public void scheduleTaskWithDelay(Runnable command, long delay) {
-		TimeManager tm = TimeManager.getInstance();		
 		long convDelay = (int) delay/TimeManager.CONVERSION_RATE;
 		TimeUnit unit = TimeUnit.MILLISECONDS;
-		executor.schedule(command, delay, unit);
+		executor.schedule(command, convDelay, unit);
 		
 		if (Constants.DEBUG) {
-			Do("executing in " + delay*TimeManager.CONVERSION_RATE / 1000 +
+			Do("executing in " + convDelay*TimeManager.CONVERSION_RATE / 1000 +
 					" seconds");
 		}
 	}

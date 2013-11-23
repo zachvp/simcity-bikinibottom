@@ -10,12 +10,9 @@ public class PassengerRole extends Role implements Passenger {
 
 	//CityLocation the Passenger is ultimately trying to get to.
 	CityLocation destination = null;
-
-	//Passenger's current location
-	CityLocation currentLocation;
 	
 	public PassengerRole(CityLocation startingLocation) {
-		currentLocation = startingLocation;
+		location = startingLocation;
 	}
 
 	@Override
@@ -33,7 +30,7 @@ public class PassengerRole extends Role implements Passenger {
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		if (destination != null) {
-			currentLocation = destination;
+			location = destination;
 			destination = null;
 			((PersonAgent) getPerson()).msgArrivedAtDestination();
 			deactivate();

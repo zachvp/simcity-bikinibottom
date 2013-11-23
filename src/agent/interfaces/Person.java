@@ -3,7 +3,7 @@ package agent.interfaces;
 import java.util.Timer;
 
 import housing.ResidentRole;
-import transportation.PassengerRole;
+import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
@@ -47,7 +47,7 @@ public interface Person {
 	 * 
 	 * @return the first PassengerRole; null if none exists
 	 */
-	public PassengerRole getPassengerRole();
+	public RealPassengerRole getPassengerRole();
 	
 	/**
 	 * Returns the PersonAgent's ResidentRole, or the first one if there's more

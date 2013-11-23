@@ -22,4 +22,7 @@ public interface Passenger {
 	 */
 	public void msgWeHaveArrived(CityLocation loc);
 	
+	
+	public CityLocation getLocation();
+	
 }

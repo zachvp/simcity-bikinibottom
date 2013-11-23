@@ -41,8 +41,7 @@ public class RealPassengerRole extends PassengerRole {
 	boolean hasCar = false;
 	boolean useBus = false;
 
-	public RealPassengerRole(Person person, CityLocation location,
-			PassengerGui gui) {
+	public RealPassengerRole(Person person, CityLocation location) {
 		super(person, location);
 		this.gui = new PassengerGuiClass(this, location);
 	}

@@ -537,11 +537,6 @@ public class WaiterRole extends Role implements Waiter {
 		}
 		
 	}
-
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.WaiterRole";
-	}
-
+	
 }
 

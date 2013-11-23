@@ -256,8 +256,7 @@ public abstract class Role {
 		executor.schedule(command, convDelay, unit);
 		
 		if (Constants.DEBUG) {
-			Do("executing in " + convDelay*TimeManager.CONVERSION_RATE / 1000 +
-					" seconds");
+			Do("executing in " + convDelay / 1000 + " seconds");
 		}
 	}
 	

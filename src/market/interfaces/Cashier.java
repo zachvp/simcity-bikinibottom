@@ -18,7 +18,7 @@ public interface Cashier {
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
 	
-	public abstract void msgOffWork();
+	public abstract void msgLeaveWork();
 
 	//Utilities
 	public abstract void setDGList(List<DeliveryGuy> list);

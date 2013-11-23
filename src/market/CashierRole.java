@@ -92,7 +92,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
-				msgOffWork();
+				msgLeaveWork();
 			
 			}
 		};
@@ -449,7 +449,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public boolean isOnBreak(){
 		return false;
 	}
-	
+
 	
 		
 	

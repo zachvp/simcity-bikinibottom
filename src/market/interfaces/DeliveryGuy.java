@@ -11,7 +11,7 @@ public interface DeliveryGuy {
 	
 		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityBuilding building);
 		
-		public abstract void msgOffWork();
+		public abstract void msgLeaveWork();
 	
 	//Utilities
 		public abstract String getMaitreDName();

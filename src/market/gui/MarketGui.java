@@ -35,15 +35,15 @@ public class MarketGui extends JFrame implements ActionListener {
     
 
     /**
-     * Constructor for RestaurantGui class.
+     * Constructor for MarketGui class.
      * Sets up all the gui components.
      */
     public MarketGui() {
-        int WINDOWX = 550;
-        int WINDOWY = 450;
+        int WINDOWX = 600;
+        int WINDOWY = 490;
 
     	JPanel BigPanel = new JPanel();
-    	
+    	BigPanel.setSize(200, 490);
     	setBounds(100, 100, 2*WINDOWX, 100+WINDOWY);
 
         setLayout(new GridLayout(1, 0));

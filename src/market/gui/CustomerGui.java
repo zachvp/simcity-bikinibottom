@@ -104,7 +104,7 @@ public class CustomerGui implements Gui{
 	
 	
 	public void DoExitMarket() {
-		xDestination = 340;
+		xDestination = 180;
 		yDestination = -20;
 		command = Command.LeaveMarket;
 	}

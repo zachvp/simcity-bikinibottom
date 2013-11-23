@@ -57,7 +57,7 @@ public class PassengerRole extends Role implements Passenger {
 	
 	public PassengerRole(Person person, CityLocation location,
 			PassengerGui gui) {
-		super((PersonAgent)person, location);
+		super(person, location);
 		currentLocation = location;
 	}
 
@@ -182,12 +182,5 @@ public class PassengerRole extends Role implements Passenger {
 		}
 		car.msgTakeMeHere(carPath,this);
 	}
-
-	@Override
-	public String getRoleType() {
-		return getClass().getName();
-	}
-
-
 
 }

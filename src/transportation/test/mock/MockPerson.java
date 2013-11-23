@@ -1,8 +1,11 @@
 package transportation.test.mock;
 
+import java.util.Timer;
+
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
+import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
@@ -79,6 +82,36 @@ public class MockPerson extends Mock implements Person{
 	public boolean isHungry() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void agentStateChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void agentDo(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printMsg(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHungerLevel(HungerLevel hungry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Timer getTimer() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

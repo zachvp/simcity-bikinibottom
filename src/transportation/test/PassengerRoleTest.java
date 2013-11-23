@@ -20,20 +20,24 @@ import parser.test.BuildingPosParserTest;
 import parser.test.mock.MockCityBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.PassengerRole;
+import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 import transportation.mapbuilder.MapBuilder;
 import transportation.mapbuilder.test.MapBuilderTest;
+import transportation.test.mock.MockPassengerGui;
 import transportation.test.mock.MockPerson;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Constants;
 
 public class PassengerRoleTest {
 	
 	Passenger passenger;
 	MockPerson person;
+	private PassengerGui mockGui;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -104,8 +108,12 @@ public class PassengerRoleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		passenger = new PassengerRole();
 		person = new MockPerson("MockPerson");
+		mockGui = new MockPassengerGui();
+		passenger = new PassengerRole(person,
+				KelpClass.getKelpInstance().placesNearMe(
+						new XYPos(0,0), LocationTypeEnum.Hospital)
+						.get(0), mockGui);
 	}
 
 	@Test

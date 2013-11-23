@@ -1,8 +1,10 @@
 package gui;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
+import agent.Role;
 
 /**
  * A class to hold all of the PersonAgent information
@@ -12,7 +14,9 @@ import agent.PersonAgent;
  */
 public class CitizenRecords {
 	private MainFrame main;
-	private Vector<PersonAgent> citizens = new Vector<PersonAgent>();
+	private ArrayList<PersonAgent> citizens = new ArrayList<PersonAgent>();
+	private ArrayList<BuildingRecords> buildingRecords = new ArrayList<BuildingRecords>();
+	
 	private InfoList personInfoList;
 	private InfoPanel infoPanel;
 
@@ -23,6 +27,15 @@ public class CitizenRecords {
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
+		
+		//TEST
+		//for(BuildingRecords rec: buildingRecords){
+			//if (rec.getType() == LocationTypeEnum.Restaurant){
+				//buildingRecords.get(0).addPerson("Waiter", person.getName());
+			//}
+		//}
+		
+		
 	}
 
 	/**
@@ -42,7 +55,14 @@ public class CitizenRecords {
 		citizens.add(newPerson);
 		personInfoList.addToList(newPerson.getName());
 		//start Thread
-
+		
+		//TODO TEST
+		for(BuildingRecords rec: buildingRecords){
+			if (rec.getType() == LocationTypeEnum.Restaurant){
+					rec.addPerson("Waiters", person.getName());
+					rec.addPerson("Customers", newPerson.getName());
+			}
+		}
 
 	}
 	
@@ -59,13 +79,17 @@ public class CitizenRecords {
 		}
 	}
 	
+	public void addBuildingRecord(BuildingRecords rec){
+		buildingRecords.add(rec);
+	}
+	
 	/** Utilities **/
 	
 	/**
 	 * Returns the list of PersonAgents in the city
 	 * @return a Vector list of PersonAgent
 	 */
-	public Vector<PersonAgent> getCitizenList() {
+	public ArrayList<PersonAgent> getCitizenList() {
 		return citizens;
 	}
 	/**

@@ -28,6 +28,7 @@ import agent.interfaces.Person;
 public class CashierRole extends WorkRole implements Cashier {
 
 //public EventLog log = new EventLog();
+	private boolean Open;
 	private CashierGui cashierGui = null;
 	private String name;
 	private double cash;
@@ -212,6 +213,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	public void AtBench(){
 		atBench.release();
+		stateChanged();
 	}
 	
 	public void AtExit(){
@@ -223,7 +225,6 @@ public class CashierRole extends WorkRole implements Cashier {
 		// TODO Auto-generated method stub
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).state == Customerstate.Ordered && state == Cashierstate.Idle){
-				print ("Hi");
 				ItemCollector tempIC = getICList().get(0);
 				for (int j=1;j<getICList().size();j++){
 					if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
@@ -363,6 +364,8 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void OffWork(){
+		DomsgAllWorkersToOffWork();
+		Open = false;
 		cashierGui.OffWork();
 		try {
 			atExit.acquire();
@@ -373,6 +376,16 @@ public class CashierRole extends WorkRole implements Cashier {
 		this.deactivate();
 	}
 	
+
+	private void DomsgAllWorkersToOffWork() {
+		for (int i=0; i<ICList.size();i++){
+			ICList.get(i).msgLeaveWork();
+		}
+		for (int i=0; i<DGList.size();i++){
+			DGList.get(i).msgLeaveWork();
+		}
+		
+	}
 
 	//Utilities
 	public Map<String,Item> getInventoryList(){

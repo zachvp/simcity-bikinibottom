@@ -43,7 +43,7 @@ public class MarketPanel extends JPanel {
     private PersonAgent CashierPerson = new PersonAgent("Cashier");
     private CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
 
-    private CashierGui cashierGui = new CashierGui(ca, this);
+    private CashierGui cashierGui = new CashierGui(ca);
     
     private String ExpensiveCarInventoryLevel = "Current Inventory Level";
     private String CheapCarInventoryLevel = "Current Inventory Level";
@@ -57,7 +57,7 @@ public class MarketPanel extends JPanel {
     
     private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
     private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
-    private ItemCollectorGui icGui = new ItemCollectorGui(ic, this);
+    private ItemCollectorGui icGui = new ItemCollectorGui(ic);
    
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
     private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", CityBuilding , DeliveryGuyPerson);

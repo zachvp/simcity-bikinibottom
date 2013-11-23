@@ -13,14 +13,26 @@ import agent.gui.Gui;
 public class LayoutGui implements Gui {
 	/* --- Layout Item Positions --- */
 	//window size = 550x400
-	private final Dimension STOVE_POSITION = new Dimension(400, 100);
-	private final Dimension TABLE_POSITION = new Dimension(100, 150);
-	final Dimension POTTED_PLANT_POSITION = new Dimension(0, 0);
-	final Dimension DOOR_POSITION = new Dimension(0, 380);
-	final Dimension REFRIGERATOR_POSITION = new Dimension(450, 0);
+	private final int ROOM_WIDTH;
+	private final int ROOM_HEIGHT;
+	private final int BASE_SIZE = 20;
 	
-	public LayoutGui() {
+	private final Dimension STOVE_POSITION;
+	private final Dimension TABLE_POSITION;
+	final Dimension POTTED_PLANT_POSITION;
+	final Dimension DOOR_POSITION;
+	final Dimension REFRIGERATOR_POSITION;
+	
+	public LayoutGui(int roomWidth, int roomHeight) {
+		ROOM_WIDTH = roomWidth;
+		ROOM_HEIGHT = roomHeight;
 		
+		// place all of the residential items
+		STOVE_POSITION = new Dimension(ROOM_WIDTH/2, ROOM_HEIGHT/3);
+		TABLE_POSITION = new Dimension(ROOM_WIDTH/4, ROOM_HEIGHT/4);
+		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH/4, 5);
+		DOOR_POSITION = new Dimension(0, ROOM_HEIGHT/4);
+		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH/2, 0);
 	}
 
 	@Override
@@ -31,12 +43,22 @@ public class LayoutGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, 20, 20);
-		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, 20, 20);
-		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, 20, 20);
-		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, 20, 20);
-		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, 20, 20);
+		g.setColor(Color.WHITE);
+		
+		// draw shapes
+		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, BASE_SIZE, BASE_SIZE);
+		
+		// draw labels
+		g.setColor(Color.BLACK);
+		g.drawString("Stove", STOVE_POSITION.width, STOVE_POSITION.height + BASE_SIZE);
+		g.drawString("Table", TABLE_POSITION.width, TABLE_POSITION.height  + BASE_SIZE);
+		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height  + BASE_SIZE);
+		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
+		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height  + BASE_SIZE);
 	}
 
 	@Override
@@ -50,6 +72,10 @@ public class LayoutGui implements Gui {
 
 	public Dimension getTablePosition() {
 		return TABLE_POSITION;
+	}
+	
+	public Dimension getRefrigeratorPosition() {
+		return REFRIGERATOR_POSITION;
 	}
 
 }

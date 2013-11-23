@@ -4,82 +4,89 @@ import housing.Dwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import agent.PersonAgent;
 import agent.Role;
 import agent.gui.AnimationPanel;
 
 /**
- * HousingGui pulls together all of the GUI and animation elements including
- * the AnimationPanel 
+ * HousingGui displays individual housing units. It pulls together all of the
+ * GUI and animation elements including the AnimationPanel, role graphics, and
+ * layout graphics. 
  * @author Zach VP
  *
  */
 
-public class HousingGui extends JFrame {
+public class HousingGui extends JPanel {
 	/* --- Data --- */
-	
+
 	/** Index is the slot in the complex the gui lies in.  */
 	int index;
 	
-	// TODO these are temporary dimensions that should not be hardcoded
-    int WINDOWX = 550;
-    int WINDOWY = 600;
-	
+	// payRecipient for this unit
+ 	PayRecipientRole payRecipientRole;
+
 	// add resident
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole residentRole = new ResidentRole(residentPerson);
 	
-	// add payRecipient
-	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
-	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
-	
-	// set up animation
+	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
-	LayoutGui layoutGui = new LayoutGui();
+	LayoutGui layoutGui = new LayoutGui(500, 500);
 	ResidentGui residentGui = new ResidentGui(residentRole);
-	
+
 	// housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
 	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index);
-	
-	public HousingGui() {
-        setBounds(50, 50, WINDOWX, WINDOWY);
-        
-		this.add(housingAnimationPanel);
+
+	// Layout for housingAnimationPanel
+	GridLayout layout = new GridLayout(1,1);
+
+	public HousingGui(int index, PayRecipientRole payRecipientRole) {
+		this.index = index;
 		
+		// set the manager for this housing unit
+		this.payRecipientRole = payRecipientRole;
+		
+		// add the resident to the pay recipient's charges
+		residentRole.setPayee(payRecipientRole);
 		payRecipientRole.addResident(dwelling);
 		
-		/* -- Set up people --- */
+		// add people to the list
 		people.add(residentPerson);
-		people.add(payRecipientPerson);
 		
+		// activate roles
 		startAndActivate(residentPerson, residentRole);
-		startAndActivate(payRecipientPerson, payRecipientRole);
 		
+		// assign guis to the resident
 		residentRole.setGui(residentGui);
 		residentGui.setLayoutGui(layoutGui);
 		
-		/* --- Add to Animation Panel --- */
+		switch(index){
+			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
+			case 1: housingAnimationPanel.setBackground(Color.RED); break;
+			case 2: housingAnimationPanel.setBackground(Color.GREEN); break;
+			case 3: housingAnimationPanel.setBackground(Color.BLUE); break;
+			default: housingAnimationPanel.setBackground(Color.BLACK); break;
+		}
+		
+		// add to animation panel
+		this.setLayout(layout);
 		housingAnimationPanel.addGui(layoutGui);
 		housingAnimationPanel.addGui(residentGui);
+		this.add(housingAnimationPanel);
 	}
 	
 	private void startAndActivate(PersonAgent agent, Role role) {
 		agent.startThread();
-		agent.addRole(residentRole);
+		agent.addRole(role);
 		role.activate();
 	}
-	
-	public static void main(String[] args) {
-		HousingGui gui = new HousingGui();
-		gui.setTitle("Housing Panel");
-		gui.setVisible(true);
-		gui.setResizable(false);
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
 }

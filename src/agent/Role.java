@@ -255,10 +255,10 @@ public abstract class Role {
 		TimeUnit unit = TimeUnit.MILLISECONDS;
 		executor.schedule(command, convDelay, unit);
 		
-		if (Constants.DEBUG) {
-			Do("executing in " + convDelay*TimeManager.CONVERSION_RATE / 1000 +
-					" seconds");
-		}
+//		if (Constants.DEBUG) {
+//			Do("executing in " + convDelay*TimeManager.CONVERSION_RATE / 1000 +
+//					" seconds");
+//		}
 	}
 	
 }

@@ -77,7 +77,7 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	}
 
 	@Override
-	public void msgOffWork() {
+	public void msgLeaveWork() {
 		// TODO Auto-generated method stub
 		
 	}

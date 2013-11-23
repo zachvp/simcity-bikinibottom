@@ -198,7 +198,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		stateChanged();
 	}
 	
-	public void msgOffWork(){
+	@Override
+	public void msgLeaveWork(){
 		state = Cashierstate.OffWork;
 		stateChanged();
 	}

@@ -12,7 +12,7 @@ public interface ItemCollector {
 		
 		public abstract int msgHowManyOrdersYouHave();
 		
-		public abstract void msgOffWork();
+		public abstract void msgLeaveWork();
 		
 	//Utilities
 		public abstract String getMaitreDName();

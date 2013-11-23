@@ -48,7 +48,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		
 		TimerTask task = new TimerTask(){
 			public void run() {
-				msgOffWork();
+				msgLeaveWork();
 			
 			}
 		};
@@ -75,7 +75,8 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		return Orders.size();
 	}
 	
-	public void msgOffWork(){
+	@Override
+	public void msgLeaveWork(){
 		state = ItemCollectorstate.OffWork;
 		stateChanged();
 	}

@@ -12,11 +12,6 @@ import CommonSimpleClasses.CityLocation;
 public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
-	/**
-	 * When this is true, a WorkRole should leave work when all tasks are
-	 * complete. Make sure you set this to false when you do end your shift!
-	 */
-	protected boolean endShiftWhenPossible = false;
 	
 	public WorkRole() {
 		super();
@@ -145,11 +140,6 @@ public abstract class WorkRole extends Role {
 	/**
 	 * Ends the work day as soon as possible - for example, when a Waiter
 	 * finishes helping all customers.
-	 * 
-	 * @see endShiftWhenPossible
 	 */
-	public void msgEndWorkDay() {
-		this.endShiftWhenPossible = true;
-		stateChanged();
-	}
+	public abstract void msgLeaveWork();
 }

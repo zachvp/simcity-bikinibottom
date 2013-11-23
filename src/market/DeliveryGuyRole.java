@@ -57,7 +57,8 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			return Available;
 		}
 		
-		public void msgOffWork(){
+		@Override
+		public void msgLeaveWork(){
 			state = DeliveryGuystate.OffWork;
 			stateChanged();
 		}

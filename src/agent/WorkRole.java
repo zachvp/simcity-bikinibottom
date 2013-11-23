@@ -1,5 +1,6 @@
 package agent;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 
 /**
@@ -11,6 +12,18 @@ import CommonSimpleClasses.CityLocation;
 public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
+	
+	public WorkRole() {
+		super();
+	}
+	
+	public WorkRole(Person person) {
+		super(person);
+	}
+	
+	public WorkRole(Person person, CityLocation loc) {
+		super(person, loc);
+	}
 	
 	/**
 	 * The hour of day this person's work shift starts, in 24-hour time.

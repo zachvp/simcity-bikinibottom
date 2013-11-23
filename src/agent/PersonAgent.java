@@ -8,7 +8,7 @@ import java.util.Timer;
 
 import kelp.Kelp;
 import kelp.KelpClass;
-import transportation.PassengerRole;
+import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
 import agent.Role;
@@ -136,12 +136,12 @@ public class PersonAgent extends Agent implements Person {
 	/* -------- Actions -------- */
 	
 	/**
-	 * Starts up the {@link PassengerRole} to take the Person to the given
+	 * Starts up the {@link RealPassengerRole} to take the Person to the given
 	 * {@link CityLocation}. This is one of PersonAgent's most important
 	 * actions - and several other actions can simply call this one.
 	 */
 	private void goToLoc(CityLocation loc) {
-		PassengerRole pass = getPassengerRole();
+		RealPassengerRole pass = getPassengerRole();
 		pass.msgGoToLocation(loc);
 		pass.activate();
 	}
@@ -342,10 +342,10 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Methods for finding special roles
 	
 	@Override
-	public PassengerRole getPassengerRole() {
+	public RealPassengerRole getPassengerRole() {
 		for (Role r : roles) {
-			if (r instanceof PassengerRole) {
-				return (PassengerRole) r;
+			if (r instanceof RealPassengerRole) {
+				return (RealPassengerRole) r;
 			}
 		}
 		return null;

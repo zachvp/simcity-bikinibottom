@@ -201,11 +201,16 @@ public abstract class Role {
 	// ---- Schedule tasks
 	
 	public void scheduleDailyTask(Runnable command, int hour, int minute) {
-		TimeManager tm = TimeManager.getInstance();
+		TimeManager tm = TimeManager.getInstance();		
 		long initialDelay = tm.timeUntil(tm.nextSuchTime(hour, minute));
 		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
 		TimeUnit unit = TimeUnit.MILLISECONDS;
 		executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+		
+		if (Constants.DEBUG) {
+			Do("next occurrence of " + hour + ":" + minute + " is in " +
+					initialDelay + " milliseconds");
+		}
 	}
 	
 }

@@ -135,12 +135,20 @@ public class BankCustomerGui implements Gui{
 		yDestination = guardY;
 	}
 	
+    public void DoEndWorkDay(){
+    	canRelease = true;
+    	xDestination = 300;
+    	yDestination = 500;
+    }
+	
     public void atDestination() {
 //    	System.out.println("Made it");
     	canRelease = false;
     	agent.msgAtDestination();
     	
     }
+    
+
 	
 }
 

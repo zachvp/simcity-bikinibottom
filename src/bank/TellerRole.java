@@ -1,8 +1,14 @@
 package bank;
 
-import agent.Agent;
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import bank.gui.TellerGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
@@ -10,27 +16,25 @@ import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
-
 /**
  * Restaurant customer agent.
  */
 
 //Build should not be problem
-public class TellerRole extends Role implements Teller {
+public class TellerRole extends WorkRole implements Teller {
 	private String name;
 	
 	Semaphore active = new Semaphore(0, true);
 	TellerGui tellerGui;
 	int myDeskPosition;
+	
+	int startHour = 8;
+	int startMinute = 0;
+	int endHour = 6;
+	int endMinute = 0;
+	
+	
+
 	
 	SecurityGuard securityGuard;
 	
@@ -72,9 +76,27 @@ public class TellerRole extends Role implements Teller {
 	}
 	private List<MyCustomer> myCustomers= new ArrayList<MyCustomer>();
 	LoanManager loanManager;
+	boolean endWorkShift = false;
 	
 	public TellerRole(PersonAgent person) {
 		super(person);
+		
+		// ask everyone for rent
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				//do stuff
+				
+				msgLeaveWork();
+				}
+			
+		};
+		
+		// every day at noon
+		int hour = 17;
+		int minute = 0;
+		
+		scheduleDailyTask(command, hour, minute);
 	}
 	
 //	public TellerRole(PersonAgent person, AccountManager am, LoanManager lm, int deskPosition){
@@ -139,9 +161,15 @@ public class TellerRole extends Role implements Teller {
 		stateChanged();
 	}
 	
+	public void msgLeaveWork() {
+		endWorkShift = true;
+		stateChanged();
+	}
+	
 	public void msgAtDestination() {
 		active.release();
 	}
+	
 	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -196,6 +224,11 @@ public class TellerRole extends Role implements Teller {
 				return true;
 			}
 		}
+		
+		if(endWorkShift) {
+			goOffWork();
+			return true;
+		}
 		return false;
 	}
 	// Actions
@@ -210,7 +243,7 @@ public class TellerRole extends Role implements Teller {
 	
 	private void accountOpened(MyCustomer mc) {
 		Do("account has been opened");
-		doGoToDesk();//temp, TODO fix for multipl tellers
+		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgAccountOpened(mc.accountId);
 		getMyCustomers().remove(mc);
@@ -261,6 +294,13 @@ public class TellerRole extends Role implements Teller {
 	   getMyCustomers().remove(mc);
 	   securityGuard.msgTellerOpen(this);
 	}
+	private void goOffWork() {
+		doEndWorkDay();
+		acquireSemaphore(active);
+		
+		this.deactivate();
+		
+	}
 
 	//ANIMATION
 	private void doGoToLoanManager() {
@@ -269,11 +309,14 @@ public class TellerRole extends Role implements Teller {
 	private void doGoToAccountManager() {
 		tellerGui.DoGoToAccountManager();
 	}
-	public void doGoToDesk(){
+	private void doGoToDesk(){
 		tellerGui.DoGoToDesk(myDeskPosition);
 	}
+	public void doGoToWorkstation() {
+		tellerGui.DoGoToWorkstation(myDeskPosition);
+	}
 	private void doEndWorkDay() {
-		
+		tellerGui.DoEndWorkDay();
 	}
 	
 	private void acquireSemaphore(Semaphore s) {
@@ -325,6 +368,41 @@ public class TellerRole extends Role implements Teller {
 
 	public void setMyCustomers(List<MyCustomer> myCustomers) {
 		this.myCustomers = myCustomers;
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return startHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		
+		return startMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		
+		return endHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		
+		return endMinute;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

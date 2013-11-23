@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.SecurityGuard;
@@ -16,15 +17,23 @@ import bank.interfaces.Teller;
  */
 
 //Build should not be problem
-public class SecurityGuardRole extends Role implements SecurityGuard {
+public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	SecurityGuardGui securityGuardGui;
 	
-
+	boolean endWorkShift = false;
 	
-	class MyCustomer {
+	List<WorkRole> workRoles = new ArrayList<WorkRole>();
+
+	public enum customerState{waiting, inBank, leaving};
+	class WaitingCustomer {
+		WaitingCustomer(BankCustomer b, customerState s){
+			bc = b;
+			state = s;
+		}
 		BankCustomer bc;
+		customerState state;
 		
 	}
 	
@@ -42,7 +51,7 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 	}
 	
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
-	List<BankCustomer> waitingCustomers = new ArrayList<BankCustomer>();
+	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
 	
 	public SecurityGuardRole(PersonAgent person) {
 		super(person);
@@ -55,14 +64,26 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 	}
 	// Messages
 	
+	public void msgLeaveWork() {
+		endWorkShift = true;
+		stateChanged();
+	}
 	public void addTeller(Teller t, int deskX) {
 		tellerPositions.add(new TellerPosition(t, 250 + (deskX *50), 170, false));
 		stateChanged();
 	}
 	
+	public void msgLeavingBank(BankCustomer bc) {
+		for(WaitingCustomer w: waitingCustomers) {
+			if(w.bc == bc){
+				w.state = customerState.leaving;
+			}
+		}
+	}
+	
 	public void msgCustomerArrived(BankCustomer bc) {
 		Do("customer arrived in bank");
-		waitingCustomers.add(bc);
+		waitingCustomers.add(new WaitingCustomer(bc, customerState.waiting));
 		stateChanged();
 	}
 	public void msgTellerOpen(Teller t) {
@@ -80,25 +101,74 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-	if(!waitingCustomers.isEmpty()){
+	
 		for(TellerPosition tp: tellerPositions) {
 			if(!tp.occupied) {
-				sendToTeller(waitingCustomers.get(0), tp);
-				return true;
+				for(WaitingCustomer w: waitingCustomers) {
+					if(w.state == customerState.waiting){
+						sendToTeller(w, tp);
+						return true;
+					}
+				}
+
 			}
 		}
-	}
-	
-		
+
+		for(WaitingCustomer w: waitingCustomers) {
+			if(w.state == customerState.leaving) {
+				removeCustomer(w);
+			}
+		}
+
+		if(endWorkShift) {
+//			goOffWork();
+			endWorkDay();
+			return true;
+		}
+
+
 		return false;
 	}
 	// Actions
 	
-	private void sendToTeller(BankCustomer bc, TellerPosition tp) {
+	private void sendToTeller(WaitingCustomer wc, TellerPosition tp) {
 		Do("sending customer to teller" + tellerPositions.size());
-		bc.msgGoToTeller(tp.xPos, tp.t);
-		waitingCustomers.remove(bc);
+		wc.bc.msgGoToTeller(tp.xPos, tp.t);
+		wc.state = customerState.inBank;
 		tp.occupied = true;
+	}
+	
+	private void goOffWork() {
+		doEndWorkDay();
+		acquireSemaphore(active);
+		this.deactivate();
+		
+	}
+	
+	private void endWorkDay() {//tells all employees to leave
+		if(waitingCustomers.isEmpty()){
+			for(WorkRole r: workRoles) {
+				r.msgLeaveWork();
+			}
+			goOffWork();
+		}
+	}
+	
+	public void resumeWorkDay() {//TODO doesnt work
+		this.activate();
+		securityGuardGui.DoGoToDesk();
+		acquireSemaphore(active);
+		for(WorkRole r: workRoles) {
+			
+			
+		}
+	}
+	
+	private void removeCustomer(WaitingCustomer w) {
+		waitingCustomers.remove(w);
+		if(waitingCustomers.isEmpty() && endWorkShift){
+			endWorkDay();
+		}
 	}
 	
 //	private void
@@ -107,6 +177,10 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 	//ANIMATION #####################
 	public void msgAtDestination() {
 		active.release();
+	}
+	
+	private void doEndWorkDay() {
+		securityGuardGui.DoEndWorkDay();
 	}
 //	private void doGoToDesk() {
 //		loanManagerGui.DoGoToDesk();
@@ -125,6 +199,10 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 
 	// Accessors, etc.
 
+	public void addRole(WorkRole r) {
+		workRoles.add(r);
+	}
+	
 	private void acquireSemaphore(Semaphore s) {
 		try {
 			s.acquire();
@@ -138,6 +216,42 @@ public class SecurityGuardRole extends Role implements SecurityGuard {
 	
 	public String toString() {
 		return "customer " + getName();
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

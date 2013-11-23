@@ -99,7 +99,6 @@ public class BankGui extends JFrame implements ActionListener {
         optionFrame.add(endWorkDayButton);
         optionFrame.add(resumeWorkButton);
         
-        
 //        animationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        animationFrame.setBounds(100+WINDOWX, 50 , WINDOWX+100, WINDOWY+100);
 //        animationFrame.setVisible(true);
@@ -108,15 +107,10 @@ public class BankGui extends JFrame implements ActionListener {
         
         addCustomerButton.setVisible(true);
        
-        
         optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         optionFrame.setBounds(WINDOWX, 50, WINDOWX, WINDOWY);
         optionFrame.setVisible(true);
         
-        
-       
-        
-   
         optionFrame.add(addCustomerButton);
     	setBounds(50, 50, WINDOWX, WINDOWY);
 
@@ -125,7 +119,6 @@ public class BankGui extends JFrame implements ActionListener {
 
         Dimension restDim = new Dimension(WINDOWX, (int) (WINDOWY * .3));
 
-        
         PersonAgent accountManagerPerson = new PersonAgent("accountManager");
         PersonAgent loanManagerPerson = new PersonAgent("loanManagement");
         accountManager = new AccountManagerRole(accountManagerPerson);
@@ -163,13 +156,6 @@ public class BankGui extends JFrame implements ActionListener {
         workRoles.add(loanManager);
         workRoles.add(accountManager);
         
-       
-        
-        
-
-        // Now, setup the info panel
-        Dimension infoDim = new Dimension(WINDOWX, (int) (WINDOWY * .125));
-             
         Dimension graphicDim = new Dimension(WINDOWX, (int) (WINDOWY * .30));
         graphicPanel = new JPanel();
         graphicPanel.setPreferredSize(graphicDim);

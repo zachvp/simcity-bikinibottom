@@ -16,6 +16,7 @@ import java.util.concurrent.Semaphore;
 import agent.PersonAgent;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
  * Restaurant customer role.
@@ -90,7 +91,7 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(PersonAgent person){
+	public CustomerRole(Person person){
 		super(person);
 		System.out.println("Created CustomerRole for " + person.getName());
 		

@@ -470,5 +470,21 @@ public class PersonAgent extends Agent implements Person {
 	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
 			FULL}
 	
+	// ---- Methods to avoid weird inheritance issues
+	@Override
+	public void agentStateChanged() {
+		stateChanged();
+	}
+
+	@Override
+	public void printMsg(String msg) {
+		print(msg);
+	}
+
+	@Override
+	public void agentDo(String msg) {
+		Do(msg);
+	}
+	
 }
 

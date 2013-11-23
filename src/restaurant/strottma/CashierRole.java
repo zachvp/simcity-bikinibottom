@@ -11,6 +11,7 @@ import java.util.*;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
  * Restaurant Cashier Role
@@ -25,7 +26,7 @@ public class CashierRole extends Role implements Cashier {
 	DecimalFormat df = new DecimalFormat("#.##");
 	private double money;
 	
-	public CashierRole(PersonAgent person) {
+	public CashierRole(Person person) {
 		super(person);
 
 		new Timer();

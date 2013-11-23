@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
  * Restaurant Waiter Role
@@ -42,7 +43,7 @@ public class WaiterRole extends Role implements Waiter {
 
 	private BreakState bState;
 
-	public WaiterRole(PersonAgent person) {
+	public WaiterRole(Person person) {
 		super(person);
 
 		this.bState = BreakState.NORMAL;

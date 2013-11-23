@@ -10,6 +10,8 @@ public interface DeliveryGuy {
 		public abstract boolean msgAreYouAvailable();
 	
 		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityBuilding building);
+		
+		public abstract void msgOffWork();
 	
 	//Utilities
 		public abstract String getMaitreDName();

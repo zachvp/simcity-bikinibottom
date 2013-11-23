@@ -19,6 +19,7 @@ public class CustomerGui implements Gui{
 	public static final int CustomerWidth = 15;
 	public static final int CustomerHeight = 15;
 	
+
 	public static final int xFrontDesk =180;
     public static final int yFrontDesk =200;
 
@@ -103,7 +104,7 @@ public class CustomerGui implements Gui{
 	
 	
 	public void DoExitMarket() {
-		xDestination = 340;
+		xDestination = 180;
 		yDestination = -20;
 		command = Command.LeaveMarket;
 	}

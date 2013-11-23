@@ -4,14 +4,12 @@ import housing.ResidentRole;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
-import agent.Role;
 import agent.interfaces.Person;
 
 /**
@@ -28,7 +26,6 @@ public class PersonAgent extends Agent implements Person {
 	private HungerLevel hungerLevel;
 	
 	private TimeManager timeManager;
-	private Timer timer;
 	
 	private Kelp kelp;
 	
@@ -59,7 +56,6 @@ public class PersonAgent extends Agent implements Person {
 		this.hungerLevel = HungerLevel.NEUTRAL;
 		
 		this.timeManager = TimeManager.getInstance();
-		this.timer = new Timer();
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
@@ -197,10 +193,6 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
-	public Timer getTimer() {
-		return this.timer;
-	}
-	
 	private void activateRoleForLoc(CityLocation loc) {
 		for (Role r : roles) {
 			if (loc.equals(r.getLocation())) {
@@ -326,19 +318,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setWorkStartThreshold(long newThresh) {
 		this.workStartThreshold = newThresh;
-	}
-	
-	// TODO Implement a general PersonGui?
-	/*
-	public void setGui(PersonGui g) {
-		personGui = g;
-	}
-
-	public PersonGui getGui() {
-		return personGui;
-	}
-	*/
-	
+	}	
 	
 	// ---- Methods for finding special roles
 	
@@ -464,7 +444,7 @@ public class PersonAgent extends Agent implements Person {
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
-	
+		
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}

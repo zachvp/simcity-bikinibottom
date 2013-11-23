@@ -1,5 +1,9 @@
 package agent;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 
@@ -13,6 +17,7 @@ public abstract class Role {
     protected CityLocation location;
     private boolean active = false;
     private boolean awaitingInput = false;
+    private ScheduledExecutorService executor;
     
     /**
      * Sets the Role's agent and location.
@@ -23,6 +28,8 @@ public abstract class Role {
     protected Role(Person person, CityLocation location) {
     	setPerson(person);
     	setLocation(location);
+    	
+		this.executor = Executors.newSingleThreadScheduledExecutor();
     }
     
     /**
@@ -190,6 +197,22 @@ public abstract class Role {
     protected void print(String msg, Throwable e) {
         person.printMsg(msg);
     }
-
+    
+	// ---- Schedule tasks
+	
+	public void scheduleDailyTask(Runnable command, int hour, int minute) {
+		TimeManager tm = TimeManager.getInstance();		
+		long initialDelay =(int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+				/TimeManager.CONVERSION_RATE;
+		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+		TimeUnit unit = TimeUnit.MILLISECONDS;
+		executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+		
+		if (Constants.DEBUG) {
+			Do("next occurrence of " + hour + ":" + minute + " is in " +
+					initialDelay/1000 + " seconds");
+		}
+	}
+	
 }
 

@@ -2,6 +2,7 @@ package parser.test.mock;
 
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.XYPos;
+import agent.Role;
 import agent.mock.Mock;
 
 public class MockCityBuilding extends Mock implements CityBuilding {
@@ -36,6 +37,12 @@ public class MockCityBuilding extends Mock implements CityBuilding {
 	public String toString() {
 		return "MockCityBuilding of type " + type + ", position " +
 				position + " and entrance position " + entrancePos;
+	}
+
+	@Override
+	public Role getGreeter() {
+		return null;
+
 	}
 
 }

@@ -12,6 +12,8 @@ import java.util.*;
 
 /**
  * Restaurant Market Agent
+ * 
+ * @author Erik Strottmann
  */
 public class MarketRole extends Role implements Market {
 	// private MarketGui marketGui = null;

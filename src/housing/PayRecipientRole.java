@@ -43,10 +43,9 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	
 	public PayRecipientRole(PersonAgent agent) {
 		super(agent);
-		Timer timer = person.getTimer();
 		
 		// ask everyone for rent
-		TimerTask task = new TimerTask(){
+		Runnable command = new Runnable(){
 			@Override
 			public void run() {
 				for(MyResident mr : residents){
@@ -55,13 +54,11 @@ public class PayRecipientRole extends Role implements PayRecipient {
 			}
 		};
 		
-		// at noon
-		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(12, 0));
+		// every day at noon
+		int hour = 12;
+		int minute = 0;
 		
-		// once every day
-		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
-		
-		timer.schedule(task, firstTime, period);
+		scheduleDailyTask(command, hour, minute);
 	}
 	
 	/* ----- Messages ----- */

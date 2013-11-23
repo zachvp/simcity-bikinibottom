@@ -34,7 +34,7 @@ public interface Constants {
 	/**
 	 * True only for development versions of this program.
 	 */
-	// TODO disable before final release
+	// TODO disable DEBUG constant before final release
 	public static final boolean DEBUG = true;
 	
     /**

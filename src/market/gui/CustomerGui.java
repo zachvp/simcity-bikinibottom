@@ -15,7 +15,7 @@ public class CustomerGui implements Gui{
 	private boolean isBuying = false;
 	
 	public static final int OffScreenX = 180;
-	public static final int OffScreenY = 50;
+	public static final int OffScreenY = -150;
 	public static final int CustomerWidth = 15;
 	public static final int CustomerHeight = 15;
 	

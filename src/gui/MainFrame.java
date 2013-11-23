@@ -191,8 +191,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			if(type == LocationTypeEnum.Restaurant){
 				restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
 				//TODO change restpanel to restRecords
-				restaurant.strottma.gui.RestaurantPanel restPanel = new restaurant.strottma.gui.RestaurantPanel(animationPanel);
-				citizenRecords.addBuildingRecord(restPanel);
+				//restaurant.strottma.gui.RestaurantPanel restPanel = new restaurant.strottma.gui.RestaurantPanel(animationPanel);
+				//citizenRecords.addBuildingRecord(restPanel);
 				//JPanel animationPanel = new JPanel();
 				//animationPanel.setBackground(Color.darkGray);
 				buildingViewPanel.addCard(animationPanel, buildingName);

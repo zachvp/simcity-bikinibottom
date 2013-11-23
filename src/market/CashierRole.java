@@ -450,8 +450,5 @@ public class CashierRole extends WorkRole implements Cashier {
 		return false;
 	}
 
-	
-		
-	
-	
+
 }

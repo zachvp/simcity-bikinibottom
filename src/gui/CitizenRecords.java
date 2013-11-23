@@ -30,7 +30,7 @@ public class CitizenRecords {
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
-		person.setHungerLevel(HungerLevel.STARVING,true);
+		//person.setHungerLevel(HungerLevel.STARVING,true);
 		Kelp kelp = KelpClass.getKelpInstance();
 		person.addRole(new RealPassengerRole(person, 
 				kelp.placesNearMe(new XYPos(0, 0), 
@@ -41,6 +41,7 @@ public class CitizenRecords {
 		person.goToLoc(kelp.placesNearMe(kelp.placesNearMe(new XYPos(0, 0), 
 			LocationTypeEnum.Apartment).get(0), LocationTypeEnum.Restaurant).get(0));
 			*/
+		person.goToLoc(person.chooseHouse());
 	}
 
 	/**

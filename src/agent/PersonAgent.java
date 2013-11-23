@@ -10,6 +10,7 @@ import kelp.KelpClass;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 
 /**
@@ -405,6 +406,19 @@ public class PersonAgent extends Agent implements Person {
 		return null;
 	}
 	
+	
+	public CityLocation chooseHouse() {
+		List<CityLocation> houses = kelp.placesNearMe(
+				getPassengerRole().getLocation(),
+				CityLocation.LocationTypeEnum.House);
+		
+		// choose a bank
+		for (CityLocation b : houses) {
+			return b;
+		}
+		
+		return null;
+	}
 	// ---- Boolean methods (for deciding what to do next)
 	
 	@Override
@@ -467,6 +481,7 @@ public class PersonAgent extends Agent implements Person {
 	public void agentDo(String msg) {
 		Do(msg);
 	}
+
 	
 }
 

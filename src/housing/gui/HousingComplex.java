@@ -56,7 +56,7 @@ public class HousingComplex extends JPanel implements CityBuilding {
 		// activate complex manager
 		startAndActivate(payRecipientPerson, payRecipientRole);
 	}
-
+	
 	private void startAndActivate(PersonAgent agent, Role role) {
 		agent.startThread();
 		agent.addRole(role);

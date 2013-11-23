@@ -92,6 +92,7 @@ public interface Person {
 		private double cashOnHand;
 		private double tooMuch;
 		private double tooLittle;
+		private double moneyNeeded;
 		
 		private IncomeLevel incomeLevel;
 		
@@ -111,16 +112,19 @@ public interface Person {
 					this.cashOnHand = 5;
 					this.tooMuch = 50;
 					this.tooLittle = 0;
+					this.moneyNeeded = 0;
 					break;
 				case RICH:
 					this.cashOnHand = 100;
 					this.tooMuch = 300;
 					this.tooLittle = 50;
+					this.moneyNeeded = 0;
 					break;
 				case MEDIUM:
 					this.cashOnHand = 30;
 					this.tooMuch = 60;
 					this.tooLittle = 15;
+					this.moneyNeeded = 0;
 					// fall through to default
 				default:
 					break;
@@ -143,10 +147,12 @@ public interface Person {
 		public double getCashOnHand() { return this.cashOnHand; }
 		public double getTooMuch() { return this.tooMuch; }
 		public double getTooLittle() { return this.tooLittle; }
+		public double getMoneyNeeded() { return this.moneyNeeded; }
 		
 		public void setCashOnHand(double coh) { this.cashOnHand = coh; }
 		public void setTooMuch(double tm) { this.tooMuch = tm; }
 		public void setTooLittle(double tl) { this.tooLittle = tl; }
+		public void setMoneyNeeded(double mn) { this.moneyNeeded = mn; }
 		
 		public boolean hasTooMuch() {
 			return cashOnHand > tooMuch;
@@ -154,6 +160,10 @@ public interface Person {
 		
 		public boolean hasTooLittle() {
 			return cashOnHand < tooLittle;
+		}
+
+		public boolean needsMoney() {
+			return moneyNeeded > 0;
 		}
 	}
 

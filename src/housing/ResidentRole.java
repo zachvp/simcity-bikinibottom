@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import housing.gui.ResidentGui;
 import housing.interfaces.PayRecipient;
@@ -40,7 +39,7 @@ public class ResidentRole extends Role implements Resident {
 	// food
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 20));
+			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 10));
 		}
 	});
 	
@@ -115,10 +114,8 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		
-		else{
-			DoJazzercise();
-		}
+		// idle behavior
+		DoJazzercise();
 		return false;
 	}
 	
@@ -150,14 +147,16 @@ public class ResidentRole extends Role implements Resident {
 		hungry = false;
 		food = null;
 		
-		//set a timer for eating
+		// set a timer for eating
 		Runnable command = new Runnable(){
 			public void run(){
 				DoSetFood("");
+				doneWaitingForInput();
 				stateChanged();
 			}
 		};
 		scheduleTaskWithDelay(command, EAT_TIME*Constants.MINUTE);
+		waitForInput();
 	}
 	
 	private void cookFood(Food f){

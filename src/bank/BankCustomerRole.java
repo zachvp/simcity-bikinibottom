@@ -6,6 +6,7 @@ import agent.Role;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
+import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
 
 import java.util.ArrayList;
@@ -26,7 +27,11 @@ import java.util.concurrent.Semaphore;
 public class BankCustomerRole extends Role implements BankCustomer {
 	private String name;
 	
+	private int accountId = -1;//if -1, has not been assigned
+
 	private Semaphore active = new Semaphore(0, true);
+	
+	private int loanManagerXPos;
 	
 	BankCustomerGui bankCustomerGui;
 	/**
@@ -37,17 +42,44 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	 */
 	public BankCustomerRole(PersonAgent person){
 		super(person);
-		this.name = name;
-		state = State.waiting;
-
+//		this.name = name;
+		state = State.enteredBank;
+		myCash.amount = 10;
 //		myCash.amount = initialMoney;
 //		myCash.capacity = initialMoney + 20;
 //		myCash.threshold = initialMoney -20;
 		
 
 	}
-	private int accountId = -1;//if -1, has not been assigned
 	
+	public BankCustomerRole(PersonAgent person, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
+		super(person);
+		state = State.enteredBank;
+		this.accountId = accountId;
+		if(name.equals("withdraw")){
+			myCash.amount = 10;
+			myCash.threshold = 20;
+			myCash.capacity = 100;
+			myCash.cashInAccount = 300;
+		}
+		if(name.equals("deposit")){
+			myCash.amount = 100;
+			myCash.threshold = 20;
+			myCash.capacity = 80;
+			myCash.cashInAccount = 0;
+		}
+		if(name.equals("loan")){
+			myCash.amount = 0;
+			myCash.threshold = 10;
+			myCash.capacity =100;
+			myCash.cashInAccount = 0;
+		}
+//		myCash.amount = initialCash;
+//		myCash.cashInAccount = 0;
+//		myCash.threshold = initialCash - 20;
+//		myCash.capacity = initialCash + 20;
+	}
+		
 	class Cash {
 		Cash() {
 			
@@ -65,8 +97,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	Cash myCash = new Cash();// = new Cash(50, 30, 70, 0);
-	public enum State {waiting, openingAccount, depositing, withdrawing, gettingLoan, atLoanManager, leaving, enteredBank};
-	enum Event {gotToTeller, accountOpened, depositSuccessful, withdrawSuccessful, sentToLoanManager, loanCompleted, goingToTeller};
+	public enum State {waiting, openingAccount, depositing, withdrawing, gettingLoan, atLoanManager, leaving, enteredBank, waitingAtGuard};
+	enum Event {gotToTeller, accountOpened, depositSuccessful, withdrawSuccessful, sentToLoanManager, loanCompleted, goingToTeller, goingToSecurityGuard};
 	
 	State state;
 	Event event;
@@ -76,6 +108,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private LoanManager loanManager;
 	Teller teller;
 	int tellerXLoc;
+	SecurityGuard securityGuard;
+	int guardX;
+	int guardY;
 	
 
 	/**
@@ -92,15 +127,23 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	}
 	
-	public void msgGoToTeller(int xLoc) {
+	public void msgGoToSecurityGuard(SecurityGuard sg){
+		
+		securityGuard = sg;
+		event = Event.goingToSecurityGuard;
+		stateChanged();
+	}
+	
+	public void msgGoToTeller(int xLoc, Teller t) {
+		teller = t;
 		event = Event.goingToTeller;
 		tellerXLoc = xLoc;
 		stateChanged();
 	}
 	
 	public void msgGotToTeller() {
-//		Do("msggottoteller");
-		System.out.println("HI");
+		Do("msggottoteller");
+//		System.out.println("HI");
 		event = Event.gotToTeller;
 		stateChanged();
 	}
@@ -124,9 +167,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		stateChanged();
 	}
 	
-	public void msgSpeakToLoanManager(LoanManager lm) {
+	public void msgSpeakToLoanManager(LoanManager lm, int xPos) {
 		setLoanManager(lm);
+		loanManagerXPos = xPos;
 		event = Event.sentToLoanManager;
+		stateChanged();
 	}
 	
 	public void msgLoanApproved(double amount) {
@@ -145,8 +190,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		System.out.println("entered scheduler");
-		if(state == State.enteredBank && event ==Event.goingToTeller) {
+		Do("Entered scheduler");
+//		System.out.println("entered scheduler");
+		if(state == State.enteredBank && event == Event.goingToSecurityGuard) {
+			goToSecurityGuard();
+			return true;
+		}
+		if(state == State.waitingAtGuard && event ==Event.goingToTeller) {
 			goToTeller(tellerXLoc);
 			return true;
 		}
@@ -183,17 +233,26 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 
 	// Actions
+	private void goToSecurityGuard(){
+		Do("going to guard");
+		doGoToSecurityGuard();
+		acquireSemaphore(active);
+		state = State.waitingAtGuard;
+		securityGuard.msgCustomerArrived(this);
+	}
+	
 	private void goToTeller(int xLoc) {
 		doGoToTeller(xLoc);
 		acquireSemaphore(active);
-		System.out.println("YO");
+//		System.out.println("YO");
 		state = State.waiting;
 		msgGotToTeller();//TODO HACK
 	}
 	
 	private void speakToTeller() {
-		System.out.println("speaking to teller");
+		Do("speaking to teller");
 		if(accountId == -1) {//have not been assigned accountID yet
+			Do("need to open account");
 			teller.msgIWantToOpenAccount(this, myCash.amount * .2);
 			state = State.openingAccount;
 			setCashAdjustAmount(-10);//TODO for testing
@@ -213,36 +272,57 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return;
 		}
 		if(myCash.amount < myCash.threshold && myCash.cashInAccount<myCash.threshold) {
-			System.out.println("Im getting Loan");
+//			System.out.println("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
 			return;
 		}
+		Do("ERROR, no condtion met");//not good
 	}
 	
 	private void leaveBank() {
+		Do("leaving bank " + accountId);
 		myCash.amount += getCashAdjustAmount();
 		myCash.amount += loanAmount;
 		myCash.cashInAccount -= getCashAdjustAmount();
 		setCashAdjustAmount(0);
 		loanAmount = 0;
 		state = State.leaving;
+		doLeaveBank();
+		acquireSemaphore(active);
 	}
 	
 	private void askForLoan() {
-		System.out.println("asking for loan from loanmanager");
+		Do("asking for loan");
+//		System.out.println("asking for loan from loanmanager");
+		doGoToLoanManager(loanManagerXPos);
+		acquireSemaphore(active);
 		getLoanManager().msgINeedALoan(this, myCash.threshold);
 		state = State.atLoanManager;
 	}
 
-	//animation
+	//ANIMATION##########################
+	private void doGoToSecurityGuard() {
+		bankCustomerGui.DoGoToSecurityGuard(myCash.amount, myCash.cashInAccount);
+	}
+	private void doGoToLoanManager(int x) {
+		bankCustomerGui.DoGoToLoanManager(x, myCash.amount, myCash.cashInAccount);
+	}
+	private void doLeaveBank() {
+		bankCustomerGui.DoLeaveBank(myCash.amount, myCash.cashInAccount);
+	}
 	private void doGoToTeller(int xLoc) {
-		bankCustomerGui.DoGoToTeller(xLoc);
+		bankCustomerGui.DoGoToTeller(xLoc, myCash.amount, myCash.cashInAccount);
 	}
 	
 	
 	// Accessors, etc.
 
+	public void addTeller(TellerRole t) {
+		teller = t;
+	}
+	
+	
 	public void setGui(BankCustomerGui b) {
 		bankCustomerGui = b;
 	}

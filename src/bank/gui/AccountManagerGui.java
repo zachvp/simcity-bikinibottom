@@ -5,14 +5,16 @@ import java.awt.*;
 import java.util.concurrent.Semaphore;
 
 import bank.gui.Gui;
+import bank.AccountManagerRole;
 import bank.BankCustomerRole;
+import bank.TellerRole;
 
 
-public class BankCustomerGui implements Gui{
+public class AccountManagerGui implements Gui{
 
-	private BankCustomerRole agent = null;
+	private AccountManagerRole agent = null;
 	private boolean isPresent = true;
-	private boolean isHungry = false;
+
 
 	//private HostAgent host;
 	BankGui gui;
@@ -30,26 +32,18 @@ public class BankCustomerGui implements Gui{
 	public static final int yTable = 250;
 	public static final int agentDim = 20;
 	
-	String name;
-	double money = -1;
-	double cashInAccount = -1;
-	
-	int entranceX = 275;
-	int entranceY = 320;
-	
-	int guardX =322;
-	int guardY = 360;
+	int deskXPos = 300;
+	int deskYPos = 40;
 	
 	boolean canRelease = false;
 
-	public BankCustomerGui(BankCustomerRole c){ //HostAgent m) {
+	public AccountManagerGui(AccountManagerRole c){ //HostAgent m) {
 		agent = c;
-		name = c.getName();
-		xPos = entranceX;
-		yPos = entranceY;
-		xDestination = entranceX;
-		yDestination = entranceY;
-		c.msgGotToTeller();
+		xPos = deskXPos;
+		yPos = deskYPos;
+		xDestination = deskXPos;
+		yDestination = deskYPos;
+//		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);
 		//maitreD = m;
@@ -79,20 +73,17 @@ public class BankCustomerGui implements Gui{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.RED);
+		g.setColor(Color.BLACK);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
-		
-		drawLetter(g, name, money, cashInAccount);
 				
 
 	}
 	
 	
-	public void drawLetter(Graphics2D g, String name, double money, double cashInAccount) {
+	public void drawLetter(Graphics2D g, String letter) {
 		g.setColor(Color.black);
-		g.drawString("name: " + name, xPos+20, yPos);
-		g.drawString("money: " + money, xPos+20, yPos+10);
-		g.drawString("Account amount: " + cashInAccount, xPos+20, yPos + 20);
+		g.drawString(letter, xPos+10, yPos+10);
+		
 	}
 
 	public boolean isPresent() {
@@ -104,37 +95,26 @@ public class BankCustomerGui implements Gui{
 		isPresent = p;
 	}
 	
-	public void DoGoToTeller(int xLoc, double money, double account) {
+
+	
+	public void DoGoToDesk() {
 		canRelease = true;
-		this.money = money;
-		this.cashInAccount = account;
-		xDestination = xLoc;
-		yDestination = 170;
+		xDestination = deskXPos;
+		yDestination = deskYPos;
 	}
 	
-	public void DoLeaveBank(double money, double account) {
+	public void DoGoToComputer() {
 		canRelease = true;
-		this.money = money;
-		this.cashInAccount = account;
+		xDestination = deskXPos;
+		yDestination = deskYPos -30;
+	}
+	
+	public void DoLeaveBank() {
+		canRelease = true;
 		xDestination = 500;
 		yDestination = 500;
 	}
-	
-	public void DoGoToLoanManager(int x, double money, double account) {
-		canRelease = true;
-		this.money = money;
-		this.cashInAccount = account;
-		xDestination = x;
-	}
 
-	public void DoGoToSecurityGuard(double money, double account) {
-		canRelease = true;
-		this.money = money;
-		this.cashInAccount = account;
-		xDestination = guardX;
-		yDestination = guardY;
-	}
-	
     public void atDestination() {
 //    	System.out.println("Made it");
     	canRelease = false;

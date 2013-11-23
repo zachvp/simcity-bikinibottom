@@ -1,10 +1,10 @@
 package bank.test.mock;
 
 
-import java.util.Map;
-
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
+import bank.interfaces.SecurityGuard;
+import bank.interfaces.Teller;
 
 
 
@@ -30,7 +30,11 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 
 		@Override
 		public void msgGotToTeller() {
-			// TODO Auto-generated method stub
+			
+			
+		}
+		
+		public void msgGoToTeller(int xLoc, Teller t){
 			
 		}
 
@@ -54,13 +58,17 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 
 		@Override
 		public void msgLoanApproved(double amount) {
-			// TODO Auto-generated method stub
+			
 			
 		}
 
 		@Override
-		public void msgSpeakToLoanManager(LoanManager lm) {
+		public void msgSpeakToLoanManager(LoanManager lm, int xLoc) {
 			log.add("sent to loanmanager");
+			
+		}
+		
+		public void msgGoToSecurityGuard(SecurityGuard sg) {
 			
 		}
 

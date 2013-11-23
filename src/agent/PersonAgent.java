@@ -486,6 +486,19 @@ public class PersonAgent extends Agent implements Person {
 		this.inventory.put(name, item);
 	}
 	
+	public void removeItemsFromInventory(String name, int amount) {
+		Item item = this.inventory.get(name);
+		if (item == null) {
+			return;
+		}
+		int newAmount = item.amount - amount;
+		if (newAmount < 0) {
+			newAmount = 0;
+		}
+		item.ItemEqual(newAmount);
+		this.inventory.put(name, item);
+	}
+	
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}

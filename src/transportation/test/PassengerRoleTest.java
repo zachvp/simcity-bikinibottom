@@ -19,7 +19,7 @@ import parser.CornersWithBusstopsParser;
 import parser.test.BuildingPosParserTest;
 import parser.test.mock.MockCityBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
-import transportation.RealPassengerRole;
+import transportation.PassengerRole;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
@@ -35,7 +35,7 @@ import agent.Constants;
 
 public class PassengerRoleTest {
 	
-	RealPassengerRole passenger;
+	PassengerRole passenger;
 	MockPerson person;
 	static List<CityLocation> locations;
 	private static List<Corner> busRoute;
@@ -113,7 +113,7 @@ public class PassengerRoleTest {
 	public void setUp() throws Exception {
 		person = new MockPerson("MockPerson");
 		mockGui = new MockPassengerGui();
-		passenger = new RealPassengerRole(person,
+		passenger = new PassengerRole(person,
 				KelpClass.getKelpInstance().placesNearMe(
 						new XYPos(0,0), LocationTypeEnum.Hospital)
 						.get(0), mockGui);

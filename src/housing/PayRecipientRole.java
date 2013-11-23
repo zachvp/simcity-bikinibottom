@@ -15,26 +15,29 @@ import agent.PersonAgent;
 import agent.Role;
 import agent.TimeManager;
 
+/**
+ * PayRecipient is the generic money collector that charges
+ * residents and tracks dues.
+ * @author Zach VP
+ *
+ */
 public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	
-	/* ----- Constants -----*/
-	private final double RENT_AMOUNT = 5;
-	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
-	enum PaymentState { PAYMENT_DUE, PAYMENT_PAID, DONE };
+	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE };
+	
 	private class MyResident{
-		Resident resident;
-		int unitNumber;
-		double monthlyPaymentRate;//how much resident must pay every month
-		double residentOwes;//how much the resident owes
-		double paymentAmount;//how much the resident actually paid
+		Dwelling dwelling;
+		double residentOwes;
+		double paymentAmount;// how much the resident has actually paid
 		PaymentState state;
 		
-		MyResident(Resident resident, ){
-			
+		MyResident(Dwelling dwelling){
+			this.dwelling = dwelling;
+			state = PaymentState.NONE;
 		}
 	}
 	
@@ -46,15 +49,14 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		TimerTask task = new TimerTask(){
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				for(MyResident r : residents){
-					r.resident.msgPaymentDue(RENT_AMOUNT);
+				for(MyResident mr : residents){
+					chargeResident(mr);
 				}
 			}
 		};
 		
 		// at noon
-		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(6, 0));
+		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(12, 0));
 		
 		// once every day
 		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
@@ -68,7 +70,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		if(mr == null) return;
 		mr.paymentAmount = amount;
 		mr.state = PaymentState.PAYMENT_PAID;
-		log.add("Received message 'here is payment' " + amount + " from " + mr.unitNumber);
+		log.add("Received message 'here is payment' " + amount + " from " + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
 
@@ -80,19 +82,12 @@ public class PayRecipientRole extends Role implements PayRecipient {
 				return true;
 			}
 		}
-		//TODO implement actual time mechanic
-//		if(globalTime%monthlyTime == 0){
-			for(MyResident mr : residents){
-				chargeResident(mr);
-				return true;
-			}
-//		}
 		return false;
 	}
 
 	/* ----- Actions ----- */
 	private void checkResidentPayment(MyResident mr){
-		log.add("Checking resident payment " + mr.unitNumber);
+		log.add("Checking resident payment " + mr.dwelling.getIDNumber());
 		mr.residentOwes -= mr.paymentAmount;
 		if(mr.residentOwes == 0){
 			mr.state = PaymentState.DONE;
@@ -101,16 +96,16 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		
 	}
 	private void chargeResident(MyResident r){
-		r.residentOwes += r.monthlyPaymentRate;
+		r.residentOwes += r.dwelling.getMonthlyPaymentAmount();
 		r.state = PaymentState.PAYMENT_DUE;
-		r.resident.msgPaymentDue(r.monthlyPaymentRate);
-		log.add("Charged resident " + r.unitNumber);
+		r.dwelling.getResident().msgPaymentDue(r.dwelling.getMonthlyPaymentAmount());
+		log.add("Charged resident " + r.dwelling.getIDNumber());
 	}
 	
 	/* ----- Utilities ----- */
 	private MyResident findResident(Resident r){
 		for(MyResident mr : residents){
-			if(mr.resident == r){
+			if(mr.dwelling.getResident() == r){
 				return mr;
 			}
 		}
@@ -118,8 +113,9 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		return null;
 	}
 	
-	public void addResident(Resident resident){
-		residents.add(new MyResident(resident));
+	public void addResident(Dwelling dwelling){
+		residents.add(new MyResident(dwelling));
+		stateChanged();
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
 
 import housing.gui.ResidentGui;
 import housing.interfaces.PayRecipient;
@@ -23,21 +22,21 @@ import agent.Role;
  *
  */
 public class ResidentRole extends Role implements Resident {
-	/** DATA */
+	/* --- DATA --- */
 	public EventLog log = new EventLog();
+	private Dwelling dwelling; 
 	
-	/* ----- Person Data ----- */
+	// graphics
 	private ResidentGui gui;
 	
-	/* ----- Temporary Hacks ----- */
 	//TODO: un-hack these
 	private boolean hungry = true;
 	
-	/* ----- Rent Data ----- */
+	// rent data
 	private double moneyOwed = 0;
 	private PayRecipient payee;
 	
-	/* ----- Food Data ----- */
+	// food
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 5));
@@ -48,7 +47,7 @@ public class ResidentRole extends Role implements Resident {
 	private Food food = null; //the food the resident is currently eating
 	private Timer timer = new Timer();
 	
-	/* ----- Constant Variables ----- */
+	// constants
 	private final int EAT_TIME = 6; 
 	
 	/* ----- Class Data ----- */
@@ -73,6 +72,7 @@ public class ResidentRole extends Role implements Resident {
 		}
 	}
 	
+	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
 	}
@@ -101,7 +101,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		//TODO: The conditions for the below event need to be modified
-		if(isHungry()){
+		if(hungry){
 			synchronized(refrigerator){
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 					Food f = entry.getValue();
@@ -155,22 +155,33 @@ public class ResidentRole extends Role implements Resident {
 	private void cookFood(Food f){
 		log.add("Cooking food");
 		food = f;
+		
+		// retrieve food from refrigerator
 		DoGoToRefrigerator();
 		waitForInput();
+		
+		// carry food from fridge to stove
 		DoSetFood(food.type);
 		DoGoToStove();
 		waitForInput();
+		
+		// place food on stove
 		DoSetFood("");
 		f.amount--;
 		food.state = FoodState.COOKING;
+		
+		// add to grocery list if the food item is low
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.low);
 		}
+		
 		/* --- Include for testing because JUnit doesn't recognize timers ---
 		DoCooking(f.type);
 		food.state = FoodState.COOKED;
 		log.add("Food is cooked.");
  		*/
+		
+		// time the food
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDoneCooking();
@@ -221,14 +232,6 @@ public class ResidentRole extends Role implements Resident {
 		}
 		log.add("There is no food at home");
 		return false;
-	}
-	
-	private void acquire(Semaphore sem){
-		try {
-			sem.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/* --- Getters and Setters (mostly used for unit testing) --- */

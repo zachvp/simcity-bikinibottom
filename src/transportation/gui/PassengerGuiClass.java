@@ -15,7 +15,7 @@ public class PassengerGuiClass implements PassengerGui {
 
 	private static final int PASSENGERW = 20;
 	private static final int PASSENGERH = 20;
-	private double xPos, yPos;
+	private int xPos, yPos;
 	private Passenger passenger;
 	private CityLocation destination;
 	private CityLocation startLocation;
@@ -35,14 +35,14 @@ public class PassengerGuiClass implements PassengerGui {
 		int xDestination = destination.position().x;
 		int yDestination = destination.position().y;
 		if (xPos < xDestination)
-			xPos += 0.1;
+			xPos += 1;
 		else if (xPos > xDestination)
-			xPos -= 0.1;
+			xPos -= 1;
 
 		if (yPos < yDestination)
-			yPos += 0.1;
+			yPos += 1;
 		else if (yPos > yDestination)
-			yPos -= 0.1;
+			yPos -= 1;
 		
 		if (xPos == xDestination && yPos == yDestination) {
 			onPlace();
@@ -64,7 +64,7 @@ public class PassengerGuiClass implements PassengerGui {
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
-		g.fillRect((int)xPos, (int)yPos, PASSENGERW, PASSENGERH);
+		g.fillRect(xPos, yPos, PASSENGERW, PASSENGERH);
 	}
 
 	@Override

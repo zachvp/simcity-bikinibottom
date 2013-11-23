@@ -6,6 +6,11 @@ import agent.Role;
 import agent.RoleFactory;
 import agent.interfaces.Person;
 
+/**
+ * Creates Roles from restaurant.strottma.
+ * 
+ * @author Erik Strottmann
+ */
 public class RestaurantStrottmaRoleFactory implements RoleFactory {
 	public static final String CASHIER_ROLE = "CashierRole";
 	public static final String COOK_ROLE = "CookRole";

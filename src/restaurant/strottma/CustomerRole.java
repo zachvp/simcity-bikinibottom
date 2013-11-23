@@ -21,6 +21,8 @@ import agent.interfaces.Person.Wallet;
 
 /**
  * Restaurant customer role.
+ * 
+ * @author Erik Strottmann
  */
 public class CustomerRole extends Role implements Customer {
 	private int hungerLevel = 10; // determines length of meal in seconds

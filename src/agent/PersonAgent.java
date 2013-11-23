@@ -318,19 +318,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setWorkStartThreshold(long newThresh) {
 		this.workStartThreshold = newThresh;
-	}
-	
-	// TODO Implement a general PersonGui?
-	/*
-	public void setGui(PersonGui g) {
-		personGui = g;
-	}
-
-	public PersonGui getGui() {
-		return personGui;
-	}
-	*/
-	
+	}	
 	
 	// ---- Methods for finding special roles
 	

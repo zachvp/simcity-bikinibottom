@@ -205,7 +205,6 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 	
-	
 	@Override
 	public Wallet getWallet() {
 		return this.wallet;
@@ -305,7 +304,7 @@ public class PersonAgent extends Agent implements Person {
 		setHungerToFull(false);
 	}
 	
-	// Work starting soon
+	// ---- Work starting soon
 	
 	/**
 	 * If there is less than this much time before work starts, the person

@@ -107,6 +107,8 @@ public class CashierGui implements Gui {
     }
 
     public void Update() {
+    	if (panel == null)
+    		return;
 		panel.UpdateInventoryLevelWithoutButton();
 	}
     

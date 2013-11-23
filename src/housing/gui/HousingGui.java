@@ -6,6 +6,7 @@ import housing.ResidentRole;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,42 +17,42 @@ import agent.Role;
 import agent.gui.AnimationPanel;
 
 /**
- * HousingGui pulls together all of the GUI and animation elements including
- * the AnimationPanel, role graphics, and layout graphics. 
+ * HousingGui displays individual housing units. It pulls together all of the
+ * GUI and animation elements including the AnimationPanel, role graphics, and
+ * layout graphics. 
  * @author Zach VP
  *
  */
 
 public class HousingGui extends JPanel {
 	/* --- Data --- */
-	
+
 	/** Index is the slot in the complex the gui lies in.  */
 	int index;
 	
-	// TODO these are temporary dimensions that should not be hardcoded
-    int WINDOW_X = 550;
-    int WINDOW_Y = 600;
-
- // payRecipient for this unit
+	// payRecipient for this unit
  	PayRecipientRole payRecipientRole;
-    
+
 	// add resident
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole residentRole = new ResidentRole(residentPerson);
 	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
-	LayoutGui layoutGui = new LayoutGui();
+	LayoutGui layoutGui = new LayoutGui(500, 500);
 	ResidentGui residentGui = new ResidentGui(residentRole);
-	
+
 	// housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
 	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index);
-	
-	public HousingGui(int index, PayRecipientRole payRecipientRole, int width, int height) {
+
+	// Layout for housingAnimationPanel
+	GridLayout layout = new GridLayout(1,1);
+
+	public HousingGui(int index, PayRecipientRole payRecipientRole) {
 		this.index = index;
-		this.setPreferredSize(new Dimension(width, height));
 		
+		// set the manager for this housing unit
 		this.payRecipientRole = payRecipientRole;
 		
 		// add the resident to the pay recipient's charges
@@ -69,16 +70,17 @@ public class HousingGui extends JPanel {
 		residentGui.setLayoutGui(layoutGui);
 		
 		switch(index){
-			case 0: setBackground(Color.BLACK); break;
-			case 1: setBackground(Color.RED); break;
-			case 2: setBackground(Color.GREEN); break;
-			case 3: setBackground(Color.BLUE); break;
-			default: setBackground(Color.WHITE); break;
+			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
+			case 1: housingAnimationPanel.setBackground(Color.RED); break;
+			case 2: housingAnimationPanel.setBackground(Color.GREEN); break;
+			case 3: housingAnimationPanel.setBackground(Color.BLUE); break;
+			default: housingAnimationPanel.setBackground(Color.BLACK); break;
 		}
+		
 		// add to animation panel
+		this.setLayout(layout);
 		housingAnimationPanel.addGui(layoutGui);
 		housingAnimationPanel.addGui(residentGui);
-		housingAnimationPanel.setBackground(Color.BLACK);
 		this.add(housingAnimationPanel);
 	}
 	

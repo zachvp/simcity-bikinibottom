@@ -3,10 +3,14 @@ package housing;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
 
-import CommonSimpleClasses.CityBuilding;
-import CommonSimpleClasses.XYPos;
+/**
+ * Dwelling is an apartment within the larger complex.
+ * There will be 4 apartments per complex. 
+ * @author Zach VP
+ *
+ */
 
-public class Dwelling implements CityBuilding {
+public class Dwelling {
 	/* --- Data --- */
 	private Resident resident;
 	private PayRecipient payRecipient;
@@ -19,29 +23,12 @@ public class Dwelling implements CityBuilding {
 	enum Condition { GOOD, FAIR, POOR, BROKEN }
 	Condition condition = Condition.GOOD;
 	
-	
-	public Dwelling(Resident resident, PayRecipient payRecipient) {
+	/* --- Constructor --- */
+	public Dwelling(Resident resident, PayRecipient payRecipient, int ID) {
 		super();
 		this.resident = resident;
 		this.payRecipient = payRecipient;
-	}
-
-	/* --- From Super Class --- */
-	@Override
-	public LocationTypeEnum type() {
-		return null;
-	}
-
-	@Override
-	public XYPos position() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XYPos entrancePos() {
-		// TODO Auto-generated method stub
-		return null;
+		this.IDNumber = ID;
 	}
 
 	public int getIDNumber() {
@@ -75,5 +62,4 @@ public class Dwelling implements CityBuilding {
 	public void setMonthlyPaymentAmount(double monthlyPaymentAmount) {
 		this.monthlyPaymentAmount = monthlyPaymentAmount;
 	}
-
 }

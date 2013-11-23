@@ -15,6 +15,8 @@ import agent.interfaces.Person;
 
 /**
  * Restaurant Cashier Role
+ * 
+ * @author Erik Strottmann
  */
 public class CashierRole extends Role implements Cashier {
 

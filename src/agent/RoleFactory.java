@@ -1,5 +1,7 @@
 package agent;
 
+import agent.interfaces.Person;
+
 /**
  * An interface with methods that, given a String, create the corresponding
  * Role.
@@ -14,6 +16,6 @@ public interface RoleFactory {
 	 * 
 	 * @throws IllegalArgumentException when the roleType doesn't exist
 	 */
-	public Role getRole(String roleType, PersonAgent personAgent)
+	public Role getRole(String roleType, Person person)
 			throws IllegalArgumentException;
 }

@@ -3,6 +3,7 @@ package restaurant.strottma;
 import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 import restaurant.strottma.gui.HostGui;
 import restaurant.strottma.gui.WaiterGui;
 import restaurant.strottma.interfaces.Customer;
@@ -36,7 +37,7 @@ public class HostRole extends Role {
 	
 	private Semaphore atTable = new Semaphore(0,true);
 
-	public HostRole(PersonAgent person) {
+	public HostRole(Person person) {
 		super(person);
 		
 		// make some tables
@@ -271,10 +272,6 @@ public class HostRole extends Role {
 			return "table " + tableNumber;
 		}
 	}
-
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.HostRole";
-	}
+	
 }
 

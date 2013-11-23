@@ -4,6 +4,7 @@ import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.Role;
 import agent.RoleFactory;
+import agent.interfaces.Person;
 
 public class RestaurantStrottmaRoleFactory implements RoleFactory {
 	public static final String CASHIER_ROLE = "CashierRole";
@@ -31,23 +32,23 @@ public class RestaurantStrottmaRoleFactory implements RoleFactory {
 	 * 
 	 * @throws IllegalArgumentException when the roleType doesn't exist
 	 */
-	public Role getRole(String roleType, PersonAgent personAgent) {
+	public Role getRole(String roleType, Person person) {
 		Role role = null;
 		
 		if (roleType.equals(CASHIER_ROLE)) {
-			role = new CashierRole(personAgent);
+			role = new CashierRole(person);
 			
 		} else if (roleType.equals(COOK_ROLE)) {
-			role = new CookRole(personAgent);
+			role = new CookRole(person);
 			
 		} else if (roleType.equals(CUSTOMER_ROLE)) {
-			role = new CustomerRole(personAgent);
+			role = new CustomerRole(person);
 			
 		} else if (roleType.equals(HOST_ROLE)) {
-			role = new HostRole(personAgent);
+			role = new HostRole(person);
 			
 		} else if (roleType.equals(WAITER_ROLE)) {
-			role = new WaiterRole(personAgent);
+			role = new WaiterRole(person);
 			
 		} else if (roleType.equals(SHARED_DATA_WAITER_ROLE)) {
 			System.out.println("ERROR in RestaurantStrottmaRoleFactory: "
@@ -59,7 +60,7 @@ public class RestaurantStrottmaRoleFactory implements RoleFactory {
 		
 		if (role != null) {
 			role.setLocation(restaurant);
-			personAgent.addRole(role);
+			person.addRole(role);
 		}
 		
 		return role;

@@ -1,5 +1,6 @@
 package housing.gui;
 
+import housing.Dwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
 
@@ -12,29 +13,46 @@ import agent.PersonAgent;
 import agent.Role;
 import agent.gui.AnimationPanel;
 
+/**
+ * HousingGui pulls together all of the GUI and animation elements including
+ * the AnimationPanel 
+ * @author Zach VP
+ *
+ */
+
 public class HousingGui extends JFrame {
-	/* --- Keeps track of all the elements --- */
-	List<PersonAgent> people = new ArrayList<PersonAgent>();
+	/* --- Data --- */
 	
-	/* -- Add People to test --- */
+	/** Index is the slot in the complex the gui lies in.  */
+	int index;
+	
+	// TODO these are temporary dimensions that should not be hardcoded
+    int WINDOWX = 550;
+    int WINDOWY = 600;
+	
+	// add resident
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole residentRole = new ResidentRole(residentPerson);
-	ResidentGui residentGui = new ResidentGui(residentRole);
 	
+	// add payRecipient
 	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
 	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
 	
-	/* --- Create an instance of the LayoutGui --- */
+	// set up animation
+	AnimationPanel housingAnimationPanel = new AnimationPanel();
 	LayoutGui layoutGui = new LayoutGui();
+	ResidentGui residentGui = new ResidentGui(residentRole);
+	
+	// housing containers
+	List<PersonAgent> people = new ArrayList<PersonAgent>();
+	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index);
 	
 	public HousingGui() {
-		/* --- Set up the dimensions of the frame --- */
-        int WINDOWX = 550;
-        int WINDOWY = 600;
         setBounds(50, 50, WINDOWX, WINDOWY);
         
-		AnimationPanel housingAnimationPanel = new AnimationPanel();
 		this.add(housingAnimationPanel);
+		
+		payRecipientRole.addResident(dwelling);
 		
 		/* -- Set up people --- */
 		people.add(residentPerson);
@@ -51,7 +69,7 @@ public class HousingGui extends JFrame {
 		housingAnimationPanel.addGui(residentGui);
 	}
 	
-	private void startAndActivate(PersonAgent agent, Role role){
+	private void startAndActivate(PersonAgent agent, Role role) {
 		agent.startThread();
 		agent.addRole(residentRole);
 		role.activate();

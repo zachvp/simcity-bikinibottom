@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
  * Restaurant Cook Role
@@ -38,7 +39,7 @@ public class CookRole extends Role implements Cook {
 		this.gui = cookGui;
 	}
 
-	public CookRole(PersonAgent person) {
+	public CookRole(Person person) {
 		super(person);
 		
 		this.timer = new Timer();
@@ -384,11 +385,6 @@ public class CookRole extends Role implements Cook {
 		public synchronized void showOrder() { showOrder = true; }
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
-	}
-
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.CookRole";
 	}
 	
 }

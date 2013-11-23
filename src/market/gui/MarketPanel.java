@@ -42,6 +42,7 @@ public class MarketPanel extends JPanel {
 	
     private PersonAgent CashierPerson = new PersonAgent("Cashier");
     private CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
+
     private CashierGui cashierGui = new CashierGui(ca, this);
     
     private String ExpensiveCarInventoryLevel = "Current Inventory Level";
@@ -61,7 +62,7 @@ public class MarketPanel extends JPanel {
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
     private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", CityBuilding , DeliveryGuyPerson);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
-    
+
     List<Item> tempInventoryList = new ArrayList<Item>();
 	{
 		tempInventoryList.add(new Item("CheapCar", 1));
@@ -103,6 +104,7 @@ public class MarketPanel extends JPanel {
             ic.setGui(icGui);
             dg.setGui(dgGui);
             ca.setGui(cashierGui);
+
             cust.setGui(custGui);
             cust1.setGui(custGui1);
 
@@ -120,6 +122,7 @@ public class MarketPanel extends JPanel {
         cust1.setCashier(ca);
         ic.setInventoryList(ca.getInventoryList());
         
+
         //Customer Gui
         gui.animationPanel.addGui(custGui);
         gui.animationPanel.addGui(custGui1);
@@ -158,6 +161,7 @@ public class MarketPanel extends JPanel {
 
         initMarketLabel();
         add(marketLabel);
+
 
         
         CustomerPerson.startThread();

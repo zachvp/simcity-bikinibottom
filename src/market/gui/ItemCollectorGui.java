@@ -54,6 +54,7 @@ public class ItemCollectorGui implements Gui {
             yPos--;
         
         if (xPos == xDestination && yPos == yDestination) {
+
         	if (command==Command.GoToWork){
         		BackReadyStation();
         	}

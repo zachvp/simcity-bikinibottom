@@ -1,5 +1,6 @@
 package market;
 
+
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -32,30 +33,31 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
-	
+
 	public DeliveryGuyRole(String NA, CityBuilding MA, PersonAgent person){
 		super(person);
 		name = NA;
 		Market = MA;
-		Timer timer = person.getTimer();
-		
-		TimerTask task = new TimerTask(){
+
+		Runnable command = new Runnable(){
+			@Override
 			public void run() {
 				msgOffWork();
 			
 			}
 		};
 		
-		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(18, 0));
-		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
-				
-		timer.schedule(task, firstTime, period);
+		int hour = 18;
+		int minute = 0;
+		
+		scheduleDailyTask(command, hour, minute);
 	}
 	
 	//Messages
 		public boolean msgAreYouAvailable() {
 			return Available;
 		}
+
 		
 		@Override
 		public void msgLeaveWork(){
@@ -142,7 +144,6 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public void setCashier(Cashier ca){
 		cashier = ca;
 	}
-	
 	//Shifts
 		public int getShiftStartHour(){
 			return 8;

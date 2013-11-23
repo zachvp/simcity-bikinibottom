@@ -23,6 +23,7 @@ public class CashierGui implements Gui {
     private static final int BenchX = 170;
     private static final int BenchY = 270;
     
+
     private static final int ExitX1 = 80;
     private static final int ExitY1 = 250;
     
@@ -31,6 +32,7 @@ public class CashierGui implements Gui {
     
     private enum Command {noCommand, GoToCashier, GoToBench, GoToExit1, GoToExit, GoToWork};
 	private Command command=Command.GoToWork;
+
 
 	private MarketPanel panel;
 	
@@ -51,6 +53,7 @@ public class CashierGui implements Gui {
             yPos--;
         
         if (xPos == xDestination && yPos == yDestination) {
+
         	if (command==Command.GoToWork){
         		GoToFrontDesk();
         	}
@@ -72,11 +75,6 @@ public class CashierGui implements Gui {
 
        
     }
-    public void GoToWork(){
-    	xDestination = ExitX1;
-    	yDestination = ExitY1;
-    	command = command.GoToWork;
-    }
     
     public void GoToFrontDesk(){
     	xDestination = FrontDeskX;
@@ -89,6 +87,7 @@ public class CashierGui implements Gui {
     	xDestination = BenchX;
     	yDestination = BenchY;
     	command=Command.GoToBench;
+
     }
     
     public void OffWork(){
@@ -101,6 +100,7 @@ public class CashierGui implements Gui {
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = command.GoToExit;
+
     }
 
     public void Update() {

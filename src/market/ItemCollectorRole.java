@@ -46,18 +46,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		super(person);
 		name = na;
 		
-		Runnable command = new Runnable(){
-			@Override
-			public void run() {
-				msgLeaveWork();
-			
-			}
-		};
-		
-		int hour = 18;
-		int minute = 0;
-		
-		scheduleDailyTask(command, hour, minute);
 		
 		
 	}

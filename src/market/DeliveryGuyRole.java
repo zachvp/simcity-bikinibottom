@@ -39,18 +39,6 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		name = NA;
 		Market = MA;
 
-		Runnable command = new Runnable(){
-			@Override
-			public void run() {
-				msgLeaveWork();
-			
-			}
-		};
-		
-		int hour = 18;
-		int minute = 0;
-		
-		scheduleDailyTask(command, hour, minute);
 	}
 	
 	//Messages

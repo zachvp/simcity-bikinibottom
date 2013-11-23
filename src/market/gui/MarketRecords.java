@@ -169,7 +169,28 @@ public class MarketRecords implements BuildingRecords {
 	}
 
 	@Override
-	public Role addPerson(String role, String name) {
+	public Role addPerson(/*Person person,*/ String role, String name) {
+		if (role == "Cashier"){
+			
+		}
+		if (role == "ItemCollector"){
+			ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+		    ItemCollectorGui icGui = new ItemCollectorGui(ic);
+		    ic.setGui(icGui);
+		    ItemCollectors.add(ic);
+		    ic.setCashier(ca);
+		    ic.setInventoryList(ca.getInventoryList());
+		    gui.addGui(icGui);
+		    ItemCollectorPerson.startThread();
+	        ItemCollectorPerson.addRole(ic);
+	        ic.activate();
+		}
+		if (role == "Customer"){
+			
+		}
+		if (role == "DeliveryGuy"){
+			
+		}
 		//setMarketControlPanel(marketControlPanel)
 		
 		

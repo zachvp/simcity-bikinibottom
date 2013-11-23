@@ -83,6 +83,8 @@ public class ItemCollectorGui implements Gui {
         
     }
     public void UpdateInventoryLevel(){
+    	if (panel == null)
+    		return;
     	panel.UpdateInventoryLevelWithoutButton();
     }
     

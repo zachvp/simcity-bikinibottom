@@ -3,10 +3,10 @@ package transportation.test.mock;
 import java.awt.Graphics2D;
 
 import agent.mock.EventLog;
-
 import CommonSimpleClasses.CityLocation;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
+import transportation.interfaces.Passenger;
 
 public class MockPassengerGui implements PassengerGui {
 	
@@ -52,6 +52,12 @@ public class MockPassengerGui implements PassengerGui {
 	public void bringOutCar() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setPassenger(Passenger passenger, CityLocation currentLocation) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

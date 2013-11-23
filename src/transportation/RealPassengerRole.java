@@ -44,6 +44,7 @@ public class RealPassengerRole extends PassengerRole {
 			PassengerGui gui) {
 		super(person, location);
 		this.gui = gui;
+		gui.setPassenger(this, location);
 	}
 
 	//TODO add input for if has car, if want bus, etc

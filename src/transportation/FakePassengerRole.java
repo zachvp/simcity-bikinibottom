@@ -42,10 +42,5 @@ public class FakePassengerRole extends Role implements Passenger {
 		return false;
 	}
 
-	@Override
-	public String getRoleType() {
-		//We are lying here BTW.
-		return "PassengerRole";
-	}
 
 }

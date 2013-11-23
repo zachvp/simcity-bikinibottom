@@ -15,7 +15,7 @@ public abstract class WorkRole extends Role {
 	/**
 	 * When this is true, a WorkRole should leave work when all tasks are complete.
 	 */
-	protected boolean offWork;
+	protected boolean endShiftWhenPossible = false;
 	
 	public WorkRole() {
 		super();
@@ -146,7 +146,7 @@ public abstract class WorkRole extends Role {
 	 * finishes helping all customers.
 	 */
 	public void msgEndWorkDay() {
-		this.offWork = true;
+		this.endShiftWhenPossible = true;
 		stateChanged();
 	}
 }

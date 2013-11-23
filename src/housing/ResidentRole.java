@@ -141,9 +141,11 @@ public class ResidentRole extends Role implements Resident {
 	private void eatFood(){
 		DoGoToStove();
 		waitForInput();
+		
 		DoSetFood(food.type);
 		DoGoToTable();
 		waitForInput();
+		
 		log.add("Eating food");
 		hungry = false;
 		food = null;

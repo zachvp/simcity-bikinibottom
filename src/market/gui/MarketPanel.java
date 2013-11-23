@@ -74,6 +74,10 @@ public class MarketPanel extends JPanel {
     private PersonAgent CustomerPerson = new PersonAgent("Customer1");
     private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
     private CustomerGui custGui = new CustomerGui(cust);
+    
+    private PersonAgent CustomerPerson1 = new PersonAgent("Customer2");
+    private CustomerRole cust1 = new CustomerRole("Customer2", 100, tempInventoryList, CustomerPerson1);
+    private CustomerGui custGui1 = new CustomerGui(cust1);
 
 
     //private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
@@ -100,21 +104,25 @@ public class MarketPanel extends JPanel {
             dg.setGui(dgGui);
             ca.setGui(cashierGui);
             cust.setGui(custGui);
+            cust1.setGui(custGui1);
 
         
         ItemCollectors.add(ic);
         DeliveryGuys.add(dg);
         customers.add(cust);
+        customers.add(cust1);
         
         ca.setICList(ItemCollectors);
         ca.setDGList(DeliveryGuys);
         ic.setCashier(ca);
         dg.setCashier(ca);
         cust.setCashier(ca);
+        cust1.setCashier(ca);
         ic.setInventoryList(ca.getInventoryList());
         
         //Customer Gui
         gui.animationPanel.addGui(custGui);
+        gui.animationPanel.addGui(custGui1);
 
         //ItemCollector Gui
         gui.animationPanel.addGui(icGui);
@@ -156,6 +164,11 @@ public class MarketPanel extends JPanel {
         CustomerPerson.addRole(cust);
         cust.activate();
         custGui.setBuying();
+        
+        CustomerPerson1.startThread();
+        CustomerPerson1.addRole(cust1);
+        cust1.activate();
+        custGui1.setBuying();
         
         //ca.msgIWantItem(tempInventoryList, cust);
         //ca.msgPhoneOrder(tempInventoryList, cust, null);

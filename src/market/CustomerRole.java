@@ -55,6 +55,7 @@ public class CustomerRole extends Role implements Customer{
 	
 	public CustomerRole(String NA, double money, List<Item>SL, PersonAgent person){
 		super(person);
+		cash = person.getWallet().getCashOnHand();
 		cash = money;
 		name = NA;
 		ShoppingList = SL;
@@ -189,6 +190,8 @@ public class CustomerRole extends Role implements Customer{
 				cashier.msgHereIsPayment(cash, this);
 				cash = 0;
 		}
+		
+		person.getWallet().setCashOnHand(cash);
 	}
 	
 	private void Leaving() {

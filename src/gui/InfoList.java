@@ -30,6 +30,7 @@ public class InfoList extends JPanel implements ActionListener {
 	private BuildingView buildingView;
 	private boolean isBuildingList = false;
 	CitizenRecords citizenRecords;
+	private ArrayList<Building>buildingList;
 	
 
 	public InfoList(int w, int h){
@@ -59,10 +60,36 @@ public class InfoList extends JPanel implements ActionListener {
 			button.addActionListener(this);
 			list.add(button);
 			view.add(button);
-			//TODO create person
 		}
 		validate();		
 	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (isBuildingList){
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println("button press " + b.getText());
+					
+					for(Building a: buildingList){
+						if(a.getName() == b.getText()){
+							infoPanel.updateBuildingInfoPanel(a);	
+						}
+					}
+					buildingView.showCard(b.getText());									
+				}
+			}
+		}
+		else{//it is a PersonAgent
+			for (JButton b: list){
+				if(e.getSource() == b){
+					//System.out.println(b.getText());
+					citizenRecords.showInfo(b.getText());
+				}
+			}
+		}
+	}
+	
+	/** Utilities **/
 	
 	/**
 	 * Sets reference to BuildingView Panel
@@ -87,34 +114,21 @@ public class InfoList extends JPanel implements ActionListener {
 	public List<JButton> getBuildingButtonList(){
 		return list;
 	}
-
-	public void actionPerformed(ActionEvent e) {
-		if (isBuildingList){
-			for (JButton b: list){
-				if(e.getSource() == b){
-					//System.out.println("button press " + b.getText());
-
-					buildingView.showCard(b.getText());
-					infoPanel.updateBuildingInfoPanel(b.getText());					
-				}
-			}
-		}
-		else{//it is a PersonAgent
-			for (JButton b: list){
-				if(e.getSource() == b){
-					//System.out.println(b.getText());
-					//infoPanel.updatePersonInfoPanel(b.getText());
-					citizenRecords.showInfo(b.getText());
-				}
-			}
-
-
-		}
-
-	}
-
+	
+	/**
+	 * Sets Reference to the CitizenRecords
+	 * @param r CitizenRecords
+	 */
 	public void setCitizenRecords(CitizenRecords r) {
 		citizenRecords = r;
+	}
+
+	/**
+	 * Sets Reference to the list of Buildings in the City
+	 * @param buildings An ArrayList of Buildings
+	 */
+	public void setBuildingList(ArrayList<Building> buildings) {
+		buildingList = buildings;
 	}
 
 	

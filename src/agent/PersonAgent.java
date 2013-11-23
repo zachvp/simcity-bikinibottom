@@ -4,14 +4,12 @@ import housing.ResidentRole;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
-import agent.Role;
 import agent.interfaces.Person;
 
 /**
@@ -28,7 +26,6 @@ public class PersonAgent extends Agent implements Person {
 	private HungerLevel hungerLevel;
 	
 	private TimeManager timeManager;
-	private Timer timer;
 	
 	private Kelp kelp;
 	
@@ -59,7 +56,6 @@ public class PersonAgent extends Agent implements Person {
 		this.hungerLevel = HungerLevel.NEUTRAL;
 		
 		this.timeManager = TimeManager.getInstance();
-		this.timer = new Timer();
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
@@ -195,10 +191,6 @@ public class PersonAgent extends Agent implements Person {
 	public void addRole(Role r) {
 		this.roles.add(r);
 		stateChanged();
-	}
-	
-	public Timer getTimer() {
-		return this.timer;
 	}
 	
 	private void activateRoleForLoc(CityLocation loc) {
@@ -464,7 +456,7 @@ public class PersonAgent extends Agent implements Person {
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
-	
+		
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}

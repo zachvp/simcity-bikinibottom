@@ -107,11 +107,5 @@ public class MockPerson extends Mock implements Person{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public Timer getTimer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

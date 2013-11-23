@@ -172,6 +172,5 @@ public interface Person {
 	public void printMsg(String msg);
 
 	public void setHungerLevel(HungerLevel hungry);
-
-	public Timer getTimer();
+	
 }

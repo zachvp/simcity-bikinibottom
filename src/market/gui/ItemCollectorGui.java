@@ -8,6 +8,7 @@ import market.ItemCollectorRole;
 
 
 
+
 import java.awt.*;
 
 public class ItemCollectorGui implements Gui {
@@ -32,14 +33,18 @@ public class ItemCollectorGui implements Gui {
     private static final int ExitX = 180;
     private static final int ExitY = -30;
 
-    private MarketPanel panel;
+    private MarketControlPanel panel;
     
     private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork};
 	private Command command=Command.GoToWork;
     
-    public ItemCollectorGui(ItemCollector ic, MarketPanel p) {
+    public ItemCollectorGui(ItemCollector ic) {
         this.agent = ic;
-        panel = p;
+    }
+    
+    
+    public void setMarketControlPanel(MarketControlPanel p){
+    	panel = p;
     }
 
     public void updatePosition() {

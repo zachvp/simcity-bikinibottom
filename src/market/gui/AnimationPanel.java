@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AnimationPanel extends JPanel implements ActionListener {
 
-    private final int WINDOWX = 400;
+    private final int WINDOWX = 600;
     private final int WINDOWY = 490;
     
     //The Magic Number

@@ -22,8 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import market.gui.AnimationPanel;
+import market.gui.MarketControlPanel;
+import market.gui.MarketRecords;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
+import restaurant.strottma.gui.RestaurantPanel;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 
@@ -187,16 +190,29 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 			if(type == LocationTypeEnum.Restaurant){
 				restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
+				//TODO change restpanel to restRecords
+				restaurant.strottma.gui.RestaurantPanel restPanel = new restaurant.strottma.gui.RestaurantPanel(animationPanel);
+				citizenRecords.addBuildingRecord(restPanel);
 				//JPanel animationPanel = new JPanel();
 				//animationPanel.setBackground(Color.darkGray);
 				buildingViewPanel.addCard(animationPanel, buildingName);
 				cityViewPanel.addBuildingToMap(buildingName, LocationTypeEnum.Restaurant); 
 			}
 			if(type == LocationTypeEnum.Market){
-				JPanel AnimationPanel = new JPanel();
-				//market.gui.AnimationPanel AnimationPanel = new AnimationPanel();
-				buildingViewPanel.addCard(AnimationPanel, buildingName);
-				cityViewPanel.addBuildingToMap(buildingName, LocationTypeEnum.Market); 
+				market.gui.AnimationPanel animationPanel = new market.gui.AnimationPanel();
+				
+				MarketRecords marketRecords = new MarketRecords(animationPanel);
+				MarketControlPanel controlPanel = new MarketControlPanel(marketRecords);
+				
+				citizenRecords.addBuildingRecord(marketRecords);
+				
+				
+				
+				
+				buildingViewPanel.addCard(animationPanel, buildingName);
+				//cityViewPanel.addBuildingToMap(buildingName, LocationTypeEnum.Market, controlPanel);
+				
+				
 			}
 			if(type == LocationTypeEnum.Hospital){
 				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());

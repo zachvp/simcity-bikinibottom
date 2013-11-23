@@ -1,32 +1,25 @@
 package bank;
 
-import agent.Agent;
+import java.util.concurrent.Semaphore;
+
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
-
 /**
  * Restaurant customer agent.
  */
 
 //Build should not be problem
-public class BankCustomerRole extends Role implements BankCustomer {
+public class BankCustomerRole extends WorkRole implements BankCustomer {
 	private String name;
 	
+	private boolean endWorkShift = false;
 	private int accountId = -1;//if -1, has not been assigned
 
 	private Semaphore active = new Semaphore(0, true);
@@ -127,6 +120,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	}
 	
+	public void msgLeaveWork() {
+//		endWorkShift = true;
+//		stateChanged();
+	}
 	public void msgGoToSecurityGuard(SecurityGuard sg){
 		
 		securityGuard = sg;
@@ -226,7 +223,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			leaveBank();
 			return true;
 		}
-		
+		if(endWorkShift) {
+			goOffWork();
+			return true;
+		}
 
 		
 		return false;
@@ -288,6 +288,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		setCashAdjustAmount(0);
 		loanAmount = 0;
 		state = State.leaving;
+		securityGuard.msgLeavingBank(this);
 		doLeaveBank();
 		acquireSemaphore(active);
 	}
@@ -299,6 +300,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		acquireSemaphore(active);
 		getLoanManager().msgINeedALoan(this, myCash.threshold);
 		state = State.atLoanManager;
+	}
+	
+	private void goOffWork() {
+		doEndWorkDay();
+		acquireSemaphore(active);
+		this.deactivate();
+		
 	}
 
 	//ANIMATION##########################
@@ -313,6 +321,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	private void doGoToTeller(int xLoc) {
 		bankCustomerGui.DoGoToTeller(xLoc, myCash.amount, myCash.cashInAccount);
+	}
+	private void doEndWorkDay() {
+		bankCustomerGui.DoEndWorkDay();
 	}
 	
 	
@@ -395,6 +406,42 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 

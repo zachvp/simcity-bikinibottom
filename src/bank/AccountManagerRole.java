@@ -1,18 +1,17 @@
 package bank;
 
-import agent.Agent;
-import agent.PersonAgent;
-import agent.Role;
-import bank.gui.AccountManagerGui;
-import bank.interfaces.AccountManager;
-import bank.interfaces.BankCustomer;
-import bank.interfaces.Teller;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+
+import agent.PersonAgent;
+import agent.WorkRole;
+import bank.gui.AccountManagerGui;
+import bank.interfaces.AccountManager;
+import bank.interfaces.BankCustomer;
+import bank.interfaces.Teller;
 
 
 /**
@@ -20,11 +19,13 @@ import java.util.concurrent.Semaphore;
  */
 
 //Build should not be problem
-public class AccountManagerRole extends Role implements AccountManager {
+public class AccountManagerRole extends WorkRole implements AccountManager {
 	private String name;
 	int currentIdNum = 1000; //starts at 1000 and increments
 	List<Teller> tellers = new ArrayList<Teller>();
 	List<Task> tasks = new ArrayList<Task>();
+	
+	private boolean endWorkShift = false;
 	
 	private Semaphore active = new Semaphore(0, true);
 	private AccountManagerGui accountManagerGui;
@@ -76,6 +77,10 @@ public class AccountManagerRole extends Role implements AccountManager {
 	}
 	// Messages
 	
+	public void msgLeaveWork() {
+		endWorkShift = true;
+		stateChanged();
+	}
 	
 	public void msgOpenNewAccount(Teller t, BankCustomer bc, double initialDeposit) {
 		
@@ -122,6 +127,11 @@ public class AccountManagerRole extends Role implements AccountManager {
 				withdraw(t);
 				return true;
 			}
+		}
+		
+		if(endWorkShift) {
+			goOffWork();
+			return true;
 		}
 		
 		return false;
@@ -172,7 +182,17 @@ public class AccountManagerRole extends Role implements AccountManager {
 		tasks.remove(t);
 	}
 	
+	private void goOffWork() {
+			doEndWorkDay();
+			acquireSemaphore(active);
+			this.deactivate();
+	}
+	
 	//ANIMATION
+	
+	private void doEndWorkDay() {
+		accountManagerGui.DoEndWorkDay();
+	}
 	
 	public void msgAtDestination() {
 		active.release();
@@ -216,6 +236,48 @@ public class AccountManagerRole extends Role implements AccountManager {
 	
 	public String toString() {
 		return "customer " + getName();
+	}
+
+
+	@Override
+	public int getShiftStartHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getShiftStartMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getShiftEndHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public int getShiftEndMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

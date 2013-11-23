@@ -1,28 +1,34 @@
 package bank.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Image;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-
-import javax.swing.*;
-
+import agent.PersonAgent;
+import agent.Role;
+import agent.WorkRole;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
 import bank.LoanManagerRole;
 import bank.SecurityGuardRole;
 import bank.TellerRole;
-
-import agent.PersonAgent;
-import bank.gui.AnimationPanel;
-
 //import restaurant.CustomerAgent;
 //import restaurant.WaiterAgent;
-
-
-import java.awt.*;
-import java.awt.event.*;
 /**
  * Main GUI class.
  * Contains the main frame and subsequent panels
@@ -55,6 +61,7 @@ public class BankGui extends JFrame implements ActionListener {
     private JButton addCustomerButton;
     private JButton addTellerButton;
     private JButton endWorkDayButton;
+    private JButton resumeWorkButton;
     private JTextField text1;
     private JTextField text2;
     
@@ -65,6 +72,8 @@ public class BankGui extends JFrame implements ActionListener {
     								Seems like a hack */
 
     private int testAccountId = 2000;
+    
+    List<WorkRole> workRoles = new ArrayList<WorkRole>();
     
     private TellerRole teller;
     private AccountManagerRole accountManager;
@@ -85,7 +94,9 @@ public class BankGui extends JFrame implements ActionListener {
         int WINDOWX = 600;
         int WINDOWY = 490;
         
+        resumeWorkButton = new JButton("resume work day, bitch");
         endWorkDayButton = new JButton("end work day");
+        resumeWorkButton.addActionListener(this);
         endWorkDayButton.addActionListener(this);
         optionFrame = new JFrame();
         addCustomerButton = new JButton("add customer");
@@ -101,6 +112,7 @@ public class BankGui extends JFrame implements ActionListener {
         addTellerButton.addActionListener(this);
         optionFrame.add(text2);
         optionFrame.add(endWorkDayButton);
+        optionFrame.add(resumeWorkButton);
         
         
 //        animationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -173,6 +185,13 @@ public class BankGui extends JFrame implements ActionListener {
         animationPanel.addGui(securityGuardGui);
         securityGuardPerson.addRole(securityGuard);
         securityGuard.activate();
+        
+        securityGuard.addRole(loanManager);
+        securityGuard.addRole(accountManager);
+        
+        workRoles.add(securityGuard);
+        workRoles.add(loanManager);
+        workRoles.add(accountManager);
         
 //        teller.setSecurityGuard(securityGuard);
        
@@ -256,7 +275,12 @@ public class BankGui extends JFrame implements ActionListener {
 		}
 		if(e.getSource() == endWorkDayButton) {
 			System.out.println("ending work day");
+			securityGuard.msgLeaveWork();
 			
+		}
+		if(e.getSource() == resumeWorkButton) {
+			System.out.println("resuming work day");
+//			securityGuard.resumeWorkDay();
 		}
 		
 	}
@@ -274,9 +298,10 @@ public class BankGui extends JFrame implements ActionListener {
         tellerPerson2.addRole(teller2);
         teller2.activate();
         securityGuard.addTeller(teller2, tellerDesk);
-        teller2.doGoToDesk();
+        teller2.doGoToWorkstation();
         teller2.setSecurityGuard(securityGuard);
-        
+        workRoles.add(teller2);
+        securityGuard.addRole(teller2);
         tellerDesk++;
 	}
 	
@@ -296,6 +321,7 @@ public class BankGui extends JFrame implements ActionListener {
 	        bankCustomer.setGui(bankCustomergui);
 	        animationPanel.addGui(bankCustomergui);
 	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        workRoles.add(bankCustomer);
 	        return;
 		}
 		if(name.equals("withdraw")){
@@ -312,6 +338,7 @@ public class BankGui extends JFrame implements ActionListener {
 	        bankCustomer.setGui(bankCustomergui);
 	        animationPanel.addGui(bankCustomergui);
 	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        workRoles.add(bankCustomer);
 	        return;
 		}
 		if(name.equals("loan")){
@@ -328,6 +355,7 @@ public class BankGui extends JFrame implements ActionListener {
 	        bankCustomer.setGui(bankCustomergui);
 	        animationPanel.addGui(bankCustomergui);
 	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        workRoles.add(bankCustomer);
 	        return;
 		}
 		if(name.equals("deposit")){
@@ -344,6 +372,7 @@ public class BankGui extends JFrame implements ActionListener {
 	        bankCustomer.setGui(bankCustomergui);
 	        animationPanel.addGui(bankCustomergui);
 	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        workRoles.add(bankCustomer);
 	        return;
 		}
 		else {//make a customer with no account
@@ -357,6 +386,7 @@ public class BankGui extends JFrame implements ActionListener {
 	        bankCustomer.setGui(bankCustomergui);
 	        animationPanel.addGui(bankCustomergui);
 	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        workRoles.add(bankCustomer);
 	        return;
 		}
 		

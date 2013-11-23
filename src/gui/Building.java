@@ -14,6 +14,7 @@ public class Building extends Rectangle2D.Double {
 	String name;
 	JPanel animationPanel;	
 	LocationTypeEnum type;
+	JPanel controls;
 	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
@@ -36,5 +37,9 @@ public class Building extends Rectangle2D.Double {
 	
 	public LocationTypeEnum getType(){
 		return type;
+	}
+	
+	public void setControlPanel(JPanel c){
+		controls = c;
 	}
 }

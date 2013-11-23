@@ -82,6 +82,26 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		buildings.add(b);
 		col++;
 	}
+	
+	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel controls){
+		if (col >= Constants.MAX_BLOCK_COL){
+			row++;
+			col = 0;
+			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
+		}
+		Building b = new Building
+				(col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_X,
+				row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
+						+ Constants.MAP_MARGIN_Y, 
+				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+		b.setName(name);
+		b.setType(type);
+		b.setControlPanel(controls);
+		buildings.add(b);
+		col++;
+	}
+	
 
 	/**
 	 * Paints the images on the map

@@ -34,8 +34,7 @@ public class CitizenRecords {
 		Kelp kelp = KelpClass.getKelpInstance();
 		person.addRole(new RealPassengerRole(person, 
 				kelp.placesNearMe(new XYPos(0, 0), 
-						LocationTypeEnum.Apartment).get(0),
-				new PassengerGuiClass()));
+						LocationTypeEnum.Apartment).get(0)));
 		person.startThread();
 		/*
 		person.goToLoc(kelp.placesNearMe(kelp.placesNearMe(new XYPos(0, 0), 

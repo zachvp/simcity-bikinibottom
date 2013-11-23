@@ -13,6 +13,7 @@ import transportation.interfaces.Busstop;
 import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
+import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.interfaces.Person;
@@ -44,6 +45,14 @@ public class RealPassengerRole extends PassengerRole {
 	public RealPassengerRole(Person person, CityLocation location) {
 		super(person, location);
 		this.gui = new PassengerGuiClass(this, location);
+	}
+	
+	//CONSTRUCTOR FOR TESTING ONLY!
+	// TODO Is this wrong?
+	public RealPassengerRole(Person person, CityLocation location,
+			MockPassengerGui gui) {
+		super(person, location);
+		this.gui = gui;
 	}
 
 	//TODO add input for if has car, if want bus, etc

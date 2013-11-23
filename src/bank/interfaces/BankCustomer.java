@@ -9,6 +9,8 @@ package bank.interfaces;
 public interface BankCustomer {
 
         public abstract void msgGotToTeller();
+        
+        public abstract void msgGoToTeller(int xLoc, Teller t);
 
         public abstract void msgAccountOpened(int accountIdNumber);
         
@@ -18,5 +20,7 @@ public interface BankCustomer {
         
         public abstract void msgLoanApproved(double amount);
         
-        public abstract void msgSpeakToLoanManager(LoanManager lm);
+        public abstract void msgSpeakToLoanManager(LoanManager lm, int XPos);
+
+        public abstract void msgGoToSecurityGuard(SecurityGuard sg);
 }

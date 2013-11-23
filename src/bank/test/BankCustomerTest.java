@@ -89,7 +89,7 @@ public class BankCustomerTest extends TestCase
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
             assertEquals("wrong state", bankCustomer.getState(), State.gettingLoan);
             assertTrue("message reception not logged", teller.log.containsString("received loan message"));
-            bankCustomer.msgSpeakToLoanManager(loanManager);
+            bankCustomer.msgSpeakToLoanManager(loanManager, 0);
             assertEquals("BC has wrong loanmanager", bankCustomer.getLoanManager(), loanManager);
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
             assertEquals("wrong state", bankCustomer.getState(), State.atLoanManager);

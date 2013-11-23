@@ -1,8 +1,11 @@
 package agent.interfaces;
 
+import java.util.Timer;
+
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
+import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 
@@ -155,4 +158,19 @@ public interface Person {
 			return cashOnHand < tooLittle;
 		}
 	}
+
+	/** Call this when state changes, requiring the Preson's attention. */
+	public void agentStateChanged();
+	
+    /** Return Person name for messages.*/
+	public String getName();
+	
+    /** The simulated action code */
+	public void agentDo(String msg);
+
+    /** Print message */
+	public void printMsg(String msg);
+
+	public void setHungerLevel(HungerLevel hungry);
+	
 }

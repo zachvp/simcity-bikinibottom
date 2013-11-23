@@ -37,7 +37,7 @@ public class KelpClass implements Kelp {
 		}
 	}
 	
-	public KelpClass() throws Exception {
+	private KelpClass() throws Exception {
 		if (instance != null) 
 			throw new Exception("Tried to create a second instance of "
 					+ "Kelp, Kelp is a singleton. You should be using "

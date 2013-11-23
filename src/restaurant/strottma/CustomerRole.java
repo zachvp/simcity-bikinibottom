@@ -16,6 +16,8 @@ import java.util.concurrent.Semaphore;
 import agent.PersonAgent;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
+import agent.interfaces.Person;
+import agent.interfaces.Person.Wallet;
 
 /**
  * Restaurant customer role.
@@ -60,8 +62,7 @@ public class CustomerRole extends Role implements Customer {
 	private Cashier cashier;
 	
 	// money
-	// TODO use PersonAgent's money
-	double money;
+	// double money; // now uses PersonAgent's money
 	double bill;
 	
 	// received from waiter
@@ -90,14 +91,14 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(PersonAgent person){
+	public CustomerRole(Person person){
 		super(person);
 		System.out.println("Created CustomerRole for " + person.getName());
 		
-		this.money = 20;
-		if (getName().equals(C_NAME_POOR))  { this.money = 0; }
-		if (getName().equals(C_NAME_FLAKE)) { this.money = 0; }
-		if (getName().equals(C_NAME_CHEAP)) { this.money = 6; }
+		person.getWallet().setCashOnHand(20);
+		if (getName().equals(C_NAME_POOR))  { person.getWallet().setCashOnHand(0); }
+		if (getName().equals(C_NAME_FLAKE)) { person.getWallet().setCashOnHand(0); }
+		if (getName().equals(C_NAME_CHEAP)) { person.getWallet().setCashOnHand(6); }
 		this.bill = 0;
 	}
 
@@ -175,7 +176,8 @@ public class CustomerRole extends Role implements Customer {
 	
 	@Override
 	public void msgHereIsChange(double change) {
-		this.money += change;
+		Wallet wallet = person.getWallet();
+		wallet.setCashOnHand(wallet.getCashOnHand() + change);
 		this.event = CustomerEvent.RECEIVED_CHANGE;
 		this.stateChanged();
 	}
@@ -369,15 +371,19 @@ public class CustomerRole extends Role implements Customer {
 	
 	private void pay() {
 		// customerGui.DoPay(); // animation - disabled for now
-		if (money >= bill) {
+		Wallet wallet = person.getWallet();
+		if (person.getWallet().getCashOnHand() >= bill) {
 			// TODO: fix this hack
 			Do("Paying $" + df.format(bill));
-			this.money -= Math.ceil(bill); // no exact change
+			
+			// pay: no exact change, use full bills
+			wallet.setCashOnHand(wallet.getCashOnHand() - Math.ceil(bill));
+			 
 			cashier.msgHereIsPayment(this, Math.ceil(bill));
 		} else {
 			Do("I can't afford this meal...");
-			cashier.msgHereIsPayment(this, money);
-			this.money = 0;
+			cashier.msgHereIsPayment(this, wallet.getCashOnHand());
+			wallet.setCashOnHand(0);
 		}
 		
 	}
@@ -386,7 +392,11 @@ public class CustomerRole extends Role implements Customer {
 		Do("Leaving.");
 		waiter.msgLeaving(this);
 		customerGui.DoExitRestaurant();
-		if (getName().equals(C_NAME_FLAKE)) { money += 50; }
+		
+		Wallet wallet = person.getWallet();
+		if (getName().equals(C_NAME_FLAKE)) {
+			wallet.setCashOnHand(wallet.getCashOnHand() + 50);
+		}
 	}
 
 	// Utilities

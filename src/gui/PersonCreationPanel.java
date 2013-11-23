@@ -111,7 +111,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			String status = (String)wealth.getSelectedItem();
 			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
 			
-			if(!verifyInputs(name, job, home, status, (String)car.getSelectedItem())){
+			if(!incompleteInputs(name, job, home, status, (String)car.getSelectedItem())){
 											
 				//reset input fields
 				nameText.setText("");
@@ -135,8 +135,18 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		}
 		
 	}
+	
+	/**
+	 * Verifies the User Inputs when creating a new Person
+	 * @param name 
+	 * @param job
+	 * @param home
+	 * @param wealthStatus
+	 * @param car
+	 * @return True if any input is incomplete
+	 */
 
-	private boolean verifyInputs(String name, String job, String home,
+	private boolean incompleteInputs(String name, String job, String home,
 			String wealthStatus, String car) {
 		return (name == null) ||(name.equals("Enter a name")) ||(name.equals(""))
 				|| (job.equals("Select an Occupation")) 
@@ -145,9 +155,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 				|| (car.equals("Has a Car")));
 		
 	}
-
-
-
 	/**
 	 * Gives hospital reference to the CitizenRecords
 	 * @param records the CitizenRecords

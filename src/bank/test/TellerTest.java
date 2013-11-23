@@ -1,18 +1,19 @@
 package bank.test;
 
-import bank.TellerAgent;
+import junit.framework.TestCase;
+import agent.PersonAgent;
+import bank.TellerRole;
 import bank.test.mock.MockAccountManager;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockLoanManager;
-import junit.framework.TestCase;
 
 public class TellerTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
 
-	TellerAgent teller;
+	TellerRole teller;
 	MockBankCustomer bankCustomer;
-	MockAccountManager accountManager;
+	MockAccountManager accountManager;// = new MockAccountManager("accountManager");
 	MockLoanManager loanManager;
 
 
@@ -24,8 +25,12 @@ public class TellerTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();  
 
+		PersonAgent tellerPerson = new PersonAgent("testTeller");
 		bankCustomer = new MockBankCustomer("mockBankCustomer");
-		teller = new TellerAgent("Teller");
+		teller = new TellerRole(tellerPerson);
+		teller.setAccountManager(accountManager);
+        teller.setLoanManager(loanManager);
+        teller.setDeskPosition(0);
 		loanManager = new MockLoanManager("mockLoanManager");
 		accountManager = new MockAccountManager("mockAM");
 		

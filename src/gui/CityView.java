@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+
 /**
  * Provides scrolling view of city map
  * @author Victoria Dea
@@ -37,9 +39,10 @@ public class CityView extends JPanel implements ActionListener{
 	 * Adds a building to the city map
 	 * @param name Name of the building
 	 */
-	public void addBuildingToMap(String name){
-		map.addBuildingToMap(name);
+	public void addBuildingToMap(String name, LocationTypeEnum type){
+		map.addBuildingToMap(name, type);
 	}
+	
 	/**
 	 * Sets reference to the BuildingView panel
 	 * @param panel BuildingView panel
@@ -56,9 +59,15 @@ public class CityView extends JPanel implements ActionListener{
 		return map.getBuildings();
 	}
 	
+	
+	
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setInfoPaneltoMap(InfoPanel infoPanel) {
+		map.setInfoPanel(infoPanel);
 	}
 	
 

@@ -1,8 +1,12 @@
 package market;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;
@@ -10,10 +14,13 @@ import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import agent.Agent;
+import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
+import agent.TimeManager;
+import agent.WorkRole;
 
-public class DeliveryGuyRole extends Role implements DeliveryGuy{
+public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available = true;
@@ -23,15 +30,36 @@ public class DeliveryGuyRole extends Role implements DeliveryGuy{
 	
 	private Semaphore atExit = new Semaphore (0,true);
 	
+	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
+	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
+	
 	public DeliveryGuyRole(String NA, CityBuilding MA, PersonAgent person){
 		super(person);
 		name = NA;
 		Market = MA;
+		Timer timer = person.getTimer();
+		
+		TimerTask task = new TimerTask(){
+			public void run() {
+				msgOffWork();
+			
+			}
+		};
+		
+		Date firstTime = new Date(TimeManager.getInstance().nextSuchTime(18, 0));
+		int period = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+				
+		timer.schedule(task, firstTime, period);
 	}
 	
 	//Messages
 		public boolean msgAreYouAvailable() {
 			return Available;
+		}
+		
+		public void msgOffWork(){
+			state = DeliveryGuystate.OffWork;
+			stateChanged();
 		}
 
 		
@@ -57,6 +85,10 @@ public class DeliveryGuyRole extends Role implements DeliveryGuy{
 			GoDeliver();
 				return true;
 		}
+		if (Available == true && state == DeliveryGuystate.OffWork){
+			OffWork();
+				return true;
+		}
 		return false;
 	}
 
@@ -78,6 +110,18 @@ public class DeliveryGuyRole extends Role implements DeliveryGuy{
 		//Available = true;
 	}
 	
+	private void OffWork(){
+		deliveryguyGui.OffWork();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.deactivate();
+	}
+	
+	
 	//Utilities
 	public void setGui (DeliveryGuyGui dgGui){
 		deliveryguyGui = dgGui;
@@ -97,6 +141,29 @@ public class DeliveryGuyRole extends Role implements DeliveryGuy{
 	public void setCashier(Cashier ca){
 		cashier = ca;
 	}
+	
+	//Shifts
+		public int getShiftStartHour(){
+			return 8;
+		}
+		public int getShiftStartMinute(){
+			return 29;
+		}
+		public int getShiftEndHour(){
+			return 18;
+		}
+		public int getShiftEndMinute(){
+			return 0;
+		}
+		public boolean isAtWork(){
+			if (this.isActive())
+				return true;
+			else
+				return false;
+		}
+		public boolean isOnBreak(){
+			return false;
+		}
 
 	private class Order{
 		List<Item> DeliveryList;

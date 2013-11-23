@@ -1,5 +1,10 @@
 package agent;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 
 /**
@@ -8,10 +13,11 @@ import CommonSimpleClasses.CityLocation;
  * @author Erik Strottmann
  */
 public abstract class Role {
-    protected PersonAgent person;
+    protected Person person;
     protected CityLocation location;
     private boolean active = false;
     private boolean awaitingInput = false;
+    private ScheduledExecutorService executor;
     
     /**
      * Sets the Role's agent and location.
@@ -19,9 +25,11 @@ public abstract class Role {
      * @see #getPerson()
      * @see #getLocation()
      */
-    protected Role(PersonAgent person, CityLocation location) {
+    protected Role(Person person, CityLocation location) {
     	setPerson(person);
     	setLocation(location);
+    	
+		this.executor = Executors.newSingleThreadScheduledExecutor();
     }
     
     /**
@@ -30,7 +38,7 @@ public abstract class Role {
      * @see #getPerson()
      * @see #setLocation()
      */
-    protected Role(PersonAgent person) {
+    protected Role(Person person) {
     	this(person, null);
     }
     
@@ -45,11 +53,11 @@ public abstract class Role {
     	this(null, null);
     }
     
-    public Agent getPerson() {
+    public Person getPerson() {
     	return this.person;
     }
     
-    public void setPerson(PersonAgent person) {
+    public void setPerson(Person person) {
     	this.person = person;
     }
     
@@ -84,7 +92,7 @@ public abstract class Role {
      * the agent to do something.
      */
     protected void stateChanged() {
-        person.stateChanged();
+        person.agentStateChanged();
     }
 
     /**
@@ -173,22 +181,32 @@ public abstract class Role {
      * The simulated action code
      */
     protected void Do(String msg) {
-        person.Do(msg);
+        person.agentDo(msg);
     }
 
     /**
      * Print message
      */
     protected void print(String msg) {
-        person.print(msg);
+        person.printMsg(msg);
     }
 
     /**
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        person.print(msg);
+        person.printMsg(msg);
     }
-
+    
+	// ---- Schedule tasks
+	
+	public void scheduleDailyTask(Runnable command, int hour, int minute) {
+		long initialDelay =
+				TimeManager.getInstance().nextSuchTime(hour, minute);
+		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+		TimeUnit unit = TimeUnit.MILLISECONDS;
+		executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+	}
+	
 }
 

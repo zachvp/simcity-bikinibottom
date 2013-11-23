@@ -254,11 +254,7 @@ public class ResidentRole extends Role implements Resident {
 	public void setMoneyOwed(double moneyOwed) {
 		this.moneyOwed = moneyOwed;
 	}
-
-	public PersonAgent getPerson() {
-		return person;
-	}
-
+	
 	public void setPerson(PersonAgent person) {
 		this.person = person;
 	}

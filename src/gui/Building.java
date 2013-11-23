@@ -4,16 +4,21 @@ import java.awt.geom.*;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
+/**
+ * A Rectangle2D that appears as a Building on the CityMap
+ *
+ */
 public class Building extends Rectangle2D.Double {
 	String name;
-	JPanel animationPanel;
-
+	JPanel animationPanel;	
+	LocationTypeEnum type;
+	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
 		
-		//TODO add name
-		//TODO link to building's animation panel 
+		//TODO link to building's animation panel ?
 		
 	}
 	
@@ -23,5 +28,13 @@ public class Building extends Rectangle2D.Double {
 	
 	public String getName(){
 		return name;
+	}
+
+	public void setType(LocationTypeEnum ntype) {
+		type = ntype;
+	}
+	
+	public LocationTypeEnum getType(){
+		return type;
 	}
 }

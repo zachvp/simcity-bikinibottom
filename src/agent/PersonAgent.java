@@ -4,14 +4,12 @@ import housing.ResidentRole;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
-import agent.Role;
 import agent.interfaces.Person;
 
 /**
@@ -28,7 +26,6 @@ public class PersonAgent extends Agent implements Person {
 	private HungerLevel hungerLevel;
 	
 	private TimeManager timeManager;
-	private Timer timer;
 	
 	private Kelp kelp;
 	
@@ -59,7 +56,6 @@ public class PersonAgent extends Agent implements Person {
 		this.hungerLevel = HungerLevel.NEUTRAL;
 		
 		this.timeManager = TimeManager.getInstance();
-		this.timer = new Timer();
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
@@ -87,6 +83,7 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
+		
 		for (Role r : roles) {
 			if (r.isActive()) {
 				if (r.isAwaitingInput()) {
@@ -96,39 +93,36 @@ public class PersonAgent extends Agent implements Person {
 				} else {
 					return r.pickAndExecuteAnAction();
 				}
-				
 				// Note: only one role should be active at a time
 			}
 		}
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
-		
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			 activateRoleForLoc(getPassengerRole().getLocation());
 		}
 		
 
 		// If you didn't just arrive somewhere, decide what to do next.
-		// TODO uncomment scheduler
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
 		} else if (isHungry()) {
 			if (wantsToEatOut()) {
-				// Restaurant r = chooseRestaurant();
-				// goToRestaurant(r);
+				 CityLocation restaurant = chooseRestaurant();
+				 goToRestaurant(restaurant);
 				return true;
 			} else if (hasFoodAtHome()) {
 				goHome();
 				return true;
 			} else {
-				// Market m = chooseMarket();
-				// goToMarket(m);
+				 CityLocation market = chooseMarket();
+				 goToMarket(market);
 				return true;
 			}
 		} else if (needToGoToBank()) {
-			// Bank b = chooseBank();
-			// goToBank(b);
+			 CityLocation bank = chooseBank();
+			 goToBank(bank);
 			return true;
 		}
 
@@ -150,35 +144,26 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	private void goHome() {
-		// TODO implement goHome
-		// CityLocation home = getResidentRole().getLocation();
-		// goToLoc(home);
+		 CityLocation home = getResidentRole().getLocation();
+		 goToLoc(home);
 	}
 	
 	private void goToWork() {
-		// TODO implement goToWork()
+		CityLocation work = getWorkRole().getLocation();
+		goToLoc(work);
 	}
 	
-	// TODO uncomment when Restaurant interface exists
-	/*
-	private void goToRestaurant(Restaurant r) {
-		// TODO implement goToRestaurant
+	private void goToRestaurant(CityLocation restaurant) {
+		goToLoc(restaurant);
 	}
-	*/
 	
-	// TODO uncomment when Market interface exists
-	/*
-	private void goToMarket(Market m) {
-		// TODO implement goToMarket
+	private void goToMarket(CityLocation market) {
+		goToLoc(market);
 	}
-	*/
 	
-	// TODO uncomment when Bank interface exists
-	/*
-	private void goToBank(Bank b) {
-		// TODO implement goToBank
+	private void goToBank(CityLocation bank) {
+		goToLoc(bank);
 	}
-	*/
 	
 	/* -------- Utilities -------- */
 	
@@ -206,10 +191,6 @@ public class PersonAgent extends Agent implements Person {
 	public void addRole(Role r) {
 		this.roles.add(r);
 		stateChanged();
-	}
-	
-	public Timer getTimer() {
-		return this.timer;
 	}
 	
 	private void activateRoleForLoc(CityLocation loc) {
@@ -355,7 +336,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public PassengerRole getPassengerRole() {
-		// TODO implement getPassengerRole
 		for (Role r : roles) {
 			if (r instanceof PassengerRole) {
 				return (PassengerRole) r;
@@ -387,23 +367,54 @@ public class PersonAgent extends Agent implements Person {
 		
 	// ---- Choosing locations to patronize
 	
-	/*
-	Restaurant chooseRestaurant() {
-		// TODO implement chooseRestaurant()
+
+	private CityLocation chooseRestaurant() {
+		// get a list of nearby restaurants
+		List<CityLocation> restaurants = kelp.placesNearMe(
+				getPassengerRole().getLocation(),
+				CityLocation.LocationTypeEnum.Restaurant);
+		
+		// choose a restaurant
+		for (CityLocation r : restaurants) {
+			// TODO don't just choose the first restaurant
+			return r;
+		}
+		
+		// if no restaurants exist
+		return null;
 	}
-	*/
 	
-	/*
-	Market chooseMarket() {
-		// TODO implement chooseRestaurant()
+	private CityLocation chooseMarket() {
+		// get a list of nearby markets
+		List<CityLocation> markets = kelp.placesNearMe(
+				getPassengerRole().getLocation(),
+				CityLocation.LocationTypeEnum.Market);
+		
+		// choose a market
+		for (CityLocation m : markets) {
+			// TODO don't just choose the first market
+			return m;
+		}
+		
+		// if no markets exist
+		return null;
 	}
-	*/
 	
-	/*
-	Bank chooseBank() {
-		// TODO implement chooseBank()
+	private CityLocation chooseBank() {
+		// get a list of nearby banks
+		List<CityLocation> banks = kelp.placesNearMe(
+				getPassengerRole().getLocation(),
+				CityLocation.LocationTypeEnum.Bank);
+		
+		// choose a bank
+		for (CityLocation b : banks) {
+			// TODO don't just choose the first bank
+			return b;
+		}
+		
+		// if no banks exist
+		return null;
 	}
-	*/
 	
 	// ---- Boolean methods (for deciding what to do next)
 	
@@ -437,21 +448,36 @@ public class PersonAgent extends Agent implements Person {
 				>= this.eatingOutWaitPeriod;
 	}
 	
+	/** Whether this person has food at home. */
 	public boolean hasFoodAtHome() {
-		return false;
-		// TODO give every person a ResidentRole
-		// return getResidentRole().thereIsFoodAtHome();
+		 return getResidentRole().thereIsFoodAtHome();
 	}
 	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle();
 	}
-	
+		
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
 	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
 			FULL}
+	
+	// ---- Methods to avoid weird inheritance issues
+	@Override
+	public void agentStateChanged() {
+		stateChanged();
+	}
+
+	@Override
+	public void printMsg(String msg) {
+		print(msg);
+	}
+
+	@Override
+	public void agentDo(String msg) {
+		Do(msg);
+	}
 	
 }
 

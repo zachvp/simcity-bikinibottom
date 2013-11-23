@@ -13,9 +13,11 @@ import agent.gui.Gui;
 public class LayoutGui implements Gui {
 	/* --- Layout Item Positions --- */
 	//window size = 550x400
+	int MODIFIER = 2;
+	
 	private final Dimension STOVE_POSITION = new Dimension(400, 100);
 	private final Dimension TABLE_POSITION = new Dimension(100, 150);
-	final Dimension POTTED_PLANT_POSITION = new Dimension(0, 0);
+	final Dimension POTTED_PLANT_POSITION = new Dimension(100, 200);
 	final Dimension DOOR_POSITION = new Dimension(0, 380);
 	final Dimension REFRIGERATOR_POSITION = new Dimension(450, 0);
 	

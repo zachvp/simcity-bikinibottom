@@ -1,28 +1,24 @@
 package bank;
 
-import agent.Agent;
-import bank.interfaces.AccountManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+import agent.PersonAgent;
+import agent.Role;
+import bank.gui.LoanManagerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
-import bank.interfaces.Teller;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
 
 /**
  * Restaurant customer agent.
  */
 
 //Build should not be problem
-public class LoanManagerAgent extends Agent implements LoanManager {
+public class LoanManagerRole extends Role implements LoanManager {
 	private String name;
+	private Semaphore active = new Semaphore(0, true);
+	LoanManagerGui loanManagerGui;
 	
 	class LoanTask {
 		LoanTask(BankCustomer bc, double loanAmount) {
@@ -35,8 +31,9 @@ public class LoanManagerAgent extends Agent implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	LoanManagerAgent(String name) {
-		this.name = name;
+	public LoanManagerRole(PersonAgent person) {
+		super(person);
+//		this.name = name;
 		
 	}
 	
@@ -65,13 +62,43 @@ public class LoanManagerAgent extends Agent implements LoanManager {
 	// Actions
 	
 	private void processLoan(LoanTask lt) {
+		doGoToComputer();
+		acquireSemaphore(active);
+		doGoToDesk();
+		acquireSemaphore(active);
 		lt.bc.msgLoanApproved(lt.loanAmount);
 		loanTasks.remove(lt);
+	}
+	
+	//ANIMATION #####################
+	public void msgAtDestination() {
+		active.release();
+	}
+	private void doGoToDesk() {
+		loanManagerGui.DoGoToDesk();
+	}
+	private void doGoToComputer() {
+		loanManagerGui.DoGoToComputer();
+	}
+	private void doLeaveBank(){ //call at end of shift
+		loanManagerGui.DoLeaveBank();
+	}
+	
+	public void setGui(LoanManagerGui lmg) {
+		loanManagerGui = lmg;
 	}
 	
 
 	// Accessors, etc.
 
+	private void acquireSemaphore(Semaphore s) {
+		try {
+			s.acquire();
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}
+	}
 	
 
 	
@@ -85,10 +112,6 @@ public class LoanManagerAgent extends Agent implements LoanManager {
 
 
 
-//	@Override
-//	public void msgFollowMeToTable(Waiter w, int x, int y, Map<String, Double> m) {
-//		// TODO Auto-generated method stub
-//		
-//	}
+
 }
 

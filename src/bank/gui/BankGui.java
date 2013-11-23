@@ -8,10 +8,14 @@ import javax.imageio.ImageIO;
 
 import javax.swing.*;
 
+import bank.AccountManagerRole;
 import bank.BankCustomerRole;
+import bank.LoanManagerRole;
+import bank.SecurityGuardRole;
+import bank.TellerRole;
 
 import agent.PersonAgent;
-import agent.gui.AnimationPanel;
+import bank.gui.AnimationPanel;
 
 //import restaurant.CustomerAgent;
 //import restaurant.WaiterAgent;
@@ -27,9 +31,9 @@ public class BankGui extends JFrame implements ActionListener {
     /* The GUI has two frames, the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
-//	JFrame animationFrame = new JFrame("Restaurant Animation");
+//	JFrame animationFrame = new JFrame("Bank Animation");
 	AnimationPanel animationPanel = new AnimationPanel();
-	
+	JFrame optionFrame;// = new JFrame();
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
      *    in RestaurantPanel()
@@ -45,6 +49,14 @@ public class BankGui extends JFrame implements ActionListener {
     private JLabel graphicImage;
     private JCheckBox stateCB;//part of infoLabel
     private JCheckBox breakCB;
+    private GridLayout optionGridLayout;
+    
+    //OPTION FRAME STUFF
+    private JButton addCustomerButton;
+    private JButton addTellerButton;
+    private JButton endWorkDayButton;
+    private JTextField text1;
+    private JTextField text2;
     
     
     //private Image image;
@@ -52,19 +64,64 @@ public class BankGui extends JFrame implements ActionListener {
     private Object currentPerson;/* Holds the agent that the info is about.
     								Seems like a hack */
 
+    private int testAccountId = 2000;
+    
+    private TellerRole teller;
+    private AccountManagerRole accountManager;
+    private SecurityGuardRole securityGuard;
+    private LoanManagerRole loanManager;
+    
+    private TellerGui tellerGui;
+    private AccountManagerGui accountManagerGui;
+    private LoanManagerGui loanManagerGui;
+    private SecurityGuardGui securityGuardGui;
+    
+    int tellerDesk = 0;
     /**
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
      */
     public BankGui() {
-        int WINDOWX = 550;
-        int WINDOWY = 600;
-
+        int WINDOWX = 600;
+        int WINDOWY = 490;
+        
+        endWorkDayButton = new JButton("end work day");
+        endWorkDayButton.addActionListener(this);
+        optionFrame = new JFrame();
+        addCustomerButton = new JButton("add customer");
+        addTellerButton = new JButton("add teller");
+        text1 = new JTextField();
+        text2 = new JTextField();
+        optionGridLayout = new GridLayout(3, 2);
+        optionFrame.setLayout(optionGridLayout);
+        optionFrame.add(addCustomerButton);
+        addCustomerButton.addActionListener(this);
+        optionFrame.add(text1);
+        optionFrame.add(addTellerButton);
+        addTellerButton.addActionListener(this);
+        optionFrame.add(text2);
+        optionFrame.add(endWorkDayButton);
+        
+        
 //        animationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        animationFrame.setBounds(100+WINDOWX, 50 , WINDOWX+100, WINDOWY+100);
 //        animationFrame.setVisible(true);
 //    	animationFrame.add(animationPanel); 
-    	
+//    	
+        
+        addCustomerButton.setVisible(true);
+       
+        
+        optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        optionFrame.setBounds(WINDOWX, 50, WINDOWX, WINDOWY);
+        optionFrame.setVisible(true);
+        
+        
+       
+        
+   
+        optionFrame.add(addCustomerButton);
+//        this.add(addCustomer);
     	setBounds(50, 50, WINDOWX, WINDOWY);
 
         setLayout(new BoxLayout((Container) getContentPane(), 
@@ -76,12 +133,61 @@ public class BankGui extends JFrame implements ActionListener {
 //        restPanel.setMaximumSize(restDim);
 //        add(restPanel);
 
-        PersonAgent bankCustomerPerson = new PersonAgent("bankCustomer");
-        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson);
+        
+        PersonAgent accountManagerPerson = new PersonAgent("accountManager");
+        PersonAgent loanManagerPerson = new PersonAgent("loanManagement");
+        accountManager = new AccountManagerRole(accountManagerPerson);
+        accountManagerGui = new AccountManagerGui(accountManager);
+        animationPanel.addGui(accountManagerGui);
+        accountManager.setGui(accountManagerGui);
+        loanManager = new LoanManagerRole(loanManagerPerson);
+        accountManagerPerson.addRole(accountManager);
+        accountManager.activate();
+        accountManagerPerson.startThread();
+        
+        loanManagerGui = new LoanManagerGui(loanManager);
+        animationPanel.addGui(loanManagerGui);
+        loanManager.setGui(loanManagerGui);
+        loanManagerPerson.addRole(loanManager);
+        loanManager.activate();
+        loanManagerPerson.startThread();
+        
+        PersonAgent securityGuardPerson = new PersonAgent("securityguard");
+        securityGuardPerson.startThread();
+        securityGuard = new SecurityGuardRole(securityGuardPerson);
+        
+//        PersonAgent tellerPerson = new PersonAgent("teller");
+//        tellerPerson.startThread();
+//        teller = new TellerRole(tellerPerson, accountManager, loanManager, tellerDesk);
+//        securityGuard.addTeller(teller, tellerDesk);
+//        tellerDesk++;
+//        tellerGui = new TellerGui(teller);
+//        teller.setGui(tellerGui);
+//        animationPanel.addGui(tellerGui);
+//        tellerPerson.addRole(teller);
+//        teller.activate();
+        
 
-        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-        bankCustomer.setGui(bankCustomergui);
-        animationPanel.addGui(bankCustomergui);
+        securityGuardGui = new SecurityGuardGui(securityGuard);
+        securityGuard.setGui(securityGuardGui);
+        animationPanel.addGui(securityGuardGui);
+        securityGuardPerson.addRole(securityGuard);
+        securityGuard.activate();
+        
+//        teller.setSecurityGuard(securityGuard);
+       
+        
+        
+//        PersonAgent bankCustomerPerson = new PersonAgent("bankCustomer");
+//        bankCustomerPerson.startThread();
+//        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson);
+//        bankCustomer.addTeller(teller);
+//        bankCustomerPerson.addRole(bankCustomer);
+//        bankCustomer.activate();
+//        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//        bankCustomer.setGui(bankCustomergui);
+//        animationPanel.addGui(bankCustomergui);
+//        bankCustomer.msgGoToTeller(250);
 
         // Now, setup the info panel
         Dimension infoDim = new Dimension(WINDOWX, (int) (WINDOWY * .125));
@@ -93,19 +199,7 @@ public class BankGui extends JFrame implements ActionListener {
         graphicPanel.setMaximumSize(graphicDim);
         graphicPanel.setBorder(BorderFactory.createTitledBorder("Graphic"));
         
-
-        stateCB = new JCheckBox();
-        stateCB.setVisible(false);
-        stateCB.addActionListener(this);
-        
-        breakCB = new JCheckBox();
-        breakCB.setVisible(false);
-        breakCB.addActionListener(this);
-        
         graphicPanel.setLayout(new BorderLayout(1,2));
-
-        infoLabel = new JLabel(); 
-        infoLabel.setText("<html><pre><i>Click Add to make customers</i></pre></html>");
        
        // graphicLabel.setText("This is my graphic addded for Lab 1");//added for lab 1
 //        graphicPanel.add(graphicLabel);
@@ -121,73 +215,7 @@ public class BankGui extends JFrame implements ActionListener {
      *
      * @param person customer (or waiter) object
      */
-//    public void updateInfoPanel(Object person) {
-//
-//        currentPerson = person;
-//        
-//        
-//        JTextField customerForm = new JTextField();
-//        
-//        System.out.println("BALL");
-//        
-//        if (person instanceof CustomerAgent) {
-//        	stateCB.setVisible(true);
-//        	breakCB.setVisible(false);
-//        	
-//            CustomerAgent customer = (CustomerAgent) person;
-//            stateCB.setText("Hungry?");
-//          //Should checkmark be there? 
-//            stateCB.setSelected(customer.getGui().isHungry());
-//          //Is customer hungry? Hack. Should ask customerGui
-//            stateCB.setEnabled(!customer.getGui().isHungry());
-//          // Hack. Should ask customerGui
-//            infoLabel.setText(
-//               "<html><pre>     Name: " + customer.getName() + " </pre></html>");
-//        }
-//        
-//        if (person instanceof WaiterAgent) {
-//        	stateCB.setVisible(false);
-//        	breakCB.setVisible(true);
-//        	
-//        	WaiterAgent waiter = (WaiterAgent) person;
-//        	breakCB.setText("Request Break?");
-//        	breakCB.setSelected(waiter.getWantToGoOnBreak());
-//        	breakCB.setEnabled(!waiter.getWantToGoOnBreak());
-////        	 breakCB.setText("Hungry?");
-//        	infoLabel.setText( "<html><pre>     Name: " + waiter.getName() + " </pre></html>");
-//        
-//        	
-//        }
-//       // infoPanel.add(customerForm, BorderLayout.CENTER);
-//        infoPanel.validate();
-//    }
-//    /**
-//     * Action listener method that reacts to the checkbox being clicked;
-//     * If it's the customer's checkbox, it will make him hungry
-//     * For v3, it will propose a break for the waiter.
-//     */
-//    public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == stateCB) {
-//            if (currentPerson instanceof CustomerAgent) {
-//                CustomerAgent c = (CustomerAgent) currentPerson;
-//                c.getGui().setHungry(restPanel.customerWaitPosition);
-//                restPanel.incrementCustomerWaitPosition();
-//                if (restPanel.customerWaitPosition > 8) {
-//                	restPanel.setCustomerWaitPosition(1);
-//                }
-//                stateCB.setEnabled(false);
-//            }
-//        }
-//        
-//        if (e.getSource() == breakCB) {
-//        	if(currentPerson instanceof WaiterAgent) {
-//        		WaiterAgent w = (WaiterAgent) currentPerson;
-//        		w.msgSetBreakBit();
-//        		breakCB.setEnabled(false);
-//        	}
-//        }
-//    }
-//    
+
     public void showCB() {
     	stateCB.setVisible(true);
     }
@@ -218,7 +246,120 @@ public class BankGui extends JFrame implements ActionListener {
     }
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource() == addCustomerButton) {
+			System.out.println(text1.getText() + text2.getText());
+			addCustomer(text1.getText());
+		}
+		if(e.getSource() == addTellerButton) {
+			System.out.println("add teller");
+			addTeller(text2.getText());
+		}
+		if(e.getSource() == endWorkDayButton) {
+			System.out.println("ending work day");
+			
+		}
 		
+	}
+	
+	private void addTeller(String name) {
+        PersonAgent tellerPerson2 = new PersonAgent(name);
+        tellerPerson2.startThread();
+        TellerRole teller2 = new TellerRole(tellerPerson2);
+        teller2.setAccountManager(accountManager);
+        teller2.setLoanManager(loanManager);
+        teller2.setDeskPosition(tellerDesk);
+        TellerGui tellerGui2 = new TellerGui(teller2);
+        teller2.setGui(tellerGui2);
+        animationPanel.addGui(tellerGui2);
+        tellerPerson2.addRole(teller2);
+        teller2.activate();
+        securityGuard.addTeller(teller2, tellerDesk);
+        teller2.doGoToDesk();
+        teller2.setSecurityGuard(securityGuard);
+        
+        tellerDesk++;
+	}
+	
+	private void addCustomer(String name) {
+		testAccountId++;
+		if(name.equals("hasAccount")) {
+	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+	        bankCustomerPerson.startThread();
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	       
+	        accountManager.hackAddAccount(bankCustomer, 200, testAccountId);
+	        
+	        bankCustomer.addTeller(teller);
+	        bankCustomerPerson.addRole(bankCustomer);
+	        bankCustomer.activate();
+	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+	        bankCustomer.setGui(bankCustomergui);
+	        animationPanel.addGui(bankCustomergui);
+	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        return;
+		}
+		if(name.equals("withdraw")){
+	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+	        bankCustomerPerson.startThread();
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        
+	        accountManager.hackAddAccount(bankCustomer, 300, testAccountId);
+	        
+	        bankCustomer.addTeller(teller);
+	        bankCustomerPerson.addRole(bankCustomer);
+	        bankCustomer.activate();
+	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+	        bankCustomer.setGui(bankCustomergui);
+	        animationPanel.addGui(bankCustomergui);
+	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        return;
+		}
+		if(name.equals("loan")){
+	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+	        bankCustomerPerson.startThread();
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        
+	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
+
+	        bankCustomer.addTeller(teller);
+	        bankCustomerPerson.addRole(bankCustomer);
+	        bankCustomer.activate();
+	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+	        bankCustomer.setGui(bankCustomergui);
+	        animationPanel.addGui(bankCustomergui);
+	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        return;
+		}
+		if(name.equals("deposit")){
+	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+	        bankCustomerPerson.startThread();
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	       
+	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
+
+	        bankCustomer.addTeller(teller);
+	        bankCustomerPerson.addRole(bankCustomer);
+	        bankCustomer.activate();
+	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+	        bankCustomer.setGui(bankCustomergui);
+	        animationPanel.addGui(bankCustomergui);
+	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        return;
+		}
+		else {//make a customer with no account
+	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+	        bankCustomerPerson.startThread();
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson);
+	        bankCustomer.addTeller(teller);
+	        bankCustomerPerson.addRole(bankCustomer);
+	        bankCustomer.activate();
+	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+	        bankCustomer.setGui(bankCustomergui);
+	        animationPanel.addGui(bankCustomergui);
+	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+	        return;
+		}
+		
+
 	}
 }

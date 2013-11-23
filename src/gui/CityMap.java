@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Constants;
 import agent.gui.Gui;
 
@@ -34,6 +35,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	BuildingView buildingView; //Ref to buildingview
 	BufferedImage image;
 	ImageIcon icon;
+	InfoPanel infoPanel;
 	
 	private List<Gui> guis = new ArrayList<Gui>();
 
@@ -43,7 +45,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		//setMaximumSize(panelDim);
 		//setMinimumSize(panelDim);
 		//setBackground(Color.gray);
-		
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
@@ -61,18 +62,10 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	}
 	
 	/**
-	 * Reference to the panel that holds all the internal building views
-	 * @param panel A BuildingView panel
-	 */
-	public void setBuildingView(BuildingView panel){
-		buildingView = panel;
-	}
-	
-	/**
 	 * Adds a new building to the map
 	 * @param name Name of the building
 	 */
-	public void addBuildingToMap(String name){
+	public void addBuildingToMap(String name, LocationTypeEnum type){
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
@@ -85,6 +78,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 						+ Constants.MAP_MARGIN_Y, 
 				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 		b.setName(name);
+		b.setType(type);
 		buildings.add(b);
 		col++;
 	}
@@ -108,8 +102,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
                 gui.draw(g2);
             }
         }
-		
-		
+				
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
 			if(b.getName().equals("Hospital")){
@@ -120,18 +113,9 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.setColor(Color.DARK_GRAY);
 				g2.fill(b);
 			}
-			
 		}
 	}
-
-	/**
-	 * Returns an ArrayList of Buildings
-	 * @return an ArrayList of Buildings
-	 */
-	public ArrayList<Building> getBuildings() {
-		return buildings;
-	}
-
+	
 	/**
 	 * Handles mouse clicks on the map
 	 */
@@ -141,12 +125,41 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 			Building b = buildings.get(i);
 			if ( b.contains( me.getX(), me.getY() ) ) {
 				buildingView.showCard(b.getName());
+				infoPanel.updateBuildingInfoPanel(b);
 				System.out.println(b.getName()+" clicked");
 
 			}
 		}
-
-
+	}
+	
+	/** Utilities **/
+	
+	/**
+	 * Adds Gui to the Map
+	 * @param gui 
+	 */
+	public void addGui(Gui gui) {
+        guis.add(gui);
+    }
+	
+	/**
+	 * Reference to the panel that holds all the internal building views
+	 * @param panel A BuildingView panel
+	 */
+	public void setBuildingView(BuildingView panel){
+		buildingView = panel;
+	}
+	
+	public void setInfoPanel(InfoPanel i){
+		infoPanel = i;
+	}
+	
+	/**
+	 * Returns an ArrayList of Buildings
+	 * @return an ArrayList of Buildings
+	 */
+	public ArrayList<Building> getBuildings() {
+		return buildings;
 	}
 
 	public void mouseEntered(MouseEvent arg0) {		
@@ -166,11 +179,4 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		repaint();
 		
 	}
-	
-	
-	public void addGui(Gui gui) {
-        guis.add(gui);
-    }
-
-    
 }

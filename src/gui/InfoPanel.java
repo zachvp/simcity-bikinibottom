@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,18 +18,12 @@ import agent.PersonAgent;
  */
 public class InfoPanel extends JPanel implements ActionListener{
 	
-	private MainFrame main;
-	private CitizenRecords citizenRecords;
-	private Vector<PersonAgent> citizens;
 	private Dimension d;
 	private JLabel info;
 	private JPanel textPanel; //info display
 	private JPanel controlPanel; //gui controls
 
-	public InfoPanel(int w, int h, MainFrame m){
-		main = m;
-		citizenRecords = main.getCitizenRecords();
-		//citizens = citizenRecords.getCitizenList();
+	public InfoPanel(int w, int h){
 		d = new Dimension(w-20, h-25);
 		setPreferredSize(d);
 		setMaximumSize(d);
@@ -43,15 +36,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textPanel.setMaximumSize(textDim);
 		textPanel.setMinimumSize(textDim);
 		
-		info = new JLabel();
-		//TODO test text
-		info.setText("<html><div>&nbsp;</div><div> "
+		info = new JLabel("");
+		//Test text
+		/*info.setText("<html><div>&nbsp;</div><div> "
 				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
 				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
 				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
 				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
-		);
+		);*/
 		textPanel.add(info);
 		
 		controlPanel = new JPanel();
@@ -70,17 +63,6 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
 		//System.out.println("update info with "+person.getName());
-		//PersonAgent person = new PersonAgent("not found");
-		//person = citizenRecords.findPerson(name);
-		
-		/*for (PersonAgent p: citizens){
-			if (p.getName() == name){
-				person = p;
-			}
-		}*/
-		
-		
-		//TODO Fix nullPointerException w/ person
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
 						//+ "<div> Job: "+ person.getJob() +"</div><div>&nbsp;</div>"
@@ -88,42 +70,29 @@ public class InfoPanel extends JPanel implements ActionListener{
 						//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
 						//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
 				);
-
-
-
 		validate();
-		
 	}
 	
 	/**
 	 * Displays the Building information
 	 * @param b Building name
 	 */
-	public void updateBuildingInfoPanel(String name){
+	public void updateBuildingInfoPanel(Building b){
 		//Building building = b;
-		System.out.println(name+ " update info panel");
-		
+		System.out.println(b.getName()+ " update info panel");
+
+		info.setText("<html><div>&nbsp;</div><div> "
+				+ "Building: "+ b.getName() +"</div><div>&nbsp;</div>"
+				+ "<div> Building Type: "+ b.getType() +"</div><div>&nbsp;</div>"
+				//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
+				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
+				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
+				);
+		validate();
+
 	}
 	
-	/**
-	 * Sets reference to citizen records
-	 * @param records CitizenRecords
-	 */
-	//public void setCitizenRecords(CitizenRecords records){
-		//citizenRecords = records;
-	//}
-	
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	/**
-	 * Sets reference to citizenlist in CitizenRecords
-	 * @param citizenList citizenList
-	 */
-	public void setCitizenList(Vector<PersonAgent> citizenList) {
-		citizens = citizenList;
+	public void actionPerformed(ActionEvent e) {
 		
 	}
 

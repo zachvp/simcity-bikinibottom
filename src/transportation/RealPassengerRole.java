@@ -5,6 +5,7 @@ import java.util.List;
 
 import kelp.Kelp;
 import kelp.KelpClass;
+import sun.util.logging.resources.logging;
 import transportation.PassengerRole.PassengerStateEnum;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
@@ -108,6 +109,7 @@ public class RealPassengerRole extends PassengerRole {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
+			System.out.println("GOT TO A PLACE");
 			((Person) getPerson()).msgArrivedAtDestination();
 			return;
 		}

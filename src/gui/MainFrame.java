@@ -1,6 +1,10 @@
 package gui;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +16,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -21,9 +26,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import agent.Constants;
+import kelp.KelpClass;
 import market.gui.AnimationPanel;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
+import parser.CornersWithBusstopsParser;
+import parser.test.BuildingPosParserTest;
+import parser.test.mock.MockCityBuilding;
+import sun.net.www.content.text.PlainTextInputStream;
+import transportation.interfaces.Busstop;
+import transportation.interfaces.Corner;
+import transportation.mapbuilder.MapBuilder;
+import transportation.mapbuilder.test.MapBuilderTest;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 
@@ -128,6 +145,71 @@ public class MainFrame extends JFrame implements ActionListener {
         InfoListSlot.setMaximumSize(listDim);
         InfoListSlot.setMinimumSize(listDim);
         InfoListSlot.setOpaque(false);
+        
+        //Create map
+        KelpClass.getKelpInstance();
+        List<BuildingDef> buildings = null;
+		try {
+			BufferedInputStream stream = (BufferedInputStream)
+					getClass()
+					.getResource("BuildingConfig.csv").getContent();
+			buildings = BuildingPosParser.parseBuildingPos(stream);
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
+		
+		try {
+			PlainTextInputStream stream = 
+					(PlainTextInputStream)MapBuilderTest.class
+					.getResource("CornersWithBusstops.txt").getContent();
+			Set<Integer> cornersWithBusstops = 
+					CornersWithBusstopsParser.parseCornersWithBusstops(stream);
+			assertFalse(cornersWithBusstops.isEmpty());
+			MapBuilder.createMap(buildings.size(), cornersWithBusstops);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.toString());
+		}
+		
+		List<Corner> corners = MapBuilder.getCreatedCorners();
+		List<Corner> busRoute = MapBuilder.getBusRoute();
+
+
+		ArrayList<CityLocation> locations = new ArrayList<CityLocation>();
+
+		for (int j = 0; j < (buildings.size() 
+				/ Constants.MAX_BLOCK_COL); j++) {
+			for (int i = 0; i < Constants.MAX_BLOCK_COL; i++) {
+				int index = j*Constants.MAX_BLOCK_COL + i;
+				locations.add(new MockCityBuilding(
+						buildings.get(index).getName(),
+						buildings.get(index).getType(),
+						new XYPos(i*(Constants.BUILDING_WIDTH 
+								+ Constants.SPACE_BETWEEN_BUILDINGS)
+								+ Constants.MAP_MARGIN_X,
+								j*(Constants.BUILDING_HEIGHT
+								+ Constants.SPACE_BETWEEN_BUILDINGS)
+								+ Constants.MAP_MARGIN_Y),
+								new XYPos(0, 0)));
+			}
+		}
+
+		assertEquals(36, locations.size());
+
+		for (Corner corner : corners) {
+			locations.add(corner);
+			List<Busstop> busstops = corner.getBusstops();
+			for (Busstop busstop : busstops) {
+				locations.add(busstop);
+			}
+			corner.startThreads();
+		}
+
+		try {
+			KelpClass.getKelpInstance().setData(locations, busRoute);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);

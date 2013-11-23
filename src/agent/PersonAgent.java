@@ -137,7 +137,8 @@ public class PersonAgent extends Agent implements Person {
 	 * {@link CityLocation}. This is one of PersonAgent's most important
 	 * actions - and several other actions can simply call this one.
 	 */
-	private void goToLoc(CityLocation loc) {
+	public void goToLoc(CityLocation loc) {
+		System.out.println("I AM GOING PLACES " + loc);
 		PassengerRole pass = getPassengerRole();
 		pass.msgGoToLocation(loc);
 		pass.activate();
@@ -438,7 +439,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	/** Whether this person has food at home. */
 	public boolean hasFoodAtHome() {
-		 return getResidentRole().thereIsFoodAtHome();
+		 return false;//getResidentRole().thereIsFoodAtHome();
 	}
 	
 	public boolean needToGoToBank() {

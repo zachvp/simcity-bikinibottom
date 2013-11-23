@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Constants;
 import agent.gui.Gui;
@@ -53,6 +54,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		}
 		icon = new ImageIcon(image);
 
+		guis.add(TransportationGuiController.getInstance());
+		
 		buildings = new ArrayList<Building>();
 
 		addMouseListener(this);
@@ -114,6 +117,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.fill(b);
 			}
 		}
+		
+		TransportationGuiController.getInstance().draw(g2);
 	}
 	
 	/**

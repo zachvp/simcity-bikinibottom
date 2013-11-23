@@ -2,7 +2,14 @@ package gui;
 
 import java.util.Vector;
 
+import kelp.Kelp;
+import kelp.KelpClass;
+import transportation.RealPassengerRole;
+import transportation.gui.PassengerGuiClass;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
+import agent.PersonAgent.HungerLevel;
 
 /**
  * A class to hold all of the PersonAgent information
@@ -23,6 +30,17 @@ public class CitizenRecords {
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
+		person.setHungerLevel(HungerLevel.STARVING,true);
+		Kelp kelp = KelpClass.getKelpInstance();
+		person.addRole(new RealPassengerRole(person, 
+				kelp.placesNearMe(new XYPos(0, 0), 
+						LocationTypeEnum.Apartment).get(0),
+				new PassengerGuiClass()));
+		person.startThread();
+		/*
+		person.goToLoc(kelp.placesNearMe(kelp.placesNearMe(new XYPos(0, 0), 
+			LocationTypeEnum.Apartment).get(0), LocationTypeEnum.Restaurant).get(0));
+			*/
 	}
 
 	/**

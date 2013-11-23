@@ -204,6 +204,18 @@ public class MainFrame extends JFrame implements ActionListener {
 				buildingViewPanel.addCard(personCreationPanel, "Hospital");
 				cityViewPanel.addBuildingToMap("Hospital", LocationTypeEnum.Hospital);
 			}
+			if(type == LocationTypeEnum.Apartment){
+				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+				personCreationPanel.setRecords(citizenRecords);
+				buildingViewPanel.addCard(personCreationPanel, "Apartment");
+				cityViewPanel.addBuildingToMap("Apartment", LocationTypeEnum.Apartment);
+			}
+			if(type == LocationTypeEnum.None){
+				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
+				personCreationPanel.setRecords(citizenRecords);
+				buildingViewPanel.addCard(personCreationPanel, "None");
+				cityViewPanel.addBuildingToMap("None", LocationTypeEnum.None);
+			}
 
 		}
 		

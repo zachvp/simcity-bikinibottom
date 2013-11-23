@@ -110,7 +110,7 @@ public class PassengerRole extends Role implements Passenger {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
-			((Person) getAgent()).msgArrivedAtDestination();
+			((Person) getPerson()).msgArrivedAtDestination();
 			return;
 		}
 		
@@ -160,7 +160,7 @@ public class PassengerRole extends Role implements Passenger {
 
 	private void startCar() {
 		state = PassengerStateEnum.InCar;
-		Car car = ((Person)getAgent()).getCar();
+		Car car = ((Person)getPerson()).getCar();
 		currentVehicle = car;
 		
 		List<Corner> carPath = new ArrayList<Corner>();
@@ -174,6 +174,11 @@ public class PassengerRole extends Role implements Passenger {
 			path.remove(0);
 		}
 		car.msgTakeMeHere(carPath,this);
+	}
+
+	@Override
+	public String getRoleType() {
+		return getClass().getName();
 	}
 
 

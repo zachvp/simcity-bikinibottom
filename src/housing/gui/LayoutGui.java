@@ -15,7 +15,7 @@ public class LayoutGui implements Gui {
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
-	private final int ITEM_SIZE = 20;
+	private final int BASE_SIZE = 20;
 	
 	private final Dimension STOVE_POSITION;
 	private final Dimension TABLE_POSITION;
@@ -28,11 +28,11 @@ public class LayoutGui implements Gui {
 		ROOM_HEIGHT = roomHeight;
 		
 		// place all of the residential items
-		STOVE_POSITION = new Dimension(ROOM_WIDTH/2, 50);
+		STOVE_POSITION = new Dimension(ROOM_WIDTH/2, ROOM_HEIGHT/3);
 		TABLE_POSITION = new Dimension(ROOM_WIDTH/4, ROOM_HEIGHT/4);
 		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH/4, 5);
 		DOOR_POSITION = new Dimension(0, ROOM_HEIGHT/4);
-		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH-40, 0);
+		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH/2, 0);
 	}
 
 	@Override
@@ -46,19 +46,19 @@ public class LayoutGui implements Gui {
 		g.setColor(Color.WHITE);
 		
 		// draw shapes
-		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, ITEM_SIZE, ITEM_SIZE);
-		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, ITEM_SIZE, ITEM_SIZE);
-		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, ITEM_SIZE, ITEM_SIZE);
-		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, ITEM_SIZE, ITEM_SIZE);
-		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, ITEM_SIZE, ITEM_SIZE);
+		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, BASE_SIZE, BASE_SIZE);
+		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, BASE_SIZE, BASE_SIZE);
 		
 		// draw labels
 		g.setColor(Color.BLACK);
-		g.drawString("Stove", STOVE_POSITION.width, STOVE_POSITION.height + ITEM_SIZE);
-		g.drawString("Table", TABLE_POSITION.width, TABLE_POSITION.height  + ITEM_SIZE);
-		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height  + ITEM_SIZE);
-		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + ITEM_SIZE);
-		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height  + ITEM_SIZE);
+		g.drawString("Stove", STOVE_POSITION.width, STOVE_POSITION.height + BASE_SIZE);
+		g.drawString("Table", TABLE_POSITION.width, TABLE_POSITION.height  + BASE_SIZE);
+		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height  + BASE_SIZE);
+		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
+		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height  + BASE_SIZE);
 	}
 
 	@Override
@@ -72,6 +72,10 @@ public class LayoutGui implements Gui {
 
 	public Dimension getTablePosition() {
 		return TABLE_POSITION;
+	}
+	
+	public Dimension getRefrigeratorPosition() {
+		return REFRIGERATOR_POSITION;
 	}
 
 }

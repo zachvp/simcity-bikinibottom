@@ -93,8 +93,8 @@ public class ResidentGui implements Gui {
 	
 	public void DoGoToRefrigerator(){
 		waiting = false;
-		xDestination = layoutGui.getTablePosition().width;
-		yDestination = layoutGui.getTablePosition().height;
+		xDestination = layoutGui.getRefrigeratorPosition().width;
+		yDestination = layoutGui.getRefrigeratorPosition().height;
 		canRelease = true;
 	}
 	

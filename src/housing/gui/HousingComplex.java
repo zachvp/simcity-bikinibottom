@@ -24,15 +24,14 @@ import CommonSimpleClasses.XYPos;
  */
 public class HousingComplex extends JPanel implements CityBuilding {
 	/* --- Data --- */
+	// some configuration constants
 	private final int UNIT_COUNT = 4;
-	int WINDOWX = 600;
-	int WINDOWY = 600;
-	
 	private final int ROWS = 2;
 	private final int COLUMNS = 2;
+	private final int SPACING = 10;
 	
 	// layout manager
-	GridLayout complexLayout = new GridLayout(ROWS, COLUMNS);
+	GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 
 	// payRecipient who manages the complex 
  	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
@@ -41,13 +40,19 @@ public class HousingComplex extends JPanel implements CityBuilding {
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
 	public HousingComplex() {
-//		this.setLayout(complexLayout);
+		// set the layout manager
+		this.setLayout(complexLayout);
 		
+		/**
+		 * Add as many units as specified to the complex. Units will
+		 * be partitioned according to the GridLayout.
+		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, payRecipientRole, WINDOWX/COLUMNS-50, WINDOWY/ROWS-50);
+			HousingGui gui = new HousingGui(i, payRecipientRole);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
+		
 		// activate complex manager
 		startAndActivate(payRecipientPerson, payRecipientRole);
 	}

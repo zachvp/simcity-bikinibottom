@@ -61,7 +61,7 @@ public class ResidentGui implements Gui {
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GRAY);
-		g.fillRect(xPos, yPos, 20, 20);
+//		g.fillRect(xPos, yPos, 20, 20);
 	    	
 		g.setColor(Color.BLACK);
 		g.drawString(guiName, xPos, yPos);

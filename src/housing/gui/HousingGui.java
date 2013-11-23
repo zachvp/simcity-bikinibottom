@@ -4,6 +4,8 @@ import housing.Dwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +29,15 @@ public class HousingGui extends JPanel {
 	int index;
 	
 	// TODO these are temporary dimensions that should not be hardcoded
-    int WINDOW_X = 550/4;
-    int WINDOW_Y = 600/4;
-	
+    int WINDOW_X = 550;
+    int WINDOW_Y = 600;
+
+ // payRecipient for this unit
+ 	PayRecipientRole payRecipientRole;
+    
 	// add resident
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole residentRole = new ResidentRole(residentPerson);
-	
-	// add payRecipient
-	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
-	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
 	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
@@ -47,34 +48,43 @@ public class HousingGui extends JPanel {
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
 	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index);
 	
-	public HousingGui(int index) {
+	public HousingGui(int index, PayRecipientRole payRecipientRole, int width, int height) {
 		this.index = index;
-		setBounds(WINDOW_X*index + WINDOW_Y%50, index*50, WINDOW_X, WINDOW_Y);
+		this.setPreferredSize(new Dimension(width, height));
 		
-		this.add(housingAnimationPanel);
+		this.payRecipientRole = payRecipientRole;
 		
+		// add the resident to the pay recipient's charges
+		residentRole.setPayee(payRecipientRole);
 		payRecipientRole.addResident(dwelling);
 		
 		// add people to the list
 		people.add(residentPerson);
-		people.add(payRecipientPerson);
 		
 		// activate roles
 		startAndActivate(residentPerson, residentRole);
-		startAndActivate(payRecipientPerson, payRecipientRole);
 		
 		// assign guis to the resident
 		residentRole.setGui(residentGui);
 		residentGui.setLayoutGui(layoutGui);
 		
+		switch(index){
+			case 0: setBackground(Color.BLACK); break;
+			case 1: setBackground(Color.RED); break;
+			case 2: setBackground(Color.GREEN); break;
+			case 3: setBackground(Color.BLUE); break;
+			default: setBackground(Color.WHITE); break;
+		}
 		// add to animation panel
 		housingAnimationPanel.addGui(layoutGui);
 		housingAnimationPanel.addGui(residentGui);
+		housingAnimationPanel.setBackground(Color.BLACK);
+		this.add(housingAnimationPanel);
 	}
 	
 	private void startAndActivate(PersonAgent agent, Role role) {
 		agent.startThread();
-		agent.addRole(residentRole);
+		agent.addRole(role);
 		role.activate();
 	}
 }

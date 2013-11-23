@@ -1,5 +1,8 @@
 package agent.interfaces;
 
+import java.util.Map;
+
+import market.Item;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -180,5 +183,17 @@ public interface Person {
 	public void printMsg(String msg);
 
 	public void setHungerLevel(HungerLevel hungry);
+	
+	/** The {@link Item}s a person currently has. */
+	Map<String, Item> getInventory();
+	
+	/** Adds amount {@link Item}s of type name to the inventory. */
+	void addItemsToInventory(String name, int amount);
+	
+	/**
+	 * Removes up to amount {@link Item}s of type name from the inventory. If
+	 * there aren't that many, remove all.
+	 */
+	void removeItemsFromInventory(String name, int amount);
 	
 }

@@ -472,10 +472,12 @@ public class PersonAgent extends Agent implements Person {
 	
 	// ---- Market/Inventory
 	
+	@Override
 	public Map<String, Item> getInventory() {
 		return this.inventory;
 	}
 	
+	@Override
 	public void addItemsToInventory(String name, int amount) {
 		Item item = this.inventory.get(name);
 		if (item == null) {
@@ -486,6 +488,7 @@ public class PersonAgent extends Agent implements Person {
 		this.inventory.put(name, item);
 	}
 	
+	@Override
 	public void removeItemsFromInventory(String name, int amount) {
 		Item item = this.inventory.get(name);
 		if (item == null) {

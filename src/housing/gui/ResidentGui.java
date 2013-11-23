@@ -17,12 +17,13 @@ import agent.gui.Gui;
 public class ResidentGui implements Gui {
 
 	private Resident resident = null;
-	private boolean canRelease = false;//this prevents excessive releases from occurring
-	private boolean waiting = false;//checks if resident is going to be idle
+	private boolean canRelease = false;// this prevents excessive releases from occurring
+	private boolean waiting = false;// checks if resident is going to be idle
 	
-	
+	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
 
+	// set up labels
 	String guiName = "Resident";
 	String eatingFood = "null";
 
@@ -32,6 +33,7 @@ public class ResidentGui implements Gui {
 	private final int JAZZER_SPOT_X = 0;
 	private final int JAZZER_SPOT_Y = 0;
 	
+	/* --- Constructor --- */
 	public ResidentGui(Resident resident) {
 		this.resident = resident;
 	}

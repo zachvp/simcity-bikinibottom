@@ -49,8 +49,6 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 
 	private DirectionEnum currentDirection; //TODO Remove from DD
 	
-	
-	
 	@Override
 	public void msgMyAdjCorners(List<MyCorner> cList) {
 		adjCorners = new ArrayList<MyCorner> (cList);
@@ -64,6 +62,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		currentCorner = c; // could be currentCorner = currentPath.get(0);
 		currentPath.remove(c);
 		event = VehicleEventEnum.ArrivedAtCorner;
+		isAnimating = false;
 		stateChanged();
 	}
 	

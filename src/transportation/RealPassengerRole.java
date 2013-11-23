@@ -7,6 +7,7 @@ import kelp.Kelp;
 import kelp.KelpClass;
 import sun.util.logging.resources.logging;
 import transportation.PassengerRole.PassengerStateEnum;
+import transportation.gui.PassengerGuiClass;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
@@ -44,8 +45,7 @@ public class RealPassengerRole extends PassengerRole {
 	public RealPassengerRole(Person person, CityLocation location,
 			PassengerGui gui) {
 		super(person, location);
-		this.gui = gui;
-		gui.setPassenger(this, location);
+		this.gui = new PassengerGuiClass(this, location);
 	}
 
 	//TODO add input for if has car, if want bus, etc
@@ -146,7 +146,7 @@ public class RealPassengerRole extends PassengerRole {
 				state = PassengerStateEnum.Walking;
 				return;
 			} else {
-				gui.bringOutCar();
+				gui.doBringOutCar();
 				state = PassengerStateEnum.GettingInCar;
 			}
 		}

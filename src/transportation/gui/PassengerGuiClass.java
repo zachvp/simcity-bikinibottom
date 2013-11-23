@@ -3,8 +3,6 @@ package transportation.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import javax.print.attribute.standard.Destination;
-
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;
@@ -20,15 +18,19 @@ public class PassengerGuiClass implements PassengerGui {
 	private CityLocation destination;
 	private CityLocation startLocation;
 
-	@Override
-	public void setPassenger(Passenger passenger, 
+	public PassengerGuiClass(Passenger passenger,
+			CityLocation location) {
+		setPassenger(passenger, location);
+	}
+
+	private void setPassenger(Passenger passenger, 
 			CityLocation currentLocation) {
 		this.passenger = passenger;
 		this.startLocation =  currentLocation;
 		this.destination = currentLocation;
 		xPos = startLocation.position().x;
 		yPos = startLocation.position().y;
-		TransportationGuiController.getInstance().addGui(this);
+		TransportationGuiController.getInstance().addPassengerGUI(this);
 	}
 	
 	public void updatePosition() {
@@ -60,6 +62,11 @@ public class PassengerGuiClass implements PassengerGui {
 			}
 		}
 	}
+	
+	private void resetXY() {
+		xPos = startLocation.position().x;
+		yPos = startLocation.position().y;
+	}
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -70,6 +77,11 @@ public class PassengerGuiClass implements PassengerGui {
 	@Override
 	public boolean isPresent() {
 		return true;
+	}
+
+	public void doSetLocation (CityLocation loc) {
+		startLocation = loc;
+		resetXY();
 	}
 
 	@Override
@@ -90,7 +102,7 @@ public class PassengerGuiClass implements PassengerGui {
 	}
 
 	@Override
-	public void bringOutCar() {
+	public void doBringOutCar() {
 		// TODO Auto-generated method stub
 	}
 

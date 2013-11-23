@@ -34,23 +34,23 @@ public class BuildingPosParserTest {
 				new BuildingDef("Cero", LocationTypeEnum.None),
 				result.get(0));
 		
-		assertEquals("First line failed", 
+		assertEquals("Second line failed", 
 				new BuildingDef("Uno", LocationTypeEnum.Restaurant),
 				result.get(1));
 		
-		assertEquals("First line failed", 
+		assertEquals("Third line failed", 
 				new BuildingDef("Dos", LocationTypeEnum.House),
 				result.get(2));
 		
-		assertEquals("First line failed", 
+		assertEquals("Fourth line failed", 
 				new BuildingDef("Tres", LocationTypeEnum.Market),
 				result.get(3));
 		
-		assertEquals("First line failed", 
+		assertEquals("Fifth line failed", 
 				new BuildingDef("Cuatro", LocationTypeEnum.Bank),
 				result.get(4));
 		
-		assertEquals("First line failed", 
+		assertEquals("Sixth line failed", 
 				new BuildingDef("Cinco", LocationTypeEnum.Hospital),
 				result.get(5));
 		

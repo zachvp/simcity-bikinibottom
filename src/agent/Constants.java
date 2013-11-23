@@ -95,4 +95,8 @@ public interface Constants {
 	 */
 	public static final int SPACE_BETWEEN_BUILDINGS = 60;
 
+	public static final int BUSSTOP_OFFESET_PERPENDICULAR = (SPACE_BETWEEN_BUILDINGS/2);
+
+	public static final int BUSSTOP_OFFESET_PARALLEL = (SPACE_BETWEEN_BUILDINGS/2);
+
 }

@@ -35,11 +35,17 @@ public class FakePassengerRole extends Role implements Passenger {
 		if (destination != null) {
 			currentLocation = destination;
 			destination = null;
-			((PersonAgent) getAgent()).msgArrivedAtDestination();
+			((PersonAgent) getPerson()).msgArrivedAtDestination();
 			deactivate();
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String getRoleType() {
+		//We are lying here BTW.
+		return "PassengerRole";
 	}
 
 }

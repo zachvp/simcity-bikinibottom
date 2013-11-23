@@ -20,6 +20,8 @@ import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Constants;
 
+
+// TODO update to test busstop orientations
 public class MapBuilderTest {
 	
 	static List<Corner> corners;

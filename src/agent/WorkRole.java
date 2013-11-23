@@ -13,7 +13,8 @@ public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
 	/**
-	 * When this is true, a WorkRole should leave work when all tasks are complete.
+	 * When this is true, a WorkRole should leave work when all tasks are
+	 * complete. Make sure you set this to false when you do end your shift!
 	 */
 	protected boolean endShiftWhenPossible = false;
 	

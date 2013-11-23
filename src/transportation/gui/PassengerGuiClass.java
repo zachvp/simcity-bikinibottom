@@ -27,8 +27,7 @@ public class PassengerGuiClass implements PassengerGui {
 		this.passenger = passenger;
 		this.startLocation =  currentLocation;
 		this.destination = currentLocation;
-		xPos = startLocation.position().x;
-		yPos = startLocation.position().y;
+		resetXY();
 		TransportationGuiController.getInstance().addPassengerGUI(this);
 	}
 	

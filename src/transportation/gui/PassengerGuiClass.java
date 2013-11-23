@@ -3,8 +3,6 @@ package transportation.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import javax.print.attribute.standard.Destination;
-
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;
@@ -31,7 +29,7 @@ public class PassengerGuiClass implements PassengerGui {
 		this.destination = currentLocation;
 		xPos = startLocation.position().x;
 		yPos = startLocation.position().y;
-		TransportationGuiController.getInstance().addGui(this);
+		TransportationGuiController.getInstance().addPassengerGUI(this);
 	}
 	
 	public void updatePosition() {

@@ -50,8 +50,6 @@ public abstract class WorkRole extends Role {
 	 */
 	public abstract boolean isOnBreak();
 	
-	public abstract CityLocation workLocation();
-	
 	/**
 	 * The duration of work, in milliseconds. Accounts for daily and hourly
 	 * overflow, but assumes that no single shift is longer than 23 hours and

@@ -34,11 +34,15 @@ public class CashierGui implements Gui {
 	private Command command=Command.GoToWork;
 
 
-	private MarketPanel panel;
+	private MarketControlPanel panel;
 	
-    public CashierGui(Cashier ca, MarketPanel p) {
+    public CashierGui(Cashier ca) {
         this.agent = ca;
-        panel = p;
+        
+    }
+    
+    public void setMarketControlPanel(MarketControlPanel p){
+    	panel = p;
     }
 
     public void updatePosition() {

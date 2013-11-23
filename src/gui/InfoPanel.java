@@ -88,6 +88,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
 				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
 				);
+		
+		
+		
 		validate();
 
 	}

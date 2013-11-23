@@ -3,8 +3,11 @@ package agent;
 import housing.ResidentRole;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import market.Item;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
@@ -43,6 +46,7 @@ public class PersonAgent extends Agent implements Person {
 	private long workStartThreshold;
 	
 	private Wallet wallet;
+	private Map<String, Item> inventory;
 	
 	private Car car;
 	
@@ -65,6 +69,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
 		
 		this.wallet = new Wallet(); // medium income level
+		this.inventory = new HashMap<String, Item>();
 	}
 	
 	/* -------- Messages -------- */
@@ -103,7 +108,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			 activateRoleForLoc(getPassengerRole().getLocation());
+			// TODO IMPORTANT: CORRECTLY DETERMINE WHETHER I SHOULD BE AT WORK
+			activateRoleForLoc(getPassengerRole().getLocation(), false);
 		}
 		
 
@@ -197,12 +203,28 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
-	private void activateRoleForLoc(CityLocation loc) {
+	private void activateRoleForLoc(CityLocation loc, boolean work) {
+		WorkRole workRole = getWorkRole();
+		if (work) {
+			workRole.activate();
+			return;
+		}
+		
+		PassengerRole passRole = getPassengerRole();
+		
 		for (Role r : roles) {
-			if (loc.equals(r.getLocation())) {
+			if (loc.equals(r.getLocation())
+					&& !r.equals(workRole)
+					&& !r.equals(passRole)) {
+				
 				r.activate();
+				return;
 			}
 		}
+		
+		// There is no role for this location! Create one.
+		Role role = null;
+		role.activate();
 	}
 	
 	@Override
@@ -447,7 +469,23 @@ public class PersonAgent extends Agent implements Person {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
 				|| wallet.needsMoney();
 	}
-		
+	
+	// ---- Market/Inventory
+	
+	public Map<String, Item> getInventory() {
+		return this.inventory;
+	}
+	
+	public void addItemsToInventory(String name, int amount) {
+		Item item = this.inventory.get(name);
+		if (item == null) {
+			item = new Item(name, amount);
+		} else {
+			item.ItemEqual(item.amount + amount);
+		}
+		this.inventory.put(name, item);
+	}
+	
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}

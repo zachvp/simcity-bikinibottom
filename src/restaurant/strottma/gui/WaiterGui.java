@@ -9,7 +9,7 @@ import java.awt.*;
 public class WaiterGui implements Gui {
 
     private WaiterRole role = null;
-    private RestaurantGui gui = null;
+   // private RestaurantGui gui = null;
     
     // dimensions
     private static final int WIDTH = 20;
@@ -36,23 +36,23 @@ public class WaiterGui implements Gui {
     private static final int DEFAULT_Y = (int) SCREEN_Y / 2;
     
     // cook location
-    private static final int COOK_X = 650;
+    private static final int COOK_X = 220;
     private static final int COOK_Y = 80;
     
     // cashier location
-    private static final int CASHIER_X = 500;
+    private static final int CASHIER_X = 100;
     private static final int CASHIER_Y = -HEIGHT;
     
     // customer waiting area
-    private static final int CUST_WAIT_X = 130;
+    private static final int CUST_WAIT_X = 30;
     private static final int CUST_WAIT_Y = 80;
     
     private boolean shouldMsg;
     private String orderText = null; // used to display the customer's food
 
-    public WaiterGui(WaiterRole role, RestaurantGui gui) {
+    public WaiterGui(WaiterRole role){//, RestaurantGui gui) {
         this.role = role;
-        this.gui = gui;
+       // this.gui = gui;
         shouldMsg = false;
     }
 
@@ -157,7 +157,7 @@ public class WaiterGui implements Gui {
     }
     
     public void DoGoOffBreak() {
-    	gui.setRoleEnabled(role);
+    //	gui.setRoleEnabled(role);
     }
 
     public int getXPos() {

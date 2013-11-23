@@ -25,11 +25,15 @@ public class CookGui implements Gui {
     private int yDestination = yPos;
         
     // default location
-    private static final int DEFAULT_X = 650;
+   // private static final int DEFAULT_X = 650;
+   // private static final int DEFAULT_Y = 80;
+    private static final int DEFAULT_X = 250;
     private static final int DEFAULT_Y = 80;
         
     // refrigerator location
-    private static final int FRIDGE_X = 950;
+   // private static final int FRIDGE_X = 950;
+   // private static final int FRIDGE_Y = 74;
+    private static final int FRIDGE_X = 550;
     private static final int FRIDGE_Y = 74;
         
     private boolean shouldMsg; // should we message the gui?

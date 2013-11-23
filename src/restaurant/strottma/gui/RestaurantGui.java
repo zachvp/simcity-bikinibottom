@@ -46,7 +46,7 @@ public class RestaurantGui extends JFrame implements ActionListener {
      *    in RestaurantPanel()
      * 2) the infoPanel about the clicked Customer (created just below)
      */    
-    private RestaurantPanel restPanel = new RestaurantPanel(this);
+    private RestaurantPanel restPanel = new RestaurantPanel(animationPanel);
     
     /* infoPanel holds information about the clicked customer, if there is one*/
     private JPanel infoPanel;
@@ -82,10 +82,10 @@ public class RestaurantGui extends JFrame implements ActionListener {
         		BoxLayout.Y_AXIS));
 
         Dimension restDim = new Dimension(REST_WIDTH, REST_HEIGHT);
-        restPanel.setPreferredSize(restDim);
-        restPanel.setMinimumSize(restDim);
-        restPanel.setMaximumSize(restDim);
-        add(restPanel);
+       // restPanel.setPreferredSize(restDim);
+       // restPanel.setMinimumSize(restDim);
+       // restPanel.setMaximumSize(restDim);
+       // add(restPanel);
         
         // Now, setup the info panel
         Dimension infoDim = new Dimension(INFO_WIDTH, INFO_HEIGHT);

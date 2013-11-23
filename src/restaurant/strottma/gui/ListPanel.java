@@ -29,7 +29,7 @@ public class ListPanel extends JPanel implements ActionListener {
     private static final int TEXT_DIM_WIDTH = Integer.MAX_VALUE;
     private JButton addPersonB = new JButton("Add");
 
-    private RestaurantPanel restPanel;
+    private RestaurantRecords restPanel;
     private String type;
 
     /**
@@ -38,7 +38,7 @@ public class ListPanel extends JPanel implements ActionListener {
      * @param rp   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public ListPanel(RestaurantPanel rp, String type) {
+    public ListPanel(RestaurantRecords rp, String type) {
         restPanel = rp;
         this.type = type;
 

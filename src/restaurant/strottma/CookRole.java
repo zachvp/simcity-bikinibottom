@@ -59,12 +59,12 @@ public class CookRole extends Role implements Cook {
 		
 		// create grills
 		for (int i = 0; i < 5; i++) {
-			grills.add(new GrillOrPlate(850, 14 + 30*i));
+			grills.add(new GrillOrPlate(850-400, 14 + 30*i));
 		}
 		
 		// create plating areas
 		for (int i = 0; i < 5; i++) {
-			plateAreas.add(new GrillOrPlate(750, 14 + 30*i));
+			plateAreas.add(new GrillOrPlate(750-400, 14 + 30*i));
 		}
 		
 		this.foods.put(st.name, st);

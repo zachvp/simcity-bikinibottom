@@ -14,7 +14,7 @@ public class CustomerGui implements Gui{
 	private String text = null; // the text to display
 
 	//private HostAgent host;
-	RestaurantGui gui;
+	RestaurantRecords gui;
 
 	private int xPos, yPos, width, height;
 	private int xDestination, yDestination;
@@ -28,7 +28,7 @@ public class CustomerGui implements Gui{
 	public static final int xOffScreen = -40;
 	public static final int yOffScreen = -40;
 
-	public CustomerGui(CustomerRole c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(CustomerRole c, RestaurantRecords gui){ //HostAgent m) {
 		role = c;
 		xPos = xOffScreen;
 		yPos = yOffScreen;

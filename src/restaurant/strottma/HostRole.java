@@ -23,7 +23,7 @@ import java.util.concurrent.Semaphore;
 public class HostRole extends Role {
 	static final int NTABLES = 4; // a global for the number of tables.
 	static final int TABLE_SPACING = 80;
-	static final int TABLE_X_OFFSET = 440; // how far right and down to bump all tables
+	static final int TABLE_X_OFFSET = 440-400; // how far right and down to bump all tables
 	static final int TABLE_Y_OFFSET = 30;
 	static final int TABLES_PER_COLUMN = 2;
 	//Notice that we implement waitingCustomers using ArrayList, but type it

@@ -271,10 +271,6 @@ public class HostRole extends Role {
 			return "table " + tableNumber;
 		}
 	}
-
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.HostRole";
-	}
+	
 }
 

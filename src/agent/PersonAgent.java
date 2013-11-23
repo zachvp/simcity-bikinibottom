@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import kelp.Kelp;
+import kelp.KelpClass;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
@@ -27,6 +29,8 @@ public class PersonAgent extends Agent implements Person {
 	
 	private TimeManager timeManager;
 	private Timer timer;
+	
+	private Kelp kelp;
 	
 	private long lastTimeEatingOut;
 	/**
@@ -56,6 +60,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.timeManager = TimeManager.getInstance();
 		this.timer = new Timer();
+		
+		this.kelp = KelpClass.getKelpInstance();
 		
 		this.lastTimeEatingOut = timeManager.fakeStartTime();
 		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
@@ -98,13 +104,12 @@ public class PersonAgent extends Agent implements Person {
 		// If you just arrived somewhere, activate the appropriate Role. 
 		
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			// TODO uncomment scheduler
-			// activateRoleForLoc(getPassengerRole().getLocation());
+			 activateRoleForLoc(getPassengerRole().getLocation());
 		}
 		
 
 		// If you didn't just arrive somewhere, decide what to do next.
-		
+		// TODO uncomment scheduler
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
@@ -207,11 +212,14 @@ public class PersonAgent extends Agent implements Person {
 		return this.timer;
 	}
 	
-	/*
-	void activateRole(CityLocation loc) {
-		// TODO implement activateRole()
+	private void activateRoleForLoc(CityLocation loc) {
+		for (Role r : roles) {
+			if (loc.equals(r.getLocation())) {
+				r.activate();
+			}
+		}
 	}
-	*/
+	
 	
 	@Override
 	public Wallet getWallet() {

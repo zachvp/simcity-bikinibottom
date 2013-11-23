@@ -30,5 +30,9 @@ public interface Kelp {
 	// TODO Update DD
 	public List<Corner> busRoute();
 
+	// TODO Update DD
+	void setData(List<CityLocation> locations, List<Corner> busRoute)
+			throws Exception;
+
 
 }

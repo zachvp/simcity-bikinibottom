@@ -166,12 +166,9 @@ public abstract class Role {
     
     @Override
     public String toString() {
-    	return person.getName() + "'s " + getRoleType();
+    	return person.getName() + "'s " + getClass().getSimpleName();
     }
     
-    /** The name of the role, e.g. BankCustomerRole */
-    public abstract String getRoleType();
-
     /**
      * The simulated action code
      */

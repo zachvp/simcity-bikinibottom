@@ -190,10 +190,6 @@ public class MarketRole extends Role implements Market {
 			return cost;
 		}
 	}
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.MarketRole";
-	}
 	
 }
 

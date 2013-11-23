@@ -480,10 +480,6 @@ public class CustomerRole extends Role implements Customer {
 		public void setY(int y) { this.y = y; }
 		
 	}
-
-	@Override
-	public String getRoleType() {
-		return "restaurant.strottma.CustomerRole";
-	}
+	
 }
 

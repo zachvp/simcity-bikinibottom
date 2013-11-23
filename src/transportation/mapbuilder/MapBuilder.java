@@ -84,7 +84,8 @@ public class MapBuilder {
 						+ Constants.SPACE_BETWEEN_BUILDINGS/2;
 	
 				createdCorners.add(
-						new CornerAgent( new XYPos(cornerX, cornerY)) );
+						new CornerAgent("Corner" + (createdCorners.size()),
+								new XYPos(cornerX, cornerY)) );
 			}
 		}
 		return createdCorners;
@@ -181,7 +182,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(;j < numCornerRows; j++) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, true);
+				addBusstopsToCorner(i, j, DirectionEnum.South);
 		}
 		
 		
@@ -209,7 +210,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(;i < numCornerCols; i++) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, false);
+				addBusstopsToCorner(i, j, DirectionEnum.East);
 		}
 		
 		
@@ -236,7 +237,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(; j >= 0; j--) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, true);
+				addBusstopsToCorner(i, j, DirectionEnum.North);
 		}
 		
 		
@@ -262,32 +263,40 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(; i >= 0; i--) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, false);
+				addBusstopsToCorner(i, j, DirectionEnum.West);
 		}
 
 	}
 
 	private static void addBusstopsToCorner(int i, int j,
-			boolean isVertical) {
+			DirectionEnum positiveDir) throws Exception {
 		
 		cornersWithBusstopsGrid.add(new XYPos(i,j));
 		
-		DirectionEnum d1;
-		DirectionEnum d2;
+		DirectionEnum negativeDir;
 		
-		if (isVertical) {
-			d1 = DirectionEnum.North;
-			d2 = DirectionEnum.South;
-		} else {
-			d1 = DirectionEnum.West;
-			d2 = DirectionEnum.East;
+		switch (positiveDir) {
+		case North:
+			negativeDir = DirectionEnum.South;
+			break;
+		case South:
+			negativeDir = DirectionEnum.North;
+			break;
+		case West:
+			negativeDir = DirectionEnum.East;
+			break;
+		case East:
+			negativeDir = DirectionEnum.West;
+			break;
+		default:
+			throw new Exception("Passed down a null direction");
 		}
 		
 		
 		getCorner2D(i, j).addBusstop(
-				new BusstopAgent(getCorner2D(i, j), d1));
+				new BusstopAgent(getCorner2D(i, j), positiveDir, true));
 		getCorner2D(i, j).addBusstop(
-				new BusstopAgent(getCorner2D(i, j), d2));
+				new BusstopAgent(getCorner2D(i, j), negativeDir, false));
 	}
 
 	private static void buildBusroute() {

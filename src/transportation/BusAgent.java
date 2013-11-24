@@ -82,6 +82,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 			busState = BusStateEnum.Moving;
 			busEvent = BusEventEnum.Initial;
 		}
+		event = VehicleEventEnum.ReceivedAdjCornersAndBusS;
 		stateChanged();
 		return;
 

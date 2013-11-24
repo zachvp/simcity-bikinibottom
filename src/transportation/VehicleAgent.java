@@ -30,7 +30,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		StartedVehicle,
 		ArrivedAtCorner,
 		ReceivedAdjCorners,
-		AuthorizedToCross
+		AuthorizedToCross,
+		ReceivedAdjCornersAndBusS
 	}
 	
 	//Pointer to Vehicle GUI TODO add to DD
@@ -95,8 +96,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 				state = VehicleStateEnum.Requesting;
 				return true;
 			} else if (state == VehicleStateEnum.Requesting 
-					&& event == VehicleEventEnum.ReceivedAdjCorners) {
-
+					&& (event == VehicleEventEnum.ReceivedAdjCorners
+					|| event == VehicleEventEnum.ReceivedAdjCornersAndBusS)) {
 				try {
 					verifyDirection();
 				} catch (ParseException e) {

@@ -66,6 +66,7 @@ public class RealPassengerRole extends PassengerRole {
 
 	@Override
 	public void msgWelcomeToBus(Bus b, double fare) {
+		currentVehicle = b;
 		state = PassengerStateEnum.InBus;
 		gui.doGetInBus(b);
 		// TODO pay fare?
@@ -125,11 +126,11 @@ public class RealPassengerRole extends PassengerRole {
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
 				Bus bus = (Bus) currentVehicle;
 				bus.msgExiting(this);
-				gui.doExitVehicle();
+				gui.doExitVehicle(location);
 				currentVehicle = null;
 			} else if (currentVehicle != null && currentVehicle instanceof Car) {
 				currentVehicle = null;
-				gui.doExitVehicle();
+				gui.doExitVehicle(location);
 			}
 			return;
 		} else {
@@ -140,7 +141,7 @@ public class RealPassengerRole extends PassengerRole {
 		}
 
 
-
+		
 		if (location.type() == LocationTypeEnum.Busstop) {
 			Busstop busstop = (Busstop)location;
 			busstop.msgIAmHere(this);

@@ -44,7 +44,8 @@ public class TransportationGuiController implements Gui {
 	@Override
 	public void draw(Graphics2D g) {
 		for (Gui gui : passengerGuis ) {
-			gui.draw(g);
+			if (gui.isPresent())
+				gui.draw(g);
 		}
 		
 		for (Gui gui : vehicleGuis ) {

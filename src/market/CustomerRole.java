@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 
 import market.gui.CustomerGui;
 import market.gui.Gui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import agent.Agent;
@@ -17,6 +18,7 @@ import agent.interfaces.Person;
 
 public class CustomerRole extends Role implements Customer{
 	String name;
+	//private MarketBuilding workingBuilding = null;
 	private CustomerGui customerGui = null;
 	
 	private List<Item> ShoppingList = new ArrayList<Item>();
@@ -38,11 +40,12 @@ public class CustomerRole extends Role implements Customer{
 		cash = money;
 		name = NA;
 		ShoppingList = SL;
+		//workingBuilding = Market;
 	}
 	
 	//Message
 	public void goingToBuy(){
-		print ("In function 'going to buy'");
+		//print ("In function 'going to buy'");
 		state = Customerstate.EnteringMarket;
 		event = Customerevent.GoingToLine;
 		stateChanged();

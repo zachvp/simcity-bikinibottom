@@ -31,6 +31,7 @@ import java.util.Vector;
  */
 public class MarketRecords implements BuildingRecords {
 	MarketInfoPanel marketControlPanel;
+	MarketBuilding building;
 	
 
     private static final CommonSimpleClasses.CityBuilding CityBuilding = null;
@@ -54,7 +55,7 @@ public class MarketRecords implements BuildingRecords {
     private ItemCollectorGui ic1Gui;
     
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
-    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson);
+    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson, building);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
 
     List<Item> tempInventoryList = new ArrayList<Item>();
@@ -94,8 +95,9 @@ public class MarketRecords implements BuildingRecords {
 
     private AnimationPanel gui; //reference to main gui
 
-    public MarketRecords(AnimationPanel gui) {
+    public MarketRecords(AnimationPanel gui, MarketBuilding market) {
     	//marketControlPanel = controlPanel;
+    	building = market;
     	cashierGui = new CashierGui(ca);
     	icGui = new ItemCollectorGui(ic);
     	ic1Gui = new ItemCollectorGui(ic1);

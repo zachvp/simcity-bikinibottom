@@ -10,9 +10,12 @@ import java.util.concurrent.Semaphore;
 import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
 import market.gui.Gui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.Constants;
 import agent.PersonAgent;
@@ -22,6 +25,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
+	private MarketBuilding workingBuilding = null;
 	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available = true;
@@ -35,9 +39,10 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
 
-	public DeliveryGuyRole(String NA, Person person){
+	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
 		super(person);
 		name = NA;
+		workingBuilding = Market;
 
 	}
 	
@@ -61,7 +66,16 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		}
 		
 		public void msgArrivedDestination(){
-			CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
+			{
+				CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+				person.getPassengerRole().msgGoToLocation(workingBuilding);
+				person.getPassengerRole().activate();
+			}
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)
+			{
+				deliveryguyGui.BackReadyStation();
+			}
 			
 		}
 		

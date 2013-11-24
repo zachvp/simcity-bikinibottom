@@ -69,7 +69,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
         if (xPos == xDestination && yPos == yDestination) {
 
         	if (command==Command.GoToWork){
-        		System.out.println("Im GoToCashier");
+        		//System.out.println("Im GoToCashier");
         		GoToFrontDesk();
         		return;
         	}

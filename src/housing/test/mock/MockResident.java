@@ -9,7 +9,7 @@ public class MockResident extends Mock implements Resident {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	public PersonAgent person = new PersonAgent("Mock Resident");
-	public double moneyOwed = 0;
+	public double oweMoney = 0;
 	
 	public MockResident(String name) {
 		super(name);
@@ -17,7 +17,7 @@ public class MockResident extends Mock implements Resident {
 
 	/* ----- Messages ----- */
 	public void msgPaymentDue(double amount) {
-		this.moneyOwed = amount;
+		this.oweMoney = amount;
 		log.add("Received message 'payment due' amount is " + amount);
 	}
 
@@ -25,5 +25,4 @@ public class MockResident extends Mock implements Resident {
 	public void msgAtDestination() {
 		log.add("Resident done waiting for input.");
 	}
-
 }

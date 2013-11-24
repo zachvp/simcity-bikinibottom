@@ -11,9 +11,17 @@ public class MockDwelling implements Dwelling {
 	public int IDNumber;
 	public String startCondition;
 	
-	public MockDwelling(Resident resident, PayRecipient payRecipient) {
+	public static int MAX_PAYMENT = 64;
+	
+	public MockDwelling(Resident resident, PayRecipient payRecipient, String condition) {
 		this.resident = resident;
 		this.payRecipient = payRecipient;
+		
+		condition.toLowerCase();
+		if(condition.equals("good")) monthlyPaymentAmount = MAX_PAYMENT;
+		if(condition.equals("fair")) monthlyPaymentAmount = MAX_PAYMENT * 0.75;
+		if(condition.equals("poor")) monthlyPaymentAmount = MAX_PAYMENT * 0.5;
+		if(condition.equals("broken")) monthlyPaymentAmount = MAX_PAYMENT * 0.25;
 	}
 
 	@Override
@@ -22,7 +30,7 @@ public class MockDwelling implements Dwelling {
 
 	@Override
 	public Resident getResident() {
-		return null;
+		return resident;
 	}
 
 	@Override

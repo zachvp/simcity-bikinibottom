@@ -1,7 +1,10 @@
 package housing.test;
 
+import java.lang.reflect.Method;
+
 import agent.PersonAgent;
 import housing.PayRecipientRole;
+import housing.PayRecipientRole.MyResident;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockResident;
 import junit.framework.TestCase;
@@ -14,8 +17,8 @@ public class PayRecipientTest extends TestCase {
 	PayRecipientRole payRecipient = new PayRecipientRole(payRecipientPerson);
 	
 	// set up mock units
-	MockResident mockResident = new MockResident("Mock Resident");
-	MockDwelling dwelling;
+	MockResident resident = new MockResident("Mock Resident");
+	MockDwelling dwelling = new MockDwelling(resident, payRecipient, "good");
 	
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -37,8 +40,32 @@ public class PayRecipientTest extends TestCase {
 		
 		// set up scenario data
 		payRecipient.addResident(dwelling);
+		MyResident mr = payRecipient.getResidents().get(0);
 		
 		/* --- Run Scenario --- */
+		// there should be one resident in the list
+		assertEquals("There should be one resident in the list.",
+				1, payRecipient.getResidents().size());
 		
+		// simulate the charging of residents at the proper time
+		payRecipient.chargeResident(mr);
+		assertEquals("Resident does not owe the proper amount.",
+				dwelling.monthlyPaymentAmount, mr.getOwes());
+		
+		// send the message to the resident
+		dwelling.getResident().msgPaymentDue(mr.getOwes());
+		
+		// simulate message reception from resident
+		payRecipient.msgHereIsPayment(resident.oweMoney, resident);
+		
+		assertEquals("MyResident data does not reflect the money received from the resident.",
+				resident.oweMoney, mr.getPaid());
+		
+		// call the scheduler after receiving the message
+		assertTrue("Scheduler should return true after setting the state of the resident.",
+				payRecipient.pickAndExecuteAnAction());
+		
+		assertEquals("Resident should now owe no money.",
+				0.0, mr.getOwes());
 	}
 }

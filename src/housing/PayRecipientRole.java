@@ -31,7 +31,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
 	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE, PAYMENT_RECEIVED };
 	
-	private class MyResident{
+	// class is public for testing purposes
+	public class MyResident{
 		Dwelling dwelling;
 		double owes;
 		double hasPaid;
@@ -41,6 +42,11 @@ public class PayRecipientRole extends Role implements PayRecipient {
 			this.dwelling = dwelling;
 			state = PaymentState.NONE;
 		}
+		
+		// setters and getters
+		public void setDwelling(Dwelling dwelling) { this.dwelling = dwelling; }
+		public double getOwes() { return owes; }
+		public double getPaid() { return hasPaid; }
 	}
 	
 	public PayRecipientRole(PersonAgent agent) {
@@ -50,8 +56,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
-				for(MyResident mr : residents){
-					chargeResident(mr);
+				synchronized(residents){
+					for(MyResident mr : residents){
+						mr.state = PaymentState.PAYMENT_DUE;
+					}
 				}
 			}
 		};
@@ -66,27 +74,39 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Messages ----- */
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
-		if(mr == null) return;
+		if(mr == null) { return; }
 		mr.hasPaid = amount;
 		mr.state = PaymentState.PAYMENT_RECEIVED;
-		log.add("Received message 'here is payment' " + amount + " from " + mr.dwelling.getIDNumber());
+		log.add("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
 
 	/* ----- Scheduler ----- */
-	protected boolean pickAndExecuteAnAction() {
-		for(MyResident mr : residents){
-			if(mr.state == PaymentState.PAYMENT_RECEIVED){
-				checkResidentPayment(mr);
-				return true;
+	public boolean pickAndExecuteAnAction() {
+		synchronized(residents){
+			for(MyResident mr : residents){
+				if(mr.state == PaymentState.PAYMENT_DUE){
+					chargeResident(mr);
+					return true;
+				}
 			}
 		}
+		
+		synchronized(residents){
+			for(MyResident mr : residents){
+				if(mr.state == PaymentState.PAYMENT_RECEIVED){
+					checkResidentPayment(mr);
+					return true;
+				}
+			}
+		}
+		
 		return false;
 	}
 
 	/* ----- Actions ----- */
 	private void checkResidentPayment(MyResident mr){
-		log.add("Checking resident payment " + mr.dwelling.getIDNumber());
+		log.add("Checking payment for resident #" + mr.dwelling.getIDNumber());
 		mr.owes -= mr.hasPaid;
 		
 		if(mr.owes == 0){
@@ -103,11 +123,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		}
 	}
 	
-	private void chargeResident(MyResident r){
-		r.owes += r.dwelling.getMonthlyPaymentAmount();
-		r.state = PaymentState.PAYMENT_DUE;
-		r.dwelling.getResident().msgPaymentDue(r.dwelling.getMonthlyPaymentAmount());
-		log.add("Charged resident " + r.dwelling.getIDNumber());
+	public void chargeResident(MyResident mr){
+		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
+		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
+		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
 	
 	/* ----- Utilities ----- */

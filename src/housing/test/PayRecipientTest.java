@@ -1,7 +1,5 @@
 package housing.test;
 
-import java.lang.reflect.Method;
-
 import agent.PersonAgent;
 import housing.PayRecipientRole;
 import housing.PayRecipientRole.MyResident;

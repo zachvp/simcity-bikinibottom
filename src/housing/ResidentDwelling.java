@@ -61,6 +61,10 @@ public class ResidentDwelling implements Dwelling {
 			monthlyPaymentAmount = 0;
 		}
 	}
+	
+	public void setConditionGood(){
+		this.condition = Condition.GOOD;
+	}
 
 	public int getIDNumber() {
 		return IDNumber;

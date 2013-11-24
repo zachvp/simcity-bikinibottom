@@ -8,4 +8,6 @@ public interface Dwelling {
 
 	int getIDNumber();
 
+	void setConditionGood();
+
 }

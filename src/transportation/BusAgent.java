@@ -12,11 +12,12 @@ import transportation.interfaces.Passenger;
 //TODO will instantly get and remove passengers, should fix?
 public class BusAgent extends VehicleAgent implements Bus {
 
+
 	//List of Passengers in the bus.
 	List<Passenger> passengerList = new ArrayList<Passenger>(); 
 	
 	//List of Passengers waiting in the current Busstop TODO add to DD
-	List<Passenger> waitingPassengerList; 
+	List<Passenger> waitingPassengerList = new ArrayList<Passenger>(); 
 
 	//Route the bus must load.
 	List<Corner> busRoute; 
@@ -47,29 +48,39 @@ public class BusAgent extends VehicleAgent implements Bus {
 		PassengersOnBus
 	};
 	
+	public BusAgent(Corner currentCorner, boolean direction,
+			List<Corner> busRoute) {
+		super(currentCorner, true);
+		this.direction = direction;
+		this.busRoute = busRoute;
+	}
+	
 	@Override
 	public void msgMyBusStop(List<Busstop> bsList) {
-		DirectionEnum myDir;
-		try {
-			myDir = myDirection();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception: Failed to find bus "
-					+ "direction, will skip a busstop.");
-			busEvent = BusEventEnum.PassengersOnBus;
-			busState = BusStateEnum.CallingPassengers;
-			return;
-		} 
-		for (Busstop bs : bsList) {
-			if (bs.direction() == myDir) {
-				currentBusstop = bs;
-				busEvent = BusEventEnum.ReceivedBusstop;
-				stateChanged();
+		if (bsList.size() > 0) {
+			DirectionEnum myDir;
+			try {
+				myDir = myDirection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception: Failed to find bus "
+						+ "direction, will skip a busstop.");
+				busEvent = BusEventEnum.PassengersOnBus;
+				busState = BusStateEnum.CallingPassengers;
 				return;
+			} 
+			for (Busstop bs : bsList) {
+				if (bs.direction() == myDir) {
+					currentBusstop = bs;
+					break;
+				}
 			}
+			busEvent = BusEventEnum.ReceivedBusstop;
+		} else {
+			busState = BusStateEnum.Moving;
+			busEvent = BusEventEnum.Initial;
 		}
-		busState = BusStateEnum.RequestingBusstop;
-		busEvent = BusEventEnum.ReceivedBusstop;
+		event = VehicleEventEnum.ReceivedAdjCornersAndBusS;
 		stateChanged();
 		return;
 
@@ -115,8 +126,8 @@ public class BusAgent extends VehicleAgent implements Bus {
 	
 	@Override
 	protected boolean pickAndExecuteAnAction() { // TODO Update scheduler in DD
-		if (state == VehicleStateEnum.OnStreet
-				&& event == VehicleEventEnum.ArrivedAtCorner
+		if (state == VehicleStateEnum.Requesting
+				&& event == VehicleEventEnum.ReceivedAdjCorners
 				&& !currentPath.isEmpty()
 				&& busState == BusStateEnum.Moving) {
 			busState = BusStateEnum.RequestingBusstop;

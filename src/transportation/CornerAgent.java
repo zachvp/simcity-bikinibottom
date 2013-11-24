@@ -239,5 +239,15 @@ public class CornerAgent extends Agent implements Corner {
 		return adjacentCorners;
 	}
 
+	@Override
+	public DirectionEnum getDirForCorner(Corner corner) throws Exception {
+		for (MyCorner adjCorner : adjacentCorners) {
+			if (corner == adjCorner.c) {
+				return adjCorner.d;
+			}
+		}
+		throw new Exception("Couldn't find nextCorner in adjCorners.");
+	}
+
 
 }

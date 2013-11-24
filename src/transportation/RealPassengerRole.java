@@ -6,14 +6,19 @@ import java.util.List;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole.PassengerStateEnum;
+import transportation.gui.PassengerGuiClass;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
+import transportation.interfaces.PassengerRequester;
 import transportation.interfaces.Vehicle;
+import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import agent.Role;
+import agent.RoleFactory;
 import agent.interfaces.Person;
 
 public class RealPassengerRole extends PassengerRole {
@@ -40,11 +45,19 @@ public class RealPassengerRole extends PassengerRole {
 	boolean hasCar = false;
 	boolean useBus = false;
 
+	private PassengerRequester requesterRole = null;
+
+	public RealPassengerRole(Person person, CityLocation location) {
+		super(person, location);
+		this.gui = new PassengerGuiClass(this, location);
+	}
+	
+	//CONSTRUCTOR FOR TESTING ONLY!
+	// TODO Is this wrong?
 	public RealPassengerRole(Person person, CityLocation location,
-			PassengerGui gui) {
+			MockPassengerGui gui) {
 		super(person, location);
 		this.gui = gui;
-		gui.setPassenger(this, location);
 	}
 
 	//TODO add input for if has car, if want bus, etc
@@ -55,9 +68,15 @@ public class RealPassengerRole extends PassengerRole {
 		stateChanged();
 
 	}
+	
+	public void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole) {
+		this.requesterRole  = requesterRole;
+		msgGoToLocation(loc);
+	}
 
 	@Override
 	public void msgWelcomeToBus(Bus b, double fare) {
+		currentVehicle = b;
 		state = PassengerStateEnum.InBus;
 		gui.doGetInBus(b);
 		// TODO pay fare?
@@ -108,7 +127,12 @@ public class RealPassengerRole extends PassengerRole {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
-			((Person) getPerson()).msgArrivedAtDestination();
+			if (requesterRole == null) ((Person) getPerson()).msgArrivedAtDestination();
+			else {
+				requesterRole.msgArrivedAtDestination();
+				requesterRole = null;
+			}
+			
 			return;
 		}
 
@@ -117,11 +141,11 @@ public class RealPassengerRole extends PassengerRole {
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
 				Bus bus = (Bus) currentVehicle;
 				bus.msgExiting(this);
-				gui.doExitVehicle();
+				gui.doExitVehicle(location);
 				currentVehicle = null;
 			} else if (currentVehicle != null && currentVehicle instanceof Car) {
 				currentVehicle = null;
-				gui.doExitVehicle();
+				gui.doExitVehicle(location);
 			}
 			return;
 		} else {
@@ -132,7 +156,7 @@ public class RealPassengerRole extends PassengerRole {
 		}
 
 
-
+		
 		if (location.type() == LocationTypeEnum.Busstop) {
 			Busstop busstop = (Busstop)location;
 			busstop.msgIAmHere(this);
@@ -144,7 +168,7 @@ public class RealPassengerRole extends PassengerRole {
 				state = PassengerStateEnum.Walking;
 				return;
 			} else {
-				gui.bringOutCar();
+				gui.doBringOutCar();
 				state = PassengerStateEnum.GettingInCar;
 			}
 		}

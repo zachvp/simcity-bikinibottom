@@ -1,5 +1,7 @@
 package bank.gui;
 
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
 import bank.BankCustomerRole;
@@ -18,11 +20,14 @@ public class BankBuilding extends Building {
 
 //	CityBuilding cityBuilding;// = new CityBuilding();
 	XYPos entrancePosition = new XYPos(300, 500);
-	SecurityGuardRole securityGuardRole;
+	SecurityGuardRole securityGuardRole;// = new SecurityGuardRole(person);
 	BankCustomerRole bankCustomerRole;
 	BankRoleFactory bankRoleFactory = new BankRoleFactory();
 	
-	private AnimationPanel animationPanel = new AnimationPanel();;
+	JPanel infoPanel = new JPanel();
+	
+	
+	private AnimationPanel animationPanel = new AnimationPanel();
 	
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -55,9 +60,9 @@ public class BankBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getControlPanel() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel getInfoPanel() {
+		infoPanel.setBackground(Color.BLUE);
+		return infoPanel;
 	}
 	
 	

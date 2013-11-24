@@ -6,6 +6,7 @@ import java.util.List;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParseException;
 
 import transportation.CornerAgent.MyCorner;
+import transportation.gui.VehicleGuiClass;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
@@ -29,7 +30,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		StartedVehicle,
 		ArrivedAtCorner,
 		ReceivedAdjCorners,
-		AuthorizedToCross
+		AuthorizedToCross,
+		ReceivedAdjCornersAndBusS
 	}
 	
 	//Pointer to Vehicle GUI TODO add to DD
@@ -42,14 +44,18 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	protected Corner currentCorner;
 	
 	//List of corners to traverse to get to the destination.
-	protected List<Corner> currentPath;
+	protected List<Corner> currentPath = new ArrayList<Corner>();
 	
 	//List of corners adjacent to currentCorner. TODO add to DD.
-	protected List<MyCorner> adjCorners;
+	protected List<MyCorner> adjCorners = new ArrayList<MyCorner>();
 
-	private DirectionEnum currentDirection; //TODO Remove from DD
+	private DirectionEnum currentDirection = DirectionEnum.West;
 	
 	
+	public VehicleAgent(Corner currentCorner, boolean isBus) {
+		this.currentCorner = currentCorner;
+		this.gui = new VehicleGuiClass(this, currentCorner, isBus);
+	}
 	
 	@Override
 	public void msgMyAdjCorners(List<MyCorner> cList) {
@@ -64,11 +70,13 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		currentCorner = c; // could be currentCorner = currentPath.get(0);
 		currentPath.remove(c);
 		event = VehicleEventEnum.ArrivedAtCorner;
+		isAnimating = false;
 		stateChanged();
 	}
 	
 	public void msgDriveNow() {
 		event = VehicleEventEnum.AuthorizedToCross;
+		currentCorner.msgDoneCrossing();
 		stateChanged();
 	}
 
@@ -89,8 +97,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 				state = VehicleStateEnum.Requesting;
 				return true;
 			} else if (state == VehicleStateEnum.Requesting 
-					&& event == VehicleEventEnum.ReceivedAdjCorners) {
-
+					&& (event == VehicleEventEnum.ReceivedAdjCorners
+					|| event == VehicleEventEnum.ReceivedAdjCornersAndBusS)) {
 				try {
 					verifyDirection();
 				} catch (ParseException e) {
@@ -118,7 +126,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	private void moveToCorner(Corner corner) {
 		gui.doMoveToCorner(corner);
 		isAnimating = true;
-		
+		state = VehicleStateEnum.OnStreet;
 	}
 
 	// TODO ADD to DD
@@ -148,7 +156,25 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 
 	// TODO Add to DD? or is it there?
 	protected void traverseCorner() {
+		try {
+			currentDirection = currentCorner.getDirForCorner(currentPath.get(0));
+		} catch (Exception e) {
+			System.out.println("Vehicle will move through incorrect lane.");
+			e.printStackTrace();
+		}
 		gui.doTraverseAndMoveToCorner(currentCorner, currentPath.get(0));
+	}
+	
+	public void startVehicle() {
+		event = VehicleEventEnum.StartedVehicle;
+		stateChanged();
+	}
+
+	/**
+	 * @return the currentDirection
+	 */
+	public DirectionEnum currentDirection() {
+		return currentDirection;
 	}
 
 }

@@ -79,12 +79,12 @@ public class CustomerRole extends Role implements Customer{
 		for (int i=0;i<Items.size();i++){
 			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
 		}
-		Map<String,Item> CurrentInvent = person.getInventory();
-		print ("I have " + CurrentInvent.get("Chicken").amount + "Chicken in my inventory");
-		print ("I have " + CurrentInvent.get("Pizza").amount + "Pizza in my inventory");
-		print ("I have " + CurrentInvent.get("CheapCar").amount + "CheapCar in my inventory");
-		print ("I have " + CurrentInvent.get("ExpensiveCar").amount + "ExpensiveCar in my inventory");
-		print ("I have " + CurrentInvent.get("Sandwich").amount + "Sandwich in my inventory");
+		Map<String,Integer> CurrentInvent = person.getInventory();
+		print ("I have " + CurrentInvent.get("Chicken") + "Chicken in my inventory");
+		print ("I have " + CurrentInvent.get("Pizza") + "Pizza in my inventory");
+		print ("I have " + CurrentInvent.get("CheapCar") + "CheapCar in my inventory");
+		print ("I have " + CurrentInvent.get("ExpensiveCar") + "ExpensiveCar in my inventory");
+		print ("I have " + CurrentInvent.get("Sandwich") + "Sandwich in my inventory");
 		
 		/*
 		for (int i=0;i<Inventory.size();i++){

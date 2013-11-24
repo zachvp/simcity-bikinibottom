@@ -13,7 +13,6 @@ import java.util.concurrent.Semaphore;
 import market.gui.CashierGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;
-import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
@@ -41,13 +40,13 @@ public class CashierRole extends WorkRole implements Cashier {
 	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
 	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
 	
-	private Map<String,Item> InventoryList = new HashMap<String,Item>();
+	private Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 	{		//Initially The market has 100 inventory on each Item
-		InventoryList.put("CheapCar",		 new Item("CheapCar", 100));
-		InventoryList.put("ExpensiveCar", 	 new Item("ExpensiveCar", 100));
-		InventoryList.put("Pizza",			 new Item("Pizza", 100));
-		InventoryList.put("Sandwich",		 new Item("Sandwich", 100));
-		InventoryList.put("Chicken",		 new Item("Chicken", 100));
+		InventoryList.put("CheapCar",		 100);
+		InventoryList.put("ExpensiveCar", 	 100);
+		InventoryList.put("Pizza",			 100);
+		InventoryList.put("Sandwich",		 100);
+		InventoryList.put("Chicken",		 100);
 	}
 	
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
@@ -70,7 +69,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	public class MyCustomer {
 		Customer c;
-		CityBuilding Building;
+		CommonSimpleClasses.CityBuilding Building;
 		List<Item> OrderList = new ArrayList<Item>();
 		private List<Item> DeliveryList = new ArrayList<Item>();
 		private List<Item> MissingItemList = new ArrayList<Item>();
@@ -98,15 +97,15 @@ public class CashierRole extends WorkRole implements Cashier {
 			}
 		};
 		
-		int hour = 18;
-		int minute = 0;
+		int hour = 6;
+		int minute = 30;
 		
 		scheduleDailyTask(command, hour, minute);
 			
 	}
 	
 	//Cashier Message 
-	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CityBuilding building)	
+	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityBuilding building)	
 	{				//The Customer will be the phone calling guy
 		print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
@@ -233,12 +232,12 @@ public class CashierRole extends WorkRole implements Cashier {
 						continue;
 				}
 				GoGetItems(getMyCustomerList().get(i),tempIC);
-				print ("GoGetItem!");
 				return true;
 			}
 		}
 		if (state == Cashierstate.GoingToGetItems){
 			CollectItemsFromBench();
+			return true;
 		}
 		//No item is fulfilled
 		for (int i=0;i<getMyCustomerList().size();i++){
@@ -365,7 +364,6 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private void OffWork(){
 		DomsgAllWorkersToOffWork();
-		Open = false;
 		cashierGui.OffWork();
 		try {
 			atExit.acquire();
@@ -388,7 +386,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	//Utilities
-	public Map<String,Item> getInventoryList(){
+	public Map<String,Integer> getInventoryList(){
 		return InventoryList;
 	}
 	public void setGui(CashierGui caGui){
@@ -406,7 +404,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void setICList(List<ItemCollector> list){
 		ICList = list;
 	}
-	public void addICList(ItemCollector IC, Map<String,Item> InventoryList){
+	public void addICList(ItemCollector IC, Map<String,Integer> InventoryList){
 		IC.setInventoryList(InventoryList);
 		getICList().add(IC);
 	}
@@ -461,6 +459,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	public boolean isOnBreak(){
 		return false;
+	}
+
+	public void setInventoryList(Map<String, Integer> iList) {
+		InventoryList = iList;
+		
 	}
 
 

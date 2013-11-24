@@ -11,7 +11,6 @@ import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;
-import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import agent.Agent;
@@ -20,13 +19,14 @@ import agent.PersonAgent;
 import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
+import agent.interfaces.Person;
 
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available = true;
 	private Cashier cashier;
-	private CityBuilding Market;
+	private CommonSimpleClasses.CityBuilding Market;
 	private Order CurrentOrder;
 	
 	private Semaphore atExit = new Semaphore (0,true);
@@ -34,10 +34,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
 
-	public DeliveryGuyRole(String NA, CityBuilding MA, PersonAgent person){
+	public DeliveryGuyRole(String NA, Person person){
 		super(person);
 		name = NA;
-		Market = MA;
 
 	}
 	
@@ -54,7 +53,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		}
 
 		
-		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CityBuilding building) {
+		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CommonSimpleClasses.CityBuilding building) {
 			CurrentOrder = new Order(DeliveryList, OrderPerson, building);
 			 Available = false;
 			 stateChanged();
@@ -158,9 +157,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private class Order{
 		List<Item> DeliveryList;
 		Customer OrderPerson;
-		CityBuilding Building;
+		CommonSimpleClasses.CityBuilding Building;
 		
-		Order(List<Item> DList, Customer OP, CityBuilding CB){
+		Order(List<Item> DList, Customer OP, CommonSimpleClasses.CityBuilding CB){
 			DeliveryList = DList;
 			OrderPerson = OP;
 			Building = CB;

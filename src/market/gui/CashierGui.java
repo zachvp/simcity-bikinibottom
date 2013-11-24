@@ -27,7 +27,7 @@ public class CashierGui implements Gui {
     private static final int ExitX1 = 130;
     private static final int ExitY1 = 150;
     
-    private static final int ExitX = 180;
+    private static final int ExitX = 130;
     private static final int ExitY = -50;
     
     private enum Command {noCommand, GoToCashier, GoToBench, GoToExit1, GoToExit, GoToWork};
@@ -59,10 +59,13 @@ public class CashierGui implements Gui {
         if (xPos == xDestination && yPos == yDestination) {
 
         	if (command==Command.GoToWork){
+        		System.out.println("Im GoToCashier");
         		GoToFrontDesk();
+        		return;
         	}
-			if (command==Command.GoToCashier) {
+        	else if (command==Command.GoToCashier) {
 				agent.AtFrontDesk();
+				
 			}
 			else if (command==Command.GoToBench) {
 				agent.AtBench();
@@ -70,7 +73,7 @@ public class CashierGui implements Gui {
 			else if (command==Command.GoToExit1){
 				ContinueOffWork();
 			}
-			if (command == Command.GoToExit){
+			else if (command == Command.GoToExit){
 				agent.AtExit();
 			}
 				

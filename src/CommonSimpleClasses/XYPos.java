@@ -13,7 +13,10 @@ public class XYPos {
 		this.y = y;
 	}
 
-	public XYPos() {}
+	public XYPos() {
+		this.x = 0;
+		this.y = 0;
+	}
 	
 	public boolean equals(Object obj) {
 		if (obj instanceof XYPos) {

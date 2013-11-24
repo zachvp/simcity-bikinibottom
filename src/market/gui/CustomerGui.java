@@ -14,13 +14,13 @@ public class CustomerGui implements Gui{
 	private boolean isPresent = false;
 	private boolean isBuying = false;
 	
-	public static final int OffScreenX = 180;
+	public static final int OffScreenX = 230;
 	public static final int OffScreenY = -150;
 	public static final int CustomerWidth = 15;
 	public static final int CustomerHeight = 15;
 	
 
-	public static final int xFrontDesk =230;
+	public static final int xFrontDesk =220;
     public static final int yFrontDesk =100;
 
 	MarketGui gui;
@@ -104,7 +104,7 @@ public class CustomerGui implements Gui{
 	
 	
 	public void DoExitMarket() {
-		xDestination = 180;
+		xDestination = 220;
 		yDestination = -20;
 		command = Command.LeaveMarket;
 	}

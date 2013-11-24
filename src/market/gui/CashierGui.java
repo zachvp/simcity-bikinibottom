@@ -17,15 +17,15 @@ public class CashierGui implements Gui {
     private static final int CashierWidth = 15;
     private static final int CashierHeight = 15;
     
-    private static final int FrontDeskX = 170;
-    private static final int FrontDeskY = 250;
+    private static final int FrontDeskX = 220;
+    private static final int FrontDeskY = 150;
     
-    private static final int BenchX = 170;
-    private static final int BenchY = 270;
+    private static final int BenchX = 220;
+    private static final int BenchY = 170;
     
 
-    private static final int ExitX1 = 80;
-    private static final int ExitY1 = 250;
+    private static final int ExitX1 = 130;
+    private static final int ExitY1 = 150;
     
     private static final int ExitX = 180;
     private static final int ExitY = -50;

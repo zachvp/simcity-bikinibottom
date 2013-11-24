@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 
 /**
@@ -30,8 +33,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 		setMinimumSize(d);
 		setLayout(new BorderLayout());
 		
+		
 		textPanel = new JPanel();
-		Dimension textDim = new Dimension((int)(w*0.5), h-25);
+		Dimension textDim = new Dimension((int)(d.width*0.4), d.height);
 		textPanel.setPreferredSize(textDim);
 		textPanel.setMaximumSize(textDim);
 		textPanel.setMinimumSize(textDim);
@@ -48,10 +52,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textPanel.add(info);
 		
 		controlPanel = new JPanel();
-		Dimension controlDim = new Dimension((int)(w*0.5), h-25);
+		Dimension controlDim = new Dimension((int)(d.width*0.6), d.height);
 		controlPanel.setPreferredSize(controlDim);
 		controlPanel.setMaximumSize(controlDim);
 		controlPanel.setMinimumSize(controlDim);
+		controlPanel.setLayout(new CardLayout());
+		
+		
+		JPanel blank = new JPanel();
+		blank.setPreferredSize(controlDim);
+		addControlPanel(blank, "blank");
 		
 		add(textPanel, BorderLayout.WEST);
 		add(controlPanel, BorderLayout.EAST);
@@ -89,10 +99,22 @@ public class InfoPanel extends JPanel implements ActionListener{
 				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
 				);
 		
-		
+		CardLayout cl = (CardLayout)(controlPanel.getLayout());
+		if(b.getType() == LocationTypeEnum.Market){
+			cl.show(controlPanel, b.getName());
+		}
+		else
+		{
+			cl.show(controlPanel, "blank");
+		}
 		
 		validate();
 
+	}
+	
+	public void addControlPanel(JPanel control, String name){
+		//control.setSize(controlPanel.getSize());
+		controlPanel.add(control, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

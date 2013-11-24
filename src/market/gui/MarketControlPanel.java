@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -41,11 +42,25 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	
 	private JPanel marketLabel = new JPanel();
 	private JPanel group = new JPanel();
+	private JButton UpdateButton;
 
 	public MarketControlPanel(MarketRecords rec) {
+		
+		
 		marketRecords = rec;
 		group.setLayout(new GridLayout(2, 2, 10, 10));
 		initMarketLabel();
+		add(MarketLabel);
+		
+		JPanel UpdatePanel = new JPanel();
+        UpdatePanel.setLayout(new GridLayout(1,0));
+        UpdateButton = new JButton("Update");
+        UpdateButton.addActionListener(this);
+        UpdatePanel.add(UpdateButton);
+        add(UpdatePanel);
+        add(new JLabel("All non-Integers input will be ignored"));
+        
+       
 
 	}
 
@@ -96,7 +111,7 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 
 
 
-		ExpensiveCarText = new JTextField("");
+		ExpensiveCarText = new JTextField();
 		ExpensiveCarText.setEditable(true);
 		CheapCarText = new JTextField("");
 		CheapCarText.setEditable(true);
@@ -159,6 +174,8 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 		marketLabel.add(panel, BorderLayout.CENTER);
 
 		UpdateInventoryLevelWithoutButton();
+		
+		add(panel);
 
 		/*
         JLabel label = new JLabel();
@@ -240,8 +257,10 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == UpdateButton) {
+        	UpdateInventoryLevelWithButton();
+        }
 
 	}
 }

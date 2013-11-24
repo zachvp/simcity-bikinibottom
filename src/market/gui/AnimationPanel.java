@@ -48,15 +48,15 @@ public class AnimationPanel extends JPanel implements ActionListener {
 
         //Front Desk
         g2.setColor(Color.GREEN);
-        g2.fillRect(90, 220, 180, 20);
+        g2.fillRect(140, 120, 180, 20);
         
         //Bench
         g2.setColor(Color.blue);
-        g2.fillRect(160, 290, 40, 15);
+        g2.fillRect(210, 190, 40, 15);
         
         //Backyard (With Inventories)
         g2.setColor(Color.darkGray);
-        g2.fillRect(90, 410, 180, 20);
+        g2.fillRect(140, 310, 180, 20);
         
         /*
         g2.setColor(Color.BLUE);

@@ -49,12 +49,14 @@ public class CitizenRecords {
 	public void addCitizen(String name, String job, String home, String status,
 			boolean hasCar) {
 		PersonAgent newPerson  = new PersonAgent(name);
-
+		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person
+		
+		//Add passengerAgent
 
 		citizens.add(newPerson);
 		personInfoList.addToList(newPerson.getName());
-		//start Thread
+		newPerson.startThread();
 		
 		//TODO TEST
 		for(BuildingRecords rec: buildingRecords){

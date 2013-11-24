@@ -22,4 +22,5 @@ public interface DeliveryGuy {
 	//Animations
 		public abstract void Ready();
 		public abstract void AtExit();
+		public abstract void AtDeliverExit();
 }

@@ -29,6 +29,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private CommonSimpleClasses.CityBuilding Market;
 	private Order CurrentOrder;
 	
+	private Semaphore atDeliver = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
@@ -59,14 +60,24 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			 stateChanged();
 		}
 		
+		public void msgArrivedDestination(){
+			CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+			
+		}
+		
 	//Animations
 		public void Ready(){
 			Available = true;
 		}
 		
+		public void AtDeliverExit(){
+			atDeliver.release();
+		}
+		
 		public void AtExit(){
 			atExit.release();
 		}
+		
 	
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
@@ -88,12 +99,12 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		// animation to go to the location (Building)
 		deliveryguyGui.GoDeliver();
 		try {
-			atExit.acquire();
+			atDeliver.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+		
 		
 		// animation go back to the market
 		

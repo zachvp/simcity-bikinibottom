@@ -36,6 +36,9 @@ public class AnimationPanel extends JPanel implements ActionListener {
     }
 
 	public void actionPerformed(ActionEvent e) {
+		for (int i =0;i<guis.size();i++){
+			guis.get(i).updatePosition();
+		}
 		repaint();  //Will have paintComponent called
 	}
 

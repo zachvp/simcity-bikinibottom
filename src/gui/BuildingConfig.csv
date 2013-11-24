@@ -11,8 +11,26 @@
 #Make sure not to leave empty lines, or lines with data that do not start
 #with an digit,
 6,Hospital
-1,Restaurant
-4,House
-3,Market
-2,Bank
-0,Cero
+3,Market1
+2,Bank1
+3,Market2
+2,Bank2
+3,Market3
+2,Bank3
+3,Market4
+2,Bank4
+3,Market5
+2,Bank5
+3,Market6
+2,Bank6
+3,Market7
+2,Bank7
+3,Market8
+2,Bank8
+3,Market9
+2,Bank9
+3,Market10
+2,Bank10
+3,Market11
+2,Bank11
+3,Market12

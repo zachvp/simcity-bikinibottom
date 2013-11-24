@@ -72,7 +72,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
-	private ArrayList<Building> buildings; //TODO get building list from city view
+	private List<Building> constructedBuildings = new ArrayList<Building>();
 
 	//TODO Create infoDisplayPanel (all button lists access this)?
 
@@ -185,7 +185,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 
 	private void constructCity(List<BuildingDef> list) {
-		ArrayList<Building> buildings = new ArrayList<Building>();
 		int x;
 		int y;
 		for(BuildingDef b: list){
@@ -198,7 +197,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if(type == LocationTypeEnum.Bank){
 				BankBuilding bank = new BankBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT); //Rectangle
 				bank.setName(buildingName);
-				buildings.add(bank);
+				constructedBuildings.add(bank);
 				construct(bank);
 				
 
@@ -236,7 +235,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 				MarketBuilding market = new MarketBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				market.setName(buildingName);
-				buildings.add(market);
+				constructedBuildings.add(market);
 				//citizenRecords.addBuildingRecord(marketRecords);
 				
 
@@ -247,6 +246,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				HospitalBuilding hospital = new HospitalBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				hospital.setRecords(citizenRecords);
 				hospital.setName(buildingName);
+				constructedBuildings.add(hospital);
 				construct(hospital);
 			}
 			if(type == LocationTypeEnum.Apartment){
@@ -261,6 +261,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 
 		}
+		initializeCornerMapAndKelp(constructedBuildings);
 
 	}
 

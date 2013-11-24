@@ -81,13 +81,14 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	 * @param name Name of the building
 	 */
 	public void addBuildingToMap(Building building){
+		col++;
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
 			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
 		buildings.add(building);
-		col++;
+		
 	}
 	
 	

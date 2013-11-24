@@ -35,6 +35,7 @@ import parser.CornersWithBusstopsParser;
 import parser.test.BuildingPosParserTest;
 import parser.test.mock.MockCityBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
+import transportation.BusAgent;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.mapbuilder.MapBuilder;
@@ -210,6 +211,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		BusAgent busAgent = new BusAgent(corners.get(1),
+				true, busRoute);
+		
+		busAgent.startThread();
+		busAgent.startVehicle();
         
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);

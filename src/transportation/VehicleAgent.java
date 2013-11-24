@@ -76,6 +76,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	
 	public void msgDriveNow() {
 		event = VehicleEventEnum.AuthorizedToCross;
+		currentCorner.msgDoneCrossing();
 		stateChanged();
 	}
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import agent.Constants.Condition;
 import agent.Role;
 import agent.mock.EventLog;
 
@@ -59,7 +60,7 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 //		DoGoToDwelling(wo.dwelling.getIDNumber());
 //		DoFixProblem(wo.problemType);
 		
-		wo.dwelling.setCondition("good");
+		wo.dwelling.setCondition(Condition.GOOD);
 		wo.state = WorkOrderState.FIXED;
 		workOrders.remove(wo);
 		

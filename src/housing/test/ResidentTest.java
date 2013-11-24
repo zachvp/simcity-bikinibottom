@@ -93,6 +93,7 @@ public class ResidentTest extends TestCase {
 		// resident eats food after food has finished cooking
 		assertTrue("Scheduler should return true after resident puts food on stove.",
 				resident.pickAndExecuteAnAction());
+		
 		// handle delay for eating food
 		synchronized(mockRequestListener){
 			mockRequestListener.wait(5000);

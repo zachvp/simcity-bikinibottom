@@ -1,7 +1,7 @@
 package agent.mock;
 
 import agent.interfaces.ScheduleTaskInterface;
-import agent.interfaces.ScheduleTaskListener;
+import agent.test.ScheduleTaskListener;
 
 /**
  * Upon completion of the ScheduleTask event, MockScheduleTaskListener will
@@ -19,8 +19,9 @@ public class MockScheduleTaskListener implements ScheduleTaskListener {
 	@Override
 	public void taskFinished(ScheduleTaskInterface Event) {
 		this.Event = Event;
-		synchronized (this) {
-		notifyAll();
+		
+		synchronized(this) {
+			notifyAll();
 		}
 	}
 	

@@ -3,10 +3,13 @@ package housing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.mock.EventLog;
+import agent.Constants;
+import agent.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -53,7 +56,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 				synchronized(residents) {
 					for(MyResident mr : residents){
 						mr.state = PaymentState.PAYMENT_DUE;
-						mr.dwelling.setCondition("poor");
+						mr.dwelling.setCondition(Condition.POOR);
 					}
 				}
 			}
@@ -78,6 +81,15 @@ public class PayRecipientRole extends Role implements PayRecipient {
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
+		synchronized(residents){
+			for(MyResident mr : residents){
+				if(mr.dwelling.getCondition() == Condition.POOR){
+					chargeResident(mr);
+					return true;
+				}
+			}
+		}
+		
 		synchronized(residents){
 			for(MyResident mr : residents){
 				if(mr.state == PaymentState.PAYMENT_DUE){

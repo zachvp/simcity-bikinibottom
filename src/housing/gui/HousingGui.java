@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.Constants.Condition;
 import agent.gui.AnimationPanel;
 
 /**
@@ -45,7 +46,7 @@ public class HousingGui extends JPanel {
 
 	// back-end housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
-	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, "good");
+	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, Condition.GOOD);
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);

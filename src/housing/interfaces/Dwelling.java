@@ -1,5 +1,7 @@
 package housing.interfaces;
 
+import agent.Constants.Condition;
+
 public interface Dwelling {
 
 	double getMonthlyPaymentAmount();
@@ -8,6 +10,8 @@ public interface Dwelling {
 
 	int getIDNumber();
 
-	void setCondition(String string);
+	void setCondition(Condition condition);
+
+	Condition getCondition();
 
 }

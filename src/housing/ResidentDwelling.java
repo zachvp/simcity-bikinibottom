@@ -1,5 +1,6 @@
 package housing;
 
+import agent.Constants;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
@@ -25,14 +26,13 @@ public class ResidentDwelling implements Dwelling {
 	private int IDNumber;
 
 	// Tracks the deterioration of the building
-	enum Condition { GOOD, FAIR, POOR, BROKEN }
-	Condition condition;
+	private Constants.Condition condition;
 	
 	// cost constants depending on housing condition
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
 	/* --- Constructor --- */
-	public ResidentDwelling(Resident resident, PayRecipient payRecipient, int ID, String startCondition) {
+	public ResidentDwelling(Resident resident, PayRecipient payRecipient, int ID, Constants.Condition startCondition) {
 		super();
 		this.resident = resident;
 		this.payRecipient = payRecipient;
@@ -40,36 +40,22 @@ public class ResidentDwelling implements Dwelling {
 		
 		// TODO start condition of unit. Could later be randomized.
 		log.add("Creating dwelling with start condition " + startCondition);
-		startCondition.toLowerCase();
-		if(startCondition == "good") {
-			condition = Condition.GOOD;
-			monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; 
-		}
-		else if(startCondition == "fair") {
-			condition = Condition.FAIR;
-			monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 75;
-		}
-		else if(startCondition == "poor") {
-			condition = Condition.POOR;
-			monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5;
-		}
-		else if(startCondition == "broken") {
-			condition = Condition.BROKEN;
-			monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.25;
-		}
-		else {
-			monthlyPaymentAmount = 0;
+		this.condition = startCondition;
+		
+		switch(condition){
+			case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
+			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
+			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
 		}
 	}
 	
-	public void setCondition(String condition){
-		condition.toLowerCase();
-		
-		if(condition == "good") this.condition = Condition.GOOD;
-		else if(condition == "fair") this.condition = Condition.FAIR;
-		else if(condition == "poor") this.condition = Condition.POOR;
-		else if(condition == "broken") this.condition = Condition.BROKEN;
-		else log.add("Improper parameter. Unable to set dwelling condition.");
+	public void setCondition(Constants.Condition condition){
+		this.condition = condition;
+	}
+	
+	public Constants.Condition getCondition(){
+		return condition;
 	}
 
 	public int getIDNumber() {

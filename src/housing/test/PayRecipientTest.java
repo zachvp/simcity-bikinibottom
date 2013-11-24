@@ -1,6 +1,7 @@
 package housing.test;
 
 import agent.PersonAgent;
+import agent.Constants.Condition;
 import housing.PayRecipientRole;
 import housing.PayRecipientRole.MyResident;
 import housing.test.mock.MockDwelling;
@@ -16,7 +17,7 @@ public class PayRecipientTest extends TestCase {
 	
 	// set up mock units
 	MockResident resident = new MockResident("Mock Resident");
-	MockDwelling dwelling = new MockDwelling(resident, payRecipient, "good");
+	MockDwelling dwelling = new MockDwelling(resident, payRecipient, Condition.GOOD);
 	
 	protected void setUp() throws Exception {
 		super.setUp();

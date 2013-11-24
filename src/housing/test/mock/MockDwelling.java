@@ -1,5 +1,6 @@
 package housing.test.mock;
 
+import agent.Constants.Condition;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
@@ -16,20 +17,21 @@ public class MockDwelling implements Dwelling {
 	public double monthlyPaymentAmount;
 	public int IDNumber;
 	public String startCondition;
-	public String condition;
+	public Condition condition;
 	
 	// constants
-	public static int MAX_PAYMENT = 64;
+	public static int MAX_MONTHLY_PAYMENT = 64;
 	
-	public MockDwelling(Resident resident, PayRecipient payRecipient, String condition) {
+	public MockDwelling(Resident resident, PayRecipient payRecipient, Condition condition) {
 		this.resident = resident;
 		this.payRecipient = payRecipient;
 		
-		condition.toLowerCase();
-		if(condition.equals("good")) monthlyPaymentAmount = MAX_PAYMENT;
-		if(condition.equals("fair")) monthlyPaymentAmount = MAX_PAYMENT * 0.75;
-		if(condition.equals("poor")) monthlyPaymentAmount = MAX_PAYMENT * 0.5;
-		if(condition.equals("broken")) monthlyPaymentAmount = MAX_PAYMENT * 0.25;
+		switch(condition){
+			case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
+			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
+			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+		}
 	}
 
 	@Override
@@ -47,14 +49,13 @@ public class MockDwelling implements Dwelling {
 	}
 
 	@Override
-	public void setCondition(String condition) {
-		condition.toLowerCase();
-		
-		if(condition.equals("good") || condition.equals("fair") ||
-				condition.equals("poor") || condition.equals("broken")){
-			this.condition = condition;
-		}
-		else log.add("Error! Cannot set Condition of Mock dwelling.");
+	public void setCondition(Condition condition) {
+		this.condition = condition;
+	}
+
+	@Override
+	public Condition getCondition() {
+		return condition;
 	}
 
 }

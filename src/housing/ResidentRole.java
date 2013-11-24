@@ -8,6 +8,8 @@ import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 import agent.mock.EventLog;
+import agent.mock.MockScheduleTaskListener;
+import agent.test.ScheduleTaskListener;
 import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
@@ -155,7 +157,7 @@ public class ResidentRole extends Role implements Resident {
 				stateChanged();
 			}
 		};
-		task.scheduleTaskWithDelay(command, EAT_TIME*Constants.MINUTE);
+		task.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
 		waitForInput();
 	}
 	
@@ -185,11 +187,14 @@ public class ResidentRole extends Role implements Resident {
 		
 		// set a timer with a delay using method from abstract Role class
 		Runnable command = new Runnable(){
+			MockScheduleTaskListener listener = new MockScheduleTaskListener();
 			public void run(){
 				timerDoneCooking();
+				listener.taskFinished(task);
 			}
 		};
 		task.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
+		
 	}
 	
 	/* --- Animation Routines --- */

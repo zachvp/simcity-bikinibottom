@@ -103,7 +103,7 @@ public class PassengerGuiClass implements PassengerGui {
 
 	@Override
 	public void doBringOutCar() {
-		// TODO Auto-generated method stub
+		passenger.msgGotInCar();
 	}
 
 }

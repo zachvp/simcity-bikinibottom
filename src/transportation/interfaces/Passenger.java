@@ -27,5 +27,7 @@ public interface Passenger {
 	public CityLocation getLocation();
 
 	void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole);
+
+	void msgGotInCar();
 	
 }

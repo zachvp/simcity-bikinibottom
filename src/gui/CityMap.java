@@ -83,7 +83,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		col++;
 	}
 	
-	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel controls){
+	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel animationPanel){
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
@@ -97,7 +97,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 		b.setName(name);
 		b.setType(type);
-		b.setControlPanel(controls);
+		b.setAnimationPanel(animationPanel);
 		buildings.add(b);
 		col++;
 	}

@@ -39,7 +39,7 @@ public class Building extends Rectangle2D.Double {
 		return type;
 	}
 	
-	public void setControlPanel(JPanel c){
-		controls = c;
+	public void setAnimationPanel(JPanel c){
+		animationPanel = c;
 	}
 }

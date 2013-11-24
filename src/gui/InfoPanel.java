@@ -61,7 +61,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		JPanel blank = new JPanel();
 		blank.setPreferredSize(controlDim);
-		addControlPanel(blank, "blank");
+		addBuildingInfoPanel(blank, "blank");
 		
 		add(textPanel, BorderLayout.WEST);
 		add(controlPanel, BorderLayout.EAST);
@@ -112,7 +112,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 	}
 	
-	public void addControlPanel(JPanel control, String name){
+	public void addBuildingInfoPanel(JPanel control, String name){
 		//control.setSize(controlPanel.getSize());
 		controlPanel.add(control, name);
 	}

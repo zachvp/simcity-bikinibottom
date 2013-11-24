@@ -218,7 +218,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		busAgent.startThread();
 		busAgent.startVehicle();
 		
-		busAgent = new BusAgent(corners.get(5),
+		busAgent = new BusAgent(corners.get(0),
 				false, busRoute);
 		
 		busAgent.startThread();

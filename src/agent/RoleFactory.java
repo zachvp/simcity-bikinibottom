@@ -10,7 +10,7 @@ import agent.interfaces.Person;
  */
 public interface RoleFactory {		
 	/**
-	 * Instantiates the Role corresponding to roleType, sets the Role's
+	 * Instantiates the CustomerRole for your building, sets the Role's
 	 * Agent to the given PersonAgent, and adds the Role to the PersonAgent's
 	 * list of Roles. Returns the Role.
 	 * 
@@ -19,6 +19,6 @@ public interface RoleFactory {
 	 * 
 	 * @throws IllegalArgumentException when the roleType doesn't exist
 	 */
-	public Role getRole(String roleType, Person person)
+	public Role getCustomerRole(Person person)
 			throws IllegalArgumentException;
 }

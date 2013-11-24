@@ -25,10 +25,10 @@ import CommonSimpleClasses.XYPos;
 public class HousingComplex extends JPanel implements CityBuilding {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 4;
-	private final int ROWS = 2;
-	private final int COLUMNS = 2;
-	private final int SPACING = 10;
+	private final int UNIT_COUNT = 1;
+	private final int ROWS = 1;
+	private final int COLUMNS = 1;
+	private final int SPACING = 0;
 	
 	// layout manager
 	GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);

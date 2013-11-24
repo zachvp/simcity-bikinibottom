@@ -1,5 +1,6 @@
 package agent;
 
+import gui.Building;
 import housing.ResidentRole;
 
 import java.util.ArrayList;
@@ -110,6 +111,7 @@ public class PersonAgent extends Agent implements Person {
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			activateRoleForLoc(getPassengerRole().getLocation(),
 					atLocationForWork());
+			return true;
 		}
 		
 
@@ -226,9 +228,13 @@ public class PersonAgent extends Agent implements Person {
 			return;
 		}
 		
-		// TODO There is no role for this location! Create one.
-		// Role role = ...;
-		// role.activate();
+		// There is no role for this location! Get a new one.
+		if (loc instanceof Building) {
+			Building building = (Building) loc;
+			Role role = building.getCustomerRole(this);
+			role.activate();
+			return;
+		} // else there isn't a role for this location
 	}
 	
 	@Override

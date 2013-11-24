@@ -23,6 +23,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private Semaphore active = new Semaphore(0, true);
 	SecurityGuardGui securityGuardGui;
 	
+	ScheduleTask task = new ScheduleTask();
+	
 	boolean endWorkShift = false;
 	
 	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
@@ -71,7 +73,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		int hour = 7;
 		int minute = 0;
 		
-		scheduleDailyTask(command, hour, minute);
+		task.scheduleDailyTask(command, hour, minute);
 		
 	}
 	

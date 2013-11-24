@@ -22,8 +22,8 @@ public class MockResident extends Mock implements Resident {
 	}
 
 	@Override
-	public void msgAtDest() {
-		log.add("Released mvement semaphore");
+	public void msgAtDestination() {
+		log.add("Resident done waiting for input.");
 	}
 
 }

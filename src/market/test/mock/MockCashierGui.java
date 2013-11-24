@@ -14,7 +14,7 @@ import java.util.List;
 
 import market.CashierRole;
 import market.Item;
-import market.gui.MarketControlPanel;
+import market.gui.MarketInfoPanel;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
@@ -31,7 +31,7 @@ public class MockCashierGui extends Mock implements CashierGuiInterfaces {
 	public EventLog log = new EventLog();
 
 	@Override
-	public void setMarketControlPanel(MarketControlPanel p) {
+	public void setMarketInfoPanel(MarketInfoPanel p) {
 		// TODO Auto-generated method stub
 		
 	}

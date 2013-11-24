@@ -30,7 +30,7 @@ import java.util.Vector;
  * including host, cook, waiters, and customers.
  */
 public class MarketRecords implements BuildingRecords {
-	MarketControlPanel marketControlPanel;
+	MarketInfoPanel marketControlPanel;
 	
 
     private static final CommonSimpleClasses.CityBuilding CityBuilding = null;

@@ -16,7 +16,7 @@ import market.Item;
 
 
 
-public class MarketControlPanel extends JPanel implements ActionListener{
+public class MarketInfoPanel extends JPanel implements ActionListener{
 	
 	MarketRecords marketRecords;
 	
@@ -47,7 +47,7 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	private JPanel group = new JPanel();
 	private JButton UpdateButton;
 
-	public MarketControlPanel(MarketRecords rec) {
+	public MarketInfoPanel(MarketRecords rec) {
 		
 		
 		marketRecords = rec;

@@ -23,48 +23,45 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	private Dimension d;
 	private JLabel info;
-	private JPanel textPanel; //info display
-	private JPanel controlPanel; //gui controls
+	//private JPanel textPanel; //info display
+	//private JPanel controlPanel; //gui controls
 
 	public InfoPanel(int w, int h){
 		d = new Dimension(w-20, h-25);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
-		setLayout(new BorderLayout());
+		setLayout(new CardLayout());
 		
-		
-		textPanel = new JPanel();
-		Dimension textDim = new Dimension((int)(d.width*0.4), d.height);
-		textPanel.setPreferredSize(textDim);
-		textPanel.setMaximumSize(textDim);
-		textPanel.setMinimumSize(textDim);
-		
+		JPanel personText = new JPanel();
+		personText.setPreferredSize(d);
+		personText.setMaximumSize(d);
+		personText.setMinimumSize(d);
+		addBuildingInfoPanel(personText, "person");
+			
 		info = new JLabel("");
 		//Test text
-		/*info.setText("<html><div>&nbsp;</div><div> "
+		info.setText("<html><div>&nbsp;</div><div> "
 				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
 				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
 				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
 				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
-		);*/
-		textPanel.add(info);
+		);
+		personText.add(info);
 		
-		controlPanel = new JPanel();
+		/*controlPanel = new JPanel();
 		Dimension controlDim = new Dimension((int)(d.width*0.6), d.height);
 		controlPanel.setPreferredSize(controlDim);
 		controlPanel.setMaximumSize(controlDim);
 		controlPanel.setMinimumSize(controlDim);
-		controlPanel.setLayout(new CardLayout());
+		controlPanel.setLayout(new CardLayout());*/
 		
 		
-		JPanel blank = new JPanel();
-		blank.setPreferredSize(controlDim);
-		addControlPanel(blank, "blank");
 		
-		add(textPanel, BorderLayout.WEST);
-		add(controlPanel, BorderLayout.EAST);
+		
+		//add(textPanel, BorderLayout.WEST);
+		//add(controlPanel, BorderLayout.EAST);
 	}
 
 	/**
@@ -72,6 +69,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * @param p Person name
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
+		CardLayout cl = (CardLayout)(this.getLayout());
+		cl.show(this, "person");
 		//System.out.println("update info with "+person.getName());
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
@@ -99,22 +98,22 @@ public class InfoPanel extends JPanel implements ActionListener{
 				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
 				);
 		
-		CardLayout cl = (CardLayout)(controlPanel.getLayout());
+		CardLayout cl = (CardLayout)(this.getLayout());
 		if(b.type() == null){
-			cl.show(controlPanel, "blank");
+			cl.show(this, "blank");
 		}
 		else
 		{
-			cl.show(controlPanel, b.getName());
+			cl.show(this, b.getName());
 		}
 		
 		validate();
 
 	}
 	
-	public void addControlPanel(JPanel control, String name){
+	public void addBuildingInfoPanel(JPanel control, String name){
 		//control.setSize(controlPanel.getSize());
-		controlPanel.add(control, name);
+		add(control, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

@@ -22,23 +22,26 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	
 	private JLabel MarketLabel;
 	//Market Label
-	private JLabel ExpensiveCarInvent = null;
-	private JLabel CheapCarInvent = null;
-	private JLabel ChickenInvent = null;
-	private JLabel PizzaInvent = null;
-	private JLabel SandwichInvent = null;
+	private JLabel LamboFinnyInvent = null;
+	private JLabel ToyodaInvent = null;
+	private JLabel KrabbyPattyInvent = null;
+	private JLabel KelpShakeInvent = null;
+	private JLabel CoralBitsInvent = null;
+	private JLabel KelpRingsInvent = null;
 
-	public JTextField ExpensiveCarText = null;
-	public JTextField CheapCarText = null;
-	public JTextField ChickenText = null;
-	public JTextField PizzaText = null;
-	public JTextField SandwichText = null;
+	public JTextField LamboFinnyText = null;
+	public JTextField ToyodaText = null;
+	public JTextField KrabbyPattyText = null;
+	public JTextField KelpShakeText = null;
+	public JTextField CoralBitsText = null;
+	public JTextField KelpRingsText = null;
 
-	private String ExpensiveCarInventoryLevel = "Current Inventory Level";
-	private String CheapCarInventoryLevel = "Current Inventory Level";
-	private String PizzaInventoryLevel = "Current Inventory Level";
-	private String SandwichInventoryLevel = "Current Inventory Level";
-	private String ChickenInventoryLevel = "Current Inventory Level";
+	private String LamboFinnyInventoryLevel = "Current Inventory Level";
+	private String ToyodaInventoryLevel = "Current Inventory Level";
+	private String KrabbyPattyInventoryLevel = "Current Inventory Level";
+	private String KelpShakeInventoryLevel = "Current Inventory Level";
+	private String CoralBitsInventoryLevel = "Current Inventory Level";
+	private String KelpRingsInventoryLevel = "Current Inventory Level";
 	
 	private JPanel marketLabel = new JPanel();
 	private JPanel group = new JPanel();
@@ -84,73 +87,85 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 		//Creating the UI
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(0,1,0,0));
-		JLabel ExpensiveCarLabel = new JLabel("               ExpensiveCar");
-		JLabel CheapCarLabel = new JLabel("               CheapCar");
-		JLabel ChickenLabel = new JLabel("               Chicken");
-		JLabel PizzaLabel = new JLabel("               Pizza");
-		JLabel SandwichLabel = new JLabel("               Sandwich");
-
-		ExpensiveCarInventoryLevel = "Current Inventory Level";
-		CheapCarInventoryLevel = "Current Inventory Level";
-		PizzaInventoryLevel = "Current Inventory Level";
-		SandwichInventoryLevel = "Current Inventory Level";
-		ChickenInventoryLevel = "Current Inventory Level";
-
-
-
-		ExpensiveCarInvent = new JLabel();
-		ExpensiveCarInvent.setText(ExpensiveCarInventoryLevel);
-		CheapCarInvent = new JLabel();
-		CheapCarInvent.setText(CheapCarInventoryLevel);
-		ChickenInvent = new JLabel();
-		ChickenInvent.setText(ChickenInventoryLevel);
-		PizzaInvent = new JLabel();
-		PizzaInvent.setText(PizzaInventoryLevel);
-		SandwichInvent = new JLabel();
-		SandwichInvent.setText(SandwichInventoryLevel);
+		JLabel LamboFinnyLabel = new JLabel("               LamboFinny");
+		JLabel ToyodaLabel = new JLabel("               Toyoda");
+		JLabel KrabbyPattyLabel = new JLabel("               Krabby Patty");
+		JLabel KelpShakeLabel = new JLabel("               Kelp Shake");
+		JLabel CoralBitsLabel = new JLabel("               Coral Bits");
+		JLabel KelpRingsLabel = new JLabel("               Kelp Rings");
+		
+		LamboFinnyInventoryLevel = "Current Inventory Level";
+		ToyodaInventoryLevel = "Current Inventory Level";
+		KrabbyPattyInventoryLevel = "Current Inventory Level";
+		KelpShakeInventoryLevel = "Current Inventory Level";
+		CoralBitsInventoryLevel = "Current Inventory Level";
+		KelpRingsInventoryLevel = "Current Inventory Level";
 
 
+		LamboFinnyInvent = new JLabel();
+		LamboFinnyInvent.setText(LamboFinnyInventoryLevel);
+		ToyodaInvent = new JLabel();
+		ToyodaInvent.setText(ToyodaInventoryLevel);
+		KrabbyPattyInvent = new JLabel();
+		KrabbyPattyInvent.setText(CoralBitsInventoryLevel);
+		KelpShakeInvent = new JLabel();
+		KelpShakeInvent.setText(KrabbyPattyInventoryLevel);
+		CoralBitsInvent = new JLabel();
+		CoralBitsInvent.setText(KelpShakeInventoryLevel);
+		KelpRingsInvent = new JLabel();
+		KelpRingsInvent.setText(KelpRingsInventoryLevel);
 
-		ExpensiveCarText = new JTextField();
-		ExpensiveCarText.setEditable(true);
-		CheapCarText = new JTextField("");
-		CheapCarText.setEditable(true);
-		ChickenText = new JTextField("");
-		ChickenText.setEditable(true);
-		PizzaText = new JTextField("");
-		PizzaText.setEditable(true);
-		SandwichText = new JTextField("");
-		SandwichText.setEditable(true);
 
-		JPanel ExpensiveCarPanel = new JPanel();
-		ExpensiveCarPanel.setLayout(new GridLayout(1,0,0,0));
-		ExpensiveCarPanel.add(ExpensiveCarLabel);
-		ExpensiveCarPanel.add(ExpensiveCarInvent);
-		ExpensiveCarPanel.add(ExpensiveCarText);
 
-		JPanel CheapCarPanel = new JPanel();
-		CheapCarPanel.setLayout(new GridLayout(1,0,0,0));
-		CheapCarPanel.add(CheapCarLabel);
-		CheapCarPanel.add(CheapCarInvent);
-		CheapCarPanel.add(CheapCarText);
+		LamboFinnyText = new JTextField();
+		LamboFinnyText.setEditable(true);
+		ToyodaText = new JTextField("");
+		ToyodaText.setEditable(true);
+		KrabbyPattyText = new JTextField("");
+		KrabbyPattyText.setEditable(true);
+		KelpShakeText = new JTextField("");
+		KelpShakeText.setEditable(true);
+		CoralBitsText = new JTextField("");
+		CoralBitsText.setEditable(true);
+		KelpRingsText = new JTextField("");
+		KelpRingsText.setEditable(true);
 
-		JPanel ChickenPanel = new JPanel();
-		ChickenPanel.setLayout(new GridLayout(1,0,0,0));
-		ChickenPanel.add(ChickenLabel);
-		ChickenPanel.add(ChickenInvent);
-		ChickenPanel.add(ChickenText);
+		JPanel LamboFinnyPanel = new JPanel();
+		LamboFinnyPanel.setLayout(new GridLayout(1,0,0,0));
+		LamboFinnyPanel.add(LamboFinnyLabel);
+		LamboFinnyPanel.add(LamboFinnyInvent);
+		LamboFinnyPanel.add(LamboFinnyText);
 
-		JPanel PizzaPanel = new JPanel();
-		PizzaPanel.setLayout(new GridLayout(1,0,0,0));
-		PizzaPanel.add(PizzaLabel);
-		PizzaPanel.add(PizzaInvent);
-		PizzaPanel.add(PizzaText);
+		JPanel ToyodaPanel = new JPanel();
+		ToyodaPanel.setLayout(new GridLayout(1,0,0,0));
+		ToyodaPanel.add(ToyodaLabel);
+		ToyodaPanel.add(ToyodaInvent);
+		ToyodaPanel.add(ToyodaText);
 
-		JPanel SandwichPanel = new JPanel();
-		SandwichPanel.setLayout(new GridLayout(1,0,0,0));
-		SandwichPanel.add(SandwichLabel);
-		SandwichPanel.add(SandwichInvent);
-		SandwichPanel.add(SandwichText);
+		JPanel KrabbyPattyPanel = new JPanel();
+		KrabbyPattyPanel.setLayout(new GridLayout(1,0,0,0));
+		KrabbyPattyPanel.add(KrabbyPattyLabel);
+		KrabbyPattyPanel.add(KrabbyPattyInvent);
+		KrabbyPattyPanel.add(KrabbyPattyText);
+
+		JPanel KelpShakePanel = new JPanel();
+		KelpShakePanel.setLayout(new GridLayout(1,0,0,0));
+		KelpShakePanel.add(KelpShakeLabel);
+		KelpShakePanel.add(KelpShakeInvent);
+		KelpShakePanel.add(KelpShakeText);
+
+		JPanel CoralBitsPanel = new JPanel();
+		CoralBitsPanel.setLayout(new GridLayout(1,0,0,0));
+		CoralBitsPanel.add(CoralBitsLabel);
+		CoralBitsPanel.add(CoralBitsInvent);
+		CoralBitsPanel.add(CoralBitsText);
+		
+		JPanel KelpRingsPanel = new JPanel();
+		KelpRingsPanel.setLayout(new GridLayout(1,0,0,0));
+		KelpRingsPanel.add(KelpRingsLabel);
+		KelpRingsPanel.add(KelpRingsInvent);
+		KelpRingsPanel.add(KelpRingsText);
+
 
 
 		//Default Panel
@@ -161,11 +176,12 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 		DefaultPanel.add(new JLabel("      Desire Inventory Level"));
 
 		panel.add(DefaultPanel);
-		panel.add(ExpensiveCarPanel);
-		panel.add(CheapCarPanel);
-		panel.add(ChickenPanel);
-		panel.add(PizzaPanel);
-		panel.add(SandwichPanel);
+		panel.add(LamboFinnyPanel);
+		panel.add(ToyodaPanel);
+		panel.add(KrabbyPattyPanel);
+		panel.add(KelpShakePanel);
+		panel.add(CoralBitsPanel);
+		panel.add(KelpRingsPanel);
 
 
 
@@ -191,56 +207,77 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	}
 
 	public void UpdateInventoryLevelWithButton(){
-		Map<String,Item> IList = marketRecords.ca.getInventoryList();
+		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
 
-		if(  isInteger(ExpensiveCarText.getText())  )
-			IList.get("ExpensiveCar").ItemEqual(Integer.parseInt(ExpensiveCarText.getText()));
-		if(  isInteger(CheapCarText.getText())  )
-			IList.get("CheapCar").ItemEqual(Integer.parseInt(CheapCarText.getText()));
-		if(  isInteger(PizzaText.getText())  )
-			IList.get("Pizza").ItemEqual(Integer.parseInt(PizzaText.getText()));
-		if(  isInteger(SandwichText.getText())  )
-			IList.get("Sandwich").ItemEqual(Integer.parseInt(SandwichText.getText()));
-		if(  isInteger(ChickenText.getText())  )
-			IList.get("Chicken").ItemEqual(Integer.parseInt(ChickenText.getText()));
+		System.out.println("IMHERE");
+		if(  isInteger(LamboFinnyText.getText())  )
+			IList.put("LamboFinny", Integer.parseInt(LamboFinnyText.getText()));
+		if(  isInteger(ToyodaText.getText())  )
+			IList.put("Toyoda", Integer.parseInt(ToyodaText.getText()));
+		if(  isInteger(KelpShakeText.getText())  )
+			IList.put("Kelp Shake", Integer.parseInt(KelpShakeText.getText()));
+		if(  isInteger(CoralBitsText.getText())  )
+			IList.put("Coral Bits", Integer.parseInt(CoralBitsText.getText()));
+		if(  isInteger(KrabbyPattyText.getText())  )
+			IList.put("Krabby Patty", Integer.parseInt(KrabbyPattyText.getText()));
+		if(  isInteger(KelpRingsText.getText())  )
+			IList.put("KelpRings", Integer.parseInt(KelpRingsText.getText()));
+		
+		
 
-
-		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar").amount);
-		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar").amount);
-		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza").amount);
-		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich").amount);
-		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken").amount);
-		ExpensiveCarInvent.setText("                    " + ExpensiveCarInventoryLevel);
-		CheapCarInvent.setText("                    " + CheapCarInventoryLevel);
-		ChickenInvent.setText("                    " + ChickenInventoryLevel);
-		PizzaInvent.setText("                    " + PizzaInventoryLevel);
-		SandwichInvent.setText("                    " + SandwichInventoryLevel);
-
-		ExpensiveCarText.setText("");
-		CheapCarText.setText("");
-		PizzaText.setText("");
-		ChickenText.setText("");
-		SandwichText.setText("");
+		//Printing out the labels
+		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
+		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));
+		KrabbyPattyInventoryLevel 		= Integer.toString(IList.get("Krabby Patty"));
+		KelpShakeInventoryLevel		= Integer.toString(IList.get("Kelp Shake"));
+		CoralBitsInventoryLevel 		= Integer.toString(IList.get("Coral Bits"));
+		KelpRingsInventoryLevel 	= Integer.toString(IList.get("Kelp Rings"));
+		LamboFinnyInvent.setText("                    " + LamboFinnyInventoryLevel);
+		ToyodaInvent.setText("                    " + ToyodaInventoryLevel);
+		KrabbyPattyInvent.setText("                    " + KrabbyPattyInventoryLevel);
+		KelpShakeInvent.setText("                    " + KelpShakeInventoryLevel);
+		CoralBitsInvent.setText("                    " + CoralBitsInventoryLevel);
+		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
+		
+		LamboFinnyText.setText("");
+		ToyodaText.setText("");
+		KelpShakeText.setText("");
+		KrabbyPattyText.setText("");
+		CoralBitsText.setText("");
+		KelpRingsText.setText("");
+		
+		marketRecords.ca.setInventoryList(IList);
 
 		MarketLabel.setText("Today's Staff :    " + marketRecords.ca.getName() + "                     " + "Market's Current Cash :   " + marketRecords.ca.getCash());
 
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){
-		Map<String,Item> IList = marketRecords.ca.getInventoryList();
-		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar").amount);
-		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar").amount);
-		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza").amount);
-		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich").amount);
-		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken").amount);
-		ExpensiveCarInvent.setText("                    " + ExpensiveCarInventoryLevel);
-		CheapCarInvent.setText("                    " + CheapCarInventoryLevel);
-		ChickenInvent.setText("                    " + ChickenInventoryLevel);
-		PizzaInvent.setText("                    " + PizzaInventoryLevel);
-		SandwichInvent.setText("                    " + SandwichInventoryLevel);
+		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
+		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
+		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));
+		KrabbyPattyInventoryLevel 		= Integer.toString(IList.get("Krabby Patty"));
+		KelpShakeInventoryLevel		= Integer.toString(IList.get("Kelp Shake"));
+		CoralBitsInventoryLevel 		= Integer.toString(IList.get("Coral Bits"));
+		KelpRingsInventoryLevel 	= Integer.toString(IList.get("Kelp Rings"));
+		LamboFinnyInvent.setText("                    " + LamboFinnyInventoryLevel);
+		ToyodaInvent.setText("                    " + ToyodaInventoryLevel);
+		KrabbyPattyInvent.setText("                    " + KrabbyPattyInventoryLevel);
+		KelpShakeInvent.setText("                    " + KelpShakeInventoryLevel);
+		CoralBitsInvent.setText("                    " + CoralBitsInventoryLevel);
+		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
+		
+		LamboFinnyText.setText("");
+		ToyodaText.setText("");
+		KelpShakeText.setText("");
+		KrabbyPattyText.setText("");
+		CoralBitsText.setText("");
+		KelpRingsText.setText("");
+		
+		marketRecords.ca.setInventoryList(IList);
 
 		MarketLabel.setText("Today's Staff :    " + marketRecords.ca.getName() + "                     " + "Market's Current Cash :   " + marketRecords.ca.getCash());
-		System.out.println (marketRecords.ca.getCash());
+
 
 	}
 

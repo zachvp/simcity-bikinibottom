@@ -1,19 +1,25 @@
 package market.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import agent.PersonAgent;
 import junit.framework.TestCase;
 import market.CashierRole;
+import market.CashierRole.Cashierstate;
 import market.Item;
 import market.CashierRole.Customerstate;
+import market.gui.CashierGui;
+import market.test.mock.MockCashierGui;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
 
 public class CashierTest extends TestCase
 {
 	CashierRole Cashier;
+	MockCashierGui cashierGui;
 	MockCustomer Customer1;
 	MockCustomer Customer2;
 	MockItemCollector ItemCollector1;
@@ -27,11 +33,13 @@ public class CashierTest extends TestCase
 		super.setUp();		
 
 		PersonAgent cashier = new PersonAgent ("John");
-		Cashier = new CashierRole("John", 100, cashier);		
+		Cashier = new CashierRole("John", 100, cashier);	
+		
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");
 		ItemCollector1 = new MockItemCollector("ItemCollector1");
 		ItemCollector2 = new MockItemCollector("ItemCollector2");
+		
 		
 	}	
 	
@@ -40,18 +48,25 @@ public class CashierTest extends TestCase
 	 */
 	public void testOne1MarketCustomer1ItemCollectorScenario()
 	{
+		
 		Customer1.Cashier = Cashier;
 		Customer2.Cashier = Cashier;
 		ItemCollector1.Cashier = Cashier;
-		ItemCollector2.Cashier = Cashier;
+		ItemCollector1.setInventoryList(Cashier.getInventoryList());
+		ItemCollector1.setInventoryList(Cashier.getInventoryList());
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
-			tempInventoryList.add(new Item("CheapCar", 1));
-			tempInventoryList.add(new Item("ExpensiveCar", 0));
-			tempInventoryList.add(new Item("Pizza", 1));
-			tempInventoryList.add(new Item("Sandwich", 0));
-			tempInventoryList.add(new Item("Chicken", 0));
+			tempInventoryList.add(new Item("Kelp Rings", 1));
+			tempInventoryList.add(new Item("LamboFinny", 0));
+			tempInventoryList.add(new Item("Kelp Shake", 1));
+			tempInventoryList.add(new Item("Toyoda", 1));
+			tempInventoryList.add(new Item("Krabby Patty", 0));
+			tempInventoryList.add(new Item("Coral Bits", 0));
 		}
+		cashierGui = new MockCashierGui(Cashier);
+		Cashier.setGui(cashierGui);
+		if (Cashier.getGui() == null)
+			System.out.println("Its null");
 		
 		//check preconditions
 		//Check MyCustomerlist
@@ -66,6 +81,8 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have $100 in it. It doesn't.", (int) Cashier.getCash(), 100);
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
+			
+			Cashier.setState(Cashierstate.Idle);
 			
 		//Step 1
 			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
@@ -88,17 +105,18 @@ public class CashierTest extends TestCase
 			assertTrue("Cashier's scheduler shouldn't have returned false , but didn't.", Cashier.pickAndExecuteAnAction());
 		
 		//Checking the DeliveryList
-			assertEquals("The first one in the Delivery List should be CheapCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).name, "CheapCar");
+			assertEquals("The first one in the Delivery List should be CheapCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).name, "Toyoda");
 			assertEquals("The Cheap Car should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).amount, 1);
-			assertEquals("The second one in the Delivery List should be ExpensiveCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).name, "ExpensiveCar");
+			assertEquals("The second one in the Delivery List should be ExpensiveCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).name, "LamboFinny");
 			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).amount, 0);
-			assertEquals("The third one in the Delivery List should be Pizza",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).name, "Pizza");
+			assertEquals("The third one in the Delivery List should be KrabbyPatty",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).name, "Krabby Patty");
 			assertEquals("The Expensive Car should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).amount, 1);
-			assertEquals("The fourth one in the Delivery List should be Sandwich",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).name, "Sandwich");
+			assertEquals("The fourth one in the Delivery List should be KelpShake",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).name, "Kelp Shake");
 			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).amount, 0);
-			assertEquals("The fifth one in the Delivery List should be Chicken",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).name, "Chicken");
+			assertEquals("The fifth one in the Delivery List should be CoralBits",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).name, "Coral Bits");
 			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).amount, 0);
-			
+			assertEquals("The fifth one in the Delivery List should be KelpRings",Cashier.getMyCustomerList().get(0).getDeliveryList().get(5).name, "Kelp Rings");
+			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(5).amount, 0);
 			
 		//Checking The State **Collected**
 			boolean stateTest = false;
@@ -150,12 +168,18 @@ public class CashierTest extends TestCase
 		ItemCollector2.Cashier = Cashier;
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
-			tempInventoryList.add(new Item("CheapCar", 1));
-			tempInventoryList.add(new Item("ExpensiveCar", 0));
-			tempInventoryList.add(new Item("Pizza", 1));
-			tempInventoryList.add(new Item("Sandwich", 0));
-			tempInventoryList.add(new Item("Chicken", 0));
+			tempInventoryList.add(new Item("Kelp Rings", 1));
+			tempInventoryList.add(new Item("LamboFinny", 1));
+			tempInventoryList.add(new Item("Kelp Shake", 1));
+			tempInventoryList.add(new Item("Toyoda", 1));
+			tempInventoryList.add(new Item("Krabby Patty", 0));
+			tempInventoryList.add(new Item("Coral Bits", 0));
 		}
+		
+		cashierGui = new MockCashierGui(Cashier);
+		Cashier.setGui(cashierGui);
+		if (Cashier.getGui() == null)
+			System.out.println("Its null");
 		
 		//check preconditions
 		//Check MyCustomerlist
@@ -171,8 +195,20 @@ public class CashierTest extends TestCase
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
+			Cashier.setState(Cashierstate.Idle);
+			Map<String,Integer> InventoryList = new HashMap<String,Integer>();
+			{		//Initially The market has 100 inventory on each Item
+				for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
+					InventoryList.put(agent.Constants.FOODS.get(i), 100);
+				}
+				for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
+					InventoryList.put(agent.Constants.CARS.get(i), 100);
+				}
+				InventoryList.put("LamboFinny", 0);
+			}
+			
 		//Step 1
-			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
+			Cashier.addICList(ItemCollector1, InventoryList);
 		//Check MyIClist
 			assertEquals("Cashier should have 1 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -192,17 +228,18 @@ public class CashierTest extends TestCase
 			assertTrue("Cashier's scheduler shouldn't have returned false , but didn't.", Cashier.pickAndExecuteAnAction());
 		
 		//Checking the DeliveryList
-			assertEquals("The first one in the Delivery List should be CheapCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).name, "CheapCar");
-			assertEquals("The Cheap Car should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).amount, 1);
-			assertEquals("The second one in the Delivery List should be ExpensiveCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).name, "ExpensiveCar");
-			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).amount, 0);
-			assertEquals("The third one in the Delivery List should be Pizza",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).name, "Pizza");
-			assertEquals("The Expensive Car should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).amount, 1);
-			assertEquals("The fourth one in the Delivery List should be Sandwich",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).name, "Sandwich");
-			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).amount, 0);
-			assertEquals("The fifth one in the Delivery List should be Chicken",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).name, "Chicken");
-			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).amount, 0);
-			
+			assertEquals("The first one in the Delivery List should be Toyoda",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).name, "Toyoda");
+			assertEquals("The Toyoda should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(0).amount, 1);
+			assertEquals("The second one in the Delivery List should be LamboFinny",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).name, "LamboFinny");
+			assertEquals("The LamboFinny should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).amount, 0);
+			assertEquals("The third one in the Delivery List should be KrabbyPatty",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).name, "Krabby Patty");
+			assertEquals("The KrabbyPatty should be having an amount 1",Cashier.getMyCustomerList().get(0).getDeliveryList().get(2).amount, 1);
+			assertEquals("The fourth one in the Delivery List should be KelpShake",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).name, "Kelp Shake");
+			assertEquals("The KelpShake should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(3).amount, 0);
+			assertEquals("The fifth one in the Delivery List should be CoralBits",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).name, "Coral Bits");
+			assertEquals("The CoralBits should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(4).amount, 0);
+			assertEquals("The fifth one in the Delivery List should be KelpRings",Cashier.getMyCustomerList().get(0).getDeliveryList().get(5).name, "Kelp Rings");
+			assertEquals("The KelpRings should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(5).amount, 0);
 			
 		//Checking The State **Collected**
 			boolean stateTest = false;

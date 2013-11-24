@@ -10,7 +10,11 @@ import gui.BuildingRecords;
 
 import javax.swing.*;
 
+import transportation.FakePassengerRole;
+import transportation.PassengerRole;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -29,7 +33,7 @@ public class MarketRecords implements BuildingRecords {
 	MarketControlPanel marketControlPanel;
 	
 
-    private static final CityBuilding CityBuilding = null;
+    private static final CommonSimpleClasses.CityBuilding CityBuilding = null;
 
    
 	
@@ -46,8 +50,12 @@ public class MarketRecords implements BuildingRecords {
     private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
     private ItemCollectorGui icGui;
    
+    private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");
+    private ItemCollectorRole ic1 = new ItemCollectorRole("ItemCollector2", ItemCollectorPerson1);
+    private ItemCollectorGui ic1Gui;
+    
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
-    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", CityBuilding , DeliveryGuyPerson);
+    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
 
     List<Item> tempInventoryList = new ArrayList<Item>();
@@ -58,29 +66,30 @@ public class MarketRecords implements BuildingRecords {
 		tempInventoryList.add(new Item("Sandwich", 0));
 		tempInventoryList.add(new Item("Chicken", 0));
 	}
+	
+	private CityLocation fakeLoc = new CityLocation() {
+		@Override
+		public LocationTypeEnum type() {
+			return LocationTypeEnum.None;
+		}
+		@Override
+		public XYPos position() {
+			return new XYPos();
+		}
+	};
     
     private PersonAgent CustomerPerson = new PersonAgent("Customer1");
     private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
+    private PassengerRole pr = new FakePassengerRole(fakeLoc);
+    {CustomerPerson.addRole(pr);}
     private CustomerGui custGui = new CustomerGui(cust);
     
     private PersonAgent CustomerPerson1 = new PersonAgent("Customer2");
     private CustomerRole cust1 = new CustomerRole("Customer2", 100, tempInventoryList, CustomerPerson1);
+    {CustomerPerson.addRole(pr);}
     private CustomerGui custGui1 = new CustomerGui(cust1);
-
-
-    //private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
-    //private Vector<MarketAgent> markets = new Vector<MarketAgent>();
-    
-
-    
-   
     
     
-    //private ListPanel customerPanel = new ListPanel(this, "Customers");
-    //private ListPanel waiterPanel = new ListPanel(this, "Waiters");
-    
-   
-
 
     private AnimationPanel gui; //reference to main gui
 
@@ -88,9 +97,11 @@ public class MarketRecords implements BuildingRecords {
     	//marketControlPanel = controlPanel;
     	cashierGui = new CashierGui(ca);
     	icGui = new ItemCollectorGui(ic);
+    	ic1Gui = new ItemCollectorGui(ic1);
         this.gui = gui;
         
             ic.setGui(icGui);
+            ic1.setGui(ic1Gui);
             dg.setGui(dgGui);
             ca.setGui(cashierGui);
 
@@ -99,6 +110,7 @@ public class MarketRecords implements BuildingRecords {
 
         
         ItemCollectors.add(ic);
+        ItemCollectors.add(ic1);
         DeliveryGuys.add(dg);
         customers.add(cust);
         customers.add(cust1);
@@ -106,10 +118,14 @@ public class MarketRecords implements BuildingRecords {
         ca.setICList(ItemCollectors);
         ca.setDGList(DeliveryGuys);
         ic.setCashier(ca);
+        ic1.setCashier(ca);
         dg.setCashier(ca);
         cust.setCashier(ca);
         cust1.setCashier(ca);
+        cust.setPriceList(ca.getPriceList());
+        cust1.setPriceList(ca.getPriceList());
         ic.setInventoryList(ca.getInventoryList());
+        ic1.setInventoryList(ca.getInventoryList());
         
 
         //Customer Gui
@@ -118,6 +134,7 @@ public class MarketRecords implements BuildingRecords {
 
         //ItemCollector Gui
         gui.addGui(icGui);
+        gui.addGui(ic1Gui);
         
         //Cashier Gui
         gui.addGui(cashierGui);
@@ -136,18 +153,12 @@ public class MarketRecords implements BuildingRecords {
         ItemCollectorPerson.startThread();
         ItemCollectorPerson.addRole(ic);
         ic.activate();
+        ic1Gui.setItemCollectorNumber(1);
         
-        //Start the thread
-        /*
-        ca.startThread();
-        ic.startThread();
-        dg.startThread();
-		*/
-
-       // setLayout(new GridLayout(1, 2, 20, 20));
-      
-
-
+        ItemCollectorPerson1.startThread();
+        ItemCollectorPerson1.addRole(ic1);
+        ic1.activate();
+        ic1Gui.setItemCollectorNumber(2);
         
         CustomerPerson.startThread();
         CustomerPerson.addRole(cust);
@@ -158,9 +169,6 @@ public class MarketRecords implements BuildingRecords {
         CustomerPerson1.addRole(cust1);
         cust1.activate();
         custGui1.setBuying();
-        
-        //ca.msgIWantItem(tempInventoryList, cust);
-        //ca.msgPhoneOrder(tempInventoryList, cust, null);
       
     }
 

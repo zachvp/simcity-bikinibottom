@@ -3,6 +3,7 @@ package market.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import CommonSimpleClasses.CityBuilding;
 import market.Item;
 
 public interface Cashier {
@@ -24,7 +25,7 @@ public interface Cashier {
 	public abstract void setDGList(List<DeliveryGuy> list);
 	public abstract void addDGList(DeliveryGuy DG);
 	public abstract void setICList(List<ItemCollector> list);
-	public abstract void addICList(ItemCollector IC, Map<String,Item> IList);
+	public abstract void addICList(ItemCollector IC, Map<String,Integer> IList);
 	public abstract String getMaitreDName();
 	public abstract String getName();
 

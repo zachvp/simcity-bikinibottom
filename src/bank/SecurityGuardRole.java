@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.SecurityGuard;
@@ -56,7 +57,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
 	
-	public SecurityGuardRole(PersonAgent person) {
+	public SecurityGuardRole(Person person) {
 		super(person);
 //		this.name = name;
 		Runnable command = new Runnable(){

@@ -1,6 +1,7 @@
 package market.interfaces;
 import java.util.List;
 
+import CommonSimpleClasses.CityBuilding;
 import market.Item;
 
 

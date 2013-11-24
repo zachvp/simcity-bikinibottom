@@ -2,12 +2,8 @@ package bank;
 
 import java.util.concurrent.Semaphore;
 
-import transportation.FakePassengerRole;
-import transportation.PassengerRole;
-
-import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -17,6 +13,8 @@ import bank.interfaces.Teller;
 /**
  * Restaurant customer agent.
  */
+
+
 
 //Build should not be problem
 public class BankCustomerRole extends WorkRole implements BankCustomer {
@@ -39,11 +37,11 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
 //	PassengerRole passengerRole;
+
 	
-	
-	public BankCustomerRole(PersonAgent person){
+	public BankCustomerRole(Person person){
 		super(person);
-//		passengerRole = new FakePassengerRole();
+//		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
 //		this.name = name;
 		state = State.enteredBank;
@@ -57,7 +55,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 
 	}
 	
-	public BankCustomerRole(PersonAgent person, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
+	public BankCustomerRole(Person person, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
 		super(person);
 		state = State.enteredBank;
 		this.accountId = accountId;

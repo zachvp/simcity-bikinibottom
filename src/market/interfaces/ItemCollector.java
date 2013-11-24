@@ -19,7 +19,7 @@ public interface ItemCollector {
 		public abstract String getName();
 		public abstract void setCashier(Cashier ca);
 
-		public abstract void setInventoryList(Map<String, Item> inventoryList);
+		public abstract void setInventoryList(Map<String, Integer> inventoryList);
 
 	//Animations
 		public abstract void AtCollectStation();

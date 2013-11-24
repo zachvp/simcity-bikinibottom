@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.AccountManagerGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
@@ -60,7 +60,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 //	////////
 	
-	public AccountManagerRole(PersonAgent person){
+	public AccountManagerRole(Person person){
 		super(person);
 //		this.name = name;
 		

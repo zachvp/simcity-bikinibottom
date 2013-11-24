@@ -2,6 +2,9 @@ package market;
 
 
 import java.util.ArrayList;
+
+import agent.Constants;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,25 +16,28 @@ import java.util.concurrent.Semaphore;
 import market.gui.CashierGui;
 import market.gui.Gui;
 import market.interfaces.Cashier;
-import market.interfaces.CityBuilding;
+import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
+import market.test.mock.MockCashierGui;
 import agent.Agent;
 import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
+import agent.Role.ScheduleTask;
 import agent.interfaces.Person;
 
 public class CashierRole extends WorkRole implements Cashier {
 
 //public EventLog log = new EventLog();
 	private boolean Open;
-	private CashierGui cashierGui = null;
+	private CashierGuiInterfaces cashierGui = null;
 	private String name;
 	private double cash;
+	ScheduleTask task = new ScheduleTask();
 	
 	private Semaphore atFrontDesk = new Semaphore(0,true);
 	private Semaphore atBench = new Semaphore (0,true);
@@ -41,27 +47,30 @@ public class CashierRole extends WorkRole implements Cashier {
 	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
 	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
 	
-	private Map<String,Item> InventoryList = new HashMap<String,Item>();
+	private Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 	{		//Initially The market has 100 inventory on each Item
-		InventoryList.put("CheapCar",		 new Item("CheapCar", 100));
-		InventoryList.put("ExpensiveCar", 	 new Item("ExpensiveCar", 100));
-		InventoryList.put("Pizza",			 new Item("Pizza", 100));
-		InventoryList.put("Sandwich",		 new Item("Sandwich", 100));
-		InventoryList.put("Chicken",		 new Item("Chicken", 100));
+		for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
+			InventoryList.put(agent.Constants.FOODS.get(i), 100);
+		}
+		for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
+			InventoryList.put(agent.Constants.CARS.get(i), 100);
+		}
 	}
 	
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
 	{
-		double CheapCar = 100;
-		double ExpensiveCar = 300;
-		double Pizza = 20;
-		double Sandwich = 10;
-		double Chicken = 15;
-		PriceList.put("Chicken", Chicken);
-		PriceList.put("Sandwich", Sandwich);
-		PriceList.put("Pizza", Pizza);
-		PriceList.put("ExpensiveCar", ExpensiveCar);
-		PriceList.put("CheapCar", CheapCar);
+		double Toyoda = 100;
+		double LamboFinny = 300;
+		double KrabbyPatty = 20;
+		double KelpShake = 10;
+		double CoralBits = 15;
+		double KelpRings = 5;
+		PriceList.put("Krabby Patty", KrabbyPatty);
+		PriceList.put("Kelp Shake", KelpShake);
+		PriceList.put("Coral Bits", CoralBits);
+		PriceList.put("Kelp Rings", KelpRings);
+		PriceList.put("LamboFinny", LamboFinny);
+		PriceList.put("Toyoda", Toyoda);
 		
 	}
 	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems};
@@ -70,7 +79,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	public class MyCustomer {
 		Customer c;
-		CityBuilding Building;
+		CommonSimpleClasses.CityBuilding Building;
 		List<Item> OrderList = new ArrayList<Item>();
 		private List<Item> DeliveryList = new ArrayList<Item>();
 		private List<Item> MissingItemList = new ArrayList<Item>();
@@ -98,15 +107,15 @@ public class CashierRole extends WorkRole implements Cashier {
 			}
 		};
 		
-		int hour = 18;
-		int minute = 0;
+		int hour = 6;
+		int minute = 30;
 		
-		scheduleDailyTask(command, hour, minute);
+		task.scheduleDailyTask(command, hour, minute);
 			
 	}
 	
 	//Cashier Message 
-	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CityBuilding building)	
+	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityBuilding building)	
 	{				//The Customer will be the phone calling guy
 		print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
@@ -137,7 +146,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
 		print ("Received Items from ItemCollector");
-		state = Cashierstate.GoingToGetItems;
+		setState(Cashierstate.GoingToGetItems);
 		
 		int ShoppingListSize = 0;
 		for (int i=0;i<Items.size();i++){
@@ -200,14 +209,14 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	@Override
 	public void msgLeaveWork(){
-		state = Cashierstate.OffWork;
+		setState(Cashierstate.OffWork);
 		stateChanged();
 	}
 
 	//Animations
 	public void AtFrontDesk(){
 		atFrontDesk.release();
-		state = Cashierstate.Idle;
+		setState(Cashierstate.Idle);
 		stateChanged();
 	}
 	
@@ -224,7 +233,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
 		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.Ordered && state == Cashierstate.Idle){
+			if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
 				ItemCollector tempIC = getICList().get(0);
 				for (int j=1;j<getICList().size();j++){
 					if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
@@ -233,36 +242,36 @@ public class CashierRole extends WorkRole implements Cashier {
 						continue;
 				}
 				GoGetItems(getMyCustomerList().get(i),tempIC);
-				print ("GoGetItem!");
 				return true;
 			}
 		}
-		if (state == Cashierstate.GoingToGetItems){
+		if (getState() == Cashierstate.GoingToGetItems){
 			CollectItemsFromBench();
+			return true;
 		}
 		//No item is fulfilled
 		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.EpicFailed && state == Cashierstate.Idle){
+			if (getMyCustomerList().get(i).state == Customerstate.EpicFailed && getState() == Cashierstate.Idle){
 				TellCustomerEpicFail(getMyCustomerList().get(i));
 				return true;
 			}
 		}
 		//Some or All items are fulfilled
 		for (int i=0;i<getMyCustomerList().size();i++){
-			if ((getMyCustomerList().get(i).state == Customerstate.Collected || getMyCustomerList().get(i).state == Customerstate.Failed) && state == Cashierstate.Idle){
+			if ((getMyCustomerList().get(i).state == Customerstate.Collected || getMyCustomerList().get(i).state == Customerstate.Failed) && getState() == Cashierstate.Idle){
 				CalculatePayment(getMyCustomerList().get(i));
 				return true;
 			}
 		}
 		
 		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.Paid && state == Cashierstate.Idle){
+			if (getMyCustomerList().get(i).state == Customerstate.Paid && getState() == Cashierstate.Idle){
 				GiveItems(getMyCustomerList().get(i));
 				return true;
 			}
 		}
 		
-		if (getMyCustomerList().isEmpty() && state == Cashierstate.OffWork){
+		if (getMyCustomerList().isEmpty() && getState() == Cashierstate.OffWork){
 			OffWork();
 			return true;
 		}
@@ -365,7 +374,6 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private void OffWork(){
 		DomsgAllWorkersToOffWork();
-		Open = false;
 		cashierGui.OffWork();
 		try {
 			atExit.acquire();
@@ -388,10 +396,10 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	//Utilities
-	public Map<String,Item> getInventoryList(){
+	public Map<String,Integer> getInventoryList(){
 		return InventoryList;
 	}
-	public void setGui(CashierGui caGui){
+	public void setGui(CashierGuiInterfaces caGui){
 		cashierGui = caGui;
 	}
 	public Gui getGui(){
@@ -406,7 +414,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void setICList(List<ItemCollector> list){
 		ICList = list;
 	}
-	public void addICList(ItemCollector IC, Map<String,Item> InventoryList){
+	public void addICList(ItemCollector IC, Map<String,Integer> InventoryList){
 		IC.setInventoryList(InventoryList);
 		getICList().add(IC);
 	}
@@ -463,5 +471,21 @@ public class CashierRole extends WorkRole implements Cashier {
 		return false;
 	}
 
+	public void setInventoryList(Map<String, Integer> iList) {
+		InventoryList = iList;
+		
+	}
+
+	public Map<String,Double> getPriceList(){
+		return PriceList;
+	}
+
+	public Cashierstate getState() {
+		return state;
+	}
+
+	public void setState(Cashierstate state) {
+		this.state = state;
+	}
 
 }

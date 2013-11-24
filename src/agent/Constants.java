@@ -113,5 +113,14 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
-
+	
+	/**
+	 * Types of Car in the city
+	 */
+	public static final List<String> CARS = new ArrayList<String>() {
+		{
+			add("LamboFinny");
+			add("Toyoda");
+		}
+	};
 }

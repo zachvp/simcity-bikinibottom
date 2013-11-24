@@ -21,16 +21,16 @@ public class ItemCollectorGui implements Gui {
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
     
-    private static final int HomePosX = 190;
-    private static final int HomePosY = 220;
+    private  int HomePosX = 190;
+    private  int HomePosY = 195;
     
-    private static final int CollectItemX = 170;
-    private static final int CollectItemY = 260;
+    private  int CollectItemX = 170;
+    private  int CollectItemY = 260;
     
     private static final int ExitX1 = 130;
     private static final int ExitY1 = 150;
     
-    private static final int ExitX = 180;
+    private static final int ExitX = 130;
     private static final int ExitY = -30;
 
     private MarketControlPanel panel;
@@ -42,6 +42,16 @@ public class ItemCollectorGui implements Gui {
         this.agent = ic;
     }
     
+    public void setItemCollectorNumber(int i){
+    	if (i == 1){
+    		HomePosX = 210;
+    	    CollectItemX = 170;
+    	}
+    	if (i == 2){
+    		HomePosX = 255;
+    	    CollectItemX = 280;
+    	}
+    }
     
     public void setMarketControlPanel(MarketControlPanel p){
     	panel = p;

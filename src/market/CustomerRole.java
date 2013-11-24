@@ -26,20 +26,7 @@ public class CustomerRole extends Role implements Customer{
 	private Cashier cashier;
 	private Customerstate state;
 	private Customerevent event;
-	private Map<String,Double>PriceList = new HashMap<String, Double>();
-	{
-		double CheapCar = 100;
-		double ExpensiveCar = 300;
-		double Pizza = 20;
-		double Sandwich = 10;
-		double Chicken = 15;
-		PriceList.put("Chicken", Chicken);
-		PriceList.put("Sandwich", Sandwich);
-		PriceList.put("Pizza", Pizza);
-		PriceList.put("ExpensiveCar", ExpensiveCar);
-		PriceList.put("CheapCar", CheapCar);	
-	}
-	
+	private Map<String,Double>PriceList;
 	private Semaphore atFrontDesk = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	public enum Customerstate {Idle, GoingToOrder, Waiting, Paid, EnteringMarket, NotAtMarket};
@@ -79,12 +66,13 @@ public class CustomerRole extends Role implements Customer{
 		for (int i=0;i<Items.size();i++){
 			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
 		}
-		Map<String,Item> CurrentInvent = person.getInventory();
-		print ("I have " + CurrentInvent.get("Chicken").amount + "Chicken in my inventory");
-		print ("I have " + CurrentInvent.get("Pizza").amount + "Pizza in my inventory");
-		print ("I have " + CurrentInvent.get("CheapCar").amount + "CheapCar in my inventory");
-		print ("I have " + CurrentInvent.get("ExpensiveCar").amount + "ExpensiveCar in my inventory");
-		print ("I have " + CurrentInvent.get("Sandwich").amount + "Sandwich in my inventory");
+		Map<String,Integer> CurrentInvent = person.getInventory();
+		print ("I have " + CurrentInvent.get("Krabby Patty") + "Krabby Patty in my inventory");
+		print ("I have " + CurrentInvent.get("Kelp Shake") + "Kelp Shake in my inventory");
+		print ("I have " + CurrentInvent.get("Coral Bits") + "Coral Bits in my inventory");
+		print ("I have " + CurrentInvent.get("Kelp Rings") + "Kelp Rings in my inventory");
+		print ("I have " + CurrentInvent.get("LamboFinny") + "ExpensiveCar in my inventory");
+		print ("I have " + CurrentInvent.get("Toyoda") + "Sandwich in my inventory");
 		
 		/*
 		for (int i=0;i<Inventory.size();i++){
@@ -230,6 +218,10 @@ public class CustomerRole extends Role implements Customer{
 
 	public void setShoppingList(List<Item> SL) {
 		ShoppingList = SL;
+	}
+	
+	public void setPriceList (Map<String,Double> PL){
+		PriceList = PL;
 	}
 
 

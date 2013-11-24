@@ -24,6 +24,9 @@ import bank.interfaces.Teller;
 public class TellerRole extends WorkRole implements Teller {
 	private String name;
 	
+	//need to instantiate the Task Scheduler now. Edited by Zach
+	ScheduleTask task = new ScheduleTask();
+	
 	Semaphore active = new Semaphore(0, true);
 	TellerGui tellerGui;
 	int myDeskPosition;
@@ -96,7 +99,7 @@ public class TellerRole extends WorkRole implements Teller {
 		int hour = 17;
 		int minute = 0;
 		
-		scheduleDailyTask(command, hour, minute);
+		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 //	public TellerRole(PersonAgent person, AccountManager am, LoanManager lm, int deskPosition){

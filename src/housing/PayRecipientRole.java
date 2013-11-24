@@ -24,10 +24,11 @@ import agent.TimeManager;
 public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
+	ScheduleTask task = new ScheduleTask();
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
-	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE };
+	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE, PAYMENT_RECEIVED };
 	
 	private class MyResident{
 		Dwelling dwelling;
@@ -56,9 +57,9 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		
 		// every day at noon
 		int hour = 6;
-		int minute = 1;
+		int minute = 5;
 		
-		scheduleDailyTask(command, hour, minute);
+		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 	/* ----- Messages ----- */
@@ -66,7 +67,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		MyResident mr = findResident(r);
 		if(mr == null) return;
 		mr.paymentAmount = amount;
-		mr.state = PaymentState.PAYMENT_PAID;
+		mr.state = PaymentState.PAYMENT_RECEIVED;
 		log.add("Received message 'here is payment' " + amount + " from " + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
@@ -74,7 +75,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Scheduler ----- */
 	protected boolean pickAndExecuteAnAction() {
 		for(MyResident mr : residents){
-			if(mr.state == PaymentState.PAYMENT_PAID){
+			if(mr.state == PaymentState.PAYMENT_RECEIVED){
 				checkResidentPayment(mr);
 				return true;
 			}
@@ -86,12 +87,21 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	private void checkResidentPayment(MyResident mr){
 		log.add("Checking resident payment " + mr.dwelling.getIDNumber());
 		mr.residentOwes -= mr.paymentAmount;
+		
 		if(mr.residentOwes == 0){
 			mr.state = PaymentState.DONE;
 			log.add("Resident has paid in full, now owes " + mr.residentOwes);
 		}
-		
+		else if(mr.residentOwes > 0) {
+			log.add("Resident " + mr.dwelling.getIDNumber() + " still owes money!");
+			mr.state = PaymentState.PAYMENT_DUE;
+		}
+		// this should never happen
+		else {
+			log.add("Resident overpaid! Money will go to next month.");
+		}
 	}
+	
 	private void chargeResident(MyResident r){
 		r.residentOwes += r.dwelling.getMonthlyPaymentAmount();
 		r.state = PaymentState.PAYMENT_DUE;

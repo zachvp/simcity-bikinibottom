@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import market.gui.MarketBuilding;
 import agent.PersonAgent;
 
 /**
@@ -71,6 +72,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 	public void updateBuildingInfoPanel(Building b){
 		//Building building = b;
 		System.out.println(b.getName()+ " update info panel");
+		if (b instanceof MarketBuilding){
+			((MarketBuilding) b).UpdateInfoPanel();
+		}
 		
 		CardLayout cl = (CardLayout)(this.getLayout());
 		if(b.getInfoPanel() == null){

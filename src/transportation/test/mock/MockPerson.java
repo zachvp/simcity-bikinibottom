@@ -1,9 +1,8 @@
 package transportation.test.mock;
 
-import java.util.Timer;
+import java.util.Map;
 
-import com.xuggle.mediatool.IMediaDebugListener.Event;
-
+import market.Item;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -109,6 +108,24 @@ public class MockPerson extends Mock implements Person{
 
 	@Override
 	public void setHungerLevel(HungerLevel hungry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Integer> getInventory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addItemsToInventory(String name, int amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeItemsFromInventory(String name, int amount) {
 		// TODO Auto-generated method stub
 		
 	}

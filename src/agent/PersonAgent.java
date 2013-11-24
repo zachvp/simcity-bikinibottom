@@ -46,7 +46,7 @@ public class PersonAgent extends Agent implements Person {
 	private long workStartThreshold;
 	
 	private Wallet wallet;
-	private Map<String, Item> inventory;
+	private Map<String, Integer> inventory;
 	
 	private Car car;
 	
@@ -69,7 +69,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
 		
 		this.wallet = new Wallet(); // medium income level
-		this.inventory = new HashMap<String, Item>();
+		this.inventory = new HashMap<String, Integer>();
 	}
 	
 	/* -------- Messages -------- */
@@ -108,8 +108,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			// TODO IMPORTANT: CORRECTLY DETERMINE WHETHER I SHOULD BE AT WORK
-			activateRoleForLoc(getPassengerRole().getLocation(), false);
+			activateRoleForLoc(getPassengerRole().getLocation(),
+					atLocationForWork());
 		}
 		
 
@@ -203,28 +203,32 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
-	private void activateRoleForLoc(CityLocation loc, boolean work) {
-		WorkRole workRole = getWorkRole();
-		if (work) {
-			workRole.activate();
-			return;
-		}
-		
-		PassengerRole passRole = getPassengerRole();
-		
+	/**
+	 * Activates the current location's Role. Won't activate a WorkRole
+	 * unless forWork is true; won't activate a PassengerRole ever.
+	 * 
+	 * @param loc
+	 * @param forWork only activates a WorkRole if this is true
+	 */
+	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
 		for (Role r : roles) {
 			if (loc.equals(r.getLocation())
-					&& !r.equals(workRole)
-					&& !r.equals(passRole)) {
+					&& (forWork == (r instanceof WorkRole))
+					&& !(r instanceof PassengerRole)) {
 				
 				r.activate();
 				return;
 			}
 		}
 		
-		// There is no role for this location! Create one.
-		Role role = null;
-		role.activate();
+		if (forWork) {
+			// You tried to go here for work, but you don't work here. Oops.
+			return;
+		}
+		
+		// TODO There is no role for this location! Create one.
+		// Role role = ...;
+		// role.activate();
 	}
 	
 	@Override
@@ -440,6 +444,27 @@ public class PersonAgent extends Agent implements Person {
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
 	}
 	
+	/**
+	 * Whether you're here to work. Helps determine whether to activate a
+	 * WorkRole.
+	 */
+	private boolean atLocationForWork() {
+		// You're not here for work if work doesn't start soon.
+		if (!workStartsSoon()) {
+			return false;
+		}
+		
+		WorkRole workRole = getWorkRole();
+		if (workRole == null) {
+			// If you don't have a job, you're not here to work.
+			return false;
+		}
+		
+		// Otherwise, you're here for work iff this is your work location. 
+		return getPassengerRole().getLocation()
+				.equals(workRole.getLocation());
+	}
+	
 	@Override
 	public boolean isStarving() {
 		return hungerLevel == HungerLevel.STARVING;
@@ -473,33 +498,22 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Market/Inventory
 	
 	@Override
-	public Map<String, Item> getInventory() {
+	public Map<String, Integer> getInventory() {
 		return this.inventory;
 	}
 	
 	@Override
 	public void addItemsToInventory(String name, int amount) {
-		Item item = this.inventory.get(name);
-		if (item == null) {
-			item = new Item(name, amount);
-		} else {
-			item.ItemEqual(item.amount + amount);
-		}
-		this.inventory.put(name, item);
+		int currentCount = this.inventory.get(name);
+		this.inventory.put(name, currentCount + amount);
 	}
 	
 	@Override
 	public void removeItemsFromInventory(String name, int amount) {
-		Item item = this.inventory.get(name);
-		if (item == null) {
-			return;
-		}
-		int newAmount = item.amount - amount;
-		if (newAmount < 0) {
-			newAmount = 0;
-		}
-		item.ItemEqual(newAmount);
-		this.inventory.put(name, item);
+		int currentCount = this.inventory.get(name);
+		int newAmount = currentCount - amount;
+		if (newAmount < 0) { newAmount = 0; }
+		this.inventory.put(name, newAmount);
 	}
 	
 	// ---- Enumerations
@@ -509,6 +523,7 @@ public class PersonAgent extends Agent implements Person {
 			FULL}
 	
 	// ---- Methods to avoid weird inheritance issues
+	
 	@Override
 	public void agentStateChanged() {
 		stateChanged();

@@ -62,4 +62,9 @@ public class MarketBuilding extends gui.Building {
 		return info;
 	}
 	
+	public void UpdateInfoPanel(){
+		((MarketInfoPanel) info).UpdateInventoryLevelWithoutButton();
+		return;
+	}
+	
 }

@@ -5,6 +5,7 @@ import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
+import housing.interfaces.MaintenenceWorker;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
@@ -19,8 +20,11 @@ public class ResidentDwelling implements Dwelling {
 	
 	// housing slots
 	private Resident resident;
+	
 	private PayRecipient payRecipient;
 	private double monthlyPaymentAmount;
+	
+	private MaintenenceWorker worker = new MaintenenceWorkerRole();
 	
 	// example: Apartment unit number or house address
 	private int IDNumber;

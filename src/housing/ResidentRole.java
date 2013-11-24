@@ -7,6 +7,7 @@ import java.util.Map;
 import housing.PayRecipientRole.MyResident;
 import housing.PayRecipientRole.PaymentState;
 import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenenceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -47,6 +48,7 @@ public class ResidentRole extends Role implements Resident {
 	private double oweMoney = 0;
 	private PayRecipient payee;
 	private Dwelling dwelling;
+	private MaintenenceWorker worker;
 	
 	// food data
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
@@ -110,6 +112,12 @@ public class ResidentRole extends Role implements Resident {
 		stateChanged();
 	}
 	
+	@Override
+	public void msgDwellingFixed(){
+		log.add("Received message 'dwelling fixed'");
+		dwelling.setCondition(Condition.GOOD);
+	}
+	
 	public void msgAtDestination() {
 		doneWaitingForInput();
 	}
@@ -118,17 +126,18 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		
-		if(food != null && food.state == FoodState.COOKED){
+		if(food != null && food.state == FoodState.COOKED) {
 			eatFood();
 			return true;
 		}
 		
-		if(dwelling.getCondition() == Condition.POOR || dwelling.getCondition() == Condition.BROKEN){
+		if(dwelling.getCondition() == Condition.POOR ||
+				dwelling.getCondition() == Condition.BROKEN) {
 			callMaintenenceWorker();
 			return true;
 		}
 		
-		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0){
+		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0) {
 			makePayment();
 			return true;
 		}
@@ -136,7 +145,7 @@ public class ResidentRole extends Role implements Resident {
 		//TODO: The conditions for the below event need to be modified
 		if(hungry) {
 			synchronized(refrigerator) {
-				for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
+				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();
 					if(f.amount > 0){
 						cookFood(f);
@@ -230,6 +239,7 @@ public class ResidentRole extends Role implements Resident {
 				timerDoneCooking();
 			}
 		};
+		
 		// cook the food for the proper time
 		listener.taskFinished(task);
 		task.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
@@ -238,7 +248,7 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		log.add("This house needs fixing! Calling a maintence worker.");
 		//TODO actually implement maintenence worker
-		dwelling.setCondition(Condition.GOOD);
+		worker.msgFileWorkOrder(dwelling);
 	}
 	
 	/* --- Animation Routines --- */

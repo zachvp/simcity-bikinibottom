@@ -21,7 +21,7 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 		Dwelling dwelling;
 		WorkOrderState state;
 		
-		WorkOrder(Dwelling dwelling, String problem){
+		WorkOrder(Dwelling dwelling){
 			this.dwelling = dwelling;
 			state = WorkOrderState.FILED;
 		}
@@ -32,13 +32,13 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 	}
 
 	/* --- Messages --- */
-	public void msgFileWorkOrder(String problemType, Dwelling dwelling) {
+	public void msgFileWorkOrder(Dwelling dwelling) {
 		if(dwelling == null) {
 			log.add("Can't fulfill work order. Dwelling does not exits.");
 		}
 		
 		// add a new work order
-		workOrders.add(new WorkOrder(dwelling, problemType));
+		workOrders.add(new WorkOrder(dwelling));
 		stateChanged();
 	}
 	
@@ -61,8 +61,8 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 //		DoGoToDwelling(wo.dwelling.getIDNumber());
 //		DoFixProblem(wo.problemType);
 		
-		wo.dwelling.setCondition(Condition.GOOD);
 		wo.state = WorkOrderState.FIXED;
+		wo.dwelling.getResident().msgDwellingFixed();
 		workOrders.remove(wo);
 		
 //		DoReturnHome();

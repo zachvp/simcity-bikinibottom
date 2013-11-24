@@ -95,9 +95,10 @@ public class PassengerGuiClass implements PassengerGui {
 	}
 
 	@Override
-	public void doExitVehicle() {
+	public void doExitVehicle(CityLocation location) {
+		startLocation = location;
+		resetXY();
 		isPresent = true;
-
 	}
 
 	@Override

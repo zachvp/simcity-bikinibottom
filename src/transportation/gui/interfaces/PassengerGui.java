@@ -12,7 +12,7 @@ public interface PassengerGui extends Gui {
 
 	void doGetInBus(Bus b);
 
-	void doExitVehicle();
+	void doExitVehicle(CityLocation loc);
 
 	void doBringOutCar();
 

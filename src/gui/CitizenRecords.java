@@ -5,9 +5,15 @@ import java.util.Vector;
 
 import kelp.Kelp;
 import kelp.KelpClass;
+import transportation.CarAgent;
 import transportation.RealPassengerRole;
+import transportation.CornerAgent.MyCorner;
 import transportation.gui.PassengerGuiClass;
+import transportation.interfaces.Car;
+import transportation.interfaces.Corner;
+import transportation.interfaces.Passenger;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
@@ -29,11 +35,16 @@ public class CitizenRecords {
 
 
 	public CitizenRecords(MainFrame m){
+		Kelp kelp = KelpClass.getKelpInstance();
+		
+		
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
+		person.setCar(new CarAgent((Corner) kelp.placesNearMe(new XYPos(0, 0), 
+						LocationTypeEnum.Corner).get(0)));
 		//person.setHungerLevel(HungerLevel.STARVING,true);
-		Kelp kelp = KelpClass.getKelpInstance();
+		
 		person.addRole(new RealPassengerRole(person, 
 				kelp.placesNearMe(new XYPos(0, 0), 
 						LocationTypeEnum.Apartment).get(0)));

@@ -43,8 +43,8 @@ public class RealPassengerRole extends PassengerRole {
 	Vehicle currentVehicle = null;
 
 	//TODO implement passing down from person
-	boolean hasCar = false;
-	boolean useBus = true;
+	boolean hasCar = true;
+	boolean useBus = false;
 
 	private PassengerRequester requesterRole = null;
 

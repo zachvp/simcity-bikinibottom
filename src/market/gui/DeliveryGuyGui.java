@@ -16,8 +16,11 @@ public class DeliveryGuyGui implements Gui {
     private static final int DeliveryGuyWidth = 10;
     private static final int DeliveryGuyHeight = 10;
     
-    private static final int ExitX = -10;
-    private static final int ExitY = -10;
+    private static final int DeliverExitX = -10;
+    private static final int DeliverExitY = -10;
+    
+    private static final int ExitX = 130;
+    private static final int ExitY = -50;
 
     private static final int HomePosX = 10;
     private static final int HomePosY = 10;
@@ -43,7 +46,10 @@ public class DeliveryGuyGui implements Gui {
         if (xPos == xDestination && yPos == yDestination){
         	if (command==Command.GoHome) 
 				agent.Ready();
-			else if (command==Command.GoDeliver || command==Command.GoToExit) {
+			else if (command==Command.GoDeliver) {
+				agent.AtDeliverExit();
+			}
+			else if (command==Command.GoToExit){
 				agent.AtExit();
 			}
         	command=Command.noCommand;
@@ -59,8 +65,8 @@ public class DeliveryGuyGui implements Gui {
     }
     
     public void GoDeliver(){
-    	xDestination = ExitX;
-    	yDestination = ExitY;
+    	xDestination = DeliverExitX;
+    	yDestination = DeliverExitY;
     	command = command.GoDeliver;
     }
     

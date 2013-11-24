@@ -19,10 +19,10 @@ import agent.interfaces.Person;
 public class RealPassengerRole extends PassengerRole {
 
 	//CityLocation the Passenger is ultimately trying to get to.
-	CityLocation destination;
+	private CityLocation destination;
 
 	//Path to follow to get to destination. TODO add to DD
-	List<CityLocation> path;
+	private List<CityLocation> path = new ArrayList<CityLocation>();
 
 	//Pointer to GUI TODO Add to DD
 	PassengerGui gui;
@@ -32,18 +32,19 @@ public class RealPassengerRole extends PassengerRole {
 
 	//TODO update DD
 	//Stores what the Passenger is doing.
-	PassengerStateEnum state = PassengerStateEnum.Initial;
+	private PassengerStateEnum state = PassengerStateEnum.Initial;
 
 	Vehicle currentVehicle = null;
 
 	//TODO implement passing down from person
 	boolean hasCar = false;
-	boolean useBus = true;
+	boolean useBus = false;
 
 	public RealPassengerRole(Person person, CityLocation location,
 			PassengerGui gui) {
 		super(person, location);
-		this.location = location;
+		this.gui = gui;
+		gui.setPassenger(this, location);
 	}
 
 	//TODO add input for if has car, if want bus, etc
@@ -65,9 +66,13 @@ public class RealPassengerRole extends PassengerRole {
 
 	@Override
 	//From Vehicle or GUI
-	public void msgWeHaveArrived(CityLocation loc) {
+	public void msgWeHaveArrived(CityLocation loc) throws Exception {
+		if (path.get(0) != loc &&
+				state != PassengerStateEnum.InBus) {
+			throw new Exception("Arrived message sent, but passenger"
+					+ " wasn't going there");
+		}
 		location = loc;
-		gui.doUpdateLoc(loc);
 		state = PassengerStateEnum.DecisionTime;
 		stateChanged();
 	}
@@ -99,6 +104,7 @@ public class RealPassengerRole extends PassengerRole {
 			// TODO maybe some other priority
 			boolean useBusNow = useBus && !hasCar;
 			path = kelp.routeFromAToB(location, destination, useBusNow);
+			return;
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
@@ -111,19 +117,13 @@ public class RealPassengerRole extends PassengerRole {
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
 				Bus bus = (Bus) currentVehicle;
 				bus.msgExiting(this);
-				path.remove(0);
 				gui.doExitVehicle();
 				currentVehicle = null;
-				return;
 			} else if (currentVehicle != null && currentVehicle instanceof Car) {
 				currentVehicle = null;
-				path.remove(0);
 				gui.doExitVehicle();
-				return;
-			} else {
-				path.remove(0);
-				return;
 			}
+			return;
 		} else {
 			if (currentVehicle != null && currentVehicle instanceof Bus) {
 				state = PassengerStateEnum.InBus;
@@ -167,4 +167,28 @@ public class RealPassengerRole extends PassengerRole {
 		}
 		car.msgTakeMeHere(carPath,this);
 	}
+
+	/**
+	 * @return the destination
+	 */
+	public CityLocation destination() {
+		return destination;
+	}
+
+	/**
+	 * @return the path
+	 */
+	public List<CityLocation> path() {
+		return path;
+	}
+
+	/**
+	 * @return the state
+	 */
+	public PassengerStateEnum state() {
+		return state;
+	}
+
+
+
 }

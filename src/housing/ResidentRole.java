@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import housing.gui.ResidentGui;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.mock.EventLog;
+import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -39,7 +39,7 @@ public class ResidentRole extends Role implements Resident {
 	// food
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 5));
+			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 10));
 		}
 	});
 	
@@ -48,7 +48,7 @@ public class ResidentRole extends Role implements Resident {
 	private Timer timer = new Timer();
 	
 	// constants
-	private final int EAT_TIME = 6; 
+	private final int EAT_TIME = 10; 
 	
 	/* ----- Class Data ----- */
 	/**
@@ -96,10 +96,12 @@ public class ResidentRole extends Role implements Resident {
 			makePayment();
 			return true;
 		}
+		
 		if(food != null && food.state == FoodState.COOKED){
 			eatFood();
 			return true;
 		}
+		
 		//TODO: The conditions for the below event need to be modified
 		if(hungry){
 			synchronized(refrigerator){
@@ -112,9 +114,8 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		else{
-			DoJazzercise();
-		}
+		// idle behavior
+		DoJazzercise();
 		return false;
 	}
 	
@@ -137,19 +138,25 @@ public class ResidentRole extends Role implements Resident {
 	private void eatFood(){
 		DoGoToStove();
 		waitForInput();
+		
 		DoSetFood(food.type);
 		DoGoToTable();
 		waitForInput();
+		
 		log.add("Eating food");
 		hungry = false;
 		food = null;
-		timer.schedule(new TimerTask() {
-			public void run() {
+		
+		// set a timer for eating
+		Runnable command = new Runnable(){
+			public void run(){
 				DoSetFood("");
+				doneWaitingForInput();
 				stateChanged();
 			}
-		},
-		EAT_TIME * 1000);
+		};
+		scheduleTaskWithDelay(command, EAT_TIME*Constants.MINUTE);
+		waitForInput();
 	}
 	
 	private void cookFood(Food f){
@@ -175,19 +182,13 @@ public class ResidentRole extends Role implements Resident {
 			groceries.put(f.type, f.capacity - f.low);
 		}
 		
-		/* --- Include for testing because JUnit doesn't recognize timers ---
-		DoCooking(f.type);
-		food.state = FoodState.COOKED;
-		log.add("Food is cooked.");
- 		*/
-		
-		// time the food
-		timer.schedule(new TimerTask() {
-			public void run() {
+		// set a timer with a delay using method from abstract Role class
+		Runnable command = new Runnable(){
+			public void run(){
 				timerDoneCooking();
 			}
-		},
-		f.cookTime * 1000);
+		};
+		scheduleTaskWithDelay(command, food.cookTime*Constants.MINUTE);
 	}
 	
 	/* --- Animation Routines --- */

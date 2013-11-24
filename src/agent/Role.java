@@ -2,6 +2,7 @@ package agent;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import agent.interfaces.Person;
@@ -16,7 +17,8 @@ public abstract class Role {
     protected Person person;
     protected CityLocation location;
     private boolean active = false;
-    private boolean awaitingInput = false;
+    // private boolean awaitingInput = false;
+    private Semaphore awaitingInputSem = new Semaphore(0, true);
     private ScheduledExecutorService executor;
     
     /**
@@ -124,7 +126,8 @@ public abstract class Role {
      * {@link #pickAndExecuteAnAction()} should be called.
      */
     public boolean isAwaitingInput() {
-        return this.awaitingInput;
+        // return this.awaitingInput;
+    	return this.awaitingInputSem.availablePermits() < 0;
     }
     
     /**
@@ -151,7 +154,13 @@ public abstract class Role {
      * @see #isAwaitingInput()
      */
     public void waitForInput() {
-    	this.awaitingInput = true;
+    	// this.awaitingInput = true;
+    	try {
+			this.awaitingInputSem.acquire();
+		} catch (InterruptedException e) {
+			// thread interrupted on semaphore acquire!
+			e.printStackTrace();
+		}
     }
     
     /**
@@ -161,7 +170,8 @@ public abstract class Role {
      * @see #isAwaitingInput()
      */
     public void doneWaitingForInput() {
-    	this.awaitingInput = false;
+    	// this.awaitingInput = false;
+    	this.awaitingInputSem.release();
     	stateChanged();
     }
 
@@ -204,7 +214,7 @@ public abstract class Role {
      */
 	public void scheduleDailyTask(Runnable command, int hour, int minute) {
 		TimeManager tm = TimeManager.getInstance();		
-		long initialDelay =(int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+		long initialDelay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
 				/TimeManager.CONVERSION_RATE;
 		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
 		TimeUnit unit = TimeUnit.MILLISECONDS;
@@ -246,8 +256,7 @@ public abstract class Role {
 		executor.schedule(command, convDelay, unit);
 		
 		if (Constants.DEBUG) {
-			Do("executing in " + convDelay*TimeManager.CONVERSION_RATE / 1000 +
-					" seconds");
+			Do("executing in " + convDelay / 1000 + " seconds");
 		}
 	}
 	

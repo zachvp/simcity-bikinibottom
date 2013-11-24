@@ -116,9 +116,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	}
 	// Messages
 
-	public void gotHungry() {//from animation
-
-	}
+	
 	
 	public void msgLeaveWork() {
 //		endWorkShift = true;

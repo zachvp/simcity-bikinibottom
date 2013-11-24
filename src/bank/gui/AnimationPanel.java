@@ -40,7 +40,6 @@ public class AnimationPanel extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
         
-//        System.out.println("HIHIH");
 
         //Clear the screen by painting a rectangle the size of the frame
         g2.setColor(getBackground());

@@ -149,7 +149,12 @@ public class BusAgent extends VehicleAgent implements Bus {
 
 	private void letPassengersExit() {
 		for (Passenger passenger : passengerList) {
-			passenger.msgWeHaveArrived(currentCorner);
+			try {
+				passenger.msgWeHaveArrived(currentCorner);
+			} catch (Exception e) {
+				System.out.println("THIS SHOULDN'T HAPPEN!");
+				e.printStackTrace();
+			}
 		}
 		
 		//TODO here we're not waiting for passengers to exit

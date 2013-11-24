@@ -3,8 +3,11 @@ package agent;
 import housing.ResidentRole;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import market.Item;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
@@ -43,6 +46,7 @@ public class PersonAgent extends Agent implements Person {
 	private long workStartThreshold;
 	
 	private Wallet wallet;
+	private Map<String, Item> inventory;
 	
 	private Car car;
 	
@@ -65,6 +69,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
 		
 		this.wallet = new Wallet(); // medium income level
+		this.inventory = new HashMap<String, Item>();
 	}
 	
 	/* -------- Messages -------- */
@@ -84,22 +89,27 @@ public class PersonAgent extends Agent implements Person {
 	protected boolean pickAndExecuteAnAction() {
 		// First, the Role rules.
 		
+		boolean roleExecuted = false;
+		
 		for (Role r : roles) {
 			if (r.isActive()) {
-				if (r.isAwaitingInput()) {
-					// The Role is paused. Return false, but don't activate
-					// another Role!
-					return false;
-				} else {
-					return r.pickAndExecuteAnAction();
-				}
-				// Note: only one role should be active at a time
+//				if (r.isAwaitingInput()) {
+//					// The Role is paused. Return false, but don't activate
+//					// another Role!
+//					return false;
+//				} else {
+					roleExecuted = r.pickAndExecuteAnAction() || roleExecuted;
+//				}
 			}
 		}
 		
+		// if at least one role's scheduler returned true, return true
+		if (roleExecuted) { return true; }
+		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			 activateRoleForLoc(getPassengerRole().getLocation());
+			// TODO IMPORTANT: CORRECTLY DETERMINE WHETHER I SHOULD BE AT WORK
+			activateRoleForLoc(getPassengerRole().getLocation(), false);
 		}
 		
 
@@ -193,14 +203,29 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
-	private void activateRoleForLoc(CityLocation loc) {
+	private void activateRoleForLoc(CityLocation loc, boolean work) {
+		WorkRole workRole = getWorkRole();
+		if (work) {
+			workRole.activate();
+			return;
+		}
+		
+		PassengerRole passRole = getPassengerRole();
+		
 		for (Role r : roles) {
-			if (loc.equals(r.getLocation())) {
+			if (loc.equals(r.getLocation())
+					&& !r.equals(workRole)
+					&& !r.equals(passRole)) {
+				
 				r.activate();
+				return;
 			}
 		}
+		
+		// There is no role for this location! Create one.
+		Role role = null;
+		role.activate();
 	}
-	
 	
 	@Override
 	public Wallet getWallet() {
@@ -301,7 +326,7 @@ public class PersonAgent extends Agent implements Person {
 		setHungerToFull(false);
 	}
 	
-	// Work starting soon
+	// ---- Work starting soon
 	
 	/**
 	 * If there is less than this much time before work starts, the person
@@ -354,7 +379,6 @@ public class PersonAgent extends Agent implements Person {
 	
 		
 	// ---- Choosing locations to patronize
-	
 
 	private CityLocation chooseRestaurant() {
 		// get a list of nearby restaurants
@@ -432,7 +456,7 @@ public class PersonAgent extends Agent implements Person {
 	 * eating out.
 	 */
 	public boolean wantsToEatOut() {
-		return timeManager.timeUntil(lastTimeEatingOut)
+		return -timeManager.timeUntil(lastTimeEatingOut)
 				>= this.eatingOutWaitPeriod;
 	}
 	
@@ -442,9 +466,42 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public boolean needToGoToBank() {
-		return wallet.hasTooMuch() || wallet.hasTooLittle();
+		return wallet.hasTooMuch() || wallet.hasTooLittle()
+				|| wallet.needsMoney();
 	}
-		
+	
+	// ---- Market/Inventory
+	
+	@Override
+	public Map<String, Item> getInventory() {
+		return this.inventory;
+	}
+	
+	@Override
+	public void addItemsToInventory(String name, int amount) {
+		Item item = this.inventory.get(name);
+		if (item == null) {
+			item = new Item(name, amount);
+		} else {
+			item.ItemEqual(item.amount + amount);
+		}
+		this.inventory.put(name, item);
+	}
+	
+	@Override
+	public void removeItemsFromInventory(String name, int amount) {
+		Item item = this.inventory.get(name);
+		if (item == null) {
+			return;
+		}
+		int newAmount = item.amount - amount;
+		if (newAmount < 0) {
+			newAmount = 0;
+		}
+		item.ItemEqual(newAmount);
+		this.inventory.put(name, item);
+	}
+	
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}

@@ -56,7 +56,7 @@ public class ResidentTest extends TestCase {
 	 * time to cook.
 	 * */
 	public void testNormativeCookAndEat() throws InterruptedException {
-		// set the residen't gui to the mock gui
+		// set the resident gui to the mock gui
 		resident.setGui(gui);
 		// listens for the taskScheduler to finish. Use for routine that have a time delay
 		MockScheduleTaskListener mockRequestListener = new MockScheduleTaskListener();

@@ -2,13 +2,10 @@ package housing.gui;
 
 import housing.PayRecipientRole;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import agent.PersonAgent;
@@ -22,7 +19,7 @@ import CommonSimpleClasses.XYPos;
  * @author Zach VP
  *
  */
-public class HousingComplex extends JPanel implements CityBuilding {
+public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
 	private final int UNIT_COUNT = 1;
@@ -35,7 +32,7 @@ public class HousingComplex extends JPanel implements CityBuilding {
 
 	// payRecipient who manages the complex 
  	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
- 	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
+ 	private PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
 	
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
@@ -62,26 +59,12 @@ public class HousingComplex extends JPanel implements CityBuilding {
 		agent.addRole(role);
 		role.activate();
 	}
-	
-	@Override
-	public LocationTypeEnum type() {
-		return LocationTypeEnum.Apartment;
-	}
 
-	@Override
-	public XYPos position() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XYPos entrancePos() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public Role getGreeter() {
+	public PayRecipientRole getPayRecipientRole() {
 		return payRecipientRole;
+	}
+
+	public void setPayRecipientRole(PayRecipientRole payRecipientRole) {
+		this.payRecipientRole = payRecipientRole;
 	}
 }

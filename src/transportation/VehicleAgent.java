@@ -124,7 +124,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	private void moveToCorner(Corner corner) {
 		gui.doMoveToCorner(corner);
 		isAnimating = true;
-		
+		state = VehicleStateEnum.OnStreet;
 	}
 
 	// TODO ADD to DD

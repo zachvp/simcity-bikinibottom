@@ -83,7 +83,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	@Override
 	protected boolean pickAndExecuteAnAction() { // TODO Update DD
 		if (!isAnimating) {
-			if (currentPath.isEmpty()) {
+			if (currentPath.isEmpty() && event != VehicleEventEnum.None) {
 				endTravel();
 				return true;
 			} else if (state == VehicleStateEnum.Initial && 
@@ -166,6 +166,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	}
 	
 	public void startVehicle() {
+		gui.setPresent(true);
 		event = VehicleEventEnum.StartedVehicle;
 		stateChanged();
 	}

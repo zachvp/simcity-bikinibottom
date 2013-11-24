@@ -18,4 +18,6 @@ public interface PassengerGui extends Gui {
 
 	void doSetLocation(CityLocation loc);
 
+	XYPos getPos();
+
 }

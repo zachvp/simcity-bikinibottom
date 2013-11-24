@@ -103,7 +103,13 @@ public class PassengerGuiClass implements PassengerGui {
 
 	@Override
 	public void doBringOutCar() {
+		isPresent = false;
 		passenger.msgGotInCar();
+	}
+
+	@Override
+	public XYPos getPos() {
+		return new XYPos(xPos, yPos);
 	}
 
 }

@@ -193,7 +193,7 @@ public class RealPassengerRole extends PassengerRole {
 		for (int j = 0; j < i-1; j++) {
 			path.remove(0);
 		}
-		car.msgTakeMeHere(carPath,this);
+		car.msgTakeMeHere(carPath,this,gui.getPos());
 		if (car instanceof CarAgent) {
 			CarAgent carAgent = (CarAgent) car;
 			carAgent.startThread();

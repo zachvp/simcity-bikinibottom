@@ -3,20 +3,24 @@ package bank.gui;
 import javax.swing.JPanel;
 
 import bank.BankCustomerRole;
+import bank.BankRoleFactory;
 import bank.SecurityGuardRole;
 
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import CommonSimpleClasses.XYPos;
 
-
+//creates animation panel and starts building
 public class BankBuilding extends Building {
 
+//	CityBuilding cityBuilding;// = new CityBuilding();
 	XYPos entrancePosition = new XYPos(300, 500);
 	SecurityGuardRole securityGuardRole;
 	BankCustomerRole bankCustomerRole;
+	BankRoleFactory bankRoleFactory = new BankRoleFactory();
 	
 	private AnimationPanel animationPanel = new AnimationPanel();;
 	
@@ -42,8 +46,7 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		BankCustomerRole bc = new BankCustomerRole(person);
-		return bc;
+		return bankRoleFactory.getCustomerRole(person);
 	}
 
 	@Override

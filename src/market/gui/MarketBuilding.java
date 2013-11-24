@@ -15,7 +15,6 @@ public class MarketBuilding extends gui.Building {
 
 	String name;
 	JPanel animationPanel = new market.gui.AnimationPanel();	
-	LocationTypeEnum type;
 	JPanel controls;
 	MarketRoleFactory marketroleFactory = new MarketRoleFactory();
 	

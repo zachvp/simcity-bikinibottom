@@ -13,5 +13,7 @@ public interface Vehicle extends AdjCornerRequester {
 	public void msgDriveNow();
 
 	DirectionEnum currentDirection();
+
+	void startVehicle();
 	
 }

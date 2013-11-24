@@ -1,6 +1,6 @@
 package housing.gui;
 
-import housing.Dwelling;
+import housing.ResidentDwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
 import housing.interfaces.ResidentGui;
@@ -45,7 +45,7 @@ public class HousingGui extends JPanel {
 
 	// back-end housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
-	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index, "good");
+	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, "good");
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);

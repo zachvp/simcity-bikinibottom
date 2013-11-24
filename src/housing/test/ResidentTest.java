@@ -44,7 +44,8 @@ public class ResidentTest extends TestCase {
 		resident.msgPaymentDue(PAYMENT_AMOUNT);
 		assertEquals("Resident should now owe " + PAYMENT_AMOUNT + ".",
 				PAYMENT_AMOUNT, resident.getMoneyOwed());
-		//check that the pay recipient received the pay message from the resident
+		
+		// check that the pay recipient received the pay message from the resident
 		assertTrue("Resident's scheduler should have returned true, reacting to the payment due message",
 				resident.pickAndExecuteAnAction());
 		assertEquals("Pay recipient should have the instance of resident.",
@@ -62,6 +63,13 @@ public class ResidentTest extends TestCase {
 		MockScheduleTaskListener mockRequestListener = new MockScheduleTaskListener();
 		
 		/* --- Test Preconditions --- */
+		// check money owed
+		assertEquals("Resident should owe $0.0.", resident.getMoneyOwed(), 0.0);
+		// check event log
+		assertEquals("Resident should have an empty event log before the message is called. Instead, the Resident's event log reads: "
+				+ resident.log.toString(), 0, resident.log.size());
+		
+		// check food conditions
 		assertFalse("Resident should not be hungry to start.",
 				resident.isHungry());
 		assertEquals("Food resident is handling should be null.",

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.mock.EventLog;
@@ -32,8 +33,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	
 	private class MyResident{
 		Dwelling dwelling;
-		double residentOwes;
-		double paymentAmount;// how much the resident has actually paid
+		double owes;
+		double hasPaid;
 		PaymentState state;
 		
 		MyResident(Dwelling dwelling){
@@ -66,7 +67,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
 		if(mr == null) return;
-		mr.paymentAmount = amount;
+		mr.hasPaid = amount;
 		mr.state = PaymentState.PAYMENT_RECEIVED;
 		log.add("Received message 'here is payment' " + amount + " from " + mr.dwelling.getIDNumber());
 		stateChanged();
@@ -86,13 +87,13 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	/* ----- Actions ----- */
 	private void checkResidentPayment(MyResident mr){
 		log.add("Checking resident payment " + mr.dwelling.getIDNumber());
-		mr.residentOwes -= mr.paymentAmount;
+		mr.owes -= mr.hasPaid;
 		
-		if(mr.residentOwes == 0){
+		if(mr.owes == 0){
 			mr.state = PaymentState.DONE;
-			log.add("Resident has paid in full, now owes " + mr.residentOwes);
+			log.add("Resident has paid in full, now owes " + mr.owes);
 		}
-		else if(mr.residentOwes > 0) {
+		else if(mr.owes > 0) {
 			log.add("Resident " + mr.dwelling.getIDNumber() + " still owes money!");
 			mr.state = PaymentState.PAYMENT_DUE;
 		}
@@ -103,7 +104,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	}
 	
 	private void chargeResident(MyResident r){
-		r.residentOwes += r.dwelling.getMonthlyPaymentAmount();
+		r.owes += r.dwelling.getMonthlyPaymentAmount();
 		r.state = PaymentState.PAYMENT_DUE;
 		r.dwelling.getResident().msgPaymentDue(r.dwelling.getMonthlyPaymentAmount());
 		log.add("Charged resident " + r.dwelling.getIDNumber());
@@ -123,5 +124,13 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public void addResident(Dwelling dwelling){
 		residents.add(new MyResident(dwelling));
 		stateChanged();
+	}
+
+	public List<MyResident> getResidents() {
+		return residents;
+	}
+
+	public void setResidents(List<MyResident> residents) {
+		this.residents = residents;
 	}
 }

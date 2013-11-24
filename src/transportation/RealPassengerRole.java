@@ -190,6 +190,11 @@ public class RealPassengerRole extends PassengerRole {
 			path.remove(0);
 		}
 		car.msgTakeMeHere(carPath,this);
+		if (car instanceof CarAgent) {
+			CarAgent carAgent = (CarAgent) car;
+			carAgent.startThread();
+		}
+		car.startVehicle();
 	}
 
 	/**

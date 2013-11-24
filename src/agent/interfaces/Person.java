@@ -157,6 +157,14 @@ public interface Person {
 		public void setTooLittle(double tl) { this.tooLittle = tl; }
 		public void setMoneyNeeded(double mn) { this.moneyNeeded = mn; }
 		
+		/** Adds cash to cashOnHand. */
+		public void addCash(double cash) { this.cashOnHand += cash; }
+		/**
+		 * Subtracts cash from cashOnHand. Careful! This method doesn't verify
+		 * that cashOnHand has enough cash, so you have to do that yourself.
+		 */
+		public void subtractCash(double cash) { this.cashOnHand -= cash; }
+		
 		public boolean hasTooMuch() {
 			return cashOnHand > tooMuch;
 		}

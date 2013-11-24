@@ -9,6 +9,10 @@ import transportation.interfaces.Passenger;
 
 public class CarAgent extends VehicleAgent implements Car {
 
+	public CarAgent(Corner currentCorner) {
+		super(currentCorner, false);
+	}
+
 	Passenger driver;
 	
 	@Override

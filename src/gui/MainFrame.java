@@ -217,6 +217,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		busAgent.startThread();
 		busAgent.startVehicle();
+		
+		busAgent = new BusAgent(corners.get(5),
+				false, busRoute);
+		
+		busAgent.startThread();
+		busAgent.startVehicle();
         
         JTabbedPane tabbedPane = new JTabbedPane();
         buildingList = new InfoList(listDim.width, listDim.height);

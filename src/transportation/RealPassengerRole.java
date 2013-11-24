@@ -41,7 +41,7 @@ public class RealPassengerRole extends PassengerRole {
 
 	//TODO implement passing down from person
 	boolean hasCar = false;
-	boolean useBus = false;
+	boolean useBus = true;
 
 	public RealPassengerRole(Person person, CityLocation location) {
 		super(person, location);

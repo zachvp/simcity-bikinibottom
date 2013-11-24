@@ -1,11 +1,13 @@
 package gui;
 
+import java.util.List;
 import java.util.Vector;
 
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.RealPassengerRole;
 import transportation.gui.PassengerGuiClass;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
@@ -40,7 +42,10 @@ public class CitizenRecords {
 		person.goToLoc(kelp.placesNearMe(kelp.placesNearMe(new XYPos(0, 0), 
 			LocationTypeEnum.Apartment).get(0), LocationTypeEnum.Restaurant).get(0));
 			*/
-		person.goToLoc(person.chooseHouse());
+		List<CityLocation> placesToGo = kelp.placesNearMe(person.getPassengerRole().getLocation(),
+				LocationTypeEnum.House);
+		
+		person.goToLoc(placesToGo.get(placesToGo.size()-1));
 	}
 
 	/**

@@ -20,8 +20,6 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	private Dimension d;
 	private JLabel info;
-	//private JPanel textPanel; //info display
-	//private JPanel controlPanel; //gui controls
 
 	public InfoPanel(int w, int h){
 		d = new Dimension(w-20, h-25);

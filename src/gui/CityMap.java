@@ -42,9 +42,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
-		//setMaximumSize(panelDim);
-		//setMinimumSize(panelDim);
-		//setBackground(Color.gray);
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
@@ -61,16 +58,18 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
     	timer.start();
 	}
 	
+	/**
+	 * Returns the x coordinate of the next available spot on the map 
+	 * @return x coordinate
+	 */
 	public int getNextBuildingX(){
-		/*if (col >= Constants.MAX_BLOCK_COL){
-			row++;
-			col = 0;
-			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
-		}*/
-		
 		return col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
 				+ Constants.MAP_MARGIN_X;
 	}
+	/**
+	 * Returns the y coordinate of the next available spot on the map 
+	 * @return y coordinate
+	 */
 	public int getNextBuildingY(){
 		return row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
 				+ Constants.MAP_MARGIN_Y;
@@ -85,13 +84,9 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
-			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
 		buildings.add(building);
-		
 	}
-	
-	
 	
 
 	/**

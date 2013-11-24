@@ -156,5 +156,10 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	protected void traverseCorner() {
 		gui.doTraverseAndMoveToCorner(currentCorner, currentPath.get(0));
 	}
+	
+	public void startVehicle() {
+		event = VehicleEventEnum.StartedVehicle;
+		stateChanged();
+	}
 
 }

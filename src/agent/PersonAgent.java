@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import market.Item;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
@@ -65,9 +64,9 @@ public class PersonAgent extends Agent implements Person {
 		this.kelp = KelpClass.getKelpInstance();
 		
 		this.lastTimeEatingOut = timeManager.fakeStartTime();
-		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
+		this.eatingOutWaitPeriod = Constants.DAY;
 		
-		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
+		this.workStartThreshold = 30 * Constants.MINUTE;
 		
 		this.wallet = new Wallet(); // medium income level
 		this.inventory = new HashMap<String, Integer>();

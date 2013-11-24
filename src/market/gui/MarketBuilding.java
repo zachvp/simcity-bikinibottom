@@ -16,7 +16,7 @@ public class MarketBuilding extends gui.Building {
 	String name;
 	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
 	MarketRecords records = new MarketRecords(animationPanel);
-	JPanel controls = new MarketControlPanel(records);
+	JPanel info = new MarketInfoPanel(records);
 	MarketRoleFactory marketroleFactory = new MarketRoleFactory();
 	
 	public MarketBuilding(int x, int y, int width, int height) {
@@ -57,9 +57,9 @@ public class MarketBuilding extends gui.Building {
 	}
 
 	@Override
-	public JPanel getControlPanel() {
+	public JPanel getInfoPanel() {
 		// TODO Auto-generated method stub
-		return controls;
+		return info;
 	}
 	
 }

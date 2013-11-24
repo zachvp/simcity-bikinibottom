@@ -27,7 +27,7 @@ public abstract class Building extends Rectangle2D.Double
 	String name;
 	JPanel animationPanel;	
 	LocationTypeEnum type;
-	JPanel controls;
+	JPanel info;
 	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
@@ -49,6 +49,6 @@ public abstract class Building extends Rectangle2D.Double
 	public abstract JPanel getAnimationPanel();
 	
 	//Return your control panel here (null if you don't have one)
-	public abstract JPanel getControlPanel();
+	public abstract JPanel getInfoPanel();
 	
 }

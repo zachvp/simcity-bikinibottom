@@ -22,13 +22,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import market.gui.MarketBuilding;
 import bank.gui.BankBuilding;
 import agent.Constants;
 import kelp.KelpClass;
-import market.gui.AnimationPanel;
-import market.gui.MarketBuilding;
-import market.gui.MarketControlPanel;
-import market.gui.MarketRecords;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;

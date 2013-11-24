@@ -34,7 +34,11 @@ public class AnimationPanel extends JPanel implements ActionListener {
     }
 
 	public void actionPerformed(ActionEvent e) {
+		for(Gui g: guis) {
+			g.updatePosition();
+		}
 		repaint();  //Will have paintComponent called
+		
 	}
 
     public void paintComponent(Graphics g) {

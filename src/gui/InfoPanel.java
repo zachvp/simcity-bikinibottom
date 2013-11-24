@@ -93,14 +93,14 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 		info.setText("<html><div>&nbsp;</div><div> "
 				+ "Building: "+ b.getName() +"</div><div>&nbsp;</div>"
-				+ "<div> Building Type: "+ b.getType() +"</div><div>&nbsp;</div>"
+				+ "<div> Building Type: "+ b.type() +"</div><div>&nbsp;</div>"
 				//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
 				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
 				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
 				);
 		
 		CardLayout cl = (CardLayout)(controlPanel.getLayout());
-		if(b.getType() == LocationTypeEnum.Market){
+		if(b.type() == LocationTypeEnum.Market){
 			cl.show(controlPanel, b.getName());
 		}
 		else

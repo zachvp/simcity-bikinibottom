@@ -22,8 +22,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import bank.gui.BankBuilding;
+import agent.Constants;
 import kelp.KelpClass;
 import market.gui.AnimationPanel;
+import market.gui.MarketBuilding;
 import market.gui.MarketControlPanel;
 import market.gui.MarketRecords;
 import parser.BuildingDef;
@@ -64,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	//Panels
 	private BuildingView buildingViewPanel;
 	private CityView cityViewPanel;
+	private CityMap map;
 	public InfoPanel infoPanel;
 
 	private PersonCreationPanel personCreationPanel;
@@ -118,8 +122,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.setMinimumSize(cityDim);
 		cityViewSlot.setOpaque(false);
 		cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
-		cityViewPanel = new CityView(cityDim.width, cityDim.height, this);
-		cityViewPanel.setBuildingView(buildingViewPanel);
+		map = new CityMap();
+		cityViewPanel = new CityView(cityDim.width, cityDim.height, this, map);
+		
+		map.setBuildingView(buildingViewPanel);
 		cityViewSlot.add(cityViewPanel);
 
 		//Information Panel
@@ -146,14 +152,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		personList.setInfoPanel(infoPanel);
 		citizenRecords = new CitizenRecords(this);
 		personList.setCitizenRecords(citizenRecords);
-		buildingList.setBuildingList(cityViewPanel.getBuildings());
+		buildingList.setBuildingList(map.getBuildings());
 		citizenRecords.setInfoPanel(infoPanel);
 		buildingList.setBuildingView(buildingViewPanel);
 		tabbedPane.addTab("Buildings", buildingList);
 		tabbedPane.addTab("People", personList);
 		InfoListSlot.add(tabbedPane);
 		buildingViewPanel.setBuildingList(buildingList);
-		cityViewPanel.setInfoPaneltoMap(infoPanel);
+		map.setInfoPanel(infoPanel);
 
 		//JPanel to hold infoPanelSlot and buildingListSlot
 		JPanel infoHolder = new JPanel();
@@ -175,26 +181,35 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	}
 
-	private void construct(String name, JPanel animationPanel, LocationTypeEnum type){
-		buildingViewPanel.addCard(animationPanel, name);//creates card and corresponding button
-		cityViewPanel.addBuildingToMap(name, type, animationPanel);
+	private void construct(Building building){
+		buildingViewPanel.addCard(building.getAnimationPanel(), building.getName());//creates card and corresponding button
+		map.addBuildingToMap(building);
 	}
 
 	private void constructCity(List<BuildingDef> list) {
 		ArrayList<Building> buildings = new ArrayList<Building>();
+		int x;
+		int y;
 		for(BuildingDef b: list){
 			String buildingName = b.getName();
 			LocationTypeEnum type = b.getType();
+			
+			x = map.getNextBuildingX();
+			y = map.getNextBuildingY();
 
 			if(type == LocationTypeEnum.Bank){
+				BankBuilding bank = new BankBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT); //Rectangle
+				bank.setName(buildingName);
+				buildings.add(bank);
+				construct(bank);
+				
 
 				//keep Buildings in a list for kelp
 				//calc pos of new rect -- getNextBuildingPos() from CityMap
-				//BankBuilding bank = new BankBuilding(); //Rectangle
 				//JPanel BankAnimaitonPanel = bank.getAnimationPanel()
-				bank.gui.AnimationPanel BankAnimationPanel = new bank.gui.AnimationPanel();
+				//bank.gui.AnimationPanel BankAnimationPanel = new bank.gui.AnimationPanel();
 
-				construct(buildingName, BankAnimationPanel, LocationTypeEnum.Bank);
+				//construct(buildingName, BankAnimationPanel, LocationTypeEnum.Bank);
 
 				//buildingViewPanel.addCard(BankAnimationPanel, buildingName);//creates card and corresponding button
 				//cityViewPanel.addBuildingToMap(buildingName, LocationTypeEnum.Bank);
@@ -205,7 +220,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if(type == LocationTypeEnum.House){
 				JPanel HouseAnimationPanel = new JPanel();
 				HouseAnimationPanel.setBackground(Color.green);
-				construct(buildingName,HouseAnimationPanel, LocationTypeEnum.House); 
+				//construct(buildingName,HouseAnimationPanel, LocationTypeEnum.House); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
 				restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
@@ -213,37 +228,37 @@ public class MainFrame extends JFrame implements ActionListener {
 				//RestaurantRecords restRecords = new restaurant.strottma.gui.RestaurantRecords(animationPanel);
 				//citizenRecords.addBuildingRecord(restRecords);
 
-				construct(buildingName, animationPanel, LocationTypeEnum.Restaurant); 
+				//construct(buildingName, animationPanel, LocationTypeEnum.Restaurant); 
 			}
 			if(type == LocationTypeEnum.Market){
-				market.gui.AnimationPanel animationPanel = new market.gui.AnimationPanel();
+				//market.gui.AnimationPanel animationPanel = new market.gui.AnimationPanel();
 
-				MarketRecords marketRecords = new MarketRecords(animationPanel);
-				MarketControlPanel controlPanel = new MarketControlPanel(marketRecords);
+				//MarketRecords marketRecords = new MarketRecords(animationPanel);
+				//MarketControlPanel controlPanel = new MarketControlPanel(marketRecords);
 
-				citizenRecords.addBuildingRecord(marketRecords);
-				infoPanel.addControlPanel(controlPanel, buildingName);
+				MarketBuilding market = new MarketBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				market.setName(buildingName);
+				buildings.add(market);
+				//citizenRecords.addBuildingRecord(marketRecords);
+				//infoPanel.addControlPanel(market.getControlPanel(), buildingName);
 
-
-
-
-				construct(buildingName, animationPanel, LocationTypeEnum.Market);
+				construct(market);
 
 			}
 			if(type == LocationTypeEnum.Hospital){
 				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
 				personCreationPanel.setRecords(citizenRecords);
-				construct(buildingName, personCreationPanel, LocationTypeEnum.Hospital);
+				//construct(buildingName, personCreationPanel, LocationTypeEnum.Hospital);
 			}
 			if(type == LocationTypeEnum.Apartment){
 				JPanel animationPanel = new JPanel();
 				animationPanel.setBackground(Color.green);
-				construct(buildingName, animationPanel, LocationTypeEnum.None);
+				//construct(buildingName, animationPanel, LocationTypeEnum.None);
 			}
 			if(type == LocationTypeEnum.None){
 				JPanel animationPanel = new JPanel();
 				animationPanel.setBackground(Color.green);
-				construct(buildingName, animationPanel, LocationTypeEnum.None);
+				//construct(buildingName, animationPanel, LocationTypeEnum.None);
 			}
 
 		}

@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.TellerGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
@@ -81,7 +80,7 @@ public class TellerRole extends WorkRole implements Teller {
 	LoanManager loanManager;
 	boolean endWorkShift = false;
 	
-	public TellerRole(PersonAgent person) {
+	public TellerRole(Person person) {
 		super(person);
 		
 		// ask everyone for rent

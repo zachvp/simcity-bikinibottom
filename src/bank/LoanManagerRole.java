@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.LoanManagerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -34,7 +33,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	public LoanManagerRole(PersonAgent person) {
+	public LoanManagerRole(Person person) {
 		super(person);
 //		this.name = name;
 		

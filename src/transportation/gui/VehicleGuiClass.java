@@ -94,20 +94,20 @@ public class VehicleGuiClass implements VehicleGui {
 		
 		switch (vehicle.currentDirection()) {
 		case North:
-			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS,
+			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS/4,
 					yPos);
 			break;
 		case South:
-			response = new XYPos(xPos-Constants.SPACE_BETWEEN_BUILDINGS,
+			response = new XYPos(xPos-Constants.SPACE_BETWEEN_BUILDINGS/4,
 					yPos);
 			break;
 		case West:
 			response = new XYPos(xPos,
-					yPos-Constants.SPACE_BETWEEN_BUILDINGS);
+					yPos-Constants.SPACE_BETWEEN_BUILDINGS/4);
 			break;
 		case East:
 			response = new XYPos(xPos,
-					yPos+Constants.SPACE_BETWEEN_BUILDINGS);
+					yPos+Constants.SPACE_BETWEEN_BUILDINGS/4);
 			break;
 		default:
 			throw new Exception("This shouldn't happen");

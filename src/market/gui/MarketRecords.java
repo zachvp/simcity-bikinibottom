@@ -122,6 +122,8 @@ public class MarketRecords implements BuildingRecords {
         dg.setCashier(ca);
         cust.setCashier(ca);
         cust1.setCashier(ca);
+        cust.setPriceList(ca.getPriceList());
+        cust1.setPriceList(ca.getPriceList());
         ic.setInventoryList(ca.getInventoryList());
         ic1.setInventoryList(ca.getInventoryList());
         

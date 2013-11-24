@@ -29,11 +29,12 @@ public class MockItemCollector extends Mock implements ItemCollector {
 		
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
-			tempInventoryList.add(new Item("CheapCar", 1));
-			tempInventoryList.add(new Item("ExpensiveCar", 0));
-			tempInventoryList.add(new Item("Pizza", 1));
-			tempInventoryList.add(new Item("Sandwich", 0));
-			tempInventoryList.add(new Item("Chicken", 0));
+			tempInventoryList.add(new Item("Toyoda", 1));
+			tempInventoryList.add(new Item("LamboFinny", 0));
+			tempInventoryList.add(new Item("Krabby Patty", 1));
+			tempInventoryList.add(new Item("Kelp Shake", 0));
+			tempInventoryList.add(new Item("Coral Bits", 0));
+			tempInventoryList.add(new Item("Kelp Rings", 0));
 		}
 		
 			Cashier.msgHereAreItems(tempInventoryList, new ArrayList<Item>(), c);

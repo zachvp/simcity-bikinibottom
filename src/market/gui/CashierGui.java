@@ -4,10 +4,11 @@ package market.gui;
 import market.CashierRole;
 import market.CustomerRole;
 import market.interfaces.Cashier;
+import market.interfaces.CashierGuiInterfaces;
 
 import java.awt.*;
 
-public class CashierGui implements Gui {
+public class CashierGui implements Gui, CashierGuiInterfaces {
 
     private Cashier agent = null;
 
@@ -41,11 +42,19 @@ public class CashierGui implements Gui {
         
     }
     
-    public void setMarketControlPanel(MarketControlPanel p){
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#setMarketControlPanel(market.gui.MarketControlPanel)
+	 */
+    @Override
+	public void setMarketControlPanel(MarketControlPanel p){
     	panel = p;
     }
 
-    public void updatePosition() {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#updatePosition()
+	 */
+    @Override
+	public void updatePosition() {
         if (xPos < xDestination)
             xPos++;
         else if (xPos > xDestination)
@@ -83,52 +92,88 @@ public class CashierGui implements Gui {
        
     }
     
-    public void GoToFrontDesk(){
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#GoToFrontDesk()
+	 */
+    @Override
+	public void GoToFrontDesk(){
     	xDestination = FrontDeskX;
     	yDestination = FrontDeskY;
     	command=Command.GoToCashier;
     }
     
-    public void GoToBench(){
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#GoToBench()
+	 */
+    @Override
+	public void GoToBench(){
     	xDestination = BenchX;
     	yDestination = BenchY;
     	command=Command.GoToBench;
 
     }
     
-    public void OffWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#OffWork()
+	 */
+    @Override
+	public void OffWork(){
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = command.GoToExit1;
     }
     
-    public void ContinueOffWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#ContinueOffWork()
+	 */
+    @Override
+	public void ContinueOffWork(){
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = command.GoToExit;
 
     }
 
-    public void Update() {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#Update()
+	 */
+    @Override
+	public void Update() {
     	if (panel == null)
     		return;
 		panel.UpdateInventoryLevelWithoutButton();
 	}
     
-    public void draw(Graphics2D g) {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#draw(java.awt.Graphics2D)
+	 */
+    @Override
+	public void draw(Graphics2D g) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, CashierWidth, CashierHeight);
     }
 
-    public boolean isPresent() {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#isPresent()
+	 */
+    @Override
+	public boolean isPresent() {
         return true;
     }
 
-    public int getXPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#getXPos()
+	 */
+    @Override
+	public int getXPos() {
         return xPos;
     }
 
-    public int getYPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.MockCashierGui#getYPos()
+	 */
+    @Override
+	public int getYPos() {
         return yPos;
     }
 

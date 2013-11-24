@@ -11,6 +11,7 @@ import agent.interfaces.Person;
 
 /**
  * Creates Roles from restaurant.strottma.
+ * TODO implement RoleFactory in RestaurantStrottma Building class instead
  * 
  * @author Erik Strottmann
  */

@@ -24,6 +24,17 @@ public class VehicleGuiClass implements VehicleGui {
 	private Corner destination;
 	private Corner startLocation;
 	private Vehicle vehicle;
+	private boolean isBus;
+	
+	public VehicleGuiClass(Vehicle vehicle,
+			Corner currentLocation, boolean isBus) {
+		this.vehicle = vehicle;
+		this.startLocation =  currentLocation;
+		this.destination = currentLocation;
+		this.isBus = isBus;
+		resetXY();
+		TransportationGuiController.getInstance().addVehicleGUI(this);
+	}
 
 
 	@Override
@@ -58,7 +69,9 @@ public class VehicleGuiClass implements VehicleGui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.YELLOW);
+		if (isBus) g.setColor(Color.YELLOW);
+		else g.setColor(Color.RED);
+		
 		g.fillRect(xPos, yPos, VEHICLEW, VEHICLEH);
 	}
 
@@ -77,6 +90,11 @@ public class VehicleGuiClass implements VehicleGui {
 			Corner destination) {
 		// TODO update here for corner management things
 		doMoveToCorner(destination);
+	}
+	
+	private void resetXY() {
+		xPos = startLocation.position().x;
+		yPos = startLocation.position().y;
 	}
 
 }

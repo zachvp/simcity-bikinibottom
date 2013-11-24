@@ -6,6 +6,7 @@ import java.util.List;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParseException;
 
 import transportation.CornerAgent.MyCorner;
+import transportation.gui.VehicleGuiClass;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
@@ -42,12 +43,18 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	protected Corner currentCorner;
 	
 	//List of corners to traverse to get to the destination.
-	protected List<Corner> currentPath;
+	protected List<Corner> currentPath = new ArrayList<Corner>();
 	
 	//List of corners adjacent to currentCorner. TODO add to DD.
-	protected List<MyCorner> adjCorners;
+	protected List<MyCorner> adjCorners = new ArrayList<MyCorner>();
 
 	private DirectionEnum currentDirection; //TODO Remove from DD
+	
+	
+	public VehicleAgent(Corner currentCorner, boolean isBus) {
+		this.currentCorner = currentCorner;
+		this.gui = new VehicleGuiClass(this, currentCorner, isBus);
+	}
 	
 	@Override
 	public void msgMyAdjCorners(List<MyCorner> cList) {

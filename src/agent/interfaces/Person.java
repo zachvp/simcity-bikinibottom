@@ -193,7 +193,7 @@ public interface Person {
 	public void setHungerLevel(HungerLevel hungry);
 	
 	/** The {@link Item}s a person currently has. */
-	Map<String, Item> getInventory();
+	Map<String, Integer> getInventory();
 	
 	/** Adds amount {@link Item}s of type name to the inventory. */
 	void addItemsToInventory(String name, int amount);

@@ -46,7 +46,7 @@ public class PersonAgent extends Agent implements Person {
 	private long workStartThreshold;
 	
 	private Wallet wallet;
-	private Map<String, Item> inventory;
+	private Map<String, Integer> inventory;
 	
 	private Car car;
 	
@@ -69,7 +69,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
 		
 		this.wallet = new Wallet(); // medium income level
-		this.inventory = new HashMap<String, Item>();
+		this.inventory = new HashMap<String, Integer>();
 	}
 	
 	/* -------- Messages -------- */
@@ -498,33 +498,22 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Market/Inventory
 	
 	@Override
-	public Map<String, Item> getInventory() {
+	public Map<String, Integer> getInventory() {
 		return this.inventory;
 	}
 	
 	@Override
 	public void addItemsToInventory(String name, int amount) {
-		Item item = this.inventory.get(name);
-		if (item == null) {
-			item = new Item(name, amount);
-		} else {
-			item.ItemEqual(item.amount + amount);
-		}
-		this.inventory.put(name, item);
+		int currentCount = this.inventory.get(name);
+		this.inventory.put(name, currentCount + amount);
 	}
 	
 	@Override
 	public void removeItemsFromInventory(String name, int amount) {
-		Item item = this.inventory.get(name);
-		if (item == null) {
-			return;
-		}
-		int newAmount = item.amount - amount;
-		if (newAmount < 0) {
-			newAmount = 0;
-		}
-		item.ItemEqual(newAmount);
-		this.inventory.put(name, item);
+		int currentCount = this.inventory.get(name);
+		int newAmount = currentCount - amount;
+		if (newAmount < 0) { newAmount = 0; }
+		this.inventory.put(name, newAmount);
 	}
 	
 	// ---- Enumerations

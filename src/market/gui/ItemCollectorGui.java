@@ -44,7 +44,7 @@ public class ItemCollectorGui implements Gui {
     
     public void setItemCollectorNumber(int i){
     	if (i == 1){
-    		HomePosX = 210;
+    		HomePosX = 195;
     	    CollectItemX = 170;
     	}
     	if (i == 2){

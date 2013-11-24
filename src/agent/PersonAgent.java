@@ -523,6 +523,7 @@ public class PersonAgent extends Agent implements Person {
 			FULL}
 	
 	// ---- Methods to avoid weird inheritance issues
+	
 	@Override
 	public void agentStateChanged() {
 		stateChanged();

@@ -12,10 +12,13 @@ import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
+import transportation.interfaces.PassengerRequester;
 import transportation.interfaces.Vehicle;
 import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import agent.Role;
+import agent.RoleFactory;
 import agent.interfaces.Person;
 
 public class RealPassengerRole extends PassengerRole {
@@ -42,6 +45,8 @@ public class RealPassengerRole extends PassengerRole {
 	boolean hasCar = false;
 	boolean useBus = false;
 
+	private PassengerRequester requesterRole = null;
+
 	public RealPassengerRole(Person person, CityLocation location) {
 		super(person, location);
 		this.gui = new PassengerGuiClass(this, location);
@@ -62,6 +67,11 @@ public class RealPassengerRole extends PassengerRole {
 		state = PassengerStateEnum.DecisionTime;
 		stateChanged();
 
+	}
+	
+	public void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole) {
+		this.requesterRole  = requesterRole;
+		msgGoToLocation(loc);
 	}
 
 	@Override
@@ -117,7 +127,12 @@ public class RealPassengerRole extends PassengerRole {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
-			((Person) getPerson()).msgArrivedAtDestination();
+			if (requesterRole == null) ((Person) getPerson()).msgArrivedAtDestination();
+			else {
+				requesterRole.msgArrivedAtDestination();
+				requesterRole = null;
+			}
+			
 			return;
 		}
 

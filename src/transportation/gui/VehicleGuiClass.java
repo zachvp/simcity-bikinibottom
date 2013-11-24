@@ -6,7 +6,12 @@ package transportation.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import agent.Constants;
+
+import com.sun.swing.internal.plaf.basic.resources.basic;
+
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
@@ -72,8 +77,48 @@ public class VehicleGuiClass implements VehicleGui {
 		if (isBus) g.setColor(Color.YELLOW);
 		else g.setColor(Color.RED);
 		
-		g.fillRect(xPos, yPos, VEHICLEW, VEHICLEH);
+		XYPos drawingPos;
+		
+		try {
+			drawingPos = calculateDrawingPosition();
+		} catch (Exception e) {
+			drawingPos = new XYPos(xPos,yPos);
+			e.printStackTrace();
+		}
+		
+		g.fillRect(drawingPos.x, drawingPos.y, VEHICLEW, VEHICLEH);
 	}
+
+	private XYPos calculateDrawingPosition() throws Exception {
+		XYPos response;
+		
+		switch (vehicle.currentDirection()) {
+		case North:
+			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS,
+					yPos);
+			break;
+		case South:
+			response = new XYPos(xPos-Constants.SPACE_BETWEEN_BUILDINGS,
+					yPos);
+			break;
+		case West:
+			response = new XYPos(xPos,
+					yPos-Constants.SPACE_BETWEEN_BUILDINGS);
+			break;
+		case East:
+			response = new XYPos(xPos,
+					yPos+Constants.SPACE_BETWEEN_BUILDINGS);
+			break;
+		default:
+			throw new Exception("This shouldn't happen");
+		}
+		
+		//adjust from center to corner
+		response.x -= VEHICLEW/2;
+		response.y -= VEHICLEH/2;
+		return response;
+	}
+
 
 	@Override
 	public boolean isPresent() {

@@ -43,8 +43,8 @@ public class CityView extends JPanel implements ActionListener{
 		map.addBuildingToMap(name, type);
 	}
 	
-	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel controls){
-		map.addBuildingToMap(name, type, controls);
+	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel animationPanel){
+		map.addBuildingToMap(name, type, animationPanel);
 	}
 	
 	/**

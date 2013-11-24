@@ -1,5 +1,8 @@
 package agent.interfaces;
 
+import java.util.Map;
+
+import market.Item;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -92,6 +95,7 @@ public interface Person {
 		private double cashOnHand;
 		private double tooMuch;
 		private double tooLittle;
+		private double moneyNeeded;
 		
 		private IncomeLevel incomeLevel;
 		
@@ -111,16 +115,19 @@ public interface Person {
 					this.cashOnHand = 5;
 					this.tooMuch = 50;
 					this.tooLittle = 0;
+					this.moneyNeeded = 0;
 					break;
 				case RICH:
 					this.cashOnHand = 100;
 					this.tooMuch = 300;
 					this.tooLittle = 50;
+					this.moneyNeeded = 0;
 					break;
 				case MEDIUM:
 					this.cashOnHand = 30;
 					this.tooMuch = 60;
 					this.tooLittle = 15;
+					this.moneyNeeded = 0;
 					// fall through to default
 				default:
 					break;
@@ -143,10 +150,20 @@ public interface Person {
 		public double getCashOnHand() { return this.cashOnHand; }
 		public double getTooMuch() { return this.tooMuch; }
 		public double getTooLittle() { return this.tooLittle; }
+		public double getMoneyNeeded() { return this.moneyNeeded; }
 		
 		public void setCashOnHand(double coh) { this.cashOnHand = coh; }
 		public void setTooMuch(double tm) { this.tooMuch = tm; }
 		public void setTooLittle(double tl) { this.tooLittle = tl; }
+		public void setMoneyNeeded(double mn) { this.moneyNeeded = mn; }
+		
+		/** Adds cash to cashOnHand. */
+		public void addCash(double cash) { this.cashOnHand += cash; }
+		/**
+		 * Subtracts cash from cashOnHand. Careful! This method doesn't verify
+		 * that cashOnHand has enough cash, so you have to do that yourself.
+		 */
+		public void subtractCash(double cash) { this.cashOnHand -= cash; }
 		
 		public boolean hasTooMuch() {
 			return cashOnHand > tooMuch;
@@ -154,6 +171,10 @@ public interface Person {
 		
 		public boolean hasTooLittle() {
 			return cashOnHand < tooLittle;
+		}
+
+		public boolean needsMoney() {
+			return moneyNeeded > 0;
 		}
 	}
 
@@ -170,5 +191,17 @@ public interface Person {
 	public void printMsg(String msg);
 
 	public void setHungerLevel(HungerLevel hungry);
+	
+	/** The {@link Item}s a person currently has. */
+	Map<String, Integer> getInventory();
+	
+	/** Adds amount {@link Item}s of type name to the inventory. */
+	void addItemsToInventory(String name, int amount);
+	
+	/**
+	 * Removes up to amount {@link Item}s of type name from the inventory. If
+	 * there aren't that many, remove all.
+	 */
+	void removeItemsFromInventory(String name, int amount);
 	
 }

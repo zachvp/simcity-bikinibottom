@@ -1,7 +1,8 @@
 package transportation.test.mock;
 
-import java.util.Timer;
+import java.util.Map;
 
+import market.Item;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -9,9 +10,12 @@ import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import agent.mock.EventLog;
 import agent.mock.Mock;
 
 public class MockPerson extends Mock implements Person{
+	
+	public EventLog log = new EventLog();
 
 	public MockPerson(String name) {
 		super(name);
@@ -20,7 +24,7 @@ public class MockPerson extends Mock implements Person{
 
 	@Override
 	public void msgArrivedAtDestination() {
-		// TODO Auto-generated method stub
+		log.add("Received msgArrivedAtDestination()");
 		
 	}
 
@@ -104,6 +108,24 @@ public class MockPerson extends Mock implements Person{
 
 	@Override
 	public void setHungerLevel(HungerLevel hungry) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Integer> getInventory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addItemsToInventory(String name, int amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeItemsFromInventory(String name, int amount) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,6 +1,7 @@
 package bank;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -22,9 +23,11 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private Semaphore active = new Semaphore(0, true);
 	SecurityGuardGui securityGuardGui;
 	
+	ScheduleTask task = new ScheduleTask();
+	
 	boolean endWorkShift = false;
 	
-	List<WorkRole> workRoles = new ArrayList<WorkRole>();
+	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
 
 	public enum customerState{waiting, inBank, leaving};
 	class WaitingCustomer {
@@ -56,6 +59,21 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	public SecurityGuardRole(PersonAgent person) {
 		super(person);
 //		this.name = name;
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				//do stuff
+				
+				msgLeaveWork();
+				}
+			
+		};
+		
+		// every day at TIME
+		int hour = 7;
+		int minute = 0;
+		
+		task.scheduleDailyTask(command, hour, minute);
 		
 	}
 	
@@ -74,11 +92,14 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 	
 	public void msgLeavingBank(BankCustomer bc) {
-		for(WaitingCustomer w: waitingCustomers) {
-			if(w.bc == bc){
-				w.state = customerState.leaving;
+		synchronized(waitingCustomers) {
+			for(WaitingCustomer w: waitingCustomers) {
+				if(w.bc == bc){
+					w.state = customerState.leaving;
+				}
 			}
 		}
+		stateChanged();
 	}
 	
 	public void msgCustomerArrived(BankCustomer bc) {
@@ -114,9 +135,12 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 			}
 		}
 
-		for(WaitingCustomer w: waitingCustomers) {
-			if(w.state == customerState.leaving) {
-				removeCustomer(w);
+		synchronized(waitingCustomers) {
+			for(WaitingCustomer w: waitingCustomers) {
+				if(w.state == customerState.leaving) {
+					removeCustomer(w);
+					return true;
+				}
 			}
 		}
 
@@ -159,7 +183,6 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		securityGuardGui.DoGoToDesk();
 		acquireSemaphore(active);
 		for(WorkRole r: workRoles) {
-			
 			
 		}
 	}

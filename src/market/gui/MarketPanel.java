@@ -10,6 +10,7 @@ import market.interfaces.*;
 import javax.swing.*;
 
 import agent.PersonAgent;
+import agent.interfaces.Person;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -72,11 +73,11 @@ public class MarketPanel extends JPanel {
 		tempInventoryList.add(new Item("Chicken", 0));
 	}
     
-    private PersonAgent CustomerPerson = new PersonAgent("Customer1");
+    private PersonAgent CustomerPerson = new PersonAgent("Customer1Person");
     private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
     private CustomerGui custGui = new CustomerGui(cust);
     
-    private PersonAgent CustomerPerson1 = new PersonAgent("Customer2");
+    private PersonAgent CustomerPerson1 = new PersonAgent("Customer2Person");
     private CustomerRole cust1 = new CustomerRole("Customer2", 100, tempInventoryList, CustomerPerson1);
     private CustomerGui custGui1 = new CustomerGui(cust1);
 

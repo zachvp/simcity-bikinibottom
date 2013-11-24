@@ -20,8 +20,8 @@ public class CustomerGui implements Gui{
 	public static final int CustomerHeight = 15;
 	
 
-	public static final int xFrontDesk =180;
-    public static final int yFrontDesk =200;
+	public static final int xFrontDesk =230;
+    public static final int yFrontDesk =100;
 
 	MarketGui gui;
 

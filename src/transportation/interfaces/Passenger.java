@@ -20,7 +20,7 @@ public interface Passenger {
 	/*Message a Passenger receives when the bus he is 
 	 * on arrives to each corner with a busstop.
 	 */
-	public void msgWeHaveArrived(CityLocation loc);
+	public void msgWeHaveArrived(CityLocation loc) throws Exception;
 	
 	
 	public CityLocation getLocation();

@@ -326,7 +326,6 @@ public class TellerRole extends WorkRole implements Teller {
 		try {
 			s.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

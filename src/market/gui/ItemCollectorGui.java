@@ -21,14 +21,14 @@ public class ItemCollectorGui implements Gui {
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
     
-    private static final int HomePosX = 140;
-    private static final int HomePosY = 320;
+    private static final int HomePosX = 190;
+    private static final int HomePosY = 220;
     
-    private static final int CollectItemX = 120;
-    private static final int CollectItemY = 360;
+    private static final int CollectItemX = 170;
+    private static final int CollectItemY = 260;
     
-    private static final int ExitX1 = 80;
-    private static final int ExitY1 = 250;
+    private static final int ExitX1 = 130;
+    private static final int ExitY1 = 150;
     
     private static final int ExitX = 180;
     private static final int ExitY = -30;

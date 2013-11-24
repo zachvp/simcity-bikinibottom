@@ -1,7 +1,9 @@
 package transportation.gui.interfaces;
 
 import transportation.interfaces.Bus;
+import transportation.interfaces.Passenger;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.XYPos;
 import agent.gui.Gui;
 
 public interface PassengerGui extends Gui {
@@ -12,8 +14,8 @@ public interface PassengerGui extends Gui {
 
 	void doExitVehicle();
 
-	void doUpdateLoc(CityLocation loc);
-
 	void bringOutCar();
+
+	void setPassenger(Passenger passenger, CityLocation currentLocation);
 
 }

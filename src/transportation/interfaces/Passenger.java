@@ -1,5 +1,6 @@
 package transportation.interfaces;
 
+import agent.Role;
 import CommonSimpleClasses.CityLocation;
 
 /* Role a person takes when he needs to move between 
@@ -24,5 +25,7 @@ public interface Passenger {
 	
 	
 	public CityLocation getLocation();
+
+	void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole);
 	
 }

@@ -42,11 +42,6 @@ public class MockPassengerGui implements PassengerGui {
 
 	}
 
-	@Override
-	public void doExitVehicle() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void doBringOutCar() {
@@ -56,6 +51,12 @@ public class MockPassengerGui implements PassengerGui {
 
 	@Override
 	public void doSetLocation(CityLocation loc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void doExitVehicle(CityLocation loc) {
 		// TODO Auto-generated method stub
 		
 	}

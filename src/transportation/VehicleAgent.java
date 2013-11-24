@@ -49,7 +49,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	//List of corners adjacent to currentCorner. TODO add to DD.
 	protected List<MyCorner> adjCorners = new ArrayList<MyCorner>();
 
-	private DirectionEnum currentDirection; //TODO Remove from DD
+	private DirectionEnum currentDirection = DirectionEnum.West;
 	
 	
 	public VehicleAgent(Corner currentCorner, boolean isBus) {
@@ -156,12 +156,25 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 
 	// TODO Add to DD? or is it there?
 	protected void traverseCorner() {
+		try {
+			currentDirection = currentCorner.getDirForCorner(currentPath.get(0));
+		} catch (Exception e) {
+			System.out.println("Vehicle will move through incorrect lane.");
+			e.printStackTrace();
+		}
 		gui.doTraverseAndMoveToCorner(currentCorner, currentPath.get(0));
 	}
 	
 	public void startVehicle() {
 		event = VehicleEventEnum.StartedVehicle;
 		stateChanged();
+	}
+
+	/**
+	 * @return the currentDirection
+	 */
+	public DirectionEnum currentDirection() {
+		return currentDirection;
 	}
 
 }

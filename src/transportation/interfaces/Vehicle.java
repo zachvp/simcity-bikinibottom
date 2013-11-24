@@ -1,5 +1,7 @@
 package transportation.interfaces;
 
+import CommonSimpleClasses.DirectionEnum;
+
 //Describes vehicles that drive through a sequence of Corners.
 public interface Vehicle extends AdjCornerRequester {
 	
@@ -9,5 +11,7 @@ public interface Vehicle extends AdjCornerRequester {
 	//Message received when you can cross a corner
 	// TODO Add to DD
 	public void msgDriveNow();
+
+	DirectionEnum currentDirection();
 	
 }

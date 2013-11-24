@@ -16,6 +16,7 @@ public class PassengerGuiClass implements PassengerGui {
 	private Passenger passenger;
 	private CityLocation destination;
 	private CityLocation startLocation;
+	private boolean isPresent = true;
 
 	public PassengerGuiClass(Passenger passenger,
 			CityLocation location) {
@@ -74,7 +75,7 @@ public class PassengerGuiClass implements PassengerGui {
 
 	@Override
 	public boolean isPresent() {
-		return true;
+		return isPresent;
 	}
 
 	public void doSetLocation (CityLocation loc) {
@@ -89,13 +90,12 @@ public class PassengerGuiClass implements PassengerGui {
 
 	@Override
 	public void doGetInBus(Bus b) {
-		// TODO Auto-generated method stub
-
+		isPresent = false;
 	}
 
 	@Override
 	public void doExitVehicle() {
-		// TODO Auto-generated method stub
+		isPresent = true;
 
 	}
 

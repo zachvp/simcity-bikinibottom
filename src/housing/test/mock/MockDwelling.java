@@ -10,6 +10,7 @@ public class MockDwelling implements Dwelling {
 	public double monthlyPaymentAmount;
 	public int IDNumber;
 	public String startCondition;
+	public String condition;
 	
 	public static int MAX_PAYMENT = 64;
 	
@@ -36,6 +37,11 @@ public class MockDwelling implements Dwelling {
 	@Override
 	public int getIDNumber() {
 		return 0;
+	}
+
+	@Override
+	public void setConditionGood() {
+		condition = "good";
 	}
 
 }

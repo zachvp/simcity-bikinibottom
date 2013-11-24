@@ -213,21 +213,28 @@ public class KelpClass implements Kelp {
 	private List<CityLocation> routeWithoutBus(XYPos posA, XYPos posB) {
 		List<CityLocation> nearCorners = placesNearMe(posA, 
 				LocationTypeEnum.Corner);
+		Corner startCorner, endCorner;
 		
+		/*
 		//Getting the 2 corners closest to A
 		List<Corner> cornersInit = new ArrayList<Corner>();
 		cornersInit.add((Corner)nearCorners.get(0));
 		cornersInit.add((Corner)nearCorners.get(1));
+		*/
 		
+		startCorner = (Corner)nearCorners.get(0);
 		//Getting the 2 corners closest to B
 		nearCorners = placesNearMe(posB, LocationTypeEnum.Corner);
+		/*
 		List<Corner> cornersEnd = new ArrayList<Corner>();
 		cornersEnd.add((Corner)nearCorners.get(0));
 		cornersEnd.add((Corner)nearCorners.get(1));
+		*/
+		endCorner = (Corner)nearCorners.get(0);
 		
 		
 		//Determining shortest path
-		Corner startCorner, endCorner;
+		/*
 		startCorner = endCorner = null;
 		int minDistance = 2147483647;
 		
@@ -246,7 +253,7 @@ public class KelpClass implements Kelp {
 				minDistance = distance;
 			}
 		}
-		
+		*/
 		//Determining in what direction to move;
 		DirectionEnum horizontalDir, verticalDir;
 		

@@ -56,7 +56,8 @@ public class TransportationGuiController implements Gui {
 		}
 		
 		for (Gui gui : vehicleGuis ) {
-			gui.draw(g);
+			if (gui.isPresent())
+				gui.draw(g);
 		}
 		
 		for (Gui gui : busstopGuis ) {

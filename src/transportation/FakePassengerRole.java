@@ -53,5 +53,11 @@ public class FakePassengerRole extends PassengerRole {
 		
 	}
 
+	@Override
+	public void msgGotInCar() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

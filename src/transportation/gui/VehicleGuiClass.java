@@ -30,6 +30,7 @@ public class VehicleGuiClass implements VehicleGui {
 	private Corner startLocation;
 	private Vehicle vehicle;
 	private boolean isBus;
+	private boolean isPresent;
 	
 	public VehicleGuiClass(Vehicle vehicle,
 			Corner currentLocation, boolean isBus) {
@@ -37,8 +38,15 @@ public class VehicleGuiClass implements VehicleGui {
 		this.startLocation =  currentLocation;
 		this.destination = currentLocation;
 		this.isBus = isBus;
+		this.isPresent = isBus;
 		resetXY();
 		TransportationGuiController.getInstance().addVehicleGUI(this);
+	}
+	
+	public void setLocation(Corner loc) {
+		startLocation = loc;
+		destination = loc;
+		resetXY();
 	}
 
 
@@ -122,7 +130,11 @@ public class VehicleGuiClass implements VehicleGui {
 
 	@Override
 	public boolean isPresent() {
-		return true;
+		return isPresent;
+	}
+	
+	public void setPresent(boolean isPresent) {
+		this.isPresent = isPresent;
 	}
 
 	@Override
@@ -140,6 +152,12 @@ public class VehicleGuiClass implements VehicleGui {
 	private void resetXY() {
 		xPos = startLocation.position().x;
 		yPos = startLocation.position().y;
+	}
+
+	@Override
+	public void setLocation(XYPos startingPos) {
+		xPos = startingPos.x;
+		yPos = startingPos.y;
 	}
 
 }

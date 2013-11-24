@@ -123,8 +123,8 @@ public class BusAgent extends VehicleAgent implements Bus {
 	
 	@Override
 	protected boolean pickAndExecuteAnAction() { // TODO Update scheduler in DD
-		if (state == VehicleStateEnum.OnStreet
-				&& event == VehicleEventEnum.ArrivedAtCorner
+		if (state == VehicleStateEnum.Requesting
+				&& event == VehicleEventEnum.ReceivedAdjCorners
 				&& !currentPath.isEmpty()
 				&& busState == BusStateEnum.Moving) {
 			busState = BusStateEnum.RequestingBusstop;
@@ -149,15 +149,9 @@ public class BusAgent extends VehicleAgent implements Bus {
 				busEvent == BusEventEnum.PassengersOnBus) {
 			busState = BusStateEnum.Moving;
 			return super.pickAndExecuteAnAction();
-		// TODO Risky change, check validity
-		// old code
-		/*
 		} else if (busState == BusStateEnum.Moving)
 			return super.pickAndExecuteAnAction();
 		else return false;
-		*/
-		// new code
-		} else return super.pickAndExecuteAnAction();
 		
 	}
 

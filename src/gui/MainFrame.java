@@ -174,8 +174,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			LocationTypeEnum type = b.getType();
 			
 			if(type == LocationTypeEnum.Bank){
-				JPanel BankAnimationPanel = new JPanel();
-				BankAnimationPanel.setBackground(Color.blue);
+				bank.gui.AnimationPanel BankAnimationPanel = new bank.gui.AnimationPanel();
+				
 				buildingViewPanel.addCard(BankAnimationPanel, buildingName);//creates card and corresponding button
 				cityViewPanel.addBuildingToMap(buildingName, LocationTypeEnum.Bank);
 				//TODO add method to set control panel to infoPanel, should

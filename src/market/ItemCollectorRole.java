@@ -27,7 +27,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	private ItemCollectorGui itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;
-	private Map<String,Item> InventoryList = null;
+	private Map<String, Integer> InventoryList = null;
 	private List<Order> Orders = new ArrayList<Order>();
 
 	private Semaphore atStation = new Semaphore (0,true);
@@ -120,18 +120,20 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
 		for(int i=0;i<o.ItemList.size();i++){
-			Item CurrentItem = InventoryList.get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
-			if (CurrentItem.amount >= o.ItemList.get(i).amount){	//enough inventories to satisfy
-				CurrentItem.ItemConsumed(o.ItemList.get(i).amount);
+			int CurrentItem = InventoryList.get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
+			if (CurrentItem >= o.ItemList.get(i).amount){	//enough inventories to satisfy
+				CurrentItem -= o.ItemList.get(i).amount;
+				InventoryList.put(o.ItemList.get(i).name, CurrentItem);
 				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
 			else		//not enough inventories to satisfy the order
 			{			//Add into it anyway (Try to satisfy the order)
-				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem.amount);
-				CurrentItem.ItemConsumed(CurrentItem.amount);
+				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem);
+				CurrentItem = 0;
+				InventoryList.put(o.ItemList.get(i).name, CurrentItem);
 				DeliverList.add(tempitem);
-				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem.amount);
+				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem);
 				MissingList.add(Missingitem);
 			}
 		}
@@ -161,7 +163,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 
 	//Utilities
-	public void setInventoryList(Map<String,Item> IList){
+	public void setInventoryList(Map<String,Integer> IList){
 		InventoryList = IList;
 	}
 	public void setGui (ItemCollectorGui icGui){

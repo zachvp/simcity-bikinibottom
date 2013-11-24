@@ -10,14 +10,14 @@ public class DeliveryGuyGui implements Gui {
 
     private DeliveryGuy agent = null;
 
-    private int xPos = 40, yPos = 140;//default cashier position
+    private int xPos = 180, yPos = -30;//default cashier position
     private int xDestination = 40, yDestination = 140;//default start position
     
     private static final int DeliveryGuyWidth = 10;
     private static final int DeliveryGuyHeight = 10;
     
-    private static final int ExitX = 10;
-    private static final int ExitY = 10;
+    private static final int ExitX = -10;
+    private static final int ExitY = -10;
 
     private static final int HomePosX = 10;
     private static final int HomePosY = 10;

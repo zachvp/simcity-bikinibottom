@@ -59,12 +59,6 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	}
 
 	@Override
-	public void setInventoryList(Map<String, Item> inventoryList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void AtCollectStation() {
 		// TODO Auto-generated method stub
 		
@@ -84,6 +78,12 @@ public class MockItemCollector extends Mock implements ItemCollector {
 
 	@Override
 	public void AtExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setInventoryList(Map<String, Integer> inventoryList) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -3,6 +3,7 @@ package housing.gui;
 import housing.Dwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
+import housing.interfaces.ResidentGui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,13 +41,13 @@ public class HousingGui extends JPanel {
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
 	LayoutGui layoutGui = new LayoutGui(500, 500);
-	ResidentGui residentGui = new ResidentGui(residentRole);
+	ResidentRoleGui residentGui = new ResidentRoleGui(residentRole);
 
-	// housing containers
+	// back-end housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
-	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index);
+	Dwelling dwelling = new Dwelling(residentRole, payRecipientRole, index, "good");
 
-	// Layout for housingAnimationPanel
+	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
 
 	public HousingGui(int index, PayRecipientRole payRecipientRole) {

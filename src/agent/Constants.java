@@ -27,6 +27,9 @@ in this Software without prior written authorization from Stanford University.
 */
 package agent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Constants of general use
  */
@@ -98,5 +101,17 @@ public interface Constants {
 	public static final int BUSSTOP_OFFESET_PERPENDICULAR = (SPACE_BETWEEN_BUILDINGS/2);
 
 	public static final int BUSSTOP_OFFESET_PARALLEL = (SPACE_BETWEEN_BUILDINGS/2);
+	
+	/**
+	 * Types of food in the city
+	 */
+	public static final List<String> FOODS = new ArrayList<String>() {
+		{
+			add("Krabby Patty");
+			add("Kelp Shake");
+			add("Coral Bits");
+			add("Kelp Rings");
+		}
+	};
 
 }

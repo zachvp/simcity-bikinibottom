@@ -9,5 +9,5 @@ public interface Resident {
 	 */
 	public void msgPaymentDue(double amount);
 
-	public void msgAtDest();
+	public void msgAtDestination();
 }

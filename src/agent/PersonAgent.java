@@ -510,13 +510,15 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void addItemsToInventory(String name, int amount) {
-		int currentCount = this.inventory.get(name);
+		Integer currentCount = this.inventory.get(name);
+		if (currentCount == null) { currentCount = 0; }
 		this.inventory.put(name, currentCount + amount);
 	}
 	
 	@Override
 	public void removeItemsFromInventory(String name, int amount) {
-		int currentCount = this.inventory.get(name);
+		Integer currentCount = this.inventory.get(name);
+		if (currentCount == null) { currentCount = 0; }
 		int newAmount = currentCount - amount;
 		if (newAmount < 0) { newAmount = 0; }
 		this.inventory.put(name, newAmount);

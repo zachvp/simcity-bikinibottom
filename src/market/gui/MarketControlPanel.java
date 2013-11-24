@@ -191,25 +191,28 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 	}
 
 	public void UpdateInventoryLevelWithButton(){
-		Map<String,Item> IList = marketRecords.ca.getInventoryList();
+		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
 
+		System.out.println("IMHERE");
 		if(  isInteger(ExpensiveCarText.getText())  )
-			IList.get("ExpensiveCar").ItemEqual(Integer.parseInt(ExpensiveCarText.getText()));
+			IList.put("ExpensiveCar", Integer.parseInt(ExpensiveCarText.getText()));
 		if(  isInteger(CheapCarText.getText())  )
-			IList.get("CheapCar").ItemEqual(Integer.parseInt(CheapCarText.getText()));
+			IList.put("CheapCar", Integer.parseInt(CheapCarText.getText()));
 		if(  isInteger(PizzaText.getText())  )
-			IList.get("Pizza").ItemEqual(Integer.parseInt(PizzaText.getText()));
+			IList.put("Pizza", Integer.parseInt(PizzaText.getText()));
 		if(  isInteger(SandwichText.getText())  )
-			IList.get("Sandwich").ItemEqual(Integer.parseInt(SandwichText.getText()));
+			IList.put("Sandwich", Integer.parseInt(SandwichText.getText()));
 		if(  isInteger(ChickenText.getText())  )
-			IList.get("Chicken").ItemEqual(Integer.parseInt(ChickenText.getText()));
+			IList.put("Chicken", Integer.parseInt(ChickenText.getText()));
+		
+		
 
-
-		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar").amount);
-		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar").amount);
-		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza").amount);
-		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich").amount);
-		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken").amount);
+		//Printing out the labels
+		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar"));
+		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar"));
+		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza"));
+		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich"));
+		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken"));
 		ExpensiveCarInvent.setText("                    " + ExpensiveCarInventoryLevel);
 		CheapCarInvent.setText("                    " + CheapCarInventoryLevel);
 		ChickenInvent.setText("                    " + ChickenInventoryLevel);
@@ -221,18 +224,20 @@ public class MarketControlPanel extends JPanel implements ActionListener{
 		PizzaText.setText("");
 		ChickenText.setText("");
 		SandwichText.setText("");
+		
+		marketRecords.ca.setInventoryList(IList);
 
 		MarketLabel.setText("Today's Staff :    " + marketRecords.ca.getName() + "                     " + "Market's Current Cash :   " + marketRecords.ca.getCash());
 
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){
-		Map<String,Item> IList = marketRecords.ca.getInventoryList();
-		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar").amount);
-		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar").amount);
-		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza").amount);
-		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich").amount);
-		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken").amount);
+		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
+		ExpensiveCarInventoryLevel	= Integer.toString(IList.get("ExpensiveCar"));
+		CheapCarInventoryLevel		= Integer.toString(IList.get("CheapCar"));
+		PizzaInventoryLevel 		= Integer.toString(IList.get("Pizza"));
+		SandwichInventoryLevel		= Integer.toString(IList.get("Sandwich"));
+		ChickenInventoryLevel 		= Integer.toString(IList.get("Chicken"));
 		ExpensiveCarInvent.setText("                    " + ExpensiveCarInventoryLevel);
 		CheapCarInvent.setText("                    " + CheapCarInventoryLevel);
 		ChickenInvent.setText("                    " + ChickenInventoryLevel);

@@ -1,6 +1,7 @@
 package housing.gui;
 
 import housing.interfaces.Resident;
+import housing.interfaces.ResidentGui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,7 +15,7 @@ import agent.gui.Gui;
  * @author Zach VP
  *
  */
-public class ResidentGui implements Gui {
+public class ResidentRoleGui implements Gui, ResidentGui {
 
 	private Resident resident = null;
 	private boolean canRelease = false;// this prevents excessive releases from occurring
@@ -34,7 +35,7 @@ public class ResidentGui implements Gui {
 	private final int JAZZER_SPOT_Y = 0;
 	
 	/* --- Constructor --- */
-	public ResidentGui(Resident resident) {
+	public ResidentRoleGui(Resident resident) {
 		this.resident = resident;
 	}
 
@@ -55,7 +56,7 @@ public class ResidentGui implements Gui {
 
 		if (xPos == xDestination && yPos == yDestination && canRelease && !waiting ) {
 			canRelease = false;
-			resident.msgAtDest();
+			resident.msgAtDestination();
 		}
 	}
 

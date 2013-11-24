@@ -44,7 +44,7 @@ public class ResidentRole extends Role implements Resident {
 	private boolean hungry = false;
 	
 	// rent data
-	private double moneyOwed = 0;
+	private double oweMoney = 0;
 	private PayRecipient payee;
 	private Dwelling dwelling;
 	
@@ -105,7 +105,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount) {
-		this.moneyOwed = amount;
+		this.oweMoney = amount;
 		log.add("Received message 'payment due' amount is " + amount);
 		stateChanged();
 	}
@@ -128,7 +128,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		if(moneyOwed > 0){
+		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0){
 			makePayment();
 			return true;
 		}
@@ -155,16 +155,24 @@ public class ResidentRole extends Role implements Resident {
 	private void makePayment() {
 		log.add("Attempting to make payment. Cash amount is "
 				+ person.getWallet().getCashOnHand());
+		
 		double cash = person.getWallet().getCashOnHand();
-		if(cash >= moneyOwed) {
-			payee.msgHereIsPayment(moneyOwed, this);
-			cash -= moneyOwed;
+		if(cash >= oweMoney) {
+			payee.msgHereIsPayment(oweMoney, this);
+			cash -= oweMoney;
+			person.getWallet().setCashOnHand(cash);
+			oweMoney = 0;
+		}
+		else if(cash > 0) {
+			payee.msgHereIsPayment(cash, this);
+			oweMoney -= cash;
+			cash = 0;
+			person.getWallet().setCashOnHand(cash);
+			log.add("Not enough money to cover full cost. Cash now " + cash);
 		}
 		else {
-			payee.msgHereIsPayment(cash, this);
-			cash = 0;
+			log.add("Don't have any money to pay my dues.");
 		}
-		moneyOwed = 0;
 	}
 	
 	private void eatFood() {
@@ -291,11 +299,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public double getMoneyOwed() {
-		return moneyOwed;
+		return oweMoney;
 	}
 
 	public void setMoneyOwed(double moneyOwed) {
-		this.moneyOwed = moneyOwed;
+		this.oweMoney = moneyOwed;
 	}
 	
 	public void setPerson(PersonAgent person) {

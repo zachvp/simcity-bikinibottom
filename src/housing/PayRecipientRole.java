@@ -26,7 +26,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
-	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE, PAYMENT_RECEIVED };
+	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PENDING, PAYMENT_RECEIVED,
+		PAYMENT_PAID, DONE, };
 	
 	// class is public for testing purposes
 	public class MyResident{
@@ -113,8 +114,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 			log.add("Resident has paid in full, now owes " + mr.owes);
 		}
 		else if(mr.owes > 0) {
-			log.add("Resident " + mr.dwelling.getIDNumber() + " still owes money!");
-			mr.state = PaymentState.PAYMENT_DUE;
+			log.add("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
+			mr.state = PaymentState.NONE;
 		}
 		// this should never happen
 		else {
@@ -123,6 +124,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	}
 	
 	public void chargeResident(MyResident mr){
+		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
 		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());

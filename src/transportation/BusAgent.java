@@ -72,9 +72,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 			for (Busstop bs : bsList) {
 				if (bs.direction() == myDir) {
 					currentBusstop = bs;
-					busEvent = BusEventEnum.ReceivedBusstop;
-					stateChanged();
-					return;
+					break;
 				}
 			}
 			busEvent = BusEventEnum.ReceivedBusstop;

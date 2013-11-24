@@ -16,9 +16,6 @@ public interface RoleFactory {
 	 * 
 	 * NOTE: Keep a Map<Person, Role> of all existing roles, so that you
 	 * do not instantiate a new one when asked for the role a second time.
-	 * 
-	 * @throws IllegalArgumentException when the roleType doesn't exist
 	 */
-	public Role getCustomerRole(Person person)
-			throws IllegalArgumentException;
+	public Role getCustomerRole(Person person);
 }

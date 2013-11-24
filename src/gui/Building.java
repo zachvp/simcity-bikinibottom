@@ -1,13 +1,12 @@
 package gui;
 
-import java.awt.geom.*;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
-import agent.RoleFactory;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.XYPos;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import agent.RoleFactory;
 
 /**
  * Every building must have a class that represents

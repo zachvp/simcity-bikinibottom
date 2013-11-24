@@ -9,13 +9,13 @@ public class BankRecords implements BuildingRecords {
 
 	@Override
 	public LocationTypeEnum getType() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return LocationTypeEnum.Bank;
 	}
 
 	@Override
 	public Role addPerson(String role, String name) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

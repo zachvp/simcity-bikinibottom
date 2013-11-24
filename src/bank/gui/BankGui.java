@@ -182,13 +182,7 @@ public class BankGui extends JFrame implements ActionListener {
     /**
      * Main routine to get gui started
      */
-    public static void main(String[] args) {
-        BankGui gui = new BankGui();
-        gui.setTitle("SpongeBank");
-        gui.setVisible(true);
-        gui.setResizable(false);
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+ 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == addCustomerButton) {
@@ -318,4 +312,12 @@ public class BankGui extends JFrame implements ActionListener {
 		
 
 	}
+	
+	   public static void main(String[] args) {
+	        BankGui gui = new BankGui();
+	        gui.setTitle("SpongeBank");
+	        gui.setVisible(true);
+	        gui.setResizable(false);
+	        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    }
 }

@@ -2,6 +2,9 @@ package bank;
 
 import java.util.concurrent.Semaphore;
 
+import transportation.FakePassengerRole;
+import transportation.PassengerRole;
+
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
@@ -19,6 +22,8 @@ import bank.interfaces.Teller;
 public class BankCustomerRole extends WorkRole implements BankCustomer {
 	private String name;
 	
+	double cashInAccount;
+	
 	private boolean endWorkShift = false;
 	private int accountId = -1;//if -1, has not been assigned
 
@@ -33,14 +38,21 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
+//	PassengerRole passengerRole;
+	
+	
 	public BankCustomerRole(PersonAgent person){
 		super(person);
+//		passengerRole = new FakePassengerRole();
+//		this.getPerson().addRole(passengerRole);
 //		this.name = name;
 		state = State.enteredBank;
-		myCash.amount = 10;
+		this.getPerson().getWallet().setCashOnHand(10);
+//		person.getWallet().setCashOnHand(10);//TODO fix this, only done for testing
+//		myCash.amount = 10;
 //		myCash.amount = initialMoney;
 //		myCash.capacity = initialMoney + 20;
-//		myCash.threshold = initialMoney -20;
+//		this.getPerson().getWallet().getTooLittle() = initialMoney -20;
 		
 
 	}
@@ -50,46 +62,57 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		state = State.enteredBank;
 		this.accountId = accountId;
 		if(name.equals("withdraw")){
-			myCash.amount = 10;
-			myCash.threshold = 20;
-			myCash.capacity = 100;
-			myCash.cashInAccount = 300;
+			this.getPerson().getWallet().setCashOnHand(10);
+			this.getPerson().getWallet().setTooMuch(100);
+			this.getPerson().getWallet().setTooLittle(20);
+//			myCash.amount = 10;
+//			this.getPerson().getWallet().getTooLittle() = 20;
+//			myCash.capacity = 100;
+			cashInAccount = 300;
 		}
 		if(name.equals("deposit")){
-			myCash.amount = 100;
-			myCash.threshold = 20;
-			myCash.capacity = 80;
-			myCash.cashInAccount = 0;
+			this.getPerson().getWallet().setCashOnHand(100);
+			this.getPerson().getWallet().setTooMuch(80);
+			this.getPerson().getWallet().setTooLittle(20);
+//			myCash.amount = 100;
+//			this.getPerson().getWallet().getTooLittle() = 20;
+//			myCash.capacity = 80;
+			cashInAccount = 0;
 		}
 		if(name.equals("loan")){
-			myCash.amount = 0;
-			myCash.threshold = 10;
-			myCash.capacity =100;
-			myCash.cashInAccount = 0;
+			this.getPerson().getWallet().setCashOnHand(0);
+			this.getPerson().getWallet().setTooMuch(100);
+			this.getPerson().getWallet().setTooLittle(10);
+//			myCash.amount = 0;
+//			this.getPerson().getWallet().getTooLittle() = 10;
+//			myCash.capacity =100;
+			cashInAccount = 0;
 		}
 //		myCash.amount = initialCash;
-//		myCash.cashInAccount = 0;
-//		myCash.threshold = initialCash - 20;
+//		cashInAccount = 0;
+//		this.getPerson().getWallet().getTooLittle() = initialCash - 20;
 //		myCash.capacity = initialCash + 20;
 	}
 		
-	class Cash {
-		Cash() {
-			
-		}
-		Cash(double amount, double threshold, double capacity, double cashInAccount) {
-			this.amount = amount;
-			this.threshold = threshold;
-			this.capacity = capacity;
-			this.cashInAccount = cashInAccount;
-		}
-		double amount;
-		double threshold;
-		double capacity;
-		double cashInAccount;
-	}
+//	class Cash {
+//		Cash() {
+//			
+//		}
+//		Cash(double amount, double threshold, double capacity, double cashInAccount) {
+//			this.amount = amount;
+//			this.threshold = threshold;
+//			this.capacity = capacity;
+//			this.cashInAccount = cashInAccount;
+//		}
+//		double amount;
+//		double threshold;
+//		double capacity;
+//		double cashInAccount;
+//	}
 	
-	Cash myCash = new Cash();// = new Cash(50, 30, 70, 0);
+	
+	
+//	Cash myCash = new Cash();// = new Cash(50, 30, 70, 0);
 	public enum State {waiting, openingAccount, depositing, withdrawing, gettingLoan, atLoanManager, leaving, enteredBank, waitingAtGuard};
 	enum Event {gotToTeller, accountOpened, depositSuccessful, withdrawSuccessful, sentToLoanManager, loanCompleted, goingToTeller, goingToSecurityGuard};
 	
@@ -251,25 +274,25 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		Do("speaking to teller");
 		if(accountId == -1) {//have not been assigned accountID yet
 			Do("need to open account");
-			teller.msgIWantToOpenAccount(this, myCash.amount * .2);
+			teller.msgIWantToOpenAccount(this, this.getPerson().getWallet().getCashOnHand() * .2);
 			state = State.openingAccount;
 			setCashAdjustAmount(-10);//TODO for testing
 //			Do("made it here");
 			return;
 		}
-		if(myCash.amount < myCash.threshold && myCash.cashInAccount > myCash.threshold){
+		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount > this.getPerson().getWallet().getTooLittle()){
 			System.out.println("I'm withdrawing");
-			teller.msgWithdrawMoney(this, accountId, myCash.threshold);//TODO for testing
+			teller.msgWithdrawMoney(this, accountId, this.getPerson().getWallet().getTooLittle());//TODO for testing
 			state= State.withdrawing;
 			return;
 		}
-		if(myCash.amount>myCash.capacity) {
+		if(this.getPerson().getWallet().getCashOnHand() > this.getPerson().getWallet().getTooMuch()) {
 			System.out.println("Im depositing");
-			teller.msgDepositMoney(this, accountId, myCash.threshold); //TODO for testing
+			teller.msgDepositMoney(this, accountId, this.getPerson().getWallet().getTooLittle()); //TODO for testing
 			state = State.depositing;
 			return;
 		}
-		if(myCash.amount < myCash.threshold && myCash.cashInAccount<myCash.threshold) {
+		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount<this.getPerson().getWallet().getTooLittle()) {
 //			System.out.println("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
@@ -280,9 +303,12 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	private void leaveBank() {
 		Do("leaving bank " + accountId);
-		myCash.amount += getCashAdjustAmount();
-		myCash.amount += loanAmount;
-		myCash.cashInAccount -= getCashAdjustAmount();
+//		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
+		this.getPerson().getWallet().addCash(getCashAdjustAmount());
+		this.getPerson().getWallet().addCash(loanAmount);
+//		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + loanAmount);
+//		myCash.amount += loanAmount;
+		cashInAccount -= getCashAdjustAmount();
 		setCashAdjustAmount(0);
 		loanAmount = 0;
 		state = State.leaving;
@@ -296,7 +322,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //		System.out.println("asking for loan from loanmanager");
 		doGoToLoanManager(loanManagerXPos);
 		acquireSemaphore(active);
-		getLoanManager().msgINeedALoan(this, myCash.threshold);
+		getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getTooLittle());
 		state = State.atLoanManager;
 	}
 	
@@ -309,16 +335,16 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 
 	//ANIMATION##########################
 	private void doGoToSecurityGuard() {
-		bankCustomerGui.DoGoToSecurityGuard(myCash.amount, myCash.cashInAccount);
+		bankCustomerGui.DoGoToSecurityGuard(this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
 	private void doGoToLoanManager(int x) {
-		bankCustomerGui.DoGoToLoanManager(x, myCash.amount, myCash.cashInAccount);
+		bankCustomerGui.DoGoToLoanManager(x, this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
 	private void doLeaveBank() {
-		bankCustomerGui.DoLeaveBank(myCash.amount, myCash.cashInAccount);
+		bankCustomerGui.DoLeaveBank(this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
 	private void doGoToTeller(int xLoc) {
-		bankCustomerGui.DoGoToTeller(xLoc, myCash.amount, myCash.cashInAccount);
+		bankCustomerGui.DoGoToTeller(xLoc, this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
 	private void doEndWorkDay() {
 		bankCustomerGui.DoEndWorkDay();
@@ -340,29 +366,33 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		teller = t;
 	}
 	public double getWalletAmount() {
-		return myCash.amount;
+		return this.getPerson().getWallet().getCashOnHand();//myCash.amount;
 	}
 	public void setWalletAmount(double amount) {
-		myCash.amount = amount;
+		this.getPerson().getWallet().setCashOnHand(amount);
+//		myCash.amount = amount;
 	}
 	public double getWalletCapacity() {
-		return myCash.capacity;
+		return this.getPerson().getWallet().getTooMuch();
+//				myCash.capacity;
 	}
 	public double getWalletThreshold() {
-		return myCash.threshold;
+		return this.getPerson().getWallet().getTooLittle();
 	}
-	public void setMoney(int money) {
-		myCash.amount = money;
-		myCash.capacity = money+20;
-		myCash.threshold = money-20;
+	public void setMoney(double money) {
+		this.getPerson().getWallet().setCashOnHand(money);
+//		myCash.amount = money;
+		this.getPerson().getWallet().setTooMuch(money+20);
+//		myCash.capacity = money+20;
+		this.getPerson().getWallet().setTooLittle(money - 20);// = money-20;
 	}
 
 	public void setAccountAmount(double money) {
-		myCash.cashInAccount = money;
+		cashInAccount = money;
 	}
 	
 	public double getAccountAmount() {
-		return myCash.cashInAccount;
+		return cashInAccount;
 	}
 	
 	public State getState() {

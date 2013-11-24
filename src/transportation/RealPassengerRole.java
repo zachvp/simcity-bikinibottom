@@ -168,8 +168,8 @@ public class RealPassengerRole extends PassengerRole {
 				state = PassengerStateEnum.Walking;
 				return;
 			} else {
-				gui.doBringOutCar();
 				state = PassengerStateEnum.GettingInCar;
+				gui.doBringOutCar();
 			}
 		}
 	}

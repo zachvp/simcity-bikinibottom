@@ -1,17 +1,24 @@
 package housing.test.mock;
 
+import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 
 public class MockDwelling implements Dwelling {
+	EventLog log = new EventLog();
+	
+	// role info
 	public Resident resident;
 	public PayRecipient payRecipient;
+	
+	// hard dwelling data
 	public double monthlyPaymentAmount;
 	public int IDNumber;
 	public String startCondition;
 	public String condition;
 	
+	// constants
 	public static int MAX_PAYMENT = 64;
 	
 	public MockDwelling(Resident resident, PayRecipient payRecipient, String condition) {
@@ -40,8 +47,14 @@ public class MockDwelling implements Dwelling {
 	}
 
 	@Override
-	public void setConditionGood() {
-		condition = "good";
+	public void setCondition(String condition) {
+		condition.toLowerCase();
+		
+		if(condition.equals("good") || condition.equals("fair") ||
+				condition.equals("poor") || condition.equals("broken")){
+			this.condition = condition;
+		}
+		else log.add("Error! Cannot set Condition of Mock dwelling.");
 	}
 
 }

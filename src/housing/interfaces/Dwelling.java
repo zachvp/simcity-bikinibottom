@@ -8,6 +8,6 @@ public interface Dwelling {
 
 	int getIDNumber();
 
-	void setConditionGood();
+	void setCondition(String string);
 
 }

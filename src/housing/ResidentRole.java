@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import housing.gui.ResidentRoleGui;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -25,6 +24,7 @@ import agent.Role;
 public class ResidentRole extends Role implements Resident {
 	/* --- DATA --- */
 	public EventLog log = new EventLog();
+	// used to create time delays and schedule events
 	private ScheduleTask task = new ScheduleTask();
 	
 	// graphics

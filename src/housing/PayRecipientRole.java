@@ -1,20 +1,14 @@
 package housing;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.mock.EventLog;
-import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
-import agent.TimeManager;
 
 /**
  * PayRecipient is the generic money collector that charges
@@ -53,12 +47,13 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		super(agent);
 		
 		// ask everyone for rent
-		Runnable command = new Runnable(){
+		Runnable command = new Runnable() {
 			@Override
 			public void run() {
-				synchronized(residents){
+				synchronized(residents) {
 					for(MyResident mr : residents){
 						mr.state = PaymentState.PAYMENT_DUE;
+						mr.dwelling.setCondition("poor");
 					}
 				}
 			}

@@ -59,7 +59,7 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 //		DoGoToDwelling(wo.dwelling.getIDNumber());
 //		DoFixProblem(wo.problemType);
 		
-		wo.dwelling.setConditionGood();
+		wo.dwelling.setCondition("good");
 		wo.state = WorkOrderState.FIXED;
 		workOrders.remove(wo);
 		

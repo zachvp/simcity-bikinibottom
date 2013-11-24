@@ -62,8 +62,14 @@ public class ResidentDwelling implements Dwelling {
 		}
 	}
 	
-	public void setConditionGood(){
-		this.condition = Condition.GOOD;
+	public void setCondition(String condition){
+		condition.toLowerCase();
+		
+		if(condition == "good") this.condition = Condition.GOOD;
+		else if(condition == "fair") this.condition = Condition.FAIR;
+		else if(condition == "poor") this.condition = Condition.POOR;
+		else if(condition == "broken") this.condition = Condition.BROKEN;
+		else log.add("Improper parameter. Unable to set dwelling condition.");
 	}
 
 	public int getIDNumber() {

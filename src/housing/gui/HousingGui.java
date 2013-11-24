@@ -67,6 +67,8 @@ public class HousingGui extends JPanel {
 		// activate roles
 		startAndActivate(residentPerson, residentRole);
 		
+		residentRole.setDwelling(dwelling);
+		
 		// assign guis to the resident
 		residentRole.setGui(residentGui);
 		residentGui.setLayoutGui(layoutGui);

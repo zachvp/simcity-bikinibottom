@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import housing.PayRecipientRole.MyResident;
+import housing.PayRecipientRole.PaymentState;
+import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -11,6 +14,7 @@ import agent.mock.EventLog;
 import agent.mock.MockScheduleTaskListener;
 import agent.test.ScheduleTaskListener;
 import agent.Constants;
+import agent.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -25,7 +29,11 @@ import agent.Role;
 
 public class ResidentRole extends Role implements Resident {
 	/* --- DATA --- */
+	
+	// test data
 	public EventLog log = new EventLog();
+	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	
 	// used to create time delays and schedule events
 	private ScheduleTask task = new ScheduleTask();
 	
@@ -38,6 +46,7 @@ public class ResidentRole extends Role implements Resident {
 	// rent data
 	private double moneyOwed = 0;
 	private PayRecipient payee;
+	private Dwelling dwelling;
 	
 	// food data
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
@@ -50,7 +59,7 @@ public class ResidentRole extends Role implements Resident {
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
-	private final int EAT_TIME = 10; 
+	private final int EAT_TIME = 5; 
 	
 	/* ----- Class Data ----- */
 	/**
@@ -76,6 +85,21 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent) {
 		super(agent);
+		
+		// ask everyone for rent
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				dwelling.setCondition(Condition.POOR);
+				stateChanged();
+			}
+		};
+		
+		// every day at noon
+		int hour = 6;
+		int minute = 10;
+		
+		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 	/* ----- Messages ----- */
@@ -93,13 +117,19 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		if(moneyOwed > 0){
-			makePayment();
-			return true;
-		}
 		
 		if(food != null && food.state == FoodState.COOKED){
 			eatFood();
+			return true;
+		}
+		
+		if(dwelling.getCondition() == Condition.POOR || dwelling.getCondition() == Condition.BROKEN){
+			callMaintenenceWorker();
+			return true;
+		}
+		
+		if(moneyOwed > 0){
+			makePayment();
 			return true;
 		}
 		
@@ -138,6 +168,9 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void eatFood() {
+		hungry = false;
+		log.add("Eating food " + food.type);
+		
 		DoGoToStove();
 		waitForInput();
 		
@@ -145,18 +178,16 @@ public class ResidentRole extends Role implements Resident {
 		DoGoToTable();
 		waitForInput();
 		
-		log.add("Eating food");
-		hungry = false;
-		food = null;
-		
 		// set a timer for eating
 		Runnable command = new Runnable() {
 			public void run(){
 				DoSetFood("");
 				doneWaitingForInput();
+				food = null;
 				stateChanged();
 			}
 		};
+		listener.taskFinished(task);
 		task.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
 		waitForInput();
 	}
@@ -187,14 +218,19 @@ public class ResidentRole extends Role implements Resident {
 		
 		// set a timer with a delay using method from abstract Role class
 		Runnable command = new Runnable(){
-			MockScheduleTaskListener listener = new MockScheduleTaskListener();
 			public void run(){
 				timerDoneCooking();
-				listener.taskFinished(task);
 			}
 		};
+		// cook the food for the proper time
+		listener.taskFinished(task);
 		task.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
-		
+	}
+	
+	private void callMaintenenceWorker(){
+		log.add("This house needs fixing! Calling a maintence worker.");
+		//TODO actually implement maintenence worker
+		dwelling.setCondition(Condition.GOOD);
 	}
 	
 	/* --- Animation Routines --- */
@@ -296,5 +332,9 @@ public class ResidentRole extends Role implements Resident {
 
 	public void setRefrigerator(Map<String, Food> refrigerator) {
 		this.refrigerator = refrigerator;
+	}
+
+	public void setDwelling(Dwelling dwelling) {
+		this.dwelling = dwelling;
 	}
 }

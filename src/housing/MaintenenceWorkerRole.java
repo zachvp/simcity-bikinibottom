@@ -44,6 +44,7 @@ public class MaintenenceWorkerRole extends Role implements MaintenenceWorker {
 	
 	@Override
 	protected boolean pickAndExecuteAnAction() {
+		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
 				if(wo.state == WorkOrderState.FILED){

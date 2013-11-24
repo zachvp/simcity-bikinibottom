@@ -56,7 +56,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 				synchronized(residents) {
 					for(MyResident mr : residents){
 						mr.state = PaymentState.PAYMENT_DUE;
-						mr.dwelling.setCondition(Condition.POOR);
+						stateChanged();
 					}
 				}
 			}
@@ -81,14 +81,6 @@ public class PayRecipientRole extends Role implements PayRecipient {
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
-		synchronized(residents){
-			for(MyResident mr : residents){
-				if(mr.dwelling.getCondition() == Condition.POOR){
-					chargeResident(mr);
-					return true;
-				}
-			}
-		}
 		
 		synchronized(residents){
 			for(MyResident mr : residents){

@@ -11,6 +11,7 @@ import agent.test.ScheduleTaskListener;
  */
 public class MockScheduleTaskListener implements ScheduleTaskListener {
 	private ScheduleTaskInterface Event;
+	public EventLog log = new EventLog();
 	
 	public MockScheduleTaskListener() {
 		// TODO Auto-generated constructor stub
@@ -22,6 +23,7 @@ public class MockScheduleTaskListener implements ScheduleTaskListener {
 		
 		synchronized(this) {
 			notifyAll();
+			log.add("Task finished");
 		}
 	}
 	

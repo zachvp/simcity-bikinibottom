@@ -1,9 +1,11 @@
 package housing.test;
 
 import agent.PersonAgent;
+import agent.Constants.Condition;
 import agent.mock.MockScheduleTaskListener;
 import housing.ResidentRole;
 import housing.interfaces.ResidentGui;
+import housing.test.mock.MockDwelling;
 import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResidentGui;
 import junit.framework.TestCase;
@@ -16,12 +18,15 @@ public class ResidentTest extends TestCase {
 	
 	// mock roles
 	MockPayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
+	MockDwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
 	
 	// constants
 	private final double PAYMENT_AMOUNT = 64;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		resident.setDwelling(dwelling);
 	}
 	
 	/**
@@ -96,8 +101,9 @@ public class ResidentTest extends TestCase {
 		
 		// handle delay for eating food
 		synchronized(mockRequestListener){
-			mockRequestListener.wait(5000);
+			mockRequestListener.wait(7000);
 		}
+		
 		// resident's hunger is now satisfied
 		assertFalse("Hungry should be false", resident.isHungry());
 		assertEquals("Food should be NULL", null, resident.getFood());

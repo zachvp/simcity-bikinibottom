@@ -61,46 +61,36 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
     	timer.start();
 	}
 	
+	public int getNextBuildingX(){
+		/*if (col >= Constants.MAX_BLOCK_COL){
+			row++;
+			col = 0;
+			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
+		}*/
+		
+		return col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
+				+ Constants.MAP_MARGIN_X;
+	}
+	public int getNextBuildingY(){
+		return row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
+				+ Constants.MAP_MARGIN_Y;
+	}
+	
 	/**
 	 * Adds a new building to the map
 	 * @param name Name of the building
 	 */
-	public void addBuildingToMap(String name, LocationTypeEnum type){
+	public void addBuildingToMap(Building building){
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
 			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
-		Building b = new Building
-				(col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
-						+ Constants.MAP_MARGIN_X,
-				row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
-						+ Constants.MAP_MARGIN_Y, 
-				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-		b.setName(name);
-		b.setType(type);
-		buildings.add(b);
+		buildings.add(building);
 		col++;
 	}
 	
-	public void addBuildingToMap(String name, LocationTypeEnum type, JPanel animationPanel){
-		if (col >= Constants.MAX_BLOCK_COL){
-			row++;
-			col = 0;
-			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
-		}
-		Building b = new Building
-				(col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
-						+ Constants.MAP_MARGIN_X,
-				row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
-						+ Constants.MAP_MARGIN_Y, 
-				Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-		b.setName(name);
-		b.setType(type);
-		b.setAnimationPanel(animationPanel);
-		buildings.add(b);
-		col++;
-	}
+	
 	
 
 	/**

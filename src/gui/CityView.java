@@ -21,24 +21,31 @@ public class CityView extends JPanel implements ActionListener{
 	private CityMap map;
 	Dimension d;
 
-	public CityView(int w, int h, MainFrame main){
+	public CityView(int w, int h, MainFrame main, CityMap m){
 		mainFrame = main;
 		d = new Dimension(w-20, h-65);
 		
 		//setSize(d);
 		//TODO setPreferred size, max and min size
 		setOpaque(false);
-		map = new CityMap();
+		map = m;
 		pane = new JScrollPane(map, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		pane.setPreferredSize(d);
 		add(pane);
 		
 	}
 	
-	/**
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	/* *
 	 * Adds a building to the city map
 	 * @param name Name of the building
-	 */
+	 * /
 	public void addBuildingToMap(String name, LocationTypeEnum type){
 		map.addBuildingToMap(name, type);
 	}
@@ -50,7 +57,7 @@ public class CityView extends JPanel implements ActionListener{
 	/**
 	 * Sets reference to the BuildingView panel
 	 * @param panel BuildingView panel
-	 */
+	 * /
 	public void setBuildingView(BuildingView panel){
 		map.setBuildingView(panel);
 	}
@@ -58,21 +65,18 @@ public class CityView extends JPanel implements ActionListener{
 	/**
 	 * Returns the list of Buildings on the map
 	 * @return ArrayList of Buildings
-	 */
+	 * /
 	public ArrayList<Building> getBuildings() {
 		return map.getBuildings();
 	}
 	
 	
 	
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	public void setInfoPaneltoMap(InfoPanel infoPanel) {
 		map.setInfoPanel(infoPanel);
-	}
+	}*/
 	
 
 }

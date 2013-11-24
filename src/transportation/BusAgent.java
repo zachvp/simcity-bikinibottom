@@ -57,27 +57,31 @@ public class BusAgent extends VehicleAgent implements Bus {
 	
 	@Override
 	public void msgMyBusStop(List<Busstop> bsList) {
-		DirectionEnum myDir;
-		try {
-			myDir = myDirection();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception: Failed to find bus "
-					+ "direction, will skip a busstop.");
-			busEvent = BusEventEnum.PassengersOnBus;
-			busState = BusStateEnum.CallingPassengers;
-			return;
-		} 
-		for (Busstop bs : bsList) {
-			if (bs.direction() == myDir) {
-				currentBusstop = bs;
-				busEvent = BusEventEnum.ReceivedBusstop;
-				stateChanged();
+		if (bsList.size() > 0) {
+			DirectionEnum myDir;
+			try {
+				myDir = myDirection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception: Failed to find bus "
+						+ "direction, will skip a busstop.");
+				busEvent = BusEventEnum.PassengersOnBus;
+				busState = BusStateEnum.CallingPassengers;
 				return;
+			} 
+			for (Busstop bs : bsList) {
+				if (bs.direction() == myDir) {
+					currentBusstop = bs;
+					busEvent = BusEventEnum.ReceivedBusstop;
+					stateChanged();
+					return;
+				}
 			}
+			busEvent = BusEventEnum.ReceivedBusstop;
+		} else {
+			busState = BusStateEnum.Moving;
+			busEvent = BusEventEnum.Initial;
 		}
-		busState = BusStateEnum.RequestingBusstop;
-		busEvent = BusEventEnum.ReceivedBusstop;
 		stateChanged();
 		return;
 

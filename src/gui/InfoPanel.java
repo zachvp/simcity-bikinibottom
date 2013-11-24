@@ -89,17 +89,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 	public void updateBuildingInfoPanel(Building b){
 		//Building building = b;
 		System.out.println(b.getName()+ " update info panel");
-
-		info.setText("<html><div>&nbsp;</div><div> "
-				+ "Building: "+ b.getName() +"</div><div>&nbsp;</div>"
-				+ "<div> Building Type: "+ b.type() +"</div><div>&nbsp;</div>"
-				//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
-				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
-				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
-				);
 		
 		CardLayout cl = (CardLayout)(this.getLayout());
-		if(b.type() == null){
+		if(b.getInfoPanel() == null){
 			cl.show(this, "blank");
 		}
 		else
@@ -112,7 +104,6 @@ public class InfoPanel extends JPanel implements ActionListener{
 	}
 	
 	public void addBuildingInfoPanel(JPanel control, String name){
-		//control.setSize(controlPanel.getSize());
 		add(control, name);
 	}
 	

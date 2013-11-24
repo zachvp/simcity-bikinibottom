@@ -181,6 +181,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private void construct(Building building){
 		buildingViewPanel.addCard(building.getAnimationPanel(), building.getName());//creates card and corresponding button
 		map.addBuildingToMap(building);
+		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 	}
 
 	private void constructCity(List<BuildingDef> list) {
@@ -237,7 +238,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				market.setName(buildingName);
 				buildings.add(market);
 				//citizenRecords.addBuildingRecord(marketRecords);
-				infoPanel.addBuildingInfoPanel(market.getInfoPanel(), buildingName);
+				
 
 				construct(market);
 

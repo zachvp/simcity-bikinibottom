@@ -1,8 +1,6 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +8,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 
 /**
@@ -41,27 +38,14 @@ public class InfoPanel extends JPanel implements ActionListener{
 			
 		info = new JLabel("");
 		//Test text
-		info.setText("<html><div>&nbsp;</div><div> "
+		/*info.setText("<html><div>&nbsp;</div><div> "
 				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
 				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
 				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
 				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
-		);
+		);*/
 		personText.add(info);
-		
-		/*controlPanel = new JPanel();
-		Dimension controlDim = new Dimension((int)(d.width*0.6), d.height);
-		controlPanel.setPreferredSize(controlDim);
-		controlPanel.setMaximumSize(controlDim);
-		controlPanel.setMinimumSize(controlDim);
-		controlPanel.setLayout(new CardLayout());*/
-		
-		
-		
-		
-		//add(textPanel, BorderLayout.WEST);
-		//add(controlPanel, BorderLayout.EAST);
 	}
 
 	/**
@@ -103,8 +87,13 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 	}
 	
-	public void addBuildingInfoPanel(JPanel control, String name){
-		add(control, name);
+	/**
+	 * Adds the Building's control panel to the cardlayout
+	 * @param panel Building's info panel
+	 * @param name Building's name
+	 */
+	public void addBuildingInfoPanel(JPanel panel, String name){
+		add(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

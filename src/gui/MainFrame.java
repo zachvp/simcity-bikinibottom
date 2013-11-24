@@ -67,7 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private CityMap map;
 	public InfoPanel infoPanel;
 
-	private PersonCreationPanel personCreationPanel;
+	
 
 	private InfoList buildingList;
 	private InfoList personList;
@@ -244,9 +244,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
 			}
 			if(type == LocationTypeEnum.Hospital){
-				personCreationPanel = new PersonCreationPanel(buildingViewPanel.getDim());
-				personCreationPanel.setRecords(citizenRecords);
-				//construct(buildingName, personCreationPanel, LocationTypeEnum.Hospital);
+				HospitalBuilding hospital = new HospitalBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				hospital.setRecords(citizenRecords);
+				hospital.setName(buildingName);
+				construct(hospital);
 			}
 			if(type == LocationTypeEnum.Apartment){
 				JPanel animationPanel = new JPanel();

@@ -37,7 +37,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 	
 	JLabel msg;
 
-	public PersonCreationPanel(Dimension d){
+	public PersonCreationPanel(){
+		Dimension d = new Dimension(600, 490);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
@@ -110,7 +111,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			String status = (String)wealth.getSelectedItem();
 			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
 			
-			//TODO disabled for testing purposes
 			if(!incompleteInputs(name, job, home, status, (String)car.getSelectedItem())){
 											
 				//reset input fields

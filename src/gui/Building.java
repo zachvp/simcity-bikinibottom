@@ -45,7 +45,10 @@ public abstract class Building extends Rectangle2D.Double
 		return new XYPos((int)getX(), (int)getY());
 	}
 	
+	//Return your animation panel here
 	public abstract JPanel getAnimationPanel();
 	
+	//Return your control panel here (null if you don't have one)
+	public abstract JPanel getControlPanel();
 	
 }

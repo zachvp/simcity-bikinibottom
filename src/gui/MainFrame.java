@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -21,12 +22,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import kelp.KelpClass;
 import market.gui.AnimationPanel;
 import market.gui.MarketControlPanel;
 import market.gui.MarketRecords;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
+import parser.CornersWithBusstopsParser;
 import restaurant.strottma.gui.*;
+import sun.net.www.content.text.PlainTextInputStream;
+import transportation.interfaces.Corner;
+import transportation.mapbuilder.MapBuilder;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 
@@ -235,6 +242,35 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		}
 		
+	}
+	
+	void initializeCornerMapAndKelp(List<Building> buildings) {
+		try {
+            PlainTextInputStream stream = 
+                           (PlainTextInputStream)getClass()
+                           .getResource("CornersWithBusstops.txt").getContent();
+            Set<Integer> cornersWithBusstops = 
+               CornersWithBusstopsParser.parseCornersWithBusstops(stream);
+            MapBuilder.createMap(buildings.size(), cornersWithBusstops);
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
+		
+		List<Corner> corners = MapBuilder.getCreatedCorners();
+        List<Corner> busRoute = MapBuilder.getBusRoute();
+        
+        ArrayList<CityLocation> locations =
+        		new ArrayList<CityLocation>(buildings);
+        
+        for (Corner corner : corners) {
+        	locations.add(corner);
+        }
+		
+		try {
+            KelpClass.getKelpInstance().setData(locations, busRoute);
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
 	}
 	
 	/** Utilities **/

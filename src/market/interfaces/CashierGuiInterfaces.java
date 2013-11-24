@@ -3,11 +3,11 @@ package market.interfaces;
 import java.awt.Graphics2D;
 
 import market.gui.Gui;
-import market.gui.MarketControlPanel;
+import market.gui.MarketInfoPanel;
 
 public interface CashierGuiInterfaces extends Gui {
 
-	public abstract void setMarketControlPanel(MarketControlPanel p);
+	public abstract void setMarketInfoPanel(MarketInfoPanel p);
 
 	public abstract void updatePosition();
 

@@ -27,6 +27,9 @@ public class BusstopGuiClass implements BusstopGui {
 		xPos = busstop.position().x;
 		yPos = busstop.position().y;
 		
+		//Moving from corner to center
+		xPos -= BUSSTOPW/2;
+		yPos -= BUSSTOPH/2;
 	}
 
 	@Override

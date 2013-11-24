@@ -240,7 +240,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				market.setName(buildingName);
 				buildings.add(market);
 				//citizenRecords.addBuildingRecord(marketRecords);
-				//infoPanel.addControlPanel(market.getControlPanel(), buildingName);
+				infoPanel.addControlPanel(market.getControlPanel(), buildingName);
 
 				construct(market);
 

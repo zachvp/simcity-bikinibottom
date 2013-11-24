@@ -100,12 +100,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 				);
 		
 		CardLayout cl = (CardLayout)(controlPanel.getLayout());
-		if(b.type() == LocationTypeEnum.Market){
-			cl.show(controlPanel, b.getName());
+		if(b.type() == null){
+			cl.show(controlPanel, "blank");
 		}
 		else
 		{
-			cl.show(controlPanel, "blank");
+			cl.show(controlPanel, b.getName());
 		}
 		
 		validate();

@@ -7,6 +7,7 @@ import java.util.List;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
+import CommonSimpleClasses.CityLocation;
 import agent.interfaces.Person;
 import agent.mock.EventLog;
 import agent.Constants;
@@ -48,15 +49,15 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		public double getPaid() { return hasPaid; }
 	}
 	
-	public PayRecipientRole(Person payRecipientPerson) {
-		super(payRecipientPerson);
+	public PayRecipientRole(Person payRecipientPerson, CityLocation residence) {
+		super(payRecipientPerson, residence);
 		
 		// ask everyone for rent
 		Runnable command = new Runnable() {
 			@Override
 			public void run() {
 				synchronized(residents) {
-					for(MyResident mr : residents){
+					for(MyResident mr : residents) {
 						mr.state = PaymentState.PAYMENT_DUE;
 						stateChanged();
 					}
@@ -71,6 +72,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		task.scheduleDailyTask(command, hour, minute);
 	}
 	
+	public PayRecipientRole(PersonAgent payRecipientPerson) {
+		super(payRecipientPerson);
+	}
+
 	/* ----- Messages ----- */
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
@@ -127,6 +132,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public void chargeResident(MyResident mr){
 		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
+		
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
 		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
@@ -143,8 +149,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	}
 	
 	public void addResident(Dwelling dwelling){
-		residents.add(new MyResident(dwelling));
-		stateChanged();
+		if(dwelling.getResident() != null){
+			residents.add(new MyResident(dwelling));
+			stateChanged();
+		}
 	}
 
 	public List<MyResident> getResidents() {

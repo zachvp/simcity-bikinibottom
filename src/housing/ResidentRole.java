@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
-import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
-import agent.interfaces.Person;
+import CommonSimpleClasses.CityLocation;
 import agent.mock.EventLog;
 import agent.mock.MockScheduleTaskListener;
 import agent.Constants;
@@ -40,13 +40,12 @@ public class ResidentRole extends Role implements Resident {
 	private ResidentGui gui;
 	
 	// TODO: un-hack these
-	private boolean hungry = false;
+	private boolean hungry = true;
 	
 	// rent data
 	private double oweMoney = 0;
 	private PayRecipient payee;
 	private Dwelling dwelling;
-	private MaintenanceWorker worker;
 	
 	// food data
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
@@ -83,8 +82,8 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent) {
-		super(agent);
+	public ResidentRole(PersonAgent agent, CityLocation residence) {
+		super(agent, residence);
 		
 		// ask everyone for rent
 		Runnable command = new Runnable() {
@@ -106,19 +105,20 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public void msgPaymentDue(double amount) {
 		this.oweMoney = amount;
-		log.add("Received message 'payment due' amount is " + amount);
+		Do("Received message 'payment due' amount is " + amount);
 		stateChanged();
 	}
 	
 	@Override
 	public void msgDwellingFixed(){
-		log.add("Received message 'dwelling fixed'");
+		Do("Received message 'dwelling fixed'");
 		dwelling.setCondition(Condition.GOOD);
 	}
 	
 	public void msgAtDestination() {
 		doneWaitingForInput();
 	}
+	
 
 	/* ----- Scheduler ----- */
 	@Override
@@ -131,7 +131,8 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(dwelling.getCondition() == Condition.POOR ||
 				dwelling.getCondition() == Condition.BROKEN) {
-			callMaintenenceWorker();
+			if(dwelling.getWorker() != null)
+				callMaintenenceWorker();
 			return true;
 		}
 		
@@ -160,7 +161,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Actions ----- */
 	private void makePayment() {
-		log.add("Attempting to make payment. Cash amount is "
+		Do("Attempting to make payment. Cash amount is "
 				+ person.getWallet().getCashOnHand());
 		
 		double cash = person.getWallet().getCashOnHand();
@@ -175,16 +176,16 @@ public class ResidentRole extends Role implements Resident {
 			oweMoney -= cash;
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
-			log.add("Not enough money to cover full cost. Cash now " + cash);
+			Do("Not enough money to cover full cost. Cash now " + cash);
 		}
 		else {
-			log.add("Don't have any money to pay my dues.");
+			Do("Don't have any money to pay my dues.");
 		}
 	}
 	
 	private void eatFood() {
 		hungry = false;
-		log.add("Eating food " + food.type);
+		Do("Eating food " + food.type);
 		
 		DoGoToStove();
 		waitForInput();
@@ -197,9 +198,10 @@ public class ResidentRole extends Role implements Resident {
 		Runnable command = new Runnable() {
 			public void run(){
 				DoSetFood("");
-				doneWaitingForInput();
 				food = null;
+				doneWaitingForInput();
 				stateChanged();
+				DoJazzercise();
 			}
 		};
 		listener.taskFinished(task);
@@ -208,7 +210,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void cookFood(Food f) {
-		log.add("Cooking food");
+		Do("Cooking food");
 		food = f;
 		
 		// retrieve food from refrigerator
@@ -227,7 +229,7 @@ public class ResidentRole extends Role implements Resident {
 		
 		// add to grocery list if the food item is low
 		if(f.amount == f.low) {
-			log.add("Adding " + f.type + " to grocery list");
+			Do("Adding " + f.type + " to grocery list");
 			groceries.put(f.type, f.capacity - f.low);
 		}
 		
@@ -244,25 +246,25 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void callMaintenenceWorker(){
-		log.add("This house needs fixing! Calling a maintenance worker.");
+		Do("This house needs fixing! Calling a maintenance worker.");
 		//TODO actually implement maintenance worker
-		worker.msgFileWorkOrder(dwelling);
+		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 	}
 	
 	/* --- Animation Routines --- */
 	private void DoGoToStove() {
-		log.add("Going to stove.");
+		Do("Going to stove.");
 		gui.DoGoToStove();
 	}
 	
 	private void DoGoToTable() {
-		log.add("Going to table.");
+		Do("Going to table.");
 		gui.DoGoToTable();
 	}
 	
 	private void DoGoToRefrigerator() {
-		log.add("Going to refrigerator.");
+		Do("Going to refrigerator.");
 		gui.DoGoToRefrigerator();
 	}
 	
@@ -277,7 +279,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Utility Functions ----- */
 	private void timerDoneCooking() {
 		food.state = FoodState.COOKED;
-		log.add("Food is cooked.");
+		Do("Food is cooked.");
 		stateChanged();
 	}
 	
@@ -285,12 +287,12 @@ public class ResidentRole extends Role implements Resident {
 		synchronized(refrigerator){
 			for(Map.Entry<String, Food> entry : refrigerator.entrySet()){
 				if(entry.getValue().amount > 0){
-					log.add("There is food at home.");
+					Do("There is food at home.");
 					return true;
 				}
 			}
 		}
-		log.add("There is no food at home");
+		Do("There is no food at home");
 		return false;
 	}
 	
@@ -305,10 +307,6 @@ public class ResidentRole extends Role implements Resident {
 
 	public void setPayee(PayRecipient payee) {
 		this.payee = payee;
-	}
-	
-	public void setWorker(MaintenanceWorker worker){
-		this.worker = worker;
 	}
 
 	public double getMoneyOwed() {
@@ -361,5 +359,10 @@ public class ResidentRole extends Role implements Resident {
 
 	public Dwelling getDwelling() {
 		return dwelling;
+	}
+
+	public void setLayoutGui(LayoutGui layoutGui) {
+		this.gui.setLayoutGui(layoutGui);
+		
 	}
 }

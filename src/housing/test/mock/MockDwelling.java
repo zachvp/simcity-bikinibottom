@@ -3,6 +3,7 @@ package housing.test.mock;
 import agent.Constants.Condition;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 
@@ -61,6 +62,16 @@ public class MockDwelling implements Dwelling {
 	@Override
 	public Condition getCondition() {
 		return condition;
+	}
+
+	@Override
+	public MaintenanceWorker getWorker() {
+		return null;
+	}
+
+	@Override
+	public void setPayRecipient(PayRecipient payRecipient) {
+		this.payRecipient = payRecipient;
 	}
 
 }

@@ -86,5 +86,25 @@ public class RestaurantStrottmaBuilding extends Building {
 		// TODO initialize the info panel
 		return infoPanel;
 	}
+
+	@Override
+	public int getOpeningHour() {
+		return 8;
+	}
+
+	@Override
+	public int getOpeningMinute() {
+		return 0;
+	}
+
+	@Override
+	public int getClosingHour() {
+		return 22;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		return 0;
+	}
 	
 }

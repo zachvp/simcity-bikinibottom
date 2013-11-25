@@ -129,11 +129,25 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		return new JPanel();
 	}
-	
-	public boolean isOpen() {
-		return TimeManager.getInstance().isNowBetween(startHour, startMinute, endHour, endMinute);
-	
+
+	@Override
+	public int getOpeningHour() {
+		return startHour;
 	}
-	
+
+	@Override
+	public int getOpeningMinute() {
+		return startMinute;
+	}
+
+	@Override
+	public int getClosingHour() {
+		return endHour;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		return endMinute;
+	}	
 	
 }

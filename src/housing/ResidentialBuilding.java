@@ -34,7 +34,9 @@ public class ResidentialBuilding extends Building {
 	
 	// constants
 	private final int EMPLOYEE_START_HOUR = 6;
+	private final int EMPLOYEE_START_MINUTE = 0;
 	private final int EMPLOYEE_END_HOUR = 11;
+	private final int EMPLOYEE_END_MINUTE = 0;
 
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -73,6 +75,26 @@ public class ResidentialBuilding extends Building {
 	public JPanel getInfoPanel() {
 		// TODO Auto-generated method stub
 		return new JPanel();
+	}
+
+	@Override
+	public int getOpeningHour() {
+		return EMPLOYEE_START_HOUR;
+	}
+
+	@Override
+	public int getOpeningMinute() {
+		return EMPLOYEE_START_MINUTE;
+	}
+
+	@Override
+	public int getClosingHour() {
+		return EMPLOYEE_END_HOUR;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		return EMPLOYEE_START_MINUTE;
 	}
 
 }

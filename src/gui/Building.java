@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.XYPos;
 import agent.RoleFactory;
+import agent.TimeManager;
 
 /**
  * Every building must have a class that represents
@@ -51,4 +52,22 @@ public abstract class Building extends Rectangle2D.Double
 	//Return your control panel here (null if you don't have one)
 	public abstract JPanel getInfoPanel();
 	
+	/** Whether the building is open right now. */
+	public boolean isOpen() {
+		return TimeManager.getInstance().isNowBetween(getOpeningHour(),
+				getOpeningMinute(), getClosingHour(), getClosingMinute());
+	}
+	
+	/** The hour of day this building opens. */
+	public abstract int getOpeningHour();
+	
+	/** The minute of day this building opens. */
+	public abstract int getOpeningMinute();
+	
+	/** The hour of day this building closes. */
+	public abstract int getClosingHour();
+	
+	/** The minute of day this building closes. */
+	public abstract int getClosingMinute();
+
 }

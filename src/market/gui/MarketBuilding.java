@@ -51,12 +51,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		// TODO Auto-generated method stub
 			//Pass Cashier
 		return getRecords().ca;
-	}
-	
-	public boolean isOpen() {
-		return (TimeManager.getInstance().isNowBetween(startinghour,startingminutes,endinghour,endingminutes));
-	}
-	
+	}	
 
 	@Override
 	public LocationTypeEnum type() {
@@ -117,6 +112,26 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 
 	public void setRecords(MarketRecords records) {
 		this.records = records;
+	}
+
+	@Override
+	public int getOpeningHour() {
+		return startinghour;
+	}
+
+	@Override
+	public int getOpeningMinute() {
+		return startingminutes;
+	}
+
+	@Override
+	public int getClosingHour() {
+		return endinghour;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		return endingminutes;
 	}
 	
 }

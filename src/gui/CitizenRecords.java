@@ -1,5 +1,8 @@
 package gui;
 
+import housing.ResidentRole;
+import housing.interfaces.Dwelling;
+
 import java.util.ArrayList;
 
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
@@ -33,14 +36,25 @@ public class CitizenRecords {
 		citizens.add(person);
 		personInfoList.addToList(person.getName());
 	}
-	public void addCitizen(String name, WorkRole job, String home, String status,
+	public void addCitizen(String name, WorkRole job, Dwelling home, String status,
 			boolean hasCar) {
 		PersonAgent newPerson  = new PersonAgent(name);
-		newPerson.addRole(job);
-		if (job != null) job.setPerson(newPerson);
+		
+		//Assigning job
+		if (job != null) {
+			newPerson.addRole(job);
+			job.setPerson(newPerson);
+		}
+		
+		//Assigning residence
+		if (home != null) {
+			ResidentRole role = (ResidentRole)(home.getResident());
+			newPerson.addRole(role);
+			role.setPerson(newPerson);			
+		}
 		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person
-		//TODO remember that you need to add roles to people AND people to roles
+		//TODO add dwelling!
 		
 		//Add passengerAgent
 		citizens.add(newPerson);

@@ -49,14 +49,14 @@ ClassifiedsChangedListener{
 
 	JTextField nameTextF;
 	JComboBox<MyComboBoxItem> occupationsCB;
-	JComboBox<String> residencesCB;
+	JComboBox<MyComboBoxItem> residencesCB;
 	JComboBox<String> wealthCB;
 	JComboBox<String> carCB;
 	JButton createButton;
 	ArrayList<MyComboBoxItem> occList = new ArrayList<MyComboBoxItem>();
 	MyComboBoxItem[] occupationArray;
-	ArrayList<String> resList = new ArrayList<String>();
-	String[] residentArray;
+	ArrayList<MyComboBoxItem> resList = new ArrayList<MyComboBoxItem>();
+	MyComboBoxItem[] residentArray;
 
 	JLabel msg;
 
@@ -92,7 +92,7 @@ ClassifiedsChangedListener{
 		checkClassifiedsforJobs();
 		occupationsCB = new JComboBox<MyComboBoxItem>(occupationArray);
 		checkClassifiedsforHome();
-		residencesCB = new JComboBox<String>(residentArray);
+		residencesCB = new JComboBox<MyComboBoxItem>(residentArray);
 		wealthCB = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
 		carCB = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
 
@@ -105,7 +105,7 @@ ClassifiedsChangedListener{
 		// default values for person creation
 		nameTextF.setText("mr balloon hands");
 		occupationsCB.setSelectedIndex(0);
-		residencesCB.setSelectedIndex(1);
+		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(2);
 
@@ -142,14 +142,16 @@ ClassifiedsChangedListener{
 		if(e.getSource() == createButton){
 			MyComboBoxItem jobItem = (MyComboBoxItem)(occupationsCB.
 					getSelectedItem());
+			MyComboBoxItem homeItem = (MyComboBoxItem)(residencesCB.
+					getSelectedItem());
 			
 			String name = nameTextF.getText();
 			WorkRole job = (WorkRole)(jobItem.object);
-			String home = (String)residencesCB.getSelectedItem();
+			Dwelling home = (Dwelling)(homeItem.object);
 			String status = (String)wealthCB.getSelectedItem();
 			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
 
-			if(!incompleteInputs(name, home, status, (String)carCB.getSelectedItem())){
+			if(!incompleteInputs(name, status, (String)carCB.getSelectedItem())){
 				//reset input fields
 				nameTextF.setText("");
 				occupationsCB.setSelectedIndex(0);
@@ -168,14 +170,16 @@ ClassifiedsChangedListener{
 				
 				// default values for person creation
 				nameTextF.setText("mr balloon hands");
-				occupationsCB.setSelectedIndex(1);
-				residencesCB.setSelectedIndex(1);
+				occupationsCB.setSelectedIndex(0);
+				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(1);
 				carCB.setSelectedIndex(2);
 			}
 			else{
 				msg.setText("Please complete all inputs");
-			}			
+			}
+			
+			classifiedsUpdated();
 		}
 		//		
 		//		if (e.getSource() == occupationsCB) {
@@ -216,16 +220,15 @@ ClassifiedsChangedListener{
 	//TODO needs testing
 	private void checkClassifiedsforHome(){
 		resList.clear();
-		resList.add("Select a Residence");
-		resList.add("None");
+		resList.add(new MyComboBoxItem(null));
 
 		ArrayList<Dwelling> newHomes = new ArrayList<Dwelling>();
 		newHomes.addAll((ArrayList<Dwelling>) classifieds.getRooms(true));
 
 		for(Dwelling w: newHomes){
-			resList.add(w.toString()); //TODO check if name is correct
+			resList.add(new MyComboBoxItem(w)); //TODO check if name is correct
 		}
-		residentArray = resList.toArray(new String[newHomes.size()]);
+		residentArray = resList.toArray(new MyComboBoxItem[newHomes.size()]);
 	}
 
 	/**
@@ -238,11 +241,10 @@ ClassifiedsChangedListener{
 	 * @return True if any input is incomplete
 	 */
 
-	private boolean incompleteInputs(String name, String home,
+	private boolean incompleteInputs(String name,
 			String wealth, String car) {
 		return (name == null) ||(name.equals("Enter a name")) ||(name.equals(""))
-				|| (home.equals("Select a Residence") 
-						|| (wealth.equals("Select a Status"))
+				|| ((wealth.equals("Select a Status"))
 						|| (car.equals("Has a Car")));
 
 	}

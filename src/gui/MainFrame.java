@@ -227,10 +227,27 @@ public class MainFrame extends JFrame implements ActionListener {
 				//		follow addBuildingToMap() path
 				//add building details
 			}
+			
+			// TODO Instantiate apartments?
+
+			if(type == LocationTypeEnum.Apartment){
+				/*
+				AptBuilding apt = new AptBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				apt.setName(buildingName);
+				construct(apt);
+				*/
+				try {
+					throw new Exception("Can't instantiate apartments,"
+							+ " doing houses instead (I think)");
+				} catch (Exception e) {
+					e.printStackTrace();
+					type = LocationTypeEnum.House;
+				}
+			}
 			if(type == LocationTypeEnum.House){
-				//ResidentialBuilding house = new ResidentialBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				//house.setName(buildingName);
-				//construct(house); 
+				ResidentialBuilding house = new ResidentialBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				house.setName(buildingName);
+				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
 				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
@@ -249,11 +266,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				hospital.setName(buildingName);
 				construct(hospital);
 			}
-			if(type == LocationTypeEnum.Apartment){
-				//AptBuilding apt = new AptBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				//apt.setName(buildingName);
-				//construct(apt);
-			}
+			
+			
+			
 			if(type == LocationTypeEnum.None){
 				MockBuilding mock = new MockBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				mock.setName(buildingName);

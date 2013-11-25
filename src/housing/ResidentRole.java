@@ -4,16 +4,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import housing.PayRecipientRole.MyResident;
-import housing.PayRecipientRole.PaymentState;
 import housing.interfaces.Dwelling;
-import housing.interfaces.MaintenenceWorker;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
+import agent.interfaces.Person;
 import agent.mock.EventLog;
 import agent.mock.MockScheduleTaskListener;
-import agent.test.ScheduleTaskListener;
 import agent.Constants;
 import agent.Constants.Condition;
 import agent.PersonAgent;
@@ -48,7 +46,7 @@ public class ResidentRole extends Role implements Resident {
 	private double oweMoney = 0;
 	private PayRecipient payee;
 	private Dwelling dwelling;
-	private MaintenenceWorker worker;
+	private MaintenanceWorker worker;
 	
 	// food data
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
@@ -104,6 +102,10 @@ public class ResidentRole extends Role implements Resident {
 		task.scheduleDailyTask(command, hour, minute);
 	}
 	
+	public ResidentRole(Person residentPerson) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount) {
@@ -246,9 +248,10 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void callMaintenenceWorker(){
-		log.add("This house needs fixing! Calling a maintence worker.");
-		//TODO actually implement maintenence worker
+		log.add("This house needs fixing! Calling a maintenance worker.");
+		//TODO actually implement maintenance worker
 		worker.msgFileWorkOrder(dwelling);
+		dwelling.setCondition(Condition.BEING_FIXED);
 	}
 	
 	/* --- Animation Routines --- */
@@ -306,6 +309,10 @@ public class ResidentRole extends Role implements Resident {
 
 	public void setPayee(PayRecipient payee) {
 		this.payee = payee;
+	}
+	
+	public void setWorker(MaintenanceWorker worker){
+		this.worker = worker;
 	}
 
 	public double getMoneyOwed() {

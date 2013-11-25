@@ -117,7 +117,7 @@ public interface Constants {
 	/**
 	 * Conditions for Dwellings
 	 */
-	enum Condition { GOOD, FAIR, POOR, BROKEN }
+	enum Condition { GOOD, FAIR, POOR, BROKEN, BEING_FIXED }
 	
 	/**
 	 * Types of Car in the city

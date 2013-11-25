@@ -1,5 +1,6 @@
 package housing.test.mock;
 
+import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.PersonAgent;
@@ -20,5 +21,10 @@ public class MockPayRecipient extends Mock implements PayRecipient {
 		myRes = r;
 		if(r == null) return;
 		log.add("Received message 'here is payment' " + amount + " from " + myRes);
+	}
+
+	@Override
+	public void addResident(Dwelling dwelling) {
+		log.add("Added resident.");
 	}
 }

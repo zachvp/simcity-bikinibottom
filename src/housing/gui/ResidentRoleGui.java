@@ -6,6 +6,7 @@ import housing.interfaces.ResidentGui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import agent.Role;
 import agent.gui.Gui;
 
 /**
@@ -35,8 +36,8 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private final int JAZZER_SPOT_Y = 0;
 	
 	/* --- Constructor --- */
-	public ResidentRoleGui(Resident resident) {
-		this.resident = resident;
+	public ResidentRoleGui(Resident residentRole) {
+		this.resident = residentRole;
 	}
 
 	/**

@@ -108,4 +108,13 @@ public class ResidentTest extends TestCase {
 		assertFalse("Hungry should be false", resident.isHungry());
 		assertEquals("Food should be NULL", null, resident.getFood());
 	}
+	
+	public void testCallMaintenanceWorker(){
+		/* --- Test Preconditions --- */
+		assertEquals("Resident should have an empty event log before the message is called. Instead, the Resident's event log reads: "
+				+ resident.log.toString(), 0, resident.log.size());
+		
+		/* --- Run the Scenario --- */
+		
+	}
 }

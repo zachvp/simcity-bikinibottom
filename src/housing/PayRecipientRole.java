@@ -7,6 +7,7 @@ import java.util.List;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
+import agent.interfaces.Person;
 import agent.mock.EventLog;
 import agent.Constants;
 import agent.Constants.Condition;
@@ -47,8 +48,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		public double getPaid() { return hasPaid; }
 	}
 	
-	public PayRecipientRole(PersonAgent agent) {
-		super(agent);
+	public PayRecipientRole(Person payRecipientPerson) {
+		super(payRecipientPerson);
 		
 		// ask everyone for rent
 		Runnable command = new Runnable() {

@@ -18,7 +18,7 @@ public class FakePassengerRole extends PassengerRole {
 	}
 
 	@Override
-	public void msgGoToLocation(CityLocation loc) {
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus) {
 		destination = loc;
 		stateChanged();
 	}
@@ -46,10 +46,10 @@ public class FakePassengerRole extends PassengerRole {
 	}
 
 	@Override
-	public void msgGoToLocation(CityLocation loc, 
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus,
 			PassengerRequester requesterRole) {
 		this.requesterRole = requesterRole;
-		msgGoToLocation(loc);
+		msgGoToLocation(loc, willingToUseBus);
 		
 	}
 

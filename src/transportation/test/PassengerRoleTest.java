@@ -132,7 +132,7 @@ public class PassengerRoleTest {
 		
 		assertEquals(locations.get(12), passenger.getLocation());
 		
-		passenger.msgGoToLocation(locations.get(35));
+		passenger.msgGoToLocation(locations.get(35), false);
 		
 		assertEquals(passenger.destination(), locations.get(35));
 		assertEquals(PassengerStateEnum.DecisionTime, passenger.state());

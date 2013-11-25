@@ -64,16 +64,17 @@ public class RealPassengerRole extends PassengerRole {
 
 	//TODO add input for if has car, if want bus, etc
 	@Override
-	public void msgGoToLocation(CityLocation loc) {
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus) {
 		destination = loc;
 		state = PassengerStateEnum.DecisionTime;
 		stateChanged();
 
 	}
 	
-	public void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole) {
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus,
+			PassengerRequester requesterRole) {
 		this.requesterRole  = requesterRole;
-		msgGoToLocation(loc);
+		msgGoToLocation(loc, willingToUseBus);
 	}
 
 	@Override
@@ -127,7 +128,8 @@ public class RealPassengerRole extends PassengerRole {
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
-			if (requesterRole == null) ((Person) getPerson()).msgArrivedAtDestination();
+			if (requesterRole == null) ((Person) getPerson())
+										.msgArrivedAtDestination();
 			else {
 				requesterRole.msgArrivedAtDestination();
 				requesterRole = null;

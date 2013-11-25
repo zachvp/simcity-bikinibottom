@@ -141,7 +141,8 @@ public class PersonAgent extends Agent implements Person {
 	public void goToLoc(CityLocation loc) {
 		System.out.println("I AM GOING PLACES " + loc);
 		PassengerRole pass = getPassengerRole();
-		pass.msgGoToLocation(loc);
+		pass.msgGoToLocation(loc, true);
+		// TODO person is hard coded to be willing to use the bus
 		pass.activate();
 	}
 	

@@ -9,7 +9,7 @@ import CommonSimpleClasses.CityLocation;
 public interface Passenger {
 	
 	// Message from Person that sets the destination.
-	public void msgGoToLocation(CityLocation loc);
+	void msgGoToLocation(CityLocation loc, boolean willingToUseBus);
 	
 	/* Message a Passenger receives when the bus he is
 	 * waiting for arrives.
@@ -28,10 +28,12 @@ public interface Passenger {
 	/* Message from a `PassengerRequester` `Role` that sets
 	 *  the destination.
 	 */
-	void msgGoToLocation(CityLocation loc, 
+	void msgGoToLocation(CityLocation loc, boolean willingToUseBus,
 			PassengerRequester requesterRole);
 	
 	//Message received from the `PersonGui` when he gets in his car.
 	void msgGotInCar();
+
+	
 	
 }

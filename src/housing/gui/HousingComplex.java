@@ -1,6 +1,9 @@
 package housing.gui;
 
+import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
+import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.PayRecipient;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -8,10 +11,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
-import CommonSimpleClasses.CityBuilding;
-import CommonSimpleClasses.XYPos;
+import agent.interfaces.Person;
 
 /**
  * HousingComplex is the equivalent of one building unit. It has 4 subdivisions
@@ -22,17 +25,22 @@ import CommonSimpleClasses.XYPos;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 1;
-	private final int ROWS = 1;
-	private final int COLUMNS = 1;
-	private final int SPACING = 0;
+	private final int UNIT_COUNT = 4;
+	private final int ROWS = 2;
+	private final int COLUMNS = 2;
+	private final int SPACING = 10;
 	
 	// layout manager
-	GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
+	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 
 	// payRecipient who manages the complex 
- 	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
- 	private PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
+ 	private Person payRecipientPerson = new PersonAgent("Pay Recipient");
+ 	private PayRecipient payRecipientRole = new PayRecipientRole(payRecipientPerson);
+ 	
+ 	// maintenance worker who repairs dwellings
+ 	private Person workerPerson = new PersonAgent("Maintenance Worker");
+ 	private MaintenanceWorker worker = new MaintenanceWorkerRole((PersonAgent) workerPerson);
+ 	
 	
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
@@ -45,22 +53,23 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, payRecipientRole);
+			HousingGui gui = new HousingGui(i, payRecipientRole, worker);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
 		
 		// activate complex manager
-		startAndActivate(payRecipientPerson, payRecipientRole);
+		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
+		startAndActivate(workerPerson, (Role) worker);
 	}
 	
-	private void startAndActivate(PersonAgent agent, Role role) {
-		agent.startThread();
-		agent.addRole(role);
-		role.activate();
+	private void startAndActivate(Person person, Role payRecipientRole) {
+		((Agent) payRecipientPerson).startThread();
+		payRecipientPerson.addRole((Role) payRecipientRole);
+		((Role) payRecipientRole).activate();
 	}
 
-	public PayRecipientRole getPayRecipientRole() {
+	public PayRecipient getPayRecipientRole() {
 		return payRecipientRole;
 	}
 

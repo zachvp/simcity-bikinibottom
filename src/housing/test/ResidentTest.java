@@ -1,9 +1,15 @@
 package housing.test;
 
 import agent.PersonAgent;
+import agent.Constants.Condition;
 import agent.mock.MockScheduleTaskListener;
 import housing.ResidentRole;
+import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.PayRecipient;
 import housing.interfaces.ResidentGui;
+import housing.test.mock.MockDwelling;
+import housing.test.mock.MockMaintenanceWorker;
 import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResidentGui;
 import junit.framework.TestCase;
@@ -15,13 +21,17 @@ public class ResidentTest extends TestCase {
 	ResidentGui gui = new MockResidentGui(resident);
 	
 	// mock roles
-	MockPayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
+	PayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
+	Dwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
+	MaintenanceWorker worker = new MockMaintenanceWorker("Worker");
 	
 	// constants
 	private final double PAYMENT_AMOUNT = 64;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		resident.setDwelling(dwelling);
 	}
 	
 	/**
@@ -49,7 +59,7 @@ public class ResidentTest extends TestCase {
 		assertTrue("Resident's scheduler should have returned true, reacting to the payment due message",
 				resident.pickAndExecuteAnAction());
 		assertEquals("Pay recipient should have the instance of resident.",
-				resident, mockPayRecipient.myRes);
+				resident, PayRecipient.myRes);
 	}
 	
 	/** Tests the simplest resident cooking and eating case.
@@ -93,12 +103,23 @@ public class ResidentTest extends TestCase {
 		// resident eats food after food has finished cooking
 		assertTrue("Scheduler should return true after resident puts food on stove.",
 				resident.pickAndExecuteAnAction());
+		
 		// handle delay for eating food
 		synchronized(mockRequestListener){
-			mockRequestListener.wait(5000);
+			mockRequestListener.wait(7000);
 		}
+		
 		// resident's hunger is now satisfied
 		assertFalse("Hungry should be false", resident.isHungry());
 		assertEquals("Food should be NULL", null, resident.getFood());
+	}
+	
+	public void testCallMaintenanceWorker(){
+		/* --- Test Preconditions --- */
+		assertEquals("Resident should have an empty event log before the message is called. Instead, the Resident's event log reads: "
+				+ resident.log.toString(), 0, resident.log.size());
+		
+		/* --- Run the Scenario --- */
+		
 	}
 }

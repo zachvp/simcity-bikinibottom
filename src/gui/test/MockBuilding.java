@@ -54,6 +54,30 @@ public class MockBuilding extends Building{
 		return new JPanel();
 	}
 
+	@Override
+	public int getOpeningHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getOpeningMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getClosingHour() {
+		// TODO Auto-generated method stub
+		return 23;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		// TODO Auto-generated method stub
+		return 59;
+	}
+
 
 
 }

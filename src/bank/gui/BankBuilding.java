@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
-import agent.TimeManager;
 import agent.interfaces.Person;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
@@ -27,15 +26,13 @@ public class BankBuilding extends Building {
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
-	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
 	
-	int startHour = 9;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
-	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static int timeDifference = 6;
+			
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
 	
@@ -47,6 +44,10 @@ public class BankBuilding extends Building {
 		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
 		initRoles();
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount + timeDifference;
+		instanceCount++;
 	}
 	
 	private void initRoles() {
@@ -129,11 +130,5 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		return new JPanel();
 	}
-	
-	public boolean isOpen() {
-		return TimeManager.getInstance().isNowBetween(startHour, startMinute, endHour, endMinute);
-	
-	}
-	
 	
 }

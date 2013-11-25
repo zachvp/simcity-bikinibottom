@@ -89,7 +89,8 @@ ClassifiedsChangedListener{
 				nameTextF.setText(null);
 			}
 		});
-
+		
+		// default values for person creation
 		nameTextF.setText("mr balloon hands");
 		occupationsCB.setSelectedIndex(1);
 		residencesCB.setSelectedIndex(1);
@@ -149,6 +150,13 @@ ClassifiedsChangedListener{
 
 				//TODO pull up newPerson's infopanel
 				msg.setText(name + " was created.");
+				
+				// default values for person creation
+				nameTextF.setText("mr balloon hands");
+				occupationsCB.setSelectedIndex(1);
+				residencesCB.setSelectedIndex(1);
+				wealthCB.setSelectedIndex(1);
+				carCB.setSelectedIndex(2);
 			}
 			else{
 				msg.setText("Please complete all inputs");

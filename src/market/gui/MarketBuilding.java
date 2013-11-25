@@ -21,11 +21,6 @@ import agent.interfaces.Person;
 
 
 public class MarketBuilding extends gui.Building implements RoleFactory{
-
-	private int startinghour = 8;
-	private int startingminutes = 29;
-	private int endinghour = 18;
-	private int endingminutes = 0;
 	
 	XYPos entrancePosition;
 	String name;
@@ -36,9 +31,17 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
 	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static int timeDifference = 6;
+	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		entrancePosition = new XYPos(x + (width/2), y + height);
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount + timeDifference;
+		instanceCount++;
 	}
 
 	@Override
@@ -51,12 +54,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		// TODO Auto-generated method stub
 			//Pass Cashier
 		return getRecords().ca;
-	}
-	
-	public boolean isOpen() {
-		return (TimeManager.getInstance().isNowBetween(startinghour,startingminutes,endinghour,endingminutes));
-	}
-	
+	}	
 
 	@Override
 	public LocationTypeEnum type() {

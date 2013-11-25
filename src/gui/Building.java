@@ -49,6 +49,11 @@ public abstract class Building extends Rectangle2D.Double
 		return name;
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 	public XYPos position() {
 		return new XYPos((int)getX(), (int)getY());
 	}

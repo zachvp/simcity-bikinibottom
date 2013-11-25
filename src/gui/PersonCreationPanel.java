@@ -168,8 +168,18 @@ ClassifiedsChangedListener{
 				
 				// default values for person creation
 				nameTextF.setText("mr balloon hands");
-				occupationsCB.setSelectedIndex(1);
-				residencesCB.setSelectedIndex(1);
+				try {
+					occupationsCB.setSelectedIndex(1);
+				} catch (IllegalArgumentException except) {
+					// oh well
+					// except.printStackTrace();
+				}
+				try {
+					residencesCB.setSelectedIndex(1);
+				} catch (IllegalArgumentException except) {
+					// oh well
+					// except.printStackTrace();
+				}
 				wealthCB.setSelectedIndex(1);
 				carCB.setSelectedIndex(2);
 			}

@@ -24,7 +24,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getGreeter() {
-		return complex.getPayRecipientRole();
+		return (Role) complex.getPayRecipientRole();
 	}
 
 	@Override

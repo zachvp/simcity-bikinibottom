@@ -31,6 +31,7 @@ public class InfoList extends JPanel implements ActionListener {
 	private boolean isBuildingList = false;
 	CitizenRecords citizenRecords;
 	private ArrayList<Building>buildingList;
+	InfoList otherTab;
 	
 
 	public InfoList(int w, int h){
@@ -48,7 +49,6 @@ public class InfoList extends JPanel implements ActionListener {
 	 * @param name Name on the button
 	 */
 	public void addToList(String name) {
-		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
 			//System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
@@ -67,13 +67,11 @@ public class InfoList extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (isBuildingList){
 			for (JButton b: list){
-				if(e.getSource() == b){
-					//System.out.println("button press " + b.getText());
-					
+				if(e.getSource() == b){					
+					//System.out.println("button press " + b.getText());					
 					for(Building a: buildingList){
-						if(a.getName() == b.getText()){
+						if(a.getName() == b.getText())
 							infoPanel.updateBuildingInfoPanel(a);	
-						}
 					}
 					buildingView.showCard(b.getText());									
 				}
@@ -81,11 +79,24 @@ public class InfoList extends JPanel implements ActionListener {
 		}
 		else{//it is a PersonAgent
 			for (JButton b: list){
-				if(e.getSource() == b){
-					//System.out.println(b.getText());
+				if(e.getSource() == b)
 					citizenRecords.showInfo(b.getText());
-				}
 			}
+		}
+		/*for (JButton b: list){
+			if(e.getSource() == b){
+				b.setBackground(Color.LIGHT_GRAY);
+			}
+			else{
+				b.setBackground(Color.white);
+			}
+		}
+		otherTab.deselectOtherTab();*/
+	}
+	
+	public void deselectOtherTab(){
+		for (JButton b: list){
+			b.setBackground(Color.white);
 		}
 	}
 	
@@ -130,6 +141,9 @@ public class InfoList extends JPanel implements ActionListener {
 	public void setBuildingList(ArrayList<Building> buildings) {
 		buildingList = buildings;
 	}
+	public void setOtherTab(InfoList t){
+		otherTab = t;
+	}
 
 	
-}//end class
+}

@@ -146,6 +146,7 @@ public class MarketRecords implements BuildingRecords {
         
         CashierPerson.startThread();
         CashierPerson.addRole(ca);
+        
         ca.activate();
         
         DeliveryGuyPerson.startThread();
@@ -212,7 +213,10 @@ public class MarketRecords implements BuildingRecords {
 		return null;
 	}
 
-
+public void SetCashierMarketInfoPanel(MarketInfoPanel p){
+		cashierGui.setMarketInfoPanel(p);
+	return;
+}
  
     /**
      * Adds a customer or waiter to the appropriate list

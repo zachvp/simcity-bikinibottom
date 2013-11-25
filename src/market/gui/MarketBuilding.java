@@ -17,6 +17,8 @@ public class MarketBuilding extends gui.Building {
 	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
 	MarketRecords records = new MarketRecords(animationPanel, this);
 	JPanel info = new MarketInfoPanel(records);
+	//ATTENTION
+	{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	MarketRoleFactory marketroleFactory = new MarketRoleFactory();
 	
 	public MarketBuilding(int x, int y, int width, int height) {

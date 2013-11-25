@@ -264,18 +264,34 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		doGoToTeller(xLoc);
 		acquireSemaphore(active);
 //		System.out.println("YO");
-		state = State.waiting;
-		msgGotToTeller();//TODO HACK
+//		state = State.waiting;
+//		msgGotToTeller();
+		speakToTeller();
 	}
 	
 	private void speakToTeller() {
-		Do("speaking to teller");
+		Do("speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+
+		
 		if(accountId == -1) {//have not been assigned accountID yet
 			Do("need to open account");
-			teller.msgIWantToOpenAccount(this, this.getPerson().getWallet().getCashOnHand() * .2);
+			double initialDepositAmount = this.getPerson().getWallet().getCashOnHand() * .2;
+			teller.msgIWantToOpenAccount(this, initialDepositAmount);//TODO does this work or constant?
 			state = State.openingAccount;
-			setCashAdjustAmount(-10);//TODO for testing
+			setCashAdjustAmount(-initialDepositAmount);//TODO for testing
 //			Do("made it here");
+			return;
+		}
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount > this.getPerson().getWallet().getMoneyNeeded()) { //if i need money and have enough in my account, i will withdraw it
+			double moneyNeeded = this.getPerson().getWallet().getMoneyNeeded();
+			System.out.println("I'm withdrawing needed money");
+			teller.msgWithdrawMoney(this, accountId, moneyNeeded);//TODO for testing
+			state= State.withdrawing;
+			return;
+		}
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount < this.getPerson().getWallet().getMoneyNeeded()) {//if i need money and dont have enough in account, i will take a loan for ALL OF IT (NOTE: possibly make it possible to withdraw some and get rest in loan?
+			teller.msgINeedALoan(this);
+			state= State.gettingLoan;
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount > this.getPerson().getWallet().getTooLittle()){
@@ -299,6 +315,23 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		Do("ERROR, no condtion met");//not good
 	}
 	
+
+	
+	private void askForLoan() {//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+		Do("asking for loan");
+//		System.out.println("asking for loan from loanmanager");
+		doGoToLoanManager(loanManagerXPos);
+		acquireSemaphore(active);
+		if(this.getPerson().getWallet().getMoneyNeeded() == 0) {
+			getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getTooLittle());
+		}
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0) {
+			getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getMoneyNeeded());
+			this.getPerson().getWallet().setMoneyNeeded(0);//TODO check
+		}
+		state = State.atLoanManager;
+	}
+	
 	private void leaveBank() {
 		Do("leaving bank " + accountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
@@ -313,15 +346,6 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		securityGuard.msgLeavingBank(this);
 		doLeaveBank();
 		acquireSemaphore(active);
-	}
-	
-	private void askForLoan() {
-		Do("asking for loan");
-//		System.out.println("asking for loan from loanmanager");
-		doGoToLoanManager(loanManagerXPos);
-		acquireSemaphore(active);
-		getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getTooLittle());
-		state = State.atLoanManager;
 	}
 	
 	private void goOffWork() {

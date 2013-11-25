@@ -16,6 +16,7 @@ import agent.interfaces.Person;
 public class MarketRoleFactory implements RoleFactory{
 
 	Map<Person,market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
+	
 	@Override
 	public Role getCustomerRole(Person person) {
 		List<Item> ShoppingList = new ArrayList<Item>();
@@ -37,6 +38,7 @@ public class MarketRoleFactory implements RoleFactory{
 		}
 		else {
 			CustomerRole role = new CustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
+			role.setLocation(person.getPassengerRole().getLocation());
 			role.setPerson(person);
 			person.addRole(role);
 			return role;
@@ -44,4 +46,5 @@ public class MarketRoleFactory implements RoleFactory{
 		
 	}
 	
+
 }

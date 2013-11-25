@@ -37,4 +37,6 @@ public interface Passenger {
 
 	DirectionEnum currentDirection();
 
+	void setLocation(CityLocation startLocation);
+
 }

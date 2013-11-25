@@ -5,14 +5,16 @@ import gui.Building;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import org.hamcrest.core.IsInstanceOf;
-
 import agent.Constants;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
+import transportation.interfaces.Busstop;
+import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 
 public class PassengerGuiClass implements PassengerGui {
@@ -43,20 +45,63 @@ public class PassengerGuiClass implements PassengerGui {
 	public void updatePosition() {
 		int xDestination = destinationPos().x;
 		int yDestination = destinationPos().y;
-		if (xPos < xDestination)
-			xPos += 1;
-		else if (xPos > xDestination)
-			xPos -= 1;
-
-		if (yPos < yDestination)
-			yPos += 1;
-		else if (yPos > yDestination)
-			yPos -= 1;
-		
-		if (xPos == xDestination && yPos == yDestination) {
+		if (arrivedAtDestination(xDestination, yDestination)) {
 			onPlace();
+		} else if (destination.type() != LocationTypeEnum.Corner
+				|| startLocation.type() != LocationTypeEnum.Corner) {
+			if (xPos < xDestination)
+				xPos += 1;
+			else if (xPos > xDestination)
+				xPos -= 1;
+
+			if (yPos < yDestination)
+				yPos += 1;
+			else if (yPos > yDestination)
+				yPos -= 1;
+		} else {
+			switch (passenger.currentDirection()) {
+			case North:
+				yPos -= 1;
+				break;
+			case South:
+				yPos += 1;
+				break;
+			case West:
+				xPos -= 1;
+				break;
+			case East:
+				xPos += 1;
+				break;
+			case None:
+			default:
+				try {
+					throw new Exception("This shouldn't happen!"
+							+ " Person won't move!");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			}
 		}
 
+	}
+
+	public boolean arrivedAtDestination(int xDestination, int yDestination) {
+		if (destination.type() != LocationTypeEnum.Corner) {
+			return xPos == xDestination && yPos == yDestination;
+		} else {
+			return atEdgeOfCorner();
+		}
+	}
+
+	public boolean atEdgeOfCorner() {
+		return manhattanDistanceFromDestination()
+				< Constants.SPACE_BETWEEN_BUILDINGS;
+	}
+
+	private int manhattanDistanceFromDestination() {
+		return Math.abs(xPos - destination.position().x) +
+				Math.abs(yPos - destination.position().y);
 	}
 
 	private XYPos destinationPos() {
@@ -103,8 +148,8 @@ public class PassengerGuiClass implements PassengerGui {
 	}
 	
 	private XYPos calculateDrawingPosition() throws Exception {
-		XYPos response;
-		
+		XYPos response = new XYPos(xPos,yPos);
+		/*
 		switch (passenger.currentDirection()) {
 		case North:
 			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS/2
@@ -130,7 +175,7 @@ public class PassengerGuiClass implements PassengerGui {
 		default:
 			throw new Exception("This shouldn't happen");
 		}
-		
+		*/
 		//adjust from center to corner
 		response.x -= PASSENGERW/2;
 		response.y -= PASSENGERH/2;
@@ -173,6 +218,18 @@ public class PassengerGuiClass implements PassengerGui {
 	@Override
 	public XYPos getPos() {
 		return new XYPos(xPos, yPos);
+	}
+
+	@Override
+	public void doExitBus(Corner corner, boolean orientation) {
+		try {
+			doExitVehicle(corner.getBusstopWithDirection(orientation));
+			startLocation = ((Busstop) startLocation).corner();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Animation glitches due to exception");
+			doExitVehicle(corner);
+		}
 	}
 
 }

@@ -28,7 +28,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 	/* Specifies if the bus is following the route forwards 
 	 * (`true`) or backwards (`false`).
 	 */
-	boolean direction;
+	boolean orientation;
 	
 	//State the bus is in.
 	BusStateEnum busState = BusStateEnum.Moving; 
@@ -50,10 +50,10 @@ public class BusAgent extends VehicleAgent implements Bus {
 		PassengersOnBus
 	};
 	
-	public BusAgent(Corner currentCorner, boolean direction,
+	public BusAgent(Corner currentCorner, boolean orientation,
 			List<Corner> busRoute) {
 		super(currentCorner, true);
-		this.direction = direction;
+		this.orientation = orientation;
 		this.busRoute = busRoute;
 	}
 	
@@ -193,9 +193,14 @@ public class BusAgent extends VehicleAgent implements Bus {
 	@Override
 	void endTravel() {
 		currentPath = new ArrayList<Corner> (busRoute);
-		if (!direction) { 
+		if (!orientation) { 
 			java.util.Collections.reverse(currentPath);
 		}
+	}
+
+	@Override
+	public boolean orientation() {
+		return orientation;
 	}
 
 }

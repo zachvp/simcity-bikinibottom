@@ -9,7 +9,7 @@ public class MainFile extends JFrame {
 	public MainFile() {
 		HousingComplex complex = new HousingComplex();
 		add(complex);
-		this.setBounds(50, 50, 600, 600);
+		this.setBounds(50, 50,600, 490);
 	}
 
 	// TODO this is simply a test main() method

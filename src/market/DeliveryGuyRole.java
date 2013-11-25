@@ -39,6 +39,12 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
 
+	//Working Hour
+		int startinghour = 8;
+		int startingminutes = 29;
+		int endinghour = 18;
+		int endingminutes = 0;
+		
 	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
 		super(person);
 		name = NA;
@@ -160,16 +166,16 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	}
 	//Shifts
 		public int getShiftStartHour(){
-			return 8;
+			return startinghour;
 		}
 		public int getShiftStartMinute(){
-			return 29;
+			return startingminutes;
 		}
 		public int getShiftEndHour(){
-			return 18;
+			return endinghour;
 		}
 		public int getShiftEndMinute(){
-			return 0;
+			return endingminutes;
 		}
 		public boolean isAtWork(){
 			if (this.isActive())

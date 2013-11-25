@@ -70,12 +70,14 @@ public class CustomerRole extends Role implements Customer{
 			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
 		}
 		Map<String,Integer> CurrentInvent = person.getInventory();
+		/*
 		print ("I have " + CurrentInvent.get("Krabby Patty") + "Krabby Patty in my inventory");
 		print ("I have " + CurrentInvent.get("Kelp Shake") + "Kelp Shake in my inventory");
 		print ("I have " + CurrentInvent.get("Coral Bits") + "Coral Bits in my inventory");
 		print ("I have " + CurrentInvent.get("Kelp Rings") + "Kelp Rings in my inventory");
 		print ("I have " + CurrentInvent.get("LamboFinny") + "LamboFinny in my inventory");
 		print ("I have " + CurrentInvent.get("Toyoda") + "Toyoda in my inventory");
+		*/
 		
 		/*
 		for (int i=0;i<Inventory.size();i++){
@@ -99,7 +101,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	public void msgAnimationFinishedGoToCashier(){
-		print ("At FrontDesk now");
+		//print ("At FrontDesk now");
 		atFrontDesk.release();
 		state = Customerstate.GoingToOrder;
 		event = Customerevent.WaitingInLine;
@@ -141,7 +143,7 @@ public class CustomerRole extends Role implements Customer{
 	
 	//Action
 	private void GoToFindCashier(){
-		print ("Going to the Front Desk");
+		//print ("Going to the Front Desk");
 		customerGui.DoGoToFrontDesk();
 		try {
 			atFrontDesk.acquire();
@@ -152,7 +154,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	private void OrderItems(List<Item> ShoppingList){
-		print ("Order Items");
+		//print ("Order Items");
 		cashier.msgIWantItem(ShoppingList, this);
 		ExpectedCost = 0;
 		for (int i=0;i<ShoppingList.size();i++){
@@ -163,7 +165,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	private void PayItems(double cost){
-		print ("Pay Items");
+		//print ("Pay Items");
 		state = Customerstate.Paid;
 		if (cost == ExpectedCost){
 			if (cash >= cost){
@@ -190,7 +192,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	private void Leaving() {
-		print ("Leaving Market");
+		//print ("Leaving Market");
 		customerGui.DoExitMarket();
 		try {
 			atExit.acquire();

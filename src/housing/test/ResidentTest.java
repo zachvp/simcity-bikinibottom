@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class ResidentTest extends TestCase {
 	// testing Roles and Agents
 	PersonAgent residentPerson = new PersonAgent("Resident");
-	ResidentRole resident = new ResidentRole(residentPerson);
+	ResidentRole resident = new ResidentRole(residentPerson, null);
 	ResidentGui gui = new MockResidentGui(resident);
 	
 	// mock roles

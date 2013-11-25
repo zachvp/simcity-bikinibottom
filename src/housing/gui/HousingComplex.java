@@ -3,9 +3,6 @@ package housing.gui;
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import agent.Agent;
-import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -26,10 +22,10 @@ import agent.interfaces.Person;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 1;
-	private final int ROWS = 1;
-	private final int COLUMNS = 1;
-	private final int SPACING = 1;
+	private final int UNIT_COUNT = 4;
+	private final int ROWS = 2;
+	private final int COLUMNS = 2;
+	private final int SPACING = 10;
 	
 	// layout manager
 	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
@@ -87,13 +83,5 @@ public class HousingComplex extends JPanel {
 		( (Agent) person).startThread();
 		person.addRole(role);
 		( (Role) role).activate();
-	}
-
-	public PayRecipient getPayRecipientRole() {
-		return payRecipientRole;
-	}
-
-	public void setPayRecipientRole(PayRecipientRole payRecipientRole) {
-		this.payRecipientRole = payRecipientRole;
 	}
 }

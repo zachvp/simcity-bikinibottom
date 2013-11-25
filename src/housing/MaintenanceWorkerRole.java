@@ -33,6 +33,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		super(agent, residence);
 	}
 
+	public MaintenanceWorkerRole(PersonAgent person) {
+		super(person);
+	}
+
 	/* --- Messages --- */
 	public void msgFileWorkOrder(Dwelling dwelling) {
 		if(dwelling == null) {

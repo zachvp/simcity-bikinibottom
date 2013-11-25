@@ -72,6 +72,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		task.scheduleDailyTask(command, hour, minute);
 	}
 	
+	public PayRecipientRole(PersonAgent payRecipientPerson) {
+		super(payRecipientPerson);
+	}
+
 	/* ----- Messages ----- */
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);

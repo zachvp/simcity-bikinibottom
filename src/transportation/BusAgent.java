@@ -121,7 +121,10 @@ public class BusAgent extends VehicleAgent implements Bus {
 	// the exiting of passengers.
 	@Override
 	public void msgExiting(Passenger p) {
-		passengerList.remove(p);
+		synchronized (passengerList) {
+			passengerList.remove(p);
+		}
+		
 		/* TODO add counting mechanism if going to make 
 		 * passengers exit in order
 		 */
@@ -165,15 +168,17 @@ public class BusAgent extends VehicleAgent implements Bus {
 	 *  what `Corner` we are on so that they can decide to leave.
 	 */
 	private void letPassengersExit() {
-		for (Passenger passenger : passengerList) {
-			try {
-				passenger.msgWeHaveArrived(currentCorner);
-			} catch (Exception e) {
-				System.out.println("THIS SHOULDN'T HAPPEN!");
-				e.printStackTrace();
+		synchronized (passengerList) {
+			for (Passenger passenger : passengerList) {
+				try {
+					passenger.msgWeHaveArrived(currentCorner);
+				} catch (Exception e) {
+					System.out.println("THIS SHOULDN'T HAPPEN!");
+					e.printStackTrace();
+				}
 			}
 		}
-		
+
 		//TODO here we're not waiting for passengers to exit
 		busEvent = BusEventEnum.PassengersLeft;
 	}

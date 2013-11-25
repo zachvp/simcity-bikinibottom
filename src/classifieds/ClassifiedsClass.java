@@ -35,8 +35,11 @@ public class ClassifiedsClass implements Classifieds {
 	@Override
 	public List<WorkRole> getJobsForBuilding(CityBuilding building,
 			boolean returnOnlyOpenPositions) {
+		if(building == null){
+			return roles;
+		}
+		else{
 		List<WorkRole> response = new ArrayList<WorkRole>();
-		
 		for (WorkRole role : roles) {
 			if (role.getPerson() != null &&
 					returnOnlyOpenPositions)
@@ -48,6 +51,7 @@ public class ClassifiedsClass implements Classifieds {
 			}
 		}
 		return response;
+		}
 	}
 
 	@Override

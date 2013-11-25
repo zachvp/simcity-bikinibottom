@@ -66,7 +66,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		o.c = c;
 		o.ItemList = ItemList;
 		getOrders().add(o);
-		state = ItemCollectorstate.Idle;
 		stateChanged();
 	}
 
@@ -97,7 +96,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	//Scheduler
 	public boolean pickAndExecuteAnAction() {
-		if (state == ItemCollectorstate.Idle)
+		//if (state == ItemCollectorstate.Idle)
 		if(getOrders().size()!=0){
 			GoGetItems(getOrders().get(0));
 			return true;

@@ -18,10 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import market.CashierRole;
-import agent.PersonAgent;
 import agent.WorkRole;
-import agent.interfaces.Person;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
 
@@ -73,6 +70,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setMinimumSize(inputDim);
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
+		
+		
 		
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();		

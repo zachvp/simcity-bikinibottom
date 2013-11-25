@@ -51,11 +51,11 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 	 */
     @Override
 	public void setItemCollectorNumber(int i){
-    	if (i == 1){
+    	if (i == 0){
     		HomePosX = 195;
     	    CollectItemX = 170;
     	}
-    	if (i == 2){
+    	else{
     		HomePosX = 255;
     	    CollectItemX = 280;
     	}

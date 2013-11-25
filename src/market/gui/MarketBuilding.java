@@ -27,6 +27,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	private int endinghour = 18;
 	private int endingminutes = 0;
 	
+	XYPos entrancePosition;
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
 	MarketRecords records = new MarketRecords(animationPanel, this);
@@ -37,14 +38,12 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
+		entrancePosition = new XYPos(x + (width/2), y + height);
 	}
 
 	@Override
 	public XYPos entrancePos() {
-		// TODO Auto-generated method stub
-			//Pass down proper entrance position
-		return (new XYPos(0,0));
+		return (entrancePosition);
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public class BankGui extends JPanel implements ActionListener {
 
     private int testAccountId = 2000;
     
-    CityLocation bank = new BankBuilding(0, 0, 0, 0);
+//    CityLocation bank = new BankBuilding(0, 0, 0, 0);
     
     List<WorkRole> workRoles = new ArrayList<WorkRole>();
     
@@ -121,7 +121,7 @@ public class BankGui extends JPanel implements ActionListener {
        
         optionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         optionFrame.setBounds(WINDOWX, 50, WINDOWX, WINDOWY);
-        optionFrame.setVisible(true);
+//        optionFrame.setVisible(true);
         
         optionFrame.add(addCustomerButton);
     	setBounds(50, 50, WINDOWX, WINDOWY);
@@ -130,42 +130,42 @@ public class BankGui extends JPanel implements ActionListener {
 
         Dimension restDim = new Dimension(WINDOWX, (int) (WINDOWY * .3));
 
-        PersonAgent accountManagerPerson = new PersonAgent("accountManager");
-        PersonAgent loanManagerPerson = new PersonAgent("loanManagement");
-        accountManager = new AccountManagerRole(accountManagerPerson, bank);
-        accountManagerGui = new AccountManagerGui(accountManager);
-        animationPanel.addGui(accountManagerGui);
-        accountManager.setGui(accountManagerGui);
-        loanManager = new LoanManagerRole(loanManagerPerson, bank);
-        accountManagerPerson.addRole(accountManager);
-        accountManager.activate();
-        accountManagerPerson.startThread();
+//        PersonAgent accountManagerPerson = new PersonAgent("accountManager");
+//        PersonAgent loanManagerPerson = new PersonAgent("loanManagement");
+//        accountManager = new AccountManagerRole(accountManagerPerson, bank);
+//        accountManagerGui = new AccountManagerGui(accountManager);
+//        animationPanel.addGui(accountManagerGui);
+//        accountManager.setGui(accountManagerGui);
+//        loanManager = new LoanManagerRole(loanManagerPerson, bank);
+//        accountManagerPerson.addRole(accountManager);
+//        accountManager.activate();
+//        accountManagerPerson.startThread();
         
-        loanManagerGui = new LoanManagerGui(loanManager);
-        animationPanel.addGui(loanManagerGui);
-        loanManager.setGui(loanManagerGui);
-        loanManagerPerson.addRole(loanManager);
-        loanManager.activate();
-        loanManagerPerson.startThread();
+//        loanManagerGui = new LoanManagerGui(loanManager);
+//        animationPanel.addGui(loanManagerGui);
+//        loanManager.setGui(loanManagerGui);
+//        loanManagerPerson.addRole(loanManager);
+//        loanManager.activate();
+//        loanManagerPerson.startThread();
         
-        PersonAgent securityGuardPerson = new PersonAgent("securityguard");
-        securityGuardPerson.startThread();
-        securityGuard = new SecurityGuardRole(securityGuardPerson, bank);
+//        PersonAgent securityGuardPerson = new PersonAgent("securityguard");
+//        securityGuardPerson.startThread();
+//        securityGuard = new SecurityGuardRole(securityGuardPerson, bank);
         
         
 
-        securityGuardGui = new SecurityGuardGui(securityGuard);
-        securityGuard.setGui(securityGuardGui);
-        animationPanel.addGui(securityGuardGui);
-        securityGuardPerson.addRole(securityGuard);
-        securityGuard.activate();
+//        securityGuardGui = new SecurityGuardGui(securityGuard);
+//        securityGuard.setGui(securityGuardGui);
+//        animationPanel.addGui(securityGuardGui);
+//        securityGuardPerson.addRole(securityGuard);
+//        securityGuard.activate();
         
-        securityGuard.addRole(loanManager);
-        securityGuard.addRole(accountManager);
-        
-        workRoles.add(securityGuard);
-        workRoles.add(loanManager);
-        workRoles.add(accountManager);
+//        securityGuard.addRole(loanManager);
+//        securityGuard.addRole(accountManager);
+//        
+//        workRoles.add(securityGuard);
+//        workRoles.add(loanManager);
+//        workRoles.add(accountManager);
         
         Dimension graphicDim = new Dimension(WINDOWX, (int) (WINDOWY * .30));
 //       animationPanel.setBackground(Color.RED);
@@ -190,133 +190,133 @@ public class BankGui extends JPanel implements ActionListener {
  
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == addCustomerButton) {
-			System.out.println(text1.getText() + text2.getText());
-			addCustomer(text1.getText());
-		}
-		if(e.getSource() == addTellerButton) {
-			System.out.println("add teller");
-			addTeller(text2.getText());
-		}
-		if(e.getSource() == endWorkDayButton) {
-			System.out.println("ending work day");
-			securityGuard.msgLeaveWork();
-			
-		}
-		if(e.getSource() == resumeWorkButton) {
-			System.out.println("resuming work day");
-//			securityGuard.resumeWorkDay();
-		}
+//		if(e.getSource() == addCustomerButton) {
+//			System.out.println(text1.getText() + text2.getText());
+//			addCustomer(text1.getText());
+//		}
+//		if(e.getSource() == addTellerButton) {
+//			System.out.println("add teller");
+//			addTeller(text2.getText());
+//		}
+//		if(e.getSource() == endWorkDayButton) {
+//			System.out.println("ending work day");
+//			securityGuard.msgLeaveWork();
+//			
+//		}
+//		if(e.getSource() == resumeWorkButton) {
+//			System.out.println("resuming work day");
+////			securityGuard.resumeWorkDay();
+//		}
 		
 	}
 	
-	private void addTeller(String name) {
-        PersonAgent tellerPerson2 = new PersonAgent(name);
-        tellerPerson2.startThread();
-        TellerRole teller2 = new TellerRole(tellerPerson2, bank);
-        teller2.setAccountManager(accountManager);
-        teller2.setLoanManager(loanManager);
-        teller2.setDeskPosition(tellerDesk);
-        TellerGui tellerGui2 = new TellerGui(teller2);
-        teller2.setGui(tellerGui2);
-        animationPanel.addGui(tellerGui2);
-        tellerPerson2.addRole(teller2);
-        teller2.activate();
-        securityGuard.addTeller(teller2, tellerDesk);
-        teller2.doGoToWorkstation();
-        teller2.setSecurityGuard(securityGuard);
-        workRoles.add(teller2);
-        securityGuard.addRole(teller2);
-        tellerDesk++;
-	}
-	
-	private void addCustomer(String name) {
-		testAccountId++;
-		if(name.equals("hasAccount")) {
-	        PersonAgent bankCustomerPerson = new PersonAgent(name);
-	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
-	       
-	        accountManager.hackAddAccount(bankCustomer, 200, testAccountId);
-	        
-	        bankCustomer.addTeller(teller);
-	        bankCustomerPerson.addRole(bankCustomer);
-	        bankCustomer.activate();
-	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-	        bankCustomer.setGui(bankCustomergui);
-	        animationPanel.addGui(bankCustomergui);
-	        bankCustomer.msgGoToSecurityGuard(securityGuard);
-	        workRoles.add(bankCustomer);
-	        return;
-		}
-		if(name.equals("withdraw")){
-	        PersonAgent bankCustomerPerson = new PersonAgent(name);
-	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
-	        
-	        accountManager.hackAddAccount(bankCustomer, 300, testAccountId);
-	        
-	        bankCustomer.addTeller(teller);
-	        bankCustomerPerson.addRole(bankCustomer);
-	        bankCustomer.activate();
-	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-	        bankCustomer.setGui(bankCustomergui);
-	        animationPanel.addGui(bankCustomergui);
-	        bankCustomer.msgGoToSecurityGuard(securityGuard);
-	        workRoles.add(bankCustomer);
-	        return;
-		}
-		if(name.equals("loan")){
-	        PersonAgent bankCustomerPerson = new PersonAgent(name);
-	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
-	        
-	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
-
-	        bankCustomer.addTeller(teller);
-	        bankCustomerPerson.addRole(bankCustomer);
-	        bankCustomer.activate();
-	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-	        bankCustomer.setGui(bankCustomergui);
-	        animationPanel.addGui(bankCustomergui);
-	        bankCustomer.msgGoToSecurityGuard(securityGuard);
-	        workRoles.add(bankCustomer);
-	        return;
-		}
-		if(name.equals("deposit")){
-	        PersonAgent bankCustomerPerson = new PersonAgent(name);
-	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
-	       
-	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
-
-	        bankCustomer.addTeller(teller);
-	        bankCustomerPerson.addRole(bankCustomer);
-	        bankCustomer.activate();
-	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-	        bankCustomer.setGui(bankCustomergui);
-	        animationPanel.addGui(bankCustomergui);
-	        bankCustomer.msgGoToSecurityGuard(securityGuard);
-	        workRoles.add(bankCustomer);
-	        return;
-		}
-		else {//make a customer with no account
-	        PersonAgent bankCustomerPerson = new PersonAgent(name);
-	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank);
-	        bankCustomer.addTeller(teller);
-	        bankCustomerPerson.addRole(bankCustomer);
-	        bankCustomer.activate();
-	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
-	        bankCustomer.setGui(bankCustomergui);
-	        animationPanel.addGui(bankCustomergui);
-	        bankCustomer.msgGoToSecurityGuard(securityGuard);
-	        workRoles.add(bankCustomer);
-	        return;
-		}
-		
-
-	}
+//	private void addTeller(String name) {
+//        PersonAgent tellerPerson2 = new PersonAgent(name);
+//        tellerPerson2.startThread();
+//        TellerRole teller2 = new TellerRole(tellerPerson2, bank);
+//        teller2.setAccountManager(accountManager);
+//        teller2.setLoanManager(loanManager);
+//        teller2.setDeskPosition(tellerDesk);
+//        TellerGui tellerGui2 = new TellerGui(teller2);
+//        teller2.setGui(tellerGui2);
+//        animationPanel.addGui(tellerGui2);
+//        tellerPerson2.addRole(teller2);
+//        teller2.activate();
+//        securityGuard.addTeller(teller2, tellerDesk);
+//        teller2.doGoToWorkstation();
+//        teller2.setSecurityGuard(securityGuard);
+//        workRoles.add(teller2);
+//        securityGuard.addRole(teller2);
+//        tellerDesk++;
+//	}
+//	
+//	private void addCustomer(String name) {
+//		testAccountId++;
+//		if(name.equals("hasAccount")) {
+//	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+//	        bankCustomerPerson.startThread();
+//	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
+//	       
+//	        accountManager.hackAddAccount(bankCustomer, 200, testAccountId);
+//	        
+//	        bankCustomer.addTeller(teller);
+//	        bankCustomerPerson.addRole(bankCustomer);
+//	        bankCustomer.activate();
+//	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//	        bankCustomer.setGui(bankCustomergui);
+//	        animationPanel.addGui(bankCustomergui);
+//	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+//	        workRoles.add(bankCustomer);
+//	        return;
+//		}
+//		if(name.equals("withdraw")){
+//	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+//	        bankCustomerPerson.startThread();
+//	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
+//	        
+//	        accountManager.hackAddAccount(bankCustomer, 300, testAccountId);
+//	        
+//	        bankCustomer.addTeller(teller);
+//	        bankCustomerPerson.addRole(bankCustomer);
+//	        bankCustomer.activate();
+//	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//	        bankCustomer.setGui(bankCustomergui);
+//	        animationPanel.addGui(bankCustomergui);
+//	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+//	        workRoles.add(bankCustomer);
+//	        return;
+//		}
+//		if(name.equals("loan")){
+//	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+//	        bankCustomerPerson.startThread();
+//	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
+//	        
+//	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
+//
+//	        bankCustomer.addTeller(teller);
+//	        bankCustomerPerson.addRole(bankCustomer);
+//	        bankCustomer.activate();
+//	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//	        bankCustomer.setGui(bankCustomergui);
+//	        animationPanel.addGui(bankCustomergui);
+//	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+//	        workRoles.add(bankCustomer);
+//	        return;
+//		}
+//		if(name.equals("deposit")){
+//	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+//	        bankCustomerPerson.startThread();
+//	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
+//	       
+//	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
+//
+//	        bankCustomer.addTeller(teller);
+//	        bankCustomerPerson.addRole(bankCustomer);
+//	        bankCustomer.activate();
+//	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//	        bankCustomer.setGui(bankCustomergui);
+//	        animationPanel.addGui(bankCustomergui);
+//	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+//	        workRoles.add(bankCustomer);
+//	        return;
+//		}
+//		else {//make a customer with no account
+//	        PersonAgent bankCustomerPerson = new PersonAgent(name);
+//	        bankCustomerPerson.startThread();
+//	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank);
+//	        bankCustomer.addTeller(teller);
+//	        bankCustomerPerson.addRole(bankCustomer);
+//	        bankCustomer.activate();
+//	        BankCustomerGui bankCustomergui = new BankCustomerGui(bankCustomer);
+//	        bankCustomer.setGui(bankCustomergui);
+//	        animationPanel.addGui(bankCustomergui);
+//	        bankCustomer.msgGoToSecurityGuard(securityGuard);
+//	        workRoles.add(bankCustomer);
+//	        return;
+//		}
+//		
+//
+//	}
 	
 
 }

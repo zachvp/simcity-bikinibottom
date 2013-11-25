@@ -15,8 +15,6 @@ import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
-import CommonSimpleClasses.CityBuilding;
-import CommonSimpleClasses.XYPos;
 
 /**
  * HousingComplex is the equivalent of one building unit. It has 4 subdivisions
@@ -27,10 +25,10 @@ import CommonSimpleClasses.XYPos;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 1;
-	private final int ROWS = 1;
-	private final int COLUMNS = 1;
-	private final int SPACING = 0;
+	private final int UNIT_COUNT = 4;
+	private final int ROWS = 2;
+	private final int COLUMNS = 2;
+	private final int SPACING = 10;
 	
 	// layout manager
 	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);

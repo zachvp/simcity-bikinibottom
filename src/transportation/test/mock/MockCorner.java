@@ -14,20 +14,21 @@ import agent.mock.Mock;
 
 public class MockCorner extends Mock implements Corner {
 
-	public MockCorner(String name) {
+	private XYPos location;
+
+	public MockCorner(String name, int x, int y) {
 		super(name);
+		location = new XYPos(x, y);
 	}
 
 	@Override
 	public LocationTypeEnum type() {
-		// TODO Auto-generated method stub
-		return null;
+		return LocationTypeEnum.Busstop;
 	}
 
 	@Override
 	public XYPos position() {
-		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override

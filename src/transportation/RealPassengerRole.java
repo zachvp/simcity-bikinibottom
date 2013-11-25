@@ -43,7 +43,7 @@ public class RealPassengerRole extends PassengerRole {
 	Vehicle currentVehicle = null;
 
 	//True if `Passenger` has a `Car`.
-	boolean hasCar = true;
+	boolean hasCar = false;
 	
 	//True if `Passenger` is willing to take the bus.
 	boolean useBus = false;

@@ -41,8 +41,10 @@ public class CitizenRecords {
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
+		/*
 		person.setCar(new CarAgent((Corner) kelp.placesNearMe(new XYPos(0, 0), 
 						LocationTypeEnum.Corner).get(0)));
+						*/
 		//person.setHungerLevel(HungerLevel.STARVING,true);
 		
 		person.addRole(new RealPassengerRole(person, 

@@ -21,7 +21,7 @@ import bank.interfaces.Teller;
 //Build should not be problem
 public class AccountManagerRole extends WorkRole implements AccountManager {
 	private String name;
-	int currentIdNum = 1000; //starts at 1000 and increments
+	int currentIdNum = 1000; //starts at 1000 and increments TODO make this and accountmap static
 	List<Teller> tellers = new ArrayList<Teller>();
 	List<Task> tasks = new ArrayList<Task>();
 	
@@ -56,8 +56,12 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		BankCustomer bc;
 		double amount;
 	}
-	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();
+	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();//make STATIC
 	
+	int startHour = 9;
+	int startMinute = 0;
+	int endHour = 16;
+	int endMinute = 30;
 //	////////
 	
 	public AccountManagerRole(Person person){
@@ -211,7 +215,6 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		try {
 			s.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -241,29 +244,25 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 
 	@Override
 	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return startHour;
 	}
 
 
 	@Override
 	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return startMinute;
 	}
 
 
 	@Override
 	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return endHour;
 	}
 
 
 	@Override
 	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return endMinute;
 	}
 
 

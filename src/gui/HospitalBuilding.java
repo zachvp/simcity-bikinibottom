@@ -20,7 +20,7 @@ public class HospitalBuilding extends Building{
 	@Override
 	public XYPos entrancePos() {
 		// TODO Auto-generated method stub
-		return null;
+		return (new XYPos((int)x,(int)y));
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class HospitalBuilding extends Building{
 	@Override
 	public LocationTypeEnum type() {
 		// TODO Auto-generated method stub
-		return null;
+		return LocationTypeEnum.Hospital;
 	}
 
 	@Override

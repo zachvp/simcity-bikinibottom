@@ -111,12 +111,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
-        }
 				
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
@@ -129,6 +123,12 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.fill(b);
 			}
 		}
+		
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.draw(g2);
+            }
+        }
 	}
 
 	public void updatePosition() {

@@ -23,6 +23,7 @@ public class MainFile extends JFrame {
 		
 		// TODO test methods
 		this.population = new HashMap<Person, Role>();
+		/*
 		try {
 			this.addRole(new PersonAgent("Squidward"), "resident");
 			this.addRole(new PersonAgent("Mr. Krabs"), "payrecipient");
@@ -30,8 +31,10 @@ public class MainFile extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
+	/*
 	// role factory for the HousingBuilding
 	public void addRole(PersonAgent agent, String type) throws Exception{
 		// normalize the parameter
@@ -71,7 +74,7 @@ public class MainFile extends JFrame {
 		
 		complex.addWorker(worker);
 	}
-	
+	*/
 	private void startAndAddRole(PersonAgent agent, Role role) {
 		agent.startThread();
 		agent.addRole(role);

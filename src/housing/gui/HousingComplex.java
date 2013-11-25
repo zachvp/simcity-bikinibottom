@@ -36,10 +36,6 @@ public class HousingComplex extends JPanel {
 
 	// payRecipient who manages the complex 
 // 	private Person payRecipientPerson; = new PersonAgent("Pay Recipient");
- 	private PayRecipient payRecipientRole = new PayRecipientRole(null);
- 	
- 	// maintenance worker who repairs dwellings
- 	private MaintenanceWorker worker = new MaintenanceWorkerRole(null);
  	
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();

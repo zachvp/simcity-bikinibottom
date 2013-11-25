@@ -13,6 +13,10 @@ import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
+import housing.gui.ResidentRoleGui;
+import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.PayRecipient;
+import housing.interfaces.ResidentGui;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
@@ -31,8 +35,14 @@ public class ResidentialBuilding extends Building {
 	// this displays after clicking on the ResidentialBuilding
 	HousingComplex complex;
 	
+	// manages the complex
+	private PayRecipientRole payRecipientRole;
+	
+	// takes care of problems in the complex
+	private MaintenanceWorker worker;
+	
 	// used for producing jobs and residential roads in the complex
-	Map<Person, Role> population;
+	Map<Person, ResidentRole> population;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -44,13 +54,20 @@ public class ResidentialBuilding extends Building {
 		this.housingComplex = this;
 		this.complex = new HousingComplex();
 
-		this.population = new HashMap<Person, Role>();
+		this.population = new HashMap<Person, ResidentRole>();
 		
 		// Stagger opening/closing time
 		this.timeOffset = instanceCount + timeDifference;
 		instanceCount++;
+		
+		this.initializeRoles();
 	}
 
+	private void initializeRoles(){
+		// two objects that are common to all the dwellings in the complex
+		payRecipientRole = new PayRecipientRole(null, this);
+	 	worker = new MaintenanceWorkerRole(null, this);
+	}
 	
 	@Override
 	public XYPos entrancePos() {
@@ -59,7 +76,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getGreeter() {
-		return (Role) complex.getPayRecipientRole();
+		return payRecipientRole;
 	}
 
 	@Override
@@ -69,14 +86,19 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		Role role = population.get(person);
+		ResidentRole role = population.get(person);
+		
 		if(role == null) {
-			role = new ResidentRole((PersonAgent) person);
+			role = new ResidentRole((PersonAgent) person, this);
+			ResidentGui gui = new ResidentRoleGui(role);
+			role.setGui(gui);
 			role.setLocation(housingComplex);
 		}
+		
 		else {
 			role.setPerson(person);
 		}
+		
 		person.addRole(role);
 		return role;
 	}

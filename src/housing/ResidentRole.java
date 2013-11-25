@@ -6,11 +6,10 @@ import java.util.Map;
 
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
-import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
-import agent.interfaces.Person;
+import CommonSimpleClasses.CityLocation;
 import agent.mock.EventLog;
 import agent.mock.MockScheduleTaskListener;
 import agent.Constants;
@@ -83,8 +82,8 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent) {
-		super(agent);
+	public ResidentRole(PersonAgent agent, CityLocation residence) {
+		super(agent, residence);
 		
 		// ask everyone for rent
 		Runnable command = new Runnable() {
@@ -199,9 +198,10 @@ public class ResidentRole extends Role implements Resident {
 		Runnable command = new Runnable() {
 			public void run(){
 				DoSetFood("");
-				doneWaitingForInput();
 				food = null;
+				doneWaitingForInput();
 				stateChanged();
+				DoJazzercise();
 			}
 		};
 		listener.taskFinished(task);

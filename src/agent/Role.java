@@ -222,10 +222,8 @@ public abstract class Role {
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
 			
-			if (Constants.DEBUG) {
-				Do("next occurrence of " + hour + ":" + minute + " is in " +
-						initialDelay/1000 + " seconds");
-			}
+			Do("next occurrence of " + hour + ":" + minute + " is in " +
+					initialDelay/1000 + " seconds");
 		}
     
 	
@@ -239,10 +237,8 @@ public abstract class Role {
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.schedule(command, delay, unit);
 			
-			if (Constants.DEBUG) {
-				Do("next occurrence of " + hour + ":" + minute + " is in " +
-						delay/1000 + " seconds");
-			}
+			Do("next occurrence of " + hour + ":" + minute + " is in " +
+					delay/1000 + " seconds");
 		}
 		
 		/**
@@ -258,9 +254,7 @@ public abstract class Role {
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.schedule(command, convDelay, unit);
 			
-			if (Constants.DEBUG) {
 				Do("executing in " + convDelay / 1000 + " seconds");
-			}
 		}
     }
 }

@@ -5,6 +5,7 @@ import java.util.concurrent.Semaphore;
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -53,7 +54,16 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //		myCash.capacity = initialMoney + 20;
 //		this.getPerson().getWallet().getTooLittle() = initialMoney -20;
 		
-
+		// Set the security guard if necessary
+		if (securityGuard == null && bank instanceof BankBuilding) {
+			if (bank instanceof BankBuilding) {
+				BankBuilding bankBuilding = (BankBuilding) bank;
+				securityGuard = (SecurityGuard) bankBuilding.getGreeter();
+				// hopefully this works...
+			} else {
+				print("Error: Bank is not a BankBuilding.");
+			}
+		}
 	}
 	
 	public BankCustomerRole(Person person, CityLocation bank, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
@@ -421,11 +431,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	public State getState() {
 		return state;
 	}
-
-	public String toString() {
-		return "customer " + getName();
-	}
-
+	
 	public int getAccountId() {
 		return accountId;
 	}

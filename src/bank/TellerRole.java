@@ -357,11 +357,6 @@ public class TellerRole extends WorkRole implements Teller {
 	public void setLoanManager(LoanManager lm) {
 		loanManager = lm;
 	}
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
 
 	public List<MyCustomer> getMyCustomers() {
 		return myCustomers;

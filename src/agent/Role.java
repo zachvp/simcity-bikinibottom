@@ -29,8 +29,8 @@ public abstract class Role {
      * @see #getLocation()
      */
     protected Role(Person person, CityLocation location) {
-    	setPerson(person);
-    	setLocation(location);
+    	this.person = person;
+    	this.location = location;
     	
 		this.executor = Executors.newSingleThreadScheduledExecutor();
     }

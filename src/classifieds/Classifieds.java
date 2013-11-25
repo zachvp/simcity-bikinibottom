@@ -10,7 +10,7 @@ import agent.WorkRole;
 
 public interface Classifieds {
 	
-	/* Will return a list of WorkRoles. If building != null, 
+	/** Will return a list of WorkRoles. If building != null, 
 	 * returns only jobs for that building, else it returns 
 	 * jobs far all buildings. If returnOnlyOpenPositions
 	 * is true, it returns only open positions, else it 
@@ -19,7 +19,7 @@ public interface Classifieds {
 	List<WorkRole> getJobsForBuilding(CityBuilding building, 
 			boolean returnOnlyOpenPositions);
 	
-	/* Adds a role to the register. ALL WorkRoles must do
+	/** Adds a role to the register. ALL WorkRoles must do
 	 * this.
 	 */
 	void addWorkRole(WorkRole role);
@@ -28,4 +28,13 @@ public interface Classifieds {
 	
 	void addDwelling(Dwelling dwelling);
 	
+	/**
+	 * Adds the listener to a list of listeners that are updated when the
+	 * Classifieds change.
+	 */
+	void addListener(ClassifiedsChangedListener listener);
+	
+	/** Notifies all listeners that the Classifieds have changed. */
+	void notifyListeners();
+
 }

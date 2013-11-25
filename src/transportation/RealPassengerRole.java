@@ -146,7 +146,7 @@ public class RealPassengerRole extends PassengerRole {
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
 				Bus bus = (Bus) currentVehicle;
 				bus.msgExiting(this);
-				gui.doExitVehicle(location);
+				gui.doExitBus((Corner)location,bus.orientation());
 				currentVehicle = null;
 			} else if (currentVehicle != null && currentVehicle instanceof Car) {
 				currentVehicle = null;

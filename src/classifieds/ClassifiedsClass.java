@@ -17,6 +17,8 @@ public class ClassifiedsClass implements Classifieds {
 	private ClassifiedsClass() {}
 	
 	static ClassifiedsClass instance = null;
+	private List<ClassifiedsChangedListener> listeners
+			= new ArrayList<ClassifiedsChangedListener>();
 	
 	static public ClassifiedsClass getClassifiedsInstance() {
 		if (instance == null) {
@@ -67,11 +69,25 @@ public class ClassifiedsClass implements Classifieds {
 	@Override
 	public void addWorkRole(WorkRole role) {
 		roles.add(role);
+		 notifyListeners();
 	}
 
 	@Override
 	public void addDwelling(Dwelling dwelling) {
 		dwellings.add(dwelling);
+		notifyListeners();
+	}
+	
+	@Override
+	public void addListener(ClassifiedsChangedListener listener) {
+		listeners.add(listener);
+	}
+	
+	@Override
+	public void notifyListeners() {
+		for (ClassifiedsChangedListener listener : listeners) {
+			listener.classifiedsUpdated();
+		}
 	}
 
 }

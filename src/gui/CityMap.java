@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	
 	ArrayList<Building> buildings;
 	BuildingView buildingView; //Ref to buildingview
-	BufferedImage image;
+	BufferedImage image, hospitalImage, KrustyKrabImage, snailpoNullImage, bankImage, marketImage;
 	ImageIcon icon;
 	InfoPanel infoPanel;
 	
@@ -53,6 +55,12 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
+			hospitalImage = ImageIO.read(getClass().getResource("hospital.png"));
+			KrustyKrabImage = ImageIO.read(getClass().getResource("krusty_krab.png"));
+			snailpoNullImage = ImageIO.read(getClass().getResource("snailpo_sign.png"));
+			bankImage = ImageIO.read(getClass().getResource("bank.png"));
+			marketImage = ImageIO.read(getClass().getResource("market.png"));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,14 +123,47 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-				
+		Rectangle2D tr;	
+		TexturePaint tp;
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
-			if(b.getName().equals("Hospital")){
-				g2.setColor(Color.white);
+			if(b.type() == LocationTypeEnum.Hospital){
+				tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(hospitalImage, tr);
+				//g2.setColor(Color.white);
+				g2.setPaint(tp);
 				g2.fill(b);
-				
-			}else{
+			}
+			else if(b.type() == LocationTypeEnum.Restaurant){
+				 tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(KrustyKrabImage, tr);
+				g2.setPaint(tp);
+				g2.fill(b);
+			}
+			else if(b.type() == LocationTypeEnum.None){
+				tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(snailpoNullImage, tr);
+				g2.setPaint(tp);
+				g2.fill(b);
+			}
+			else if(b.type() == LocationTypeEnum.Bank){
+				tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(bankImage, tr);
+				g2.setPaint(tp);
+				g2.fill(b);
+			}
+			else if(b.type() == LocationTypeEnum.Market){
+				tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(marketImage, tr);
+				g2.setPaint(tp);
+				g2.fill(b);
+			}
+			else{
 				g2.setColor(Color.DARK_GRAY);
 				g2.fill(b);
 			}

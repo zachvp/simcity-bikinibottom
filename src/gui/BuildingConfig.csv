@@ -11,9 +11,9 @@
 #Make sure not to leave empty lines, or lines with data that do not start
 #with an digit,
 6,Hospital
-0,Market1
+3,Market1
 0,House1
-0,Market2
+3,Market2
 2,Bank2
 1,Restaurant1
 2,Bank3

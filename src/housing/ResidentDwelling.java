@@ -48,6 +48,7 @@ public class ResidentDwelling implements Dwelling {
 			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
 			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
 			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			default : this.monthlyPaymentAmount = 0; break;
 		}
 	}
 	

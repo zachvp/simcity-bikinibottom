@@ -10,9 +10,10 @@ import java.util.List;
 import agent.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import agent.mock.EventLog;
 
-public class MaintenanceWorkerRole extends Role implements MaintenanceWorker {
+public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker {
 	/* --- Data --- */
 	EventLog log = new EventLog();
 	List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
@@ -71,5 +72,42 @@ public class MaintenanceWorkerRole extends Role implements MaintenanceWorker {
 		log.add("Fixed problem.");
 		
 //		DoReturnHome();
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return 6;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return 11;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return 0;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 }

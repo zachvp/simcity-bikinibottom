@@ -1,12 +1,12 @@
 package classifieds;
 
+import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.ws.Response;
-
 
 import CommonSimpleClasses.CityBuilding;
 import agent.Role;
@@ -56,7 +56,8 @@ public class ClassifiedsClass implements Classifieds {
 		List<Dwelling> response = new ArrayList<Dwelling>();
 		
 		for (Dwelling dwelling : dwellings) {
-			if (dwelling.getResident() != null
+			ResidentRole role = (ResidentRole) (dwelling.getResident());
+			if (role.getPerson() != null
 					&& returnOnlyOpenRooms) {
 				continue;
 			}

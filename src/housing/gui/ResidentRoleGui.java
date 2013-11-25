@@ -1,5 +1,6 @@
 package housing.gui;
 
+import housing.ResidentRole;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -36,8 +37,8 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private final int JAZZER_SPOT_Y = 0;
 	
 	/* --- Constructor --- */
-	public ResidentRoleGui(Resident residentRole) {
-		this.resident = residentRole;
+	public ResidentRoleGui(ResidentRole role) {
+		this.resident = role;
 	}
 
 	/**
@@ -95,6 +96,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	
 	public void DoGoToRefrigerator(){
 		waiting = false;
+		if(layoutGui == null) System.out.println("Gui is null");
 		xDestination = layoutGui.getRefrigeratorPosition().width;
 		yDestination = layoutGui.getRefrigeratorPosition().height;
 		canRelease = true;

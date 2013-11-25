@@ -35,6 +35,7 @@ import kelp.KelpClass;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
@@ -216,8 +217,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				BankBuilding bank = new BankBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT); //Rectangle
 				bank.setName(buildingName);
 				construct(bank);
-
-
+				
 				//keep Buildings in a list for kelp
 				//calc pos of new rect -- getNextBuildingPos() from CityMap
 				//JPanel BankAnimaitonPanel = bank.getAnimationPanel()
@@ -237,12 +237,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				//construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				//restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
-
-				//RestaurantRecords restRecords = new restaurant.strottma.gui.RestaurantRecords(animationPanel);
-				//citizenRecords.addBuildingRecord(restRecords);
-
-				//construct(buildingName, animationPanel, LocationTypeEnum.Restaurant); 
+				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				restaurant.setName(buildingName);
+				construct(restaurant);
 			}
 			if(type == LocationTypeEnum.Market){
 				MarketBuilding market = new MarketBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
@@ -267,7 +264,8 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(mock);
 			}
 		}
-		//initializeCornerMapAndKelp(constructedBuildings);
+		
+		initializeCornerMapAndKelp(constructedBuildings);
 		hospital.setBuildings(constructedBuildings);
 	}
 

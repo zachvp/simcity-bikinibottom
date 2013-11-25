@@ -32,7 +32,8 @@ import agent.interfaces.Person;
 
 public class CashierRole extends WorkRole implements Cashier {
 
-//public EventLog log = new EventLog();
+private static final int startingminute = 0;
+	//public EventLog log = new EventLog();
 	private CashierGuiInterfaces cashierGui = null;
 	private String name;
 	private double MarketTotalMoney;
@@ -55,6 +56,12 @@ public class CashierRole extends WorkRole implements Cashier {
 			InventoryList.put(agent.Constants.CARS.get(i), 100);
 		}
 	}
+	
+	//Working Hour
+	int startinghour = 8;
+	int startingminutes = 29;
+	int endinghour = 18;
+	int endingminutes = 0;
 	
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
 	{
@@ -105,6 +112,9 @@ public class CashierRole extends WorkRole implements Cashier {
 			
 			}
 		};
+		
+		
+		
 		
 		int hour = 6;
 		int minute = 30;
@@ -449,16 +459,16 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	//Shifts
 	public int getShiftStartHour(){
-		return 8;
+		return startinghour;
 	}
 	public int getShiftStartMinute(){
-		return 29;
+		return startingminutes;
 	}
 	public int getShiftEndHour(){
-		return 18;
+		return endinghour;
 	}
 	public int getShiftEndMinute(){
-		return 0;
+		return endingminutes;
 	}
 	public boolean isAtWork(){
 		if (this.isActive())

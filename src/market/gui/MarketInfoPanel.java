@@ -254,7 +254,7 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 
 	public void UpdateInventoryLevelWithoutButton(){
 		
-		System.out.println("IMHERE");
+		//System.out.println("IMHERE");
 		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
 		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
 		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));

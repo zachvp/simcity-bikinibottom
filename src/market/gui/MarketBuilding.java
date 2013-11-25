@@ -13,6 +13,7 @@ import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.RoleFactory;
+import agent.TimeManager;
 import agent.interfaces.Person;
 
 
@@ -20,6 +21,11 @@ import agent.interfaces.Person;
 
 public class MarketBuilding extends gui.Building implements RoleFactory{
 
+	private int startinghour = 8;
+	private int startingminutes = 29;
+	private int endinghour = 18;
+	private int endingminutes = 0;
+	
 	String name;
 	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
 	MarketRecords records = new MarketRecords(animationPanel, this);
@@ -46,6 +52,11 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 			//Pass Cashier
 		return records.ca;
 	}
+	
+	public boolean isOpen() {
+		return (TimeManager.getInstance().isNowBetween(startinghour,startingminutes,endinghour,endingminutes));
+	}
+	
 
 	@Override
 	public LocationTypeEnum type() {

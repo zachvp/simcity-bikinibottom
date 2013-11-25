@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Constants;
 import agent.gui.Gui;
@@ -45,6 +46,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
+		setMaximumSize(panelDim);
+		setMinimumSize(panelDim);
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
@@ -52,6 +55,9 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 			e.printStackTrace();
 		}
 		icon = new ImageIcon(image);
+		
+		// Add the transportations to the guis
+		guis.add(TransportationGuiController.getInstance());
 
 		buildings = new ArrayList<Building>();
 
@@ -61,11 +67,12 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
     	timer.start();
     	
     	utilTimer = new java.util.Timer();
+
     	utilTimer.scheduleAtFixedRate(new TimerTask() {
     		public void run() {
     			updatePosition();
     		}
-    	}, 100, 100);
+    	}, 10000, 25);
 	}
 	
 	/**
@@ -106,12 +113,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
-        }
 				
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
@@ -124,6 +125,12 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.fill(b);
 			}
 		}
+		
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.draw(g2);
+            }
+        }
 	}
 
 	public void updatePosition() {

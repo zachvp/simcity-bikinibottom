@@ -34,7 +34,7 @@ public class CustomerRole extends Role implements Customer {
 	Semaphore multiStepAction = new Semaphore(0, true);
 	
 	public static int WS_COUNT = 5;
-	public static int WS_X_OFFSET = 100; // how far the whole area is offset
+	public static int WS_X_OFFSET = 100-100; // how far the whole area is offset
 	public static int WS_Y_OFFSET = 14;
 	public static int WS_X_SPACING = 10; // how far each spot is separated from the last
 	public static int WS_Y_SPACING = 10;

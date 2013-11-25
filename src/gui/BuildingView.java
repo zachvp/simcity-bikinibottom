@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 
@@ -24,6 +25,7 @@ public class BuildingView extends JPanel implements ActionListener{
 		d = new Dimension(w, h);//(w-15, h-70);
 		setSize(d);
 		setLayout(new CardLayout());
+		//setBorder(BorderFactory.);
 		setVisible(true);
 
 		//TODO change to welcome card?

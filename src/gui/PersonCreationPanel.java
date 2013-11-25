@@ -18,10 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import market.CashierRole;
-import agent.PersonAgent;
+import bank.TellerRole;
 import agent.WorkRole;
-import agent.interfaces.Person;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
 
@@ -66,6 +64,9 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		
 		welcomeText.setFont(font);
 		
+		//TODO test
+		WorkRole test = new TellerRole(null, null);
+		
 		JPanel inputPanel = new JPanel();
 		Dimension inputDim = new Dimension(d.width, (int)(d.height*0.3));
 		inputPanel.setPreferredSize(inputDim);
@@ -73,6 +74,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setMinimumSize(inputDim);
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
+		
+		
 		
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();		
@@ -87,6 +90,12 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 				nameTextF.setText(null);
 			}
 		});
+		
+		nameTextF.setText("mr balloon hands");
+		occupationsCB.setSelectedIndex(1);
+		residencesCB.setSelectedIndex(1);
+		wealthCB.setSelectedIndex(1);
+		carCB.setSelectedIndex(2);
 
 		inputPanel.add(new JLabel("Name: "));
 		inputPanel.add(nameTextF);
@@ -161,7 +170,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
 		
 		for(WorkRole w: newJobs){
-			occList.add(w.toString());
+			occList.add(w.getClass().getSimpleName());
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
 	}

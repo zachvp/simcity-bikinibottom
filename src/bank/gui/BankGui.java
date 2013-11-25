@@ -173,6 +173,10 @@ public class BankGui extends JPanel implements ActionListener {
         this.add(animationPanel);//animation panel added here FIXIT
 
     }
+    
+    public AnimationPanel getAnimationPanel()  {
+    	return animationPanel;
+    }
     /**
      * updateInfoPanel() takes the given customer (or, for v3, Host) object and
      * changes the information panel to hold that person's info.

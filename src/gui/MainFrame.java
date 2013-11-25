@@ -35,7 +35,9 @@ import kelp.KelpClass;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
+import transportation.BusAgent;
 import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
@@ -110,23 +112,23 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingViewSlot.setPreferredSize(buildingDim);
 		buildingViewSlot.setMaximumSize(buildingDim);
 		buildingViewSlot.setMinimumSize(buildingDim);
-		buildingViewSlot.setBorder(BorderFactory.createTitledBorder("Building View"));
+		//buildingViewSlot.setBorder(BorderFactory.createTitledBorder("Building View"));
 		buildingViewSlot.setOpaque(false);
 		buildingViewPanel = new BuildingView(buildingDim.width, buildingDim.height);
 		buildingViewSlot.add(buildingViewPanel);
 
 		//City map view
-		Dimension cityDim = new Dimension((int)(WINDOWX * .5), (int) (WINDOWY * .7));
+		Dimension cityDim = new Dimension(((int)(WINDOWX * .5))-10, (int) (WINDOWY * .7));
 		cityViewSlot.setPreferredSize(cityDim);
 		cityViewSlot.setMaximumSize(cityDim);
 		cityViewSlot.setMinimumSize(cityDim);
 		cityViewSlot.setOpaque(false);
-		cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
+		//cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
 		map = new CityMap();
-		cityViewPanel = new CityView(cityDim.width, cityDim.height, this, map);
+		//cityViewPanel = new CityView(cityDim.width, cityDim.height, this, map);
 
 		map.setBuildingView(buildingViewPanel);
-		cityViewSlot.add(cityViewPanel);
+		cityViewSlot.add(map);
 
 		//Information Panel 720x210
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
@@ -197,7 +199,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				semaphore.release();
 				
 			}
-		}, 2000);
+		}, 8000);
 		
 		try {
 			semaphore.acquire();
@@ -216,8 +218,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				BankBuilding bank = new BankBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT); //Rectangle
 				bank.setName(buildingName);
 				construct(bank);
-
-
+				
 				//keep Buildings in a list for kelp
 				//calc pos of new rect -- getNextBuildingPos() from CityMap
 				//JPanel BankAnimaitonPanel = bank.getAnimationPanel()
@@ -237,12 +238,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				//construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				//restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
-
-				//RestaurantRecords restRecords = new restaurant.strottma.gui.RestaurantRecords(animationPanel);
-				//citizenRecords.addBuildingRecord(restRecords);
-
-				//construct(buildingName, animationPanel, LocationTypeEnum.Restaurant); 
+				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				restaurant.setName(buildingName);
+				construct(restaurant);
 			}
 			if(type == LocationTypeEnum.Market){
 				MarketBuilding market = new MarketBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
@@ -267,7 +265,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(mock);
 			}
 		}
-		//initializeCornerMapAndKelp(constructedBuildings);
+		initializeCornerMapAndKelp(constructedBuildings);
 		hospital.setBuildings(constructedBuildings);
 	}
 
@@ -302,6 +300,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		for (Corner corner : corners) {
 			locations.add(corner);
+			List<Busstop> busstops = corner.getBusstops();
+			for (Busstop busstop : busstops) {
+				locations.add(busstop);
+			}
 		}
 
 		try {
@@ -309,6 +311,24 @@ public class MainFrame extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		for (Corner corner : corners) {
+			corner.startThreads();
+		}
+		
+		BusAgent busAgent = new BusAgent(corners.get(1),
+				true, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+
+		busAgent = new BusAgent(corners.get(0),
+				false, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+		
+		
 	}
 
 	/** Utilities **/

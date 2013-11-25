@@ -27,7 +27,7 @@ public class BankBuilding extends Building {
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
 	
-	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
 	
 	int startHour = 9;
@@ -43,7 +43,7 @@ public class BankBuilding extends Building {
 		entrancePosition = new XYPos(x + (width/2), y + height);
 		bankGui = new BankGui();
 		this.bank = this;
-		this.existingRoles = new HashMap<Person, Role>();
+		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -64,9 +64,13 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		Role role = existingRoles.get(person);
+		
+		BankCustomerRole role = existingRoles.get(person);
 		if(role == null) {
 			role = new BankCustomerRole(person, bank);
+			BankCustomerGui bcg = new BankCustomerGui(role);
+			role.setGui(bcg);
+			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
 		}
 		else {
@@ -78,7 +82,7 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return bankGui;
+		return bankGui.getAnimationPanel();
 	}
 
 	@Override

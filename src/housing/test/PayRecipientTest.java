@@ -67,8 +67,4 @@ public class PayRecipientTest extends TestCase {
 		assertEquals("Resident should now owe no money.",
 				0.0, mr.getOwes());
 	}
-	
-	private void testFileWorkOrderAndFixProblem() {
-		
-	}
 }

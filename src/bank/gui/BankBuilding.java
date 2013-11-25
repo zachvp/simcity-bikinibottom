@@ -21,12 +21,11 @@ import bank.SecurityGuardRole;
 public class BankBuilding extends Building {
 
 //	CityBuilding cityBuilding;// = new CityBuilding();
-	XYPos entrancePosition = new XYPos(300, 500);
+	XYPos entrancePosition;// = new XYPos(300, 500);
 	SecurityGuardRole securityGuardRole;// = new SecurityGuardRole(person);
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
-	JPanel infoPanel = new JPanel();
 	
 	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
@@ -36,10 +35,13 @@ public class BankBuilding extends Building {
 	int endHour = 16;
 	int endMinute = 30;
 	
-	private AnimationPanel animationPanel = new AnimationPanel();
+	//private AnimationPanel animationPanel = new AnimationPanel();
+	BankGui bankGui;
 	
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		entrancePosition = new XYPos(x + (width/2), y + height);
+		bankGui = new BankGui();
 		this.bank = this;
 		this.existingRoles = new HashMap<Person, Role>();
 		// TODO Auto-generated constructor stub
@@ -76,13 +78,12 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return animationPanel;
+		return bankGui;
 	}
 
 	@Override
 	public JPanel getInfoPanel() {
-		infoPanel.setBackground(Color.BLUE);
-		return infoPanel;
+		return new JPanel();
 	}
 	
 	public boolean isOpen() {

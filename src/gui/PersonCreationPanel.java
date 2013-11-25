@@ -1,5 +1,7 @@
 package gui;
 
+import housing.interfaces.Dwelling;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,14 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.*;
 
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import agent.PersonAgent;
+import agent.WorkRole;
+import classifieds.Classifieds;
+import classifieds.ClassifiedsClass;
 
 /**
  * Panel for creating PersonAgents from UI
@@ -26,14 +33,18 @@ import agent.PersonAgent;
 public class PersonCreationPanel extends JPanel implements ActionListener{
 	
 	private CitizenRecords citizenRecords;
-
+	Classifieds classifieds = ClassifiedsClass.getClassifiedsInstance();
 	
-	JTextField nameText;
-	JComboBox<String> occupations;
-	JComboBox<String> residences;
-	JComboBox<String> wealth;
-	JComboBox<String> car;
+	JTextField nameTextF;
+	JComboBox<String> occupationsCB;
+	JComboBox<String> residencesCB;
+	JComboBox<String> wealthCB;
+	JComboBox<String> carCB;
 	JButton createButton;
+	ArrayList<String> occList = new ArrayList<String>();
+	String[] occupationArray;
+	ArrayList<String> resList = new ArrayList<String>();
+	String[] residentArray;
 	
 	JLabel msg;
 
@@ -62,28 +73,33 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
 		
-		nameText = new JTextField("Enter a name");
-		occupations = new JComboBox<String>(new String[] {"Select an Occupation", "None"});
-		residences = new JComboBox<String>(new String[] {"Select a Residence", "None"});
-		wealth = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
-		car = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
+		//occupationList.add("Select an Occupation");
+		//occupationList.add("None");
+		
+		nameTextF = new JTextField("Enter a name");		
+		checkClassifiedsforJobs();		
+		occupationsCB = new JComboBox<String>(occupationArray);
+		checkClassifiedsforHome();
+		residencesCB = new JComboBox<String>(residentArray);
+		wealthCB = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
+		carCB = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
 
-		nameText.addMouseListener(new MouseAdapter() {
+		nameTextF.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				nameText.setText(null);
+				nameTextF.setText(null);
 			}
 		});
 
 		inputPanel.add(new JLabel("Name: "));
-		inputPanel.add(nameText);
+		inputPanel.add(nameTextF);
 		inputPanel.add(new JLabel("Occupation: "));
-		inputPanel.add(occupations);
+		inputPanel.add(occupationsCB);
 		inputPanel.add(new JLabel("Residence: "));
-		inputPanel.add(residences);
+		inputPanel.add(residencesCB);
 		inputPanel.add(new JLabel("Status: "));
-		inputPanel.add(wealth);
+		inputPanel.add(wealthCB);
 		inputPanel.add(new JLabel("Car: "));
-		inputPanel.add(car);
+		inputPanel.add(carCB);
 		
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
@@ -105,20 +121,20 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == createButton){
-			String name = nameText.getText();
-			String job = (String)occupations.getSelectedItem();
-			String home = (String)residences.getSelectedItem();
-			String status = (String)wealth.getSelectedItem();
-			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
+			String name = nameTextF.getText();
+			String job = (String)occupationsCB.getSelectedItem();
+			String home = (String)residencesCB.getSelectedItem();
+			String status = (String)wealthCB.getSelectedItem();
+			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
 			
-			if(!incompleteInputs(name, job, home, status, (String)car.getSelectedItem())){
+			if(!incompleteInputs(name, job, home, status, (String)carCB.getSelectedItem())){
 											
 				//reset input fields
-				nameText.setText("");
-				occupations.setSelectedIndex(0);
-				residences.setSelectedIndex(0);
-				wealth.setSelectedIndex(0);
-				car.setSelectedIndex(0);
+				nameTextF.setText("");
+				occupationsCB.setSelectedIndex(0);
+				residencesCB.setSelectedIndex(0);
+				wealthCB.setSelectedIndex(0);
+				carCB.setSelectedIndex(0);
 				
 				//create new PersonAgent
 				//PersonAgent newPerson = new PersonAgent(name);
@@ -132,8 +148,43 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			else{
 				msg.setText("Please complete all inputs");
 			}
+			//Checks for Classifieds updates after each creation
+			checkClassifiedsforJobs();
 		}
+	}
+	
+	//TODO needs testing
+	private void checkClassifiedsforJobs(){
+		occList.clear();
+		occList.add("Select an Occupation");
+		occList.add("None");
 		
+		ArrayList<WorkRole> newJobs = new ArrayList<WorkRole>();
+		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
+		
+		for(WorkRole w: newJobs){
+			occList.add(w.getName());
+		}
+		occupationArray = occList.toArray(new String[newJobs.size()]);
+		
+		//ArrayList<WorkRole> newJobs = new ArrayList<WorkRole>();
+		//newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
+		//occupationArray = newJobs.toArray(new String[newJobs.size()]);
+	}
+	
+	//TODO needs testing
+	private void checkClassifiedsforHome(){
+		resList.clear();
+		resList.add("Select a Residence");
+		resList.add("None");
+		
+		ArrayList<Dwelling> newHomes = new ArrayList<Dwelling>();
+		newHomes.addAll((ArrayList<Dwelling>) classifieds.getRooms(true));
+		
+		for(Dwelling w: newHomes){
+			resList.add(w.toString()); //TODO check if name is correct
+		}
+		residentArray = resList.toArray(new String[newHomes.size()]);
 	}
 	
 	/**
@@ -147,7 +198,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 	 */
 
 	private boolean incompleteInputs(String name, String job, String home,
-			String wealthStatus, String car) {
+			String wealth, String car) {
 		return (name == null) ||(name.equals("Enter a name")) ||(name.equals(""))
 				|| (job.equals("Select an Occupation")) 
 				|| (home.equals("Select a Residence") 

@@ -28,19 +28,9 @@ public interface Person {
 	 */
 	public void addRole(Role r);
 	
-	/**
-	 * @see Wallet
-	 */
 	public Wallet getWallet();
 	
-	/**
-	 * @see Car
-	 */
 	public Car getCar();
-	
-	/**
-	 * @see Car
-	 */
 	public void setCar(Car car);
 	
 	

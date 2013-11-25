@@ -475,6 +475,7 @@ public class PersonAgent extends Agent implements Person {
 		return hungerLevel == HungerLevel.STARVING;
 	}
 	
+	@Override
 	public boolean isHungry() {
 		return hungerLevel == HungerLevel.STARVING ||
 				hungerLevel == HungerLevel.HUNGRY; 

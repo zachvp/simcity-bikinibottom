@@ -31,7 +31,8 @@ public class TimeManagerTest extends TestCase {
 	static final long SBSP_P1_0200 = 925635600000L;
 	// Sun May 02 1999 16:30:00 GMT-0700 (PDT)
 	static final long SBSP_P1_1630 = 925687800000L;
-		
+	
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		

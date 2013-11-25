@@ -1,5 +1,8 @@
 package housing;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
@@ -9,15 +12,36 @@ import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
 
+/**
+ * ResidentialBuilding is the class that will be slotted into the city map itself.
+ * It will then display in the overview city map. Upon clicking on it, the view within
+ * the ResidentialBuilding with the detailed housing animations will pop up. 
+ * @author Zach VP
+ */
+
 public class ResidentialBuilding extends Building {
-	XYPos entrancePos;
-	HousingComplex complex = new HousingComplex();
-	
+	// ResidentialBuilding is a CityLocation that will be added to kelp
 	CityLocation housingComplex;
+	
+	// location for the "door" to the building
+	XYPos entrancePos;
+	
+	// this displays after clicking on the ResidentialBuilding
+	HousingComplex complex;
+	
+	// used for producing jobs and residential roads in the complex
+	Map<Person, Role> roles;
+	
+	// constants
+	private final int EMPLOYEE_START_HOUR = 6;
+	private final int EMPLOYEE_END_HOUR = 11;
 
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		entrancePos = new XYPos(x + width/2, height);
+		this.entrancePos = new XYPos(width/2, height);
+		this.housingComplex = this;
+		this.complex = new HousingComplex();
+		this.roles = new HashMap<Person, Role>();
 	}
 
 	@Override
@@ -37,8 +61,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		
-		return this.getGreeter();
+		return null;
 	}
 
 	@Override

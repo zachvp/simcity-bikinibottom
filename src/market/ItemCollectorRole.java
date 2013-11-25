@@ -2,6 +2,7 @@ package market;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
 import agent.gui.Gui;
+import agent.interfaces.Person;
 
 public class ItemCollectorRole extends WorkRole implements ItemCollector{
 
@@ -30,7 +32,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	private String name;
 	private Cashier cashier;
 	private Map<String, Integer> InventoryList = null;
-	private List<Order> Orders = new ArrayList<Order>();
+	private List<Order> Orders = Collections.synchronizedList(new ArrayList<Order>());
 
 	private Semaphore atStation = new Semaphore (0,true);
 	private Semaphore atHome = new Semaphore (0,true);
@@ -44,7 +46,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	public ItemCollectorRole(String na, PersonAgent person, MarketBuilding cL){
+	public ItemCollectorRole(String na, Person person, MarketBuilding cL){
 		super(person, cL);
 		name = na;
 		
@@ -65,7 +67,9 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
-		getOrders().add(o);
+		synchronized(getOrders()){
+			getOrders().add(o);
+		}
 		stateChanged();
 	}
 
@@ -119,9 +123,11 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (int i=0;i<getOrders().size();i++){
-			if (o == getOrders().get(i)){
-				getOrders().remove(i);
+		synchronized(getOrders()){
+			for (int i=0;i<getOrders().size();i++){
+				if (o == getOrders().get(i)){
+					getOrders().remove(i);
+				}
 			}
 		}
 		List<Item> MissingList = new ArrayList<Item>();

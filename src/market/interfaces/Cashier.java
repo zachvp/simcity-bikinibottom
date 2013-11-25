@@ -26,6 +26,7 @@ public interface Cashier {
 	public abstract void addDGList(DeliveryGuy DG);
 	public abstract void setICList(List<ItemCollector> list);
 	public abstract void addICList(ItemCollector IC, Map<String,Integer> IList);
+	public abstract Map<String, Integer> getInventoryList();
 	public abstract String getMaitreDName();
 	public abstract String getName();
 
@@ -33,6 +34,8 @@ public interface Cashier {
 	public abstract void AtFrontDesk();
 	public abstract void AtBench();
 	public abstract void AtExit();
+
+	
 	
 	
 	

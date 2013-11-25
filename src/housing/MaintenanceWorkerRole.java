@@ -14,8 +14,8 @@ import agent.mock.EventLog;
 
 public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker {
 	/* --- Data --- */
-	EventLog log = new EventLog();
-	List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
+	public EventLog log = new EventLog();
+	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
 	
 	enum WorkOrderState {FILED, FIXED}
 	private class WorkOrder {
@@ -45,7 +45,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	}
 	
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
@@ -108,5 +108,13 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	public void msgLeaveWork() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public List<WorkOrder> getWorkOrders() {
+		return workOrders;
+	}
+
+	public void setWorkOrders(List<WorkOrder> workOrders) {
+		this.workOrders = workOrders;
 	}
 }

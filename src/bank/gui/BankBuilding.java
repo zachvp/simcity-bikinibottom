@@ -40,7 +40,7 @@ public class BankBuilding extends Building {
 	
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		entrancePosition = new XYPos(x + (width/2), y + height);
+		entrancePosition = new XYPos(width/2, height);
 		bankGui = new BankGui();
 		this.bank = this;
 		this.existingRoles = new HashMap<Person, Role>();

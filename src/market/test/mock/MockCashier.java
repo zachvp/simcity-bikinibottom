@@ -111,6 +111,12 @@ public class MockCashier extends Mock implements Cashier {
 		itemCollector = ic;
 	}
 
+	@Override
+	public Map<String, Integer> getInventoryList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 
 	

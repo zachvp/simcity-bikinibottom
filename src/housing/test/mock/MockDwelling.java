@@ -34,6 +34,11 @@ public class MockDwelling implements Dwelling {
 		}
 	}
 
+	public MockDwelling(Resident resident, Condition condition) {
+		this.resident = resident;
+		this.condition = condition;
+	}
+
 	@Override
 	public double getMonthlyPaymentAmount() { 
 		return monthlyPaymentAmount; }

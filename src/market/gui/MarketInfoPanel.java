@@ -221,7 +221,7 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		if(  isInteger(KrabbyPattyText.getText())  )
 			IList.put("Krabby Patty", Integer.parseInt(KrabbyPattyText.getText()));
 		if(  isInteger(KelpRingsText.getText())  )
-			IList.put("KelpRings", Integer.parseInt(KelpRingsText.getText()));
+			IList.put("Kelp Rings", Integer.parseInt(KelpRingsText.getText()));
 		
 		
 

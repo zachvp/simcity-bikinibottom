@@ -242,12 +242,6 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		}
 	}
 	
-
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
 	@Override
 	public int getShiftStartHour() {
 		return startHour;

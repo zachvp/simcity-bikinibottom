@@ -431,11 +431,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	public State getState() {
 		return state;
 	}
-
-	public String toString() {
-		return "customer " + getName();
-	}
-
+	
 	public int getAccountId() {
 		return accountId;
 	}

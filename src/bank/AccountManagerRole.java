@@ -229,13 +229,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		}
 //		return null;
 //	}
-
 	
-	public String toString() {
-		return "customer " + getName();
-	}
-
-
 	@Override
 	public int getShiftStartHour() {
 		return startHour;

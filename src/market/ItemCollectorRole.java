@@ -15,6 +15,7 @@ import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
+import market.interfaces.ItemCollectorGuiInterfaces;
 import agent.Agent;
 import agent.Constants;
 import agent.PersonAgent;
@@ -25,7 +26,7 @@ import agent.gui.Gui;
 
 public class ItemCollectorRole extends WorkRole implements ItemCollector{
 
-	private ItemCollectorGui itemcollectorGui = null;
+	private ItemCollectorGuiInterfaces itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;
 	private Map<String, Integer> InventoryList = null;
@@ -64,13 +65,12 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
-		Orders.add(o);
-		state = ItemCollectorstate.Idle;
+		getOrders().add(o);
 		stateChanged();
 	}
 
 	public int msgHowManyOrdersYouHave(){
-		return Orders.size();
+		return getOrders().size();
 	}
 	
 	@Override
@@ -95,14 +95,14 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	
 	//Scheduler
-	protected boolean pickAndExecuteAnAction() {
-		if (state == ItemCollectorstate.Idle)
-		if(Orders.size()!=0){
-			GoGetItems(Orders.get(0));
+	public boolean pickAndExecuteAnAction() {
+		//if (state == ItemCollectorstate.Idle)
+		if(getOrders().size()!=0){
+			GoGetItems(getOrders().get(0));
 			return true;
 		}
 		
-		if (state == ItemCollectorstate.OffWork && Orders.size()==0){
+		if (state == ItemCollectorstate.OffWork && getOrders().size()==0){
 			OffWork();
 			return true;
 		}
@@ -119,18 +119,18 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (int i=0;i<Orders.size();i++){
-			if (o == Orders.get(i)){
-				Orders.remove(i);
+		for (int i=0;i<getOrders().size();i++){
+			if (o == getOrders().get(i)){
+				getOrders().remove(i);
 			}
 		}
 		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
 		for(int i=0;i<o.ItemList.size();i++){
-			int CurrentItem = InventoryList.get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
+			int CurrentItem = getInventoryList().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
 			if (CurrentItem >= o.ItemList.get(i).amount){	//enough inventories to satisfy
 				CurrentItem -= o.ItemList.get(i).amount;
-				InventoryList.put(o.ItemList.get(i).name, CurrentItem);
+				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
 				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
@@ -138,7 +138,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			{			//Add into it anyway (Try to satisfy the order)
 				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem);
 				CurrentItem = 0;
-				InventoryList.put(o.ItemList.get(i).name, CurrentItem);
+				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
 				DeliverList.add(tempitem);
 				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem);
 				MissingList.add(Missingitem);
@@ -152,7 +152,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			e.printStackTrace();
 		}
 		
-		cashier.msgHereAreItems(DeliverList, MissingList, o.c);
+		getCashier().msgHereAreItems(DeliverList, MissingList, o.c);
 		
 		return;
 	}
@@ -173,7 +173,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public void setInventoryList(Map<String,Integer> IList){
 		InventoryList = IList;
 	}
-	public void setGui (ItemCollectorGui icGui){
+	public void setGui (ItemCollectorGuiInterfaces icGui){
 		itemcollectorGui = icGui;
 	}
 	public Gui getGui (){
@@ -189,6 +189,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	public void setCashier(Cashier ca){
 		cashier = ca;
+	}
+	
+	public void setState(ItemCollectorstate s) {
+		state = s;
 	}
 	//Shifts
 	public int getShiftStartHour(){
@@ -212,4 +216,22 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public boolean isOnBreak(){
 		return false;
 	}
+
+	public Map<String, Integer> getInventoryList() {
+		return InventoryList;
+	}
+
+	public List<Order> getOrders() {
+		return Orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		Orders = orders;
+	}
+
+	public Cashier getCashier() {
+		return cashier;
+	}
+
+	
 }

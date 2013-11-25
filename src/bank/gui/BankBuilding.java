@@ -1,43 +1,49 @@
 package bank.gui;
 
+import gui.Building;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
-import bank.BankCustomerRole;
-import bank.BankRoleFactory;
-import bank.SecurityGuardRole;
-
-import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
+import agent.TimeManager;
+import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
-import gui.Building;
-import CommonSimpleClasses.XYPos;
+import bank.BankCustomerRole;
+import bank.SecurityGuardRole;
 
 //creates animation panel and starts building
 public class BankBuilding extends Building {
 
 //	CityBuilding cityBuilding;// = new CityBuilding();
-	XYPos entrancePosition = new XYPos(300, 500);
+	XYPos entrancePosition;// = new XYPos(300, 500);
 	SecurityGuardRole securityGuardRole;// = new SecurityGuardRole(person);
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
-	JPanel infoPanel = new JPanel();
 	
-	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
 	
-	private AnimationPanel animationPanel = new AnimationPanel();
+	int startHour = 9;
+	int startMinute = 0;
+	int endHour = 16;
+	int endMinute = 30;
+	
+	//private AnimationPanel animationPanel = new AnimationPanel();
+	BankGui bankGui;
 	
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		entrancePosition = new XYPos(x + (width/2), y + height);
+		bankGui = new BankGui();
 		this.bank = this;
-		this.existingRoles = new HashMap<Person, Role>();
+		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -58,9 +64,13 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		Role role = existingRoles.get(person);
+		
+		BankCustomerRole role = existingRoles.get(person);
 		if(role == null) {
-			role = new BankCustomerRole(person);
+			role = new BankCustomerRole(person, bank);
+			BankCustomerGui bcg = new BankCustomerGui(role);
+			role.setGui(bcg);
+			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
 		}
 		else {
@@ -72,13 +82,17 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return animationPanel;
+		return bankGui.getAnimationPanel();
 	}
 
 	@Override
 	public JPanel getInfoPanel() {
-		infoPanel.setBackground(Color.BLUE);
-		return infoPanel;
+		return new JPanel();
+	}
+	
+	public boolean isOpen() {
+		return TimeManager.getInstance().isNowBetween(startHour, startMinute, endHour, endMinute);
+	
 	}
 	
 	

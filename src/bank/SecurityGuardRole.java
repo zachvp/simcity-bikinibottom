@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
@@ -57,8 +58,13 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
 	
-	public SecurityGuardRole(Person person) {
-		super(person);
+	int startHour = 9;
+	int startMinute = 0;
+	int endHour = 16;
+	int endMinute = 30;
+	
+	public SecurityGuardRole(Person person, CityLocation bank) {
+		super(person, bank);
 //		this.name = name;
 		Runnable command = new Runnable(){
 			@Override
@@ -244,26 +250,22 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 
 	@Override
 	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return startHour;
 	}
 
 	@Override
 	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return startMinute;
 	}
 
 	@Override
 	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return endHour;
 	}
 
 	@Override
 	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return endMinute;
 	}
 
 	@Override

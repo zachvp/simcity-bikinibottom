@@ -10,11 +10,12 @@ import market.ItemCollectorRole;
 
 
 
+
 import java.awt.*;
 
 import agent.gui.Gui;
 
-public class ItemCollectorGui implements Gui {
+public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 
     private ItemCollector agent = null;
 
@@ -45,7 +46,11 @@ public class ItemCollectorGui implements Gui {
         this.agent = ic;
     }
     
-    public void setItemCollectorNumber(int i){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#setItemCollectorNumber(int)
+	 */
+    @Override
+	public void setItemCollectorNumber(int i){
     	if (i == 1){
     		HomePosX = 195;
     	    CollectItemX = 170;
@@ -56,11 +61,19 @@ public class ItemCollectorGui implements Gui {
     	}
     }
     
-    public void setMarketControlPanel(MarketInfoPanel p){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#setMarketControlPanel(market.gui.MarketInfoPanel)
+	 */
+    @Override
+	public void setMarketControlPanel(MarketInfoPanel p){
     	panel = p;
     }
 
-    public void updatePosition() {
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#updatePosition()
+	 */
+    @Override
+	public void updatePosition() {
         if (xPos < xDestination)
             xPos++;
         else if (xPos > xDestination)
@@ -95,57 +108,97 @@ public class ItemCollectorGui implements Gui {
         
         
     }
-    public void UpdateInventoryLevel(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#UpdateInventoryLevel()
+	 */
+    @Override
+	public void UpdateInventoryLevel(){
     	if (panel == null)
     		return;
     	panel.UpdateInventoryLevelWithoutButton();
     }
     
-    public void GoToWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#GoToWork()
+	 */
+    @Override
+	public void GoToWork(){
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = command.GoToWork;
     }
     
-    public void BackReadyStation(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#BackReadyStation()
+	 */
+    @Override
+	public void BackReadyStation(){
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command=Command.GoHome;
     	UpdateInventoryLevel();
     }
     
-    public void CollectItems(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#CollectItems()
+	 */
+    @Override
+	public void CollectItems(){
     	xDestination = CollectItemX;
     	yDestination = CollectItemY;
     	command=Command.CollectItem;
     }
     
-    public void OffWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#OffWork()
+	 */
+    @Override
+	public void OffWork(){
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command=Command.GoToExit1;
     }
     
-    public void ContinueOffWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#ContinueOffWork()
+	 */
+    @Override
+	public void ContinueOffWork(){
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command=Command.GoToExit;
     }
 
-    public void draw(Graphics2D g) {
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#draw(java.awt.Graphics2D)
+	 */
+    @Override
+	public void draw(Graphics2D g) {
         g.setColor(Color.PINK);
         g.fillRect(xPos, yPos, ItemCollectorWidth, ItemCollectorHeight);
     }
 
-    public boolean isPresent() {
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#isPresent()
+	 */
+    @Override
+	public boolean isPresent() {
         return true;
     }
 
-    public int getXPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#getXPos()
+	 */
+    @Override
+	public int getXPos() {
         return xPos;
     }
 
-    public int getYPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.ItemCollectorGuiInterfaces#getYPos()
+	 */
+    @Override
+	public int getYPos() {
         return yPos;
     }
 }

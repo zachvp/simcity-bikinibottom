@@ -23,7 +23,7 @@ public class BankRoleFactory implements RoleFactory{
 	public Role getCustomerRole(Person person) {
 		Role role = existingRoles.get(person);
 		if(role == null) {
-			role = new BankCustomerRole(person);
+			role = new BankCustomerRole(person, bank);
 			role.setLocation(bank);
 		}
 		else {

@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import market.Item;
+import market.ItemCollectorRole.ItemCollectorstate;
 
 public interface ItemCollector {
 	
-	//Message
+		//Message
 		public abstract void msgGetTheseItem(List<Item> ItemList, Customer c);
 		
 		public abstract int msgHowManyOrdersYouHave();
@@ -18,11 +19,16 @@ public interface ItemCollector {
 		public abstract String getMaitreDName();
 		public abstract String getName();
 		public abstract void setCashier(Cashier ca);
-
+		public abstract void setGui(ItemCollectorGuiInterfaces itemCollectorGui);
 		public abstract void setInventoryList(Map<String, Integer> inventoryList);
+		public abstract void setState(ItemCollectorstate s);
+
 
 	//Animations
 		public abstract void AtCollectStation();
 		public abstract void Ready();
 		public abstract void AtExit();
+
+		
+
 }

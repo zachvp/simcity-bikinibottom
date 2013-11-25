@@ -138,7 +138,6 @@ public class MarketGui extends JFrame implements ActionListener {
      */
     public static void main(String[] args) {
         MarketGui gui = new MarketGui();
-        gui.marketRecords.SetCashierMarketInfoPanel(gui.marketPanel);
         gui.setTitle("csci201 SimCity Market");
         gui.setVisible(true);
         gui.setResizable(false);

@@ -70,7 +70,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	//Panels
 	private BuildingView buildingViewPanel;
-	private CityView cityViewPanel;
 	private CityMap map;
 	public InfoPanel infoPanel;	
 
@@ -112,23 +111,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingViewSlot.setPreferredSize(buildingDim);
 		buildingViewSlot.setMaximumSize(buildingDim);
 		buildingViewSlot.setMinimumSize(buildingDim);
-		buildingViewSlot.setBorder(BorderFactory.createTitledBorder("Building View"));
 		buildingViewSlot.setOpaque(false);
 		buildingViewPanel = new BuildingView(buildingDim.width, buildingDim.height);
 		buildingViewSlot.add(buildingViewPanel);
 
 		//City map view
-		Dimension cityDim = new Dimension((int)(WINDOWX * .5), (int) (WINDOWY * .7));
+		Dimension cityDim = new Dimension(((int)(WINDOWX * .5))-10, (int) (WINDOWY * .7));
 		cityViewSlot.setPreferredSize(cityDim);
 		cityViewSlot.setMaximumSize(cityDim);
 		cityViewSlot.setMinimumSize(cityDim);
 		cityViewSlot.setOpaque(false);
-		cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
 		map = new CityMap();
-		cityViewPanel = new CityView(cityDim.width, cityDim.height, this, map);
-
 		map.setBuildingView(buildingViewPanel);
-		cityViewSlot.add(cityViewPanel);
+		cityViewSlot.add(map);
 
 		//Information Panel 720x210
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));

@@ -4,6 +4,7 @@ import transportation.interfaces.Bus;
 import transportation.interfaces.Passenger;
 import transportation.interfaces.PassengerRequester;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.DirectionEnum;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -57,6 +58,12 @@ public class FakePassengerRole extends PassengerRole {
 	public void msgGotInCar() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DirectionEnum currentDirection() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

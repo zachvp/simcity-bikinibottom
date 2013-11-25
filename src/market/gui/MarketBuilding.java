@@ -30,10 +30,10 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	XYPos entrancePosition;
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
-	MarketRecords records = new MarketRecords(animationPanel, this);
-	JPanel info = new MarketInfoPanel(records);
+	private MarketRecords records = new MarketRecords(animationPanel, this);
+	JPanel info = new MarketInfoPanel(getRecords());
 	//ATTENTION
-	{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
+		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
 	
 	public MarketBuilding(int x, int y, int width, int height) {
@@ -50,7 +50,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	public Role getGreeter() {
 		// TODO Auto-generated method stub
 			//Pass Cashier
-		return records.ca;
+		return getRecords().ca;
 	}
 	
 	public boolean isOpen() {
@@ -85,6 +85,8 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		}
 		else {
 			CustomerRole role = new CustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
+			CustomerGui custGui = new CustomerGui(role);
+			role.setGui(custGui);
 			role.setLocation(this);
 			role.setPerson(person);
 			person.addRole(role);
@@ -107,6 +109,14 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	public void UpdateInfoPanel(){
 		((MarketInfoPanel) info).UpdateInventoryLevelWithoutButton();
 		return;
+	}
+
+	public MarketRecords getRecords() {
+		return records;
+	}
+
+	public void setRecords(MarketRecords records) {
+		this.records = records;
 	}
 	
 }

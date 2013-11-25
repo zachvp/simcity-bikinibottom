@@ -18,6 +18,11 @@ public class XYPos {
 		this.y = 0;
 	}
 	
+	public XYPos(XYPos position) {
+		this.x = position.x;
+		this.y = position.y;
+	}
+
 	public boolean equals(Object obj) {
 		if (obj instanceof XYPos) {
 			XYPos pos = (XYPos) obj;

@@ -67,6 +67,7 @@ public class RealPassengerRole extends PassengerRole {
 	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus) {
 		destination = loc;
 		state = PassengerStateEnum.DecisionTime;
+		hasCar = (getPerson().getCar() != null);
 		stateChanged();
 
 	}

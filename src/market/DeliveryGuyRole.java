@@ -10,9 +10,12 @@ import java.util.concurrent.Semaphore;
 import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
 import market.gui.Gui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.Constants;
 import agent.PersonAgent;
@@ -22,6 +25,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
+	private MarketBuilding workingBuilding = null;
 	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available = true;
@@ -29,14 +33,16 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private CommonSimpleClasses.CityBuilding Market;
 	private Order CurrentOrder;
 	
+	private Semaphore atDeliver = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
 
-	public DeliveryGuyRole(String NA, Person person){
+	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
 		super(person);
 		name = NA;
+		workingBuilding = Market;
 
 	}
 	
@@ -59,14 +65,32 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			 stateChanged();
 		}
 		
+		public void msgArrivedDestination(){
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
+			{
+				CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+				person.getPassengerRole().msgGoToLocation(workingBuilding);
+				person.getPassengerRole().activate();
+			}
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)
+			{
+				deliveryguyGui.BackReadyStation();
+			}
+		}
+		
 	//Animations
 		public void Ready(){
 			Available = true;
 		}
 		
+		public void AtDeliverExit(){
+			atDeliver.release();
+		}
+		
 		public void AtExit(){
 			atExit.release();
 		}
+		
 	
 	//Scheduler
 	protected boolean pickAndExecuteAnAction() {
@@ -88,12 +112,15 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		// animation to go to the location (Building)
 		deliveryguyGui.GoDeliver();
 		try {
-			atExit.acquire();
+			atDeliver.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+		person.getPassengerRole().activate();
+		person.getPassengerRole().msgGoToLocation(CurrentOrder.Building);
+		//stateChanged()?
+		
 		
 		// animation go back to the market
 		

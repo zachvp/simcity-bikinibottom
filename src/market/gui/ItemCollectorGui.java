@@ -33,7 +33,7 @@ public class ItemCollectorGui implements Gui {
     private static final int ExitX = 130;
     private static final int ExitY = -30;
 
-    private MarketControlPanel panel;
+    private MarketInfoPanel panel;
     
     private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork};
 	private Command command=Command.GoToWork;
@@ -44,7 +44,7 @@ public class ItemCollectorGui implements Gui {
     
     public void setItemCollectorNumber(int i){
     	if (i == 1){
-    		HomePosX = 210;
+    		HomePosX = 195;
     	    CollectItemX = 170;
     	}
     	if (i == 2){
@@ -53,7 +53,7 @@ public class ItemCollectorGui implements Gui {
     	}
     }
     
-    public void setMarketControlPanel(MarketControlPanel p){
+    public void setMarketControlPanel(MarketInfoPanel p){
     	panel = p;
     }
 

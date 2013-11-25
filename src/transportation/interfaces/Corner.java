@@ -50,5 +50,7 @@ public interface Corner extends CityLocation {
 
 	List<MyCorner> getAdjacentCorners();
 
+	public DirectionEnum getDirForCorner(Corner corner) throws Exception;
+
 	
 }

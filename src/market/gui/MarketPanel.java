@@ -61,8 +61,8 @@ public class MarketPanel extends JPanel {
     private ItemCollectorGui icGui = new ItemCollectorGui(ic);
    
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
-    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1",DeliveryGuyPerson);
-    private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
+    //private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1",DeliveryGuyPerson);
+    //private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
 
     List<Item> tempInventoryList = new ArrayList<Item>();
 	{
@@ -103,7 +103,7 @@ public class MarketPanel extends JPanel {
         this.gui = gui;
         
             ic.setGui(icGui);
-            dg.setGui(dgGui);
+           // dg.setGui(dgGui);
             ca.setGui(cashierGui);
 
             cust.setGui(custGui);
@@ -111,14 +111,14 @@ public class MarketPanel extends JPanel {
 
         
         ItemCollectors.add(ic);
-        DeliveryGuys.add(dg);
+       // DeliveryGuys.add(dg);
         customers.add(cust);
         customers.add(cust1);
         
         ca.setICList(ItemCollectors);
         ca.setDGList(DeliveryGuys);
         ic.setCashier(ca);
-        dg.setCashier(ca);
+        //dg.setCashier(ca);
         cust.setCashier(ca);
         cust1.setCashier(ca);
         ic.setInventoryList(ca.getInventoryList());
@@ -135,15 +135,15 @@ public class MarketPanel extends JPanel {
         gui.animationPanel.addGui(cashierGui);
         
         //DeliveryGuy Gui
-        gui.animationPanel.addGui(dgGui);
+        //gui.animationPanel.addGui(dgGui);
         
         CashierPerson.startThread();
         CashierPerson.addRole(ca);
         ca.activate();
         
         DeliveryGuyPerson.startThread();
-        DeliveryGuyPerson.addRole(dg);
-        dg.activate();
+       // DeliveryGuyPerson.addRole(dg);
+        //dg.activate();
         
         ItemCollectorPerson.startThread();
         ItemCollectorPerson.addRole(ic);

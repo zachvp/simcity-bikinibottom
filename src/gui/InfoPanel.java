@@ -1,8 +1,6 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import market.gui.MarketBuilding;
 import agent.PersonAgent;
 
 /**
@@ -23,23 +21,20 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	private Dimension d;
 	private JLabel info;
-	private JPanel textPanel; //info display
-	private JPanel controlPanel; //gui controls
 
 	public InfoPanel(int w, int h){
 		d = new Dimension(w-20, h-25);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
-		setLayout(new BorderLayout());
+		setLayout(new CardLayout());
 		
-		
-		textPanel = new JPanel();
-		Dimension textDim = new Dimension((int)(d.width*0.4), d.height);
-		textPanel.setPreferredSize(textDim);
-		textPanel.setMaximumSize(textDim);
-		textPanel.setMinimumSize(textDim);
-		
+		JPanel personText = new JPanel();
+		personText.setPreferredSize(d);
+		personText.setMaximumSize(d);
+		personText.setMinimumSize(d);
+		addBuildingInfoPanel(personText, "person");
+			
 		info = new JLabel("");
 		//Test text
 		/*info.setText("<html><div>&nbsp;</div><div> "
@@ -49,22 +44,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
 				+ "<div> Hunger Level: "+"2" +"</div></html>"
 		);*/
-		textPanel.add(info);
-		
-		controlPanel = new JPanel();
-		Dimension controlDim = new Dimension((int)(d.width*0.6), d.height);
-		controlPanel.setPreferredSize(controlDim);
-		controlPanel.setMaximumSize(controlDim);
-		controlPanel.setMinimumSize(controlDim);
-		controlPanel.setLayout(new CardLayout());
-		
-		
-		JPanel blank = new JPanel();
-		blank.setPreferredSize(controlDim);
-		addControlPanel(blank, "blank");
-		
-		add(textPanel, BorderLayout.WEST);
-		add(controlPanel, BorderLayout.EAST);
+		personText.add(info);
 	}
 
 	/**
@@ -72,6 +52,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * @param p Person name
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
+		CardLayout cl = (CardLayout)(this.getLayout());
+		cl.show(this, "person");
 		//System.out.println("update info with "+person.getName());
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
@@ -90,31 +72,30 @@ public class InfoPanel extends JPanel implements ActionListener{
 	public void updateBuildingInfoPanel(Building b){
 		//Building building = b;
 		System.out.println(b.getName()+ " update info panel");
-
-		info.setText("<html><div>&nbsp;</div><div> "
-				+ "Building: "+ b.getName() +"</div><div>&nbsp;</div>"
-				+ "<div> Building Type: "+ b.type() +"</div><div>&nbsp;</div>"
-				//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
-				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
-				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
-				);
+		if (b instanceof MarketBuilding){
+			((MarketBuilding) b).UpdateInfoPanel();
+		}
 		
-		CardLayout cl = (CardLayout)(controlPanel.getLayout());
-		if(b.type() == LocationTypeEnum.Market){
-			cl.show(controlPanel, b.getName());
+		CardLayout cl = (CardLayout)(this.getLayout());
+		if(b.getInfoPanel() == null){
+			cl.show(this, "blank");
 		}
 		else
 		{
-			cl.show(controlPanel, "blank");
+			cl.show(this, b.getName());
 		}
 		
 		validate();
 
 	}
 	
-	public void addControlPanel(JPanel control, String name){
-		//control.setSize(controlPanel.getSize());
-		controlPanel.add(control, name);
+	/**
+	 * Adds the Building's control panel to the cardlayout
+	 * @param panel Building's info panel
+	 * @param name Building's name
+	 */
+	public void addBuildingInfoPanel(JPanel panel, String name){
+		add(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

@@ -37,7 +37,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 	
 	JLabel msg;
 
-	public PersonCreationPanel(Dimension d){
+	public PersonCreationPanel(){
+		Dimension d = new Dimension(600, 490);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
@@ -110,7 +111,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			String status = (String)wealth.getSelectedItem();
 			boolean hasCar = ((String)car.getSelectedItem()).equals("Yes");
 			
-			//TODO disabled for testing purposes
 			if(!incompleteInputs(name, job, home, status, (String)car.getSelectedItem())){
 											
 				//reset input fields
@@ -127,7 +127,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 				System.out.println(name +" has been added to your city!");
 				
 				//TODO pull up newPerson's infopanel
-				msg.setText(name + " was created");
+				msg.setText(name + " was created.");
 			}
 			else{
 				msg.setText("Please complete all inputs");

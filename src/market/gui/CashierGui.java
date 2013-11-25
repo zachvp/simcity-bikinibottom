@@ -5,6 +5,8 @@ import market.CashierRole;
 import market.CustomerRole;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
+//import market.interfaces.MarketInfoPanel;
+
 
 import java.awt.*;
 
@@ -35,7 +37,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	private Command command=Command.GoToWork;
 
 
-	private MarketControlPanel panel;
+	private MarketInfoPanel panel;
 	
     public CashierGui(Cashier ca) {
         this.agent = ca;
@@ -44,11 +46,11 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     
     /* (non-Javadoc)
 	 * @see market.gui.MockCashierGui#setMarketControlPanel(market.gui.MarketControlPanel)
-	 */
+	 * /
     @Override
-	public void setMarketControlPanel(MarketControlPanel p){
+	public void setMarketInfoPanel(MarketInfoPanel p){
     	panel = p;
-    }
+    }*/
 
     /* (non-Javadoc)
 	 * @see market.gui.MockCashierGui#updatePosition()
@@ -68,7 +70,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
         if (xPos == xDestination && yPos == yDestination) {
 
         	if (command==Command.GoToWork){
-        		System.out.println("Im GoToCashier");
+        		//System.out.println("Im GoToCashier");
         		GoToFrontDesk();
         		return;
         	}
@@ -88,8 +90,6 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 				
 		command=Command.noCommand;
         }
-
-       
     }
     
     /* (non-Javadoc)
@@ -141,7 +141,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	public void Update() {
     	if (panel == null)
     		return;
-		panel.UpdateInventoryLevelWithoutButton();
+		panel.UpdateInventoryLevelWithButton();
 	}
     
     /* (non-Javadoc)
@@ -177,5 +177,12 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
         return yPos;
     }
 
+	@Override
+	public void setMarketInfoPanel(MarketInfoPanel p) {
+		panel = p;
+		
+	}
+
+	
 	
 }

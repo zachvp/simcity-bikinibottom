@@ -12,6 +12,8 @@ public interface DeliveryGuy {
 	
 		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityBuilding building);
 		
+		public abstract void msgArrivedDestination();
+		
 		public abstract void msgLeaveWork();
 	
 	//Utilities
@@ -22,4 +24,5 @@ public interface DeliveryGuy {
 	//Animations
 		public abstract void Ready();
 		public abstract void AtExit();
+		public abstract void AtDeliverExit();
 }

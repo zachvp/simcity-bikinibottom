@@ -30,7 +30,8 @@ import java.util.Vector;
  * including host, cook, waiters, and customers.
  */
 public class MarketRecords implements BuildingRecords {
-	MarketControlPanel marketControlPanel;
+	MarketInfoPanel marketControlPanel;
+	MarketBuilding building;
 	
 
     private static final CommonSimpleClasses.CityBuilding CityBuilding = null;
@@ -44,7 +45,6 @@ public class MarketRecords implements BuildingRecords {
     
     private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
     private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
-    private List<Customer> customers = new Vector<Customer>();
     
     private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
     private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
@@ -55,16 +55,18 @@ public class MarketRecords implements BuildingRecords {
     private ItemCollectorGui ic1Gui;
     
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
-    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson);
+    private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson, building);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
 
     List<Item> tempInventoryList = new ArrayList<Item>();
 	{
-		tempInventoryList.add(new Item("CheapCar", 1));
-		tempInventoryList.add(new Item("ExpensiveCar", 0));
-		tempInventoryList.add(new Item("Pizza", 1));
-		tempInventoryList.add(new Item("Sandwich", 0));
-		tempInventoryList.add(new Item("Chicken", 0));
+		tempInventoryList.add(new Item("Toyoda", 1));
+		tempInventoryList.add(new Item("LamboFinny", 0));
+		tempInventoryList.add(new Item("Krabby Patty", 1));
+		tempInventoryList.add(new Item("Kelp Shake", 0));
+		tempInventoryList.add(new Item("Coral Bits", 0));
+		tempInventoryList.add(new Item("Kelp Rings", 0));
+		
 	}
 	
 	private CityLocation fakeLoc = new CityLocation() {
@@ -93,8 +95,9 @@ public class MarketRecords implements BuildingRecords {
 
     private AnimationPanel gui; //reference to main gui
 
-    public MarketRecords(AnimationPanel gui) {
+    public MarketRecords(AnimationPanel gui, MarketBuilding market) {
     	//marketControlPanel = controlPanel;
+    	building = market;
     	cashierGui = new CashierGui(ca);
     	icGui = new ItemCollectorGui(ic);
     	ic1Gui = new ItemCollectorGui(ic1);
@@ -112,8 +115,7 @@ public class MarketRecords implements BuildingRecords {
         ItemCollectors.add(ic);
         ItemCollectors.add(ic1);
         DeliveryGuys.add(dg);
-        customers.add(cust);
-        customers.add(cust1);
+
         
         ca.setICList(ItemCollectors);
         ca.setDGList(DeliveryGuys);
@@ -144,6 +146,7 @@ public class MarketRecords implements BuildingRecords {
         
         CashierPerson.startThread();
         CashierPerson.addRole(ca);
+        
         ca.activate();
         
         DeliveryGuyPerson.startThread();
@@ -154,19 +157,23 @@ public class MarketRecords implements BuildingRecords {
         ItemCollectorPerson.addRole(ic);
         ic.activate();
         ic1Gui.setItemCollectorNumber(1);
+        ic.setInventoryList(ca.getInventoryList());
         
         ItemCollectorPerson1.startThread();
         ItemCollectorPerson1.addRole(ic1);
         ic1.activate();
-        ic1Gui.setItemCollectorNumber(2);
+        icGui.setItemCollectorNumber(2);
+        ic1.setInventoryList(ca.getInventoryList());
         
         CustomerPerson.startThread();
         CustomerPerson.addRole(cust);
+        cust.setPriceList(ca.getPriceList());
         cust.activate();
         custGui.setBuying();
         
         CustomerPerson1.startThread();
         CustomerPerson1.addRole(cust1);
+        cust.setPriceList(ca.getPriceList());
         cust1.activate();
         custGui1.setBuying();
       
@@ -206,7 +213,10 @@ public class MarketRecords implements BuildingRecords {
 		return null;
 	}
 
-
+public void SetCashierMarketInfoPanel(MarketInfoPanel p){
+		cashierGui.setMarketInfoPanel(p);
+	return;
+}
  
     /**
      * Adds a customer or waiter to the appropriate list

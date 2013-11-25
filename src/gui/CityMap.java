@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -39,12 +40,11 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	
 	private List<Gui> guis = new ArrayList<Gui>();
 
+	private java.util.Timer utilTimer;
+
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
-		//setMaximumSize(panelDim);
-		//setMinimumSize(panelDim);
-		//setBackground(Color.gray);
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));
@@ -57,20 +57,29 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 
 		addMouseListener(this);
 		
-		Timer timer = new Timer(10, this);
+		javax.swing.Timer timer = new javax.swing.Timer(10, this); //call update every 1/10 sec
     	timer.start();
+    	
+    	utilTimer = new java.util.Timer();
+    	utilTimer.scheduleAtFixedRate(new TimerTask() {
+    		public void run() {
+    			updatePosition();
+    		}
+    	}, 100, 100);
 	}
 	
+	/**
+	 * Returns the x coordinate of the next available spot on the map 
+	 * @return x coordinate
+	 */
 	public int getNextBuildingX(){
-		/*if (col >= Constants.MAX_BLOCK_COL){
-			row++;
-			col = 0;
-			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
-		}*/
-		
 		return col*(Constants.BUILDING_WIDTH+Constants.SPACE_BETWEEN_BUILDINGS)
 				+ Constants.MAP_MARGIN_X;
 	}
+	/**
+	 * Returns the y coordinate of the next available spot on the map 
+	 * @return y coordinate
+	 */
 	public int getNextBuildingY(){
 		return row*(Constants.BUILDING_HEIGHT+Constants.SPACE_BETWEEN_BUILDINGS)
 				+ Constants.MAP_MARGIN_Y;
@@ -81,16 +90,13 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	 * @param name Name of the building
 	 */
 	public void addBuildingToMap(Building building){
+		col++;
 		if (col >= Constants.MAX_BLOCK_COL){
 			row++;
 			col = 0;
-			//if (row > MAX_ROW){ System.out.println("at max map capacity");}
 		}
 		buildings.add(building);
-		col++;
 	}
-	
-	
 	
 
 	/**
@@ -100,12 +106,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-		
-		for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
@@ -124,6 +124,14 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.fill(b);
 			}
 		}
+	}
+
+	public void updatePosition() {
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
 	}
 	
 	/**

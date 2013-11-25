@@ -1,24 +1,20 @@
-package gui.test;
-
-import java.awt.Color;
+package gui;
 
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
-import gui.Building;
 
-public class TestBuilding extends Building{
+public class HospitalBuilding extends Building{	
 	
-	String name = "TestBuilding";
-	JPanel animationPanel = new JPanel();
-	LocationTypeEnum type = LocationTypeEnum.None;
-	JPanel controls;
+	CitizenRecords records;
+	PersonCreationPanel panel = new PersonCreationPanel();
+	
 
-	public TestBuilding(int x, int y, int width, int height) {
+	public HospitalBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		animationPanel.setBackground(Color.blue);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -35,7 +31,8 @@ public class TestBuilding extends Building{
 
 	@Override
 	public LocationTypeEnum type() {
-		return type;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -46,14 +43,19 @@ public class TestBuilding extends Building{
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return animationPanel;
+		// TODO Auto-generated method stub
+		return panel;
 	}
 
 	@Override
-	public JPanel getControlPanel() {
-		// TODO Auto-generated method stub
-		return null;
+	public JPanel getInfoPanel() {
+		
+		return new JPanel();
 	}
-	
+
+	public void setRecords(CitizenRecords citizenRecords) {
+		records = citizenRecords;
+		panel.setRecords(records);
+	}
 
 }

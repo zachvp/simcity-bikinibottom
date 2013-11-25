@@ -14,8 +14,11 @@ import agent.interfaces.Person;
 public class MarketBuilding extends gui.Building {
 
 	String name;
-	JPanel animationPanel = new market.gui.AnimationPanel();	
-	JPanel controls;
+	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
+	MarketRecords records = new MarketRecords(animationPanel, this);
+	JPanel info = new MarketInfoPanel(records);
+	//ATTENTION
+	{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	MarketRoleFactory marketroleFactory = new MarketRoleFactory();
 	
 	public MarketBuilding(int x, int y, int width, int height) {
@@ -56,9 +59,14 @@ public class MarketBuilding extends gui.Building {
 	}
 
 	@Override
-	public JPanel getControlPanel() {
+	public JPanel getInfoPanel() {
 		// TODO Auto-generated method stub
-		return null;
+		return info;
+	}
+	
+	public void UpdateInfoPanel(){
+		((MarketInfoPanel) info).UpdateInventoryLevelWithoutButton();
+		return;
 	}
 	
 }

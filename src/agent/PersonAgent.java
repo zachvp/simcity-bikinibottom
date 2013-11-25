@@ -571,10 +571,15 @@ public class PersonAgent extends Agent implements Person {
 	public void agentStateChanged() {
 		stateChanged();
 	}
-
+	
 	@Override
 	public void printMsg(String msg) {
 		print(msg);
+	}
+	
+	@Override
+	public void printMsg(String msg, Throwable e) {
+		print(msg, e);
 	}
 
 	@Override

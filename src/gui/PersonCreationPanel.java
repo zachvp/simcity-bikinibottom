@@ -87,6 +87,12 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 				nameTextF.setText(null);
 			}
 		});
+		
+		nameTextF.setText("mr balloon hands");
+		occupationsCB.setSelectedIndex(1);
+		residencesCB.setSelectedIndex(1);
+		wealthCB.setSelectedIndex(1);
+		carCB.setSelectedIndex(2);
 
 		inputPanel.add(new JLabel("Name: "));
 		inputPanel.add(nameTextF);

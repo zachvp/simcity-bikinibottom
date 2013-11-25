@@ -102,10 +102,6 @@ public class ResidentRole extends Role implements Resident {
 		task.scheduleDailyTask(command, hour, minute);
 	}
 	
-	public ResidentRole(Person residentPerson) {
-		// TODO Auto-generated constructor stub
-	}
-
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount) {
@@ -361,5 +357,9 @@ public class ResidentRole extends Role implements Resident {
 
 	public void setDwelling(Dwelling dwelling) {
 		this.dwelling = dwelling;
+	}
+
+	public Dwelling getDwelling() {
+		return dwelling;
 	}
 }

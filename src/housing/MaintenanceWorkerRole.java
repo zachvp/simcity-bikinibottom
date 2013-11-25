@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import agent.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;

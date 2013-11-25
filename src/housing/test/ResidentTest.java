@@ -30,8 +30,9 @@ public class ResidentTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		
 		resident.setDwelling(dwelling);
+		resident.setWorker(worker);
+		dwelling.setCondition(Condition.GOOD);
 	}
 	
 	/**
@@ -55,11 +56,13 @@ public class ResidentTest extends TestCase {
 		assertEquals("Resident should now owe " + PAYMENT_AMOUNT + ".",
 				PAYMENT_AMOUNT, resident.getMoneyOwed());
 		
-		// check that the pay recipient received the pay message from the resident
+		// check that the resident's money updated properly
 		assertTrue("Resident's scheduler should have returned true, reacting to the payment due message",
 				resident.pickAndExecuteAnAction());
-		assertEquals("Pay recipient should have the instance of resident.",
-				resident, PayRecipient.myRes);
+		assertEquals("Pay recipient should owe no money now.",
+				0.0, resident.getMoneyOwed());
+		assertEquals("Person should have money - " + PAYMENT_AMOUNT,
+				0.0, residentPerson.getWallet().getCashOnHand());
 	}
 	
 	/** Tests the simplest resident cooking and eating case.
@@ -69,6 +72,7 @@ public class ResidentTest extends TestCase {
 	public void testNormativeCookAndEat() throws InterruptedException {
 		// set the resident gui to the mock gui
 		resident.setGui(gui);
+		
 		// listens for the taskScheduler to finish. Use for routine that have a time delay
 		MockScheduleTaskListener mockRequestListener = new MockScheduleTaskListener();
 		
@@ -95,6 +99,7 @@ public class ResidentTest extends TestCase {
 		// scheduler runs and resident executes cookFood()
 		assertTrue("Scheduler should return true after resident is hungry "
 				+ "and there are items in the fridge.", resident.pickAndExecuteAnAction());
+		
 		// handle the delay from the food cooking
 		synchronized(mockRequestListener){
 			mockRequestListener.wait(5000);
@@ -118,8 +123,21 @@ public class ResidentTest extends TestCase {
 		/* --- Test Preconditions --- */
 		assertEquals("Resident should have an empty event log before the message is called. Instead, the Resident's event log reads: "
 				+ resident.log.toString(), 0, resident.log.size());
+		assertEquals("Dwelling should have a starting condition of GOOD.",
+				Condition.GOOD, resident.getDwelling().getCondition());
 		
 		/* --- Run the Scenario --- */
 		
+		//  set the dwelling to a poor state
+		resident.getDwelling().setCondition(Condition.POOR);
+		
+		// call the scheduler. Resident should notify the maintenance worker
+		assertTrue("Scheduler should return true after noting the poor dwelling state.",
+				resident.pickAndExecuteAnAction());
+		
+		// send the 'fixed' message to the resident
+		resident.msgDwellingFixed();
+		assertEquals("Dwelling condition should now be GOOD.",
+				Condition.GOOD, dwelling.getCondition());
 	}
 }

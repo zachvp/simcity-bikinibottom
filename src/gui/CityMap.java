@@ -38,7 +38,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	
 	ArrayList<Building> buildings;
 	BuildingView buildingView; //Ref to buildingview
-	BufferedImage image, hospitalImage, KrustyKrabImage, snailpoNullImage;
+	BufferedImage image, hospitalImage, KrustyKrabImage, snailpoNullImage, bankImage;
 	ImageIcon icon;
 	InfoPanel infoPanel;
 	
@@ -58,6 +58,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 			hospitalImage = ImageIO.read(getClass().getResource("hospital.png"));
 			KrustyKrabImage = ImageIO.read(getClass().getResource("krusty_krab.png"));
 			snailpoNullImage = ImageIO.read(getClass().getResource("snailpo_sign.png"));
+			bankImage = ImageIO.read(getClass().getResource("bank.png"));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -144,6 +145,13 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				tr = new Rectangle2D.Double(b.x, b.y,
 				        b.getWidth(), b.getHeight());
 				tp = new TexturePaint(snailpoNullImage, tr);
+				g2.setPaint(tp);
+				g2.fill(b);
+			}
+			else if(b.type() == LocationTypeEnum.Bank){
+				tr = new Rectangle2D.Double(b.x, b.y,
+				        b.getWidth(), b.getHeight());
+				tp = new TexturePaint(bankImage, tr);
 				g2.setPaint(tp);
 				g2.fill(b);
 			}

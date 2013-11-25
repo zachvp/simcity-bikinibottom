@@ -1,9 +1,14 @@
 package transportation.gui;
 
+import gui.Building;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.hamcrest.core.IsInstanceOf;
+
 import agent.Constants;
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;
@@ -55,8 +60,13 @@ public class PassengerGuiClass implements PassengerGui {
 	}
 
 	private XYPos destinationPos() {
-		
-		return destination.position();
+		if (destination instanceof Building) {
+			Building cb = (Building) destination;
+			XYPos response = new XYPos(cb.position());
+			response.x += cb.entrancePos().x;
+			response.y += cb.entrancePos().y;
+			return response;
+		} else return destination.position();
 	}
 
 	private void onPlace() {

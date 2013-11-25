@@ -12,8 +12,11 @@ import market.Item;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
+import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 
 /**
@@ -359,12 +362,27 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public PassengerRole getPassengerRole() {
+		// Get the PassengerRole if there is one.
 		for (Role r : roles) {
 			if (r instanceof PassengerRole) {
 				return (PassengerRole) r;
 			}
 		}
-		return null;
+		
+		// Else, create a new one.
+		CityLocation hospital = null;
+		for (CityLocation loc : kelp.placesNearMe(new XYPos(),
+				LocationTypeEnum.Hospital)) {
+			
+			// Choose the first hospital, since we only have one for now.
+			hospital = loc;
+			break;
+		}
+		if (hospital == null) {
+			throw new NullPointerException("Kelp has no hospital roles.");
+		}
+		PassengerRole pass = new RealPassengerRole(this, hospital);
+		return pass;
 	}
 
 	@Override

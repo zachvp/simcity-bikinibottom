@@ -36,12 +36,13 @@ public class CitizenRecords {
 	public void addCitizen(String name, WorkRole job, String home, String status,
 			boolean hasCar) {
 		PersonAgent newPerson  = new PersonAgent(name);
+		newPerson.addRole(job);
+		if (job != null) job.setPerson(newPerson);
 		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person
 		//TODO remember that you need to add roles to people AND people to roles
 		
 		//Add passengerAgent
-
 		citizens.add(newPerson);
 		personInfoList.addToList(newPerson.getName());
 		newPerson.startThread();

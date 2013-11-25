@@ -2,6 +2,7 @@ package bank;
 
 import java.util.concurrent.Semaphore;
 
+import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankCustomerGui;
@@ -39,8 +40,8 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //	PassengerRole passengerRole;
 
 	
-	public BankCustomerRole(Person person){
-		super(person);
+	public BankCustomerRole(Person person, CityLocation bank){
+		super(person, bank);
 //		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
 //		this.name = name;
@@ -55,8 +56,8 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 
 	}
 	
-	public BankCustomerRole(Person person, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
-		super(person);
+	public BankCustomerRole(Person person, CityLocation bank, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
+		super(person, bank);
 		state = State.enteredBank;
 		this.accountId = accountId;
 		if(name.equals("withdraw")){
@@ -159,7 +160,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	public void msgGotToTeller() {
 		Do("msggottoteller");
-//		System.out.println("HI");
+//		Do("HI");
 		event = Event.gotToTeller;
 		stateChanged();
 	}
@@ -197,7 +198,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	}
 	
 	public void msgAtDestination() {
-		System.out.println("Made it");
+//		Do("Made it");
 		active.release();
 	}
 	
@@ -207,7 +208,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 */
 	public boolean pickAndExecuteAnAction() {
 		Do("Entered scheduler");
-//		System.out.println("entered scheduler");
+//		Do("entered scheduler");
 		if(state == State.enteredBank && event == Event.goingToSecurityGuard) {
 			goToSecurityGuard();
 			return true;
@@ -263,7 +264,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	private void goToTeller(int xLoc) {
 		doGoToTeller(xLoc);
 		acquireSemaphore(active);
-//		System.out.println("YO");
+//		Do("YO");
 //		state = State.waiting;
 //		msgGotToTeller();
 		speakToTeller();
@@ -284,7 +285,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		}
 		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount > this.getPerson().getWallet().getMoneyNeeded()) { //if i need money and have enough in my account, i will withdraw it
 			double moneyNeeded = this.getPerson().getWallet().getMoneyNeeded();
-			System.out.println("I'm withdrawing needed money");
+			Do("I'm withdrawing needed money");
 			teller.msgWithdrawMoney(this, accountId, moneyNeeded);//TODO for testing
 			state= State.withdrawing;
 			return;
@@ -295,19 +296,19 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount > this.getPerson().getWallet().getTooLittle()){
-			System.out.println("I'm withdrawing");
+			Do("I'm withdrawing");
 			teller.msgWithdrawMoney(this, accountId, this.getPerson().getWallet().getTooLittle());//TODO for testing
 			state= State.withdrawing;
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() > this.getPerson().getWallet().getTooMuch()) {
-			System.out.println("Im depositing");
+			Do("Im depositing");
 			teller.msgDepositMoney(this, accountId, this.getPerson().getWallet().getTooLittle()); //TODO for testing
 			state = State.depositing;
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount<this.getPerson().getWallet().getTooLittle()) {
-//			System.out.println("Im getting Loan");
+//			Do("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
 			return;
@@ -319,7 +320,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	private void askForLoan() {//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 		Do("asking for loan");
-//		System.out.println("asking for loan from loanmanager");
+//		Do("asking for loan from loanmanager");
 		doGoToLoanManager(loanManagerXPos);
 		acquireSemaphore(active);
 		if(this.getPerson().getWallet().getMoneyNeeded() == 0) {

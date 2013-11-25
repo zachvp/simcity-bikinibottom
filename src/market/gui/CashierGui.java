@@ -144,7 +144,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	public void Update() {
     	if (panel == null)
     		return;
-		panel.UpdateInventoryLevelWithButton();
+		panel.UpdateInventoryLevelWithoutButton();
 	}
     
     /* (non-Javadoc)

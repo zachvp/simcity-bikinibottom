@@ -65,7 +65,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPanel cityViewSlot = new JPanel();
 	private JPanel buildingViewSlot = new JPanel();
 	private JPanel infoPanelSlot = new JPanel();
-	private JPanel InfoListSlot        = new JPanel();
+	private JPanel InfoListSlot = new JPanel();
 
 	//Panels
 	private BuildingView buildingViewPanel;
@@ -76,11 +76,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
-	private List<Building> constructedBuildings = new ArrayList<Building>();
+	
+	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
+	HospitalBuilding hospital;
 	private Semaphore semaphore = new Semaphore(0);
 	private Timer timer = new Timer();
-
-	//TODO Add timer here?
 
 	public MainFrame(){
 
@@ -129,7 +129,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		map.setBuildingView(buildingViewPanel);
 		cityViewSlot.add(cityViewPanel);
 
-		//Information Panel
+		//Information Panel 720x210
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
 		infoPanelSlot.setPreferredSize(infoDim);
 		infoPanelSlot.setMaximumSize(infoDim);
@@ -233,9 +233,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				//add building details
 			}
 			if(type == LocationTypeEnum.House){
-				ResidentialBuilding house = new ResidentialBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				house.setName(buildingName);
-				construct(house); 
+				//ResidentialBuilding house = new ResidentialBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				//house.setName(buildingName);
+				//construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
 				//restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
@@ -251,8 +251,9 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(market);
 			}
 			if(type == LocationTypeEnum.Hospital){
-				HospitalBuilding hospital = new HospitalBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				hospital.setRecords(citizenRecords);
+				//TODO
+				hospital = new HospitalBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				hospital.setRecords(citizenRecords);				
 				hospital.setName(buildingName);
 				construct(hospital);
 			}
@@ -267,7 +268,8 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(mock);
 			}
 		}
-		initializeCornerMapAndKelp(constructedBuildings);
+		//initializeCornerMapAndKelp(constructedBuildings);
+		hospital.setBuildings(constructedBuildings);
 	}
 
 	/**

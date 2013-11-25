@@ -1,30 +1,22 @@
 package market.gui;
 
-import market.CashierRole;
-import market.CustomerRole;
-import market.Item;
-import market.ItemCollectorRole;
-import market.DeliveryGuyRole;
-import market.interfaces.*;
 import gui.BuildingRecords;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
-import transportation.FakePassengerRole;
-import transportation.PassengerRole;
-import CommonSimpleClasses.CityLocation;
+import market.CashierRole;
+import market.CustomerRole;
+import market.DeliveryGuyRole;
+import market.Item;
+import market.ItemCollectorRole;
+import market.interfaces.DeliveryGuy;
+import market.interfaces.ItemCollector;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
 import agent.Role;
 import agent.gui.AnimationPanel;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 /**
  * Panel in frame that contains all the restaurant information,
@@ -65,18 +57,16 @@ public class MarketRecords implements BuildingRecords {
 		
 	}
     
-	/*
+	
     private PersonAgent CustomerPerson = new PersonAgent("Customer1");
     private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
-    private PassengerRole pr = new FakePassengerRole(fakeLoc);
-    {CustomerPerson.addRole(pr);}
     private CustomerGui custGui = new CustomerGui(cust);
     
     private PersonAgent CustomerPerson1 = new PersonAgent("Customer2");
     private CustomerRole cust1 = new CustomerRole("Customer2", 100, tempInventoryList, CustomerPerson1);
-    {CustomerPerson.addRole(pr);}
     private CustomerGui custGui1 = new CustomerGui(cust1);
-    */
+    
+    
     
 
     private AnimationPanel gui; //reference to main gui
@@ -94,15 +84,34 @@ public class MarketRecords implements BuildingRecords {
             ic1.setGui(ic1Gui);
             dg.setGui(dgGui);
             ca.setGui(cashierGui);
-
-            /*
-            cust.setGui(custGui);
-            cust1.setGui(custGui1);
-			*/
-
+            
+            
+            
+            
+    		
+    		cust.setGui(custGui);
+    		cust.setCashier(ca);
+    		cust.setPriceList(ca.getPriceList());
+    		CustomerPerson.startThread();
+        	CustomerPerson.addRole(cust);
+        	cust.setPriceList(ca.getPriceList());
+        	cust.activate();
+        	custGui.setBuying();
+        	gui.addGui(custGui);
+        	
+    		cust1.setGui(custGui1);
+        	cust1.setCashier(ca);
+        	cust1.setPriceList(ca.getPriceList());
+        	CustomerPerson1.startThread();
+        	CustomerPerson1.addRole(cust1);
+        	cust1.setPriceList(ca.getPriceList());
+        	cust1.activate();
+        	custGui1.setBuying();
+        	gui.addGui(custGui1);
+        	
         
         ItemCollectors.add(ic);
-        ItemCollectors.add(ic1);
+        //ItemCollectors.add(ic1);
         DeliveryGuys.add(dg);
 
         
@@ -112,19 +121,15 @@ public class MarketRecords implements BuildingRecords {
         ic1.setCashier(ca);
         dg.setCashier(ca);
         /*
-        cust.setCashier(ca);
-        cust1.setCashier(ca);
-        cust.setPriceList(ca.getPriceList());
-        cust1.setPriceList(ca.getPriceList());
+        
         */
         ic.setInventoryList(ca.getInventoryList());
         ic1.setInventoryList(ca.getInventoryList());
         
 
-        //Customer Gui
+        
         /*
-        gui.addGui(custGui);
-        gui.addGui(custGui1);
+        
 		*/
 
         //ItemCollector Gui
@@ -160,17 +165,7 @@ public class MarketRecords implements BuildingRecords {
         ic1.setInventoryList(ca.getInventoryList());
         
         /*
-        CustomerPerson.startThread();
-        CustomerPerson.addRole(cust);
-        cust.setPriceList(ca.getPriceList());
-        cust.activate();
-        custGui.setBuying();
         
-        CustomerPerson1.startThread();
-        CustomerPerson1.addRole(cust1);
-        cust.setPriceList(ca.getPriceList());
-        cust1.activate();
-        custGui1.setBuying();
         */
       
     }

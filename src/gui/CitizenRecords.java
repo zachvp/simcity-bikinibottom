@@ -15,8 +15,8 @@ import agent.Role;
 public class CitizenRecords {
 	private MainFrame main;
 	private ArrayList<PersonAgent> citizens = new ArrayList<PersonAgent>();
-	private ArrayList<BuildingRecords> buildingRecords = new ArrayList<BuildingRecords>();
-	
+	private ArrayList<BuildingRecords> buildingRecords = new ArrayList<BuildingRecords>(); //TODO delete?
+	ArrayList<Building> buildings;
 	private InfoList personInfoList;
 	private InfoPanel infoPanel;
 
@@ -101,5 +101,11 @@ public class CitizenRecords {
 	}
 	public InfoPanel getInfoPanel() {
 		return infoPanel;
+	}
+	public void setBuildings(ArrayList<Building> b){
+		buildings = b;
+	}
+	public ArrayList<Building> getBuildings(){
+		return buildings;
 	}
 }

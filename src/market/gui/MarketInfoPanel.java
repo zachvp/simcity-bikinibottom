@@ -100,6 +100,14 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		KelpShakeInventoryLevel = "Current Inventory Level";
 		CoralBitsInventoryLevel = "Current Inventory Level";
 		KelpRingsInventoryLevel = "Current Inventory Level";
+		
+		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
+		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
+		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));
+		KrabbyPattyInventoryLevel 		= Integer.toString(IList.get("Krabby Patty"));
+		KelpShakeInventoryLevel		= Integer.toString(IList.get("Kelp Shake"));
+		CoralBitsInventoryLevel 		= Integer.toString(IList.get("Coral Bits"));
+		KelpRingsInventoryLevel 	= Integer.toString(IList.get("Kelp Rings"));
 
 
 		LamboFinnyInvent = new JLabel();
@@ -269,12 +277,7 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		CoralBitsInvent.setText("                    " + CoralBitsInventoryLevel);
 		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
 		
-		LamboFinnyText.setText("");
-		ToyodaText.setText("");
-		KelpShakeText.setText("");
-		KrabbyPattyText.setText("");
-		CoralBitsText.setText("");
-		KelpRingsText.setText("");
+
 		
 		marketRecords.ca.setInventoryList(IList);
 

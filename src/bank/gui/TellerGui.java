@@ -1,15 +1,14 @@
 package bank.gui;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.concurrent.Semaphore;
 
-import bank.gui.Gui;
-import bank.BankCustomerRole;
 import bank.TellerRole;
 
 
-public class TellerGui implements Gui{
+public class TellerGui implements agent.gui.Gui{
 
 	private TellerRole agent = null;
 	private boolean isPresent = true;

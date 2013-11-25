@@ -2,7 +2,6 @@ package bank.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -19,8 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.WorkRole;
+import agent.gui.AnimationPanel;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
 import bank.LoanManagerRole;
@@ -32,7 +32,7 @@ import bank.TellerRole;
  * Main GUI class.
  * Contains the main frame and subsequent panels
  */
-public class BankGui extends JFrame implements ActionListener {
+public class BankGui extends JPanel implements ActionListener {
 
 	AnimationPanel animationPanel = new AnimationPanel();
 	JFrame optionFrame;// = new JFrame();
@@ -58,6 +58,8 @@ public class BankGui extends JFrame implements ActionListener {
 
     private int testAccountId = 2000;
     
+    CityLocation bank = new BankBuilding(0, 0, 0, 0);
+    
     List<WorkRole> workRoles = new ArrayList<WorkRole>();
     
     private TellerRole teller;
@@ -70,14 +72,23 @@ public class BankGui extends JFrame implements ActionListener {
     private LoanManagerGui loanManagerGui;
     private SecurityGuardGui securityGuardGui;
     
+    private LayoutGui layoutGui;
+    
+    GridLayout layout = new GridLayout(1,1);
+    
     int tellerDesk = 0;
     /**
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
      */
     public BankGui() {
+    	
+    	
         int WINDOWX = 600;
         int WINDOWY = 490;
+        
+        layoutGui = new LayoutGui();
+        animationPanel.addGui(layoutGui);
         
         resumeWorkButton = new JButton("resume work day, bitch");
         endWorkDayButton = new JButton("end work day");
@@ -90,11 +101,12 @@ public class BankGui extends JFrame implements ActionListener {
         text2 = new JTextField();
         optionGridLayout = new GridLayout(3, 2);
         optionFrame.setLayout(optionGridLayout);
-        optionFrame.add(addCustomerButton);
+       
         addCustomerButton.addActionListener(this);
+        addTellerButton.addActionListener(this);
+        optionFrame.add(addCustomerButton);
         optionFrame.add(text1);
         optionFrame.add(addTellerButton);
-        addTellerButton.addActionListener(this);
         optionFrame.add(text2);
         optionFrame.add(endWorkDayButton);
         optionFrame.add(resumeWorkButton);
@@ -114,18 +126,17 @@ public class BankGui extends JFrame implements ActionListener {
         optionFrame.add(addCustomerButton);
     	setBounds(50, 50, WINDOWX, WINDOWY);
 
-        setLayout(new BoxLayout((Container) getContentPane(), 
-        		BoxLayout.Y_AXIS));
+   
 
         Dimension restDim = new Dimension(WINDOWX, (int) (WINDOWY * .3));
 
         PersonAgent accountManagerPerson = new PersonAgent("accountManager");
         PersonAgent loanManagerPerson = new PersonAgent("loanManagement");
-        accountManager = new AccountManagerRole(accountManagerPerson);
+        accountManager = new AccountManagerRole(accountManagerPerson, bank);
         accountManagerGui = new AccountManagerGui(accountManager);
         animationPanel.addGui(accountManagerGui);
         accountManager.setGui(accountManagerGui);
-        loanManager = new LoanManagerRole(loanManagerPerson);
+        loanManager = new LoanManagerRole(loanManagerPerson, bank);
         accountManagerPerson.addRole(accountManager);
         accountManager.activate();
         accountManagerPerson.startThread();
@@ -139,7 +150,7 @@ public class BankGui extends JFrame implements ActionListener {
         
         PersonAgent securityGuardPerson = new PersonAgent("securityguard");
         securityGuardPerson.startThread();
-        securityGuard = new SecurityGuardRole(securityGuardPerson);
+        securityGuard = new SecurityGuardRole(securityGuardPerson, bank);
         
         
 
@@ -157,15 +168,9 @@ public class BankGui extends JFrame implements ActionListener {
         workRoles.add(accountManager);
         
         Dimension graphicDim = new Dimension(WINDOWX, (int) (WINDOWY * .30));
-        graphicPanel = new JPanel();
-        graphicPanel.setPreferredSize(graphicDim);
-        graphicPanel.setMinimumSize(graphicDim);
-        graphicPanel.setMaximumSize(graphicDim);
-        graphicPanel.setBorder(BorderFactory.createTitledBorder("Graphic"));
-        
-        graphicPanel.setLayout(new BorderLayout(1,2));
-        graphicPanel.setBackground(Color.red);
-        add(animationPanel);//animation panel added here FIXIT
+//       animationPanel.setBackground(Color.RED);
+       this.setLayout(layout);
+        this.add(animationPanel);//animation panel added here FIXIT
 
     }
     /**
@@ -208,7 +213,7 @@ public class BankGui extends JFrame implements ActionListener {
 	private void addTeller(String name) {
         PersonAgent tellerPerson2 = new PersonAgent(name);
         tellerPerson2.startThread();
-        TellerRole teller2 = new TellerRole(tellerPerson2);
+        TellerRole teller2 = new TellerRole(tellerPerson2, bank);
         teller2.setAccountManager(accountManager);
         teller2.setLoanManager(loanManager);
         teller2.setDeskPosition(tellerDesk);
@@ -230,7 +235,7 @@ public class BankGui extends JFrame implements ActionListener {
 		if(name.equals("hasAccount")) {
 	        PersonAgent bankCustomerPerson = new PersonAgent(name);
 	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
 	       
 	        accountManager.hackAddAccount(bankCustomer, 200, testAccountId);
 	        
@@ -247,7 +252,7 @@ public class BankGui extends JFrame implements ActionListener {
 		if(name.equals("withdraw")){
 	        PersonAgent bankCustomerPerson = new PersonAgent(name);
 	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank, testAccountId, name);
 	        
 	        accountManager.hackAddAccount(bankCustomer, 300, testAccountId);
 	        
@@ -264,7 +269,7 @@ public class BankGui extends JFrame implements ActionListener {
 		if(name.equals("loan")){
 	        PersonAgent bankCustomerPerson = new PersonAgent(name);
 	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
 	        
 	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
 
@@ -281,7 +286,7 @@ public class BankGui extends JFrame implements ActionListener {
 		if(name.equals("deposit")){
 	        PersonAgent bankCustomerPerson = new PersonAgent(name);
 	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, testAccountId, name);
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson,bank, testAccountId, name);
 	       
 	        accountManager.hackAddAccount(bankCustomer, 0, testAccountId);
 
@@ -298,7 +303,7 @@ public class BankGui extends JFrame implements ActionListener {
 		else {//make a customer with no account
 	        PersonAgent bankCustomerPerson = new PersonAgent(name);
 	        bankCustomerPerson.startThread();
-	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson);
+	        BankCustomerRole bankCustomer = new BankCustomerRole(bankCustomerPerson, bank);
 	        bankCustomer.addTeller(teller);
 	        bankCustomerPerson.addRole(bankCustomer);
 	        bankCustomer.activate();
@@ -313,11 +318,5 @@ public class BankGui extends JFrame implements ActionListener {
 
 	}
 	
-	   public static void main(String[] args) {
-	        BankGui gui = new BankGui();
-	        gui.setTitle("SpongeBank");
-	        gui.setVisible(true);
-	        gui.setResizable(false);
-	        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    }
+
 }

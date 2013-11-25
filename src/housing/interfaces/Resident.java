@@ -10,4 +10,6 @@ public interface Resident {
 	public void msgPaymentDue(double amount);
 
 	public void msgAtDestination();
+
+	public void msgDwellingFixed();
 }

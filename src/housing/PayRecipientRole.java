@@ -1,20 +1,18 @@
 package housing;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
+import agent.interfaces.Person;
 import agent.mock.EventLog;
 import agent.Constants;
+import agent.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
-import agent.TimeManager;
 
 /**
  * PayRecipient is the generic money collector that charges
@@ -29,7 +27,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
-	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PAID, DONE, PAYMENT_RECEIVED };
+	enum PaymentState { NONE, PAYMENT_DUE, PAYMENT_PENDING, PAYMENT_RECEIVED,
+		PAYMENT_PAID, DONE, };
 	
 	// class is public for testing purposes
 	public class MyResident{
@@ -49,16 +48,17 @@ public class PayRecipientRole extends Role implements PayRecipient {
 		public double getPaid() { return hasPaid; }
 	}
 	
-	public PayRecipientRole(PersonAgent agent) {
-		super(agent);
+	public PayRecipientRole(Person payRecipientPerson) {
+		super(payRecipientPerson);
 		
 		// ask everyone for rent
-		Runnable command = new Runnable(){
+		Runnable command = new Runnable() {
 			@Override
 			public void run() {
-				synchronized(residents){
+				synchronized(residents) {
 					for(MyResident mr : residents){
 						mr.state = PaymentState.PAYMENT_DUE;
+						stateChanged();
 					}
 				}
 			}
@@ -83,6 +83,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
+		
 		synchronized(residents){
 			for(MyResident mr : residents){
 				if(mr.state == PaymentState.PAYMENT_DUE){
@@ -114,8 +115,8 @@ public class PayRecipientRole extends Role implements PayRecipient {
 			log.add("Resident has paid in full, now owes " + mr.owes);
 		}
 		else if(mr.owes > 0) {
-			log.add("Resident " + mr.dwelling.getIDNumber() + " still owes money!");
-			mr.state = PaymentState.PAYMENT_DUE;
+			log.add("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
+			mr.state = PaymentState.NONE;
 		}
 		// this should never happen
 		else {
@@ -124,6 +125,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	}
 	
 	public void chargeResident(MyResident mr){
+		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
 		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());

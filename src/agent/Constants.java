@@ -115,6 +115,11 @@ public interface Constants {
 	};
 	
 	/**
+	 * Conditions for Dwellings
+	 */
+	enum Condition { GOOD, FAIR, POOR, BROKEN, BEING_FIXED }
+	
+	/**
 	 * Types of Car in the city
 	 */
 	public static final List<String> CARS = new ArrayList<String>() {

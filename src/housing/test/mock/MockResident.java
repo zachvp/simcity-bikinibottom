@@ -25,4 +25,9 @@ public class MockResident extends Mock implements Resident {
 	public void msgAtDestination() {
 		log.add("Resident done waiting for input.");
 	}
+
+	@Override
+	public void msgDwellingFixed() {
+		log.add("Dwelling is fixed.");
+	}
 }

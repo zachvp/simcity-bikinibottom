@@ -1,17 +1,22 @@
 package restaurant.strottma;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
+
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.CookGui;
 import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
-
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -19,7 +24,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CookRole extends Role implements Cook {
+public class CookRole extends WorkRole implements Cook {
 
 	// private CookGui cookGui = null;
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
@@ -40,9 +45,14 @@ public class CookRole extends Role implements Cook {
 	public void setGui(CookGui cookGui) {
 		this.gui = cookGui;
 	}
+	
+	int shiftStartHour;
+	int shiftStartMinute;
+	int shiftEndHour;
+	int shiftEndMinute;
 
-	public CookRole(Person person) {
-		super(person);
+	public CookRole(Person person, CityLocation location) {
+		super(person, location);
 		
 		this.timer = new Timer();
 
@@ -50,6 +60,11 @@ public class CookRole extends Role implements Cook {
 		this.markets = new ArrayList<Market>();
 		this.grills = new ArrayList<GrillOrPlate>();
 		this.plateAreas = new ArrayList<GrillOrPlate>();
+		
+		this.shiftStartHour = 8; // 08:00
+		this.shiftStartMinute = 0;
+		this.shiftEndHour = 20; // 20:00
+		this.shiftEndMinute = 0;
 		
 		// new Food(name, quantity, capacity, low threshold, cooking time in milliseconds)
 		Food st = new Food("Steak",   3, 5, 2, 7*1000);
@@ -121,6 +136,12 @@ public class CookRole extends Role implements Cook {
 	
 	public void msgAtDestination() { // from gui
 		multiStepAction.release();
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**
@@ -387,6 +408,37 @@ public class CookRole extends Role implements Cook {
 		public synchronized void showOrder() { showOrder = true; }
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return shiftStartHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return shiftStartMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return shiftEndHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return shiftEndMinute;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe cooks can go on breaks in v3
+		return false;
 	}
 	
 }

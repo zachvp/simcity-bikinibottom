@@ -1,15 +1,16 @@
 package restaurant.strottma;
 
-import agent.Agent;
-import agent.PersonAgent;
-import agent.Role;
-import agent.interfaces.Person;
-import restaurant.strottma.gui.HostGui;
-import restaurant.strottma.gui.WaiterGui;
-import restaurant.strottma.interfaces.Customer;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
+
+import restaurant.strottma.gui.HostGui;
+import restaurant.strottma.interfaces.Customer;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
+import agent.interfaces.Person;
 
 /**
  * Restaurant Host Role
@@ -20,7 +21,7 @@ import java.util.concurrent.Semaphore;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostRole extends Role {
+public class HostRole extends WorkRole {
 	static final int NTABLES = 4; // a global for the number of tables.
 	static final int TABLE_SPACING = 80;
 	static final int TABLE_X_OFFSET = 440; // how far right and down to bump all tables
@@ -38,9 +39,19 @@ public class HostRole extends Role {
 	private HostGui hostGui = null;
 	
 	private Semaphore atTable = new Semaphore(0,true);
+	
+	int shiftStartHour;
+	int shiftStartMinute;
+	int shiftEndHour;
+	int shiftEndMinute;
 
-	public HostRole(Person person) {
-		super(person);
+	public HostRole(Person person, CityLocation location) {
+		super(person, location);
+		
+		this.shiftStartHour = 8; // 08:00
+		this.shiftStartMinute = 0;
+		this.shiftEndHour = 20; // 20:00
+		this.shiftEndMinute = 0;
 		
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
@@ -82,6 +93,12 @@ public class HostRole extends Role {
 	public void msgOffBreak(WaiterRole w) { // from waiter
 		MyWaiter mw = findWaiter(w);
 		mw.state = WState.NORMAL;
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**
@@ -273,6 +290,37 @@ public class HostRole extends Role {
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return shiftStartHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return shiftStartMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return shiftEndHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return shiftEndMinute;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe hosts can go on breaks in v3
+		return false;
 	}
 	
 }

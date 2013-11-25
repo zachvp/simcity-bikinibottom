@@ -47,12 +47,14 @@ public class RestaurantPanel extends JPanel {
     private PersonAgent marketPerson1 = new PersonAgent("Market1");
     private PersonAgent marketPerson2 = new PersonAgent("Market2");
     
-    private HostRole host = new HostRole(sarah);
-    private CookRole cook = new CookRole(john);
-    private CashierRole cashier = new CashierRole(mike);
-    private MarketRole market1 = new MarketRole(marketPerson1);
-    private MarketRole market2 = new MarketRole(marketPerson2);
+    RestaurantStrottmaBuilding building = new RestaurantStrottmaBuilding(0,0,0,0);
     
+    private HostRole host = new HostRole(sarah, building);
+    private CookRole cook = new CookRole(john, building);
+    private CashierRole cashier = new CashierRole(mike, building);
+    private MarketRole market1 = new MarketRole(marketPerson1, building);
+    private MarketRole market2 = new MarketRole(marketPerson2, building);
+        
     private Vector<CustomerRole> customers = new Vector<CustomerRole>();
     private Vector<WaiterRole> waiters = new Vector<WaiterRole>();
 
@@ -63,6 +65,8 @@ public class RestaurantPanel extends JPanel {
 
     public RestaurantPanel(RestaurantGui gui) {
         this.gui = gui;
+        
+        building.setHost(host);
         
         agents.add(sarah);
         agents.add(john);
@@ -171,7 +175,7 @@ public class RestaurantPanel extends JPanel {
     	
     	if (type.equals("Customers")) {
     		PersonAgent p = new PersonAgent(name);
-    		CustomerRole c = new CustomerRole(p);	
+    		CustomerRole c = new CustomerRole(p, building);	
     		CustomerGui g = new CustomerGui(c, gui);
     		
     		gui.animationPanel.addGui(g);
@@ -188,7 +192,7 @@ public class RestaurantPanel extends JPanel {
     		
     	} else if (type.equals("Waiters")) {
     		PersonAgent p = new PersonAgent(name);
-    		WaiterRole w = new WaiterRole(p);
+    		WaiterRole w = new WaiterRole(p, building);
     		w.setOthers(host, cook, cashier);
     		WaiterGui wg = new WaiterGui(w, gui);
     		

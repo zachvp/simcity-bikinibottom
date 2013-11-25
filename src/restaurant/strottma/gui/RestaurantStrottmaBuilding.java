@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import restaurant.strottma.CustomerRole;
+import restaurant.strottma.HostRole;
 import CommonSimpleClasses.XYPos;
 import agent.Constants;
 import agent.Role;
@@ -21,10 +22,15 @@ import agent.interfaces.Person;
  */
 public class RestaurantStrottmaBuilding extends Building {
 	private Map<Person, Role> existingRoles;
+	private HostRole host;
 	
 	public RestaurantStrottmaBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.existingRoles = new HashMap<Person, Role>();
+	}
+	
+	public void setHost(HostRole host) {
+		this.host = host;
 	}
 	
 	/**
@@ -40,8 +46,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	
 	@Override
 	public Role getGreeter() {
-		// TODO return the host
-		return null;
+		return host;
 	}
 	
 	@Override
@@ -54,7 +59,7 @@ public class RestaurantStrottmaBuilding extends Building {
 		Role role = existingRoles.get(person);
 		if (role == null) {
 			// Create a new role if none exists
-			role = new CustomerRole(person);
+			role = new CustomerRole(person, this);
 			role.setLocation(this);
 		} else {
 			// Otherwise use the existing role
@@ -69,7 +74,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	@Override
 	public JPanel getAnimationPanel() {
 		// TODO initialize the animation panel
-		JPanel animationPanel = new JPanel();
+		JPanel animationPanel = new agent.gui.AnimationPanel();
 		return animationPanel;
 	}
 	

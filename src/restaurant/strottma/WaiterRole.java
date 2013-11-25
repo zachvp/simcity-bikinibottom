@@ -1,18 +1,20 @@
 package restaurant.strottma;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.Semaphore;
+
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.WaiterGui;
 import restaurant.strottma.interfaces.Cashier;
+import restaurant.strottma.interfaces.Cook.GrillOrPlate;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
-import restaurant.strottma.interfaces.Cook.GrillOrPlate;
-
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -20,7 +22,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class WaiterRole extends Role implements Waiter {
+public class WaiterRole extends WorkRole implements Waiter {
 	
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	
@@ -44,11 +46,21 @@ public class WaiterRole extends Role implements Waiter {
 			BREAK_DENIED, ON_BREAK, BREAK_DONE};
 
 	private BreakState bState;
+	
+	int shiftStartHour;
+	int shiftStartMinute;
+	int shiftEndHour;
+	int shiftEndMinute;
 
-	public WaiterRole(Person person) {
-		super(person);
+	public WaiterRole(Person person, CityLocation location) {
+		super(person, location);
 
 		this.bState = BreakState.NORMAL;
+		
+		this.shiftStartHour = 8; // 08:00
+		this.shiftStartMinute = 0;
+		this.shiftEndHour = 20; // 20:00
+		this.shiftEndMinute = 0;
 	}
 	
 	public void setOthers(HostRole host, CookRole cook, Cashier cashier) {
@@ -150,6 +162,12 @@ public class WaiterRole extends Role implements Waiter {
 	public void msgEndBreak() { // from gui
 		bState = BreakState.BREAK_DONE;
 		multiStepAction.release();
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**
@@ -539,6 +557,31 @@ public class WaiterRole extends Role implements Waiter {
 			}
 		}
 		
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return shiftStartHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return shiftStartMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return shiftEndHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return shiftEndMinute;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
 	}
 	
 }

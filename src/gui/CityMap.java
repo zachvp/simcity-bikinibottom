@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -39,6 +40,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	
 	private List<Gui> guis = new ArrayList<Gui>();
 
+	private java.util.Timer utilTimer;
+
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
@@ -59,6 +62,14 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		
 		Timer timer = new Timer(10, this);
     	timer.start();
+    	
+    	utilTimer = new java.util.Timer();
+        utilTimer.scheduleAtFixedRate(new TimerTask() {
+                public void run() {
+                        updatePosition();
+                }
+        }, 10, 25);
+
 	}
 	
 	/**
@@ -90,12 +101,6 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.drawImage(icon.getImage(), 0, 0, null);
-		
-		for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
@@ -114,6 +119,14 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 				g2.fill(b);
 			}
 		}
+	}
+
+	public void updatePosition() {
+		for(Gui gui : guis) {
+            if (gui.isPresent()) {
+                gui.updatePosition();
+            }
+        }
 	}
 	
 	/**

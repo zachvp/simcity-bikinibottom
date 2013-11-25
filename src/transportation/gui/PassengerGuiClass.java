@@ -10,8 +10,10 @@ import transportation.interfaces.Bus;
 import transportation.interfaces.Passenger;
 
 public class PassengerGuiClass implements PassengerGui {
-	private static final int PASSENGERW = 20;
-	private static final int PASSENGERH = 20;
+
+	private static final int PASSENGERW = 4;
+	private static final int PASSENGERH = 4;
+
 	private int xPos, yPos;
 	private Passenger passenger;
 	private CityLocation destination;

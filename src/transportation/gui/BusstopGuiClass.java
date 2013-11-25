@@ -11,8 +11,8 @@ import agent.gui.Gui;
 
 public class BusstopGuiClass implements BusstopGui {
 	
-	private static final int BUSSTOPW = 10;
-	private static final int BUSSTOPH = 10;
+	private static final int BUSSTOPW = 6;
+	private static final int BUSSTOPH = 6;
 	private Busstop busstop;
 	private int xPos;
 	private int yPos;

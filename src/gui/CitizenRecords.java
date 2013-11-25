@@ -22,6 +22,7 @@ public class CitizenRecords {
 
 	private PersonAgent person = new PersonAgent("Steve");
 
+	
 
 	public CitizenRecords(MainFrame m){
 		main = m;
@@ -58,7 +59,7 @@ public class CitizenRecords {
 		personInfoList.addToList(newPerson.getName());
 		newPerson.startThread();
 		
-		//TODO TEST
+		//TODO 
 		for(BuildingRecords rec: buildingRecords){
 			if (rec.getType() == LocationTypeEnum.Restaurant){
 					rec.addPerson("Waiters", person.getName());

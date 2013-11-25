@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
+import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
@@ -30,7 +31,7 @@ public class ResidentialBuilding extends Building {
 	HousingComplex complex;
 	
 	// used for producing jobs and residential roads in the complex
-	Map<Person, Role> roles;
+	Map<Person, Role> population;
 	
 	// constants
 	private final int EMPLOYEE_START_HOUR = 6;
@@ -41,9 +42,10 @@ public class ResidentialBuilding extends Building {
 		this.entrancePos = new XYPos(width/2, height);
 		this.housingComplex = this;
 		this.complex = new HousingComplex();
-		this.roles = new HashMap<Person, Role>();
+		this.population = new HashMap<Person, Role>();
 	}
 
+	
 	@Override
 	public XYPos entrancePos() {
 		return entrancePos;

@@ -37,17 +37,14 @@ public class HousingGui extends JPanel {
  	MaintenanceWorker worker;
 
 	// add resident
-	PersonAgent residentPerson = new PersonAgent("Resident");
-	ResidentRole residentRole = new ResidentRole(residentPerson);
+ 	ResidentRole resident;
 	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
 	LayoutGui layoutGui = new LayoutGui(500, 500);
-	ResidentRoleGui residentGui = new ResidentRoleGui( residentRole);
 
 	// back-end housing containers
-	List<PersonAgent> people = new ArrayList<PersonAgent>();
-	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, Condition.GOOD);
+	ResidentDwelling dwelling = new ResidentDwelling(payRecipientRole, index, Condition.GOOD);
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
@@ -58,25 +55,6 @@ public class HousingGui extends JPanel {
 		// set the manager for this housing unit
 		this.payRecipientRole = payRecipient;
 		this.worker = worker;
-		
-		// set the worker for this housing unit
-		residentRole.setWorker(worker);
-		
-		// add the resident to the pay recipient's charges
-		residentRole.setPayee(payRecipient);
-		payRecipient.addResident(dwelling);
-		
-		// add people to the list
-		people.add(residentPerson);
-		
-		// activate roles
-		startAndActivate(residentPerson, residentRole);
-		
-		residentRole.setDwelling(dwelling);
-		
-		// assign guis to the resident
-		residentRole.setGui(residentGui);
-		residentGui.setLayoutGui(layoutGui);
 		
 		switch(index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
@@ -89,13 +67,36 @@ public class HousingGui extends JPanel {
 		// add to animation panel
 		this.setLayout(layout);
 		housingAnimationPanel.addGui(layoutGui);
-		housingAnimationPanel.addGui(residentGui);
 		this.add(housingAnimationPanel);
 	}
 	
-	private void startAndActivate(PersonAgent agent, Role role) {
-		agent.startThread();
-		agent.addRole(role);
+	/* --- Utilities --- */
+	public void addResidentGui(ResidentRole role){
+		this.resident = role;
+
+		// connect resident to proper roles to each other for messaging purposes
+		role.setDwelling(dwelling);
+		role.setPayee(payRecipientRole);
+		role.setWorker(worker);
+		
+		// connect proper roles to resident
+		dwelling.setResident(role);
+		
+		payRecipientRole.addResident(dwelling);
+		
+		// set up gui stuff for the role
+		ResidentRoleGui residentGui = new ResidentRoleGui(role);
+		housingAnimationPanel.addGui(residentGui);
+		role.setGui(residentGui);
+		role.setLayoutGui(layoutGui);
+		
+		// finally activate all the roles now that the pointers are sorted out
 		role.activate();
+		((Role) payRecipientRole).activate();
+		((Role) worker).activate();
+	}
+	
+	public ResidentRole getResident(){
+		return resident;
 	}
 }

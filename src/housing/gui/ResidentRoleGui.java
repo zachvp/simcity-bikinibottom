@@ -95,6 +95,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	
 	public void DoGoToRefrigerator(){
 		waiting = false;
+		if(layoutGui == null) System.out.println("Gui is null");
 		xDestination = layoutGui.getRefrigeratorPosition().width;
 		yDestination = layoutGui.getRefrigeratorPosition().height;
 		canRelease = true;

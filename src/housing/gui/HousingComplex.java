@@ -2,6 +2,7 @@ package housing.gui;
 
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
+import housing.ResidentRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 
@@ -25,10 +26,10 @@ import agent.interfaces.Person;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 4;
-	private final int ROWS = 2;
-	private final int COLUMNS = 2;
-	private final int SPACING = 10;
+	private final int UNIT_COUNT = 1;
+	private final int ROWS = 1;
+	private final int COLUMNS = 1;
+	private final int SPACING = 1;
 	
 	// layout manager
 	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
@@ -41,7 +42,7 @@ public class HousingComplex extends JPanel {
  	private Person workerPerson = new PersonAgent("Maintenance Worker");
  	private MaintenanceWorker worker = new MaintenanceWorkerRole((PersonAgent) workerPerson);
  	
-	
+	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
 	public HousingComplex() {
@@ -57,16 +58,25 @@ public class HousingComplex extends JPanel {
 			this.add(gui);
 			housingUnits.add(gui);
 		}
-		
-		// activate complex manager
+
+		// activate complex manager and worker
 		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
 		startAndActivate(workerPerson, (Role) worker);
 	}
 	
-	private void startAndActivate(Person person, Role payRecipientRole) {
-		((Agent) payRecipientPerson).startThread();
-		payRecipientPerson.addRole((Role) payRecipientRole);
-		((Role) payRecipientRole).activate();
+	public void addResident(ResidentRole role){
+		for(HousingGui unit : housingUnits){
+			if(unit.getResident() == null){
+				unit.addResidentGui(role);
+				break;
+			}
+		}
+	}
+	
+	private void startAndActivate(Person person, Role role) {
+		( (Agent) person).startThread();
+		person.addRole(role);
+//		( (Role) role).activate();
 	}
 
 	public PayRecipient getPayRecipientRole() {

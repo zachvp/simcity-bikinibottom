@@ -3,6 +3,7 @@ package housing;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
 import agent.Constants;
+import agent.Constants.Condition;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
@@ -45,6 +46,7 @@ public class ResidentDwelling implements Dwelling {
 		log.add("Creating dwelling with start condition " + startCondition);
 		this.condition = startCondition;
 		
+		// determine the starting monthly payment for the property
 		switch(condition){
 			case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
 			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
@@ -57,6 +59,23 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
+	public ResidentDwelling(PayRecipient payRecipientRole, int index,
+			Condition startCondition) {
+		// set local data to constructor params
+		this.condition = startCondition;
+		this.payRecipient = payRecipientRole;
+		this.IDNumber = index;
+		
+		// determine the starting monthly payment for the property
+		switch(condition){
+		case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
+		case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
+		case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+		case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+		default : this.monthlyPaymentAmount = 0; break;
+	}
+	}
+
 	public void setCondition(Constants.Condition condition){
 		this.condition = condition;
 	}

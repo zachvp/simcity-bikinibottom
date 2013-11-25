@@ -1,9 +1,11 @@
 package housing.gui;
 
+import housing.PayRecipientRole;
 import housing.ResidentDwelling;
 import housing.ResidentRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
+
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -76,13 +78,10 @@ public class HousingGui extends JPanel {
 
 		// connect resident to proper roles to each other for messaging purposes
 		role.setDwelling(dwelling);
-		role.setPayee(payRecipientRole);
 		role.setWorker(worker);
 		
 		// connect proper roles to resident
 		dwelling.setResident(role);
-		
-		payRecipientRole.addResident(dwelling);
 		
 		// set up gui stuff for the role
 		ResidentRoleGui residentGui = new ResidentRoleGui(role);
@@ -90,10 +89,16 @@ public class HousingGui extends JPanel {
 		role.setGui(residentGui);
 		role.setLayoutGui(layoutGui);
 		
-		// finally activate all the roles now that the pointers are sorted out
+		// finally activate the resident role now that the pointers are sorted
 		role.activate();
-		((Role) payRecipientRole).activate();
-		((Role) worker).activate();
+	}
+	
+	public void addPayRecipient(PayRecipientRole role){
+		this.payRecipientRole = role;
+		// add the resident to the payRecipient's list
+		payRecipientRole.addResident(dwelling);
+		resident.setPayee(role);
+		role.activate();
 	}
 	
 	public ResidentRole getResident(){

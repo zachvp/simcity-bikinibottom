@@ -35,8 +35,8 @@ public class HousingComplex extends JPanel {
 	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 
 	// payRecipient who manages the complex 
- 	private Person payRecipientPerson = new PersonAgent("Pay Recipient");
- 	private PayRecipient payRecipientRole = new PayRecipientRole(payRecipientPerson);
+// 	private Person payRecipientPerson; = new PersonAgent("Pay Recipient");
+ 	private PayRecipient payRecipientRole;
  	
  	// maintenance worker who repairs dwellings
  	private Person workerPerson = new PersonAgent("Maintenance Worker");
@@ -60,7 +60,7 @@ public class HousingComplex extends JPanel {
 		}
 
 		// activate complex manager and worker
-		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
+//		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
 		startAndActivate(workerPerson, (Role) worker);
 	}
 	
@@ -73,10 +73,16 @@ public class HousingComplex extends JPanel {
 		}
 	}
 	
+	public void addPayRecipient(PayRecipientRole role){
+		for(HousingGui unit : housingUnits){
+			unit.addPayRecipient(role);
+		}
+	}
+	
 	private void startAndActivate(Person person, Role role) {
 		( (Agent) person).startThread();
 		person.addRole(role);
-//		( (Role) role).activate();
+		( (Role) role).activate();
 	}
 
 	public PayRecipient getPayRecipientRole() {

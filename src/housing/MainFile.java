@@ -24,22 +24,30 @@ public class MainFile extends JFrame {
 		// TODO test methods
 		this.population = new HashMap<Person, Role>();
 		this.addResident(new PersonAgent("Squidward"));
+		this.addPayRecipient(new PersonAgent("Mr. Krabs"));
 	}
 	
 	public void addResident(PersonAgent agent){
-		System.out.println("Added resident");
 		ResidentRole resident = new ResidentRole(agent);
 		agent.addRole(resident);
 		population.put(agent, resident);
-		this.startAndActivate(agent, resident);
+		this.startAndAddRole(agent, resident);
 		
 		complex.addResident(resident);
 	}
 	
-	private void startAndActivate(PersonAgent agent, Role role) {
+	public void addPayRecipient(PersonAgent agent){
+		PayRecipientRole payRecipient = new PayRecipientRole(agent);
+		agent.addRole(payRecipient);
+		population.put(agent, payRecipient);
+		this.startAndAddRole(agent, payRecipient);
+		
+		complex.addPayRecipient(payRecipient);
+	}
+	
+	private void startAndAddRole(PersonAgent agent, Role role) {
 		agent.startThread();
 		agent.addRole(role);
-//		role.activate();
 	}
 
 	// TODO this is simply a test main() method

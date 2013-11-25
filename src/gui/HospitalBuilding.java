@@ -1,5 +1,8 @@
 package gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.XYPos;
@@ -9,6 +12,7 @@ import agent.interfaces.Person;
 public class HospitalBuilding extends Building{	
 	
 	CitizenRecords records;
+	ArrayList<Building> buildings;
 	PersonCreationPanel panel = new PersonCreationPanel();
 	
 
@@ -57,5 +61,10 @@ public class HospitalBuilding extends Building{
 		records = citizenRecords;
 		panel.setRecords(records);
 	}
+	public void setBuildings(ArrayList<Building> b){
+		buildings = b;
+		records.setBuildings(b);
+	}
+	
 
 }

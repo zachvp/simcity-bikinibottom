@@ -256,10 +256,7 @@ private static final int startingminute = 0;
 				return true;
 			}
 		}
-		if (getState() == Cashierstate.GoingToGetItems){
-			CollectItemsFromBench();
-			return true;
-		}
+		
 		//No item is fulfilled
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).state == Customerstate.EpicFailed && getState() == Cashierstate.Idle){
@@ -284,6 +281,11 @@ private static final int startingminute = 0;
 		
 		if (getMyCustomerList().isEmpty() && getState() == Cashierstate.OffWork){
 			OffWork();
+			return true;
+		}
+		
+		if (getState() == Cashierstate.GoingToGetItems){
+			CollectItemsFromBench();
 			return true;
 		}
 

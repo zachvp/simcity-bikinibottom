@@ -13,11 +13,7 @@ import market.Item;
 import market.ItemCollectorRole;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
-import transportation.FakePassengerRole;
-import transportation.PassengerRole;
-import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
 import agent.Role;
 import agent.gui.AnimationPanel;
@@ -115,7 +111,7 @@ public class MarketRecords implements BuildingRecords {
         	
         
         ItemCollectors.add(ic);
-        ItemCollectors.add(ic1);
+        //ItemCollectors.add(ic1);
         DeliveryGuys.add(dg);
 
         

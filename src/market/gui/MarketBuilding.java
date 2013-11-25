@@ -1,17 +1,24 @@
 package market.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JPanel;
 
-import market.MarketRoleFactory;
+import market.CustomerRole;
+import market.Item;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
+import agent.RoleFactory;
 import agent.interfaces.Person;
 
 
 
 
-public class MarketBuilding extends gui.Building {
+public class MarketBuilding extends gui.Building implements RoleFactory{
 
 	String name;
 	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
@@ -19,7 +26,7 @@ public class MarketBuilding extends gui.Building {
 	JPanel info = new MarketInfoPanel(records);
 	//ATTENTION
 	{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
-	MarketRoleFactory marketroleFactory = new MarketRoleFactory();
+	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -37,7 +44,7 @@ public class MarketBuilding extends gui.Building {
 	public Role getGreeter() {
 		// TODO Auto-generated method stub
 			//Pass Cashier
-		return null;
+		return records.ca;
 	}
 
 	@Override
@@ -48,8 +55,30 @@ public class MarketBuilding extends gui.Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		// TODO Auto-generated method stub
-		return marketroleFactory.getCustomerRole(person);
+		List<Item> ShoppingList = new ArrayList<Item>();
+		Map<String,Integer> GroceryList = person.getResidentRole().getGroceries();
+		{
+			//FOODS
+			for (int i=0;i<agent.Constants.FOODS.size();i++){
+				ShoppingList.add(new Item(agent.Constants.FOODS.get(i),GroceryList.get(agent.Constants.FOODS.get(i))));
+			}
+			//CARS
+			for (int i=0;i<agent.Constants.CARS.size();i++){
+				ShoppingList.add(new Item(agent.Constants.CARS.get(i),GroceryList.get(agent.Constants.CARS.get(i))));
+			}
+		}
+		
+		if (MarketCustomerMap.containsKey(person)){
+			MarketCustomerMap.get(person).setShoppingList(ShoppingList);
+			return MarketCustomerMap.get(person);
+		}
+		else {
+			CustomerRole role = new CustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
+			role.setLocation(this);
+			role.setPerson(person);
+			person.addRole(role);
+			return role;
+		}
 	}
 
 	@Override

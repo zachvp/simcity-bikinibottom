@@ -84,8 +84,8 @@ public interface Constants {
     /**
      * Dimensions of a building on a map
      */
-    public static final int BUILDING_WIDTH = 90;
-	public static final int BUILDING_HEIGHT = 90;
+    public static final int BUILDING_WIDTH = 46;
+	public static final int BUILDING_HEIGHT = 46;
 	
 	/**
 	 * Dimensions of the City Map
@@ -96,8 +96,8 @@ public interface Constants {
 	/**
 	 * Margins of the City Map
 	 */
-	public static final int MAP_MARGIN_Y = 10;
-	public static final int MAP_MARGIN_X = 10;
+	public static final int MAP_MARGIN_Y = 20;
+	public static final int MAP_MARGIN_X = 60;
 	/**
 	 * Maximum number of Columns in the Map
 	 */
@@ -106,7 +106,7 @@ public interface Constants {
 	/** Space between 2 building on the city map, a.k.a. 
 	 *  the width of the road and sidewalks.
 	 */
-	public static final int SPACE_BETWEEN_BUILDINGS = 60;
+	public static final int SPACE_BETWEEN_BUILDINGS = 34;
 
 	public static final int BUSSTOP_OFFESET_PERPENDICULAR = (SPACE_BETWEEN_BUILDINGS/2);
 

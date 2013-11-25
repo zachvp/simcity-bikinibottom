@@ -37,6 +37,7 @@ import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
+import transportation.BusAgent;
 import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
@@ -198,7 +199,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				semaphore.release();
 				
 			}
-		}, 2000);
+		}, 8000);
 		
 		try {
 			semaphore.acquire();
@@ -264,7 +265,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(mock);
 			}
 		}
-		
 		initializeCornerMapAndKelp(constructedBuildings);
 		hospital.setBuildings(constructedBuildings);
 	}
@@ -300,6 +300,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		for (Corner corner : corners) {
 			locations.add(corner);
+			List<Busstop> busstops = corner.getBusstops();
+			for (Busstop busstop : busstops) {
+				locations.add(busstop);
+			}
 		}
 
 		try {
@@ -307,6 +311,24 @@ public class MainFrame extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		for (Corner corner : corners) {
+			corner.startThreads();
+		}
+		
+		BusAgent busAgent = new BusAgent(corners.get(1),
+				true, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+
+		busAgent = new BusAgent(corners.get(0),
+				false, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+		
+		
 	}
 
 	/** Utilities **/

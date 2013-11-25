@@ -186,9 +186,12 @@ public interface Person {
 	
     /** The simulated action code */
 	public void agentDo(String msg);
-
-    /** Print message */
+	
+	/** Print message */
 	public void printMsg(String msg);
+	
+    /** Print message with error */
+	public void printMsg(String msg, Throwable e);
 
 	public void setHungerLevel(HungerLevel hungry);
 	

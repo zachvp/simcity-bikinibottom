@@ -19,7 +19,7 @@ public class CornerAgent extends Agent implements Corner {
 	public class MyCorner {
 		public Corner c;
 		//Direction in which the Corner is.
-		public DirectionEnum d; // TODO add Direction enum as DD standalone?
+		public DirectionEnum d;
 		
 		public MyCorner(Corner c, DirectionEnum d) {
 			this.c = c;
@@ -53,7 +53,7 @@ public class CornerAgent extends Agent implements Corner {
 	Queue<AdjCornerRequester> waitingForCorners =
 			new LinkedList<AdjCornerRequester>();
 	
-	//Reference to Kelp TODO add to DD
+	//Reference to Kelp
 	Kelp kelp;
 
 	private String name;
@@ -125,19 +125,19 @@ public class CornerAgent extends Agent implements Corner {
 		return false;
 	}
 
-	// TODO Add to DD
+	// Sends `busstopList` to a requester.
 	private void sendBusstopInfo() {
 		BusstopRequester bsR = waitingForBusstops.remove();
 		bsR.msgMyBusStop(new ArrayList<Busstop>(busstopList));
 	}
 
-	// TODO Add to DD
+	// Sends `adjacentCorners` to a requester.
 	private void sendAdjCornerInfo() {
 		AdjCornerRequester cR = waitingForCorners.remove();
 		cR.msgMyAdjCorners(new ArrayList<MyCorner>(adjacentCorners));
 	}
 
-	// TODO Add to DD
+	// Lets a waiting `Vehicle` cross the intersection.
 	private void letSomeoneThrough() {
 		crossroadBusy = true;
 		IntersectionAction iA = waitingToCross.remove();

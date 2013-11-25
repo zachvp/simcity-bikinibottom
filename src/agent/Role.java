@@ -95,7 +95,9 @@ public abstract class Role {
      * the agent to do something.
      */
     protected void stateChanged() {
-        person.agentStateChanged();
+    	if (person != null) {
+    		person.agentStateChanged();
+    	}
     }
 
     /**
@@ -180,33 +182,49 @@ public abstract class Role {
      * Return role name for messages.  Default is to return agent name.
      */
     public String getName() {
-        return person.getName();
+    	if (person != null) {
+    		return person.getName();
+    	} else {
+    		return "Nobody";
+    	}
     }
     
     @Override
     public String toString() {
-    	return person.getName() + "'s " + getClass().getSimpleName();
+    	return getName() + "'s " + getClass().getSimpleName();
     }
     
     /**
      * The simulated action code
      */
     protected void Do(String msg) {
-        person.agentDo(msg);
+    	if (person != null) {
+    		person.agentDo(msg);
+    	} else {
+    		// well i guess we can't do anything
+    	}
     }
 
     /**
      * Print message
      */
     protected void print(String msg) {
-        person.printMsg(msg);
+    	if (person != null) {
+    		person.printMsg(msg);
+    	} else {
+    		// well i guess we can't print anything
+    	}
     }
 
     /**
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        person.printMsg(msg);
+    	if (person != null) {
+    		person.printMsg(msg, e);
+    	} else {
+    		// well i guess we can't print anything
+    	}
     }
     
 	// ---- Schedule tasks

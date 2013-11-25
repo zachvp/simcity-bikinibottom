@@ -1,5 +1,6 @@
 package housing.gui;
 
+import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
 import housing.ResidentDwelling;
 import housing.ResidentRole;
@@ -78,7 +79,6 @@ public class HousingGui extends JPanel {
 
 		// connect resident to proper roles to each other for messaging purposes
 		role.setDwelling(dwelling);
-		role.setWorker(worker);
 		
 		// connect proper roles to resident
 		dwelling.setResident(role);
@@ -90,14 +90,21 @@ public class HousingGui extends JPanel {
 		role.setLayoutGui(layoutGui);
 		
 		// finally activate the resident role now that the pointers are sorted
-		role.activate();
+		resident.activate();
 	}
 	
 	public void addPayRecipient(PayRecipientRole role){
 		this.payRecipientRole = role;
+		
 		// add the resident to the payRecipient's list
 		payRecipientRole.addResident(dwelling);
 		resident.setPayee(role);
+		role.activate();
+	}
+	
+	public void addWorker(MaintenanceWorkerRole role){
+		this.worker = role;
+		resident.setWorker(worker);
 		role.activate();
 	}
 	

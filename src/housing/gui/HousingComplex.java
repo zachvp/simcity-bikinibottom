@@ -39,8 +39,7 @@ public class HousingComplex extends JPanel {
  	private PayRecipient payRecipientRole;
  	
  	// maintenance worker who repairs dwellings
- 	private Person workerPerson = new PersonAgent("Maintenance Worker");
- 	private MaintenanceWorker worker = new MaintenanceWorkerRole((PersonAgent) workerPerson);
+ 	private MaintenanceWorker worker;
  	
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
@@ -60,8 +59,7 @@ public class HousingComplex extends JPanel {
 		}
 
 		// activate complex manager and worker
-//		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
-		startAndActivate(workerPerson, (Role) worker);
+//		startAndActivate(workerPerson, (Role) worker);
 	}
 	
 	public void addResident(ResidentRole role){
@@ -76,6 +74,12 @@ public class HousingComplex extends JPanel {
 	public void addPayRecipient(PayRecipientRole role){
 		for(HousingGui unit : housingUnits){
 			unit.addPayRecipient(role);
+		}
+	}
+	
+	public void addWorker(MaintenanceWorkerRole role){
+		for(HousingGui unit : housingUnits){
+			unit.addWorker(role);
 		}
 	}
 	

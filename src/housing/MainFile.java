@@ -25,6 +25,7 @@ public class MainFile extends JFrame {
 		this.population = new HashMap<Person, Role>();
 		this.addResident(new PersonAgent("Squidward"));
 		this.addPayRecipient(new PersonAgent("Mr. Krabs"));
+		this.addMaintenanceWorker(new PersonAgent("Fishbait"));
 	}
 	
 	public void addResident(PersonAgent agent){
@@ -43,6 +44,15 @@ public class MainFile extends JFrame {
 		this.startAndAddRole(agent, payRecipient);
 		
 		complex.addPayRecipient(payRecipient);
+	}
+	
+	public void addMaintenanceWorker(PersonAgent agent){
+		MaintenanceWorkerRole worker = new MaintenanceWorkerRole(agent);
+		agent.addRole(worker);
+		population.put(agent, worker);
+		this.startAndAddRole(agent, worker);
+		
+		complex.addWorker(worker);
 	}
 	
 	private void startAndAddRole(PersonAgent agent, Role role) {

@@ -58,7 +58,7 @@ public class MainFile extends JFrame {
 		PayRecipientRole payRecipient = new PayRecipientRole(agent);
 		agent.addRole(payRecipient);
 		population.put(agent, payRecipient);
-		this.startAndAddRole(agent, payRecipient);
+//		this.startAndAddRole(agent, payRecipient);
 		
 		complex.addPayRecipient(payRecipient);
 	}
@@ -67,7 +67,7 @@ public class MainFile extends JFrame {
 		MaintenanceWorkerRole worker = new MaintenanceWorkerRole(agent);
 		agent.addRole(worker);
 		population.put(agent, worker);
-		this.startAndAddRole(agent, worker);
+//		this.startAndAddRole(agent, worker);
 		
 		complex.addWorker(worker);
 	}

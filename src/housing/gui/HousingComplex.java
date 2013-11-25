@@ -36,10 +36,10 @@ public class HousingComplex extends JPanel {
 
 	// payRecipient who manages the complex 
 // 	private Person payRecipientPerson; = new PersonAgent("Pay Recipient");
- 	private PayRecipient payRecipientRole;
+ 	private PayRecipient payRecipientRole = new PayRecipientRole(null);
  	
  	// maintenance worker who repairs dwellings
- 	private MaintenanceWorker worker;
+ 	private MaintenanceWorker worker = new MaintenanceWorkerRole(null);
  	
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
@@ -53,13 +53,11 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, payRecipientRole, worker);
+			HousingGui gui = new HousingGui(i);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
 
-		// activate complex manager and worker
-//		startAndActivate(workerPerson, (Role) worker);
 	}
 	
 	public void addResident(ResidentRole role){
@@ -73,13 +71,19 @@ public class HousingComplex extends JPanel {
 	
 	public void addPayRecipient(PayRecipientRole role){
 		for(HousingGui unit : housingUnits){
-			unit.addPayRecipient(role);
+			if(unit.getResident() != null){
+				unit.addPayRecipient(role);
+				break;
+			}
 		}
 	}
 	
 	public void addWorker(MaintenanceWorkerRole role){
 		for(HousingGui unit : housingUnits){
-			unit.addWorker(role);
+			if(unit.getResident() != null){
+				unit.addWorker(role);
+				break;
+			}
 		}
 	}
 	

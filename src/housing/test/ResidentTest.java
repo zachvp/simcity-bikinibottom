@@ -31,7 +31,6 @@ public class ResidentTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		resident.setDwelling(dwelling);
-		resident.setWorker(worker);
 		dwelling.setCondition(Condition.GOOD);
 	}
 	

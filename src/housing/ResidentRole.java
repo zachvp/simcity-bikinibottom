@@ -41,13 +41,12 @@ public class ResidentRole extends Role implements Resident {
 	private ResidentGui gui;
 	
 	// TODO: un-hack these
-	private boolean hungry = false;
+	private boolean hungry = true;
 	
 	// rent data
 	private double oweMoney = 0;
 	private PayRecipient payee;
 	private Dwelling dwelling;
-	private MaintenanceWorker worker;
 	
 	// food data
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
@@ -120,6 +119,7 @@ public class ResidentRole extends Role implements Resident {
 	public void msgAtDestination() {
 		doneWaitingForInput();
 	}
+	
 
 	/* ----- Scheduler ----- */
 	@Override
@@ -132,7 +132,8 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(dwelling.getCondition() == Condition.POOR ||
 				dwelling.getCondition() == Condition.BROKEN) {
-			callMaintenenceWorker();
+			if(dwelling.getWorker() != null)
+				callMaintenenceWorker();
 			return true;
 		}
 		
@@ -247,7 +248,7 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
 		//TODO actually implement maintenance worker
-		worker.msgFileWorkOrder(dwelling);
+		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 	}
 	
@@ -307,10 +308,6 @@ public class ResidentRole extends Role implements Resident {
 	public void setPayee(PayRecipient payee) {
 		this.payee = payee;
 	}
-	
-	public void setWorker(MaintenanceWorker worker){
-		this.worker = worker;
-	}
 
 	public double getMoneyOwed() {
 		return oweMoney;
@@ -357,7 +354,6 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public void setDwelling(Dwelling dwelling) {
-		if(dwelling == null) Do("Dwelling is null");
 		this.dwelling = dwelling;
 	}
 

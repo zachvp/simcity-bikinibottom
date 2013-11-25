@@ -47,17 +47,13 @@ public class HousingGui extends JPanel {
 	LayoutGui layoutGui = new LayoutGui(500, 500);
 
 	// back-end housing containers
-	ResidentDwelling dwelling = new ResidentDwelling(payRecipientRole, index, Condition.GOOD);
+	ResidentDwelling dwelling = new ResidentDwelling(resident, payRecipientRole, worker, index, Condition.GOOD);
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
 
-	public HousingGui(int index, PayRecipient payRecipient, MaintenanceWorker worker) {
+	public HousingGui(int index) {
 		this.index = index;
-		
-		// set the manager for this housing unit
-		this.payRecipientRole = payRecipient;
-		this.worker = worker;
 		
 		switch(index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
@@ -78,16 +74,16 @@ public class HousingGui extends JPanel {
 		this.resident = role;
 
 		// connect resident to proper roles to each other for messaging purposes
-		role.setDwelling(dwelling);
+		resident.setDwelling(dwelling);
 		
 		// connect proper roles to resident
-		dwelling.setResident(role);
+		resident.setPayee(payRecipientRole);
 		
 		// set up gui stuff for the role
 		ResidentRoleGui residentGui = new ResidentRoleGui(role);
 		housingAnimationPanel.addGui(residentGui);
-		role.setGui(residentGui);
-		role.setLayoutGui(layoutGui);
+		resident.setGui(residentGui);
+		resident.setLayoutGui(layoutGui);
 		
 		// finally activate the resident role now that the pointers are sorted
 		resident.activate();
@@ -97,14 +93,15 @@ public class HousingGui extends JPanel {
 		this.payRecipientRole = role;
 		
 		// add the resident to the payRecipient's list
-		payRecipientRole.addResident(dwelling);
-		resident.setPayee(role);
+		if(resident != null) {
+			System.out.println("Rezzy is null");
+			payRecipientRole.addResident(dwelling);
+		}
 		role.activate();
 	}
 	
 	public void addWorker(MaintenanceWorkerRole role){
 		this.worker = role;
-		resident.setWorker(worker);
 		role.activate();
 	}
 	

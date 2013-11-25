@@ -56,7 +56,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 			@Override
 			public void run() {
 				synchronized(residents) {
-					for(MyResident mr : residents){
+					for(MyResident mr : residents) {
 						mr.state = PaymentState.PAYMENT_DUE;
 						stateChanged();
 					}
@@ -127,6 +127,7 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	public void chargeResident(MyResident mr){
 		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
+		
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
 		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
@@ -143,8 +144,10 @@ public class PayRecipientRole extends Role implements PayRecipient {
 	}
 	
 	public void addResident(Dwelling dwelling){
-		residents.add(new MyResident(dwelling));
-		stateChanged();
+		if(dwelling.getResident() != null){
+			residents.add(new MyResident(dwelling));
+			stateChanged();
+		}
 	}
 
 	public List<MyResident> getResidents() {

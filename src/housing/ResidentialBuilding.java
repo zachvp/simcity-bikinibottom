@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import bank.BankCustomerRole;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
@@ -63,7 +64,16 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		return null;
+		Role role = population.get(person);
+		if(role == null) {
+			role = new ResidentRole((PersonAgent) person);
+			role.setLocation(housingComplex);
+		}
+		else {
+			role.setPerson(person);
+		}
+		person.addRole(role);
+		return role;
 	}
 
 	@Override

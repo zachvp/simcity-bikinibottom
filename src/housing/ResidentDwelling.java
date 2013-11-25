@@ -1,11 +1,11 @@
 package housing;
 
-import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
 import agent.Constants;
 import agent.Constants.Condition;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
 
@@ -23,6 +23,8 @@ public class ResidentDwelling implements Dwelling {
 	// housing slots
 	private Resident resident;
 	
+	private MaintenanceWorker worker;
+	
 	private PayRecipient payRecipient;
 	private double monthlyPaymentAmount;
 	
@@ -36,11 +38,12 @@ public class ResidentDwelling implements Dwelling {
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
 	/* --- Constructor --- */
-	public ResidentDwelling(Resident resident, PayRecipient payRecipient, int ID, Constants.Condition startCondition) {
+	public ResidentDwelling(Resident resident, PayRecipient payRecipient, MaintenanceWorker worker, int ID, Constants.Condition startCondition) {
 		super();
 		this.resident = resident;
 		this.payRecipient = payRecipient;
 		this.IDNumber = ID;
+		this.worker = worker;
 		
 		// TODO start condition of unit. Could later be randomized.
 		log.add("Creating dwelling with start condition " + startCondition);
@@ -59,8 +62,7 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
-	public ResidentDwelling(PayRecipient payRecipientRole, int index,
-			Condition startCondition) {
+	public ResidentDwelling(PayRecipient payRecipientRole, int index, Condition startCondition) {
 		// set local data to constructor params
 		this.condition = startCondition;
 		this.payRecipient = payRecipientRole;
@@ -114,5 +116,13 @@ public class ResidentDwelling implements Dwelling {
 
 	public void setMonthlyPaymentAmount(double monthlyPaymentAmount) {
 		this.monthlyPaymentAmount = monthlyPaymentAmount;
+	}
+
+	public MaintenanceWorker getWorker() {
+		return worker;
+	}
+
+	public void setWorker(MaintenanceWorker worker) {
+		this.worker = worker;
 	}
 }

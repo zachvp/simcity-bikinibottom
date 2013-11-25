@@ -37,7 +37,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		entrancePosition = new XYPos(x + (width/2), y + height);
+		entrancePosition = new XYPos((width/2), height);
 		
 		// Stagger opening/closing time
 		this.timeOffset = instanceCount + timeDifference;

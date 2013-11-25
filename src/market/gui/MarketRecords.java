@@ -33,12 +33,10 @@ public class MarketRecords implements BuildingRecords {
 	MarketInfoPanel marketControlPanel;
 	MarketBuilding building;
 	
-	
     private PersonAgent CashierPerson = new PersonAgent("Cashier");
     CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
 	private CashierGui cashierGui;
 
-    
     private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
     private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
     
@@ -64,17 +62,6 @@ public class MarketRecords implements BuildingRecords {
 		tempInventoryList.add(new Item("Kelp Rings", 0));
 		
 	}
-	
-	private CityLocation fakeLoc = new CityLocation() {
-		@Override
-		public LocationTypeEnum type() {
-			return LocationTypeEnum.None;
-		}
-		@Override
-		public XYPos position() {
-			return new XYPos();
-		}
-	};
     
 	/*
     private PersonAgent CustomerPerson = new PersonAgent("Customer1");

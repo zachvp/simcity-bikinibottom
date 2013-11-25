@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.AccountManagerGui;
+import bank.gui.BankBuilding;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.Teller;
@@ -64,8 +66,8 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	int endMinute = 30;
 //	////////
 	
-	public AccountManagerRole(Person person){
-		super(person);
+	public AccountManagerRole(Person person, CityLocation bank){
+		super(person, bank);
 //		this.name = name;
 		
 	}

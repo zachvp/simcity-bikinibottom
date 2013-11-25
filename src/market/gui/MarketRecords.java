@@ -1,15 +1,18 @@
 package market.gui;
 
-import market.CashierRole;
-import market.CustomerRole;
-import market.Item;
-import market.ItemCollectorRole;
-import market.DeliveryGuyRole;
-import market.interfaces.*;
 import gui.BuildingRecords;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
+import market.CashierRole;
+import market.CustomerRole;
+import market.DeliveryGuyRole;
+import market.Item;
+import market.ItemCollectorRole;
+import market.interfaces.DeliveryGuy;
+import market.interfaces.ItemCollector;
 import transportation.FakePassengerRole;
 import transportation.PassengerRole;
 import CommonSimpleClasses.CityLocation;
@@ -18,13 +21,6 @@ import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
 import agent.Role;
 import agent.gui.AnimationPanel;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 /**
  * Panel in frame that contains all the restaurant information,

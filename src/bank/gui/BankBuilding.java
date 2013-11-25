@@ -1,22 +1,21 @@
 package bank.gui;
 
+import gui.Building;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
-import bank.BankCustomerRole;
-import bank.BankRoleFactory;
-import bank.SecurityGuardRole;
-
-import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
+import agent.TimeManager;
+import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
-import gui.Building;
-import CommonSimpleClasses.XYPos;
+import bank.BankCustomerRole;
+import bank.SecurityGuardRole;
 
 //creates animation panel and starts building
 public class BankBuilding extends Building {
@@ -31,6 +30,11 @@ public class BankBuilding extends Building {
 	
 	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
+	
+	int startHour = 9;
+	int startMinute = 0;
+	int endHour = 16;
+	int endMinute = 30;
 	
 	private AnimationPanel animationPanel = new AnimationPanel();
 	
@@ -60,7 +64,7 @@ public class BankBuilding extends Building {
 	public Role getCustomerRole(Person person) {
 		Role role = existingRoles.get(person);
 		if(role == null) {
-			role = new BankCustomerRole(person);
+			role = new BankCustomerRole(person, bank);
 			role.setLocation(bank);
 		}
 		else {
@@ -79,6 +83,11 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		infoPanel.setBackground(Color.BLUE);
 		return infoPanel;
+	}
+	
+	public boolean isOpen() {
+		return TimeManager.getInstance().isNowBetween(startHour, startMinute, endHour, endMinute);
+	
 	}
 	
 	

@@ -23,7 +23,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private JLabel info;
 
 	public InfoPanel(int w, int h){
-		d = new Dimension(w-20, h-25);
+		d = new Dimension(w-20, h-25); //700 X 185
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);

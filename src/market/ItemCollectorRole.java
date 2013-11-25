@@ -2,6 +2,7 @@ package market;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,21 +17,22 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import market.interfaces.ItemCollectorGuiInterfaces;
-import agent.Agent;
-import agent.Constants;
-import agent.PersonAgent;
-import agent.Role;
-import agent.TimeManager;
 import agent.WorkRole;
 import agent.gui.Gui;
+import agent.interfaces.Person;
 
+/**
+ * The Role that is responsible to collect items in the market
+ * @author AnThOnY
+ *
+ */
 public class ItemCollectorRole extends WorkRole implements ItemCollector{
 
 	private ItemCollectorGuiInterfaces itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;
 	private Map<String, Integer> InventoryList = null;
-	private List<Order> Orders = new ArrayList<Order>();
+	private List<Order> Orders = Collections.synchronizedList(new ArrayList<Order>());
 
 	private Semaphore atStation = new Semaphore (0,true);
 	private Semaphore atHome = new Semaphore (0,true);
@@ -39,12 +41,23 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public enum ItemCollectorstate {GoingToWork, Idle, OffWork, GettingItem};
 	ItemCollectorstate state = ItemCollectorstate.GoingToWork;
 	
+	/**
+	 * this is a private class for ItemCollector to keep track his work
+	 * @author AnThOnY
+	 *
+	 */
 	private class Order {
 		public Customer c;
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	public ItemCollectorRole(String na, PersonAgent person, MarketBuilding cL){
+	/**
+	 * This is the only constructor of ItemCollectorRole 
+	 * @param na name of the person
+	 * @param person person himself
+	 * @param cL The building that the ItemCollector is working in
+	 */
+	public ItemCollectorRole(String na, Person person, MarketBuilding cL){
 		super(person, cL);
 		name = na;
 		
@@ -60,41 +73,65 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	
 	//Messages	
+		/**
+		 * A message from Cashier that to collect items
+		 * @param ItemList the list of Items that are requested
+		 * @param c the customer
+		 */
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
 		//print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
-		getOrders().add(o);
+		synchronized(getOrders()){
+			getOrders().add(o);
+		}
 		stateChanged();
 	}
 
+	/**
+	 * The current size of the orderlist
+	 */
 	public int msgHowManyOrdersYouHave(){
 		return getOrders().size();
 	}
 	
-	@Override
+	/**
+	 * the message to call off work
+	 */
 	public void msgLeaveWork(){
 		state = ItemCollectorstate.OffWork;
 		stateChanged();
 	}
 	
 	//Animations
+	/**
+	 * Animation!
+	 */
 	public void AtCollectStation(){
 		atStation.release();
 	}
 	
+	/**
+	 * Animation!
+	 */
 	public void Ready(){
 		state = ItemCollectorstate.Idle;
 		atHome.release();
 	}
 	
+	/**
+	 * Animation!
+	 */
 	public void AtExit(){
 		atExit.release();
 	}
 	
 	
 	//Scheduler
+	/**
+	 * The ItemCollectorRole's PaEaA that is either go and get items or call off work
+	 */
 	public boolean pickAndExecuteAnAction() {
 		//if (state == ItemCollectorstate.Idle)
 		if(getOrders().size()!=0){
@@ -110,6 +147,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	}
 	
 	//Actions
+	/**
+	 * This the action to move the itemcollector to the backyard collect items by check through inventoryMap
+	 * @param o CurrentOrder
+	 */
 	private void GoGetItems(Order o){
 		//print("Going to get items");
 		itemcollectorGui.CollectItems();
@@ -119,28 +160,32 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (int i=0;i<getOrders().size();i++){
-			if (o == getOrders().get(i)){
-				getOrders().remove(i);
+		synchronized(getOrders()){
+			for (int i=0;i<getOrders().size();i++){
+				if (o == getOrders().get(i)){
+					getOrders().remove(i);
+				}
 			}
 		}
 		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
 		for(int i=0;i<o.ItemList.size();i++){
-			int CurrentItem = getInventoryList().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
+			int CurrentItem = getInventoryMap().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
 			if (CurrentItem >= o.ItemList.get(i).amount){	//enough inventories to satisfy
 				CurrentItem -= o.ItemList.get(i).amount;
-				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
+				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
 				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
 			else		//not enough inventories to satisfy the order
 			{			//Add into it anyway (Try to satisfy the order)
 				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem);
-				CurrentItem = 0;
-				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
+				
+				
 				DeliverList.add(tempitem);
 				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem);
+				CurrentItem = 0;
+				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
 				MissingList.add(Missingitem);
 			}
 		}
@@ -157,6 +202,9 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		return;
 	}
 	
+	/**
+	 * the action to offwork
+	 */
 	private void OffWork(){
 		itemcollectorGui.OffWork();
 		try {
@@ -217,7 +265,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		return false;
 	}
 
-	public Map<String, Integer> getInventoryList() {
+	public Map<String, Integer> getInventoryMap() {
 		return InventoryList;
 	}
 

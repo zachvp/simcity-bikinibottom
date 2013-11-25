@@ -15,28 +15,13 @@ import agent.Role;
 public class CitizenRecords {
 	private MainFrame main;
 	private ArrayList<PersonAgent> citizens = new ArrayList<PersonAgent>();
-	private ArrayList<BuildingRecords> buildingRecords = new ArrayList<BuildingRecords>(); //TODO delete?
 	ArrayList<Building> buildings;
 	private InfoList personInfoList;
 	private InfoPanel infoPanel;
 
-	private PersonAgent person = new PersonAgent("Steve");
-
-	
-
 	public CitizenRecords(MainFrame m){
 		main = m;
 		personInfoList = main.getPersonInfoList();
-		addCitizen(person);
-		
-		//TEST
-		//for(BuildingRecords rec: buildingRecords){
-			//if (rec.getType() == LocationTypeEnum.Restaurant){
-				//buildingRecords.get(0).addPerson("Waiter", person.getName());
-			//}
-		//}
-		
-		
 	}
 
 	/**
@@ -60,14 +45,6 @@ public class CitizenRecords {
 		newPerson.startThread();
 
 		infoPanel.updatePersonInfoPanel(newPerson);
-		//TODO TEST
-
-		for(BuildingRecords rec: buildingRecords){
-			if (rec.getType() == LocationTypeEnum.Restaurant){
-					rec.addPerson("Waiters", person.getName());
-					rec.addPerson("Customers", newPerson.getName());
-			}
-		}
 
 	}
 	
@@ -84,9 +61,6 @@ public class CitizenRecords {
 		}
 	}
 	
-	public void addBuildingRecord(BuildingRecords rec){
-		buildingRecords.add(rec);
-	}
 	
 	/** Utilities **/
 	

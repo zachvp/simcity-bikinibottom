@@ -128,12 +128,6 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		}
 	}
 	
-
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
 	@Override
 	public int getShiftStartHour() {
 		return startHour;

@@ -6,9 +6,10 @@ import java.awt.Graphics2D;
 import java.util.concurrent.Semaphore;
 
 import bank.TellerRole;
+import bank.interfaces.TellerGuiInterface;
 
 
-public class TellerGui implements agent.gui.Gui{
+public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 
 	private TellerRole agent = null;
 	private boolean isPresent = true;

@@ -65,6 +65,26 @@ public class HospitalBuilding extends Building{
 		buildings = b;
 		records.setBuildings(b);
 	}
+
+	@Override
+	public int getOpeningHour() {
+		return 0;
+	}
+
+	@Override
+	public int getOpeningMinute() {
+		return 0;
+	}
+
+	@Override
+	public int getClosingHour() {
+		return 23;
+	}
+
+	@Override
+	public int getClosingMinute() {
+		return 59;
+	}
 	
 
 }

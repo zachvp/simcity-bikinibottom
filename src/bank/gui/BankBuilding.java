@@ -2,7 +2,6 @@ package bank.gui;
 
 import gui.Building;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,11 +10,12 @@ import javax.swing.JPanel;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
-import agent.TimeManager;
-import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
+import bank.AccountManagerRole;
 import bank.BankCustomerRole;
+import bank.LoanManagerRole;
 import bank.SecurityGuardRole;
+import bank.TellerRole;
 
 //creates animation panel and starts building
 public class BankBuilding extends Building {
@@ -26,15 +26,13 @@ public class BankBuilding extends Building {
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
-	
-	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
 	
-	int startHour = 9;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
-	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static int timeDifference = 6;
+			
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
 	
@@ -43,8 +41,51 @@ public class BankBuilding extends Building {
 		entrancePosition = new XYPos(width/2, height);
 		bankGui = new BankGui();
 		this.bank = this;
-		this.existingRoles = new HashMap<Person, Role>();
+		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
+		initRoles();
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount + timeDifference;
+		instanceCount++;
+	}
+	
+	private void initRoles() {
+		// Create the roles
+		SecurityGuardRole security = new SecurityGuardRole(null, this);
+		AccountManagerRole account = new AccountManagerRole(null, this);
+		LoanManagerRole loan = new LoanManagerRole(null, this);
+		TellerRole tell1 = new TellerRole(null, this);
+		TellerRole tell2 = new TellerRole(null, this);
+		TellerRole tell3 = new TellerRole(null, this);
+		
+		// Tell the security guard about the roles
+		security.addRole(account);
+		security.addRole(loan);
+		security.addRole(tell1);
+		security.addRole(tell2);
+		security.addRole(tell3);
+		
+		// Give the tellers a position
+		security.addTeller(tell1, 1);
+		security.addTeller(tell2, 2);
+		security.addTeller(tell3, 3);
+		
+		// Tell the tellers about the security guard
+		tell1.setSecurityGuard(security);
+		tell2.setSecurityGuard(security);
+		tell3.setSecurityGuard(security);
+		
+		// Tell the tellers about the account manager
+		tell1.setAccountManager(account);
+		tell2.setAccountManager(account);
+		tell3.setAccountManager(account);
+		
+		// Tell the tellers about the account manager
+		tell1.setLoanManager(loan);
+		tell2.setLoanManager(loan);
+		tell3.setLoanManager(loan);
+		
 	}
 
 	@Override
@@ -64,9 +105,13 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		Role role = existingRoles.get(person);
+		
+		BankCustomerRole role = existingRoles.get(person);
 		if(role == null) {
 			role = new BankCustomerRole(person, bank);
+			BankCustomerGui bcg = new BankCustomerGui(role);
+			role.setGui(bcg);
+			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
 		}
 		else {
@@ -78,18 +123,12 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return bankGui;
+		return bankGui.getAnimationPanel();
 	}
 
 	@Override
 	public JPanel getInfoPanel() {
 		return new JPanel();
 	}
-	
-	public boolean isOpen() {
-		return TimeManager.getInstance().isNowBetween(startHour, startMinute, endHour, endMinute);
-	
-	}
-	
 	
 }

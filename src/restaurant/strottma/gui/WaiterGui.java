@@ -36,15 +36,15 @@ public class WaiterGui implements Gui {
     private static final int DEFAULT_Y = (int) SCREEN_Y / 2;
     
     // cook location
-    private static final int COOK_X = 650;
+    private static final int COOK_X = 220;//650;
     private static final int COOK_Y = 80;
     
     // cashier location
-    private static final int CASHIER_X = 500;
+    private static final int CASHIER_X = 500-400;
     private static final int CASHIER_Y = -HEIGHT;
     
     // customer waiting area
-    private static final int CUST_WAIT_X = 130;
+    private static final int CUST_WAIT_X = 130-100;
     private static final int CUST_WAIT_Y = 80;
     
     private boolean shouldMsg;

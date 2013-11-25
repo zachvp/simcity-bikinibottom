@@ -11,7 +11,7 @@ import transportation.IntersectionAction;
  * necessary interactions when people or vehicles reach 
  * a corner.
  */
-// TODO Update DD!!!
+
 public interface Corner extends CityLocation {
 	
 	/* Message a vehicle sends to a corner 

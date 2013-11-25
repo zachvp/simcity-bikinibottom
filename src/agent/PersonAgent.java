@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import market.Item;
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole;
@@ -68,11 +67,12 @@ public class PersonAgent extends Agent implements Person {
 		this.kelp = KelpClass.getKelpInstance();
 		
 		this.lastTimeEatingOut = timeManager.fakeStartTime();
-		this.eatingOutWaitPeriod = 1000 * 60 * 60 * 24; // one day
+		this.eatingOutWaitPeriod = Constants.DAY;
 		
-		this.workStartThreshold = 1000 * 60 * 30; // 30 minutes
+		this.workStartThreshold = 2 * Constants.HOUR;
 		
 		this.wallet = new Wallet(); // medium income level
+		this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
 	}
 	
@@ -83,6 +83,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
+		System.out.println("we're here captain");
 	}
 	
 	/* -------- Scheduler -------- */
@@ -94,6 +95,7 @@ public class PersonAgent extends Agent implements Person {
 		// First, the Role rules.
 		
 		boolean roleExecuted = false;
+		boolean roleActive = false;
 		
 		for (Role r : roles) {
 			if (r.isActive()) {
@@ -103,12 +105,14 @@ public class PersonAgent extends Agent implements Person {
 //					return false;
 //				} else {
 					roleExecuted = r.pickAndExecuteAnAction() || roleExecuted;
+					roleActive = true;
 //				}
 			}
 		}
 		
 		// if at least one role's scheduler returned true, return true
 		if (roleExecuted) { return true; }
+		if (roleActive) { return false; }
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
@@ -122,23 +126,32 @@ public class PersonAgent extends Agent implements Person {
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
-		} else if (isHungry()) {
+		}
+		if (isHungry()) {
 			if (wantsToEatOut()) {
 				 CityLocation restaurant = chooseRestaurant();
-				 goToRestaurant(restaurant);
-				return true;
-			} else if (hasFoodAtHome()) {
+				 if (restaurant != null) {
+					goToRestaurant(restaurant);
+					return true;
+				 }
+			}
+			if (hasFoodAtHome()) {
 				goHome();
 				return true;
 			} else {
-				 CityLocation market = chooseMarket();
-				 goToMarket(market);
+				CityLocation market = chooseMarket();
+				if (market != null) {
+					goToMarket(market);
+					return true;
+				}
+			}
+		}
+		if (needToGoToBank()) {
+			CityLocation bank = chooseBank();
+			if (bank != null) {
+				goToBank(bank);
 				return true;
 			}
-		} else if (needToGoToBank()) {
-			 CityLocation bank = chooseBank();
-			 goToBank(bank);
-			return true;
 		}
 
 		// No actions were performed.
@@ -154,7 +167,8 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void goToLoc(CityLocation loc) {
 		PassengerRole pass = getPassengerRole();
-		pass.msgGoToLocation(loc);
+		pass.msgGoToLocation(loc, true);
+		// TODO person is hard coded to be willing to use the bus
 		pass.activate();
 	}
 	
@@ -382,6 +396,7 @@ public class PersonAgent extends Agent implements Person {
 			throw new NullPointerException("Kelp has no hospital roles.");
 		}
 		PassengerRole pass = new RealPassengerRole(this, hospital);
+		addRole(pass);
 		return pass;
 	}
 
@@ -417,7 +432,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a restaurant
 		for (CityLocation r : restaurants) {
 			// TODO don't just choose the first restaurant
-			return r;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) r).isOpen() ) return r;
 		}
 		
 		// if no restaurants exist
@@ -433,7 +449,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a market
 		for (CityLocation m : markets) {
 			// TODO don't just choose the first market
-			return m;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) m).isOpen() ) return m;
 		}
 		
 		// if no markets exist
@@ -449,7 +466,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a bank
 		for (CityLocation b : banks) {
 			// TODO don't just choose the first bank
-			return b;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) b).isOpen() ) return b;
 		}
 		
 		// if no banks exist
@@ -511,7 +529,8 @@ public class PersonAgent extends Agent implements Person {
 	
 	/** Whether this person has food at home. */
 	public boolean hasFoodAtHome() {
-		 return getResidentRole().thereIsFoodAtHome();
+		ResidentRole res = getResidentRole();
+		return (res != null) && res.thereIsFoodAtHome();
 	}
 	
 	public boolean needToGoToBank() {
@@ -554,10 +573,15 @@ public class PersonAgent extends Agent implements Person {
 	public void agentStateChanged() {
 		stateChanged();
 	}
-
+	
 	@Override
 	public void printMsg(String msg) {
 		print(msg);
+	}
+	
+	@Override
+	public void printMsg(String msg, Throwable e) {
+		print(msg, e);
 	}
 
 	@Override

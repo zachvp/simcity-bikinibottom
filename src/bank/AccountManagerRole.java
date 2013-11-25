@@ -66,18 +66,10 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	int endMinute = 30;
 //	////////
 	
-	public AccountManagerRole(Person person, CityLocation bank){
-		super(person, bank);
-//		this.name = name;
-		
+	public AccountManagerRole(Person person, CityLocation loc) {
+		super(person, loc);
 	}
-		
-
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-
-
+	
 	public String getCustomerName() {
 		return name;
 	}
@@ -237,13 +229,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		}
 //		return null;
 //	}
-
 	
-	public String toString() {
-		return "customer " + getName();
-	}
-
-
 	@Override
 	public int getShiftStartHour() {
 		return startHour;

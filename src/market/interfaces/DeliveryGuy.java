@@ -1,7 +1,7 @@
 package market.interfaces;
 import java.util.List;
 
-import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import market.Item;
 
 
@@ -10,7 +10,7 @@ public interface DeliveryGuy {
 	// Messages
 		public abstract boolean msgAreYouAvailable();
 	
-		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityBuilding building);
+		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityLocation building);
 		
 		public abstract void msgArrivedDestination();
 		

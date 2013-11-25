@@ -24,10 +24,20 @@ import agent.interfaces.Person;
 public class RestaurantStrottmaBuilding extends Building {
 	private Map<Person, Role> existingRoles;
 	private HostRole host;
+	private InfoPanel infoPanel = new InfoPanel();
+	private AnimationPanel animationPanel = new AnimationPanel();
+	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static int timeDifference = 6;
 	
 	public RestaurantStrottmaBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.existingRoles = new HashMap<Person, Role>();
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount + timeDifference;
+		instanceCount++;
 	}
 	
 	public void setHost(HostRole host) {
@@ -75,16 +85,13 @@ public class RestaurantStrottmaBuilding extends Building {
 	@Override
 	public JPanel getAnimationPanel() {
 		// TODO initialize the animation panel
-		JPanel animationPanel = new agent.gui.AnimationPanel();
+		//JPanel animationPanel = new agent.gui.AnimationPanel();
 		return animationPanel;
 	}
 	
 	@Override
 	public JPanel getInfoPanel() {
 		// TODO initialize the info panel
-		JPanel infoPanel = new JPanel();
-		infoPanel.setPreferredSize(new Dimension(Constants.INFO_PANEL_WIDTH,
-				Constants.INFO_PANEL_HEIGHT));
 		return infoPanel;
 	}
 	

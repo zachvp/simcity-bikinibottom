@@ -4,6 +4,7 @@ import transportation.interfaces.Bus;
 import transportation.interfaces.Passenger;
 import transportation.interfaces.PassengerRequester;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.DirectionEnum;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -18,7 +19,7 @@ public class FakePassengerRole extends PassengerRole {
 	}
 
 	@Override
-	public void msgGoToLocation(CityLocation loc) {
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus) {
 		destination = loc;
 		stateChanged();
 	}
@@ -46,11 +47,23 @@ public class FakePassengerRole extends PassengerRole {
 	}
 
 	@Override
-	public void msgGoToLocation(CityLocation loc, 
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus,
 			PassengerRequester requesterRole) {
 		this.requesterRole = requesterRole;
-		msgGoToLocation(loc);
+		msgGoToLocation(loc, willingToUseBus);
 		
+	}
+
+	@Override
+	public void msgGotInCar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public DirectionEnum currentDirection() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

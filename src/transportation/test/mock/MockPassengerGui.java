@@ -4,8 +4,10 @@ import java.awt.Graphics2D;
 
 import agent.mock.EventLog;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
+import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 
 public class MockPassengerGui implements PassengerGui {
@@ -57,6 +59,18 @@ public class MockPassengerGui implements PassengerGui {
 
 	@Override
 	public void doExitVehicle(CityLocation loc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public XYPos getPos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void doExitBus(Corner location, boolean orientation) {
 		// TODO Auto-generated method stub
 		
 	}

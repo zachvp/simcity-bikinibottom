@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import agent.Constants;
 import agent.PersonAgent;
 import junit.framework.TestCase;
 import market.CashierRole;
@@ -25,6 +26,7 @@ public class CashierTest extends TestCase
 	MockCustomer Customer2;
 	MockItemCollector ItemCollector1;
 	MockItemCollector ItemCollector2;
+	Map<String, Integer> InventoryList;
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -33,8 +35,25 @@ public class CashierTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();		
 
+		InventoryList = new HashMap<String, Integer>();
+		{
+			InventoryList.put("Krabby Patty", 100);
+			InventoryList.put("Kelp Shake", 100);
+			InventoryList.put("Coral Bits", 100);
+			InventoryList.put("Kelp Rings", 100);
+			InventoryList.put("LamboFinny", 100);
+			InventoryList.put("Toyoda", 100);
+		}
+		
+		
 		PersonAgent cashier = new PersonAgent ("John");
-		Cashier = new CashierRole("John", 100, cashier, new MarketBuilding(1,1,1,1));	
+<<<<<<< HEAD
+		Cashier = new CashierRole("John", 100, cashier, new MarketBuilding(1,1,1,1), InventoryList);	
+=======
+
+		// TODO give this cashier a proper inventory list 
+		Cashier = new CashierRole("John", 100, cashier, new MarketBuilding(1,1,1,1), null);	
+>>>>>>> dcf6b4e41837c4ea98d960d690e57d24a0302bd5
 		
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");

@@ -6,32 +6,28 @@ import java.util.ArrayList;
 import CommonSimpleClasses.CityLocation;
 import agent.Constants;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.gui.CashierGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
-import market.test.mock.MockCashierGui;
-import agent.Agent;
-import agent.Constants;
-import agent.PersonAgent;
-import agent.Role;
-import agent.TimeManager;
 import agent.WorkRole;
-import agent.Role.ScheduleTask;
 import agent.gui.Gui;
 import agent.interfaces.Person;
 
+/**
+ * The role of Cashier in Market, he acts as the Host in the market that receives message from Customers and ItemCollectors
+ * @author AnThOnY
+ *
+ */
 public class CashierRole extends WorkRole implements Cashier {
 
 private static final int startingminute = 0;
@@ -45,19 +41,11 @@ private static final int startingminute = 0;
 	private Semaphore atBench = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 
-	private List<MyCustomer> MyCustomerList = new ArrayList<MyCustomer>();
-	private List<ItemCollector> ICList = new ArrayList<ItemCollector>();
-	private List<DeliveryGuy> DGList = new ArrayList<DeliveryGuy>();
+	private List<MyCustomer> MyCustomerList = Collections.synchronizedList(new ArrayList<MyCustomer>());
+	private List<ItemCollector> ICList = Collections.synchronizedList(new ArrayList<ItemCollector>());
+	private List<DeliveryGuy> DGList = Collections.synchronizedList(new ArrayList<DeliveryGuy>() );
 	
-	private Map<String,Integer> InventoryList = new HashMap<String,Integer>();
-	{		//Initially The market has 100 inventory on each Item
-		for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
-			InventoryList.put(agent.Constants.FOODS.get(i), 100);
-		}
-		for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
-			InventoryList.put(agent.Constants.CARS.get(i), 100);
-		}
-	}
+	private Map<String,Integer> InventoryList ;
 	
 	//Working Hour
 	int startinghour = 8;
@@ -65,29 +53,22 @@ private static final int startingminute = 0;
 	int endinghour = 18;
 	int endingminutes = 0;
 	
-	private Map<String,Double>PriceList = new HashMap<String, Double>();
-	{
-		double Toyoda = 100;
-		double LamboFinny = 300;
-		double KrabbyPatty = 20;
-		double KelpShake = 10;
-		double CoralBits = 15;
-		double KelpRings = 5;
-		PriceList.put("Krabby Patty", KrabbyPatty);
-		PriceList.put("Kelp Shake", KelpShake);
-		PriceList.put("Coral Bits", CoralBits);
-		PriceList.put("Kelp Rings", KelpRings);
-		PriceList.put("LamboFinny", LamboFinny);
-		PriceList.put("Toyoda", Toyoda);
-		
-	}
+	/**
+	 * PriceList in the market
+	 */
+	private Map<String,Double>PriceList;
 	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems};
 	private Cashierstate state = Cashierstate.GoingToWork; 
 	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck, GivenItems, Failed, EpicFailed}
 	
+	/**
+	 * This is the class for cashier to keep track of the customers in the market
+	 * @author AnThOnY
+	 *
+	 */
 	public class MyCustomer {
 		Customer c;
-		CommonSimpleClasses.CityBuilding Building;
+		CommonSimpleClasses.CityLocation Building;
 		List<Item> OrderList = new ArrayList<Item>();
 		private List<Item> DeliveryList = new ArrayList<Item>();
 		private List<Item> MissingItemList = new ArrayList<Item>();
@@ -102,15 +83,27 @@ private static final int startingminute = 0;
 		}
 	}
 	
-    public CashierRole(String NA, double money, Person person, MarketBuilding cL){
+	/**
+	 * This is the only constructor of the CashierRole in the Market
+	 * @param NA The name of the CashierRole
+	 * @param money The amount of money that the market has it
+	 * @param person The Person of the CashierRole
+	 * @param cL The MarketBuilding that the CashierRole's in
+	 * @param inList The InventoryList of the Market
+	 */
+    public CashierRole(String NA, double money, Person person, MarketBuilding cL, Map<String,Integer> inList){
     	super(person, cL);
 		name = NA;
 		setCash(money);
+		PriceList = Constants.MarketPriceList;
+		InventoryList = inList;
 		
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
 				msgLeaveWork();
+				print ("LamboFinnyI" + InventoryList.get("LamboFinny"));
+				print ("LamboFinnyP" + PriceList.get("LamboFinny"));
 			
 			}
 		};
@@ -126,7 +119,13 @@ private static final int startingminute = 0;
 	}
 	
 	//Cashier Message 
-	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityBuilding building)	
+    /**
+     * This is the message r from the restaurant
+     * @param ShoppingList This is the List of Items that the customer wants to buy
+     * @param C the customer himself
+     * @param CityBuilding the building that is going to deliver to
+     */
+	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityLocation building)	
 	{				//The Customer will be the phone calling guy
 		//print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
@@ -140,6 +139,11 @@ private static final int startingminute = 0;
 		stateChanged();
 	}
 	
+	/**
+	 * This is the message from normal customer (Customers that are in the building
+	 * @param ShoppingList This is the list of items that the customer wants to buy
+	 * @param C Customer himself
+	 */
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) //[Customer to Cashier]
 	{
 		//print ("Received Msg from Customer");
@@ -154,6 +158,12 @@ private static final int startingminute = 0;
 		stateChanged();
 	}
 
+	/**
+	 * This is the message from the ItemCollectors that giving back the result from collecting items in the backyard of the market
+	 * @param Items This is the Deliver List
+	 * @param MissingItems A list that contains all the missing items
+	 * @param c The customer
+	 */
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
 		//print ("Received Items from ItemCollector");
@@ -170,34 +180,35 @@ private static final int startingminute = 0;
 		//print ("ShoppingListSize : " + ShoppingListSize);
 		//print ("MissingItemListSize : " + MissingItemListSize);
 		
-		
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).c == c)
-			{
-				//When there is no item in the shoppinglist can be satisified
-				if (ShoppingListSize == 0){
-					//print ("Epic Failed");
-					getMyCustomerList().get(i).state = Customerstate.EpicFailed;
-					getMyCustomerList().get(i).MissingItemList = MissingItems;
-					break;
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if (getMyCustomerList().get(i).c == c)
+				{
+					//When there is no item in the shoppinglist can be satisified
+					if (ShoppingListSize == 0){
+						//print ("Epic Failed");
+						getMyCustomerList().get(i).state = Customerstate.EpicFailed;
+						getMyCustomerList().get(i).MissingItemList = MissingItems;
+						break;
+					}
+					//When there is some items that cannot be fulfilled
+					else if (MissingItemListSize != 0){
+						//print ("failed");
+						getMyCustomerList().get(i).state = Customerstate.Failed;
+						getMyCustomerList().get(i).MissingItemList = MissingItems;
+						getMyCustomerList().get(i).setDeliveryList(Items);
+						break;
+					}
+					//All items can be fulfilled
+					else
+						//print ("no problem");
+						getMyCustomerList().get(i).state = Customerstate.Collected;
+						getMyCustomerList().get(i).setDeliveryList(Items);
+						break;
 				}
-				//When there is some items that cannot be fulfilled
-				else if (MissingItemListSize != 0){
-					//print ("failed");
-					getMyCustomerList().get(i).state = Customerstate.Failed;
-					getMyCustomerList().get(i).MissingItemList = MissingItems;
-					getMyCustomerList().get(i).setDeliveryList(Items);
-					break;
-				}
-				//All items can be fulfilled
-				else
-					//print ("no problem");
-					getMyCustomerList().get(i).state = Customerstate.Collected;
-					getMyCustomerList().get(i).setDeliveryList(Items);
-					break;
-			}
 			
 				
+			}
 		}
 		
 		
@@ -205,77 +216,117 @@ private static final int startingminute = 0;
 		stateChanged();
 	}			
 	
+	/**
+	 * This is the message from the customer that receiving payment
+	 * @param payment the total amount of the customer that can pay
+	 * @param c customer himself
+	 */
 	public void msgHereIsPayment(double payment, Customer c)
 	{
 		//print ("Receive payment from Customer ");
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).c == c){
-				getMyCustomerList().get(i).state = Customerstate.Paid;
-				setCash(getCash() + payment);
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if (getMyCustomerList().get(i).c == c){
+					getMyCustomerList().get(i).state = Customerstate.Paid;
+					setCash(getCash() + payment);
+				}
 			}
 		}
 		cashierGui.Update();
 		stateChanged();
 	}
-	
-	@Override
+	//Animations
+	/**
+	 * Animation!
+	 * getting the semaphore release
+	 */
 	public void msgLeaveWork(){
 		setState(Cashierstate.OffWork);
 		stateChanged();
 	}
 
-	//Animations
+	/**
+	 * Animation!
+	 * getting the semaphore release
+	 */
 	public void AtFrontDesk(){
 		atFrontDesk.release();
 		setState(Cashierstate.Idle);
 		stateChanged();
 	}
 	
+	/**
+	 * Animation!
+	 * getting the semaphore release
+	 */
 	public void AtBench(){
 		atBench.release();
 		stateChanged();
 	}
 	
+	/**
+	 * Animation!
+	 * getting the semaphore release
+	 */
 	public void AtExit(){
 		atExit.release();
 	}
 
 	//Scheduler
+	/**
+	 * This is the scheduler and
+	 * the first loop is planning to ask itemcollectors to get items
+	 * the second loop is to tell customers if none of the items in the customers shoppinglists are satisfied
+	 * the third loop is to give the invoice to the customers
+	 * the fourth loop is to give items to the customers
+	 * the fifth loop is to call everyone in the market to offwork as the workperiod has passed
+	 * the sixth loop is an animation that being call to walk to the bench and collect items
+	 */
 	public boolean pickAndExecuteAnAction() {
-		// TODO Auto-generated method stub
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
-				ItemCollector tempIC = getICList().get(0);
-				for (int j=1;j<getICList().size();j++){
-					if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
-						tempIC = getICList().get(j);
-					else
-						continue;
+
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
+					synchronized(getICList()){
+						ItemCollector tempIC = getICList().get(0);
+						for (int j=1;j<getICList().size();j++){
+							if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
+								tempIC = getICList().get(j);
+							else
+								continue;
+						}
+						GoGetItems(getMyCustomerList().get(i),tempIC);
+						return true;
+					}
 				}
-				GoGetItems(getMyCustomerList().get(i),tempIC);
-				return true;
 			}
 		}
 		
 		//No item is fulfilled
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.EpicFailed && getState() == Cashierstate.Idle){
-				TellCustomerEpicFail(getMyCustomerList().get(i));
-				return true;
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if (getMyCustomerList().get(i).state == Customerstate.EpicFailed && getState() == Cashierstate.Idle){
+					TellCustomerEpicFail(getMyCustomerList().get(i));
+					return true;
+				}
 			}
 		}
 		//Some or All items are fulfilled
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if ((getMyCustomerList().get(i).state == Customerstate.Collected || getMyCustomerList().get(i).state == Customerstate.Failed) && getState() == Cashierstate.Idle){
-				CalculatePayment(getMyCustomerList().get(i));
-				return true;
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if ((getMyCustomerList().get(i).state == Customerstate.Collected || getMyCustomerList().get(i).state == Customerstate.Failed) && getState() == Cashierstate.Idle){
+					CalculatePayment(getMyCustomerList().get(i));
+					return true;
+				}
 			}
 		}
 		
-		for (int i=0;i<getMyCustomerList().size();i++){
-			if (getMyCustomerList().get(i).state == Customerstate.Paid && getState() == Cashierstate.Idle){
-				GiveItems(getMyCustomerList().get(i));
-				return true;
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<getMyCustomerList().size();i++){
+				if (getMyCustomerList().get(i).state == Customerstate.Paid && getState() == Cashierstate.Idle){
+					GiveItems(getMyCustomerList().get(i));
+					return true;
+				}
 			}
 		}
 		
@@ -294,6 +345,11 @@ private static final int startingminute = 0;
 	}
 	
 	//Actions
+	/**
+	 * This is the action to first move the cashier to the bench and ask the selected item collector to collect items for the order
+	 * @param MC the class MyCustomer for the current Customer
+	 * @param IC the selected ItemCollector to do this job
+	 */
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
 		//print ("Going to ask ItemCollector to get Items");
 		cashierGui.GoToBench();
@@ -317,6 +373,9 @@ private static final int startingminute = 0;
 		
 	}
 	
+	/**
+	 * Animate to go to bench and collect items and go back to front desk
+	 */
 	private void CollectItemsFromBench(){
 		cashierGui.GoToBench();
 		try {
@@ -334,18 +393,28 @@ private static final int startingminute = 0;
 		}
 	}
 
+	/**
+	 * An action to tell the customer none of his order can be satisfied
+	 * @param MC The customer that totally has no order can be satisfied
+	 */
 	private void TellCustomerEpicFail(MyCustomer MC){
 		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		MC.c.msgNoItem();
-		for (int i=0;i<MyCustomerList.size();i++){
-			if (MC == MyCustomerList.get(i)){
-				MyCustomerList.remove(i);
+		synchronized(getMyCustomerList()){
+			for (int i=0;i<MyCustomerList.size();i++){
+				if (MC == MyCustomerList.get(i)){
+					MyCustomerList.remove(i);
+				}
 			}
 		}
 		
 	}
 	
+	/**
+	 * This is the action to calculate the invoice (Measuring the total price of the deliver items) and send it to the customer
+	 * @param MC The current Customer that is going to receive the invoice
+	 */
 	private void CalculatePayment(MyCustomer MC){
 		//print ("Calculating the total for the customer");
 		double total = 0;
@@ -358,33 +427,46 @@ private static final int startingminute = 0;
 		
 	}
 
+	/**
+	 * This is the action to give items to the customer (in the market) or find the appropriate deliveryguy to deliver item to the building
+	 * @param MC The current Customer that is being handled
+	 */
 	private void GiveItems (MyCustomer MC){
 		//print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
 		if (MC.Building == null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());
-			for (int i=0;i<MyCustomerList.size();i++){
-				if (MC == MyCustomerList.get(i)){
-					MyCustomerList.remove(i);
+			synchronized(getMyCustomerList()){
+				for (int i=0;i<MyCustomerList.size();i++){
+					if (MC == MyCustomerList.get(i)){
+						MyCustomerList.remove(i);
+					}
 				}
 			}
 		}
 		else
-			for (int i=0;i<getDGList().size();i++){
-				if(getDGList().get(i).msgAreYouAvailable()){
-					MC.deliveryGuy = getDGList().get(i);
-					MC.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.c, MC.Building);
-					for (int j=0;j<MyCustomerList.size();j++){
-						if (MC == MyCustomerList.get(j)){
-							MyCustomerList.remove(j);
-							break;
+			synchronized(getDGList()){
+				for (int i=0;i<getDGList().size();i++){
+					if(getDGList().get(i).msgAreYouAvailable()){
+						MC.deliveryGuy = getDGList().get(i);
+						MC.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.c, MC.Building);
+						synchronized(getMyCustomerList()){
+							for (int j=0;j<MyCustomerList.size();j++){
+								if (MC == MyCustomerList.get(j)){
+									MyCustomerList.remove(j);
+									break;
+								}
+							}
 						}
+						break;
 					}
-					break;
 				}
 			}
 	}
 	
+	/**
+	 * calling offwork (including himself)
+	 */
 	private void OffWork(){
 		DomsgAllWorkersToOffWork();
 		cashierGui.OffWork();
@@ -398,12 +480,20 @@ private static final int startingminute = 0;
 	}
 	
 
+	/**
+	 * Calling everyone offwork
+	 */
 	private void DomsgAllWorkersToOffWork() {
-		for (int i=0; i<ICList.size();i++){
-			ICList.get(i).msgLeaveWork();
+		synchronized(getICList()){
+			for (int i=0; i<ICList.size();i++){
+				ICList.get(i).msgLeaveWork();
+			}
 		}
-		for (int i=0; i<DGList.size();i++){
-			DGList.get(i).msgLeaveWork();
+		
+		synchronized(getDGList()){
+			for (int i=0; i<DGList.size();i++){
+				DGList.get(i).msgLeaveWork();
+			}
 		}
 		
 	}
@@ -461,6 +551,23 @@ private static final int startingminute = 0;
 		this.MarketTotalMoney = cash;
 	}
 	
+	public void setInventoryList(Map<String, Integer> iList) {
+		InventoryList = iList;
+		
+	}
+
+	public Map<String,Double> getPriceList(){
+		return PriceList;
+	}
+
+	public Cashierstate getState() {
+		return state;
+	}
+
+	public void setState(Cashierstate state) {
+		this.state = state;
+	}
+	
 	//Shifts
 	public int getShiftStartHour(){
 		return startinghour;
@@ -484,21 +591,6 @@ private static final int startingminute = 0;
 		return false;
 	}
 
-	public void setInventoryList(Map<String, Integer> iList) {
-		InventoryList = iList;
-		
-	}
 
-	public Map<String,Double> getPriceList(){
-		return PriceList;
-	}
-
-	public Cashierstate getState() {
-		return state;
-	}
-
-	public void setState(Cashierstate state) {
-		this.state = state;
-	}
 
 }

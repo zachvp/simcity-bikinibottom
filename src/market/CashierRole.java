@@ -126,7 +126,7 @@ private static final int startingminute = 0;
 	//Cashier Message 
 	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityBuilding building)	
 	{				//The Customer will be the phone calling guy
-		print ("Received Phone Order");
+		//print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -140,7 +140,7 @@ private static final int startingminute = 0;
 	
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) //[Customer to Cashier]
 	{
-		print ("Received Msg from Customer");
+		//print ("Received Msg from Customer");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -154,7 +154,7 @@ private static final int startingminute = 0;
 
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
-		print ("Received Items from ItemCollector");
+		//print ("Received Items from ItemCollector");
 		setState(Cashierstate.GoingToGetItems);
 		
 		int ShoppingListSize = 0;
@@ -205,7 +205,7 @@ private static final int startingminute = 0;
 	
 	public void msgHereIsPayment(double payment, Customer c)
 	{
-		print ("Receive payment from Customer ");
+		//print ("Receive payment from Customer ");
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).c == c){
 				getMyCustomerList().get(i).state = Customerstate.Paid;
@@ -291,7 +291,7 @@ private static final int startingminute = 0;
 	
 	//Actions
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
-		print ("Going to ask ItemCollector to get Items");
+		//print ("Going to ask ItemCollector to get Items");
 		cashierGui.GoToBench();
 		try {
 			atBench.acquire();
@@ -331,7 +331,7 @@ private static final int startingminute = 0;
 	}
 
 	private void TellCustomerEpicFail(MyCustomer MC){
-		print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
+		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		MC.c.msgNoItem();
 		for (int i=0;i<MyCustomerList.size();i++){
@@ -343,7 +343,7 @@ private static final int startingminute = 0;
 	}
 	
 	private void CalculatePayment(MyCustomer MC){
-		print ("Calculating the total for the customer");
+		//print ("Calculating the total for the customer");
 		double total = 0;
 		for (int i=0;i<MC.getDeliveryList().size();i++){
 			double CurrentPrice = PriceList.get(MC.getDeliveryList().get(i).name);
@@ -355,7 +355,7 @@ private static final int startingminute = 0;
 	}
 
 	private void GiveItems (MyCustomer MC){
-		print ("Going to Give/Deliver Item");
+		//print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
 		if (MC.Building == null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());

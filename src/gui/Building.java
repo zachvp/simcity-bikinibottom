@@ -30,6 +30,13 @@ public abstract class Building extends Rectangle2D.Double
 	LocationTypeEnum type;
 	JPanel info;
 	
+	protected static final int defaultStartHour = 9;
+	protected static final int defaultStartMinute = 0;
+	protected static final int defaultEndHour = 17;
+	protected static final int defaultEndMinute = 0;
+	
+	protected int timeOffset = 0;
+	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
 	}
@@ -59,15 +66,23 @@ public abstract class Building extends Rectangle2D.Double
 	}
 	
 	/** The hour of day this building opens. */
-	public abstract int getOpeningHour();
+	public int getOpeningHour() {
+		return (defaultStartHour + timeOffset) % 24;
+	}
 	
 	/** The minute of day this building opens. */
-	public abstract int getOpeningMinute();
+	public int getOpeningMinute() {
+		return defaultStartMinute;
+	}
 	
 	/** The hour of day this building closes. */
-	public abstract int getClosingHour();
+	public int getClosingHour() {
+		return (defaultEndHour + timeOffset) % 24;
+	}
 	
 	/** The minute of day this building closes. */
-	public abstract int getClosingMinute();
-
+	public int getClosingMinute() {
+		return defaultEndMinute;
+	}	
+	
 }

@@ -21,6 +21,8 @@ public class MockCashier extends Mock implements Cashier {
 	 */
 	public ItemCollector itemCollector;
 	public List<Item>ShoppingList;
+	public List<Item>MissingList;
+	public List<Item>DeliverList;
 	
 	public MockCashier(String name) {
 		super(name);
@@ -43,7 +45,8 @@ public class MockCashier extends Mock implements Cashier {
 	@Override
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems,
 			Customer c) {
-		// TODO Auto-generated method stub
+		DeliverList = Items;
+		MissingList = MissingItems;
 		
 	}
 

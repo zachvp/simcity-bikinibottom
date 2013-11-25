@@ -36,6 +36,7 @@ import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
 import sun.net.www.content.text.PlainTextInputStream;
+import transportation.BusAgent;
 import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
@@ -307,6 +308,24 @@ public class MainFrame extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		for (Corner corner : corners) {
+			corner.startThreads();
+		}
+		
+		BusAgent busAgent = new BusAgent(corners.get(1),
+				true, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+
+		busAgent = new BusAgent(corners.get(0),
+				false, busRoute);
+
+		busAgent.startThread();
+		busAgent.startVehicle();
+		
+		
 	}
 
 	/** Utilities **/

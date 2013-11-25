@@ -65,7 +65,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		welcomeText.setFont(font);
 		
 		//TODO test
-		WorkRole test = new TellerRole(null, null);
+//		WorkRole test = new TellerRole(null, null);
 		
 		JPanel inputPanel = new JPanel();
 		Dimension inputDim = new Dimension(d.width, (int)(d.height*0.3));

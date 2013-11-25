@@ -209,7 +209,7 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 	public void UpdateInventoryLevelWithButton(){
 		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
 
-		System.out.println("IMHERE");
+		//System.out.println("IMHERE");
 		if(  isInteger(LamboFinnyText.getText())  )
 			IList.put("LamboFinny", Integer.parseInt(LamboFinnyText.getText()));
 		if(  isInteger(ToyodaText.getText())  )
@@ -253,6 +253,8 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){
+		
+		System.out.println("IMHERE");
 		Map<String,Integer> IList = marketRecords.ca.getInventoryList();
 		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
 		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));

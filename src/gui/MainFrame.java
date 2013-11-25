@@ -2,6 +2,7 @@ package gui;
 
 
 import gui.test.MockBuilding;
+import housing.ResidentialBuilding;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -211,12 +212,12 @@ public class MainFrame extends JFrame implements ActionListener {
 				//add building details
 			}
 			if(type == LocationTypeEnum.House){
-				//HouseBuilding house = new HouseBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				//house.setName(buildingName);
-				//construct(house); 
+				ResidentialBuilding house = new ResidentialBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				house.setName(buildingName);
+				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
+				//restaurant.strottma.gui.AnimationPanel animationPanel= new restaurant.strottma.gui.AnimationPanel();
 
 				//RestaurantRecords restRecords = new restaurant.strottma.gui.RestaurantRecords(animationPanel);
 				//citizenRecords.addBuildingRecord(restRecords);

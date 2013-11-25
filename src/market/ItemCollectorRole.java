@@ -50,10 +50,16 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		
 	}
 	
+	//Working Hour
+		int startinghour = 8;
+		int startingminutes = 29;
+		int endinghour = 18;
+		int endingminutes = 0;
+	
 	
 	//Messages	
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
-		print ("Received msg to get items");
+		//print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
 		o.ItemList = ItemList;
@@ -104,7 +110,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	//Actions
 	private void GoGetItems(Order o){
-		print("Going to get items");
+		//print("Going to get items");
 		itemcollectorGui.CollectItems();
 		try {
 			atStation.acquire();
@@ -185,16 +191,16 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	}
 	//Shifts
 	public int getShiftStartHour(){
-		return 8;
+		return startinghour;
 	}
 	public int getShiftStartMinute(){
-		return 29;
+		return startingminutes;
 	}
 	public int getShiftEndHour(){
-		return 18;
+		return endinghour;
 	}
 	public int getShiftEndMinute(){
-		return 0;
+		return endingminutes;
 	}
 	public boolean isAtWork(){
 		if (this.isActive())

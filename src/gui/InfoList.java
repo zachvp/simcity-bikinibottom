@@ -49,7 +49,6 @@ public class InfoList extends JPanel implements ActionListener {
 	 * @param name Name on the button
 	 */
 	public void addToList(String name) {
-		//TODO modify to add more building details to button? (picture, etc.)		
 		if (name != null) {
 			//System.out.println("adding "+name+" to list");
 			JButton button = new JButton(name);
@@ -84,7 +83,7 @@ public class InfoList extends JPanel implements ActionListener {
 					citizenRecords.showInfo(b.getText());
 			}
 		}
-		for (JButton b: list){
+		/*for (JButton b: list){
 			if(e.getSource() == b){
 				b.setBackground(Color.LIGHT_GRAY);
 			}
@@ -92,7 +91,7 @@ public class InfoList extends JPanel implements ActionListener {
 				b.setBackground(Color.white);
 			}
 		}
-		otherTab.deselectOtherTab();
+		otherTab.deselectOtherTab();*/
 	}
 	
 	public void deselectOtherTab(){
@@ -147,4 +146,4 @@ public class InfoList extends JPanel implements ActionListener {
 	}
 
 	
-}//end class
+}

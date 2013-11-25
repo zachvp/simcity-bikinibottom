@@ -2,6 +2,7 @@ package housing;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
@@ -11,6 +12,8 @@ import housing.gui.HousingComplex;
 public class ResidentialBuilding extends Building {
 	XYPos entrancePos;
 	HousingComplex complex = new HousingComplex();
+	
+	CityLocation housingComplex;
 
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -24,7 +27,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getGreeter() {
-		return complex.getPayRecipientRole();
+		return (Role) complex.getPayRecipientRole();
 	}
 
 	@Override
@@ -34,7 +37,8 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		return null;
+		
+		return this.getGreeter();
 	}
 
 	@Override
@@ -43,8 +47,9 @@ public class ResidentialBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getControlPanel() {
-		return null;
+	public JPanel getInfoPanel() {
+		// TODO Auto-generated method stub
+		return new JPanel();
 	}
 
 }

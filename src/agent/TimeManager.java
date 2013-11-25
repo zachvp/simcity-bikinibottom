@@ -130,6 +130,19 @@ public class TimeManager {
 		return isTimeBetween(currentSimTime(), otherOne, otherTwo);
 	}
 	
+	/**
+	 * Determines whether the current sim time is between
+	 * "firstHour:firstMinute" and "secondHour:secondMinute". Works whether
+	 * firstHour:firstMinute or secondHour:secondMinute comes first, and even
+	 * if any of the three times are equal. 
+	 */
+	public boolean isNowBetween(int firstHour, int firstMinute, int secondHour,
+			int secondMinute) {
+		
+		return isNowBetween(timeToday(firstHour, firstMinute),
+				timeToday(secondHour, secondMinute));
+	}
+	
 	/* -------- Occurrence of a time in h:m on a given day -------- */
 	
 	/**

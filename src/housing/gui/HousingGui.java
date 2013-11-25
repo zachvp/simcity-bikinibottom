@@ -1,8 +1,12 @@
 package housing.gui;
 
+import housing.MaintenanceWorkerRole;
 import housing.ResidentDwelling;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
+import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.PayRecipient;
+import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
 import java.awt.Color;
@@ -15,7 +19,9 @@ import javax.swing.JPanel;
 
 import agent.PersonAgent;
 import agent.Role;
+import agent.Constants.Condition;
 import agent.gui.AnimationPanel;
+import agent.interfaces.Person;
 
 /**
  * HousingGui displays individual housing units. It pulls together all of the
@@ -32,7 +38,10 @@ public class HousingGui extends JPanel {
 	int index;
 	
 	// payRecipient for this unit
- 	PayRecipientRole payRecipientRole;
+ 	PayRecipient payRecipientRole;
+ 	
+ 	// worker for this unit
+ 	MaintenanceWorker worker;
 
 	// add resident
 	PersonAgent residentPerson = new PersonAgent("Resident");
@@ -41,30 +50,36 @@ public class HousingGui extends JPanel {
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
 	LayoutGui layoutGui = new LayoutGui(500, 500);
-	ResidentRoleGui residentGui = new ResidentRoleGui(residentRole);
+	ResidentRoleGui residentGui = new ResidentRoleGui( residentRole);
 
 	// back-end housing containers
 	List<PersonAgent> people = new ArrayList<PersonAgent>();
-	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, "good");
+	ResidentDwelling dwelling = new ResidentDwelling(residentRole, payRecipientRole, index, Condition.GOOD);
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
 
-	public HousingGui(int index, PayRecipientRole payRecipientRole) {
+	public HousingGui(int index, PayRecipient payRecipient, MaintenanceWorker worker) {
 		this.index = index;
 		
 		// set the manager for this housing unit
-		this.payRecipientRole = payRecipientRole;
+		this.payRecipientRole = payRecipient;
+		this.worker = worker;
+		
+		// set the worker for this housing unit
+		residentRole.setWorker(worker);
 		
 		// add the resident to the pay recipient's charges
-		residentRole.setPayee(payRecipientRole);
-		payRecipientRole.addResident(dwelling);
+		residentRole.setPayee(payRecipient);
+		payRecipient.addResident(dwelling);
 		
 		// add people to the list
 		people.add(residentPerson);
 		
 		// activate roles
 		startAndActivate(residentPerson, residentRole);
+		
+		residentRole.setDwelling(dwelling);
 		
 		// assign guis to the resident
 		residentRole.setGui(residentGui);

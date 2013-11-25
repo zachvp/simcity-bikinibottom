@@ -32,7 +32,8 @@ import agent.interfaces.Person;
 
 public class CashierRole extends WorkRole implements Cashier {
 
-//public EventLog log = new EventLog();
+private static final int startingminute = 0;
+	//public EventLog log = new EventLog();
 	private CashierGuiInterfaces cashierGui = null;
 	private String name;
 	private double MarketTotalMoney;
@@ -55,6 +56,12 @@ public class CashierRole extends WorkRole implements Cashier {
 			InventoryList.put(agent.Constants.CARS.get(i), 100);
 		}
 	}
+	
+	//Working Hour
+	int startinghour = 8;
+	int startingminutes = 29;
+	int endinghour = 18;
+	int endingminutes = 0;
 	
 	private Map<String,Double>PriceList = new HashMap<String, Double>();
 	{
@@ -106,6 +113,9 @@ public class CashierRole extends WorkRole implements Cashier {
 			}
 		};
 		
+		
+		
+		
 		int hour = 6;
 		int minute = 30;
 		
@@ -116,7 +126,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	//Cashier Message 
 	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityBuilding building)	
 	{				//The Customer will be the phone calling guy
-		print ("Received Phone Order");
+		//print ("Received Phone Order");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -130,7 +140,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) //[Customer to Cashier]
 	{
-		print ("Received Msg from Customer");
+		//print ("Received Msg from Customer");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
@@ -144,7 +154,7 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
 	{
-		print ("Received Items from ItemCollector");
+		//print ("Received Items from ItemCollector");
 		setState(Cashierstate.GoingToGetItems);
 		
 		int ShoppingListSize = 0;
@@ -195,7 +205,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	public void msgHereIsPayment(double payment, Customer c)
 	{
-		print ("Receive payment from Customer ");
+		//print ("Receive payment from Customer ");
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).c == c){
 				getMyCustomerList().get(i).state = Customerstate.Paid;
@@ -281,7 +291,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	//Actions
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
-		print ("Going to ask ItemCollector to get Items");
+		//print ("Going to ask ItemCollector to get Items");
 		cashierGui.GoToBench();
 		try {
 			atBench.acquire();
@@ -321,7 +331,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	private void TellCustomerEpicFail(MyCustomer MC){
-		print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
+		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		MC.c.msgNoItem();
 		for (int i=0;i<MyCustomerList.size();i++){
@@ -333,7 +343,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void CalculatePayment(MyCustomer MC){
-		print ("Calculating the total for the customer");
+		//print ("Calculating the total for the customer");
 		double total = 0;
 		for (int i=0;i<MC.getDeliveryList().size();i++){
 			double CurrentPrice = PriceList.get(MC.getDeliveryList().get(i).name);
@@ -345,7 +355,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	private void GiveItems (MyCustomer MC){
-		print ("Going to Give/Deliver Item");
+		//print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
 		if (MC.Building == null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());
@@ -449,16 +459,16 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	//Shifts
 	public int getShiftStartHour(){
-		return 8;
+		return startinghour;
 	}
 	public int getShiftStartMinute(){
-		return 29;
+		return startingminutes;
 	}
 	public int getShiftEndHour(){
-		return 18;
+		return endinghour;
 	}
 	public int getShiftEndMinute(){
-		return 0;
+		return endingminutes;
 	}
 	public boolean isAtWork(){
 		if (this.isActive())

@@ -40,6 +40,16 @@ public interface Constants {
 	// TODO disable DEBUG constant before final release
 	public static final boolean DEBUG = true;
 	
+	/**
+	 * Whether EventLog should log events.
+	 */
+	public static final boolean LOG = false;
+	
+	/**
+	 * Whether print statements should execute.
+	 */
+	public static final boolean PRINT = false;
+	
     /**
      * The number of milliseconds in a second
      */
@@ -113,6 +123,11 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
+	
+	/**
+	 * Conditions for Dwellings
+	 */
+	enum Condition { GOOD, FAIR, POOR, BROKEN, BEING_FIXED }
 	
 	/**
 	 * Types of Car in the city

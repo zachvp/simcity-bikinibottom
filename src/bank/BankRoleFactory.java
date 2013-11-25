@@ -3,6 +3,7 @@ package bank;
 import java.util.HashMap;
 import java.util.Map;
 
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.RoleFactory;
 import agent.interfaces.Person;
@@ -11,19 +12,24 @@ import agent.interfaces.Person;
 
 public class BankRoleFactory implements RoleFactory{
 
-	Map<Person,bank.BankCustomerRole> bankCustomerMap = new HashMap<Person, bank.BankCustomerRole>();
-
+	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	private CityLocation bank;
+	
+	public BankRoleFactory(CityLocation bank) {
+		this.bank = bank;
+		this.existingRoles = new HashMap<Person, Role>();
+	}
 	@Override
 	public Role getCustomerRole(Person person) {
-		
-		if(bankCustomerMap.containsKey(person)){
-			return bankCustomerMap.get(person);
+		Role role = existingRoles.get(person);
+		if(role == null) {
+			role = new BankCustomerRole(person);
+			role.setLocation(bank);
 		}
 		else {
-			BankCustomerRole bankCustomerRole = new BankCustomerRole(person);
-			bankCustomerRole.setPerson(person);
-			person.addRole(bankCustomerRole);
-			return bankCustomerRole;
+			role.setPerson(person);
 		}
+		person.addRole(role);
+		return role;
 	}
 }

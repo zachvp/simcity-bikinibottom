@@ -7,6 +7,7 @@ import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 //import market.interfaces.MarketInfoPanel;
 
+
 import java.awt.*;
 
 public class CashierGui implements Gui, CashierGuiInterfaces {
@@ -89,8 +90,6 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 				
 		command=Command.noCommand;
         }
-
-       
     }
     
     /* (non-Javadoc)
@@ -142,7 +141,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	public void Update() {
     	if (panel == null)
     		return;
-		panel.UpdateInventoryLevelWithoutButton();
+		panel.UpdateInventoryLevelWithButton();
 	}
     
     /* (non-Javadoc)

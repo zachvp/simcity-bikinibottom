@@ -76,7 +76,6 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			{
 				deliveryguyGui.BackReadyStation();
 			}
-			
 		}
 		
 	//Animations
@@ -118,6 +117,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		person.getPassengerRole().activate();
+		person.getPassengerRole().msgGoToLocation(CurrentOrder.Building);
+		//stateChanged()?
 		
 		
 		// animation go back to the market

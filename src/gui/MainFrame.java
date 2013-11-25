@@ -139,9 +139,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		InfoListSlot.setMinimumSize(listDim);
 		InfoListSlot.setOpaque(false);
 
+		//Lists displaying People and Buildings in the city
 		JTabbedPane tabbedPane = new JTabbedPane();
 		buildingList = new InfoList(listDim.width, listDim.height);
 		personList = new InfoList(listDim.width, listDim.height);
+		buildingList.setOtherTab(personList);
+		personList.setOtherTab(buildingList);
 		buildingList.setInfoPanel(infoPanel);
 		personList.setInfoPanel(infoPanel);
 		citizenRecords = new CitizenRecords(this);

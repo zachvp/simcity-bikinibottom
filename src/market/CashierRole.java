@@ -33,10 +33,9 @@ import agent.interfaces.Person;
 public class CashierRole extends WorkRole implements Cashier {
 
 //public EventLog log = new EventLog();
-	private boolean Open;
 	private CashierGuiInterfaces cashierGui = null;
 	private String name;
-	private double cash;
+	private double MarketTotalMoney;
 	ScheduleTask task = new ScheduleTask();
 	
 	private Semaphore atFrontDesk = new Semaphore(0,true);
@@ -441,11 +440,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	public double getCash() {
-		return cash;
+		return MarketTotalMoney;
 	}
 
 	public void setCash(double cash) {
-		this.cash = cash;
+		this.MarketTotalMoney = cash;
 	}
 	
 	//Shifts

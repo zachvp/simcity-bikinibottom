@@ -191,7 +191,11 @@ public abstract class Role {
     
     @Override
     public String toString() {
-    	return getName() + "'s " + getClass().getSimpleName();
+    	if (person != null) {
+    		return getName() + "'s " + getClass().getSimpleName();
+    	} else {
+    		return getClass().getSimpleName() + " at " + getLocation();
+    	}
     }
     
     /**

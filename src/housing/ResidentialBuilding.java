@@ -12,12 +12,25 @@ import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
 
+/**
+ * ResidentialBuilding is the class that will be slotted into the city map itself.
+ * It will then display in the overview city map. Upon clicking on it, the view within
+ * the ResidentialBuilding with the detailed housing animations will pop up. 
+ * @author Zach VP
+ */
+
 public class ResidentialBuilding extends Building {
+	// ResidentialBuilding is a CityLocation that will be added to kelp
 	CityLocation housingComplex;
-	XYPos entrancePos;
-	HousingComplex complex = new HousingComplex();
 	
-	Map<Person, Role> roles = new HashMap<Person, Role>();
+	// location for the "door" to the building
+	XYPos entrancePos;
+	
+	// this displays after clicking on the ResidentialBuilding
+	HousingComplex complex;
+	
+	// used for producing jobs and residential roads in the complex
+	Map<Person, Role> roles;
 	
 	// constants
 	private final int EMPLOYEE_START_HOUR = 6;
@@ -27,6 +40,8 @@ public class ResidentialBuilding extends Building {
 		super(x, y, width, height);
 		this.entrancePos = new XYPos(x + width/2, y + height);
 		this.housingComplex = this;
+		this.complex = new HousingComplex();
+		this.roles = new HashMap<Person, Role>();
 	}
 
 	@Override

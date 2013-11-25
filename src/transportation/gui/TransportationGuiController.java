@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import transportation.gui.interfaces.BusstopGui;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.gui.interfaces.VehicleGui;
 import agent.gui.Gui;
@@ -18,6 +19,9 @@ public class TransportationGuiController implements Gui {
 
 	private List<VehicleGui> vehicleGuis =
 			new ArrayList<VehicleGui>();
+
+	private List<BusstopGui> busstopGuis =
+			new ArrayList<BusstopGui>();
 	
 	private TransportationGuiController() {}
 	
@@ -30,12 +34,20 @@ public class TransportationGuiController implements Gui {
 
 	@Override
 	public void updatePosition() {
+		
+		for (Gui gui : busstopGuis ) {
+			gui.updatePosition();
+		}
+		
 		for (Gui gui : passengerGuis ) {
 			gui.updatePosition();
 		}
 		for (Gui gui : vehicleGuis ) {
 			gui.updatePosition();
+			gui.updatePosition();
+			gui.updatePosition();
 		}
+		
 		for (Gui gui : guis ) {
 			gui.updatePosition();
 		}
@@ -43,13 +55,18 @@ public class TransportationGuiController implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		for (Gui gui : busstopGuis ) {
+			gui.draw(g);
+		}
+		
 		for (Gui gui : passengerGuis ) {
 			if (gui.isPresent())
 				gui.draw(g);
 		}
 		
 		for (Gui gui : vehicleGuis ) {
-			gui.draw(g);
+			if (gui.isPresent())
+				gui.draw(g);
 		}
 		
 		for (Gui gui : guis ) {
@@ -72,6 +89,10 @@ public class TransportationGuiController implements Gui {
 
 	public void addVehicleGUI(VehicleGui vehicleGui) {
 		vehicleGuis.add(vehicleGui);
+	}
+
+	public void addBusstopGUI(BusstopGui busstopGui) {
+		busstopGuis .add(busstopGui);
 	}
 
 }

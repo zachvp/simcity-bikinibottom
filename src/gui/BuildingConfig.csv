@@ -11,12 +11,14 @@
 #Make sure not to leave empty lines, or lines with data that do not start
 #with an digit,
 6,Hospital
-3,Market1
-4,House1
-3,Market2
+0,Market1
+0,House1
+0,Market2
 2,Bank2
-2,Mock1
 1,Restaurant1
+2,Bank3
+0,Mock1
+0,Mock2
 0,Mock3
 0,Mock4
 0,Mock5
@@ -38,11 +40,3 @@
 0,Mock21
 0,Mock22
 0,Mock23
-0,Mock24
-0,Mock25
-0,Mock26
-0,Mock27
-0,Mock28
-0,Mock29
-0,Mock30
-0,Mock31

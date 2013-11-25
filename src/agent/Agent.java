@@ -1,6 +1,8 @@
 package agent;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Semaphore;
+
+import agent.mock.EventLog;
 
 /**
  * Base class for simple agents
@@ -8,6 +10,7 @@ import java.util.concurrent.*;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
+    private EventLog log = new EventLog();
     
     private boolean pause = false;
     
@@ -48,14 +51,16 @@ public abstract class Agent {
      * The simulated action code
      */
     protected void Do(String msg) {
-        print(msg, null);
+        // print(msg, null);
+        log.add(msg);
     }
 
     /**
      * Print message
      */
     protected void print(String msg) {
-        print(msg, null);
+        // print(msg, null);
+    	log.add(msg);
     }
 
     /**

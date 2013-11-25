@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 
+import agent.gui.Gui;
+
 public class CustomerGui implements Gui{
 
 	private Customer agent = null;

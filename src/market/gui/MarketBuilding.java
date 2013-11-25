@@ -14,6 +14,7 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.RoleFactory;
 import agent.TimeManager;
+import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
 
 
@@ -27,7 +28,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	private int endingminutes = 0;
 	
 	String name;
-	AnimationPanel animationPanel = new market.gui.AnimationPanel();	
+	AnimationPanel animationPanel = new AnimationPanel();	
 	MarketRecords records = new MarketRecords(animationPanel, this);
 	JPanel info = new MarketInfoPanel(records);
 	//ATTENTION

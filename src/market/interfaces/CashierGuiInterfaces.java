@@ -2,7 +2,7 @@ package market.interfaces;
 
 import java.awt.Graphics2D;
 
-import market.gui.Gui;
+import agent.gui.Gui;
 import market.gui.MarketInfoPanel;
 
 public interface CashierGuiInterfaces extends Gui {

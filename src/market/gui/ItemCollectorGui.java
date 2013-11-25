@@ -9,7 +9,10 @@ import market.ItemCollectorRole;
 
 
 
+
 import java.awt.*;
+
+import agent.gui.Gui;
 
 public class ItemCollectorGui implements Gui {
 

@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import market.gui.CustomerGui;
-import market.gui.Gui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
+import agent.gui.Gui;
 import agent.interfaces.Person;
 
 public class CustomerRole extends Role implements Customer{

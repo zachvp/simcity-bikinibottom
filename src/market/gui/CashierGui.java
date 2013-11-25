@@ -8,7 +8,10 @@ import market.interfaces.CashierGuiInterfaces;
 //import market.interfaces.MarketInfoPanel;
 
 
+
 import java.awt.*;
+
+import agent.gui.Gui;
 
 public class CashierGui implements Gui, CashierGuiInterfaces {
 

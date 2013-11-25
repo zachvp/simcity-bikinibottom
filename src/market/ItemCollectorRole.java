@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.gui.Gui;
 import market.gui.ItemCollectorGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
@@ -22,6 +21,7 @@ import agent.PersonAgent;
 import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
+import agent.gui.Gui;
 
 public class ItemCollectorRole extends WorkRole implements ItemCollector{
 

@@ -5,6 +5,8 @@ import market.interfaces.Customer;
 
 import javax.swing.*;
 
+import agent.gui.AnimationPanel;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;

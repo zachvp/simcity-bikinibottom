@@ -9,7 +9,6 @@ import java.util.concurrent.Semaphore;
 
 import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
-import market.gui.Gui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
@@ -22,6 +21,7 @@ import agent.PersonAgent;
 import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
+import agent.gui.Gui;
 import agent.interfaces.Person;
 
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{

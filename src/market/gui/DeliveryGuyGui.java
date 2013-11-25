@@ -6,6 +6,8 @@ import market.interfaces.DeliveryGuy;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class DeliveryGuyGui implements Gui {
 
     private DeliveryGuy agent = null;

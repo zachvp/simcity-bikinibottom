@@ -17,6 +17,7 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 import agent.PersonAgent;
 import agent.Role;
+import agent.gui.AnimationPanel;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -52,6 +53,7 @@ public class MarketRecords implements BuildingRecords {
     private DeliveryGuyRole dg = new DeliveryGuyRole("DeliveryGuy1", DeliveryGuyPerson, building);
     private DeliveryGuyGui dgGui = new DeliveryGuyGui(dg);
 
+    private MarketBackgroundLayoutGui marketBackgroundLayout;
     List<Item> tempInventoryList = new ArrayList<Item>();
 	{
 		tempInventoryList.add(new Item("Toyoda", 1));
@@ -82,6 +84,7 @@ public class MarketRecords implements BuildingRecords {
     public MarketRecords(AnimationPanel gui, MarketBuilding market) {
     	//marketControlPanel = controlPanel;
     	building = market;
+    	marketBackgroundLayout = new MarketBackgroundLayoutGui();
     	cashierGui = new CashierGui(ca);
     	icGui = new ItemCollectorGui(ic);
     	ic1Gui = new ItemCollectorGui(ic1);
@@ -125,6 +128,7 @@ public class MarketRecords implements BuildingRecords {
 		*/
 
         //ItemCollector Gui
+        gui.addGui(marketBackgroundLayout);
         gui.addGui(icGui);
         gui.addGui(ic1Gui);
         

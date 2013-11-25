@@ -15,7 +15,6 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.gui.CashierGui;
-import market.gui.Gui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
@@ -30,6 +29,7 @@ import agent.Role;
 import agent.TimeManager;
 import agent.WorkRole;
 import agent.Role.ScheduleTask;
+import agent.gui.Gui;
 import agent.interfaces.Person;
 
 public class CashierRole extends WorkRole implements Cashier {

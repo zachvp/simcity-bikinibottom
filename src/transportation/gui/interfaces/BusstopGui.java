@@ -1,4 +1,4 @@
-package transportation;
+package transportation.gui.interfaces;
 
 import agent.gui.Gui;
 

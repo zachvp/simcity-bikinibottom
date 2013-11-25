@@ -16,7 +16,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 	//List of Passengers in the bus.
 	List<Passenger> passengerList = new ArrayList<Passenger>(); 
 	
-	//List of Passengers waiting in the current Busstop TODO add to DD
+	//List of `Passenger`s waiting in the `currentBusstop`.
 	List<Passenger> waitingPassengerList = new ArrayList<Passenger>(); 
 
 	//Route the bus must load.
@@ -25,12 +25,14 @@ public class BusAgent extends VehicleAgent implements Bus {
 	//Busstop the Bus is currently in.
 	Busstop currentBusstop;
 		
-	//State the bus is in.
-	BusStateEnum busState = BusStateEnum.Moving; 
-	
+	/* Specifies if the bus is following the route forwards 
+	 * (`true`) or backwards (`false`).
+	 */
 	boolean direction;
 	
-	enum BusStateEnum { // TODO Update DD
+	//State the bus is in.
+	BusStateEnum busState = BusStateEnum.Moving; 
+	enum BusStateEnum {
 		Moving,
 		RequestingBusstop,
 		LettingPassengersExit,
@@ -40,7 +42,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		
 	//Event the bus did.
 	BusEventEnum busEvent = BusEventEnum.Initial;
-	enum BusEventEnum { // TODO Update DD
+	enum BusEventEnum {
 		Initial,
 		ReceivedBusstop,
 		PassengersLeft,
@@ -115,7 +117,8 @@ public class BusAgent extends VehicleAgent implements Bus {
 		stateChanged();
 	}
 
-	// TODO this does nothing cause we're not synchronizing the exiting of passengers.
+	// TODO this does nothing cause we're not synchronizing
+	// the exiting of passengers.
 	@Override
 	public void msgExiting(Passenger p) {
 		passengerList.remove(p);
@@ -125,7 +128,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 	}
 	
 	@Override
-	protected boolean pickAndExecuteAnAction() { // TODO Update scheduler in DD
+	protected boolean pickAndExecuteAnAction() {
 		if (state == VehicleStateEnum.Requesting
 				&& event == VehicleEventEnum.ReceivedAdjCorners
 				&& !currentPath.isEmpty()
@@ -136,7 +139,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		} else if (busState == BusStateEnum.RequestingBusstop &&
 				busEvent == BusEventEnum.ReceivedBusstop) {
 			busState = BusStateEnum.LettingPassengersExit;
-			letPassengersExit(); //TODO update action name in DD
+			letPassengersExit();
 			return true;
 		} else if (busState == BusStateEnum.LettingPassengersExit
 				&& busEvent == BusEventEnum.PassengersLeft){
@@ -146,7 +149,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		} else if (busState == BusStateEnum.RequestingPassengers
 				&& busEvent == BusEventEnum.PassengersReceived) {
 			busState = BusStateEnum.CallingPassengers;
-			letPassengersIn(); //TODO update action name in DD
+			letPassengersIn();
 			return true;
 		} else if (busState == BusStateEnum.CallingPassengers &&
 				busEvent == BusEventEnum.PassengersOnBus) {
@@ -157,7 +160,10 @@ public class BusAgent extends VehicleAgent implements Bus {
 		else return false;
 		
 	}
-
+	
+	/* Messages all the passengers in the bus and lets them know
+	 *  what `Corner` we are on so that they can decide to leave.
+	 */
 	private void letPassengersExit() {
 		for (Passenger passenger : passengerList) {
 			try {
@@ -172,6 +178,9 @@ public class BusAgent extends VehicleAgent implements Bus {
 		busEvent = BusEventEnum.PassengersLeft;
 	}
 	
+	/* Messages all the passengers waiting for the bus, and waits
+	 *  for them to come in.
+	 */
 	private void letPassengersIn() {
 		for (Passenger passenger : waitingPassengerList) {
 			passenger.msgWelcomeToBus(this, 0); //TODO give fare?

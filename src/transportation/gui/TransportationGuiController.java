@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import transportation.BusstopGui;
+import transportation.gui.interfaces.BusstopGui;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.gui.interfaces.VehicleGui;
 import agent.gui.Gui;

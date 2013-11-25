@@ -9,7 +9,6 @@ public interface Vehicle extends AdjCornerRequester {
 	public void msgArrivedAtCorner(Corner c);
 	
 	//Message received when you can cross a corner
-	// TODO Add to DD
 	public void msgDriveNow();
 
 	DirectionEnum currentDirection();

@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import sun.java2d.loops.DrawRect;
 import transportation.BusstopAgent;
-import transportation.BusstopGui;
+import transportation.gui.interfaces.BusstopGui;
 import transportation.interfaces.Busstop;
 import agent.gui.Gui;
 

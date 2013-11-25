@@ -6,7 +6,6 @@ import CommonSimpleClasses.CityLocation;
 /* Role a person takes when he needs to move between 
  * two places in the city.
  */
-// TODO Update DD, passenger no longer busstoprequester
 public interface Passenger {
 	
 	// Message from Person that sets the destination.
@@ -17,17 +16,22 @@ public interface Passenger {
 	 */
 	public void msgWelcomeToBus(Bus b, double fare);
 	
-	// TODO Update DD
-	/*Message a Passenger receives when the bus he is 
-	 * on arrives to each corner with a busstop.
+	/*  Message a `Passenger` receives when the bus he is on 
+	 * arrives to each `Corner` with a `Busstop`, when the 
+	 * `Car` he is in arrives to destination, or when the 
+	 * `PassengerGui` arrives to the corner he was walking to.
 	 */
 	public void msgWeHaveArrived(CityLocation loc) throws Exception;
 	
-	
 	public CityLocation getLocation();
 
-	void msgGoToLocation(CityLocation loc, PassengerRequester requesterRole);
-
+	/* Message from a `PassengerRequester` `Role` that sets
+	 *  the destination.
+	 */
+	void msgGoToLocation(CityLocation loc, 
+			PassengerRequester requesterRole);
+	
+	//Message received from the `PersonGui` when he gets in his car.
 	void msgGotInCar();
 	
 }

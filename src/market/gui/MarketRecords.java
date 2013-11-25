@@ -34,18 +34,18 @@ public class MarketRecords implements BuildingRecords {
 	MarketBuilding building;
 	
     private PersonAgent CashierPerson = new PersonAgent("Cashier");
-    CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
+    CashierRole ca = new CashierRole("Cashier", 100, CashierPerson, building);
 	private CashierGui cashierGui;
 
     private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
     private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
     
     private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
-    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson, building);
     private ItemCollectorGui icGui;
    
     private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");
-    private ItemCollectorRole ic1 = new ItemCollectorRole("ItemCollector2", ItemCollectorPerson1);
+    private ItemCollectorRole ic1 = new ItemCollectorRole("ItemCollector2", ItemCollectorPerson1, building);
     private ItemCollectorGui ic1Gui;
     
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
@@ -181,7 +181,7 @@ public class MarketRecords implements BuildingRecords {
 			
 		}
 		if (role == "ItemCollector"){
-			ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+			ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson, building);
 		    ItemCollectorGui icGui = new ItemCollectorGui(ic);
 		    ic.setGui(icGui);
 		    ItemCollectors.add(ic);

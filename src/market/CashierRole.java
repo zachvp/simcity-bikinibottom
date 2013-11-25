@@ -3,6 +3,7 @@ package market;
 
 import java.util.ArrayList;
 
+import CommonSimpleClasses.CityLocation;
 import agent.Constants;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.concurrent.Semaphore;
 
 import market.gui.CashierGui;
 import market.gui.Gui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
@@ -100,8 +102,8 @@ private static final int startingminute = 0;
 		}
 	}
 	
-    public CashierRole(String NA, double money, Person person){
-    	super(person);
+    public CashierRole(String NA, double money, Person person, MarketBuilding cL){
+    	super(person, cL);
 		name = NA;
 		setCash(money);
 		

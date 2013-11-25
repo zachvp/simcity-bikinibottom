@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import bank.TellerRole;
 import agent.WorkRole;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
@@ -62,6 +63,9 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		Font font = new Font("Serif", Font.BOLD, 20);
 		
 		welcomeText.setFont(font);
+		
+		//TODO test
+		WorkRole test = new TellerRole(null, null);
 		
 		JPanel inputPanel = new JPanel();
 		Dimension inputDim = new Dimension(d.width, (int)(d.height*0.3));
@@ -166,7 +170,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
 		
 		for(WorkRole w: newJobs){
-			occList.add(w.toString());
+			occList.add(w.getClass().getSimpleName());
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
 	}

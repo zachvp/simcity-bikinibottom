@@ -18,6 +18,7 @@ public class TellerTest extends TestCase
 	MockAccountManager accountManager;// = new MockAccountManager("accountManager");
 	MockLoanManager loanManager;
 
+	CityLocation testLocation = new BankBuilding(0,0,0,0);
 
 	 CityLocation testLocation = new BankBuilding(0,0,0,0);
 

@@ -36,7 +36,6 @@ public class ClassifiedsClass implements Classifieds {
 	public List<WorkRole> getJobsForBuilding(CityBuilding building,
 			boolean returnOnlyOpenPositions) {
 		List<WorkRole> response = new ArrayList<WorkRole>();
-		
 		for (WorkRole role : roles) {
 			if (role.getPerson() != null &&
 					returnOnlyOpenPositions)

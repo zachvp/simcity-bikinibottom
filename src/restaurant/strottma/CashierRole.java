@@ -1,16 +1,18 @@
 package restaurant.strottma;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import restaurant.strottma.test.mock.EventLog;
-
-import java.text.DecimalFormat;
-import java.util.*;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -18,7 +20,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CashierRole extends Role implements Cashier {
+public class CashierRole extends WorkRole implements Cashier {
 
 	public EventLog log = new EventLog();
 
@@ -28,11 +30,21 @@ public class CashierRole extends Role implements Cashier {
 	DecimalFormat df = new DecimalFormat("#.##");
 	private double money;
 	
-	public CashierRole(Person person) {
-		super(person);
+	int shiftStartHour;
+	int shiftStartMinute;
+	int shiftEndHour;
+	int shiftEndMinute;
+	
+	public CashierRole(Person person, CityLocation location) {
+		super(person, location);
 
 		new Timer();
 		this.money = 200.00; // default
+		
+		this.shiftStartHour = 8; // 08:00
+		this.shiftStartMinute = 0;
+		this.shiftEndHour = 20; // 20:00
+		this.shiftEndMinute = 0;
 	}
 
 	/* Messages */
@@ -65,6 +77,12 @@ public class CashierRole extends Role implements Cashier {
 	public void msgHereIsBill(double bill, Market market) {
 		bills.add(new MyBill(bill, market));
 		stateChanged();
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
@@ -245,6 +263,37 @@ public class CashierRole extends Role implements Cashier {
 		public void setAmount(double amount) { this.amount = amount; }
 		
 		public Market getMarket() { return market; }
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		return shiftStartHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return shiftStartMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return shiftEndHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return shiftEndMinute;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe cashiers can go on breaks in v3
+		return false;
 	}
 	
 }

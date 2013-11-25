@@ -1,11 +1,5 @@
 package restaurant.strottma;
 
-import restaurant.strottma.WaiterRole.Menu;
-import restaurant.strottma.gui.CustomerGui;
-import restaurant.strottma.interfaces.Cashier;
-import restaurant.strottma.interfaces.Customer;
-import restaurant.strottma.interfaces.Waiter;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +7,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
+import restaurant.strottma.WaiterRole.Menu;
+import restaurant.strottma.gui.CustomerGui;
+import restaurant.strottma.interfaces.Cashier;
+import restaurant.strottma.interfaces.Customer;
+import restaurant.strottma.interfaces.Waiter;
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.interfaces.Person;
@@ -93,8 +92,8 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(Person person){
-		super(person);
+	public CustomerRole(Person person, CityLocation location){
+		super(person, location);
 		System.out.println("Created CustomerRole for " + person.getName());
 		
 		person.getWallet().setCashOnHand(20);

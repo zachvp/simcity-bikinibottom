@@ -20,9 +20,6 @@ public class TellerTest extends TestCase
 
 	CityLocation testLocation = new BankBuilding(0,0,0,0);
 
-	 CityLocation testLocation = new BankBuilding(0,0,0,0);
-
-
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
 	 * for your agent and mocks, etc.

@@ -128,20 +128,22 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
 		for(int i=0;i<o.ItemList.size();i++){
-			int CurrentItem = getInventoryList().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
+			int CurrentItem = getInventoryMap().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
 			if (CurrentItem >= o.ItemList.get(i).amount){	//enough inventories to satisfy
 				CurrentItem -= o.ItemList.get(i).amount;
-				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
+				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
 				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
 			else		//not enough inventories to satisfy the order
 			{			//Add into it anyway (Try to satisfy the order)
 				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem);
-				CurrentItem = 0;
-				getInventoryList().put(o.ItemList.get(i).name, CurrentItem);
+				
+				
 				DeliverList.add(tempitem);
 				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem);
+				CurrentItem = 0;
+				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
 				MissingList.add(Missingitem);
 			}
 		}
@@ -218,7 +220,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		return false;
 	}
 
-	public Map<String, Integer> getInventoryList() {
+	public Map<String, Integer> getInventoryMap() {
 		return InventoryList;
 	}
 

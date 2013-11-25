@@ -28,6 +28,7 @@ public class CitizenRecords {
 		main = m;
 		personInfoList = main.getPersonInfoList();
 		addCitizen(person);
+		person.startThread();
 		
 		//TEST
 		//for(BuildingRecords rec: buildingRecords){

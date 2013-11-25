@@ -197,7 +197,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				semaphore.release();
 				
 			}
-		}, 2000);
+		}, 8000);
 		
 		try {
 			semaphore.acquire();

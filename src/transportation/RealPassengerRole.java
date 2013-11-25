@@ -30,7 +30,7 @@ public class RealPassengerRole extends PassengerRole {
 	private List<CityLocation> path = new ArrayList<CityLocation>();
 
 	//Pointer to GUI TODO Add to DD
-	PassengerGui gui;
+	public PassengerGui gui;
 
 	//Pointer to Kelp TODO Add to DD
 	Kelp kelp = KelpClass.getKelpInstance();

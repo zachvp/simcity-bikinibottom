@@ -1,8 +1,10 @@
 package bank.test;
 
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import bank.BankCustomerRole;
 import bank.BankCustomerRole.State;
+import bank.gui.BankBuilding;
 import bank.test.mock.MockLoanManager;
 import bank.test.mock.MockTeller;
 import junit.framework.TestCase;
@@ -16,6 +18,7 @@ public class BankCustomerTest extends TestCase
         MockTeller teller;
         MockLoanManager loanManager;
         
+        CityLocation testLocation = new BankBuilding(0,0,0,0);
         
         
         /**
@@ -24,7 +27,7 @@ public class BankCustomerTest extends TestCase
          */
         public void setUp() throws Exception{
                 super.setUp();  
-                bankCustomer = new BankCustomerRole(person);
+                bankCustomer = new BankCustomerRole(person, testLocation);
                 teller = new MockTeller("mockTeller");
                 loanManager = new MockLoanManager("mockLoanManager");
                 bankCustomer.setTeller(teller);

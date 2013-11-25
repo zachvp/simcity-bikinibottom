@@ -38,6 +38,7 @@ public class MarketRoleFactory implements RoleFactory{
 		}
 		else {
 			CustomerRole role = new CustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
+			role.setLocation(person.getPassengerRole().getLocation());
 			role.setPerson(person);
 			person.addRole(role);
 			return role;
@@ -45,4 +46,5 @@ public class MarketRoleFactory implements RoleFactory{
 		
 	}
 	
+
 }

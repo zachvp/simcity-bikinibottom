@@ -1,7 +1,5 @@
 package market.gui;
 
-import gui.BuildingRecords;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +25,7 @@ import agent.interfaces.Person;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
-public class MarketRecords implements BuildingRecords {
+public class MarketRecords {
 	MarketInfoPanel marketControlPanel;
 	MarketBuilding building;
 	
@@ -141,7 +139,6 @@ public class MarketRecords implements BuildingRecords {
 		return LocationTypeEnum.Market;
 	}
 
-	@Override
 	public Role addPerson(/*Person person,*/ String role, String name) {
 		/*
 		if (role == "Cashier"){

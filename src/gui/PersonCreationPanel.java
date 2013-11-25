@@ -174,9 +174,11 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
 		
+		if(occupationsCB != null){
 		occupationsCB.removeAllItems();
 		for (String s: occupationArray){
 			occupationsCB.addItem(s);
+		}
 		}
 	}
 	

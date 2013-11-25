@@ -74,11 +74,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
 		
-		//TODO testing combo box update
-		Person p = new PersonAgent("Pete");
-		WorkRole test = new CashierRole("p",0, p, null);
-		
-			
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();		
 		occupationsCB = new JComboBox<String>(occupationArray);

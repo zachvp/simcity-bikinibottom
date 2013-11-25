@@ -12,6 +12,7 @@ import market.CashierRole.Cashierstate;
 import market.Item;
 import market.CashierRole.Customerstate;
 import market.gui.CashierGui;
+import market.gui.MarketBuilding;
 import market.test.mock.MockCashierGui;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
@@ -33,7 +34,7 @@ public class CashierTest extends TestCase
 		super.setUp();		
 
 		PersonAgent cashier = new PersonAgent ("John");
-		Cashier = new CashierRole("John", 100, cashier);	
+		Cashier = new CashierRole("John", 100, cashier, new MarketBuilding(1,1,1,1));	
 		
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");

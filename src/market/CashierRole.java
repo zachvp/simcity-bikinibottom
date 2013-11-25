@@ -11,25 +11,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.gui.CashierGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
-import market.test.mock.MockCashierGui;
-import agent.Agent;
-import agent.Constants;
-import agent.PersonAgent;
-import agent.Role;
-import agent.TimeManager;
 import agent.WorkRole;
-import agent.Role.ScheduleTask;
 import agent.gui.Gui;
 import agent.interfaces.Person;
 
@@ -50,15 +40,7 @@ private static final int startingminute = 0;
 	private List<ItemCollector> ICList = Collections.synchronizedList(new ArrayList<ItemCollector>());
 	private List<DeliveryGuy> DGList = Collections.synchronizedList(new ArrayList<DeliveryGuy>() );
 	
-	private Map<String,Integer> InventoryList = new HashMap<String,Integer>();
-	{		//Initially The market has 100 inventory on each Item
-		for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
-			InventoryList.put(agent.Constants.FOODS.get(i), 100);
-		}
-		for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
-			InventoryList.put(agent.Constants.CARS.get(i), 100);
-		}
-	}
+	private Map<String,Integer> InventoryList ;
 	
 	//Working Hour
 	int startinghour = 8;
@@ -66,22 +48,7 @@ private static final int startingminute = 0;
 	int endinghour = 18;
 	int endingminutes = 0;
 	
-	private Map<String,Double>PriceList = new HashMap<String, Double>();
-	{
-		double Toyoda = 100;
-		double LamboFinny = 300;
-		double KrabbyPatty = 20;
-		double KelpShake = 10;
-		double CoralBits = 15;
-		double KelpRings = 5;
-		PriceList.put("Krabby Patty", KrabbyPatty);
-		PriceList.put("Kelp Shake", KelpShake);
-		PriceList.put("Coral Bits", CoralBits);
-		PriceList.put("Kelp Rings", KelpRings);
-		PriceList.put("LamboFinny", LamboFinny);
-		PriceList.put("Toyoda", Toyoda);
-		
-	}
+	private Map<String,Double>PriceList;
 	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems};
 	private Cashierstate state = Cashierstate.GoingToWork; 
 	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck, GivenItems, Failed, EpicFailed}
@@ -103,15 +70,19 @@ private static final int startingminute = 0;
 		}
 	}
 	
-    public CashierRole(String NA, double money, Person person, MarketBuilding cL){
+    public CashierRole(String NA, double money, Person person, MarketBuilding cL, Map<String,Integer> inList){
     	super(person, cL);
 		name = NA;
 		setCash(money);
+		PriceList = Constants.MarketPriceList;
+		InventoryList = inList;
 		
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
 				msgLeaveWork();
+				print ("LamboFinnyI" + InventoryList.get("LamboFinny"));
+				print ("LamboFinnyP" + PriceList.get("LamboFinny"));
 			
 			}
 		};

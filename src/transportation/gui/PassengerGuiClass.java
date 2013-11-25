@@ -1,8 +1,14 @@
 package transportation.gui;
 
+import gui.Building;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import org.hamcrest.core.IsInstanceOf;
+
+import agent.Constants;
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;
@@ -35,8 +41,8 @@ public class PassengerGuiClass implements PassengerGui {
 	}
 	
 	public void updatePosition() {
-		int xDestination = destination.position().x;
-		int yDestination = destination.position().y;
+		int xDestination = destinationPos().x;
+		int yDestination = destinationPos().y;
 		if (xPos < xDestination)
 			xPos += 1;
 		else if (xPos > xDestination)
@@ -51,6 +57,16 @@ public class PassengerGuiClass implements PassengerGui {
 			onPlace();
 		}
 
+	}
+
+	private XYPos destinationPos() {
+		if (destination instanceof Building) {
+			Building cb = (Building) destination;
+			XYPos response = new XYPos(cb.position());
+			response.x += cb.entrancePos().x;
+			response.y += cb.entrancePos().y;
+			return response;
+		} else return destination.position();
 	}
 
 	private void onPlace() {
@@ -72,7 +88,53 @@ public class PassengerGuiClass implements PassengerGui {
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, PASSENGERW, PASSENGERH);
+		
+		XYPos drawingPos;
+		
+		try {
+			drawingPos = calculateDrawingPosition();
+		} catch (Exception e) {
+			drawingPos = new XYPos(xPos,yPos);
+			e.printStackTrace();
+		}
+		
+		g.fillRect(drawingPos.x, drawingPos.y,
+				PASSENGERW, PASSENGERH);
+	}
+	
+	private XYPos calculateDrawingPosition() throws Exception {
+		XYPos response;
+		
+		switch (passenger.currentDirection()) {
+		case North:
+			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS/2
+										-PASSENGERW/2, yPos);
+			break;
+		case South:
+			response = new XYPos(xPos-Constants.SPACE_BETWEEN_BUILDINGS/2
+										+PASSENGERW/2, yPos);
+			break;
+		case West:
+			response = new XYPos(xPos,
+					yPos-Constants.SPACE_BETWEEN_BUILDINGS/2
+							+PASSENGERH/2);
+			break;
+		case East:
+			response = new XYPos(xPos,
+					yPos+Constants.SPACE_BETWEEN_BUILDINGS/2
+							-PASSENGERH/2);
+			break;
+		case None:
+			response = new XYPos(xPos, yPos);
+			break;
+		default:
+			throw new Exception("This shouldn't happen");
+		}
+		
+		//adjust from center to corner
+		response.x -= PASSENGERW/2;
+		response.y -= PASSENGERH/2;
+		return response;
 	}
 
 	@Override

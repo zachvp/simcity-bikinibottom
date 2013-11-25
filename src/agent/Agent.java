@@ -67,7 +67,9 @@ public abstract class Agent {
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        StringBuffer sb = new StringBuffer();
+        if (!Constants.PRINT) { return; }
+    	
+    	StringBuffer sb = new StringBuffer();
         sb.append(getName());
         sb.append(": ");
         sb.append(msg);

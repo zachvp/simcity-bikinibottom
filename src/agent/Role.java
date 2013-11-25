@@ -1,5 +1,7 @@
 package agent;
 
+import housing.interfaces.ResidentGui;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
@@ -191,7 +193,11 @@ public abstract class Role {
     
     @Override
     public String toString() {
-    	return getName() + "'s " + getClass().getSimpleName();
+    	if (person != null) {
+    		return getName() + "'s " + getClass().getSimpleName();
+    	} else {
+    		return getClass().getSimpleName() + " at " + getLocation();
+    	}
     }
     
     /**
@@ -275,5 +281,10 @@ public abstract class Role {
 				Do("executing in " + convDelay / 1000 + " seconds");
 		}
     }
+
+	public void setGui(ResidentGui gui) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

@@ -6,9 +6,8 @@ import CommonSimpleClasses.XYPos;
 
 //A Vehicle whose route can be set by a Passenger.
 public interface Car extends Vehicle {
-	
-	//TODO update DD
-	//Message to set a destination.
+
+	//Message to set a path, driver and starting position.
 	public void msgTakeMeHere(List<Corner> path, 
 			Passenger driver, XYPos startingPos);
 }

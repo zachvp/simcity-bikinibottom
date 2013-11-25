@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import transportation.gui.BusstopGuiClass;
+import transportation.gui.interfaces.BusstopGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
@@ -95,12 +96,16 @@ public class BusstopAgent extends Agent implements Busstop {
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		if (currentBus != null) {
-			currentBus.msgHereArePeople(peopleWaiting);
-			peopleWaiting.clear();
-			currentBus = null;
+			givePassengers();
 			return true;
 		}
 		return false;
+	}
+	//Gives the passenger list to the bus and clears it.
+	public void givePassengers() {
+		currentBus.msgHereArePeople(peopleWaiting);
+		peopleWaiting.clear();
+		currentBus = null;
 	}
 
 	@Override

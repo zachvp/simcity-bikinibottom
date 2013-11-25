@@ -26,25 +26,28 @@ public class RealPassengerRole extends PassengerRole {
 	//CityLocation the Passenger is ultimately trying to get to.
 	private CityLocation destination;
 
-	//Path to follow to get to destination. TODO add to DD
+	//Path to follow to get to destination.
 	private List<CityLocation> path = new ArrayList<CityLocation>();
 
-	//Pointer to GUI TODO Add to DD
+	//Pointer to GUI
 	PassengerGui gui;
 
-	//Pointer to Kelp TODO Add to DD
+	//Pointer to Kelp
 	Kelp kelp = KelpClass.getKelpInstance();
 
-	//TODO update DD
 	//Stores what the Passenger is doing.
 	private PassengerStateEnum state = PassengerStateEnum.Initial;
 
+	//`Vehicle` the `Passenger` is currently on.
 	Vehicle currentVehicle = null;
 
-	//TODO implement passing down from person
+	//True if `Passenger` has a `Car`.
 	boolean hasCar = false;
+	
+	//True if `Passenger` is willing to take the bus.
 	boolean useBus = false;
 
+	//Role that requested the movement, if any.
 	private PassengerRequester requesterRole = null;
 
 	public RealPassengerRole(Person person, CityLocation location) {
@@ -53,7 +56,6 @@ public class RealPassengerRole extends PassengerRole {
 	}
 	
 	//CONSTRUCTOR FOR TESTING ONLY!
-	// TODO Is this wrong?
 	public RealPassengerRole(Person person, CityLocation location,
 			MockPassengerGui gui) {
 		super(person, location);
@@ -117,10 +119,8 @@ public class RealPassengerRole extends PassengerRole {
 	}
 
 
-	//TODO add car handling
 	private void decide() {
 		if (path.isEmpty() && location != destination){
-			// TODO maybe some other priority
 			boolean useBusNow = useBus && !hasCar;
 			path = kelp.routeFromAToB(location, destination, useBusNow);
 			return;
@@ -154,8 +154,6 @@ public class RealPassengerRole extends PassengerRole {
 				return;
 			}
 		}
-
-
 		
 		if (location.type() == LocationTypeEnum.Busstop) {
 			Busstop busstop = (Busstop)location;

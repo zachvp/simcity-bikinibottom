@@ -127,7 +127,7 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 				System.out.println(name +" has been added to your city!");
 				
 				//TODO pull up newPerson's infopanel
-				msg.setText(name + " was created");
+				msg.setText(name + " was created.");
 			}
 			else{
 				msg.setText("Please complete all inputs");

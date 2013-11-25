@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,18 +32,29 @@ import classifieds.ClassifiedsClass;
  */
 public class PersonCreationPanel extends JPanel implements ActionListener,
 ClassifiedsChangedListener{
+	
+	class MyComboBoxItem {
+		public Object object;
+		public MyComboBoxItem(Object object) {
+			this.object = object;
+		}
+		public String toString() {
+			if (object != null) return object.toString();
+			else return "None";
+		}
+	}
 
 	private CitizenRecords citizenRecords;
 	Classifieds classifieds = ClassifiedsClass.getClassifiedsInstance();
 
 	JTextField nameTextF;
-	JComboBox<String> occupationsCB;
+	JComboBox<MyComboBoxItem> occupationsCB;
 	JComboBox<String> residencesCB;
 	JComboBox<String> wealthCB;
 	JComboBox<String> carCB;
 	JButton createButton;
-	ArrayList<String> occList = new ArrayList<String>();
-	String[] occupationArray;
+	ArrayList<MyComboBoxItem> occList = new ArrayList<MyComboBoxItem>();
+	MyComboBoxItem[] occupationArray;
 	ArrayList<String> resList = new ArrayList<String>();
 	String[] residentArray;
 
@@ -78,7 +90,7 @@ ClassifiedsChangedListener{
 
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();
-		occupationsCB = new JComboBox<String>(occupationArray);
+		occupationsCB = new JComboBox<MyComboBoxItem>(occupationArray);
 		checkClassifiedsforHome();
 		residencesCB = new JComboBox<String>(residentArray);
 		wealthCB = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
@@ -92,7 +104,7 @@ ClassifiedsChangedListener{
 		
 		// default values for person creation
 		nameTextF.setText("mr balloon hands");
-		occupationsCB.setSelectedIndex(1);
+		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(1);
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(2);
@@ -128,13 +140,16 @@ ClassifiedsChangedListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == createButton){
+			MyComboBoxItem jobItem = (MyComboBoxItem)(occupationsCB.
+					getSelectedItem());
+			
 			String name = nameTextF.getText();
-			String job = (String)occupationsCB.getSelectedItem();
+			WorkRole job = (WorkRole)(jobItem.object);
 			String home = (String)residencesCB.getSelectedItem();
 			String status = (String)wealthCB.getSelectedItem();
 			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
 
-			if(!incompleteInputs(name, job, home, status, (String)carCB.getSelectedItem())){
+			if(!incompleteInputs(name, home, status, (String)carCB.getSelectedItem())){
 				//reset input fields
 				nameTextF.setText("");
 				occupationsCB.setSelectedIndex(0);
@@ -179,21 +194,20 @@ ClassifiedsChangedListener{
 	//TODO needs testing
 	private void checkClassifiedsforJobs(){
 		occList.clear();
-		occList.add("Select an Occupation");
-		occList.add("None");
+		occList.add(new MyComboBoxItem(null));
 
 		ArrayList<WorkRole> newJobs = new ArrayList<WorkRole>();
 		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
 
 		for(WorkRole w: newJobs){
-			occList.add(w.getClass().getSimpleName());
+			occList.add(new MyComboBoxItem(w));
 		}
-		occupationArray = occList.toArray(new String[newJobs.size()]);
+		occupationArray = occList.toArray(new MyComboBoxItem[newJobs.size()]);
 
 		if(occupationsCB != null){
 			occupationsCB.removeAllItems();
-			for (String s: occupationArray){
-				occupationsCB.addItem(s);
+			for (MyComboBoxItem c: occupationArray){
+				occupationsCB.addItem(c);
 
 			}
 		}
@@ -224,10 +238,9 @@ ClassifiedsChangedListener{
 	 * @return True if any input is incomplete
 	 */
 
-	private boolean incompleteInputs(String name, String job, String home,
+	private boolean incompleteInputs(String name, String home,
 			String wealth, String car) {
 		return (name == null) ||(name.equals("Enter a name")) ||(name.equals(""))
-				|| (job.equals("Select an Occupation")) 
 				|| (home.equals("Select a Residence") 
 						|| (wealth.equals("Select a Status"))
 						|| (car.equals("Has a Car")));

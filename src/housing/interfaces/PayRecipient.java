@@ -1,7 +1,5 @@
 package housing.interfaces;
 
-import housing.ResidentDwelling;
-
 public interface PayRecipient {
 	Object myRes = null;
 

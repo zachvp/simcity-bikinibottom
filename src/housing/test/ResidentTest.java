@@ -59,7 +59,7 @@ public class ResidentTest extends TestCase {
 		assertTrue("Resident's scheduler should have returned true, reacting to the payment due message",
 				resident.pickAndExecuteAnAction());
 		assertEquals("Pay recipient should have the instance of resident.",
-				resident, mockPayRecipient.myRes);
+				resident, PayRecipient.myRes);
 	}
 	
 	/** Tests the simplest resident cooking and eating case.

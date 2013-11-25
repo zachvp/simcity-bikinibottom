@@ -2,7 +2,6 @@ package bank.gui;
 
 import gui.Building;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +11,12 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.TimeManager;
-import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
+import bank.AccountManagerRole;
 import bank.BankCustomerRole;
+import bank.LoanManagerRole;
 import bank.SecurityGuardRole;
+import bank.TellerRole;
 
 //creates animation panel and starts building
 public class BankBuilding extends Building {
@@ -45,6 +46,45 @@ public class BankBuilding extends Building {
 		this.bank = this;
 		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
+		initRoles();
+	}
+	
+	private void initRoles() {
+		// Create the roles
+		SecurityGuardRole security = new SecurityGuardRole(null, this);
+		AccountManagerRole account = new AccountManagerRole(null, this);
+		LoanManagerRole loan = new LoanManagerRole(null, this);
+		TellerRole tell1 = new TellerRole(null, this);
+		TellerRole tell2 = new TellerRole(null, this);
+		TellerRole tell3 = new TellerRole(null, this);
+		
+		// Tell the security guard about the roles
+		security.addRole(account);
+		security.addRole(loan);
+		security.addRole(tell1);
+		security.addRole(tell2);
+		security.addRole(tell3);
+		
+		// Give the tellers a position
+		security.addTeller(tell1, 1);
+		security.addTeller(tell2, 2);
+		security.addTeller(tell3, 3);
+		
+		// Tell the tellers about the security guard
+		tell1.setSecurityGuard(security);
+		tell2.setSecurityGuard(security);
+		tell3.setSecurityGuard(security);
+		
+		// Tell the tellers about the account manager
+		tell1.setAccountManager(account);
+		tell2.setAccountManager(account);
+		tell3.setAccountManager(account);
+		
+		// Tell the tellers about the account manager
+		tell1.setLoanManager(loan);
+		tell2.setLoanManager(loan);
+		tell3.setLoanManager(loan);
+		
 	}
 
 	@Override

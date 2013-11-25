@@ -61,8 +61,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		
-		return this.getGreeter();
+		return null;
 	}
 
 	@Override

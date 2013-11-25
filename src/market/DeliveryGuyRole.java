@@ -75,7 +75,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
 			{
 				CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
-				person.getPassengerRole().msgGoToLocation(workingBuilding);
+				person.getPassengerRole().msgGoToLocation(workingBuilding, false);
 				person.getPassengerRole().activate();
 			}
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)
@@ -124,7 +124,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			e.printStackTrace();
 		}
 		person.getPassengerRole().activate();
-		person.getPassengerRole().msgGoToLocation(CurrentOrder.Building);
+		person.getPassengerRole().msgGoToLocation(CurrentOrder.Building, false);
 		//stateChanged()?
 		
 		

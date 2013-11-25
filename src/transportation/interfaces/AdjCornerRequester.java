@@ -12,6 +12,6 @@ public interface AdjCornerRequester {
 	/* Message to be received from a Corner 
 	 * after the request for its neighbors.
 	 */
-	void msgMyAdjCorners(List<MyCorner> cList); // TODO Change in DD
+	void msgMyAdjCorners(List<MyCorner> cList);
 
 }

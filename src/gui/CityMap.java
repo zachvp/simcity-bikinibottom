@@ -65,11 +65,12 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
     	timer.start();
     	
     	utilTimer = new java.util.Timer();
+
     	utilTimer.scheduleAtFixedRate(new TimerTask() {
     		public void run() {
     			updatePosition();
     		}
-    	}, 10000, 10);
+    	}, 10000, 25);
 	}
 	
 	/**

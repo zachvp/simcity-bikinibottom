@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 
 import market.gui.Gui;
 import market.gui.ItemCollectorGui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
@@ -42,8 +43,8 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		public List<Item> ItemList = new ArrayList<Item>();
 	}
 	
-	public ItemCollectorRole(String na, PersonAgent person){
-		super(person);
+	public ItemCollectorRole(String na, PersonAgent person, MarketBuilding cL){
+		super(person, cL);
 		name = na;
 		
 		

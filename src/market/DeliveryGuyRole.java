@@ -46,7 +46,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		int endingminutes = 0;
 		
 	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
-		super(person);
+		super(person, Market);
 		name = NA;
 		workingBuilding = Market;
 

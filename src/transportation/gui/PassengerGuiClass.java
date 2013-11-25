@@ -5,8 +5,6 @@ import gui.Building;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import org.hamcrest.core.IsInstanceOf;
-
 import agent.Constants;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
@@ -15,6 +13,7 @@ import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
+import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 
@@ -219,6 +218,18 @@ public class PassengerGuiClass implements PassengerGui {
 	@Override
 	public XYPos getPos() {
 		return new XYPos(xPos, yPos);
+	}
+
+	@Override
+	public void doExitBus(Corner corner, boolean orientation) {
+		try {
+			doExitVehicle(corner.getBusstopWithDirection(orientation));
+			startLocation = ((Busstop) startLocation).corner();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Animation glitches due to exception");
+			doExitVehicle(corner);
+		}
 	}
 
 }

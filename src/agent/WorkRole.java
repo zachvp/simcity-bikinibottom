@@ -1,5 +1,7 @@
 package agent;
 
+import classifieds.ClassifiedsClass;
+import housing.interfaces.Dwelling;
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 
@@ -13,16 +15,9 @@ public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
 	
-	public WorkRole() {
-		super();
-	}
-	
-	public WorkRole(Person person) {
-		super(person);
-	}
-	
 	public WorkRole(Person person, CityLocation loc) {
 		super(person, loc);
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	/**

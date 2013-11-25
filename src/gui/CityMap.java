@@ -46,6 +46,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 		setPreferredSize(panelDim);
+		setMaximumSize(panelDim);
+		setMinimumSize(panelDim);
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));

@@ -39,10 +39,13 @@ public class CustomerGui implements Gui{
 		agent = c;
 		xPos = OffScreenX;
 		yPos = OffScreenY;
-		xDestination = OffScreenX;
-		yDestination = OffScreenY;
+		xDestination = xFrontDesk;
+		yDestination = yFrontDesk;
 		//maitreD = m;
 		//this.gui = gui;
+		isBuying = true;
+		agent.goingToBuy();
+		setPresent(true);
 	}
 
 	public void updatePosition() {

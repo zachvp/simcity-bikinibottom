@@ -129,5 +129,11 @@ public class MockPerson extends Mock implements Person{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void printMsg(String msg, Throwable e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

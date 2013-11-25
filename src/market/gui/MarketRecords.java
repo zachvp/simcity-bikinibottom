@@ -33,25 +33,19 @@ public class MarketRecords implements BuildingRecords {
 	MarketInfoPanel marketControlPanel;
 	MarketBuilding building;
 	
-
-    private static final CommonSimpleClasses.CityBuilding CityBuilding = null;
-
-   
-	
     private PersonAgent CashierPerson = new PersonAgent("Cashier");
-    CashierRole ca = new CashierRole("Cashier", 100, CashierPerson);
+    CashierRole ca = new CashierRole("Cashier", 100, CashierPerson, building);
 	private CashierGui cashierGui;
 
-    
     private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
     private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
     
     private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
-    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+    private ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson, building);
     private ItemCollectorGui icGui;
    
     private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");
-    private ItemCollectorRole ic1 = new ItemCollectorRole("ItemCollector2", ItemCollectorPerson1);
+    private ItemCollectorRole ic1 = new ItemCollectorRole("ItemCollector2", ItemCollectorPerson1, building);
     private ItemCollectorGui ic1Gui;
     
     private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
@@ -68,18 +62,8 @@ public class MarketRecords implements BuildingRecords {
 		tempInventoryList.add(new Item("Kelp Rings", 0));
 		
 	}
-	
-	private CityLocation fakeLoc = new CityLocation() {
-		@Override
-		public LocationTypeEnum type() {
-			return LocationTypeEnum.None;
-		}
-		@Override
-		public XYPos position() {
-			return new XYPos();
-		}
-	};
     
+	/*
     private PersonAgent CustomerPerson = new PersonAgent("Customer1");
     private CustomerRole cust = new CustomerRole("Customer1", 100, tempInventoryList, CustomerPerson);
     private PassengerRole pr = new FakePassengerRole(fakeLoc);
@@ -90,7 +74,7 @@ public class MarketRecords implements BuildingRecords {
     private CustomerRole cust1 = new CustomerRole("Customer2", 100, tempInventoryList, CustomerPerson1);
     {CustomerPerson.addRole(pr);}
     private CustomerGui custGui1 = new CustomerGui(cust1);
-    
+    */
     
 
     private AnimationPanel gui; //reference to main gui
@@ -108,8 +92,10 @@ public class MarketRecords implements BuildingRecords {
             dg.setGui(dgGui);
             ca.setGui(cashierGui);
 
+            /*
             cust.setGui(custGui);
             cust1.setGui(custGui1);
+			*/
 
         
         ItemCollectors.add(ic);
@@ -122,17 +108,21 @@ public class MarketRecords implements BuildingRecords {
         ic.setCashier(ca);
         ic1.setCashier(ca);
         dg.setCashier(ca);
+        /*
         cust.setCashier(ca);
         cust1.setCashier(ca);
         cust.setPriceList(ca.getPriceList());
         cust1.setPriceList(ca.getPriceList());
+        */
         ic.setInventoryList(ca.getInventoryList());
         ic1.setInventoryList(ca.getInventoryList());
         
 
         //Customer Gui
+        /*
         gui.addGui(custGui);
         gui.addGui(custGui1);
+		*/
 
         //ItemCollector Gui
         gui.addGui(icGui);
@@ -165,6 +155,7 @@ public class MarketRecords implements BuildingRecords {
         icGui.setItemCollectorNumber(2);
         ic1.setInventoryList(ca.getInventoryList());
         
+        /*
         CustomerPerson.startThread();
         CustomerPerson.addRole(cust);
         cust.setPriceList(ca.getPriceList());
@@ -176,6 +167,7 @@ public class MarketRecords implements BuildingRecords {
         cust.setPriceList(ca.getPriceList());
         cust1.activate();
         custGui1.setBuying();
+        */
       
     }
 
@@ -189,7 +181,7 @@ public class MarketRecords implements BuildingRecords {
 			
 		}
 		if (role == "ItemCollector"){
-			ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson);
+			ItemCollectorRole ic = new ItemCollectorRole("ItemCollector1", ItemCollectorPerson, building);
 		    ItemCollectorGui icGui = new ItemCollectorGui(ic);
 		    ic.setGui(icGui);
 		    ItemCollectors.add(ic);

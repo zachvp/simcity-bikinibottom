@@ -1,5 +1,7 @@
 package housing;
 
+import classifieds.Classifieds;
+import classifieds.ClassifiedsClass;
 import agent.Constants;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
@@ -50,6 +52,9 @@ public class ResidentDwelling implements Dwelling {
 			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
 			default : this.monthlyPaymentAmount = 0; break;
 		}
+		
+		//Adding to classifieds!
+		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
 	public void setCondition(Constants.Condition condition){

@@ -433,7 +433,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a restaurant
 		for (CityLocation r : restaurants) {
 			// TODO don't just choose the first restaurant
-			return r;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) r).isOpen() ) return r;
 		}
 		
 		// if no restaurants exist
@@ -449,7 +450,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a market
 		for (CityLocation m : markets) {
 			// TODO don't just choose the first market
-			return m;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) m).isOpen() ) return m;
 		}
 		
 		// if no markets exist
@@ -465,7 +467,8 @@ public class PersonAgent extends Agent implements Person {
 		// choose a bank
 		for (CityLocation b : banks) {
 			// TODO don't just choose the first bank
-			return b;
+			// TODO DIEGO WAS HERE CHECKING IF BUILDINGS ARE OPEN
+			if ( ((Building) b).isOpen() ) return b;
 		}
 		
 		// if no banks exist

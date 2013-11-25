@@ -1,8 +1,10 @@
 package bank.test;
 
 import junit.framework.TestCase;
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import bank.TellerRole;
+import bank.gui.BankBuilding;
 import bank.test.mock.MockAccountManager;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockLoanManager;
@@ -17,6 +19,8 @@ public class TellerTest extends TestCase
 	MockLoanManager loanManager;
 
 
+	 CityLocation testLocation = new BankBuilding(0,0,0,0);
+
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -27,7 +31,7 @@ public class TellerTest extends TestCase
 
 		PersonAgent tellerPerson = new PersonAgent("testTeller");
 		bankCustomer = new MockBankCustomer("mockBankCustomer");
-		teller = new TellerRole(tellerPerson);
+		teller = new TellerRole(tellerPerson, testLocation);
 		teller.setAccountManager(accountManager);
         teller.setLoanManager(loanManager);
         teller.setDeskPosition(0);

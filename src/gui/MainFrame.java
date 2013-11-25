@@ -70,7 +70,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	//Panels
 	private BuildingView buildingViewPanel;
-	private CityView cityViewPanel;
 	private CityMap map;
 	public InfoPanel infoPanel;	
 
@@ -112,7 +111,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingViewSlot.setPreferredSize(buildingDim);
 		buildingViewSlot.setMaximumSize(buildingDim);
 		buildingViewSlot.setMinimumSize(buildingDim);
-		//buildingViewSlot.setBorder(BorderFactory.createTitledBorder("Building View"));
 		buildingViewSlot.setOpaque(false);
 		buildingViewPanel = new BuildingView(buildingDim.width, buildingDim.height);
 		buildingViewSlot.add(buildingViewPanel);
@@ -123,10 +121,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.setMaximumSize(cityDim);
 		cityViewSlot.setMinimumSize(cityDim);
 		cityViewSlot.setOpaque(false);
-		//cityViewSlot.setBorder(BorderFactory.createTitledBorder("City View"));
 		map = new CityMap();
-		//cityViewPanel = new CityView(cityDim.width, cityDim.height, this, map);
-
 		map.setBuildingView(buildingViewPanel);
 		cityViewSlot.add(map);
 

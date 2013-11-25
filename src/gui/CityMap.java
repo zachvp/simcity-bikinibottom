@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -48,6 +49,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		setPreferredSize(panelDim);
 		setMaximumSize(panelDim);
 		setMinimumSize(panelDim);
+		
 		
 		try {
 			image = ImageIO.read(getClass().getResource("map_background.png"));

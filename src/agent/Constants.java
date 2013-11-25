@@ -92,7 +92,7 @@ public interface Constants {
 	/**
 	 * Dimensions of the City Map
 	 */
-	public static final int MAP_WIDTH = 600;
+	public static final int MAP_WIDTH = 600-35;
 	public static final int MAP_HEIGHT = 490;
 	
 	/**

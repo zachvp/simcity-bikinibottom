@@ -161,7 +161,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		try {
 			PlainTextInputStream stream = 
-					(PlainTextInputStream)MapBuilderTest.class
+					(PlainTextInputStream)getClass()
 					.getResource("CornersWithBusstops.txt").getContent();
 			Set<Integer> cornersWithBusstops = 
 					CornersWithBusstopsParser.parseCornersWithBusstops(stream);
@@ -195,7 +195,6 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 		}
 
-		assertEquals(36, locations.size());
 
 		for (Corner corner : corners) {
 			locations.add(corner);

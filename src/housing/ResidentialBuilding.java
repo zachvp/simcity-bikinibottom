@@ -32,18 +32,20 @@ public class ResidentialBuilding extends Building {
 	// used for producing jobs and residential roads in the complex
 	Map<Person, Role> roles;
 	
-	// constants
-	private final int EMPLOYEE_START_HOUR = 6;
-	private final int EMPLOYEE_START_MINUTE = 0;
-	private final int EMPLOYEE_END_HOUR = 11;
-	private final int EMPLOYEE_END_MINUTE = 0;
-
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static int timeDifference = 6;
+	
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.entrancePos = new XYPos(width/2, height);
 		this.housingComplex = this;
 		this.complex = new HousingComplex();
 		this.roles = new HashMap<Person, Role>();
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount + timeDifference;
+		instanceCount++;
 	}
 
 	@Override
@@ -76,25 +78,5 @@ public class ResidentialBuilding extends Building {
 		// TODO Auto-generated method stub
 		return new JPanel();
 	}
-
-	@Override
-	public int getOpeningHour() {
-		return EMPLOYEE_START_HOUR;
-	}
-
-	@Override
-	public int getOpeningMinute() {
-		return EMPLOYEE_START_MINUTE;
-	}
-
-	@Override
-	public int getClosingHour() {
-		return EMPLOYEE_END_HOUR;
-	}
-
-	@Override
-	public int getClosingMinute() {
-		return EMPLOYEE_START_MINUTE;
-	}
-
+	
 }

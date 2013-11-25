@@ -4,8 +4,12 @@ import agent.PersonAgent;
 import agent.Constants.Condition;
 import agent.mock.MockScheduleTaskListener;
 import housing.ResidentRole;
+import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.PayRecipient;
 import housing.interfaces.ResidentGui;
 import housing.test.mock.MockDwelling;
+import housing.test.mock.MockMaintenanceWorker;
 import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResidentGui;
 import junit.framework.TestCase;
@@ -17,8 +21,9 @@ public class ResidentTest extends TestCase {
 	ResidentGui gui = new MockResidentGui(resident);
 	
 	// mock roles
-	MockPayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
-	MockDwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
+	PayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
+	Dwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
+	MaintenanceWorker worker = new MockMaintenanceWorker("Worker");
 	
 	// constants
 	private final double PAYMENT_AMOUNT = 64;

@@ -3,6 +3,8 @@ package housing.interfaces;
 import housing.ResidentDwelling;
 
 public interface PayRecipient {
+	Object myRes = null;
+
 	/* ----- Normative Messages ----- */
 	/** From Resident */
 	public void msgHereIsPayment(double amount, Resident r);

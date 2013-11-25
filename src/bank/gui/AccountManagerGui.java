@@ -1,13 +1,12 @@
 package bank.gui;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.concurrent.Semaphore;
 
-import bank.gui.Gui;
+import agent.gui.Gui;
 import bank.AccountManagerRole;
-import bank.BankCustomerRole;
-import bank.TellerRole;
 
 
 public class AccountManagerGui implements Gui{

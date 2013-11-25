@@ -113,6 +113,16 @@ public interface Constants {
 	public static final int BUSSTOP_OFFESET_PARALLEL = (SPACE_BETWEEN_BUILDINGS/2);
 	
 	/**
+	 * The width of the info panel on the main GUI window.
+	 */
+	public static final int INFO_PANEL_WIDTH = 700;
+	
+	/**
+	 * The height of the info panel on the main GUI window.
+	 */
+	public static final int INFO_PANEL_HEIGHT = 185;
+	
+	/**
 	 * Types of food in the city
 	 */
 	public static final List<String> FOODS = new ArrayList<String>() {

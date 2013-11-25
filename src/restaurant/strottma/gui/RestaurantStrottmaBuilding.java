@@ -2,6 +2,7 @@ package restaurant.strottma.gui;
 
 import gui.Building;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +83,8 @@ public class RestaurantStrottmaBuilding extends Building {
 	public JPanel getInfoPanel() {
 		// TODO initialize the info panel
 		JPanel infoPanel = new JPanel();
+		infoPanel.setPreferredSize(new Dimension(Constants.INFO_PANEL_WIDTH,
+				Constants.INFO_PANEL_HEIGHT));
 		return infoPanel;
 	}
 	

@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -72,11 +75,11 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
+	
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
-
-
-	//TODO Add timer here?
+	private Semaphore semaphore = new Semaphore(0);
+	private Timer timer = new Timer();
 
 	public MainFrame(){
 
@@ -187,6 +190,21 @@ public class MainFrame extends JFrame implements ActionListener {
 	private void constructCity(List<BuildingDef> list) {
 		int x;
 		int y;
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				semaphore.release();
+				
+			}
+		}, 2000);
+		
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		for(BuildingDef b: list){
 			String buildingName = b.getName();
 			LocationTypeEnum type = b.getType();

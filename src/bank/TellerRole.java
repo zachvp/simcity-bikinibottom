@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.TellerGui;
@@ -80,8 +81,8 @@ public class TellerRole extends WorkRole implements Teller {
 	LoanManager loanManager;
 	boolean endWorkShift = false;
 	
-	public TellerRole(Person person) {
-		super(person);
+	public TellerRole(Person person, CityLocation bank) {
+		super(person, bank);
 		
 		// ask everyone for rent
 		Runnable command = new Runnable(){

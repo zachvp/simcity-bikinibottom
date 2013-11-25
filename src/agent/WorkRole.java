@@ -15,6 +15,16 @@ public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
 	
+	public WorkRole() {
+		super();
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
+	}
+	
+	public WorkRole(Person person) {
+		super(person);
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
+	}
+	
 	public WorkRole(Person person, CityLocation loc) {
 		super(person, loc);
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);

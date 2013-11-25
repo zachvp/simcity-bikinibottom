@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,9 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import bank.TellerRole;
 import agent.WorkRole;
 import classifieds.Classifieds;
+import classifieds.ClassifiedsChangedListener;
 import classifieds.ClassifiedsClass;
 
 /**
@@ -29,7 +29,8 @@ import classifieds.ClassifiedsClass;
  * @author Victoria Dea
  *
  */
-public class PersonCreationPanel extends JPanel implements ActionListener{
+public class PersonCreationPanel extends JPanel implements ActionListener,
+		ClassifiedsChangedListener{
 	
 	private CitizenRecords citizenRecords;
 	Classifieds classifieds = ClassifiedsClass.getClassifiedsInstance();
@@ -75,10 +76,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
 		
-		
-		
 		nameTextF = new JTextField("Enter a name");		
-		checkClassifiedsforJobs();		
+		checkClassifiedsforJobs();
 		occupationsCB = new JComboBox<String>(occupationArray);
 		checkClassifiedsforHome();
 		residencesCB = new JComboBox<String>(residentArray);
@@ -111,6 +110,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
 		
+		ClassifiedsClass.getClassifiedsInstance().addListener(this);
+		
 		msg = new JLabel("");
 		Dimension msgDim = new Dimension(d.width, (int)(d.height*0.2));
 		msg.setPreferredSize(msgDim);
@@ -133,7 +134,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
 			
 			if(!incompleteInputs(name, job, home, status, (String)carCB.getSelectedItem())){
-											
 				//reset input fields
 				nameTextF.setText("");
 				occupationsCB.setSelectedIndex(0);
@@ -152,12 +152,20 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			}
 			else{
 				msg.setText("Please complete all inputs");
-			}
-			
-			
-			//Checks for Classifieds updates after each creation
-			checkClassifiedsforJobs();
+			}			
 		}
+//		
+//		if (e.getSource() == occupationsCB) {
+//			checkClassifiedsforJobs();
+//		}
+//		if (e.getSource() == residencesCB) {
+//			checkClassifiedsforHome();
+//		}
+	}
+	
+	public void classifiedsUpdated() {
+		checkClassifiedsforJobs();
+		checkClassifiedsforHome();
 	}
 	
 	//TODO needs testing
@@ -174,9 +182,11 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
 		
-		occupationsCB.removeAllItems();
-		for (String s: occupationArray){
-			occupationsCB.addItem(s);
+		if (occupationsCB != null) {
+			occupationsCB.removeAllItems();
+			for (String s: occupationArray){
+				occupationsCB.addItem(s);
+			}
 		}
 	}
 	

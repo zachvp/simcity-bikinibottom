@@ -35,6 +35,11 @@ public abstract class WorkRole extends Role {
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
+	public void setPerson(Person person) {
+		super.setPerson(person);
+		ClassifiedsClass.getClassifiedsInstance().notifyListeners();
+	}
+	
 	/**
 	 * The hour of day this person's work shift starts, in 24-hour time.
 	 * @return an integer in the range [0,23]

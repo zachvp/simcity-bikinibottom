@@ -28,4 +28,13 @@ public interface Classifieds {
 	
 	void addDwelling(Dwelling dwelling);
 	
+	/**
+	 * Adds the listener to a list of listeners that are updated when the
+	 * Classifieds change.
+	 */
+	void addListener(ClassifiedsChangedListener listener);
+	
+	/** Notifies all listeners that the Classifieds have changed. */
+	void notifyListeners();
+
 }

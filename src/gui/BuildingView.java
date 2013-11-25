@@ -21,7 +21,7 @@ public class BuildingView extends JPanel implements ActionListener{
 	private InfoList buildingList;
 
 	public BuildingView(int w, int h){
-		d = new Dimension(w-15, h-70);
+		d = new Dimension(w, h);//(w-15, h-70);
 		setSize(d);
 		setLayout(new CardLayout());
 		setVisible(true);

@@ -1,5 +1,8 @@
 package housing;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
@@ -10,14 +13,20 @@ import gui.Building;
 import housing.gui.HousingComplex;
 
 public class ResidentialBuilding extends Building {
+	CityLocation housingComplex;
 	XYPos entrancePos;
 	HousingComplex complex = new HousingComplex();
 	
-	CityLocation housingComplex;
+	Map<Person, Role> roles = new HashMap<Person, Role>();
+	
+	// constants
+	private final int EMPLOYEE_START_HOUR = 6;
+	private final int EMPLOYEE_END_HOUR = 11;
 
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		entrancePos = new XYPos(x + width/2, height);
+		this.entrancePos = new XYPos(x + width/2, y + height);
+		this.housingComplex = this;
 	}
 
 	@Override

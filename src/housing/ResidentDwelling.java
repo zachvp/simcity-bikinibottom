@@ -5,7 +5,6 @@ import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
-import housing.interfaces.MaintenanceWorker;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex

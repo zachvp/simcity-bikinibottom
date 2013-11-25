@@ -23,9 +23,24 @@ public class MainFile extends JFrame {
 		
 		// TODO test methods
 		this.population = new HashMap<Person, Role>();
-		this.addResident(new PersonAgent("Squidward"));
-		this.addPayRecipient(new PersonAgent("Mr. Krabs"));
-		this.addMaintenanceWorker(new PersonAgent("Fishbait"));
+		try {
+			this.addRole(new PersonAgent("Squidward"), "resident");
+			this.addRole(new PersonAgent("Mr. Krabs"), "payrecipient");
+			this.addRole(new PersonAgent("Fishbait"), "maintenanceworker");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// role factory for the HousingBuilding
+	public void addRole(PersonAgent agent, String type) throws Exception{
+		// normalize the parameter
+		type.toLowerCase();
+		
+		if(type.equals("resident")) addResident(agent);
+		else if(type.equals("payrecipient")) addPayRecipient(agent);
+		else if(type.equals("maintenanceworker")) addMaintenanceWorker(agent);
+		else throw new Exception("Improper housing role type passed.");
 	}
 	
 	public void addResident(PersonAgent agent){
@@ -34,6 +49,8 @@ public class MainFile extends JFrame {
 		population.put(agent, resident);
 		this.startAndAddRole(agent, resident);
 		
+		// pass role to the housing complex to assign the resident to
+		// a dwelling and create a gui for it
 		complex.addResident(resident);
 	}
 	

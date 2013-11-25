@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.concurrent.Semaphore;
 
-import bank.LoanManagerRole;
+import agent.gui.Gui;
 import bank.SecurityGuardRole;
 
 

@@ -301,6 +301,10 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		for (Corner corner : corners) {
 			locations.add(corner);
+			List<Busstop> busstops = corner.getBusstops();
+			for (Busstop busstop : busstops) {
+				locations.add(busstop);
+			}
 		}
 
 		try {

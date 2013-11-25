@@ -26,8 +26,10 @@ public class EventLog {
 	 * @param log
 	 */
 	public void add(String log){
-		events.add(new LoggedEvent(log));
-		if (Constants.DEBUG) {
+		if (Constants.LOG) {
+			events.add(new LoggedEvent(log));
+		}
+		if (Constants.PRINT) {
 			System.out.println(log);
 		}
 	}

@@ -28,7 +28,9 @@ in this Software without prior written authorization from Stanford University.
 package agent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Constants of general use
@@ -90,8 +92,8 @@ public interface Constants {
 	/**
 	 * Dimensions of the City Map
 	 */
-	public static final int MAP_WIDTH = 900;
-	public static final int MAP_HEIGHT = 900;
+	public static final int MAP_WIDTH = 600-35;
+	public static final int MAP_HEIGHT = 490;
 	
 	/**
 	 * Margins of the City Map
@@ -122,6 +124,41 @@ public interface Constants {
 	 */
 	public static final int INFO_PANEL_HEIGHT = 185;
 	
+	/**
+	 * The initial amount of money in the market
+	 */
+	public static final int MarketInitialMoney = 100;
+	
+	/**
+	 * The initial amount of Inventory levels of all the items
+	 */
+	public static final int LamboFinnyInitialAmount  = 100;
+	public static final int ToyodaInitialAmount      = 100;
+	public static final int KrabbyPattyInitialAmount = 100;
+	public static final int KelpShakeInitialAmount   = 100;
+	public static final int CoralBitsInitialAmount   = 100;
+	public static final int KelpRingsInitialAmount   = 100;
+	
+	/**
+	 * The PriceList of the market
+	 */
+	public static HashMap<String, Double> MarketPriceList = new HashMap<String,Double>(){
+		{
+		double Toyoda = 100;
+		double LamboFinny = 300;
+		double KrabbyPatty = 20;
+		double KelpShake = 10;
+		double CoralBits = 15;
+		double KelpRings = 5;
+		put("Krabby Patty", KrabbyPatty);
+		put("Kelp Shake", KelpShake);
+		put("Coral Bits", CoralBits);
+		put("Kelp Rings", KelpRings);
+		put("LamboFinny", LamboFinny);
+		put("Toyoda", Toyoda);	
+		}
+	};
+		
 	/**
 	 * Types of food in the city
 	 */

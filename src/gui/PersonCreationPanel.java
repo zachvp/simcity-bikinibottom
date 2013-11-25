@@ -173,6 +173,11 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			occList.add(w.getClass().getSimpleName());
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
+		
+		occupationsCB.removeAllItems();
+		for (String s: occupationArray){
+			occupationsCB.addItem(s);
+		}
 	}
 	
 	//TODO needs testing

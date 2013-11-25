@@ -268,7 +268,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(mock);
 			}
 		}
-		//initializeCornerMapAndKelp(constructedBuildings);
+		initializeCornerMapAndKelp(constructedBuildings);
 		hospital.setBuildings(constructedBuildings);
 	}
 

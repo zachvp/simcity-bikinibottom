@@ -1,5 +1,7 @@
 package housing;
 
+import classifieds.Classifieds;
+import classifieds.ClassifiedsClass;
 import agent.mock.EventLog;
 import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
@@ -60,6 +62,9 @@ public class ResidentDwelling implements Dwelling {
 		else {
 			monthlyPaymentAmount = 0;
 		}
+		
+		//Adding to classifieds!
+		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
 	public void setConditionGood(){

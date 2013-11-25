@@ -38,7 +38,7 @@ public class ResidentialBuilding extends Building {
 
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		this.entrancePos = new XYPos(x + width/2, y + height);
+		this.entrancePos = new XYPos(width/2, height);
 		this.housingComplex = this;
 		this.complex = new HousingComplex();
 		this.roles = new HashMap<Person, Role>();

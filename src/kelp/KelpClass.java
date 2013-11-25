@@ -14,9 +14,9 @@ import CommonSimpleClasses.XYPos;
 public class KelpClass implements Kelp {
 	
 	// TODO SET CORRECT CONSTANTS
-	private static final double AVG_BUS_WAIT = 10;
-	private static final double BUS_SPEED = 80; 
-	private static final double WALKING_SPEED = 30;
+	private static final double AVG_BUS_WAIT = 5;
+	private static final double BUS_SPEED = 30; 
+	private static final double WALKING_SPEED = 10;
 	private static final int DISTANCE_THRESHOLD_FOR_SAME_COORDINATE = 8;
 	
 	List<CityLocation> locations;

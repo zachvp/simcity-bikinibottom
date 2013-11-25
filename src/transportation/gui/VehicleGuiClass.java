@@ -23,8 +23,8 @@ import transportation.interfaces.Vehicle;
  */
 public class VehicleGuiClass implements VehicleGui {
 	
-	private static final int VEHICLEW = 20;
-	private static final int VEHICLEH = 20;
+	private static final int VEHICLEW = 8;
+	private static final int VEHICLEH = 8;
 	private int xPos, yPos;
 	private Corner destination;
 	private Corner startLocation;
@@ -55,14 +55,14 @@ public class VehicleGuiClass implements VehicleGui {
 		int xDestination = destination.position().x;
 		int yDestination = destination.position().y;
 		if (xPos < xDestination)
-			xPos += 2;
+			xPos += 1;
 		else if (xPos > xDestination)
-			xPos -= 2;
+			xPos -= 1;
 
 		if (yPos < yDestination)
-			yPos += 2;
+			yPos += 1;
 		else if (yPos > yDestination)
-			yPos -= 2;
+			yPos -= 1;
 		
 		if (xPos == xDestination && yPos == yDestination) {
 			onPlace();

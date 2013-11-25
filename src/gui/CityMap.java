@@ -71,7 +71,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
                 public void run() {
                         updatePosition();
                 }
-        }, 10, 10);
+        }, 10, 25);
+
 	}
 	
 	/**

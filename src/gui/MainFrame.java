@@ -169,7 +169,6 @@ public class MainFrame extends JFrame implements ActionListener {
 			MapBuilder.createMap(buildings.size(), cornersWithBusstops);
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail(e.toString());
 		}
 		
 		List<Corner> corners = MapBuilder.getCreatedCorners();

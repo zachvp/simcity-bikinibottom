@@ -86,8 +86,8 @@ public interface Constants {
     /**
      * Dimensions of a building on a map
      */
-    public static final int BUILDING_WIDTH = 46;
-	public static final int BUILDING_HEIGHT = 46;
+    public static final int BUILDING_WIDTH = 56;
+	public static final int BUILDING_HEIGHT = 56;
 	
 	/**
 	 * Dimensions of the City Map
@@ -98,8 +98,8 @@ public interface Constants {
 	/**
 	 * Margins of the City Map
 	 */
-	public static final int MAP_MARGIN_Y = 20;
-	public static final int MAP_MARGIN_X = 60;
+	public static final int MAP_MARGIN_Y = 10;
+	public static final int MAP_MARGIN_X = 30;
 	/**
 	 * Maximum number of Columns in the Map
 	 */

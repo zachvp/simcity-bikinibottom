@@ -12,15 +12,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import market.CashierRole;
+import agent.PersonAgent;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsClass;
 
@@ -73,9 +74,11 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		inputPanel.setLayout(new GridLayout(5,2,5,5));
 		inputPanel.setBackground(Color.white);
 		
-		//occupationList.add("Select an Occupation");
-		//occupationList.add("None");
+		//TODO testing combo box update
+		Person p = new PersonAgent("Pete");
+		WorkRole test = new CashierRole("p",0, p, null);
 		
+			
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();		
 		occupationsCB = new JComboBox<String>(occupationArray);
@@ -116,8 +119,6 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		add(msg);
 		
 	}
-
-	
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == createButton){
@@ -148,6 +149,8 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 			else{
 				msg.setText("Please complete all inputs");
 			}
+			
+			
 			//Checks for Classifieds updates after each creation
 			checkClassifiedsforJobs();
 		}
@@ -163,13 +166,9 @@ public class PersonCreationPanel extends JPanel implements ActionListener{
 		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
 		
 		for(WorkRole w: newJobs){
-			occList.add(w.getName());
+			occList.add(w.toString());
 		}
 		occupationArray = occList.toArray(new String[newJobs.size()]);
-		
-		//ArrayList<WorkRole> newJobs = new ArrayList<WorkRole>();
-		//newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
-		//occupationArray = newJobs.toArray(new String[newJobs.size()]);
 	}
 	
 	//TODO needs testing

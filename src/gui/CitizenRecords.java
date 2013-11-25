@@ -41,8 +41,10 @@ public class CitizenRecords {
 		PersonAgent newPerson  = new PersonAgent(name);
 		
 		//Assigning job
-		newPerson.addRole(job);
-		if (job != null) job.setPerson(newPerson);
+		if (job != null) {
+			newPerson.addRole(job);
+			job.setPerson(newPerson);
+		}
 		
 		//Assigning residence
 		if (home != null) {

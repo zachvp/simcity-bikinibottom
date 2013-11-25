@@ -14,4 +14,8 @@ public interface Dwelling {
 
 	Condition getCondition();
 
+	MaintenanceWorker getWorker();
+
+	void setPayRecipient(PayRecipient payRecipient);
+
 }

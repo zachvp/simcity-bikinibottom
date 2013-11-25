@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 
 /**
  * A class to hold all of the PersonAgent information
@@ -32,14 +33,16 @@ public class CitizenRecords {
 		citizens.add(person);
 		personInfoList.addToList(person.getName());
 	}
-	public void addCitizen(String name, String job, String home, String status,
+	public void addCitizen(String name, WorkRole job, String home, String status,
 			boolean hasCar) {
 		PersonAgent newPerson  = new PersonAgent(name);
+		newPerson.addRole(job);
+		if (job != null) job.setPerson(newPerson);
 		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person
+		//TODO remember that you need to add roles to people AND people to roles
 		
 		//Add passengerAgent
-
 		citizens.add(newPerson);
 		personInfoList.addToList(newPerson.getName());
 		newPerson.startThread();

@@ -6,6 +6,8 @@ import restaurant.strottma.HostRole.Table;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class WaiterGui implements Gui {
 
     private WaiterRole role = null;
@@ -157,7 +159,7 @@ public class WaiterGui implements Gui {
     }
     
     public void DoGoOffBreak() {
-    	gui.setRoleEnabled(role);
+    	//gui.setRoleEnabled(role);
     }
 
     public int getXPos() {

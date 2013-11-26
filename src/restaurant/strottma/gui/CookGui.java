@@ -8,6 +8,8 @@ import restaurant.strottma.HostRole.Table;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class CookGui implements Gui {
 
     private CookRole role = null;
@@ -61,8 +63,8 @@ public class CookGui implements Gui {
     public void draw(Graphics2D g) {
     	// draw the grills
     	for (GrillOrPlate grill : role.getGrills()) {
-    		g.setColor(Color.DARK_GRAY);
-    		g.drawRect(grill.getX(), grill.getY(), 30, 30);
+    		//g.setColor(Color.DARK_GRAY);
+    		//g.drawRect(grill.getX(), grill.getY(), 30, 30);
     		if (grill.orderVisible() && grill.getOrder() != null) {
     			g.setColor(Color.BLACK);
     			g.drawString(grill.getOrder().getChoice().substring(0, 2),
@@ -72,8 +74,8 @@ public class CookGui implements Gui {
     	
     	// draw the plating areas
     	for (GrillOrPlate plateArea : role.getPlateAreas()) {
-    		g.setColor(Color.LIGHT_GRAY);
-    		g.drawRect(plateArea.getX(), plateArea.getY(), 30, 30);
+    		//g.setColor(Color.LIGHT_GRAY);
+    		//g.drawRect(plateArea.getX(), plateArea.getY(), 30, 30);
     		if (plateArea.orderVisible()) {
     			g.setColor(Color.BLACK);
     			g.drawString(plateArea.getOrder().getChoice().substring(0, 2),

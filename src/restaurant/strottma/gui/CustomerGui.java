@@ -5,6 +5,8 @@ import restaurant.strottma.HostRole;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class CustomerGui implements Gui{
 
 	private CustomerRole role = null;
@@ -57,7 +59,7 @@ public class CustomerGui implements Gui{
 				role.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setRoleEnabled(role);
+				//gui.setRoleEnabled(role);
 			}
 			command=Command.noCommand;
 		}

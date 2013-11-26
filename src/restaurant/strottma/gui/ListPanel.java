@@ -74,7 +74,8 @@ public class ListPanel extends JPanel implements ActionListener {
         if (e.getSource() == addPersonB) {
         	// Chapter 2.19 describes showInputDialog()
         	
-        	ListRowPanel row = addPerson(restPanel.addPerson(type, addPersonT.getText()));
+        	//TODO
+        	/*ListRowPanel row = addPerson(restPanel.addPerson(type, addPersonT.getText()));
         	if (addPersonT.getText().equals("Hungry") && type.equals("Customers")) {
         		row.checkbox.setEnabled(false);
         		row.checkbox.setSelected(true);

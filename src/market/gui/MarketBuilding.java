@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import market.CustomerRole;
 import market.Item;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
@@ -38,7 +39,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		entrancePosition = new XYPos(x + (width/2), y + height);
+		entrancePosition = new XYPos((width/2), height);
 		
 		// Stagger opening/closing time
 		this.timeOffset = instanceCount + timeDifference;
@@ -54,7 +55,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	public Role getGreeter() {
 		// TODO Auto-generated method stub
 			//Pass Cashier
-		return getRecords().ca;
+		return getRecords().cashier;
 	}	
 
 	@Override
@@ -65,8 +66,15 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 
 	@Override
 	public Role getCustomerRole(Person person) {
+		
 		List<Item> ShoppingList = new ArrayList<Item>();
-		Map<String,Integer> GroceryList = person.getResidentRole().getGroceries();
+		Map<String,Integer> GroceryList = new HashMap<String,Integer>();
+		for (int i=0;i<Constants.FOODS.size();i++){
+			GroceryList.put(Constants.FOODS.get(i), 100);
+		}
+		for (int i=0;i<Constants.CARS.size();i++){
+			GroceryList.put(Constants.CARS.get(i), 100);
+		}
 		{
 			//FOODS
 			for (int i=0;i<CommonSimpleClasses.Constants.FOODS.size();i++){
@@ -79,17 +87,26 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		}
 		
 		if (MarketCustomerMap.containsKey(person)){
+			System.out.println("IF STATEMENT In Market's getCustomerRole");
 			MarketCustomerMap.get(person).setShoppingList(ShoppingList);
+			MarketCustomerMap.get(person).goingToBuy();
 			return MarketCustomerMap.get(person);
 		}
 		else {
+			System.out.println(" ELSE In Market's getCustomerRole");
+			Role role = records.CreateCustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
+			MarketCustomerMap.put(person, (CustomerRole)role);
+			return role;
+			/*
 			CustomerRole role = new CustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
 			CustomerGui custGui = new CustomerGui(role);
 			role.setGui(custGui);
 			role.setLocation(this);
 			role.setPerson(person);
+			role.goingToBuy();
 			person.addRole(role);
 			return role;
+			*/
 		}
 	}
 

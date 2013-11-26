@@ -64,7 +64,7 @@ public class CustomerRole extends Role implements Customer{
 	 * This is the function to call that actually wakes The CustomerRole that it is going to buy stuff in the market
 	 */
 	public void goingToBuy(){
-		if (person.getWorkRole().isAtWork()){
+		if (person.getWorkRole()!= null && person.getWorkRole().isAtWork()){
 			atBuilding = false;
 			state = Customerstate.GoingToOrder;
 			event = Customerevent.WaitingInLine;
@@ -162,6 +162,7 @@ public class CustomerRole extends Role implements Customer{
 		atExit.release();
 		state = Customerstate.NotAtMarket;
 		event = Customerevent.doneLeaving;
+		this.deactivate();
 	}
 	
 	//Scheduler

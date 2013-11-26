@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.Constants;
 import market.test.mock.LoggedEvent;
 import market.test.mock.EventLog;
@@ -104,6 +105,12 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	public void setState(ItemCollectorstate s) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Person getPerson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

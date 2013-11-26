@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import kelp.Kelp;
 import kelp.KelpClass;
@@ -43,15 +44,15 @@ public class CornerAgent extends Agent implements Corner {
 	 * want to drive to.
 	 */
 	Queue<IntersectionAction> waitingToCross =
-			new LinkedList<IntersectionAction>();
+			new ConcurrentLinkedQueue<IntersectionAction>();
 	
 	//List of entities waiting to get a copy of busstopList.
 	Queue<BusstopRequester> waitingForBusstops =
-			new LinkedList<BusstopRequester>();
+			new ConcurrentLinkedQueue<BusstopRequester>();
 	
 	//List of entities waiting to get a copy of adjacentCorners.
 	Queue<AdjCornerRequester> waitingForCorners =
-			new LinkedList<AdjCornerRequester>();
+			new ConcurrentLinkedQueue<AdjCornerRequester>();
 	
 	//Reference to Kelp
 	Kelp kelp;
@@ -156,6 +157,7 @@ public class CornerAgent extends Agent implements Corner {
 
 	@Override
 	public Corner getCornerForDir(DirectionEnum dir) throws Exception {
+
 		for (MyCorner corner : adjacentCorners) {
 			if (corner.d == dir) {
 				return corner.c;

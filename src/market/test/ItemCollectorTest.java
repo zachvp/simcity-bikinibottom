@@ -35,7 +35,7 @@ public class ItemCollectorTest extends TestCase
 		super.setUp();		
 
 		PersonAgent ItemCollectorGuy = new PersonAgent ("John");
-		ItemCollector = new ItemCollectorRole("John", ItemCollectorGuy, new MarketBuilding(1,1,1,1));	
+		ItemCollector = new ItemCollectorRole(ItemCollectorGuy, new MarketBuilding(1,1,1,1));	
 		ItemCollectorGuiInterfaces itemCollectorGui = new MockItemCollectorGui(ItemCollector);
 		ItemCollector.setGui(itemCollectorGui);
 		ItemCollector.setCashier(Cashier);
@@ -78,8 +78,6 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 				//Check Cashier
 					assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-				//Check MyName
-					assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 				//Check InventoryList
 					assertEquals("ItemCollector's InventoryList should have 100 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 100);
 					assertEquals("ItemCollector's InventoryList should have 100 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 100);
@@ -130,8 +128,6 @@ public class ItemCollectorTest extends TestCase
 						assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 					//Check Cashier
 						assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-					//Check MyName
-						assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 					//Check InventoryList
 						assertEquals("ItemCollector's InventoryList should have 60 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 60);
 						assertEquals("ItemCollector's InventoryList should have 70 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 70);
@@ -176,8 +172,6 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 				//Check Cashier
 					assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-				//Check MyName
-					assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 				//Check InventoryList
 					assertEquals("ItemCollector's InventoryList should have 100 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 100);
 					assertEquals("ItemCollector's InventoryList should have 100 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 100);
@@ -224,8 +218,6 @@ public class ItemCollectorTest extends TestCase
 						assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 					//Check Cashier
 						assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-					//Check MyName
-						assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 					//Check InventoryList
 						assertEquals("ItemCollector's InventoryList should have 60 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 60);
 						assertEquals("ItemCollector's InventoryList should have 70 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 70);
@@ -270,8 +262,6 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 				//Check Cashier
 					assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-				//Check MyName
-					assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 				//Check InventoryList
 					assertEquals("ItemCollector's InventoryList should have 0 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 0);
 					assertEquals("ItemCollector's InventoryList should have 0 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 0);
@@ -321,8 +311,6 @@ public class ItemCollectorTest extends TestCase
 						assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
 					//Check Cashier
 						assertEquals("ItemCollector should have a non-null Cashier in it. It doesn't.",ItemCollector.getCashier() , Cashier);
-					//Check MyName
-						assertEquals("ItemCollector should have name of John in it. It doesn't.",ItemCollector.getName(), "John");
 					//Check InventoryList
 						assertEquals("ItemCollector's InventoryList should have 0 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 0);
 						assertEquals("ItemCollector's InventoryList should have 0 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 0);

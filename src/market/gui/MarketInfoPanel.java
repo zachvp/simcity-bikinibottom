@@ -258,10 +258,10 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		CoralBitsText.setText("");
 		KelpRingsText.setText("");
 		
-		if (marketRecords.ca != null){
-		marketRecords.ca.setInventoryList(IList);
+		if (marketRecords.cashier != null){
+		marketRecords.cashier.setInventoryList(IList);
 
-		MarketLabel.setText("Today's Staff :    " + marketRecords.ca.getName() + "                     " + "Market's Current Cash :   " + marketRecords.ca.getCash());
+		MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
 	}
 
@@ -283,10 +283,10 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
 		
 
-		if (marketRecords.ca != null){
-		marketRecords.ca.setInventoryList(IList);
+		if (marketRecords.cashier != null){
+		marketRecords.cashier.setInventoryList(IList);
 
-		MarketLabel.setText("Today's Staff :    " + marketRecords.ca.getName() + "                     " + "Market's Current Cash :   " + marketRecords.ca.getCash());
+		MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
 
 	}

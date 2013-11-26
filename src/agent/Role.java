@@ -230,10 +230,5 @@ public abstract class Role {
     		// well i guess we can't print anything
     	}
     }
-    
-	public void setGui(ResidentGui gui) {
-		// TODO Auto-generated method stub
-		
-	}
 }
 

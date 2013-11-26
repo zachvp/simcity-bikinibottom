@@ -3,6 +3,7 @@ package market.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import agent.interfaces.Person;
 import market.Item;
 import market.ItemCollectorRole.ItemCollectorstate;
 
@@ -28,6 +29,8 @@ public interface ItemCollector {
 		public abstract void AtCollectStation();
 		public abstract void Ready();
 		public abstract void AtExit();
+
+		public abstract Person getPerson();
 
 		
 

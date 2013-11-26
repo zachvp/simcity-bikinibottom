@@ -16,6 +16,7 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
+import agent.PersonAgent.HungerLevel;
 import agent.interfaces.Person.Wallet.IncomeLevel;
 
 /**
@@ -45,7 +46,9 @@ public class CitizenRecords {
 		personInfoList.addToList(person.getName());
 	}
 	public void addCitizen(String name, WorkRole job, Dwelling home, String status,
-			boolean hasCar) {
+			boolean hasCar, String hungerLevel) {
+		
+		//Assigning income level
 		IncomeLevel incomeLevel;
 		
 		switch (status) {
@@ -60,7 +63,28 @@ public class CitizenRecords {
 			break;
 		}
 		
-		PersonAgent newPerson  = new PersonAgent(name, incomeLevel);
+		//Assigning hunger level
+		HungerLevel hunger;
+		switch (hungerLevel) {
+		case "Starving":
+			hunger = HungerLevel.STARVING;
+			break;
+		case "Hungry":
+			hunger = HungerLevel.HUNGRY;
+			break;
+		default:
+		case "Neutral":
+			hunger = HungerLevel.NEUTRAL;
+			break;
+		case "Satisfied":
+			hunger = HungerLevel.SATISFIED;
+			break;
+		case "Full":
+			hunger = HungerLevel.FULL;
+			break;
+		}
+		
+		PersonAgent newPerson  = new PersonAgent(name, incomeLevel, hunger);
 		
 		//Assigning job
 		if (job != null) {

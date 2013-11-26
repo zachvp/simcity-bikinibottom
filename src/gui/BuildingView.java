@@ -33,8 +33,7 @@ public class BuildingView extends JPanel implements ActionListener{
 		setLayout(new CardLayout());
 		setBackground(Color.white);
 		try {
-			image = ImageIO.read(getClass().getResource("welcomeCard.png"));
-
+			image = ImageIO.read(getClass().getResource("test//welcomeCard.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

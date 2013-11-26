@@ -1,18 +1,12 @@
 package housing.gui;
 
 import housing.MaintenanceWorkerRole;
-import housing.ResidentRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
-import housing.interfaces.Resident;
-import housing.interfaces.ResidentGui;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -28,7 +22,9 @@ import agent.gui.Gui;
 
 public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
-	private MaintenanceWorker worker = null;
+	private MaintenanceWorker worker;
+	
+	private HousingComplex complex;
 	
 	// this prevents excessive releases from occurring
 	private boolean canRelease = false;
@@ -37,7 +33,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	private boolean waiting = false;
 	
 	// determines whether to render the gui
-	private boolean present = false;
+	private boolean present = true;
 	
 	// image for Resident
 	private BufferedImage workerImage;
@@ -61,6 +57,8 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	// prime location for Jazzercising
 	private final int JAZZER_SPOT_X = xPos;
 	private final int JAZZER_SPOT_Y = yPos;
+	
+	int unit;
 	
 	/* --- Constructor --- */
 	public MaintenanceWorkerRoleGui(MaintenanceWorkerRole role) {
@@ -101,7 +99,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 //		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
 	    	
 		g.setColor(Color.WHITE);
-		g.drawRect(xPos, yPos, 20, 20);
+		g.fillRect(xPos, yPos, 20, 20);
 		
 //		g.drawString(eatingFood, xPos+5, yPos+15);
 		if(showTool == true){
@@ -135,22 +133,35 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	public int getYPos() {
 		return yPos;
 	}
+	
+	public void setID(int id) {
+		this.unit = id;
+	}
 
 	@Override
-	public void DoGoToDwelling() {
-		// TODO Auto-generated method stub
-		
+	public void DoGoToDwelling(int unit) {
+//		this.complex.removeGuiFromDwelling(this, unit);
+		this.complex.addGuiToDwelling(this, unit);
+		worker.msgAtDestination();
 	}
 
 	@Override
 	public void DoFixProblem() {
-		// TODO Auto-generated method stub
-		
+		waiting = false;
+		xDestination = 60;
+		yDestination = 50;
+		canRelease = true;
 	}
 
 	@Override
-	public void DoReturnHome() {
-		// TODO Auto-generated method stub
-		
+	public void DoReturnHome(int unit) {
+		this.complex.removeGuiFromDwelling(this, unit);
+//		this.complex.addGuiToDwelling(this, this.unit);
 	}
+
+	@Override
+	public void setComplex(HousingComplex complex) {
+		this.complex = complex;
+	}
+	
 }

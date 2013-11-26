@@ -72,4 +72,8 @@ public class AnimationPanel extends JPanel implements ActionListener {
     public void addGui(Gui gui) {
         guis.add(gui);
     }
+
+	public void removeGui(Gui gui) {
+		guis.remove(gui);
+	}
 }

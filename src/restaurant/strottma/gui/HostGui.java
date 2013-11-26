@@ -49,10 +49,7 @@ public class HostGui implements Gui {
 
     public void draw(Graphics2D g) {
     	// draw the tables
-        g.setColor(Color.YELLOW);
-        for (Table t : role.getTables()) {
-        	g.fillRect(t.getX(), t.getY(), TABLE_WIDTH, TABLE_HEIGHT);
-        }
+        
     	
     	// draw the agent
 //        g.setColor(Color.MAGENTA);

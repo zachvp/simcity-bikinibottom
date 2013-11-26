@@ -1,5 +1,6 @@
 package housing;
 
+import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -34,7 +35,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	TaskState task = TaskState.FIRST_TASK;
 	
 	// graphics
-	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
+	MaintenanceWorkerGui gui;
 	
 	
 	/* --- Constants --- */
@@ -62,10 +63,19 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	
 	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence) {
 		super(agent, residence);
+		this.gui = new MaintenanceWorkerRoleGui(this);
+	}
+	
+	public void setComplex(HousingComplex complex) {
+		gui.setComplex(complex);
 	}
 
+//	public MaintenanceWorkerRole(PersonAgent person) {
+//		super(person);
+//	}
+
 	public MaintenanceWorkerRole(PersonAgent person) {
-		super(person);
+		// TODO Auto-generated constructor stub
 	}
 
 	/* --- Messages --- */
@@ -87,10 +97,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		
-		if(task == TaskState.FIRST_TASK){
-			task = TaskState.NONE;
-			return true;
-		}
+//		if(task == TaskState.FIRST_TASK){
+//			task = TaskState.NONE;
+//			return true;
+//		}
 		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
@@ -122,6 +132,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
 		task = TaskState.DOING_TASK;
+		log.add("Fixing problem.");
 		DoGoToDwelling(wo.dwelling.getIDNumber());
 		waitForInput();
 		
@@ -140,26 +151,35 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		log.add("Fixed problem.");
 		
-		DoReturnHome();
+		DoReturnHome(wo.dwelling.getIDNumber());
 		waitForInput();
 		task = TaskState.NONE;
 	}
 	
 	/* -- Animation Routines --- */
 	private void DoGoToDwelling(int unitNumber){
-		Do("Going to dwelling.");
-		gui.DoGoToDwelling();
-		// deactivate role
+//		Do("Going to dwelling.");
+		gui.DoGoToDwelling(unitNumber);
 	}
 	
 	private void DoFixProblem(){
 		Do("Fixing problem.");
 		gui.DoFixProblem();
+		Runnable command = new Runnable() {
+			public void run(){
+				Do("Done fixing problems.");
+				doneWaitingForInput();
+			}
+		};
+		// schedule a delay for food consumption
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, 4 * Constants.MINUTE);
 	}
 	
-	private void DoReturnHome(){
+	private void DoReturnHome(int unit){
 		Do("Returning home");
-		gui.DoReturnHome();
+		gui.DoReturnHome(unit);
+		deactivate();
 	}
 
 	@Override
@@ -192,7 +212,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	}
 
 	public void msgHereIsPayment(double bill) {
-		// TODO Auto-generated method stub
-		
+		person.getWallet().addCash(bill);
 	}
 }

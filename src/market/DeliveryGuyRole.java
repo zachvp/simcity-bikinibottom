@@ -1,10 +1,7 @@
 package market;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.ItemCollectorRole.ItemCollectorstate;
@@ -13,6 +10,7 @@ import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import market.interfaces.DeliveryReceiver;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
@@ -76,8 +74,8 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		/**
 		 * The message from Cashier to go deliver item to the building (restaurant)
 		 */
-		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CommonSimpleClasses.CityLocation building) {
-			CurrentOrder = new Order(DeliveryList, OrderPerson, building);
+		public void msgDeliverIt(List<Item> DeliveryList , DeliveryReceiver deliveryReceiver , CommonSimpleClasses.CityLocation building) {
+			CurrentOrder = new Order(DeliveryList, deliveryReceiver, building);
 			 Available = false;
 			 stateChanged();
 		}
@@ -88,7 +86,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		public void msgArrivedDestination(){
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
 			{
-				CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+				CurrentOrder.deliveryReceiver.msgHereIsYourItems(CurrentOrder.DeliveryList);
 				person.getPassengerRole().msgGoToLocation(super.person.getWorkRole().getLocation(), false);
 				person.getPassengerRole().activate();
 			}
@@ -220,12 +218,12 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 
 	private class Order{
 		List<Item> DeliveryList;
-		Customer OrderPerson;
+		DeliveryReceiver deliveryReceiver;
 		CommonSimpleClasses.CityLocation Building;
 		
-		Order(List<Item> DList, Customer OP, CommonSimpleClasses.CityLocation CB){
+		Order(List<Item> DList, DeliveryReceiver dR, CommonSimpleClasses.CityLocation CB){
 			DeliveryList = DList;
-			OrderPerson = OP;
+			deliveryReceiver = dR;
 			Building = CB;
 		}
 	}

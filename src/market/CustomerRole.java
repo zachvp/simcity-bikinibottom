@@ -97,7 +97,7 @@ public class CustomerRole extends Role implements Customer{
 	}
 
 	/**
-	 * TODO HOW TO ADD ITEM TO THE RESTAURANT
+	 * 
 	 * This is the message from the cashier
 	 * @param Items The DeliveryList
 	 */

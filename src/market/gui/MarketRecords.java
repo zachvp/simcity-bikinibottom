@@ -23,8 +23,8 @@ import agent.Role;
 import agent.interfaces.Person;
 
 /**
- * Panel in frame that contains all the restaurant information,
- * including host, cook, waiters, and customers.
+ * Panel in frame that contains all the Market information,
+ * including cashier, itemcollectors, deliveryguys and marketcustomers.
  */
 public class MarketRecords {
 	MarketInfoPanel marketControlPanel;

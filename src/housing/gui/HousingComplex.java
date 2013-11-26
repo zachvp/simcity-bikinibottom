@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import agent.gui.Gui;
+
 /**
  * HousingComplex is the equivalent of one building unit. It has 4 subdivisions
  * that each contain a smaller residential unit. 
@@ -38,10 +40,28 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, building);
+			HousingGui gui = new HousingGui(i, building, this);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
 
+	}
+	
+	
+	// this is to get a maintenance worker in the right building
+	public void addGuiToDwelling(Gui gui, int unitNumber) {
+		for(HousingGui unit : housingUnits) {
+			if(unit.getIndex() == unitNumber) {
+				unit.addGui(gui);
+			}
+		}
+	}
+	
+	public void removeGuiFromDwelling(Gui gui, int unitNumber) {
+		for(HousingGui unit : housingUnits) {
+			if(unit.getIndex() == unitNumber) {
+				unit.removeGui(gui);
+			}
+		}
 	}
 }

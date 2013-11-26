@@ -1,7 +1,13 @@
 package gui.test;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.XYPos;
@@ -11,13 +17,25 @@ import gui.Building;
 
 public class MockBuilding extends Building{
 	
+	BufferedImage image;
+	ImageIcon icon;
 	JPanel animationPanel = new JPanel();
 	LocationTypeEnum type = LocationTypeEnum.None;
 	JPanel info;
 
 	public MockBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		animationPanel.setBackground(Color.blue);
+		//animationPanel.setBackground(Color.blue);
+		
+		try {
+			image = ImageIO.read(getClass().getResource("welcomeCard.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		icon = new ImageIcon(image);
+		JLabel background = new JLabel(icon);
+		animationPanel.setLayout(new BorderLayout());
+		animationPanel.add(background, BorderLayout.CENTER);
 	}
 
 	@Override

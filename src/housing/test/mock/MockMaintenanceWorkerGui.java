@@ -1,6 +1,7 @@
 package housing.test.mock;
 
 import mock.EventLog;
+import housing.gui.HousingComplex;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
 
@@ -20,7 +21,7 @@ public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	}
 
 	@Override
-	public void DoGoToDwelling() {
+	public void DoGoToDwelling(int unit) {
 		log.add("Going to dwelling");
 		worker.msgAtDestination();
 	}
@@ -32,8 +33,13 @@ public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	}
 
 	@Override
-	public void DoReturnHome() {
+	public void DoReturnHome(int unit) {
 		log.add("Going to dwelling");
 		worker.msgAtDestination();
+	}
+
+	@Override
+	public void setComplex(HousingComplex complex) {
+		log.add("Set complex");
 	}
 }

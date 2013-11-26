@@ -177,10 +177,6 @@ public class CustomerRole extends Role implements Customer{
 			GoToFindCashier();
 			return true;
 		}
-		if (!atBuilding && getState() == Customerstate.GoingToOrder && getEvent() == Customerevent.WaitingInLine){
-			PhoneOrderItems(ShoppingList);
-			return true;
-		}
 		if (atBuilding && getState() == Customerstate.GoingToOrder && getEvent() == Customerevent.WaitingInLine) 
 		{
 			OrderItems(ShoppingList);
@@ -214,20 +210,6 @@ public class CustomerRole extends Role implements Customer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * The Action to give a phone call to the market
-	 * @param ShoppingList The list of items that are going to buy
-	 */
-	private void PhoneOrderItems(List<Item>ShoppingList){
-		cashier.msgPhoneOrder(ShoppingList, this, person.getWorkRole().getLocation());
-		ExpectedCost = 0;
-		for (int i=0;i<ShoppingList.size();i++){
-			double CurrentPrice = PriceList.get(ShoppingList.get(i).name);
-			ExpectedCost = ExpectedCost + CurrentPrice*ShoppingList.get(i).amount;
-		}
-		setState(Customerstate.Waiting);
 	}
 	
 	/**

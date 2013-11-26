@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -36,7 +37,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	LayoutGui layoutGui;
 	
 	// image for Resident
-	private BufferedImage spongebob;
+	private BufferedImage resImage;
 	private ImageIcon residentIcon;
 	
 	// image for krabby patty
@@ -63,13 +64,19 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		this.resident = role;
 		this.layoutGui = gui;
 		
+		// randomize number for resident gui
+		Random generator = new Random();
+		int res = generator.nextInt(2);
+		
 		try {
-			spongebob = ImageIO.read(getClass().getResource("spongebob.png"));
+			if(res == 0) resImage = ImageIO.read(getClass().getResource("spongebob.png"));
+			else if (res == 1) resImage = ImageIO.read(getClass().getResource("squidward.png"));
+			
 			krabbyPatty = ImageIO.read(getClass().getResource("krabby_patty.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		residentIcon = new ImageIcon(spongebob);
+		residentIcon = new ImageIcon(resImage);
 		krabbyPattyIcon = new ImageIcon(krabbyPatty);
 	}
 

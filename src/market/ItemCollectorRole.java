@@ -18,6 +18,7 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import market.interfaces.ItemCollectorGuiInterfaces;
+import agent.PersonAgent;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -76,6 +77,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		 * @param c the customer
 		 */
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
+		System.out.println("Receive msg from Cashier to get items");
 		//print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
@@ -246,6 +248,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 
 	public String getName(){
 		return name;
+	}
+	
+	public PersonAgent getPerson(){
+		return (PersonAgent)super.getPerson();
 	}
 	
 	public void setCashier(Cashier ca){

@@ -39,7 +39,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 
     private MarketInfoPanel panel;
     
-    private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork, NotAtWork};
+    private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork, NotAtWork, GoToWork1};
 	private Command command=Command.NotAtWork;
     
     public ItemCollectorGui(ItemCollector ic) {
@@ -87,6 +87,10 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
         if (xPos == xDestination && yPos == yDestination) {
 
         	if (command==Command.GoToWork){
+        		GoToWork();
+        		return;
+        	}
+        	else if (command==Command.GoToWork1){
         		ContinueToWork();
         		return;
         	}
@@ -128,7 +132,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 	public void GoToWork(){
     	xDestination = ExitX1;
     	yDestination = ExitY1;
-    	command = command.GoToWork;
+    	command = command.GoToWork1;
     }
     
     public void ContinueToWork(){

@@ -141,7 +141,7 @@ public class MarketRecords {
     	
     	//ItemCollectorGuis
     	ItemCollectorGui itemCollector1Gui = new ItemCollectorGui(itemCollector1);
-    	ItemCollectorGui itemCollector2Gui = new ItemCollectorGui(itemCollector1);
+    	ItemCollectorGui itemCollector2Gui = new ItemCollectorGui(itemCollector2);
     	itemCollector1Gui.setItemCollectorNumber(0);
     	itemCollector2Gui.setItemCollectorNumber(1);
     	itemCollector1.setGui(itemCollector1Gui);
@@ -165,15 +165,7 @@ public class MarketRecords {
     	gui.addGui(deliveryGuy2Gui);
     	gui.addGui(deliveryGuy3Gui);
     	
-    	//Put itemCollectors into the cashier's ItemCollector's list
-    	cashier.getICList().add(itemCollector1);
-    	cashier.getICList().add(itemCollector2);
-    	
-    	//Put DeliveryGuys into the cashier's DeliveryGuy's list
-    	cashier.getDGList().add(deliveryGuy1);
-    	cashier.getDGList().add(deliveryGuy2);
-    	cashier.getDGList().add(deliveryGuy3);
-    	
+    	//Setting the inventoryList
     	itemCollector1.setInventoryList(cashier.getInventoryList());
     	itemCollector1.setInventoryList(cashier.getInventoryList());
     	
@@ -185,6 +177,15 @@ public class MarketRecords {
     	deliveryGuy1.setCashier(cashier);
     	deliveryGuy2.setCashier(cashier);
     	deliveryGuy3.setCashier(cashier);
+    	
+    	//Put itemCollectors into the cashier's ItemCollector's list
+    	cashier.getICList().add(itemCollector1);
+    	cashier.getICList().add(itemCollector2);
+    	
+    	//Put DeliveryGuys into the cashier's DeliveryGuy's list
+    	cashier.getDGList().add(deliveryGuy1);
+    	cashier.getDGList().add(deliveryGuy2);
+    	cashier.getDGList().add(deliveryGuy3);
     	
     }
 

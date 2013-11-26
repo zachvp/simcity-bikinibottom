@@ -29,7 +29,6 @@ public class CashierRole extends WorkRole implements Cashier {
 private static final int startingminute = 0;
 	//public EventLog log = new EventLog();
 	private CashierGuiInterfaces cashierGui = null;
-	private String name;
 	private double MarketTotalMoney;
 	ScheduleTask task = new ScheduleTask();
 	
@@ -288,15 +287,17 @@ private static final int startingminute = 0;
 			for (int i=0;i<getMyCustomerList().size();i++){
 				if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
 					synchronized(getICList()){
-						ItemCollector tempIC = getICList().get(0);
-						for (int j=1;j<getICList().size();j++){
-							if (getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
-								tempIC = getICList().get(j);
-							else
-								continue;
+						if(getICList().get(0).getPerson()!=null){
+							ItemCollector tempIC = getICList().get(0);
+							for (int j=1;j<getICList().size();j++){
+								if ((getICList().get(j).getPerson()!=null) && getICList().get(j).msgHowManyOrdersYouHave() <= tempIC.msgHowManyOrdersYouHave())
+									tempIC = getICList().get(j);
+								else
+									continue;
+							}
+							GoGetItems(getMyCustomerList().get(i),tempIC);
+							return true;
 						}
-						GoGetItems(getMyCustomerList().get(i),tempIC);
-						return true;
 					}
 				}
 			}
@@ -535,10 +536,10 @@ private static final int startingminute = 0;
 		getICList().add(IC);
 	}
 	public String getMaitreDName(){
-		return name;
+		return super.getName();
 	}
 	public String getName(){
-		return name;
+		return super.getName();
 	}
 
 	public List<MyCustomer> getMyCustomerList() {

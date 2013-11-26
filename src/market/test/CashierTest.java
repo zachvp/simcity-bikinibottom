@@ -89,8 +89,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 0);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $100 in it. It doesn't.", (int) Cashier.getCash(), 100);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -163,8 +161,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $220 in it. It doesn't.", (int) Cashier.getCash(), 215);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -203,8 +199,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 0);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $100 in it. It doesn't.", (int) Cashier.getCash(), 100);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -285,8 +279,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $150 in it. It doesn't.", (int) Cashier.getCash(), 150);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -326,8 +318,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 0);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $100 in it. It doesn't.", (int) Cashier.getCash(), 100);
 		//Check Cashier.PaEaA calls no function (Do nothing)
@@ -408,8 +398,6 @@ public class CashierTest extends TestCase
 			assertEquals("Cashier should have 0 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check MyDGlist
 			assertEquals("Cashier should have 0 DG in it. It doesn't.",Cashier.getDGList().size(), 0);
-		//Check MyName
-			assertEquals("Cashier should have name of John in it. It doesn't.",Cashier.getName(), "John");
 		//Check money
 			assertEquals("Cashier should have $105 in it. It doesn't.", (int) Cashier.getCash(), 105);
 		//Check Cashier.PaEaA calls no function (Do nothing)

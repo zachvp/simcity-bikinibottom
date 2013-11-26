@@ -3,6 +3,7 @@ package bank;
 import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityLocation;
+import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
@@ -20,7 +21,7 @@ import bank.interfaces.Teller;
 
 
 //Build should not be problem
-public class BankCustomerRole extends WorkRole implements BankCustomer {
+public class BankCustomerRole extends Role implements BankCustomer {
 	private String name;
 	
 	double cashInAccount;
@@ -44,11 +45,12 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	public BankCustomerRole(Person person, CityLocation bank){
 		super(person, bank);
+		
 //		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
 //		this.name = name;
 		state = State.enteredBank;//TODO update, if role reused, maybe change leaving to enteredBank?
-		this.getPerson().getWallet().setCashOnHand(10);
+//		this.getPerson().getWallet().setCashOnHand(9001);
 //		person.getWallet().setCashOnHand(10);//TODO fix this, only done for testing
 //		myCash.amount = 10;
 //		myCash.amount = initialMoney;
@@ -229,9 +231,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			return true;
 		}
 		if(state == State.waiting && event == Event.gotToTeller) {
-//			Do("sup");
 			speakToTeller();
-			
 			return true;
 		}
 		if(state == State.openingAccount && event == Event.accountOpened) {
@@ -259,7 +259,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			return true;
 		}
 
-		
+		System.out.println("POOOPEY");
 		return false;
 	}
 
@@ -287,7 +287,12 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		
 		if(accountId == -1) {//have not been assigned accountID yet
 			Do("need to open account");
-			double initialDepositAmount = this.getPerson().getWallet().getCashOnHand() * .2;
+			double initialDepositAmount = 10;//this.getPerson().getWallet().getCashOnHand() * .2;
+			if(this.getPerson().getWallet().getCashOnHand() < initialDepositAmount) {//is too poor/worthless to afford initialdeposit
+				teller.msgINeedALoan(this);
+				state= State.gettingLoan;
+				return;
+			}
 			teller.msgIWantToOpenAccount(this, initialDepositAmount);//TODO does this work or constant?
 			state = State.openingAccount;
 			setCashAdjustAmount(-initialDepositAmount);//TODO for testing
@@ -358,12 +363,15 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		securityGuard.msgLeavingBank(this);
 		doLeaveBank();
 		acquireSemaphore(active);
+		
+		state = State.enteredBank;
+		this.deactivate();
 	}
 	
 	private void goOffWork() {
-		doEndWorkDay();
-		acquireSemaphore(active);
-		this.deactivate();
+//		doEndWorkDay();
+//		acquireSemaphore(active);
+//		this.deactivate();
 		
 	}
 
@@ -465,43 +473,6 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 
 
 

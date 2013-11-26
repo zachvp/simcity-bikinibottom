@@ -74,7 +74,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
 		this.wallet = new Wallet(); // medium income level
-		// this.wallet.setCashOnHand(9001.00);
+		 this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
 	}
 	
@@ -157,6 +157,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 
 		// No actions were performed.
+
 		return false;
 	}
 

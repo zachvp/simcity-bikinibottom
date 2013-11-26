@@ -140,18 +140,20 @@ public class BankBuilding extends Building {
 	public Role getCustomerRole(Person person) {
 
 		BankCustomerRole role = existingRoles.get(person);
-		if(role == null) {
+		if(role == null) {//they have not been to bank and need a customer role
 			role = new BankCustomerRole(person, bank);
 			BankCustomerGui bcg = new BankCustomerGui(role);
 			role.setGui(bcg);
 			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
-			role.msgGoToSecurityGuard(security);
+			existingRoles.put(person, role);
+			person.addRole(role);
 		}
 		else {
-			role.setPerson(person);
+//			role.setPerson(person);
 		}
-		person.addRole(role);
+		role.msgGoToSecurityGuard(security);
+
 		return role;
 	}
 

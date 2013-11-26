@@ -36,8 +36,8 @@ public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 	double money = -1;
 	double cashInAccount = -1;
 	
-	int entranceX = 275;
-	int entranceY = 320;
+	int entranceX = 300;
+	int entranceY = 500;
 	
 	int guardX =322;
 	int guardY = 360;

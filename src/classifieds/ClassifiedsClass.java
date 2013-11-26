@@ -4,6 +4,7 @@ import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.ws.Response;
@@ -29,7 +30,8 @@ public class ClassifiedsClass implements Classifieds {
 	}
 	
 	//List of all the work roles in existence
-	List<WorkRole> roles = new ArrayList<WorkRole>();
+	List<WorkRole> roles = 
+			Collections.synchronizedList(new ArrayList<WorkRole>());
 	
 	//List of all the dwellings in existence
 	List<Dwelling> dwellings = new ArrayList<Dwelling>();
@@ -38,14 +40,16 @@ public class ClassifiedsClass implements Classifieds {
 	public List<WorkRole> getJobsForBuilding(CityBuilding building,
 			boolean returnOnlyOpenPositions) {
 		List<WorkRole> response = new ArrayList<WorkRole>();
-		for (WorkRole role : roles) {
-			if (role.getPerson() != null &&
-					returnOnlyOpenPositions)
-				continue;
-			if (building == null) {
-				response.add(role);
-			} else if (role.getLocation() == building) {
-				response.add(role);
+		
+		synchronized (roles) {
+			for (WorkRole role : roles) {
+				if (role.getPerson() != null && returnOnlyOpenPositions)
+					continue;
+				if (building == null) {
+					response.add(role);
+				} else if (role.getLocation() == building) {
+					response.add(role);
+				}
 			}
 		}
 		return response;
@@ -70,7 +74,7 @@ public class ClassifiedsClass implements Classifieds {
 	@Override
 	public void addWorkRole(WorkRole role) {
 		roles.add(role);
-		 notifyListeners();
+		notifyListeners();
 	}
 
 	@Override

@@ -33,16 +33,16 @@ public class LayoutGui implements Gui {
 	private BufferedImage backgroundImage;
 	private ImageIcon icon;
 	
-	public LayoutGui(int dwellingWidth, int dwellingHeight) {
-		ROOM_WIDTH = dwellingWidth;
-		ROOM_HEIGHT = dwellingHeight;
+	public LayoutGui(int dwellingWidth, int dwellingHeight, int index) {
+		ROOM_WIDTH = dwellingWidth / 3;
+		ROOM_HEIGHT = dwellingHeight / 3;
 		
 		// place all of the residential items
-		STOVE_POSITION = new Dimension(ROOM_WIDTH - 70, ROOM_HEIGHT / 2 - 50);
+		STOVE_POSITION = new Dimension(ROOM_WIDTH - 35, ROOM_HEIGHT / 2);
 		TABLE_POSITION = new Dimension(ROOM_WIDTH / 2, ROOM_HEIGHT / 2);
-		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH - 90, ROOM_HEIGHT - 95);
-		DOOR_POSITION = new Dimension(ROOM_WIDTH - 100, 25);
-		REFRIGERATOR_POSITION = new Dimension(50, ROOM_HEIGHT / 2 - 30);
+		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH - 85, ROOM_HEIGHT - 40);
+		DOOR_POSITION = new Dimension(ROOM_WIDTH - 40, 25);
+		REFRIGERATOR_POSITION = new Dimension(40, ROOM_HEIGHT / 2);
 		
 		// add the background image
 		try {

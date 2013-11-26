@@ -2,6 +2,8 @@ package transportation.gui;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import transportation.gui.interfaces.BusstopGui;
@@ -12,16 +14,17 @@ import agent.gui.Gui;
 public class TransportationGuiController implements Gui {
 	static TransportationGuiController instance = null; 
 	
-	private List<Gui> guis = new ArrayList<Gui>();
+	private List<Gui> guis = 
+			Collections.synchronizedList(new ArrayList<Gui>());
 
 	private List<PassengerGui> passengerGuis =
-			new ArrayList<PassengerGui>();
+			Collections.synchronizedList(new ArrayList<PassengerGui>());
 
 	private List<VehicleGui> vehicleGuis =
-			new ArrayList<VehicleGui>();
+			Collections.synchronizedList(new ArrayList<VehicleGui>());
 
 	private List<BusstopGui> busstopGuis =
-			new ArrayList<BusstopGui>();
+			Collections.synchronizedList(new ArrayList<BusstopGui>());
 	
 	private TransportationGuiController() {}
 	
@@ -35,42 +38,53 @@ public class TransportationGuiController implements Gui {
 	@Override
 	public void updatePosition() {
 		
-		for (Gui gui : busstopGuis ) {
-			gui.updatePosition();
+		synchronized (busstopGuis) {
+			for (Gui gui : busstopGuis) {
+				gui.updatePosition();
+			}
 		}
-		
-		for (Gui gui : passengerGuis ) {
-			gui.updatePosition();
+		synchronized (passengerGuis) {
+			for (Gui gui : passengerGuis ) {
+				gui.updatePosition();
+			}
 		}
-		for (Gui gui : vehicleGuis ) {
-			gui.updatePosition();
-			gui.updatePosition();
-			gui.updatePosition();
+		synchronized (vehicleGuis) {
+			for (Gui gui : vehicleGuis) {
+				gui.updatePosition();
+				gui.updatePosition();
+				gui.updatePosition();
+			}
 		}
-		
-		for (Gui gui : guis ) {
-			gui.updatePosition();
+		synchronized (guis) {
+			for (Gui gui : guis) {
+				gui.updatePosition();
+			}
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		for (Gui gui : busstopGuis ) {
-			gui.draw(g);
-		}
-		
-		for (Gui gui : passengerGuis ) {
-			if (gui.isPresent())
+		synchronized (busstopGuis) {
+			for (Gui gui : busstopGuis) {
 				gui.draw(g);
+			}
 		}
-		
-		for (Gui gui : vehicleGuis ) {
-			if (gui.isPresent())
+		synchronized (passengerGuis) {
+			for (Gui gui : passengerGuis) {
+				if (gui.isPresent())
+					gui.draw(g);
+			}
+		}
+		synchronized (vehicleGuis) {
+			for (Gui gui : vehicleGuis) {
+				if (gui.isPresent())
+					gui.draw(g);
+			}
+		}
+		synchronized (guis) {
+			for (Gui gui : guis) {
 				gui.draw(g);
-		}
-		
-		for (Gui gui : guis ) {
-			gui.draw(g);
+			}
 		}
 	}
 

@@ -50,7 +50,7 @@ public interface Constants {
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = true;
+	public static final boolean PRINT = false;
 	
     /**
      * The number of milliseconds in a second

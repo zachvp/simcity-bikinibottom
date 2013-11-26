@@ -9,5 +9,9 @@ public interface ResidentGui {
 	
 	public void DoJazzercise();
 
-	public void setFood(String type);
+	public void setFood(boolean type);
+
+	public void DoMoveGary();
+
+	public void setPresent(boolean b);
 }

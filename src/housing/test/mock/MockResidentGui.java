@@ -37,7 +37,19 @@ public class MockResidentGui implements ResidentGui {
 	}
 
 	@Override
-	public void setFood(String type) {
+	public void setFood(boolean type) {
 		log.add("Setting food to " + type);
+	}
+
+	@Override
+	public void DoMoveGary() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPresent(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 }

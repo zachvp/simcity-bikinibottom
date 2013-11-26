@@ -19,6 +19,7 @@ import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
@@ -61,12 +62,13 @@ public class PersonAgent extends Agent implements Person {
 	
 	public PersonAgent(String name, IncomeLevel incomeLevel){
 		super();
+		updateHungerLevel();
 		
 		this.name = name;
 		this.roles = new HashSet<Role>();
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = HungerLevel.HUNGRY;
+		this.hungerLevel = HungerLevel.FULL;
 		
 		this.timeManager = TimeManager.getInstance();
 		
@@ -85,6 +87,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	public PersonAgent(String name){
 		this(name, IncomeLevel.MEDIUM);
+		updateHungerLevel();
 	}
 	
 	/* -------- Messages -------- */
@@ -280,6 +283,42 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setCar(Car car) {
 		this.car = car;
+	}
+	
+	//updates hunger level to decrease as day goes on
+	public void updateHungerLevel() {
+		int interval = 3;
+		ScheduleTask task = new ScheduleTask();
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+					doUpdateHungerLevel();
+				}
+			
+		};
+		task.scheduleTaskAtInterval(command, TimeManager.getInstance().currentSimTime(), 4 * Constants.HOUR);
+		
+	}
+	
+	private void doUpdateHungerLevel() {
+		if(this.hungerLevel == HungerLevel.FULL) {
+			this.hungerLevel = HungerLevel.SATISFIED;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.SATISFIED) {
+			this.hungerLevel = HungerLevel.NEUTRAL;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.NEUTRAL) {
+			this.hungerLevel = HungerLevel.HUNGRY;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.HUNGRY) {
+			this.hungerLevel = HungerLevel.STARVING;
+			return;
+		}
+		
 	}
 	
 	// ---- Eating out

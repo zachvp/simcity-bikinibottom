@@ -102,7 +102,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		endHour = ((BankBuilding) bank).getClosingHour();
 		endMinute =((BankBuilding) bank).getClosingMinute();
 		
-		System.out.println("sdfghjhgfdfghjhgfgh " + startHour);
+//		System.out.println("sdfghjhgfdfghjhgfgh " + startHour);
 	}
 	
 	public String getCustomerName() {

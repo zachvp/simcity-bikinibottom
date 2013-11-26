@@ -29,4 +29,8 @@ public interface CashierGuiInterfaces extends Gui {
 
 	public abstract int getYPos();
 
+	void WalkToWork();
+
+	public abstract void GoToWork();
+
 };

@@ -19,8 +19,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 
     private ItemCollector agent = null;
 
-    private int xPos = 180, yPos = -30;//default cashier position
-    private int xDestination = ExitX1, yDestination = ExitY1;//default start position
+    private int xPos = 130, yPos = -30;//default cashier position
+    private int xDestination = 130, yDestination = -30;//default start position
     
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
@@ -39,8 +39,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 
     private MarketInfoPanel panel;
     
-    private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork};
-	private Command command=Command.GoToWork;
+    private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork, NotAtWork};
+	private Command command=Command.NotAtWork;
     
     public ItemCollectorGui(ItemCollector ic) {
         this.agent = ic;
@@ -87,7 +87,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
         if (xPos == xDestination && yPos == yDestination) {
 
         	if (command==Command.GoToWork){
-        		BackReadyStation();
+        		ContinueToWork();
+        		return;
         	}
         	else if (command==Command.GoHome) {
 				agent.Ready();
@@ -99,7 +100,9 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 				ContinueOffWork();
 			}
 			else if (command==Command.GoToExit){
+				command= Command.NotAtWork;
 				agent.AtExit();
+				return;
 			}
         	
 			command=Command.noCommand;
@@ -126,6 +129,12 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = command.GoToWork;
+    }
+    
+    public void ContinueToWork(){
+    	xDestination = HomePosX;
+    	yDestination = HomePosY;
+    	command = command.GoHome;
     }
     
     /* (non-Javadoc)

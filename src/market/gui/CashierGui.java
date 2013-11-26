@@ -17,8 +17,8 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 
     private Cashier agent = null;
 
-    private int xPos = 180, yPos = -30;//default cashier position
-    private int xDestination = ExitX1, yDestination = ExitY1;//default start position
+    private int xPos = 130, yPos = -50;//default cashier position
+    private int xDestination = ExitX, yDestination = ExitY;//default start position
     
     private static final int CashierWidth = 15;
     private static final int CashierHeight = 15;
@@ -36,8 +36,8 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     private static final int ExitX = 130;
     private static final int ExitY = -50;
     
-    private enum Command {noCommand, GoToCashier, GoToBench, GoToExit1, GoToExit, GoToWork};
-	private Command command=Command.GoToWork;
+    private enum Command {noCommand, GoToCashier, GoToBench, GoToExit1, GoToExit, GoToWork, NotAtWork, GoToWork1};
+	private Command command=Command.NotAtWork;
 
 
 	private MarketInfoPanel panel;
@@ -47,17 +47,10 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
         
     }
     
-    /* (non-Javadoc)
-	 * @see market.gui.MockCashierGui#setMarketControlPanel(market.gui.MarketControlPanel)
-	 * /
-    @Override
-	public void setMarketInfoPanel(MarketInfoPanel p){
-    	panel = p;
-    }*/
-
-    /* (non-Javadoc)
-	 * @see market.gui.MockCashierGui#updatePosition()
-	 */
+    public void GoToWork(){
+    	command=Command.GoToWork;
+    }
+    
     @Override
 	public void updatePosition() {
         if (xPos < xDestination)
@@ -74,6 +67,10 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 
         	if (command==Command.GoToWork){
         		//System.out.println("Im GoToCashier");
+        		WalkToWork();
+        		return;
+        	}
+        	else if (command==Command.GoToWork1){
         		GoToFrontDesk();
         		return;
         	}
@@ -89,6 +86,8 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 			}
 			else if (command == Command.GoToExit){
 				agent.AtExit();
+				command = Command.NotAtWork;
+				return;
 			}
 				
 		command=Command.noCommand;
@@ -99,11 +98,19 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	 * @see market.gui.MockCashierGui#GoToFrontDesk()
 	 */
     @Override
+    public void WalkToWork(){
+    	xDestination = ExitX1;
+    	yDestination = ExitY1;
+    	command=Command.GoToWork1;
+    }
+    
 	public void GoToFrontDesk(){
     	xDestination = FrontDeskX;
     	yDestination = FrontDeskY;
     	command=Command.GoToCashier;
     }
+    
+    
     
     /* (non-Javadoc)
 	 * @see market.gui.MockCashierGui#GoToBench()

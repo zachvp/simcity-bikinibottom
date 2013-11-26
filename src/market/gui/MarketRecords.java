@@ -30,8 +30,8 @@ public class MarketRecords {
 	MarketBuilding building;
 	
     //private PersonAgent CashierPerson = new PersonAgent("Cashier");
-    CashierRole ca;
-	private CashierGui cashierGui;
+	CashierRole cashier;
+	CashierGui cashierGui;
 
 	//List of ItemCollectors and DeliveryGuys
     private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
@@ -39,12 +39,12 @@ public class MarketRecords {
     
     //private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
     //private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");
-    private ItemCollectorRole ic;
-    private ItemCollectorGui icGui;
+    //private ItemCollectorRole ic;
+    //private ItemCollectorGui icGui;
    
     //private PersonAgent DeliveryGuyPerson = new PersonAgent("DeliveryGuy1");
-    private DeliveryGuyRole dg;
-    private DeliveryGuyGui dgGui;
+    //private DeliveryGuyRole dg;
+    //private DeliveryGuyGui dgGui;
 
     private MarketBackgroundLayoutGui marketBackgroundLayout;
 	private static Map<String,Double>PriceList = Constants.MarketPriceList;
@@ -78,12 +78,12 @@ public class MarketRecords {
     	//marketControlPanel = controlPanel;
     	building = market;
     	marketBackgroundLayout = new MarketBackgroundLayoutGui();
-    	
-    	
-    	
-    	
 
         this.gui = gui;
+        
+        initRoles();
+        
+        
         
         /*
         Role crTemp = CreateCashierRole(CashierPerson.getName(), CashierPerson.getWallet().getCashOnHand(), CashierPerson, building);
@@ -95,6 +95,7 @@ public class MarketRecords {
         Role icTemp = CreateItemCollectorRole(ItemCollectorPerson.getName(), ItemCollectorPerson, building, (CashierRole)crTemp);
         ItemCollectorPerson.startThread();
         icTemp.activate();
+        
         
         Role icTemp1 = CreateItemCollectorRole(ItemCollectorPerson1.getName(), ItemCollectorPerson1, building, (CashierRole)crTemp);
         ItemCollectorPerson1.startThread();
@@ -119,20 +120,71 @@ public class MarketRecords {
         	//custGui.setBuying();
         	gui.addGui(custGui);
         
-       cust1 = new CustomerRole("Customer2", 1000, tempInventoryList, CustomerPerson1); 	
-       custGui1 = new CustomerGui(cust1);
-    		cust1.setGui(custGui1);
-        	cust1.setCashier(ca);
-        	cust1.setPriceList(ca.getPriceList());
-        	CustomerPerson1.startThread();
-        	CustomerPerson1.addRole(cust1);
-        	cust1.setPriceList(ca.getPriceList());
-        	cust1.activate();
-        	//custGui1.setBuying();
-        	gui.addGui(custGui1);
+       
         	*/
 
         	gui.addGui(marketBackgroundLayout);
+    }
+    
+    public void initRoles(){
+    	
+    	//CashierRole
+    	cashier = new CashierRole(null, building, InventoryList);
+    	cashierGui = new CashierGui(cashier);
+    	cashier.setGui(cashierGui);
+    	gui.addGui(cashierGui);
+    	
+    	//ItemCollectorRoles
+    	ItemCollectorRole itemCollector1 = new ItemCollectorRole(null, building);
+    	ItemCollectorRole itemCollector2 = new ItemCollectorRole(null, building);
+    	
+    	//ItemCollectorGuis
+    	ItemCollectorGui itemCollector1Gui = new ItemCollectorGui(itemCollector1);
+    	ItemCollectorGui itemCollector2Gui = new ItemCollectorGui(itemCollector1);
+    	itemCollector1Gui.setItemCollectorNumber(0);
+    	itemCollector2Gui.setItemCollectorNumber(1);
+    	itemCollector1.setGui(itemCollector1Gui);
+    	itemCollector2.setGui(itemCollector2Gui);
+    	gui.addGui(itemCollector1Gui);
+    	gui.addGui(itemCollector2Gui);
+    	
+    	//DeliveryGuyRoles
+    	DeliveryGuyRole deliveryGuy1 = new DeliveryGuyRole(null, building);
+    	DeliveryGuyRole deliveryGuy2 = new DeliveryGuyRole(null, building);
+    	DeliveryGuyRole deliveryGuy3 = new DeliveryGuyRole(null, building);
+    	
+    	//DeliveryGuyGuis
+    	DeliveryGuyGui deliveryGuy1Gui = new DeliveryGuyGui(deliveryGuy1);
+    	DeliveryGuyGui deliveryGuy2Gui = new DeliveryGuyGui(deliveryGuy2);
+    	DeliveryGuyGui deliveryGuy3Gui = new DeliveryGuyGui(deliveryGuy3);
+    	deliveryGuy1.setGui(deliveryGuy1Gui);
+    	deliveryGuy2.setGui(deliveryGuy2Gui);
+    	deliveryGuy3.setGui(deliveryGuy3Gui);
+    	gui.addGui(deliveryGuy1Gui);
+    	gui.addGui(deliveryGuy2Gui);
+    	gui.addGui(deliveryGuy3Gui);
+    	
+    	//Put itemCollectors into the cashier's ItemCollector's list
+    	cashier.getICList().add(itemCollector1);
+    	cashier.getICList().add(itemCollector2);
+    	
+    	//Put DeliveryGuys into the cashier's DeliveryGuy's list
+    	cashier.getDGList().add(deliveryGuy1);
+    	cashier.getDGList().add(deliveryGuy2);
+    	cashier.getDGList().add(deliveryGuy3);
+    	
+    	itemCollector1.setInventoryList(cashier.getInventoryList());
+    	itemCollector1.setInventoryList(cashier.getInventoryList());
+    	
+    	//Setting Cashier in the ItemCollectors
+    	itemCollector1.setCashier(cashier);
+    	itemCollector2.setCashier(cashier);
+    	
+    	//Setting Cashier in the DeliveryGuys
+    	deliveryGuy1.setCashier(cashier);
+    	deliveryGuy2.setCashier(cashier);
+    	deliveryGuy3.setCashier(cashier);
+    	
     }
 
 	public LocationTypeEnum getType() {
@@ -182,21 +234,22 @@ public void SetCashierMarketInfoPanel(MarketInfoPanel p){
      * @param name name of person
      */
     
-public Role CreateCashierRole(String name, double money, Person person, MarketBuilding b){
-    ca = new CashierRole(name, money, person, b, InventoryList);
+/*
+public Role CreateCashierRole(String name, double money, MarketBuilding b){
+    ca = new CashierRole(name, money, null, b, InventoryList);
     cashierGui = new CashierGui(ca);   
         ca.setGui(cashierGui);
         ca.setICList(ItemCollectors);
         ca.setDGList(DeliveryGuys);
         gui.addGui(cashierGui);
         //CashierPerson.startThread();
-        person.addRole(ca); 
+        	//person.addRole(ca); 
         //ca.activate();
         return ca;
     }
 
-public Role CreateItemCollectorRole(String name, Person person, MarketBuilding b, Cashier cashier){
-    ic = new ItemCollectorRole(name, person, building);
+public Role CreateItemCollectorRole(String name, MarketBuilding b, Cashier cashier){
+    ic = new ItemCollectorRole(name, null, building);
     icGui = new ItemCollectorGui(ic);
         ic.setGui(icGui);
         ItemCollectors.add(ic);
@@ -204,24 +257,39 @@ public Role CreateItemCollectorRole(String name, Person person, MarketBuilding b
         ic.setInventoryList(cashier.getInventoryList());
         gui.addGui(icGui);
         //ItemCollectorPerson.startThread();
-        person.addRole(ic);
+        	//person.addRole(ic);
         //ic.activate();
         icGui.setItemCollectorNumber((int)(Math.random()*2));
         return ic;
     }
 
-public Role CreateDeliveryGuyRole(String name, Person person, MarketBuilding b, Cashier cashier){
-    dg = new DeliveryGuyRole(name, person, b);
+public Role CreateDeliveryGuyRole(String name, MarketBuilding b, Cashier cashier){
+    dg = new DeliveryGuyRole(name, null, b);
     dgGui = new DeliveryGuyGui(dg); 
         dg.setGui(dgGui);
         DeliveryGuys.add(dg);
         dg.setCashier(cashier);
         gui.addGui(dgGui);
         //DeliveryGuyPerson.startThread();
-        person.addRole(dg);
+        	//person.addRole(dg);
         //dg.activate();
         return dg;
     }
+
+	*/
+public Role CreateCustomerRole(String name, double money, List<Item> SL, Person person){
+    CustomerRole role = new CustomerRole(name, money, SL, person); 	
+    CustomerGui cGui = new CustomerGui(role);
+ 		role.setGui(cGui);
+     	role.setCashier(cashier);
+     	role.setPriceList(Constants.MarketPriceList);
+     	//CustomerPerson1.startThread();
+     	//CustomerPerson1.addRole(cust1);
+     	//custGui1.setBuying();
+     	gui.addGui(cGui);
+     	person.addRole(role);
+     	return role;
+     	}
 
 public Map<String, Integer> getInventoryList() {
 	

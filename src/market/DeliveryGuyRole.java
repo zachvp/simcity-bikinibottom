@@ -30,7 +30,6 @@ import agent.interfaces.Person;
  *
  */
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
-	private MarketBuilding workingBuilding = null;
 	private DeliveryGuyGui deliveryguyGui = null;
 	private String name;
 	private boolean Available = true;
@@ -56,10 +55,8 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * @param person person himself
 		 * @param Market the Market that the deliveryGuy is working in
 		 */
-	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
+	public DeliveryGuyRole(Person person, MarketBuilding Market){
 		super(person, Market);
-		name = NA;
-		workingBuilding = Market;
 
 	}
 	
@@ -96,7 +93,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
 			{
 				CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
-				person.getPassengerRole().msgGoToLocation(workingBuilding, false);
+				person.getPassengerRole().msgGoToLocation(super.person.getWorkRole().getLocation(), false);
 				person.getPassengerRole().activate();
 			}
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)

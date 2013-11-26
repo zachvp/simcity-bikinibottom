@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import market.CashierRole.Cashierstate;
 import market.gui.ItemCollectorGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
@@ -38,8 +39,8 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	private Semaphore atHome = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	
-	public enum ItemCollectorstate {GoingToWork, Idle, OffWork, GettingItem};
-	ItemCollectorstate state = ItemCollectorstate.GoingToWork;
+	public enum ItemCollectorstate {GoingToWork, Idle, OffWork, GettingItem, NotAtWork};
+	ItemCollectorstate state = ItemCollectorstate.NotAtWork;
 	
 	/**
 	 * this is a private class for ItemCollector to keep track his work
@@ -57,16 +58,12 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * @param person person himself
 	 * @param cL The building that the ItemCollector is working in
 	 */
-	public ItemCollectorRole(String na, Person person, MarketBuilding cL){
+	public ItemCollectorRole(Person person, MarketBuilding cL){
 		super(person, cL);
-		name = na;
-		
-		
-		
 	}
 	
 	//Working Hour
-		int startinghour = 8;
+		int startinghour = 6;
 		int startingminutes = 29;
 		int endinghour = 18;
 		int endingminutes = 0;
@@ -134,6 +131,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 */
 	public boolean pickAndExecuteAnAction() {
 		//if (state == ItemCollectorstate.Idle)
+		if (state == ItemCollectorstate.NotAtWork){
+			GoToWork();
+		}
+		
 		if(getOrders().size()!=0){
 			GoGetItems(getOrders().get(0));
 			return true;
@@ -147,6 +148,17 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	}
 	
 	//Actions
+	private void GoToWork(){
+		state = ItemCollectorstate.GoingToWork;
+		itemcollectorGui.GoToWork();
+		try {
+			atHome.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		state = ItemCollectorstate.Idle;
+	}
 	/**
 	 * This the action to move the itemcollector to the backyard collect items by check through inventoryMap
 	 * @param o CurrentOrder
@@ -214,6 +226,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			e.printStackTrace();
 		}
 		this.deactivate();
+		state = ItemCollectorstate.GoingToWork;
 	}
 	
 

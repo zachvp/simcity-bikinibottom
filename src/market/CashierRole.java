@@ -48,7 +48,7 @@ private static final int startingminute = 0;
 	private Map<String,Integer> InventoryList ;
 	
 	//Working Hour
-	int startinghour = 8;
+	int startinghour = 6;
 	int startingminutes = 29;
 	int endinghour = 18;
 	int endingminutes = 0;
@@ -57,8 +57,8 @@ private static final int startingminute = 0;
 	 * PriceList in the market
 	 */
 	private Map<String,Double>PriceList;
-	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems};
-	private Cashierstate state = Cashierstate.GoingToWork; 
+	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems, NotAtWork};
+	private Cashierstate state = Cashierstate.NotAtWork; 
 	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck, GivenItems, Failed, EpicFailed}
 	
 	/**
@@ -91,10 +91,9 @@ private static final int startingminute = 0;
 	 * @param cL The MarketBuilding that the CashierRole's in
 	 * @param inList The InventoryList of the Market
 	 */
-    public CashierRole(String NA, double money, Person person, MarketBuilding cL, Map<String,Integer> inList){
+    public CashierRole(Person person, MarketBuilding cL, Map<String,Integer> inList){
     	super(person, cL);
-		name = NA;
-		setCash(money);
+		setCash(Constants.MarketInitialMoney);
 		PriceList = Constants.MarketPriceList;
 		InventoryList = inList;
 		
@@ -111,8 +110,8 @@ private static final int startingminute = 0;
 		
 		
 		
-		int hour = 6;
-		int minute = 30;
+		int hour = 18;
+		int minute = 0;
 		
 		task.scheduleDailyTask(command, hour, minute);
 			
@@ -250,6 +249,7 @@ private static final int startingminute = 0;
 	 * getting the semaphore release
 	 */
 	public void AtFrontDesk(){
+		//System.out.println("AtFrontDesk");
 		atFrontDesk.release();
 		setState(Cashierstate.Idle);
 		stateChanged();
@@ -284,6 +284,10 @@ private static final int startingminute = 0;
 	 */
 	public boolean pickAndExecuteAnAction() {
 
+		if (state == Cashierstate.NotAtWork){
+			GoToWork();
+			return true;
+		}
 		synchronized(getMyCustomerList()){
 			for (int i=0;i<getMyCustomerList().size();i++){
 				if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
@@ -345,6 +349,18 @@ private static final int startingminute = 0;
 	}
 	
 	//Actions
+	private void GoToWork(){
+		state = Cashierstate.GoingToWork;
+		cashierGui.GoToWork();
+		try {
+			atFrontDesk.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		state = Cashierstate.Idle;
+	}
+	
 	/**
 	 * This is the action to first move the cashier to the bench and ask the selected item collector to collect items for the order
 	 * @param MC the class MyCustomer for the current Customer
@@ -477,6 +493,7 @@ private static final int startingminute = 0;
 			e.printStackTrace();
 		}
 		this.deactivate();
+		state = Cashierstate.NotAtWork;
 	}
 	
 

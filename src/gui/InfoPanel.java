@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
@@ -40,6 +41,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	TimeManager timeManager = TimeManager.getInstance();
 	private Timer timer;
 	
+	JLabel name, job, residence, money, hunger, nameL, jobL, residenceL, moneyL, hungerL;
+	
 	public InfoPanel(int w, int h){
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, h); //700 X 190
 		setPreferredSize(d);
@@ -57,18 +60,53 @@ public class InfoPanel extends JPanel implements ActionListener{
 		personText.setPreferredSize(d);
 		personText.setMaximumSize(d);
 		personText.setMinimumSize(d);
-		addBuildingInfoPanel(personText, "person");
-			
-		info = new JLabel("");
-		//Test text
-		/*info.setText("<html><div>&nbsp;</div><div> "
-				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
-				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
-				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
-				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
-				+ "<div> Hunger Level: "+"2" +"</div></html>"
-		);*/
-		personText.add(info);
+		personText.setLayout(new BorderLayout());
+		
+		JPanel textWest = new JPanel();
+		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.2), cardDim.height);
+		textWest.setPreferredSize(textWDim);
+		textWest.setMaximumSize(textWDim);
+		textWest.setMinimumSize(textWDim);
+		textWest.setLayout(new GridLayout(5, 1, 5, 2));
+		
+		nameL = new JLabel("");
+		jobL = new JLabel("");
+		residenceL = new JLabel("");
+		moneyL = new JLabel("");
+		hungerL = new JLabel("");
+		
+		textWest.add(nameL);
+		textWest.add(jobL);
+		textWest.add(residenceL);
+		textWest.add(moneyL);
+		textWest.add(hungerL);
+		
+		JPanel textEast = new JPanel();
+		Dimension textEDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.8), cardDim.height);
+		textEast.setPreferredSize(textEDim);
+		textEast.setMaximumSize(textEDim);
+		textEast.setMinimumSize(textEDim);
+		textEast.setLayout(new GridLayout(5, 1, 5, 2));
+		
+		name = new JLabel("");
+		job = new JLabel("");
+		residence = new JLabel("");
+		money = new JLabel("");
+		hunger = new JLabel("");
+		
+		textEast.add(name);
+		textEast.add(job);
+		textEast.add(residence);
+		textEast.add(money);
+		textEast.add(hunger);
+		
+		personText.add(textWest, BorderLayout.WEST);
+		personText.add(textEast, BorderLayout.EAST);
+
+		card.add(personText, "person");
+
+		//info = new JLabel("");
+		//personText.add(info);
 		
 		timer = new java.util.Timer();
 
@@ -80,15 +118,10 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		add(card, BorderLayout.SOUTH);
 		add(timePanel, BorderLayout.NORTH);
-		
-		
-		
 	}
 	
-	
-	
 	@SuppressWarnings("deprecation")
-	private void getTimeDisplay(){
+	private void displayTime(){
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timeManager.currentSimTime());	
 		Date date = cal.getTime();
@@ -107,9 +140,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		if(sec<10){
 			secStr = "0" + sec;
 		}
-		
 		time.setText(hourStr +":"+minStr);
-		
 	}
 
 	/**
@@ -120,13 +151,26 @@ public class InfoPanel extends JPanel implements ActionListener{
 		CardLayout cl = (CardLayout)(card.getLayout());
 		cl.show(card, "person");
 		//System.out.println("update info with "+person.getName());
-		info.setText("<html><div>&nbsp;</div><div> "
+		/*info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
 						+ "<div> Job: "+ (person.getWorkRole() == null ? "none" : person.getWorkRole().getShortName()) + "</div><div>&nbsp;</div>"
 						+ "<div> Residence: "+ (person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()) + "</div><div>&nbsp;</div>"
 						+ "<div> Money: $"+ person.getWallet().getCashOnHand() +"</div><div>&nbsp;</div>"
 						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
-				);
+				);*/
+		
+		nameL.setText("Name: ");
+		jobL.setText("Job: ");
+		residenceL.setText("Residence: ");
+		moneyL.setText("Money");
+		hungerL.setText("Hunger Level: ");
+		
+		
+		name.setText(person.getName());
+		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().getShortName()));
+		residence.setText(""+(person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()));
+		money.setText(""+person.getWallet().getCashOnHand());
+		hunger.setText(""+person.getHungerLevel());		
 		validate();
 	}
 	
@@ -169,7 +213,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	class PrintTask extends TimerTask {
         public void run() {
-        	getTimeDisplay();
+        	displayTime();
         }
 	}
 

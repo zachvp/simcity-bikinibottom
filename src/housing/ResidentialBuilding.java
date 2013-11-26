@@ -120,7 +120,7 @@ public class ResidentialBuilding extends Building {
 	@Override
 	public JPanel getInfoPanel() {
 		// TODO Auto-generated method stub
-		return new HousingInfoPanel(this);
+		return new JPanel();
 	}
 	
 }

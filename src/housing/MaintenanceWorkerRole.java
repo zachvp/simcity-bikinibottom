@@ -155,27 +155,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		gui.DoReturnHome();
 	}
 
-	/* --- Abstract methods from WorkRole --- */
-	@Override
-	public int getShiftStartHour() {
-		return SHIFT_START_HOUR;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return SHIFT_START_MINUTE;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return SHIFT_END_HOUR;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return SHIFT_END_MINUTE;
-	}
-
 	@Override
 	public boolean isAtWork() {
 		return isActive();

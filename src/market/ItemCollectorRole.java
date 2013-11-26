@@ -67,14 +67,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		super(person, cL);
 	}
 	
-
-	//Working Hour
-		int startinghour 	= Constants.MarketWorkRoleStartingHour;
-		int startingminutes = Constants.MarketWorkRoleStartingMinutes;
-		int endinghour 		= Constants.MarketWorkRoleEndingHour;
-		int endingminutes	= Constants.MarketWorkRoleEndingMinutes;
-	
-	
 	//Messages	
 		/**
 		 * A message from Cashier that to collect items
@@ -287,19 +279,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public void setState(ItemCollectorstate s) {
 		state = s;
 	}
-	//Shifts
-	public int getShiftStartHour(){
-		return startinghour;
-	}
-	public int getShiftStartMinute(){
-		return startingminutes;
-	}
-	public int getShiftEndHour(){
-		return endinghour;
-	}
-	public int getShiftEndMinute(){
-		return endingminutes;
-	}
+
 	public boolean isAtWork(){
 		if (this.isActive())
 			return true;

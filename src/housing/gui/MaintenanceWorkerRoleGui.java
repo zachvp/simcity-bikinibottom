@@ -135,4 +135,22 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	public int getYPos() {
 		return yPos;
 	}
+
+	@Override
+	public void DoGoToDwelling() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void DoFixProblem() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void DoReturnHome() {
+		// TODO Auto-generated method stub
+		
+	}
 }

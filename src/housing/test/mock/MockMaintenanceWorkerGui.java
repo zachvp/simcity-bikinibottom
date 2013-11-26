@@ -18,4 +18,19 @@ public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	public void setTool(boolean b) {
 		hasTool = b;
 	}
+
+	@Override
+	public void DoGoToDwelling() {
+		log.add("Going to dwelling");
+	}
+
+	@Override
+	public void DoFixProblem() {
+		log.add("Going to dwelling");
+	}
+
+	@Override
+	public void DoReturnHome() {
+		log.add("Going to dwelling");
+	}
 }

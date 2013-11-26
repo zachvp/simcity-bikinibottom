@@ -1,7 +1,9 @@
 package housing;
 
+import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.MaintenanceWorkerGui;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +21,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
 	
 	// graphics
-//	WorkerGui gui = new WorkerRoleGui(this);
+	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
 	
 	/* --- Constants --- */
 	private final int SHIFT_START_HOUR = 6;
@@ -79,17 +81,41 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
-//		DoGoToDwelling(wo.dwelling.getIDNumber());
-//		DoFixProblem(wo.problemType);
+		DoGoToDwelling(wo.dwelling.getIDNumber());
+		waitForInput();
 		
+		DoFixProblem();
+		waitForInput();
+		
+		// update the state and inform the resident that the problem is fixed
 		wo.state = WorkOrderState.FIXED;
 		wo.dwelling.getResident().msgDwellingFixed();
 		wo.dwelling.setCondition(Condition.GOOD);
 		workOrders.remove(wo);
 		
+		// TODO charge landlord for the service
+		
 		log.add("Fixed problem.");
 		
-//		DoReturnHome();
+		DoReturnHome();
+		waitForInput();
+	}
+	
+	/* -- Animation Routines --- */
+	private void DoGoToDwelling(int unitNumber){
+		Do("Going to dwelling.");
+		gui.DoGoToDwelling();
+		// deactivate role
+	}
+	
+	private void DoFixProblem(){
+		Do("Fixing problem.");
+		gui.DoFixProblem();
+	}
+	
+	private void DoReturnHome(){
+		Do("Returning home");
+		gui.DoReturnHome();
 	}
 
 	/* --- Abstract methods from WorkRole --- */

@@ -25,6 +25,7 @@ public class BankBuilding extends Building {
 	SecurityGuardRole securityGuardRole;// = new SecurityGuardRole(person);
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
+	InfoPanel infoPanel;
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	private CityLocation bank;
@@ -128,7 +129,8 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		return new JPanel();
+		infoPanel = new InfoPanel(this);
+		return infoPanel;
 	}
 	
 }

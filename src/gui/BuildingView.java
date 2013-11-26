@@ -1,12 +1,18 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -20,21 +26,31 @@ public class BuildingView extends JPanel implements ActionListener{
 
 	private Dimension d;
 	private InfoList buildingList;
+	private BufferedImage image;
 
 	public BuildingView(int w, int h){
 		d = new Dimension(w, h);//(w-15, h-70);
 		setSize(d);
 		setLayout(new CardLayout());
 		setVisible(true);
+		
+		try {
+			image = ImageIO.read(getClass().getResource("welcomeCard.png"));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 
 		//TODO change to welcome card?
-		JPanel blankCard = new JPanel();
-		blankCard.setSize(d);
-		blankCard.setPreferredSize(d);
-		blankCard.setMaximumSize(d);
-		blankCard.setMinimumSize(d);
-		blankCard.setBackground(Color.LIGHT_GRAY);
-		add(blankCard, "blank");
+		JPanel welcomeCard = new JPanel();
+		welcomeCard.setPreferredSize(d);
+		welcomeCard.setMaximumSize(d);
+		welcomeCard.setMinimumSize(d);
+		welcomeCard.setLayout(new BorderLayout());
+		JLabel imageLabel = new JLabel(new ImageIcon(image));
+		welcomeCard.add(imageLabel, BorderLayout.CENTER);
+		add(welcomeCard, "blank");
 	}
 	
 	/**
@@ -72,7 +88,6 @@ public class BuildingView extends JPanel implements ActionListener{
 	public Dimension getDim(){
 		return d;
 	}
-
 
 	
 	public void actionPerformed(ActionEvent e) {

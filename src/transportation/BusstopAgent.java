@@ -17,7 +17,7 @@ import agent.Agent;
 public class BusstopAgent extends Agent implements Busstop {
 	
 	//List of Passengers waiting for the bus.
-	List<Passenger> peopleWaiting = new ArrayList<Passenger>();
+	private List<Passenger> peopleWaiting = new ArrayList<Passenger>();
 	
 	//Pointer to the Corner where this bus stop is.
 	Corner corner;
@@ -96,7 +96,7 @@ public class BusstopAgent extends Agent implements Busstop {
 	}
 
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if (currentBus != null) {
 			givePassengers();
 			return true;
@@ -117,4 +117,10 @@ public class BusstopAgent extends Agent implements Busstop {
 		return corner;
 	}
 
+	/**
+	 * @return the peopleWaiting
+	 */
+	public List<Passenger> getPeopleWaiting() {
+		return peopleWaiting;
+	}
 }

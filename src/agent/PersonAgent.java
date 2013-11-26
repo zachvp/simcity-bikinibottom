@@ -3,6 +3,7 @@ package agent;
 import gui.Building;
 import housing.ResidentRole;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,8 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private Set<Role> roles;
 	
+	private Map<String, Integer> shoppingList;
+	
 	private PersonEvent event;
 	private HungerLevel hungerLevel;
 	
@@ -64,6 +67,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.name = name;
 		this.roles = new HashSet<Role>();
+		
+		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 		
 		this.event = PersonEvent.NONE;
 		this.hungerLevel = HungerLevel.HUNGRY;
@@ -280,6 +285,11 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setCar(Car car) {
 		this.car = car;
+	}
+	
+	@Override
+	public Map<String, Integer> getShoppingList(){
+		return shoppingList;
 	}
 	
 	// ---- Eating out

@@ -63,7 +63,7 @@ public class PersonAgent extends Agent implements Person {
 		this.roles = new HashSet<Role>();
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = HungerLevel.NEUTRAL;
+		this.hungerLevel = HungerLevel.HUNGRY;
 		
 		this.timeManager = TimeManager.getInstance();
 		

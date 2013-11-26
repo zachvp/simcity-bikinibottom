@@ -37,6 +37,10 @@ public abstract class WorkRole extends Role {
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
+	public String getShortName() {
+		return getClass().getSimpleName();
+	}
+	
 	public void setPerson(Person person) {
 		super.setPerson(person);
 		ClassifiedsClass.getClassifiedsInstance().notifyListeners();

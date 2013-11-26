@@ -57,10 +57,10 @@ public class InfoPanel extends JPanel implements ActionListener{
 		//System.out.println("update info with "+person.getName());
 		info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
-						//+ "<div> Job: "+ person.getJob() +"</div><div>&nbsp;</div>"
-						//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
-						//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
-						//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
+						+ "<div> Job: "+ person.getWorkRole().getShortName() +"</div><div>&nbsp;</div>"
+						+ "<div> Residence: "+ person.getResidentRole().getDwelling() + "</div><div>&nbsp;</div>"
+						+ "<div> Money: $"+ person.getWallet().getCashOnHand() +"</div><div>&nbsp;</div>"
+						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
 				);
 		validate();
 	}

@@ -50,7 +50,7 @@ public class ResidentDwelling implements Dwelling {
 		this.payRecipient = building.getPayRecipient();
 		this.worker = building.getWorker();
 		
-		this.resident = new ResidentRole(null, building);
+		this.resident = new ResidentRole(null, building, this);
 		this.building.addResident(resident);
 		
 //		log.add("Creating dwelling with start condition " + startCondition);

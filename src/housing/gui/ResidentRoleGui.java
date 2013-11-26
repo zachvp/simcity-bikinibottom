@@ -16,6 +16,7 @@ import agent.gui.Gui;
  * @author Zach VP
  *
  */
+
 public class ResidentRoleGui implements Gui, ResidentGui {
 
 	private Resident resident = null;

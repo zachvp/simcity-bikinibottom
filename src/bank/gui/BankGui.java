@@ -162,6 +162,11 @@ public class BankGui extends JPanel implements ActionListener {
     public AnimationPanel getAnimationPanel()  {
     	return animationPanel;
     }
+    
+    //used for open/closed sign
+    public LayoutGui getLayoutGui() {
+    	return layoutGui;
+    }
 
 
     /**

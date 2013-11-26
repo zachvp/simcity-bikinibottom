@@ -1,6 +1,7 @@
 package bank;
 
 import java.util.ArrayList;
+import bank.gui.BankBuilding;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -27,10 +28,14 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private Semaphore active = new Semaphore(0, true);
 	SecurityGuardGui securityGuardGui;
 	
+	BankBuilding bankBuilding;
+	
 	ScheduleTask task = new ScheduleTask();
 	
 	boolean endWorkShift = false;
 	boolean atWork;
+	
+	double paycheckAmount = 200;
 	
 	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
 
@@ -61,13 +66,15 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
 	
-	int startHour = 6;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
+	int startHour;
+	int startMinute;
+	int endHour;
+	int endMinute;
 	
 	public SecurityGuardRole(Person person, CityLocation bank) {
 		super(person, bank);
+		bankBuilding = (BankBuilding) bank;
+		
 //		this.name = name;
 		atWork = false;
 		Runnable command = new Runnable(){
@@ -76,17 +83,26 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 				//do stuff
 				
 				msgLeaveWork();
-				System.out.println("ClOCKS RUN");
+				
+				bankBuilding.changeOpenSign(false, startHour, startMinute);
+//				System.out.println("ClOCKS RUN");
 				}
 			
 		};
 		
-		// every day at TIME
-		int hour = endHour;
-		int minute = 0;
+		// every day at TIME to end
+		int hour = ((BankBuilding) bank).getClosingHour();
+		int minute = ((BankBuilding) bank).getClosingMinute();
 		
+		bankBuilding . changeOpenSign(false, startHour, startMinute);
 		task.scheduleDailyTask(command, hour, minute);
 		
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+		
+		System.out.println("sdfghjhgfdfghjhgfgh " + startHour);
 	}
 	
 	public String getCustomerName() {
@@ -174,6 +190,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	private void goToWork() {
 		atWork = true;
+		bankBuilding.changeOpenSign(true, startHour, startMinute);
 		doGoToDesk();
 		acquireSemaphore(active);
 	}
@@ -186,6 +203,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 	
 	private void goOffWork() {
+		
+		addPaycheckToWallet();
 		doEndWorkDay();
 		acquireSemaphore(active);
 		this.deactivate();
@@ -217,6 +236,14 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		if(waitingCustomers.isEmpty() && endWorkShift){
 			endWorkDay();
 		}
+	}
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 * 
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
 //	private void

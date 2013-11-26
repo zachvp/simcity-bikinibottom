@@ -90,6 +90,8 @@ public class TellerRole extends WorkRole implements Teller {
 	public TellerRole(Person person, CityLocation bank) {
 		super(person, bank);
 		
+		initShift();
+		
 		atWork = false;
 		// ask everyone for rent
 		Runnable command = new Runnable(){
@@ -113,7 +115,7 @@ public class TellerRole extends WorkRole implements Teller {
 		endMinute =((BankBuilding) bank).getClosingMinute();
 
 		
-		task.scheduleDailyTask(command, hour, minute);
+//		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 //	public TellerRole(PersonAgent person, AccountManager am, LoanManager lm, int deskPosition){
@@ -250,6 +252,7 @@ public class TellerRole extends WorkRole implements Teller {
 			goOffWork();
 			return true;
 		}
+
 		return false;
 	}
 	// Actions

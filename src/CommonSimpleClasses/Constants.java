@@ -45,7 +45,7 @@ public interface Constants {
 	/**
 	 * Whether EventLog should log events.
 	 */
-	public static final boolean LOG = false;
+	public static final boolean LOG = true;
 	
 	/**
 	 * Whether print statements should execute.

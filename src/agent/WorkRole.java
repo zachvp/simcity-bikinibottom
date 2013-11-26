@@ -6,6 +6,7 @@ import housing.interfaces.Dwelling;
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.TimeManager;
 
 /**
@@ -20,21 +21,25 @@ public abstract class WorkRole extends Role {
 	
 	public WorkRole() {
 		super();
+		initShift();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person) {
 		super(person);
+		initShift();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person, CityLocation loc) {
 		super(person, loc);
+		initShift();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(CityLocation loc) {
 		super(null, loc);
+		initShift();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
@@ -46,6 +51,33 @@ public abstract class WorkRole extends Role {
 		super.setPerson(person);
 	}
 	
+	public void initShift() {
+		int initHour = (getShiftStartHour() - getWorkStartThresholdHours());
+		int initMin = (getShiftStartMinute() - getWorkStartThresholdMinutes());
+		
+		ScheduleTask task = new ScheduleTask();
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				stateChanged();
+			}
+			
+		};
+		
+		
+		task.scheduleDailyTask(command, initHour, initMin);
+		//get start time substract thresh hours times const.hour and thresh minute * const.minute 
+		//create a daily task with new time i have with a delay of Constants.DAY / (llok at how other scheds are done)
+	}
+	
+	public int getWorkStartThresholdHours() {
+		return 2;
+	}
+	
+	public int getWorkStartThresholdMinutes() {
+		return 0;
+	}
 	/**
 	 * The hour of day this person's work shift starts, in 24-hour time.
 	 * @return an integer in the range [0,23]

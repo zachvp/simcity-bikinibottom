@@ -402,6 +402,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Accessors, etc.
 
+	public double getStrangeAmount() {
+		 return (myTooLittle() + myTooMuch())/2;
+	}
+	
 	public void addTeller(TellerRole t) {
 		teller = t;
 	}

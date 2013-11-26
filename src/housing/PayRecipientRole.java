@@ -51,7 +51,19 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	
 	// data for the worker
 	MaintenanceWorkerRole worker;
-	private List<Double> bills = Collections.synchronizedList(new ArrayList<Double>());
+	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>());
+	
+	
+	// class MyBill from worker
+	enum BillState { RECEIVED, PAYING, PAID }
+	private class MyBill {
+		double amount;
+		BillState state;
+		
+		MyBill(double amount, MaintenanceWorkerRole role) {
+			state = BillState.RECEIVED;
+		}
+	}
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -59,7 +71,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		PAYMENT_PAID, DONE, };
 	
 	// class is public for testing purposes
-	public class MyResident{
+	public class MyResident {
 		Dwelling dwelling;
 		double owes;
 		double hasPaid;
@@ -113,9 +125,10 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		stateChanged();
 	}
 	
-	public void msgServiceCharge(double charge, MaintenanceWorker worker) {
+	public void msgServiceCharge(double charge, MaintenanceWorkerRole worker) {
 		Do("Received bill for charge");
-		bills.add(charge);
+		this.worker = worker;
+		bills.add(new MyBill(charge, worker));
 		stateChanged();
 	}
 
@@ -129,12 +142,15 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		
 		// make payment(s) to the maintenance worker
 		if(person.getWallet().getCashOnHand() > 0) {
-			for(double bill : bills){
-				tryToMakePayment(bill);
-				return true;
+			synchronized(bills){
+				for(MyBill bill: bills){
+					if(bill.state == BillState.RECEIVED){
+						tryToMakePayment(bill);
+						return true;
+					}
+				}
 			}
 		}
-		
 		
 		// charge all residents after time of the month has passed
 		synchronized(residents) {
@@ -170,21 +186,23 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	}
 
 	/* ----- Actions ----- */
-	private void tryToMakePayment(double bill) {
+	private void tryToMakePayment(MyBill bill) {
 		Do("Attempting to pay service charge");
+		bill.state = BillState.PAYING;
 		
 		double cash = person.getWallet().getCashOnHand();
 		
-		if(cash >= bill){
-			worker.msgHereIsPayment(bill);
-			cash -= bill;
+		if(cash >= bill.amount){
+			worker.msgHereIsPayment(bill.amount);
+			cash -= bill.amount;
 			person.getWallet().setCashOnHand(cash);
+			bill.state = BillState.PAID;
 			bills.remove(bill);
 		}
 		
 		else {
 			Do("Not enough money to pay service charge.");
-			person.getWallet().setMoneyNeeded(person.getWallet().getMoneyNeeded() + bill);
+			person.getWallet().setMoneyNeeded(person.getWallet().getMoneyNeeded() + bill.amount);
 		}
 	}
 	

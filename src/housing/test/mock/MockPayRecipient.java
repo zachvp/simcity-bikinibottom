@@ -2,6 +2,7 @@ package housing.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
+import housing.MaintenanceWorkerRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
@@ -32,8 +33,8 @@ public class MockPayRecipient extends Mock implements PayRecipient {
 	}
 
 	@Override
-	public void msgServiceCharge(double charge, MaintenanceWorker worker) {
-		log.add("Received bill for maintenance.");
-		this.worker = worker;
+	public void msgServiceCharge(double charge, MaintenanceWorkerRole role) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -11,6 +11,6 @@ public interface PayRecipient {
 
 	public void addResident(Dwelling dwelling);
 
-	public void msgServiceCharge(double charge, MaintenanceWorker role);
+	public void msgServiceCharge(double charge, MaintenanceWorkerRole role);
 
 }

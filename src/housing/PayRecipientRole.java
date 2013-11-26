@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
 import agent.WorkRole;
@@ -25,6 +27,9 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	ScheduleTask schedule = new ScheduleTask();
+	
+	// for testing. Listens to the ScheduleTask 
+	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
 	
@@ -124,6 +129,16 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 				}
 			}
 		}
+		
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				
+			}
+		};
+		
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
 		
 		return false;
 	}

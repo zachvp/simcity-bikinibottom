@@ -1,10 +1,13 @@
 package classifieds;
 
+import gui.Building;
 import housing.interfaces.Dwelling;
 
 import java.util.List;
+import java.util.Set;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.WorkRole;
 
@@ -18,6 +21,8 @@ public interface Classifieds {
 	 */
 	List<WorkRole> getJobsForBuilding(CityBuilding building, 
 			boolean returnOnlyOpenPositions);
+	
+	Set<CityLocation> getWorkplaces();
 	
 	/** Adds a role to the register. ALL WorkRoles must do
 	 * this.

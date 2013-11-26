@@ -18,4 +18,9 @@ public class MockMaintenanceWorker extends Mock implements MaintenanceWorker {
 		log.add("Received message 'file work order.'");
 	}
 
+	@Override
+	public void msgAtDestination() {
+		log.add("Received message 'at destination'");
+	}
+
 }

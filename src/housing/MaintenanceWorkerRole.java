@@ -58,6 +58,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		stateChanged();
 	}
 	
+	public void msgAtDestination(){
+		doneWaitingForInput();
+	}
+	
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		

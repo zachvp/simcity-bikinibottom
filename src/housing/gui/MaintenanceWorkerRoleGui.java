@@ -1,6 +1,8 @@
 package housing.gui;
 
+import housing.MaintenanceWorkerRole;
 import housing.ResidentRole;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -26,7 +28,7 @@ import agent.gui.Gui;
 
 public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
-	private Resident worker = null;
+	private MaintenanceWorker worker = null;
 	
 	// this prevents excessive releases from occurring
 	private boolean canRelease = false;
@@ -61,12 +63,8 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	private final int JAZZER_SPOT_Y = yPos;
 	
 	/* --- Constructor --- */
-	public MaintenanceWorkerRoleGui(ResidentRole role, LayoutGui gui) {
+	public MaintenanceWorkerRoleGui(MaintenanceWorkerRole role) {
 		this.worker = role;
-		
-		// randomize number for resident gui
-		Random generator = new Random();
-		int res = generator.nextInt(2);
 		
 		try {
 			workerImage = ImageIO.read(getClass().getResource("spongebob.png"));
@@ -115,7 +113,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 		return present;
 	}
 
-	public Resident getAgent(){
+	public MaintenanceWorker getAgent(){
 		return worker;
 	}
 

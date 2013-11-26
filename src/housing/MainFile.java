@@ -12,7 +12,8 @@ import agent.Role;
 import agent.interfaces.Person;
 
 public class MainFile extends JFrame {
-	HousingComplex complex = new HousingComplex();
+	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
+	HousingComplex complex = new HousingComplex(building);
 	Map<Person, Role> population;
 
 	public MainFile() {

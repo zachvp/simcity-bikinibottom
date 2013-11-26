@@ -56,12 +56,7 @@ public class ResidentialBuilding extends Building {
 		
 		// set up complex
 		this.residence = this;
-		this.complex = new HousingComplex();
-		
-		// add the resident roles
-		for(int i = 0; i < 4; i++){
-			this.population.put(null, new ResidentRole(null, this));
-		}
+		this.complex = new HousingComplex(this);
 		
 		// manager for this building 
 		landlord = new PayRecipientRole(null, this);
@@ -75,7 +70,18 @@ public class ResidentialBuilding extends Building {
 		this.timeOffset = instanceCount + timeDifference;
 		instanceCount++;
 	}
+	
+	public void addResident(ResidentRole resident){
+		this.population.put(null, resident);
+	}
+	
+	public MaintenanceWorkerRole getWorker(){
+		return worker;
+	}
 
+	public PayRecipientRole getPayRecipient(){
+		return landlord;
+	}
 	@Override
 	public XYPos entrancePos() {
 		return entrancePos;

@@ -3,12 +3,15 @@ package housing.gui;
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
+import housing.ResidentialBuilding;
+
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityBuilding;
 import agent.Agent;
 import agent.Role;
 import agent.interfaces.Person;
@@ -33,7 +36,7 @@ public class HousingComplex extends JPanel {
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
-	public HousingComplex() {
+	public HousingComplex(ResidentialBuilding building) {
 		// create layout and set the layout manager
 		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 		this.setLayout(complexLayout);
@@ -43,7 +46,7 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i);
+			HousingGui gui = new HousingGui(i, building);
 			this.add(gui);
 			housingUnits.add(gui);
 		}

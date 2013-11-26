@@ -64,7 +64,6 @@ public class ResidentRole extends Role implements Resident {
 	});
 	
 	// TODO resolve buying groceries at market 
-	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
@@ -277,7 +276,7 @@ public class ResidentRole extends Role implements Resident {
 		// add to grocery list if the food item is low
 		if(f.amount == f.low) {
 			Do("Adding " + f.type + " to grocery list");
-			groceries.put(f.type, f.capacity - f.low);
+			person.getShoppingList().put(f.type, f.capacity - f.low);
 		}
 		
 		// set a timer with a delay using method from abstract Role class
@@ -390,11 +389,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public Map<String, Integer> getGroceries() {
-		return groceries;
-	}
-
-	public void setGroceries(Map<String, Integer> groceries) {
-		this.groceries = groceries;
+		return person.getShoppingList();
 	}
 
 	public Map<String, Food> getRefrigerator() {

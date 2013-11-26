@@ -30,7 +30,7 @@ import agent.interfaces.Person;
  *
  */
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
-	private DeliveryGuyGui deliveryguyGui = null;
+	private DeliveryGuyGui deliveryguyGui;
 	private String name;
 	private boolean Available = true;
 	private Cashier cashier;
@@ -40,14 +40,14 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private Semaphore atDeliver = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	
-	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
-	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
+	public enum DeliveryGuystate {NotAtWork, GoingToWork, Idle, OffWork, Delivering};
+	DeliveryGuystate state = DeliveryGuystate.NotAtWork;
 
 	//Working Hour
-		int startinghour = 8;
-		int startingminutes = 29;
-		int endinghour = 18;
-		int endingminutes = 0;
+		int startinghour 	= Constants.MarketWorkRoleStartingHour;
+		int startingminutes = Constants.MarketWorkRoleStartingMinutes;
+		int endinghour 		= Constants.MarketWorkRoleEndingHour;
+		int endingminutes	= Constants.MarketWorkRoleEndingMinutes;
 		
 		/**
 		 * The one and only one constructor for the DeliveryGuyRole
@@ -133,7 +133,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 	protected boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
-		if (state == DeliveryGuystate.GoingToWork){
+		if (state == DeliveryGuystate.NotAtWork){
 			GoToWork();
 			return true;
 		}
@@ -150,6 +150,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 
 	//Action
 	private void GoToWork(){
+		state = DeliveryGuystate.GoingToWork;
 		deliveryguyGui.BackReadyStation();
 	}
 	/**
@@ -187,7 +188,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			e.printStackTrace();
 		}
 		this.deactivate();
-		state = DeliveryGuystate.GoingToWork;
+		state = DeliveryGuystate.NotAtWork;
 	}
 	
 	

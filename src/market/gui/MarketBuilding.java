@@ -94,7 +94,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		}
 		*/
 		List<Item> ShoppingList = new ArrayList<Item>();
-		Map<String,Integer> GroceryList = person.getResidentRole().getGroceries();
+		Map<String,Integer> GroceryList = person.getShoppingList();
 		for (int i=0;i<Constants.FOODS.size();i++){
 			ShoppingList.add(new Item(Constants.FOODS.get(i), GroceryList.get(Constants.FOODS.get(i))));
 		}

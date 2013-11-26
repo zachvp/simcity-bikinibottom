@@ -18,6 +18,7 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import market.interfaces.ItemCollectorGuiInterfaces;
+import CommonSimpleClasses.Constants;
 import agent.PersonAgent;
 import agent.WorkRole;
 import agent.gui.Gui;
@@ -66,11 +67,12 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		super(person, cL);
 	}
 	
+
 	//Working Hour
-		int startinghour = 6;
-		int startingminutes = 29;
-		int endinghour = 18;
-		int endingminutes = 0;
+		int startinghour 	= Constants.MarketWorkRoleStartingHour;
+		int startingminutes = Constants.MarketWorkRoleStartingMinutes;
+		int endinghour 		= Constants.MarketWorkRoleEndingHour;
+		int endingminutes	= Constants.MarketWorkRoleEndingMinutes;
 	
 	
 	//Messages	

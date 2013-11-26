@@ -31,7 +31,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
 	private MarketRecords records;
-	JPanel info = new MarketInfoPanel(getRecords());
+	JPanel info;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
@@ -49,6 +49,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		instanceCount++;
 		
 		records = new MarketRecords(animationPanel, this);
+		info = new MarketInfoPanel(getRecords());
 	}
 
 	@Override

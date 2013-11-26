@@ -11,7 +11,6 @@ import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
-import housing.interfaces.ResidentGui;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
@@ -77,7 +76,6 @@ public class ResidentDwelling implements Dwelling {
 		
 		this.building.addResident(resident);
 		
-//		log.add("Creating dwelling with start condition " + startCondition);
 		this.condition = startCondition;
 		
 		// determine the starting monthly payment for the property
@@ -110,7 +108,7 @@ public class ResidentDwelling implements Dwelling {
 		int hour = 6;
 		int minute = 10;
 		
-//		schedule.scheduleDailyTask(command, hour, minute);
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	public void setCondition(Constants.Condition condition){

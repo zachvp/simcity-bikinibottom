@@ -61,7 +61,7 @@ public class ResidentialBuilding extends Building {
 		this.population.put(null, worker);
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
 	}
 	

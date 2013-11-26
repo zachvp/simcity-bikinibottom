@@ -57,7 +57,7 @@ public class BankBuilding extends Building {
 		initRoles();
 
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
 	}
 

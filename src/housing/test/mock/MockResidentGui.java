@@ -40,9 +40,4 @@ public class MockResidentGui implements ResidentGui {
 	public void setFood(String type) {
 		log.add("Setting food to " + type);
 	}
-
-	@Override
-	public void setLayoutGui(LayoutGui layoutGui) {
-		log.add("Set layout gui");
-	}
 }

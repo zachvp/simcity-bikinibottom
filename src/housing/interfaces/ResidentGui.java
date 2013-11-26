@@ -1,7 +1,5 @@
 package housing.interfaces;
 
-import housing.gui.LayoutGui;
-
 public interface ResidentGui {
 	public void DoGoToStove();
 	
@@ -12,6 +10,4 @@ public interface ResidentGui {
 	public void DoJazzercise();
 
 	public void setFood(String type);
-
-	public void setLayoutGui(LayoutGui layoutGui);
 }

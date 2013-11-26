@@ -40,7 +40,7 @@ public interface Constants {
 	 * True only for development versions of this program.
 	 */
 	// TODO disable DEBUG constant before final release
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	
 	/**
 	 * Whether EventLog should log events.

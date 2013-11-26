@@ -1,6 +1,7 @@
 package bank;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import bank.interfaces.Teller;
 //Build should not be problem
 public class AccountManagerRole extends WorkRole implements AccountManager {
 	private String name;
-	int currentIdNum = 1000; //starts at 1000 and increments TODO make this and accountmap static
+	static int currentIdNum = 1000; //starts at 1000 and increments TODO make this and accountmap static
 	List<Teller> tellers = new ArrayList<Teller>();
 	List<Task> tasks = new ArrayList<Task>();
 	
@@ -60,7 +61,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		BankCustomer bc;
 		double amount;
 	}
-	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();//make STATIC
+	static Map<Integer, Account> accountMap = Collections.synchronizedMap(new HashMap<Integer, Account>());//make STATIC
 	
 	int startHour = 6;
 	int startMinute = 0;

@@ -121,6 +121,7 @@ public class PersonAgent extends Agent implements Person {
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			activateRoleForLoc(getPassengerRole().getLocation(),
 					atLocationForWork());
+			event = PersonEvent.NONE;
 			return true;
 		}
 		

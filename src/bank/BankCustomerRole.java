@@ -149,6 +149,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public String getCustomerName() {
 		return name;
 	}
+	
+	public void activate() {
+		super.activate();
+		msgGoToSecurityGuard( ((BankBuilding) getLocation()).getSecurity() );
+	}
+	
 	// Messages
 
 	
@@ -158,6 +164,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 //		stateChanged();
 	}
 	public void msgGoToSecurityGuard(SecurityGuard sg){
+//		System.out.println("WOW SUCH SECURITY. WOW");
 		securityGuard = sg;
 		event = Event.goingToSecurityGuard;
 		stateChanged();
@@ -287,6 +294,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		if(accountId == -1) {//have not been assigned accountID yet
 			Do("need to open account");
 			double initialDepositAmount = 10;//this.getPerson().getWallet().getCashOnHand() * .2;
+			
 			if(this.getPerson().getWallet().getCashOnHand() < initialDepositAmount) {//is too poor/worthless to afford initialdeposit
 				teller.msgINeedALoan(this);
 				state= State.gettingLoan;
@@ -318,7 +326,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		}
 		if(this.getPerson().getWallet().getCashOnHand() > this.getPerson().getWallet().getTooMuch()) {
 			Do("Im depositing");
-			teller.msgDepositMoney(this, accountId, this.getPerson().getWallet().getTooLittle()); //TODO for testing
+			double depositAmount = myCash() - ((myTooMuch() + myTooLittle())/2);
+			teller.msgDepositMoney(this, accountId, depositAmount); //TODO for testing
 			state = State.depositing;
 			return;
 		}
@@ -398,6 +407,17 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		teller = t;
 	}
 	
+	private double myCash() {
+		return this.getPerson().getWallet().getCashOnHand();
+	}
+	
+	private double myTooLittle() {
+		return this.getPerson().getWallet().getTooLittle();
+	}
+	
+	private double myTooMuch() {
+		return this.getPerson().getWallet().getTooMuch();
+	}
 	
 	public void setGui(BankCustomerGuiInterface b) {
 		bankCustomerGui = b;

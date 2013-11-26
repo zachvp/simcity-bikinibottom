@@ -51,7 +51,7 @@ public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 		yPos = entranceY;
 		xDestination = entranceX;
 		yDestination = entranceY;
-		c.msgGotToTeller();
+//		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);
 		//maitreD = m;

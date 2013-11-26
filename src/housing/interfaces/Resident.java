@@ -1,7 +1,5 @@
 package housing.interfaces;
 
-import java.util.Map;
-
 public interface Resident {
 	/* ----- Normative Messages  ----- */
 	/** From payment collector

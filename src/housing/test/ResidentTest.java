@@ -32,7 +32,7 @@ public class ResidentTest extends TestCase {
 		super.setUp();
 		dwelling.setCondition(Condition.GOOD);
 		
-		resident = new ResidentRole(residentPerson, null, dwelling);
+		resident = new ResidentRole(residentPerson, null, dwelling, null);
 	}
 	
 	/**

@@ -19,6 +19,7 @@ import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
+import agent.gui.Gui;
 
 /**
  * ResidentRole is a more abstract class that can be extended by
@@ -41,14 +42,14 @@ public class ResidentRole extends Role implements Resident {
 	
 	// state for tasks. The Role will deactivate if it is not performing any tasks.
 	// used to determine when the role should terminate and transition to a city role
-	enum TaskState { NONE, DOING_TASK }
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
 	TaskState task = TaskState.NONE;
 	
 	// graphics
-	private ResidentGui gui = new ResidentRoleGui(this);
+	private ResidentGui gui;
 	
 	// TODO: this will be set true by the 
-	private boolean hungry = false;
+	private boolean hungry = true;
 	
 	// rent data
 	private double oweMoney = 0;
@@ -91,9 +92,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling) {
+	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
 		super(agent, residence);
 		this.dwelling = dwelling;
+		
+		this.gui = new ResidentRoleGui(this, gui);
 	}
 	
 	/* ----- Messages ----- */
@@ -119,6 +122,11 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		
+		if(task == TaskState.FIRST_TASK){
+			gui.setPresent(true);
+			task = TaskState.NONE;
+		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
 			eatFood();
@@ -153,18 +161,22 @@ public class ResidentRole extends Role implements Resident {
 		
 		// idle behavior
 		DoJazzercise();
+		DoMoveGary();
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		Runnable command = new Runnable() {
-			public void run(){
-				deactivate();
-			}
-		};
-		
-		// schedule a delay for food consumption
-		listener.taskFinished(schedule);
-		schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		if(task == TaskState.NONE){
+			Runnable command = new Runnable() {
+				public void run(){
+					Do("Deactivating role");
+					task = TaskState.FIRST_TASK;
+					deactivate();
+				}
+			};
+			// schedule a delay for food consumption
+			listener.taskFinished(schedule);
+			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		}
 		
 		return false;
 	}
@@ -190,32 +202,34 @@ public class ResidentRole extends Role implements Resident {
 			person.getWallet().setCashOnHand(cash);
 			Do("Not enough money to cover full cost. Cash now " + cash);
 			// TODO person.needToGoToBank()
+			person.getWallet().setMoneyNeeded(person.getWallet().getMoneyNeeded() + oweMoney);
 		}
 		else {
 			Do("Don't have any money to pay my dues.");
 			// TODO person.needToGoToBank()
 		}
+		DoMoveGary();
 	}
 	
 	private void eatFood() {
 		hungry = false;
+		Do("Eating food " + food.type);
 		
 		// pick up the food
 		DoGoToStove();
 		waitForInput();
 		
 		// display the food being carried
-		DoSetFood(food.type);
+		DoSetFood(true);
 		
 		// got sit at table and eat
 		DoGoToTable();
 		waitForInput();
-		Do("Eating food " + food.type);
 		
 		// set a timer for eating
 		Runnable command = new Runnable() {
 			public void run(){
-				DoSetFood("");
+				DoSetFood(false);
 				food = null;
 				doneWaitingForInput();
 				stateChanged();
@@ -230,6 +244,7 @@ public class ResidentRole extends Role implements Resident {
 		
 		// the cook/eat food task has completed, so the role is free to deactivate
 		task = TaskState.NONE;
+		DoMoveGary();
 	}
 	
 	private void cookFood(Food f) {
@@ -239,18 +254,20 @@ public class ResidentRole extends Role implements Resident {
 		
 		Do("Cooking food");
 		food = f;
+		if(food == null) Do("Food is nulll");
 		
 		// retrieve food from refrigerator
 		DoGoToRefrigerator();
 		waitForInput();
+		DoMoveGary();
 		
 		// carry food from fridge to stove
-		DoSetFood(food.type);
+		DoSetFood(true);
 		DoGoToStove();
 		waitForInput();
 		
 		// place food on stove
-		DoSetFood("");
+		DoSetFood(false);
 		f.amount--;
 		food.state = FoodState.COOKING;
 		
@@ -264,6 +281,7 @@ public class ResidentRole extends Role implements Resident {
 		Runnable command = new Runnable(){
 			public void run(){
 				timerDoneCooking();
+				DoMoveGary();
 			}
 		};
 		
@@ -276,9 +294,14 @@ public class ResidentRole extends Role implements Resident {
 		Do("This house needs fixing! Calling a maintenance worker.");
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
+		DoMoveGary();
 	}
 	
 	/* --- Animation Routines --- */
+	private void DoMoveGary(){
+		gui.DoMoveGary();
+	}
+	
 	private void DoGoToStove() {
 		Do("Going to stove.");
 		gui.DoGoToStove();
@@ -294,8 +317,8 @@ public class ResidentRole extends Role implements Resident {
 		gui.DoGoToRefrigerator();
 	}
 	
-	private void DoSetFood(String type) {
-		gui.setFood(type);
+	private void DoSetFood(boolean state) {
+		gui.setFood(state);
 	}
 	
 	private void DoJazzercise() {
@@ -385,5 +408,9 @@ public class ResidentRole extends Role implements Resident {
 
 	public Dwelling getDwelling() {
 		return dwelling;
+	}
+
+	public Gui getGui() {
+		return (Gui) gui;
 	}
 }

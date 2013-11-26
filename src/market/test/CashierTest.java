@@ -14,6 +14,7 @@ import market.Item;
 import market.CashierRole.Customerstate;
 import market.gui.CashierGui;
 import market.gui.MarketBuilding;
+import market.interfaces.ItemCollector;
 import market.test.mock.MockCashierGui;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
@@ -25,7 +26,6 @@ public class CashierTest extends TestCase
 	MockCustomer Customer1;
 	MockCustomer Customer2;
 	MockItemCollector ItemCollector1;
-	MockItemCollector ItemCollector2;
 	Map<String, Integer> InventoryList;
 	
 	/**
@@ -52,7 +52,8 @@ public class CashierTest extends TestCase
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");
 		ItemCollector1 = new MockItemCollector("ItemCollector1");
-		ItemCollector2 = new MockItemCollector("ItemCollector2");
+		List<ItemCollector> ICList = new ArrayList<ItemCollector>();
+		ICList.add(ItemCollector1);
 		
 		
 	}	
@@ -67,7 +68,7 @@ public class CashierTest extends TestCase
 		Customer2.Cashier = Cashier;
 		ItemCollector1.Cashier = Cashier;
 		ItemCollector1.setInventoryList(Cashier.getInventoryList());
-		ItemCollector1.setInventoryList(Cashier.getInventoryList());
+		
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
 			tempInventoryList.add(new Item("Kelp Rings", 1));
@@ -79,8 +80,11 @@ public class CashierTest extends TestCase
 		}
 		cashierGui = new MockCashierGui(Cashier);
 		Cashier.setGui(cashierGui);
+		
 		if (Cashier.getGui() == null)
 			System.out.println("Its null");
+		
+		Cashier.setState(Cashierstate.Working);
 		
 		//check preconditions
 		//Check MyCustomerlist
@@ -94,7 +98,7 @@ public class CashierTest extends TestCase
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
-			Cashier.setState(Cashierstate.Working);
+			
 			
 		//Step 1
 			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
@@ -114,8 +118,9 @@ public class CashierTest extends TestCase
 		//Check MyIClist
 			assertEquals("Cashier should have 1 IC in it. It doesn't.",Cashier.getICList().size(), 1);
 		//Check Cashier.PaEaA calls a function (GoGetItem)
-			assertTrue("Cashier's scheduler shouldn't have returned false , but didn't.", Cashier.pickAndExecuteAnAction());
+			assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 		
+			cashierGui.GoToBench();
 		//Checking the DeliveryList
 			assertEquals("The second one in the Delivery List should be ExpensiveCar",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).name, "LamboFinny");
 			assertEquals("The Expensive Car should be having an amount 0",Cashier.getMyCustomerList().get(0).getDeliveryList().get(1).amount, 0);
@@ -176,7 +181,6 @@ public class CashierTest extends TestCase
 		Customer1.Cashier = Cashier;
 		Customer2.Cashier = Cashier;
 		ItemCollector1.Cashier = Cashier;
-		ItemCollector2.Cashier = Cashier;
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
 			tempInventoryList.add(new Item("Kelp Rings", 1));
@@ -191,6 +195,8 @@ public class CashierTest extends TestCase
 		Cashier.setGui(cashierGui);
 		if (Cashier.getGui() == null)
 			System.out.println("Its null");
+		
+		Cashier.setState(Cashierstate.Working);
 		
 		//check preconditions
 		//Check MyCustomerlist
@@ -295,7 +301,6 @@ public class CashierTest extends TestCase
 		Customer1.Cashier = Cashier;
 		Customer2.Cashier = Cashier;
 		ItemCollector1.Cashier = Cashier;
-		ItemCollector2.Cashier = Cashier;
 		List<Item> tempInventoryList = new ArrayList<Item>();
 		{
 			tempInventoryList.add(new Item("Kelp Rings", 1));
@@ -311,6 +316,7 @@ public class CashierTest extends TestCase
 		if (Cashier.getGui() == null)
 			System.out.println("Its null");
 		
+		Cashier.setState(Cashierstate.Working);
 		//check preconditions
 		//Check MyCustomerlist
 			assertEquals("Cashier should have 0 Customer in it. It doesn't.",Cashier.getMyCustomerList().size(), 0);

@@ -2,7 +2,9 @@ package bank.gui;
 
 import gui.Building;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -10,6 +12,7 @@ import javax.swing.JPanel;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
+import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
@@ -17,6 +20,7 @@ import bank.LoanManagerRole;
 import bank.SecurityGuardRole;
 import bank.TellerRole;
 import bank.interfaces.SecurityGuard;
+import bank.interfaces.Teller;
 
 //creates animation panel and starts building
 public class BankBuilding extends Building {
@@ -38,7 +42,10 @@ public class BankBuilding extends Building {
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
 	
-	private SecurityGuard security;
+	private SecurityGuardRole security;
+	AccountManagerRole account;
+	LoanManagerRole loan;
+	List<TellerRole> tellers;
 
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -57,11 +64,16 @@ public class BankBuilding extends Building {
 	private void initRoles() {
 		// Create the roles
 		setSecurity(new SecurityGuardRole(null, this));
-		AccountManagerRole account = new AccountManagerRole(null, this);
-		LoanManagerRole loan = new LoanManagerRole(null, this);
+		account = new AccountManagerRole(null, this);
+		loan = new LoanManagerRole(null, this);
 		TellerRole tell1 = new TellerRole(null, this);
 		TellerRole tell2 = new TellerRole(null, this);
 		TellerRole tell3 = new TellerRole(null, this);
+		
+		tellers = new ArrayList<TellerRole>();
+		tellers.add(tell1);
+		tellers.add(tell2);
+		tellers.add(tell3);
 
 		// Tell the security guard about the roles
 		getSecurity().addRole(account);
@@ -175,12 +187,37 @@ public class BankBuilding extends Building {
 		return infoPanel;
 	}
 
-	public SecurityGuard getSecurity() {
+	public SecurityGuardRole getSecurity() {
 		return security;
 	}
 
-	public void setSecurity(SecurityGuard security) {
+	public void setSecurity(SecurityGuardRole security) {
 		this.security = security;
+	}
+	
+	@Override
+	public boolean isOpen() {
+		return securityGuardOnDuty() && accountManagerOnDuty()
+				&& loanManagerOnDuty() && tellerOnDuty();
+	}
+	
+	public boolean securityGuardOnDuty() {
+		return security != null && security.isAtWork();
+	}
+	
+	public boolean accountManagerOnDuty() {
+		return account != null && account.isAtWork();
+	}
+	
+	public boolean loanManagerOnDuty() {
+		return loan != null && loan.isAtWork();
+	}
+	
+	public boolean tellerOnDuty() {
+		for (TellerRole teller : tellers) {
+			if (teller.isAtWork()) { return true; }
+		}
+		return false;
 	}
 
 }

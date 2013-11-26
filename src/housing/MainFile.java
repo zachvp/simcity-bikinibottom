@@ -1,16 +1,15 @@
 package housing;
 
-import housing.gui.HousingComplex;
-
 import javax.swing.JFrame;
 
 public class MainFile extends JFrame {
 	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
-	HousingComplex complex = new HousingComplex(building);
+//	HousingComplex complex = new HousingComplex(building);
+		
 
 	public MainFile() {
-		this.add(complex);
-		this.setBounds(50, 50,600, 490);
+		this.add(building.getComplex());
+		this.setBounds(50, 50, 600, 490);
 	}
 	
 	// TODO this is simply a test main() method

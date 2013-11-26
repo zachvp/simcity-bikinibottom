@@ -104,4 +104,10 @@ public class MockCorner extends Mock implements Corner {
 		return null;
 	}
 
+	@Override
+	public void msgIAmCrossing() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

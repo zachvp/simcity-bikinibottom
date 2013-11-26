@@ -3,12 +3,15 @@ package transportation.test.mock;
 import java.util.List;
 
 import CommonSimpleClasses.DirectionEnum;
+import mock.EventLog;
 import mock.Mock;
 import transportation.CornerAgent.MyCorner;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
 
 public class MockVehicle extends Mock implements Vehicle {
+	
+	public EventLog log = new EventLog();
 
 	public MockVehicle(String name) {
 		super(name);
@@ -28,7 +31,7 @@ public class MockVehicle extends Mock implements Vehicle {
 
 	@Override
 	public void msgDriveNow() {
-		// TODO Auto-generated method stub
+		log.add("Got msgDriveNow()");
 
 	}
 

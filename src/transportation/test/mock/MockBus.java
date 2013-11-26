@@ -45,8 +45,7 @@ public class MockBus extends Mock implements Bus {
 
 	@Override
 	public void msgMyAdjCorners(List<MyCorner> cList) {
-		// TODO Auto-generated method stub
-
+		log.add("Received cList of size " + cList.size());
 	}
 
 	@Override

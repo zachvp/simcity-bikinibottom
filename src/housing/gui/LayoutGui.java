@@ -20,6 +20,8 @@ public class LayoutGui implements Gui {
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
+	
+	// used to draw shapes of furniture/appliances 
 	private final int BASE_SIZE = 20;
 	
 	// constants for appliance positions
@@ -31,17 +33,18 @@ public class LayoutGui implements Gui {
 	private BufferedImage backgroundImage;
 	private ImageIcon icon;
 	
-	public LayoutGui(int roomWidth, int roomHeight) {
-		ROOM_WIDTH = roomWidth;
-		ROOM_HEIGHT = roomHeight;
+	public LayoutGui(int dwellingWidth, int dwellingHeight) {
+		ROOM_WIDTH = dwellingWidth;
+		ROOM_HEIGHT = dwellingHeight;
 		
 		// place all of the residential items
-		STOVE_POSITION = new Dimension(ROOM_WIDTH/2, ROOM_HEIGHT/3);
-		TABLE_POSITION = new Dimension(ROOM_WIDTH/4, ROOM_HEIGHT/4);
-		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH/4, 5);
-		DOOR_POSITION = new Dimension(0, ROOM_HEIGHT/4);
-		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH/2, 0);
+		STOVE_POSITION = new Dimension(ROOM_WIDTH - 70, ROOM_HEIGHT / 2 - 50);
+		TABLE_POSITION = new Dimension(ROOM_WIDTH / 2, ROOM_HEIGHT / 2);
+		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH - 90, ROOM_HEIGHT - 95);
+		DOOR_POSITION = new Dimension(ROOM_WIDTH - 100, 25);
+		REFRIGERATOR_POSITION = new Dimension(50, ROOM_HEIGHT / 2 - 30);
 		
+		// add the background image
 		try {
 			backgroundImage = ImageIO.read(getClass().getResource("apartment_background.png"));
 		} catch (IOException e) {
@@ -64,11 +67,11 @@ public class LayoutGui implements Gui {
 		g.setColor(Color.WHITE);
 		
 		// draw shapes
-		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, BASE_SIZE, BASE_SIZE);
-		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, BASE_SIZE, BASE_SIZE);
-		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, BASE_SIZE, BASE_SIZE);
-		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, BASE_SIZE, BASE_SIZE);
-		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, BASE_SIZE, BASE_SIZE);
+//		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, BASE_SIZE, BASE_SIZE);
+//		g.fillRect(TABLE_POSITION.width, TABLE_POSITION.height, BASE_SIZE, BASE_SIZE);
+//		g.fillRect(POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height, BASE_SIZE, BASE_SIZE);
+//		g.fillRect(DOOR_POSITION.width, DOOR_POSITION.height, BASE_SIZE, BASE_SIZE);
+//		g.fillRect(REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height, BASE_SIZE, BASE_SIZE);
 		
 		// draw labels
 		g.setColor(Color.BLACK);

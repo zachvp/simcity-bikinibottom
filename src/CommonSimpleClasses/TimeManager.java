@@ -1,4 +1,4 @@
-package agent;
+package CommonSimpleClasses;
 
 import java.util.Calendar;
 

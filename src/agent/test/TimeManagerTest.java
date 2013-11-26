@@ -1,6 +1,6 @@
 package agent.test;
 
-import agent.TimeManager;
+import CommonSimpleClasses.TimeManager;
 import junit.framework.TestCase;
 
 /**

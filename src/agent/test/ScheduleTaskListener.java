@@ -2,7 +2,7 @@ package agent.test;
 
 import java.util.EventListener;
 
-import agent.interfaces.ScheduleTaskInterface;
+import CommonSimpleClasses.ScheduleTaskInterface;
 
 /**
  * Listens for the task scheduler to finish any one of its routines.

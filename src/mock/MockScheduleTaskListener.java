@@ -1,6 +1,6 @@
-package agent.mock;
+package mock;
 
-import agent.interfaces.ScheduleTaskInterface;
+import CommonSimpleClasses.ScheduleTaskInterface;
 import agent.test.ScheduleTaskListener;
 
 /**

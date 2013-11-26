@@ -1,11 +1,9 @@
 package housing;
 
+import mock.EventLog;
 import classifieds.ClassifiedsClass;
-import agent.Constants;
-import agent.Constants.Condition;
-import agent.Role;
-import agent.Role.ScheduleTask;
-import agent.mock.EventLog;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
@@ -75,7 +73,7 @@ public class ResidentDwelling implements Dwelling {
 			@Override
 			public void run() {
 				// TODO make the dwelling degrade gradually
-				condition = Condition.POOR;
+				condition = Constants.Condition.POOR;
 			}
 		};
 				
@@ -84,7 +82,7 @@ public class ResidentDwelling implements Dwelling {
 		int minute = 10;
 		
 		// TODO make this work in a non-role class
-//		schedule.scheduleDailyTask(command, hour, minute);
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	public void setCondition(Constants.Condition condition){

@@ -1,13 +1,13 @@
 package housing.gui;
 
+import gui.AnimationPanel;
 import housing.ResidentDwelling;
 import housing.ResidentialBuilding;
 import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 
-import agent.Constants.Condition;
-import agent.gui.AnimationPanel;
+import CommonSimpleClasses.Constants.Condition;
 
 /**
  * HousingGui displays individual housing units. It pulls together all of the

@@ -1,6 +1,6 @@
 package housing.interfaces;
 
-import agent.Constants.Condition;
+import CommonSimpleClasses.Constants.Condition;
 
 public interface Dwelling {
 

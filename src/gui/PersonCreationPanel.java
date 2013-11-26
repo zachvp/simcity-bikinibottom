@@ -148,7 +148,7 @@ ClassifiedsChangedListener{
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
-		inputPanelLeft.add(new JLabel("Occupation: "));
+		inputPanelLeft.add(new JLabel("Job: "));
 		inputPanelright.add(occupationsCB);
 		inputPanelLeft.add(new JLabel("Residence: "));
 		inputPanelright.add(residencesCB);

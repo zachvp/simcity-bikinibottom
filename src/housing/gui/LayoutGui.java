@@ -3,6 +3,11 @@ package housing.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import agent.gui.Gui;
 
@@ -22,6 +27,8 @@ public class LayoutGui implements Gui {
 	final Dimension POTTED_PLANT_POSITION;
 	final Dimension DOOR_POSITION;
 	final Dimension REFRIGERATOR_POSITION;
+	private BufferedImage backgroundImage;
+	private ImageIcon icon;
 	
 	public LayoutGui(int roomWidth, int roomHeight) {
 		ROOM_WIDTH = roomWidth;
@@ -33,6 +40,13 @@ public class LayoutGui implements Gui {
 		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH/4, 5);
 		DOOR_POSITION = new Dimension(0, ROOM_HEIGHT/4);
 		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH/2, 0);
+		
+		try {
+			backgroundImage = ImageIO.read(getClass().getResource("apartment_background.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		icon = new ImageIcon(backgroundImage);
 	}
 
 	@Override
@@ -43,6 +57,9 @@ public class LayoutGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		g.fillRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
+		g.drawImage(icon.getImage(), 0, 0, null);
+		
 		g.setColor(Color.WHITE);
 		
 		// draw shapes

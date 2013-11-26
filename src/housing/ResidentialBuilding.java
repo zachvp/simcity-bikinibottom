@@ -21,7 +21,7 @@ import housing.gui.HousingComplex;
 
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
-	private CityLocation residence;
+//	private CityLocation residence;
 	
 	// location for the "door" to the building
 	private XYPos entrancePos;
@@ -49,7 +49,7 @@ public class ResidentialBuilding extends Building {
 		this.population = new HashMap<Person, Role>();
 		
 		// set up complex
-		this.residence = this;
+//		this.residence = this;
 		this.complex = new HousingComplex(this);
 		
 		// manager for this building 
@@ -76,6 +76,8 @@ public class ResidentialBuilding extends Building {
 	public PayRecipientRole getPayRecipient(){
 		return landlord;
 	}
+	
+	/* --- Interface Methods --- */
 	@Override
 	public XYPos entrancePos() {
 		return entrancePos;

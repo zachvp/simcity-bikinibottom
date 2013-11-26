@@ -175,6 +175,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private void goToWork() {
 		atWork = true;
 		doGoToDesk();
+		acquireSemaphore(active);
 	}
 	
 	private void sendToTeller(WaitingCustomer wc, TellerPosition tp) {

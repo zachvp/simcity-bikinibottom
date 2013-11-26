@@ -247,6 +247,8 @@ public class TellerRole extends WorkRole implements Teller {
 	private void goToWork() {
 		atWork = true;
 		doGoToDesk();
+		acquireSemaphore(active);
+		
 	}
 	
 	private void openNewAccount(MyCustomer mc) {

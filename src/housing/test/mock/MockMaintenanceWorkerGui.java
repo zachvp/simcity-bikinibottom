@@ -20,7 +20,7 @@ public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	}
 
 	@Override
-	public void DoGoToDwelling() {
+	public void DoGoToDwelling(int unit) {
 		log.add("Going to dwelling");
 		worker.msgAtDestination();
 	}

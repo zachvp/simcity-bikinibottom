@@ -1,5 +1,6 @@
 package housing.interfaces;
 
+import housing.PayRecipientRole;
 import CommonSimpleClasses.Constants.Condition;
 
 public interface Dwelling {
@@ -16,7 +17,7 @@ public interface Dwelling {
 
 	MaintenanceWorker getWorker();
 
-	void setPayRecipient(PayRecipient payRecipient);
+	void setPayRecipient(PayRecipientRole payRecipient);
 	
 	public PayRecipient getPayRecipient();
 

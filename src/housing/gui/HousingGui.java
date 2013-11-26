@@ -3,10 +3,14 @@ package housing.gui;
 import gui.AnimationPanel;
 import housing.ResidentDwelling;
 import housing.ResidentialBuilding;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
+import agent.gui.Gui;
 import CommonSimpleClasses.Constants.Condition;
 
 /**
@@ -37,16 +41,16 @@ public class HousingGui extends JPanel {
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
 	
-	public HousingGui(int index, ResidentialBuilding building) {
+	public HousingGui(int index, ResidentialBuilding building, HousingComplex complex) {
 		this.index = index;
-		this.index %= 4;
 		
 		// initialize the graphical layout of the dwelling
 		layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT, index);
 		
 		// initialize the dwelling
-		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building, layoutGui);
-		
+		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building, layoutGui, complex);
+
+		this.index %= 4;
 		switch(this.index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
 			case 1: housingAnimationPanel.setBackground(Color.RED); break;
@@ -63,5 +67,15 @@ public class HousingGui extends JPanel {
 	}
 	
 	/* --- Utilities --- */
+	public int getIndex() {
+		return index;
+	}
 	
+	public void addGui(Gui gui) {
+		housingAnimationPanel.addGui(gui);
+	}
+
+	public void removeGui(Gui gui) {
+		housingAnimationPanel.removeGui(gui);
+	}
 }

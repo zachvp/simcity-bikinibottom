@@ -1,11 +1,11 @@
 package housing;
 
-import agent.PersonAgent;
 import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import housing.gui.HousingComplex;
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -31,7 +31,7 @@ public class ResidentDwelling implements Dwelling {
 	// roles
 	private ResidentRole resident;
 	private MaintenanceWorkerRole worker;
-	private PayRecipient payRecipient;
+	private PayRecipientRole payRecipient;
 	
 	private double monthlyPaymentAmount;
 	
@@ -45,12 +45,14 @@ public class ResidentDwelling implements Dwelling {
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
 	// TODO just a test person
-	PersonAgent person = new PersonAgent("Spongebob");
-	PersonAgent workPerson = new PersonAgent("Maintenence Worker");
+//	PersonAgent person = new PersonAgent("Spongebob");
+//	PersonAgent workPerson = new PersonAgent("Maintenence Worker");
+//	PersonAgent payPerson = new PersonAgent("Landlord");
 	// end test
 	
 	/* --- Constructor --- */
-	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building, LayoutGui gui) {
+	public ResidentDwelling(int ID, Constants.Condition startCondition,
+			ResidentialBuilding building, LayoutGui gui, HousingComplex complex) {
 		super();
 
 		this.building = building;
@@ -58,19 +60,23 @@ public class ResidentDwelling implements Dwelling {
 		this.payRecipient = building.getPayRecipient();
 		// TODO uncomment next 2 lines
 		this.worker = building.getWorker();
-		
 		this.resident = new ResidentRole(null, building, this, gui);
 		
 		// TODO implemented test hacks
-		this.resident = new ResidentRole(person, building, this, gui);
-		person.addRole(resident);
-		person.startThread();
-		resident.activate();
-		
-		this.worker = new MaintenanceWorkerRole(workPerson);
-		workPerson.addRole(worker);
-		workPerson.startThread();
-		worker.activate();
+//		this.resident = new ResidentRole(person, building, this, gui);
+//		person.addRole(resident);
+//		person.startThread();
+//		resident.activate();
+//		
+//		this.worker = new MaintenanceWorkerRole(workPerson, building, complex);
+//		workPerson.addRole(worker);
+//		workPerson.startThread();
+//		worker.activate();
+//		
+//		this.payRecipient = new PayRecipientRole(payPerson);
+//		payPerson.addRole(payRecipient);
+//		payPerson.startThread();
+//		payRecipient.activate();
 		
 		// ---- end test hacks
 		
@@ -105,7 +111,7 @@ public class ResidentDwelling implements Dwelling {
 		
 		
 		// degrade condition every day
-		int hour = 6;
+		int hour = 9;
 		int minute = 10;
 		
 		schedule.scheduleDailyTask(command, hour, minute);
@@ -147,7 +153,7 @@ public class ResidentDwelling implements Dwelling {
 		return payRecipient;
 	}
 
-	public void setPayRecipient(PayRecipient payRecipient) {
+	public void setPayRecipient(PayRecipientRole payRecipient) {
 		this.payRecipient = payRecipient;
 	}
 

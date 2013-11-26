@@ -54,12 +54,11 @@ public class ResidentialBuilding extends Building {
 		this.population = new HashMap<Person, Role>();
 		
 		// set up complex
-//		this.residence = this;
 		this.complex = new HousingComplex(this);
 		
 		// manager for this building 
 		landlord = new PayRecipientRole(null, this);
-		worker = new MaintenanceWorkerRole(null, this);
+		worker = new MaintenanceWorkerRole(null, this, complex);
 		
 		// put the constant roles in the building map
 		this.population.put(null, landlord);

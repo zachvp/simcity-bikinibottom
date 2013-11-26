@@ -1,5 +1,6 @@
 package housing;
 
+import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -34,7 +35,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	TaskState task = TaskState.FIRST_TASK;
 	
 	// graphics
-	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
+	MaintenanceWorkerGui gui;
 	
 	
 	/* --- Constants --- */
@@ -60,13 +61,14 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		}
 	}
 	
-	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence) {
+	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence, HousingComplex complex) {
 		super(agent, residence);
+		this.gui = new MaintenanceWorkerRoleGui(this, complex);
 	}
 
-	public MaintenanceWorkerRole(PersonAgent person) {
-		super(person);
-	}
+//	public MaintenanceWorkerRole(PersonAgent person) {
+//		super(person);
+//	}
 
 	/* --- Messages --- */
 	public void msgFileWorkOrder(Dwelling dwelling) {
@@ -141,7 +143,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		log.add("Fixed problem.");
 		
-		DoReturnHome();
+		DoReturnHome(wo.dwelling.getIDNumber());
 		waitForInput();
 		task = TaskState.NONE;
 	}
@@ -149,18 +151,27 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	/* -- Animation Routines --- */
 	private void DoGoToDwelling(int unitNumber){
 //		Do("Going to dwelling.");
-		gui.DoGoToDwelling();
-		// deactivate role
+		gui.DoGoToDwelling(unitNumber);
 	}
 	
 	private void DoFixProblem(){
 		Do("Fixing problem.");
 		gui.DoFixProblem();
+		Runnable command = new Runnable() {
+			public void run(){
+				Do("Done fixing problems.");
+				doneWaitingForInput();
+			}
+		};
+		// schedule a delay for food consumption
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, 4 * Constants.MINUTE);
 	}
 	
-	private void DoReturnHome(){
+	private void DoReturnHome(int unit){
 		Do("Returning home");
-		gui.DoReturnHome();
+		gui.DoReturnHome(unit);
+		deactivate();
 	}
 
 	/* --- Abstract methods from WorkRole --- */

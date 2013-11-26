@@ -12,7 +12,9 @@ import market.interfaces.Cashier;
 import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import market.interfaces.DeliveryReceiver;
 import market.interfaces.ItemCollector;
+import market.interfaces.PhonePayer;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
@@ -32,7 +34,7 @@ private static final int startingminute = 0;
 	private double MarketTotalMoney;
 	ScheduleTask task = new ScheduleTask();
 	
-	private Semaphore atFrontDesk = new Semaphore(0,true);
+private Semaphore atFrontDesk = new Semaphore(0,true);
 	private Semaphore atBench = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 
@@ -59,18 +61,36 @@ private static final int startingminute = 0;
 	 */
 	public class MyCustomer {
 		Customer c;
-		CommonSimpleClasses.CityLocation Building;
 		List<Item> OrderList = new ArrayList<Item>();
 		private List<Item> DeliveryList = new ArrayList<Item>();
 		private List<Item> MissingItemList = new ArrayList<Item>();
 		ItemCollector itemCollector;
-		DeliveryGuy deliveryGuy;
+		PhoneOrder phoneOrder = null;
 		public Customerstate state = Customerstate.Arrived;
 		public List<Item> getDeliveryList() {
 			return DeliveryList;
 		}
 		public void setDeliveryList(List<Item> deliveryList) {
 			DeliveryList = deliveryList;
+		}
+		
+	}
+	
+	/**
+	 * This is the class for cashier to keep track of the phoneOrder from the restaurant
+	 * @author AnThOnY
+	 *
+	 */
+	public class PhoneOrder {
+		private PhonePayer personPayingDelivery;
+		private DeliveryReceiver personReceivingDelivery;
+		private CommonSimpleClasses.CityLocation Building;
+		DeliveryGuy deliveryGuy;
+		
+		public PhoneOrder(PhonePayer ppD, DeliveryReceiver prD, CommonSimpleClasses.CityLocation b){
+			personPayingDelivery = ppD;
+			personReceivingDelivery = prD;
+			Building = b;
 		}
 	}
 	
@@ -87,7 +107,6 @@ private static final int startingminute = 0;
 		setCash(Constants.MarketInitialMoney);
 		PriceList = Constants.MarketPriceList;
 		InventoryList = inList;
-		
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
@@ -113,13 +132,14 @@ private static final int startingminute = 0;
      * @param C the customer himself
      * @param CityBuilding the building that is going to deliver to
      */
-	public void msgPhoneOrder(List<Item>ShoppingList, Customer C, CommonSimpleClasses.CityLocation building)	
+	public void msgPhoneOrder(List<Item>ShoppingList, PhonePayer payingPerson, DeliveryReceiver receivingPerson, CommonSimpleClasses.CityLocation building)	
 	{				//The Customer will be the phone calling guy
 		//print ("Received Phone Order");
+		
 		MyCustomer MC = new MyCustomer();
-		MC.c = C;
+		MC.c = null;
 		MC.state = Customerstate.Ordered;
-		MC.Building = building;
+		MC.phoneOrder = new PhoneOrder(payingPerson, receivingPerson, (CommonSimpleClasses.CityLocation)building);
 		for (int i=0;i<ShoppingList.size();i++){
 			MC.OrderList.add(ShoppingList.get(i));
 		}
@@ -138,7 +158,7 @@ private static final int startingminute = 0;
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
 		MC.state = Customerstate.Ordered;
-		MC.Building = null;
+		MC.phoneOrder = null;
 		for (int i=0;i<ShoppingList.size();i++){
 			MC.OrderList.add(ShoppingList.get(i));
 		}
@@ -389,7 +409,12 @@ private static final int startingminute = 0;
 	private void TellCustomerEpicFail(MyCustomer MC){
 		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
-		MC.c.msgNoItem();
+		if (MC.c != null){
+			MC.c.msgNoItem();
+		}
+		else{
+			MC.phoneOrder.personReceivingDelivery.msgNoItem();
+		}
 					MyCustomerList.remove(0);
 		
 	}
@@ -406,8 +431,12 @@ private static final int startingminute = 0;
 			total += CurrentPrice*MC.getDeliveryList().get(i).amount;
 		}
 		MC.state = Customerstate.WaitingForCheck;
-		MC.c.msgHereisYourTotal(total, MC.MissingItemList);
-		
+		if (MC.c != null){
+			MC.c.msgHereisYourTotal(total, MC.MissingItemList);
+		}
+		else {
+			MC.phoneOrder.personPayingDelivery.msgHereIsYourTotal(total, this);
+		}
 	}
 
 	/**
@@ -417,7 +446,7 @@ private static final int startingminute = 0;
 	private void GiveItems (MyCustomer MC){
 		//print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
-		if (MC.Building == null){
+		if (MC.c != null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());
 			synchronized(getMyCustomerList()){
 						MyCustomerList.remove(0);
@@ -427,8 +456,8 @@ private static final int startingminute = 0;
 			synchronized(getDGList()){
 				for (int i=0;i<getDGList().size();i++){
 					if(getDGList().get(i).msgAreYouAvailable()){
-						MC.deliveryGuy = getDGList().get(i);
-						MC.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.c, MC.Building);
+						MC.phoneOrder.deliveryGuy = getDGList().get(i);
+						MC.phoneOrder.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.phoneOrder.personReceivingDelivery, MC.phoneOrder.Building);
 						synchronized(getMyCustomerList()){
 								MyCustomerList.remove(0);
 						}

@@ -10,7 +10,7 @@ public interface DeliveryGuy {
 	// Messages
 		public abstract boolean msgAreYouAvailable();
 	
-		public abstract void msgDeliverIt(List<Item> DeliveryList, Customer OrdePerson, CityLocation building);
+		public abstract void msgDeliverIt(List<Item> DeliveryList, DeliveryReceiver OrdePerson, CityLocation building);
 		
 		public abstract void msgArrivedDestination();
 		

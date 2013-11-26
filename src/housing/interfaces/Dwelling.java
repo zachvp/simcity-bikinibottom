@@ -1,6 +1,5 @@
 package housing.interfaces;
 
-import housing.PayRecipientRole;
 import CommonSimpleClasses.Constants.Condition;
 
 public interface Dwelling {

@@ -1,5 +1,7 @@
 package housing.interfaces;
 
+import housing.gui.HousingComplex;
+
 public interface MaintenanceWorkerGui {
 	public void setTool(boolean b);
 
@@ -8,4 +10,6 @@ public interface MaintenanceWorkerGui {
 	public void DoFixProblem();
 
 	public void DoReturnHome(int unit);
+
+	public void setComplex(HousingComplex complex);
 }

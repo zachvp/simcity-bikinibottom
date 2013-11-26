@@ -27,7 +27,7 @@ import agent.interfaces.Person;
  * @see Building
  */
 public class RestaurantStrottmaBuilding extends Building {
-	private Map<Person, Role> existingRoles;
+	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
 	private CashierRole cashier;
 	private CookRole cook;
@@ -42,7 +42,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	
 	public RestaurantStrottmaBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		this.existingRoles = new HashMap<Person, Role>();
+		this.existingCustomers = new HashMap<Person, CustomerRole>();
 		
 		// Stagger opening/closing time
 		this.timeOffset = instanceCount * timeDifference;
@@ -115,11 +115,17 @@ public class RestaurantStrottmaBuilding extends Building {
 	
 	@Override
 	public Role getCustomerRole(Person person) {
-		Role role = existingRoles.get(person);
+		CustomerRole role = existingCustomers.get(person);
 		if (role == null) {
 			// Create a new role if none exists
 			role = new CustomerRole(person, this);
 			role.setLocation(this);
+			role.setHost(host);
+			
+			CustomerGui custGui = new CustomerGui(role, restaurantGui);
+			role.setGui(custGui);
+			restaurantGui.getAnimationPanel().addGui(custGui);
+			
 		} else {
 			// Otherwise use the existing role
 			role.setPerson(person);

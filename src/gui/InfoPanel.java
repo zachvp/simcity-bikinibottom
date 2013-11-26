@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -87,28 +88,28 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	
 	
-	@SuppressWarnings("deprecation")
 	private void getTimeDisplay(){
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(timeManager.currentSimTime());	
-		Date date = cal.getTime();
-		hour = date.getHours();
-		min = date.getMinutes();
-		sec = date.getSeconds();
-		hourStr = "" + hour;
-		minStr = "" + min;
-		secStr = ""+ sec;
-		if(hour<10){
-			hourStr = "0" + hour;
-		}
-		if(min<10){
-			minStr = "0" + min;
-		}
-		if(sec<10){
-			secStr = "0" + sec;
-		}
+		cal.setTimeInMillis(timeManager.currentSimTime());
+//		Date date = cal.getTime();
+//		hour = date.getHours();
+//		min = date.getMinutes();
+//		sec = date.getSeconds();
+//		hourStr = "" + hour;
+//		minStr = "" + min;
+//		secStr = ""+ sec;
+//		if(hour<10){
+//			hourStr = "0" + hour;
+//		}
+//		if(min<10){
+//			minStr = "0" + min;
+//		}
+//		if(sec<10){
+//			secStr = "0" + sec;
+//		}
 		
-		time.setText(hourStr +":"+minStr);
+		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm z");
+		time.setText(format.format(cal.getTime()));
 		
 	}
 

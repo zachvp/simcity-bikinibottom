@@ -77,6 +77,10 @@ public class ResidentialBuilding extends Building {
 		return landlord;
 	}
 	
+	public HousingComplex getComplex(){
+		return complex;
+	}
+	
 	/* --- Interface Methods --- */
 	@Override
 	public XYPos entrancePos() {

@@ -19,6 +19,7 @@ import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
+import agent.gui.Gui;
 
 /**
  * ResidentRole is a more abstract class that can be extended by
@@ -385,5 +386,9 @@ public class ResidentRole extends Role implements Resident {
 
 	public Dwelling getDwelling() {
 		return dwelling;
+	}
+
+	public Gui getGui() {
+		return (Gui) gui;
 	}
 }

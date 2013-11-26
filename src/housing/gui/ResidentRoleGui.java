@@ -36,18 +36,19 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 
 	/* --- Hardcoded Positions --- */
 	// default resident position
-	private int xPos, yPos;
-	private int xDestination = 50, yDestination = 50;//default start position
-	private final int JAZZER_SPOT_X = 0;
-	private final int JAZZER_SPOT_Y = 0;
+	private int xPos = 130; 
+	private int yPos = 15;
+	
+	private int xDestination, yDestination;//default start position
+	
+	// prime location for Jazzercising
+	private final int JAZZER_SPOT_X = xPos;
+	private final int JAZZER_SPOT_Y = yPos;
 	
 	/* --- Constructor --- */
 	public ResidentRoleGui(ResidentRole role) {
 		this.resident = role;
 		
-		// set start position of resident
-		xPos = 350;
-		yPos = 25;
 	}
 
 	/**
@@ -55,15 +56,13 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	 * it will move toward the destination.
 	 */
 	public void updatePosition() {
-		if (xPos < xDestination)
-			xPos++;
-		else if (xPos > xDestination)
-			xPos--;
+		if (xPos < xDestination) xPos++;
+		
+		else if (xPos > xDestination) xPos--;
 
-		if (yPos < yDestination)
-			yPos++;
-		else if (yPos > yDestination)
-			yPos--;
+		if (yPos < yDestination) yPos++;
+		
+		else if (yPos > yDestination) yPos--;
 
 		if (xPos == xDestination && yPos == yDestination && canRelease && !waiting ) {
 			canRelease = false;
@@ -128,12 +127,4 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	public int getYPos() {
 		return yPos;
 	}
-	
-//	public void setLayoutGui(LayoutGui gui){
-//		layoutGui = gui;
-//	}
-
-//	public void pause(){
-//		agent.pause();
-//	}
 }

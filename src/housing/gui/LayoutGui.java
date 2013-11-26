@@ -64,7 +64,7 @@ public class LayoutGui implements Gui {
 		g.fillRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
 		g.drawImage(icon.getImage(), 0, 0, null);
 		
-		g.setColor(Color.WHITE);
+//		g.setColor(Color.WHITE);
 		
 		// draw shapes
 //		g.fillRect(STOVE_POSITION.width, STOVE_POSITION.height, BASE_SIZE, BASE_SIZE);
@@ -77,7 +77,7 @@ public class LayoutGui implements Gui {
 		g.setColor(Color.BLACK);
 		g.drawString("Stove", STOVE_POSITION.width, STOVE_POSITION.height + BASE_SIZE);
 		g.drawString("Table", TABLE_POSITION.width, TABLE_POSITION.height  + BASE_SIZE);
-		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height + BASE_SIZE);
+		g.drawString("Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height + BASE_SIZE);
 		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
 	}

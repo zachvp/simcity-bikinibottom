@@ -57,6 +57,7 @@ public class HousingGui extends JPanel {
 		// add to animation panel
 		this.setLayout(layout);
 		housingAnimationPanel.addGui(layoutGui);
+		housingAnimationPanel.addGui(dwelling.getResidentGui());
 		this.add(housingAnimationPanel);
 	}
 	

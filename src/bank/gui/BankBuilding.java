@@ -156,6 +156,13 @@ public class BankBuilding extends Building {
 
 		return role;
 	}
+	/*
+	 * method to set open sign on bank counter to TRUE when open or FALSE when closed
+	 * called by SecurityGuard
+	 */
+	public void changeOpenSign(boolean b, int hour, int minute) {
+		bankGui.getLayoutGui().setOpen(b, hour, minute);
+	}
 
 	@Override
 	public JPanel getAnimationPanel() {

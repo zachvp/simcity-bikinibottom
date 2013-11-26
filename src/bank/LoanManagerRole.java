@@ -21,6 +21,8 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
 	
+	
+	boolean atWork;
 	private boolean endWorkShift = false;
 	
 	class LoanTask {
@@ -41,6 +43,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	public LoanManagerRole(Person person, CityLocation bank) {
 		super(person, bank);
+		atWork = false;
 //		this.name = name;
 		
 	}
@@ -63,7 +66,10 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
 		if(!loanTasks.isEmpty()) {
 			processLoan(loanTasks.get(0));
 			return true;
@@ -77,6 +83,12 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		return false;
 	}
 	// Actions
+	private void goToWork() {
+		atWork = true;
+		doGoToDesk();
+		acquireSemaphore(active);
+		
+	}
 	
 	private void processLoan(LoanTask lt) {
 		doGoToComputer();
@@ -89,7 +101,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private void goOffWork() {
 		doEndWorkDay();
 		acquireSemaphore(active);
-		
+		atWork = false;
 		this.deactivate();
 		
 	}

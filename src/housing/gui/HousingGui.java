@@ -24,12 +24,12 @@ public class HousingGui extends JPanel {
 	int index;
 	
 	// constants
-	private final int ROOM_WIDTH = 300;
-	private final int ROOM_HEIGHT= 245;
+	private final int ROOM_WIDTH = 600;
+	private final int ROOM_HEIGHT= 490;
 	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
-	LayoutGui layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT);
+	LayoutGui layoutGui;
 
 	// back-end housing containers that contains the resident, payRecipient, and worker
 	ResidentDwelling dwelling;
@@ -43,6 +43,8 @@ public class HousingGui extends JPanel {
 		
 		// initialize the dwelling
 		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building);
+		// initialize the graphical layout of the dwelling
+		layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT, index);
 		
 		switch(this.index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;

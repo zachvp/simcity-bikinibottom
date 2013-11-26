@@ -2,8 +2,6 @@ package bank.gui;
 
 import gui.AnimationPanel;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -11,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -19,11 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import CommonSimpleClasses.CityLocation;
-import agent.PersonAgent;
 import agent.WorkRole;
 import bank.AccountManagerRole;
-import bank.BankCustomerRole;
 import bank.LoanManagerRole;
 import bank.SecurityGuardRole;
 import bank.TellerRole;
@@ -38,12 +32,6 @@ public class BankGui extends JPanel implements ActionListener {
 	AnimationPanel animationPanel = new AnimationPanel();
 	JFrame optionFrame;// = new JFrame();
 
-    private JLabel infoLabel; //part of infoPanel
-    private JPanel graphicPanel; //added for Lab1
-    private JLabel graphicLabel;
-    private JLabel graphicImage;
-    private JCheckBox stateCB;//part of infoLabel
-    private JCheckBox breakCB;
     private GridLayout optionGridLayout;
     
     //OPTION FRAME STUFF
@@ -54,10 +42,6 @@ public class BankGui extends JPanel implements ActionListener {
     private JTextField text1;
     private JTextField text2;
 
-    private Object currentPerson;/* Holds the agent that the info is about.
-    								Seems like a hack */
-
-    private int testAccountId = 2000;
     
 //    CityLocation bank = new BankBuilding(0, 0, 0, 0);
     
@@ -178,16 +162,7 @@ public class BankGui extends JPanel implements ActionListener {
     public AnimationPanel getAnimationPanel()  {
     	return animationPanel;
     }
-    /**
-     * updateInfoPanel() takes the given customer (or, for v3, Host) object and
-     * changes the information panel to hold that person's info.
-     *
-     * @param person customer (or waiter) object
-     */
 
-    public void showCB() {
-    	stateCB.setVisible(true);
-    }
 
     /**
      * Main routine to get gui started

@@ -2,6 +2,11 @@ package market.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import agent.gui.Gui;
 
@@ -15,6 +20,18 @@ public class MarketBackgroundLayoutGui implements Gui {
 	    private final int WINDOWX = 600;
 	    private final int WINDOWY = 490;
 	    
+	    BufferedImage image;
+	    ImageIcon icon;
+	    
+	    public MarketBackgroundLayoutGui(){
+	    	try {
+				image = ImageIO.read(getClass().getResource("market_floor.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			icon = new ImageIcon(image);
+	    }
+	    
 		@Override
 		public void updatePosition() {
 			// TODO Auto-generated method stub
@@ -25,8 +42,10 @@ public class MarketBackgroundLayoutGui implements Gui {
 		public void draw(Graphics2D g) {
 			// TODO Auto-generated method stub
 			Graphics2D g2 = (Graphics2D)g;
-
+			
 	        //Clear the screen by painting a rectangle the size of the frame
+			g2.fillRect(0, 0, WINDOWX, WINDOWY);
+	        g2.drawImage(icon.getImage(), 0, 0, null);
 	        
 	        //Front Desk
 	        g2.setColor(Color.GREEN);

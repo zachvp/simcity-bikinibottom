@@ -38,7 +38,7 @@ public class BankBuilding extends Building {
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
 	
-	SecurityGuard security;
+	private SecurityGuard security;
 
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -56,7 +56,7 @@ public class BankBuilding extends Building {
 
 	private void initRoles() {
 		// Create the roles
-		security = new SecurityGuardRole(null, this);
+		setSecurity(new SecurityGuardRole(null, this));
 		AccountManagerRole account = new AccountManagerRole(null, this);
 		LoanManagerRole loan = new LoanManagerRole(null, this);
 		TellerRole tell1 = new TellerRole(null, this);
@@ -64,16 +64,16 @@ public class BankBuilding extends Building {
 		TellerRole tell3 = new TellerRole(null, this);
 
 		// Tell the security guard about the roles
-		security.addRole(account);
-		security.addRole(loan);
-		security.addRole(tell1);
-		security.addRole(tell2);
-		security.addRole(tell3);
+		getSecurity().addRole(account);
+		getSecurity().addRole(loan);
+		getSecurity().addRole(tell1);
+		getSecurity().addRole(tell2);
+		getSecurity().addRole(tell3);
 
 		// Give the tellers a position
-		security.addTeller(tell1, 0);
-		security.addTeller(tell2, 1);
-		security.addTeller(tell3, 2);
+		getSecurity().addTeller(tell1, 0);
+		getSecurity().addTeller(tell2, 1);
+		getSecurity().addTeller(tell3, 2);
 		
 		// Sets initial desk position for tellers, merp
 		tell1.setDeskPosition(0);
@@ -81,9 +81,9 @@ public class BankBuilding extends Building {
 		tell3.setDeskPosition(2);
 
 		// Tell the tellers about the security guard
-		tell1.setSecurityGuard(security);
-		tell2.setSecurityGuard(security);
-		tell3.setSecurityGuard(security);
+		tell1.setSecurityGuard(getSecurity());
+		tell2.setSecurityGuard(getSecurity());
+		tell3.setSecurityGuard(getSecurity());
 
 		// Tell the tellers about the account manager
 		tell1.setAccountManager(account);
@@ -96,7 +96,7 @@ public class BankBuilding extends Building {
 		tell3.setLoanManager(loan);
 
 		//Create and set up the guis
-		SecurityGuardGui sgGui = new SecurityGuardGui(security);
+		SecurityGuardGui sgGui = new SecurityGuardGui(getSecurity());
 		AccountManagerGui accountGui = new AccountManagerGui(account);
 		LoanManagerGui loanGui = new LoanManagerGui(loan);
 		TellerGui tGui1 = new TellerGui(tell1);
@@ -104,7 +104,7 @@ public class BankBuilding extends Building {
 		TellerGui tGui3 = new TellerGui(tell3);
 
 		//set Guis
-		security.setGui(sgGui);
+		getSecurity().setGui(sgGui);
 		account.setGui(accountGui);
 		loan.setGui(loanGui);
 		tell1.setGui(tGui1);
@@ -138,20 +138,22 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-
+		
 		BankCustomerRole role = existingRoles.get(person);
-		if(role == null) {
+		if(role == null) {//they have not been to bank and need a customer role
 			role = new BankCustomerRole(person, bank);
 			BankCustomerGui bcg = new BankCustomerGui(role);
 			role.setGui(bcg);
 			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
-			role.msgGoToSecurityGuard(security);
+			existingRoles.put(person, role);
+			person.addRole(role);
 		}
 		else {
-			role.setPerson(person);
+//			role.setPerson(person);
 		}
-		person.addRole(role);
+		role.msgGoToSecurityGuard(getSecurity());
+
 		return role;
 	}
 
@@ -164,6 +166,14 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		infoPanel = new InfoPanel(this);
 		return infoPanel;
+	}
+
+	public SecurityGuard getSecurity() {
+		return security;
+	}
+
+	public void setSecurity(SecurityGuard security) {
+		this.security = security;
 	}
 
 }

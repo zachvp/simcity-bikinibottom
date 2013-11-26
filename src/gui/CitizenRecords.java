@@ -4,11 +4,19 @@ import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import transportation.CornerAgent.MyCorner;
+import transportation.interfaces.Car;
+import transportation.interfaces.Corner;
+import transportation.interfaces.Passenger;
+import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person.Wallet.IncomeLevel;
 
 /**
  * A class to hold all of the PersonAgent information
@@ -38,7 +46,21 @@ public class CitizenRecords {
 	}
 	public void addCitizen(String name, WorkRole job, Dwelling home, String status,
 			boolean hasCar) {
-		PersonAgent newPerson  = new PersonAgent(name);
+		IncomeLevel incomeLevel;
+		
+		switch (status) {
+		case "Rich":
+			incomeLevel = IncomeLevel.RICH;
+			break;
+		case "Poor":
+			incomeLevel = IncomeLevel.POOR;
+			break;
+		default:
+			incomeLevel = IncomeLevel.MEDIUM;
+			break;
+		}
+		
+		PersonAgent newPerson  = new PersonAgent(name, incomeLevel);
 		
 		//Assigning job
 		if (job != null) {
@@ -52,6 +74,10 @@ public class CitizenRecords {
 			newPerson.addRole(role);
 			role.setPerson(newPerson);			
 		}
+		
+		//Adding car
+		if (hasCar) newPerson.instantiateCar();
+		
 		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person
 		//TODO add dwelling!

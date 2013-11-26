@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import CommonSimpleClasses.Constants;
 import agent.WorkRole;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsChangedListener;
@@ -239,7 +240,7 @@ ClassifiedsChangedListener{
 				//PersonAgent newPerson = new PersonAgent(name);
 				//TODO add all person info
 				citizenRecords.addCitizen(name, job, home, status, hasCar);
-				System.out.println(name +" has been added to your city!");
+				if (Constants.PRINT) System.out.println(name +" has been added to your city!");
 
 				//TODO pull up newPerson's infopanel
 				msg.setText(name + " was created.");

@@ -131,8 +131,8 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		if(person.getWallet().getCashOnHand() > 0) {
 			for(double bill : bills){
 				tryToMakePayment(bill);
+				return true;
 			}
-			return true;
 		}
 		
 		

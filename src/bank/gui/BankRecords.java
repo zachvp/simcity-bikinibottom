@@ -1,10 +1,10 @@
 package bank.gui;
 
+import gui.AnimationPanel;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
-import agent.gui.AnimationPanel;
 
 
 public class BankRecords {

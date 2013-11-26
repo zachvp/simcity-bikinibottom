@@ -34,7 +34,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	int startHour = 9;
+	int startHour = 6;
 	int startMinute = 0;
 	int endHour = 16;
 	int endMinute = 30;

@@ -1,9 +1,9 @@
 package housing.test.mock;
 
+import mock.EventLog;
+import mock.Mock;
 import housing.interfaces.Resident;
 import agent.PersonAgent;
-import agent.mock.EventLog;
-import agent.mock.Mock;
 
 public class MockResident extends Mock implements Resident {
 	/* ----- Data ----- */

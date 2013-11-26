@@ -1,4 +1,4 @@
-package agent.mock;
+package mock;
 
 import java.text.DateFormat;
 import java.util.Date;

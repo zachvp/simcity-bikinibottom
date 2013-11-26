@@ -2,10 +2,9 @@ package market.gui;
 
 import market.CustomerRole;
 import market.interfaces.Customer;
+import gui.AnimationPanel;
 
 import javax.swing.*;
-
-import agent.gui.AnimationPanel;
 
 import java.awt.*;
 import java.awt.event.*;

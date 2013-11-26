@@ -5,18 +5,12 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import bank.BankCustomerRole;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
-import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
-import housing.gui.ResidentRoleGui;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-import housing.interfaces.ResidentGui;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
@@ -27,48 +21,61 @@ import housing.interfaces.ResidentGui;
 
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
-	CityLocation housingComplex;
+	private CityLocation residence;
 	
 	// location for the "door" to the building
-	XYPos entrancePos;
+	private XYPos entrancePos;
 	
 	// this displays after clicking on the ResidentialBuilding
-	HousingComplex complex;
+	private HousingComplex complex;
 	
-	// manages the complex
-	private PayRecipientRole payRecipientRole;
-	
-	// takes care of problems in the complex
-	private MaintenanceWorker worker;
+	// the "boss" or greeter for this building and the on-call Mr. Fix-it
+	private PayRecipientRole landlord;
+	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
-	Map<Person, ResidentRole> population;
+	public Map<Person, Role> population;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
 	private static int timeDifference = 6;
 	
 	public ResidentialBuilding(int x, int y, int width, int height) {
+		// set up proper coordinates
 		super(x, y, width, height);
 		this.entrancePos = new XYPos(width/2, height);
-		this.housingComplex = this;
-		this.complex = new HousingComplex();
-
-		this.population = new HashMap<Person, ResidentRole>();
+		
+		// keeps track of building members
+		this.population = new HashMap<Person, Role>();
+		
+		// set up complex
+		this.residence = this;
+		this.complex = new HousingComplex(this);
+		
+		// manager for this building 
+		landlord = new PayRecipientRole(null, this);
+		worker = new MaintenanceWorkerRole(null, this);
+		
+		// put the constant roles in the building map
+		this.population.put(null, landlord);
+		this.population.put(null, worker);
 		
 		// Stagger opening/closing time
 		this.timeOffset = instanceCount + timeDifference;
 		instanceCount++;
-		
-		this.initializeRoles();
-	}
-
-	private void initializeRoles(){
-		// two objects that are common to all the dwellings in the complex
-		payRecipientRole = new PayRecipientRole(null, this);
-	 	worker = new MaintenanceWorkerRole(null, this);
 	}
 	
+	public void addResident(ResidentRole resident){
+		this.population.put(null, resident);
+	}
+	
+	public MaintenanceWorkerRole getWorker(){
+		return worker;
+	}
+
+	public PayRecipientRole getPayRecipient(){
+		return landlord;
+	}
 	@Override
 	public XYPos entrancePos() {
 		return entrancePos;
@@ -76,7 +83,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getGreeter() {
-		return payRecipientRole;
+		return landlord;
 	}
 
 	@Override
@@ -86,21 +93,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		ResidentRole role = population.get(person);
-		
-		if(role == null) {
-			role = new ResidentRole((PersonAgent) person, this);
-			ResidentGui gui = new ResidentRoleGui(role);
-			role.setGui(gui);
-			role.setLocation(housingComplex);
-		}
-		
-		else {
-			role.setPerson(person);
-		}
-		
-		person.addRole(role);
-		return role;
+		return null;
 	}
 
 	@Override

@@ -30,7 +30,6 @@ import javax.swing.JTabbedPane;
 
 import market.gui.MarketBuilding;
 import bank.gui.BankBuilding;
-import agent.Constants;
 import kelp.KelpClass;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
@@ -41,6 +40,7 @@ import transportation.BusAgent;
 import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 

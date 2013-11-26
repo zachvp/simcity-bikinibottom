@@ -7,11 +7,12 @@ import java.util.concurrent.Semaphore;
 
 import agent.gui.Gui;
 import bank.SecurityGuardRole;
+import bank.interfaces.SecurityGuard;
 
 
 public class SecurityGuardGui implements Gui{
 
-	private SecurityGuardRole agent = null;
+	private SecurityGuard agent = null;
 	private boolean isPresent = true;
 
 
@@ -34,14 +35,17 @@ public class SecurityGuardGui implements Gui{
 	int deskXPos = 300;
 	int deskYPos = 360;
 	
+	int entranceX = 300;
+	int entranceY = 500;
+	
 	boolean canRelease = false;
 
-	public SecurityGuardGui(SecurityGuardRole c){ //HostAgent m) {
+	public SecurityGuardGui(SecurityGuard c){ //HostAgent m) {
 		agent = c;
-		xPos = deskXPos;
-		yPos = deskYPos;
-		xDestination = deskXPos;
-		yDestination = deskYPos;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 //		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);

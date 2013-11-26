@@ -1,51 +1,54 @@
 package bank.test.mock;
 
+import bank.interfaces.Teller;
 import bank.interfaces.TellerGuiInterface;
 
 public class MockTellerGui implements TellerGuiInterface {
 	EventLog log = new EventLog();
+	Teller teller;
+	
+	public MockTellerGui(Teller t) {
+		this.teller = t;
+	}
 
 	@Override
 	public void DoGoToAccountManager() {
 		log.add("at account manager");
-		// TODO Auto-generated method stub
+		teller.msgAtDestination();
 		
 	}
 
 	@Override
 	public void DoGoToLoanManager() {
 		log.add("at loan manager");
-		// TODO Auto-generated method stub
+		teller.msgAtDestination();
 		
 	}
 
 	@Override
 	public void DoGoToDesk(int xFactor) {
 		log.add("at desk" + xFactor);
-		// TODO Auto-generated method stub
+		teller.msgAtDestination();
 		
 	}
 
 	@Override
 	public void DoGoToWorkstation(int xFactor) {
 		log.add("at workstation" + xFactor);
-		// TODO Auto-generated method stub
+		teller.msgAtDestination();
 		
 	}
 
 	@Override
 	public void DoEndWorkDay() {
 		log.add("end work day");
-		// TODO Auto-generated method stub
+		teller.msgAtDestination();
 		
 	}
 
 	@Override
 	public void DoLeaveBank() {
 		log.add("leave bank");
-		// TODO Auto-generated method stub
-		
+		teller.msgAtDestination();
 	}
-	
-	
 }

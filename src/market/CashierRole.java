@@ -2,13 +2,7 @@ package market;
 
 
 import java.util.ArrayList;
-
-import CommonSimpleClasses.CityLocation;
-import agent.Constants;
-
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -19,6 +13,8 @@ import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;

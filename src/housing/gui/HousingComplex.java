@@ -3,12 +3,15 @@ package housing.gui;
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
 import housing.ResidentRole;
+import housing.ResidentialBuilding;
+
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityBuilding;
 import agent.Agent;
 import agent.Role;
 import agent.interfaces.Person;
@@ -28,16 +31,14 @@ public class HousingComplex extends JPanel {
 	private final int SPACING = 10;
 	
 	// layout manager
-	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
+	private GridLayout complexLayout;
 
-	// payRecipient who manages the complex 
-// 	private Person payRecipientPerson; = new PersonAgent("Pay Recipient");
- 	
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
-	public HousingComplex() {
-		// set the layout manager
+	public HousingComplex(ResidentialBuilding building) {
+		// create layout and set the layout manager
+		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 		this.setLayout(complexLayout);
 		
 		/**
@@ -45,43 +46,10 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i);
+			HousingGui gui = new HousingGui(i, building);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
 
-	}
-	
-	public void addResident(ResidentRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() == null){
-				unit.addResidentGui(role);
-				break;
-			}
-		}
-	}
-	
-	public void addPayRecipient(PayRecipientRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() != null){
-				unit.addPayRecipient(role);
-				break;
-			}
-		}
-	}
-	
-	public void addWorker(MaintenanceWorkerRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() != null){
-				unit.addWorker(role);
-				break;
-			}
-		}
-	}
-	
-	private void startAndActivate(Person person, Role role) {
-		( (Agent) person).startThread();
-		person.addRole(role);
-		( (Role) role).activate();
 	}
 }

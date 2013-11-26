@@ -1,9 +1,8 @@
 package housing;
 
+import mock.EventLog;
 import classifieds.ClassifiedsClass;
-import agent.Constants;
-import agent.Constants.Condition;
-import agent.mock.EventLog;
+import CommonSimpleClasses.Constants;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
@@ -20,12 +19,15 @@ public class ResidentDwelling implements Dwelling {
 	/* --- Data --- */
 	EventLog log = new EventLog();
 	
-	// housing slots
-	private Resident resident;
+	// building the dwelling belongs to
+	private ResidentialBuilding building;
 	
+	/* --- Housing slots --- */
+	// roles
+	private ResidentRole resident;
 	private MaintenanceWorker worker;
-	
 	private PayRecipient payRecipient;
+	
 	private double monthlyPaymentAmount;
 	
 	// example: Apartment unit number or house address
@@ -34,18 +36,21 @@ public class ResidentDwelling implements Dwelling {
 	// Tracks the deterioration of the building
 	private Constants.Condition condition;
 	
-	// cost constants depending on housing condition
+	// cost constant depending on housing condition
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
 	/* --- Constructor --- */
-	public ResidentDwelling(Resident resident, PayRecipient payRecipient, MaintenanceWorker worker, int ID, Constants.Condition startCondition) {
+	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building) {
 		super();
-		this.resident = resident;
-		this.payRecipient = payRecipient;
-		this.IDNumber = ID;
-		this.worker = worker;
+
+		this.building = building;
 		
-		// TODO start condition of unit. Could later be randomized.
+		this.payRecipient = building.getPayRecipient();
+		this.worker = building.getWorker();
+		
+		this.resident = new ResidentRole(null, building);
+		this.building.addResident(resident);
+		
 		log.add("Creating dwelling with start condition " + startCondition);
 		this.condition = startCondition;
 		
@@ -58,24 +63,8 @@ public class ResidentDwelling implements Dwelling {
 			default : this.monthlyPaymentAmount = 0; break;
 		}
 		
-		//Adding to classifieds!
+		// Adding to classifieds!
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
-	}
-	
-	public ResidentDwelling(PayRecipient payRecipientRole, int index, Condition startCondition) {
-		// set local data to constructor params
-		this.condition = startCondition;
-		this.payRecipient = payRecipientRole;
-		this.IDNumber = index;
-		
-		// determine the starting monthly payment for the property
-		switch(condition){
-		case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
-		case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
-		case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
-		case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
-		default : this.monthlyPaymentAmount = 0; break;
-	}
 	}
 
 	public void setCondition(Constants.Condition condition){
@@ -97,8 +86,12 @@ public class ResidentDwelling implements Dwelling {
 	public Resident getResident() {
 		return resident;
 	}
+	
+	public String toString() {
+		return "Room at " + building;
+	}
 
-	public void setResident(Resident resident) {
+	public void setResident(ResidentRole resident) {
 		this.resident = resident;
 	}
 

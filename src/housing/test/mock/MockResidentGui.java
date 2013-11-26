@@ -46,4 +46,10 @@ public class MockResidentGui implements ResidentGui {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setPresent(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

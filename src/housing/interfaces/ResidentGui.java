@@ -12,4 +12,6 @@ public interface ResidentGui {
 	public void setFood(boolean type);
 
 	public void DoMoveGary();
+
+	public void setPresent(boolean b);
 }

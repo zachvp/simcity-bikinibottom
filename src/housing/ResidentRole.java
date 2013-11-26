@@ -42,7 +42,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// state for tasks. The Role will deactivate if it is not performing any tasks.
 	// used to determine when the role should terminate and transition to a city role
-	enum TaskState { NONE, DOING_TASK }
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
 	TaskState task = TaskState.NONE;
 	
 	// graphics
@@ -122,6 +122,11 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		
+		if(task == TaskState.FIRST_TASK){
+			gui.setPresent(true);
+			task = TaskState.NONE;
+		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
 			eatFood();

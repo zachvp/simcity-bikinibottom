@@ -57,12 +57,13 @@ public class ResidentDwelling implements Dwelling {
 		this.payRecipient = building.getPayRecipient();
 		this.worker = building.getWorker();
 		
-//		this.resident = new ResidentRole(null, building, this);
+		this.resident = new ResidentRole(null, building, this, gui);
+		
 		// TODO implemented test
-		this.resident = new ResidentRole(person, building, this, gui);
-		person.addRole(resident);
-		person.startThread();
-		resident.activate();
+//		this.resident = new ResidentRole(person, building, this, gui);
+//		person.addRole(resident);
+//		person.startThread();
+//		resident.activate();
 		
 		this.building.addResident(resident);
 		

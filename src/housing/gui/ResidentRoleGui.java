@@ -33,6 +33,9 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	// checks if resident is going to be idle
 	private boolean waiting = false;
 	
+	// determines whether to render the gui
+	private boolean present = false;
+	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
 	
@@ -113,7 +116,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	}
 
 	public boolean isPresent() {
-		return true;
+		return present;
 	}
 
 	public Resident getAgent(){
@@ -161,5 +164,10 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 
 	public int getYPos() {
 		return yPos;
+	}
+
+	@Override
+	public void setPresent(boolean b) {
+		present = b;
 	}
 }

@@ -63,15 +63,10 @@ public class WaiterRole extends WorkRole implements Waiter {
 		this.shiftEndMinute = 0;
 	}
 	
-	public void setOthers(HostRole host, CookRole cook, Cashier cashier) {
+	public void setOtherRoles(HostRole host, CookRole cook, Cashier cashier) {
 		this.host = host;
 		this.cook = cook;
 		this.cashier = cashier;
-	}
-	
-	@Override
-	public String toString() {
-		return "waiter " + getName();
 	}
 	
 	public HostRole getHost() {

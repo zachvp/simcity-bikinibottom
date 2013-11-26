@@ -1,6 +1,7 @@
 package agent;
 
 import classifieds.ClassifiedsClass;
+import gui.Building;
 import housing.interfaces.Dwelling;
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
@@ -48,7 +49,6 @@ public abstract class WorkRole extends Role {
 	
 	public void setPerson(Person person) {
 		super.setPerson(person);
-		ClassifiedsClass.getClassifiedsInstance().notifyListeners();
 	}
 	
 	public void initShift() {
@@ -82,22 +82,30 @@ public abstract class WorkRole extends Role {
 	 * The hour of day this person's work shift starts, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftStartHour();
+	public int getShiftStartHour(){
+		return ( ((Building) this.location).getOpeningHour());
+	}
 	/**
 	 * The minute of the hour this person's work shift starts.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftStartMinute();
+	public int getShiftStartMinute(){
+		return ( ((Building) this.location).getOpeningMinute());
+	}
 	/**
 	 * The hour of day this person's work shift ends, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftEndHour();
+	public int getShiftEndHour(){
+		return ( ((Building) this.location).getClosingHour());
+	}
 	/**
 	 * The minute of the hour this person's work shift ends.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftEndMinute();
+	public int getShiftEndMinute(){
+		return ( ((Building) this.location).getClosingMinute());
+	}
 	
 	/**
 	 * Whether this person's shift starts before midnight and ends after

@@ -18,9 +18,9 @@ import market.Item;
 
 
 public class MarketInfoPanel extends JPanel implements ActionListener{
-	
+
 	MarketRecords marketRecords;
-	
+
 	private JLabel MarketLabel;
 	//Market Label
 	private JLabel LamboFinnyInvent = null;
@@ -43,28 +43,42 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 	private String KelpShakeInventoryLevel = "Current Inventory Level";
 	private String CoralBitsInventoryLevel = "Current Inventory Level";
 	private String KelpRingsInventoryLevel = "Current Inventory Level";
-	
+
 	private JPanel marketLabel = new JPanel();
-	private JPanel group = new JPanel();
+	//
 	private JButton UpdateButton;
 
 	public MarketInfoPanel(MarketRecords rec) {
-		
-		
+		setLayout(new BorderLayout());
+		//marketLabel.setLayout(new BorderLayout());
+
+		//Creating the header of the UI
+		double cash = Constants.MarketInitialMoney;
+
+		marketLabel.setLayout(new GridLayout(1,0,0,0));
+		MarketLabel = new JLabel("Market's Current Cash :   " + cash);
+		//MarketLabel.setText("Today's Staff :    " + "Unassigned " + "                     " + "Market's Current Cash :   " + cash);
+		marketLabel.add(MarketLabel);
+		add(marketLabel, BorderLayout.NORTH);
+
+		JPanel NorthPanel = new JPanel();
+		//add(marketLabel, BorderLayout.WEST);
 		marketRecords = rec;
-		group.setLayout(new GridLayout(2, 2, 10, 10));
+		//group.setLayout(new GridLayout(2, 2, 10, 10));
 		initMarketLabel();
-		add(MarketLabel);
+		//add(MarketLabel);
 		
 		JPanel UpdatePanel = new JPanel();
-        UpdatePanel.setLayout(new GridLayout(1,0));
-        UpdateButton = new JButton("Update");
-        UpdateButton.addActionListener(this);
-        UpdatePanel.add(UpdateButton);
-        add(UpdatePanel);
-        add(new JLabel("All non-Integers input will be ignored"));
-        
-       
+		UpdatePanel.setLayout(new GridLayout(4,1,0,0));
+		UpdateButton = new JButton("Update");
+		UpdateButton.addActionListener(this);
+		UpdatePanel.add(new JLabel(""));
+		UpdatePanel.add(new JLabel(""));
+		UpdatePanel.add(UpdateButton);
+		UpdatePanel.add(new JLabel("All non-Integers input will be ignored"));
+		add(UpdatePanel, BorderLayout.EAST);
+
+
 
 	}
 
@@ -73,17 +87,8 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 	 * and host and cook information
 	 */
 	private void initMarketLabel() {
-		
-		
-		//Creating the header of the UI
-		double cash = Constants.MarketInitialMoney;
-		JPanel NorthPanel = new JPanel();
-		NorthPanel.setLayout(new FlowLayout());
-		MarketLabel = new JLabel();
-		MarketLabel.setText("Today's Staff :    " + "Unassigned " + "                     " + "Market's Current Cash :   " + cash);
-		NorthPanel.add(new JLabel("               "));
-		NorthPanel.add(MarketLabel);
-		NorthPanel.add(new JLabel("               "));
+
+
 
 		//Creating the UI
 		JPanel panel = new JPanel();
@@ -94,21 +99,21 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		JLabel KelpShakeLabel = new JLabel("               Kelp Shake");
 		JLabel CoralBitsLabel = new JLabel("               Coral Bits");
 		JLabel KelpRingsLabel = new JLabel("               Kelp Rings");
-		
+
 		LamboFinnyInventoryLevel = "Current Inventory Level";
 		ToyodaInventoryLevel = "Current Inventory Level";
 		KrabbyPattyInventoryLevel = "Current Inventory Level";
 		KelpShakeInventoryLevel = "Current Inventory Level";
 		CoralBitsInventoryLevel = "Current Inventory Level";
 		KelpRingsInventoryLevel = "Current Inventory Level";
-		
-			Map<String,Integer> IList = marketRecords.getInventoryList();
-			LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
-			ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));
-			KrabbyPattyInventoryLevel 	= Integer.toString(IList.get("Krabby Patty"));
-			KelpShakeInventoryLevel		= Integer.toString(IList.get("Kelp Shake"));
-			CoralBitsInventoryLevel 	= Integer.toString(IList.get("Coral Bits"));
-			KelpRingsInventoryLevel 	= Integer.toString(IList.get("Kelp Rings"));
+
+		Map<String,Integer> IList = marketRecords.getInventoryList();
+		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
+		ToyodaInventoryLevel		= Integer.toString(IList.get("Toyoda"));
+		KrabbyPattyInventoryLevel 	= Integer.toString(IList.get("Krabby Patty"));
+		KelpShakeInventoryLevel		= Integer.toString(IList.get("Kelp Shake"));
+		CoralBitsInventoryLevel 	= Integer.toString(IList.get("Coral Bits"));
+		KelpRingsInventoryLevel 	= Integer.toString(IList.get("Kelp Rings"));
 
 
 
@@ -171,7 +176,7 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		CoralBitsPanel.add(CoralBitsLabel);
 		CoralBitsPanel.add(CoralBitsInvent);
 		CoralBitsPanel.add(CoralBitsText);
-		
+
 		JPanel KelpRingsPanel = new JPanel();
 		KelpRingsPanel.setLayout(new GridLayout(1,0,0,0));
 		KelpRingsPanel.add(KelpRingsLabel);
@@ -195,15 +200,11 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		panel.add(CoralBitsPanel);
 		panel.add(KelpRingsPanel);
 
-
-
-		marketLabel.setLayout(new BorderLayout());
-		marketLabel.add(NorthPanel, BorderLayout.NORTH);
-		marketLabel.add(panel, BorderLayout.CENTER);
-
 		UpdateInventoryLevelWithoutButton();
-		
-		add(panel);
+
+
+		add(panel, BorderLayout.WEST);
+
 
 		/*
         JLabel label = new JLabel();
@@ -234,8 +235,8 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 			IList.put("Krabby Patty", Integer.parseInt(KrabbyPattyText.getText()));
 		if(  isInteger(KelpRingsText.getText())  )
 			IList.put("Kelp Rings", Integer.parseInt(KelpRingsText.getText()));
-		
-		
+
+
 
 		//Printing out the labels
 		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
@@ -250,23 +251,23 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		KelpShakeInvent.setText("                    " + KelpShakeInventoryLevel);
 		CoralBitsInvent.setText("                    " + CoralBitsInventoryLevel);
 		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
-		
+
 		LamboFinnyText.setText("");
 		ToyodaText.setText("");
 		KelpShakeText.setText("");
 		KrabbyPattyText.setText("");
 		CoralBitsText.setText("");
 		KelpRingsText.setText("");
-		
-		if (marketRecords.cashier != null){
-		marketRecords.cashier.setInventoryList(IList);
 
-		MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
+		if (marketRecords.cashier != null){
+			marketRecords.cashier.setInventoryList(IList);
+
+			MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){
-		
+
 		//System.out.println("IMHERE");
 		Map<String,Integer> IList = marketRecords.getInventoryList();
 		LamboFinnyInventoryLevel	= Integer.toString(IList.get("LamboFinny"));
@@ -281,12 +282,12 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		KelpShakeInvent.setText("                    " + KelpShakeInventoryLevel);
 		CoralBitsInvent.setText("                    " + CoralBitsInventoryLevel);
 		KelpRingsInvent.setText("                    " + KelpRingsInventoryLevel);
-		
+
 
 		if (marketRecords.cashier != null){
-		marketRecords.cashier.setInventoryList(IList);
+			marketRecords.cashier.setInventoryList(IList);
 
-		MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
+			MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
 
 	}
@@ -306,8 +307,8 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == UpdateButton) {
-        	UpdateInventoryLevelWithButton();
-        }
+			UpdateInventoryLevelWithButton();
+		}
 
 	}
 }

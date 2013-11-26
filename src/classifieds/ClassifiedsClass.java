@@ -1,15 +1,19 @@
 package classifieds;
 
+import gui.Building;
 import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.ws.Response;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.WorkRole;
 
@@ -32,6 +36,9 @@ public class ClassifiedsClass implements Classifieds {
 	//List of all the work roles in existence
 	List<WorkRole> roles = 
 			Collections.synchronizedList(new ArrayList<WorkRole>());
+	
+	Set<CityLocation> workplaces = 
+			Collections.synchronizedSet(new HashSet<CityLocation>());
 	
 	//List of all the dwellings in existence
 	List<Dwelling> dwellings = new ArrayList<Dwelling>();
@@ -74,6 +81,7 @@ public class ClassifiedsClass implements Classifieds {
 	@Override
 	public void addWorkRole(WorkRole role) {
 		roles.add(role);
+		workplaces.add(role.getLocation());
 		notifyListeners();
 	}
 
@@ -92,6 +100,13 @@ public class ClassifiedsClass implements Classifieds {
 	public void notifyListeners() {
 		for (ClassifiedsChangedListener listener : listeners) {
 			listener.classifiedsUpdated();
+		}
+	}
+
+	@Override
+	public Set<CityLocation> getWorkplaces() {
+		synchronized (workplaces) {
+			return new HashSet<CityLocation>(workplaces);
 		}
 	}
 

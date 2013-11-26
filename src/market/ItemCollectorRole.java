@@ -18,6 +18,7 @@ import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
 import market.interfaces.ItemCollectorGuiInterfaces;
+import CommonSimpleClasses.Constants;
 import agent.PersonAgent;
 import agent.WorkRole;
 import agent.gui.Gui;
@@ -65,13 +66,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public ItemCollectorRole(Person person, MarketBuilding cL){
 		super(person, cL);
 	}
-	
-	//Working Hour
-		int startinghour = 6;
-		int startingminutes = 29;
-		int endinghour = 18;
-		int endingminutes = 0;
-	
 	
 	//Messages	
 		/**
@@ -285,19 +279,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public void setState(ItemCollectorstate s) {
 		state = s;
 	}
-	//Shifts
-	public int getShiftStartHour(){
-		return startinghour;
-	}
-	public int getShiftStartMinute(){
-		return startingminutes;
-	}
-	public int getShiftEndHour(){
-		return endinghour;
-	}
-	public int getShiftEndMinute(){
-		return endingminutes;
-	}
+
 	public boolean isAtWork(){
 		if (this.isActive())
 			return true;

@@ -42,11 +42,7 @@ private static final int startingminute = 0;
 	
 	private Map<String,Integer> InventoryList ;
 	
-	//Working Hour
-	int startinghour = 6;
-	int startingminutes = 29;
-	int endinghour = 16;
-	int endingminutes = 30;
+
 	
 	/**
 	 * PriceList in the market
@@ -546,19 +542,7 @@ private static final int startingminute = 0;
 		this.state = state;
 	}
 	
-	//Shifts
-	public int getShiftStartHour(){
-		return startinghour;
-	}
-	public int getShiftStartMinute(){
-		return startingminutes;
-	}
-	public int getShiftEndHour(){
-		return endinghour;
-	}
-	public int getShiftEndMinute(){
-		return endingminutes;
-	}
+
 	public boolean isAtWork(){
 		if (this.isActive())
 			return true;

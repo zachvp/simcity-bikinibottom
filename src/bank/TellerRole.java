@@ -403,29 +403,6 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 
 	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		
-		return startMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		
-		return endHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		
-		return endMinute;
-	}
-
-	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
 		return false;

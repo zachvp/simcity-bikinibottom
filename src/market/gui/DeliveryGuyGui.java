@@ -12,8 +12,8 @@ public class DeliveryGuyGui implements Gui {
 
     private DeliveryGuy agent = null;
 
-    private int xPos = 180, yPos = -30;//default cashier position
-    private int xDestination = 40, yDestination = 140;//default start position
+    private int xPos = 130, yPos = -30;//default cashier position
+    private int xDestination = 130, yDestination = -30;//default start position
     
     private static final int DeliveryGuyWidth = 10;
     private static final int DeliveryGuyHeight = 10;
@@ -24,8 +24,8 @@ public class DeliveryGuyGui implements Gui {
     private static final int ExitX = 130;
     private static final int ExitY = -50;
 
-    private static final int HomePosX = 10;
-    private static final int HomePosY = 10;
+    private static final int HomePosX = 125;
+    private static final int HomePosY = 150;
     
     private enum Command {noCommand, GoHome, GoDeliver, GoToExit};
 	private Command command=Command.noCommand;

@@ -45,12 +45,12 @@ public interface Constants {
 	/**
 	 * Whether EventLog should log events.
 	 */
-	public static final boolean LOG = true;
+	public static final boolean LOG = false;
 	
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = true;
+	public static final boolean PRINT = false;
 	
     /**
      * The number of milliseconds in a second
@@ -139,6 +139,7 @@ public interface Constants {
 	public static final int CoralBitsInitialAmount   = 100;
 	public static final int KelpRingsInitialAmount   = 100;
 	
+
 	/**
 	 * The PriceList of the market
 	 */

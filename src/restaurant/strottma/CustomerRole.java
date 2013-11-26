@@ -102,6 +102,15 @@ public class CustomerRole extends Role implements Customer {
 		if (getName().equals(C_NAME_CHEAP)) { person.getWallet().setCashOnHand(6); }
 		this.bill = 0;
 	}
+	
+	/**
+	 * Activate the CustomerRole, then get hungry.
+	 */
+	@Override
+	public void activate() {
+		super.activate();
+		gotHungry();
+	}
 
 	/**
 	 * hack to establish connection to Host.

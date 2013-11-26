@@ -3,6 +3,7 @@ package agent;
 import gui.Building;
 import housing.ResidentRole;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,8 @@ import agent.interfaces.Person.Wallet.IncomeLevel;
 public class PersonAgent extends Agent implements Person {
 	private String name;
 	private Set<Role> roles;
+	
+	private Map<String, Integer> shoppingList;
 	
 	private PersonEvent event;
 	private HungerLevel hungerLevel;
@@ -67,6 +70,8 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		this.roles = new HashSet<Role>();
 		
+		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
+		
 		this.event = PersonEvent.NONE;
 		this.hungerLevel = HungerLevel.FULL;
 		
@@ -74,7 +79,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartTime();
+		this.lastTimeEatingOut = timeManager.fakeStartTime() - 2*Constants.DAY;
 		this.eatingOutWaitPeriod = Constants.DAY;
 		
 		this.workStartThreshold = 2 * Constants.HOUR;

@@ -40,8 +40,10 @@ public class ResidentRole extends Role implements Resident {
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = new ScheduleTask();
 	
-	// state for tasks. The Role will deactivate if it is not performing any tasks.
-	// used to determine when the role should terminate and transition to a city role
+	/** 
+	 * State for tasks. The Role will deactivate if it is not performing any tasks.
+	 * used to determine when the role should terminate and transition to a city role
+	*/
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
 	TaskState task = TaskState.FIRST_TASK;
 	
@@ -64,7 +66,6 @@ public class ResidentRole extends Role implements Resident {
 	});
 	
 	// TODO resolve buying groceries at market 
-	private Map<String, Integer> shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
@@ -132,6 +133,7 @@ public class ResidentRole extends Role implements Resident {
 		if(task == TaskState.FIRST_TASK){
 			gui.setPresent(true);
 			task = TaskState.NONE;
+			return true;
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
@@ -277,7 +279,7 @@ public class ResidentRole extends Role implements Resident {
 		// add to grocery list if the food item is low
 		if(f.amount == f.low) {
 			Do("Adding " + f.type + " to grocery list");
-			shoppingList.put(f.type, f.capacity - f.low);
+			person.getShoppingList().put(f.type, f.capacity - f.low);
 		}
 		
 		// set a timer with a delay using method from abstract Role class
@@ -390,11 +392,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public Map<String, Integer> getGroceries() {
-		return shoppingList;
-	}
-
-	public void setGroceries(Map<String, Integer> groceries) {
-		this.shoppingList = groceries;
+		return person.getShoppingList();
 	}
 
 	public Map<String, Food> getRefrigerator() {

@@ -31,6 +31,7 @@ import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import agent.WorkRole;
+import agent.PersonAgent.HungerLevel;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsChangedListener;
 import classifieds.ClassifiedsClass;
@@ -66,6 +67,7 @@ ClassifiedsChangedListener{
 	JComboBox<MyComboBoxItem> residencesCB;
 	JComboBox<String> wealthCB;
 	JComboBox<String> carCB;
+	JComboBox<String> hungerCB;
 	JButton createButton;
 	ArrayList<MyComboBoxItem> buildList = new ArrayList<MyComboBoxItem>();
 	MyComboBoxItem[] buildingArray;
@@ -121,7 +123,7 @@ ClassifiedsChangedListener{
 		inputPanelLeft.setPreferredSize(inputDimL);
 		inputPanelLeft.setMaximumSize(inputDimL);
 		inputPanelLeft.setMinimumSize(inputDimL);
-		inputPanelLeft.setLayout(new GridLayout(6,1,5,5));
+		inputPanelLeft.setLayout(new GridLayout(7,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelLeft.setOpaque(false);
 		
@@ -130,7 +132,7 @@ ClassifiedsChangedListener{
 		inputPanelright.setPreferredSize(inputDimR);
 		inputPanelright.setMaximumSize(inputDimR);
 		inputPanelright.setMinimumSize(inputDimR);
-		inputPanelright.setLayout(new GridLayout(6,1,5,5));
+		inputPanelright.setLayout(new GridLayout(7,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelright.setOpaque(false);
 		
@@ -145,6 +147,8 @@ ClassifiedsChangedListener{
 		residencesCB = new JComboBox<MyComboBoxItem>(residentArray);
 		wealthCB = new JComboBox<String>(new String[] {"Rich", "Middle", "Poor"});
 		carCB = new JComboBox<String>(new String[] {"Yes", "No"});
+		hungerCB = new JComboBox<String>(new String[] {"Starving", "Hungry",
+						"Neutral", "Satisfied", "Full"});
 
 		nameTextF.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -159,6 +163,7 @@ ClassifiedsChangedListener{
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(0);
+		hungerCB.setSelectedIndex(2);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -170,6 +175,8 @@ ClassifiedsChangedListener{
 		inputPanelright.add(residencesCB);
 		inputPanelLeft.add(new JLabel("Status: "));
 		inputPanelright.add(wealthCB);
+		inputPanelLeft.add(new JLabel("Hunger: "));
+		inputPanelright.add(hungerCB);
 		inputPanelLeft.add(new JLabel("Car: "));
 		inputPanelright.add(carCB);
 		
@@ -228,6 +235,7 @@ ClassifiedsChangedListener{
 		//add(south, BorderLayout.SOUTH);
 		
 		carCB.setSelectedIndex(1);
+		hungerCB.setSelectedIndex(2);
 		classifiedsUpdated();
 		checkSomewhereforBuildings();
 	}
@@ -243,6 +251,7 @@ ClassifiedsChangedListener{
 			WorkRole job = (WorkRole)(jobItem.object);
 			Dwelling home = (Dwelling)(homeItem.object);
 			String status = (String)wealthCB.getSelectedItem();
+			String hungerLevel = (String)hungerCB.getSelectedItem();
 			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
 
 			if(!incompleteInputs(name, status, (String)carCB.getSelectedItem())){
@@ -252,11 +261,12 @@ ClassifiedsChangedListener{
 				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(0);
 				carCB.setSelectedIndex(1);
+				hungerCB.setSelectedIndex(2);
 
 				//create new PersonAgent
 				//PersonAgent newPerson = new PersonAgent(name);
 				//TODO add all person info
-				citizenRecords.addCitizen(name, job, home, status, hasCar);
+				citizenRecords.addCitizen(name, job, home, status, hasCar, hungerLevel);
 				if (Constants.PRINT) System.out.println(name +" has been added to your city!");
 
 				//TODO pull up newPerson's infopanel
@@ -268,6 +278,7 @@ ClassifiedsChangedListener{
 				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(0);
 				carCB.setSelectedIndex(1);
+				hungerCB.setSelectedIndex(2);
 			}
 			else{
 				msg.setText("Please complete all inputs");

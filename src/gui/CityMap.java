@@ -196,7 +196,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 			if ( b.contains( me.getX(), me.getY() ) ) {
 				buildingView.showCard(b.getName());
 				infoPanel.updateBuildingInfoPanel(b);
-				System.out.println(b.getName()+" clicked");
+				if (Constants.PRINT) System.out.println(b.getName()+" clicked");
 
 			}
 		}

@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 public class BuildingView extends JPanel implements ActionListener{
 
 	private Dimension d;
-	private InfoList buildingList;
 	private BufferedImage image;
 
 	public BuildingView(int w, int h){
@@ -52,14 +51,7 @@ public class BuildingView extends JPanel implements ActionListener{
 		add(welcomeCard, "blank");
 	}
 	
-	/**
-	 * Gives reference to the list of Buildings
-	 * @param b InfoList of Buildings
-	 */
-	public void setBuildingList(InfoList b){
-		buildingList = b;
-	}
-
+	
 	/**
 	 * Adds a new card (building view/JPanel) to the stack.
 	 * @param card The JPanel to be added to the stack (ie. a new internal view of a building)
@@ -67,7 +59,6 @@ public class BuildingView extends JPanel implements ActionListener{
 	 */
 	public void addCard(JPanel card, String name){
 		add(card, name);
-		buildingList.addToList(name);
 	}
 
 	/**

@@ -154,7 +154,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		tabbedPane.addTab("Buildings", buildingList);
 		tabbedPane.addTab("People", personList);
 		InfoListSlot.add(tabbedPane);
-		buildingViewPanel.setBuildingList(buildingList);
 		map.setInfoPanel(infoPanel);
 
 		//JPanel to hold infoPanelSlot and buildingListSlot
@@ -282,6 +281,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	private void construct(Building building){		
 		buildingViewPanel.addCard(building.getAnimationPanel(), building.getName());//creates card and corresponding button
 		map.addBuildingToMap(building);
+		if(building.type() != LocationTypeEnum.None){
+			buildingList.addToList(building.getName());
+		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 		constructedBuildings.add(building);
 	}

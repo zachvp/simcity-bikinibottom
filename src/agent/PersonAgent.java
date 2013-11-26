@@ -83,6 +83,10 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	
+	public PersonAgent(String name){
+		this(name, IncomeLevel.MEDIUM);
+	}
+	
 	/* -------- Messages -------- */
 	
 	// from PassengerRole

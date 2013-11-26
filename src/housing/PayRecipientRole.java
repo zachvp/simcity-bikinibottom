@@ -1,6 +1,5 @@
 package housing;
 
-import housing.ResidentRole.TaskState;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
@@ -10,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
-import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
@@ -98,7 +96,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		if(mr == null) { return; }
 		mr.hasPaid = amount;
 		mr.state = PaymentState.PAYMENT_RECEIVED;
-		log.add("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
+		Do("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
 
@@ -132,20 +130,20 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 
 	/* ----- Actions ----- */
 	private void checkResidentPayment(MyResident mr){
-		log.add("Checking payment for resident #" + mr.dwelling.getIDNumber());
+		Do("Checking payment for resident #" + mr.dwelling.getIDNumber());
 		mr.owes -= mr.hasPaid;
 		
 		if(mr.owes == 0){
 			mr.state = PaymentState.DONE;
-			log.add("Resident has paid in full, now owes " + mr.owes);
+			Do("Resident has paid in full, now owes " + mr.owes);
 		}
 		else if(mr.owes > 0) {
-			log.add("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
+			Do("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
 			mr.state = PaymentState.NONE;
 		}
 		// this should never happen
 		else {
-			log.add("Resident overpaid! Money will go to next month.");
+			Do("Resident overpaid! Money will go to next month.");
 		}
 	}
 	
@@ -154,7 +152,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
-		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());
+		Do("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
 	
 	/* ----- Utilities ----- */
@@ -164,7 +162,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 				return mr;
 			}
 		}
-		log.add("Unable to find resident in list!");
+		Do("Unable to find resident in list!");
 		return null;
 	}
 	

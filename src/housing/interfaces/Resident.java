@@ -10,4 +10,6 @@ public interface Resident {
 	public void msgAtDestination();
 
 	public void msgDwellingFixed();
+
+	void msgDwellingDegraded();
 }

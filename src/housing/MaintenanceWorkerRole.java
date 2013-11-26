@@ -1,14 +1,20 @@
 package housing;
 
+import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.MaintenanceWorkerGui;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.WorkRole;
 
@@ -16,6 +22,22 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
+	
+	// listens to the schedule for completion
+	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	
+	// used to create time delays and schedule events
+	private ScheduleTask schedule = new ScheduleTask();
+	
+	// prevents the role from being deactivated prematurely
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
+	TaskState task = TaskState.FIRST_TASK;
+	
+	// graphics
+	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
+	
+	// constants
+	private final int IMPATIENCE_TIME = 7;
 	
 	/* --- Constants --- */
 	private final int SHIFT_START_HOUR = 6;
@@ -54,8 +76,16 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		stateChanged();
 	}
 	
+	public void msgAtDestination(){
+		doneWaitingForInput();
+	}
+	
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		
+		if(task == TaskState.FIRST_TASK){
+			task = TaskState.NONE;
+		}
 		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
@@ -66,21 +96,63 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 			}
 		}
 		
+		
+		// check for idleness
+		if(task == TaskState.NONE){
+			Runnable command = new Runnable() {
+				public void run(){
+					Do("Deactivating role");
+					task = TaskState.FIRST_TASK;
+					deactivate();
+				}
+			};
+			// schedule a delay for food consumption
+			listener.taskFinished(schedule);
+			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		}
+		
 		return false;
 	}
 	
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
-//		DoGoToDwelling(wo.dwelling.getIDNumber());
-//		DoFixProblem(wo.problemType);
+		task = TaskState.DOING_TASK;
+		DoGoToDwelling(wo.dwelling.getIDNumber());
+		waitForInput();
 		
+		DoFixProblem();
+		waitForInput();
+		
+		// update the state and inform the resident that the problem is fixed
 		wo.state = WorkOrderState.FIXED;
 		wo.dwelling.getResident().msgDwellingFixed();
+		wo.dwelling.setCondition(Condition.GOOD);
 		workOrders.remove(wo);
+		
+		// TODO charge landlord for the service
 		
 		log.add("Fixed problem.");
 		
-//		DoReturnHome();
+		DoReturnHome();
+		waitForInput();
+		task = TaskState.NONE;
+	}
+	
+	/* -- Animation Routines --- */
+	private void DoGoToDwelling(int unitNumber){
+		Do("Going to dwelling.");
+		gui.DoGoToDwelling();
+		// deactivate role
+	}
+	
+	private void DoFixProblem(){
+		Do("Fixing problem.");
+		gui.DoFixProblem();
+	}
+	
+	private void DoReturnHome(){
+		Do("Returning home");
+		gui.DoReturnHome();
 	}
 
 	/* --- Abstract methods from WorkRole --- */
@@ -118,6 +190,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	@Override
 	public void msgLeaveWork() {
 		deactivate();
+	}
+	
+	public void setGui(MaintenanceWorkerGui gui){
+		this.gui = gui;
 	}
 
 	/* --- Getters for testing purposes --- */

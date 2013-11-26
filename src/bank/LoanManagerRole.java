@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.gui.LoanManagerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -20,6 +21,8 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
+	
+	double paycheckAmount = 300;
 	
 	
 	boolean atWork;
@@ -36,14 +39,22 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	int startHour = 6;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
+	int startHour;
+	int startMinute;
+	int endHour;
+	int endMinute;
 	
 	public LoanManagerRole(Person person, CityLocation bank) {
 		super(person, bank);
 		atWork = false;
+		
+
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
+		
 //		this.name = name;
 		
 	}
@@ -99,11 +110,20 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		loanTasks.remove(lt);
 	}
 	private void goOffWork() {
+		addPaycheckToWallet();
 		doEndWorkDay();
 		acquireSemaphore(active);
 		atWork = false;
 		this.deactivate();
 		
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
 	//ANIMATION #####################
@@ -127,6 +147,8 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	public void setGui(LoanManagerGui lmg) {
 		loanManagerGui = lmg;
 	}
+	
+	
 	
 
 	// Accessors, etc.

@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
 import agent.WorkRole;
@@ -24,7 +26,12 @@ import agent.interfaces.Person;
 public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask schedule = new ScheduleTask();
+	
+	// for testing. Listens to the ScheduleTask 
+	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	
+	// used to create time delays and schedule events
 	
 	/* --- Constants --- */
 	// TODO when should shift end?
@@ -33,6 +40,10 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	private final int SHIFT_END_HOUR = 12;
 	private final int SHIFT_END_MINUTE = 0;
 	
+	private final int IMPATIENCE_TIME = 7;
+	
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
+	TaskState task = TaskState.FIRST_TASK;	
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -77,7 +88,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		int hour = 12;
 		int minute = 0;
 		
-		task.scheduleDailyTask(command, hour, minute);
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 	
 	public PayRecipientRole(PersonAgent payRecipientPerson) {
@@ -90,12 +101,16 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		if(mr == null) { return; }
 		mr.hasPaid = amount;
 		mr.state = PaymentState.PAYMENT_RECEIVED;
-		log.add("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
+		Do("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
+		
+		if(task == TaskState.FIRST_TASK){
+			task = TaskState.NONE;
+		}
 		
 		synchronized(residents){
 			for(MyResident mr : residents){
@@ -115,25 +130,35 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 			}
 		}
 		
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				
+			}
+		};
+		
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		
 		return false;
 	}
 
 	/* ----- Actions ----- */
 	private void checkResidentPayment(MyResident mr){
-		log.add("Checking payment for resident #" + mr.dwelling.getIDNumber());
+		Do("Checking payment for resident #" + mr.dwelling.getIDNumber());
 		mr.owes -= mr.hasPaid;
 		
 		if(mr.owes == 0){
 			mr.state = PaymentState.DONE;
-			log.add("Resident has paid in full, now owes " + mr.owes);
+			Do("Resident has paid in full, now owes " + mr.owes);
 		}
 		else if(mr.owes > 0) {
-			log.add("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
+			Do("Resident #" + mr.dwelling.getIDNumber() + " still owes money!");
 			mr.state = PaymentState.NONE;
 		}
 		// this should never happen
 		else {
-			log.add("Resident overpaid! Money will go to next month.");
+			Do("Resident overpaid! Money will go to next month.");
 		}
 	}
 	
@@ -142,7 +167,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		
 		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
-		log.add("Charged resident in unit #" + mr.dwelling.getIDNumber());
+		Do("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
 	
 	/* ----- Utilities ----- */
@@ -152,7 +177,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 				return mr;
 			}
 		}
-		log.add("Unable to find resident in list!");
+		Do("Unable to find resident in list!");
 		return null;
 	}
 	

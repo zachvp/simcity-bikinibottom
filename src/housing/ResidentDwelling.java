@@ -11,7 +11,6 @@ import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
-import housing.interfaces.ResidentGui;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
@@ -31,7 +30,7 @@ public class ResidentDwelling implements Dwelling {
 	/* --- Housing slots --- */
 	// roles
 	private ResidentRole resident;
-	private MaintenanceWorker worker;
+	private MaintenanceWorkerRole worker;
 	private PayRecipient payRecipient;
 	
 	private double monthlyPaymentAmount;
@@ -47,6 +46,8 @@ public class ResidentDwelling implements Dwelling {
 	
 	// TODO just a test person
 	PersonAgent person = new PersonAgent("Spongebob");
+	PersonAgent workPerson = new PersonAgent("Maintenence Worker");
+	// end test
 	
 	/* --- Constructor --- */
 	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building, LayoutGui gui) {
@@ -55,19 +56,26 @@ public class ResidentDwelling implements Dwelling {
 		this.building = building;
 		
 		this.payRecipient = building.getPayRecipient();
+		// TODO uncomment next 2 lines
 		this.worker = building.getWorker();
 		
 		this.resident = new ResidentRole(null, building, this, gui);
 		
-		// TODO implemented test
+		// TODO implemented test hacks
 //		this.resident = new ResidentRole(person, building, this, gui);
 //		person.addRole(resident);
 //		person.startThread();
 //		resident.activate();
+//		
+//		this.worker = new MaintenanceWorkerRole(workPerson);
+//		workPerson.addRole(worker);
+//		workPerson.startThread();
+//		worker.activate();		
+		
+		// ---- end test hacks
 		
 		this.building.addResident(resident);
 		
-//		log.add("Creating dwelling with start condition " + startCondition);
 		this.condition = startCondition;
 		
 		// determine the starting monthly payment for the property
@@ -88,14 +96,18 @@ public class ResidentDwelling implements Dwelling {
 			public void run() {
 				// TODO make the dwelling degrade gradually
 				condition = Constants.Condition.POOR;
+				resident.msgDwellingDegraded();
 			}
 		};
-				
-		// every day at noon
+		// TODO test 
+		condition = Constants.Condition.POOR;
+		resident.msgDwellingDegraded();
+		
+		
+		// degrade condition every day
 		int hour = 6;
 		int minute = 10;
 		
-		// TODO make this work in a non-role class
 		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
@@ -151,7 +163,7 @@ public class ResidentDwelling implements Dwelling {
 		return worker;
 	}
 
-	public void setWorker(MaintenanceWorker worker) {
+	public void setWorker(MaintenanceWorkerRole worker) {
 		this.worker = worker;
 	}
 }

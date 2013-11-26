@@ -39,6 +39,10 @@ public class LayoutGui implements Gui{
 	BufferedImage image;
 	ImageIcon icon;
 
+	boolean isOpen;
+	private int hour;
+	private int minute;
+	
 	public LayoutGui(){ //HostAgent m) {
 		xPos = deskXPos;
 		yPos = deskYPos;
@@ -96,15 +100,28 @@ public class LayoutGui implements Gui{
 		loanManagerDesk.fillRect(50, 140, 20, 60);
 		loanManagerDesk.fillRect(0, 200, 70, 20);
 		
-//		drawLetter(g2, "open");
+		if(isOpen) {
+			drawLetter(g2, "open");
+		}
+		else {
+			drawLetter(g2, "closed");
+		}
 
 	}
 
 
 	public void drawLetter(Graphics2D g, String letter) {
 		g.setColor(Color.black);
-		g.drawString(letter, xPos+10, yPos+10);
+		g.drawString(letter, xPos+130, yPos-5);
+		g.drawString("" + hour, xPos+200, yPos-5);
+		g.drawString("" + minute, xPos+200, yPos+5);
 
+	}
+	
+	public void setOpen(boolean is, int hour, int minute) {
+		isOpen = is;
+		this.hour = hour;
+		this.minute = minute;
 	}
 
 	public boolean isPresent() {

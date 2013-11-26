@@ -4,6 +4,7 @@ import mock.EventLog;
 import mock.Mock;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.MaintenanceWorkerGui;
 
 public class MockMaintenanceWorker extends Mock implements MaintenanceWorker {
 	/* --- Data --- */
@@ -16,6 +17,11 @@ public class MockMaintenanceWorker extends Mock implements MaintenanceWorker {
 	@Override
 	public void msgFileWorkOrder(Dwelling dwelling) {
 		log.add("Received message 'file work order.'");
+	}
+
+	@Override
+	public void msgAtDestination() {
+		log.add("Received message 'at destination'");
 	}
 
 }

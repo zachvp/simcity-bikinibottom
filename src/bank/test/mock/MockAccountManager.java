@@ -1,8 +1,6 @@
 package bank.test.mock;
 
 
-import java.util.Map;
-
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.Teller;
@@ -47,6 +45,12 @@ public class MockAccountManager extends Mock implements AccountManager {
 				double amount) {
 			log.add("withdraw" + amount);
 					
+		}
+
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
 		}
 
 		

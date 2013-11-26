@@ -1,13 +1,17 @@
 package housing;
 
+import agent.PersonAgent;
+import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
+import housing.interfaces.ResidentGui;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
@@ -41,8 +45,11 @@ public class ResidentDwelling implements Dwelling {
 	// cost constant depending on housing condition
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
+	// TODO just a test person
+	PersonAgent person = new PersonAgent("Spongebob");
+	
 	/* --- Constructor --- */
-	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building) {
+	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building, LayoutGui gui) {
 		super();
 
 		this.building = building;
@@ -50,7 +57,14 @@ public class ResidentDwelling implements Dwelling {
 		this.payRecipient = building.getPayRecipient();
 		this.worker = building.getWorker();
 		
-		this.resident = new ResidentRole(null, building, this);
+		this.resident = new ResidentRole(null, building, this, gui);
+		
+		// TODO implemented test
+//		this.resident = new ResidentRole(person, building, this, gui);
+//		person.addRole(resident);
+//		person.startThread();
+//		resident.activate();
+		
 		this.building.addResident(resident);
 		
 //		log.add("Creating dwelling with start condition " + startCondition);
@@ -103,6 +117,10 @@ public class ResidentDwelling implements Dwelling {
 
 	public Resident getResident() {
 		return resident;
+	}
+	
+	public Gui getResidentGui() {
+		return resident.getGui();
 	}
 	
 	public String toString() {

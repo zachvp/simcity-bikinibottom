@@ -124,10 +124,13 @@ public class RealPassengerRole extends PassengerRole {
 
 
 	private void decide() {
+		
+		//If passenger needs to start moving
 		if (path.isEmpty() && location != destination){
 			boolean useBusNow = useBus && !hasCar;
 			path = kelp.routeFromAToB(location, destination, useBusNow);
 			return;
+		//If passenger got to destination
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
 			deactivate();
@@ -140,7 +143,8 @@ public class RealPassengerRole extends PassengerRole {
 			
 			return;
 		}
-
+		
+		//If passenger got to intermediate path location
 		if (path.get(0) == location) {
 			path.remove(0);
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
@@ -160,11 +164,14 @@ public class RealPassengerRole extends PassengerRole {
 			}
 		}
 		
+		//If passenger arrived to a busstop
 		if (location.type() == LocationTypeEnum.Busstop) {
 			Busstop busstop = (Busstop)location;
 			busstop.msgIAmHere(this);
 			state = PassengerStateEnum.WaitingForBus;
 			return;
+			
+		//If passenger needs to initiate movement
 		} else {
 			if (!hasCar || path.get(0).type() != LocationTypeEnum.Corner) {
 				gui.doWalkTo(path.get(0));

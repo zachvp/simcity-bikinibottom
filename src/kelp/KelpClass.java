@@ -121,7 +121,9 @@ public class KelpClass implements Kelp {
 	public List<CityLocation> routeFromAToB(CityLocation A, 
 			CityLocation B, Boolean tryBus){
 		XYPos posA = getAbsoluteEntrancePosition(A);
-		return routeFromAToB(posA, B, tryBus);
+		List<CityLocation> response = routeFromAToB(posA, B, tryBus);
+		//response.add(0, A);
+		return response;
 	}
 
 	private List<CityLocation> returnFastestPath(

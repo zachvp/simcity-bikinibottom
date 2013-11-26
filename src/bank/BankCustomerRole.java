@@ -4,10 +4,8 @@ import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityLocation;
 import agent.Role;
-import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
-import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.BankCustomerGuiInterface;
 import bank.interfaces.LoanManager;
@@ -318,20 +316,21 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			state= State.gettingLoan;
 			return;
 		}
-		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount > this.getPerson().getWallet().getTooLittle()){
+		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount > ((myTooLittle() + myTooMuch())/2)){
 			Do("I'm withdrawing");
-			teller.msgWithdrawMoney(this, accountId, this.getPerson().getWallet().getTooLittle());//TODO for testing
+			double withdrawAmount = (myTooLittle() + myTooMuch())/2;
+			teller.msgWithdrawMoney(this, accountId, withdrawAmount);
 			state= State.withdrawing;
 			return;
 		}
-		if(this.getPerson().getWallet().getCashOnHand() > this.getPerson().getWallet().getTooMuch()) {
+		if(this.getPerson().getWallet().getCashOnHand() > myTooMuch()) {
 			Do("Im depositing");
 			double depositAmount = myCash() - ((myTooMuch() + myTooLittle())/2);
-			teller.msgDepositMoney(this, accountId, depositAmount); //TODO for testing
+			teller.msgDepositMoney(this, accountId, depositAmount); 
 			state = State.depositing;
 			return;
 		}
-		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount<this.getPerson().getWallet().getTooLittle()) {
+		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount< ((myTooLittle() + myTooMuch())/2)) {
 //			Do("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
@@ -344,13 +343,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private void askForLoan() {//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 		Do("asking for loan");
-//		Do("asking for loan from loanmanager");
 		doGoToLoanManager(loanManagerXPos);
 		acquireSemaphore(active);
 		if(this.getPerson().getWallet().getMoneyNeeded() == 0) {
-			getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getTooLittle());
+			getLoanManager().msgINeedALoan(this, ((myTooLittle() + myTooMuch())/2)); //gets loan to get them in safe money range for them
 		}
-		if(this.getPerson().getWallet().getMoneyNeeded() > 0) {
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0) {//has money needed for something
+			
 			getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getMoneyNeeded());
 			this.getPerson().getWallet().setMoneyNeeded(0);//TODO check
 		}
@@ -417,6 +416,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	private double myTooMuch() {
 		return this.getPerson().getWallet().getTooMuch();
+	}
+	
+	private double myMoneyNeeded() {
+		return this.getPerson().getWallet().getMoneyNeeded();
 	}
 	
 	public void setGui(BankCustomerGuiInterface b) {

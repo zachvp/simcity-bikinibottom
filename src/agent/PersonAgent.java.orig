@@ -290,6 +290,7 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
+<<<<<<< HEAD
 	//updates hunger level to decrease as day goes on
 	public void updateHungerLevel() {
 		int interval = 3;
@@ -324,6 +325,11 @@ public class PersonAgent extends Agent implements Person {
 			return;
 		}
 		
+=======
+	@Override
+	public Map<String, Integer> getShoppingList(){
+		return shoppingList;
+>>>>>>> master
 	}
 	
 	// ---- Eating out
@@ -665,12 +671,6 @@ public class PersonAgent extends Agent implements Person {
 						LocationTypeEnum.Corner).get(0);
 		
 		setCar(new CarAgent(nearestCorner));
-	}
-
-	@Override
-	public Map<String, Integer> getShoppingList() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

@@ -213,7 +213,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	}
 
 	public void msgHereIsPayment(double bill) {
-		// TODO Auto-generated method stub
-		
+		person.getWallet().addCash(bill);
 	}
 }

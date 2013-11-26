@@ -40,8 +40,10 @@ public class ResidentRole extends Role implements Resident {
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = new ScheduleTask();
 	
-	// state for tasks. The Role will deactivate if it is not performing any tasks.
-	// used to determine when the role should terminate and transition to a city role
+	/** 
+	 * State for tasks. The Role will deactivate if it is not performing any tasks.
+	 * used to determine when the role should terminate and transition to a city role
+	*/
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
 	TaskState task = TaskState.FIRST_TASK;
 	
@@ -131,6 +133,7 @@ public class ResidentRole extends Role implements Resident {
 		if(task == TaskState.FIRST_TASK){
 			gui.setPresent(true);
 			task = TaskState.NONE;
+			return true;
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {

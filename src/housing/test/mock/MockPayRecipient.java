@@ -3,6 +3,7 @@ package housing.test.mock;
 import mock.EventLog;
 import mock.Mock;
 import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.PersonAgent;
@@ -12,6 +13,8 @@ public class MockPayRecipient extends Mock implements PayRecipient {
 	public EventLog log = new EventLog();
 	public PersonAgent person = new PersonAgent("Mock Pay Recipient");
 	public Resident myRes;
+	public MaintenanceWorker worker;
+	
 	public MockPayRecipient(String name) {
 		super(name);
 	}
@@ -26,5 +29,11 @@ public class MockPayRecipient extends Mock implements PayRecipient {
 	@Override
 	public void addResident(Dwelling dwelling) {
 		log.add("Added resident.");
+	}
+
+	@Override
+	public void msgServiceCharge(double charge, MaintenanceWorker worker) {
+		log.add("Received bill for maintenance.");
+		this.worker = worker;
 	}
 }

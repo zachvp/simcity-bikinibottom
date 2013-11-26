@@ -179,10 +179,8 @@ ClassifiedsChangedListener{
 		ClassifiedsClass.getClassifiedsInstance().addListener(this);
 
 		msg = new JLabel("");
-		Dimension msgDim = new Dimension(d.width, (int)(d.height*0.3));
+		Dimension msgDim = new Dimension((int)(d.width*0.6), (int)(d.height*0.05));
 		msg.setPreferredSize(msgDim);
-		msg.setMaximumSize(msgDim);
-		msg.setMinimumSize(msgDim);
 		
 		south.add(createButton);
 		south.add(populateButton);

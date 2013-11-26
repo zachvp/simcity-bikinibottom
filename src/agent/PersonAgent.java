@@ -3,7 +3,6 @@ package agent;
 import gui.Building;
 import housing.ResidentRole;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,9 +15,9 @@ import transportation.PassengerRole;
 import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 

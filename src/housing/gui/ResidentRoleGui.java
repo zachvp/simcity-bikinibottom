@@ -32,7 +32,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	/* --- Hardcoded Positions --- */
 	// default resident position
 	private int xPos, yPos;
-	private int xDestination = 100, yDestination = 100;//default start position
+	private int xDestination = 50, yDestination = 50;//default start position
 	private final int JAZZER_SPOT_X = 0;
 	private final int JAZZER_SPOT_Y = 0;
 	

@@ -62,15 +62,15 @@ public class ResidentDwelling implements Dwelling {
 		this.resident = new ResidentRole(null, building, this, gui);
 		
 		// TODO implemented test hacks
-//		this.resident = new ResidentRole(person, building, this, gui);
-//		person.addRole(resident);
-//		person.startThread();
-//		resident.activate();
-//		
-//		this.worker = new MaintenanceWorkerRole(workPerson);
-//		workPerson.addRole(worker);
-//		workPerson.startThread();
-//		worker.activate();		
+		this.resident = new ResidentRole(person, building, this, gui);
+		person.addRole(resident);
+		person.startThread();
+		resident.activate();
+		
+		this.worker = new MaintenanceWorkerRole(workPerson);
+		workPerson.addRole(worker);
+		workPerson.startThread();
+		worker.activate();
 		
 		// ---- end test hacks
 		

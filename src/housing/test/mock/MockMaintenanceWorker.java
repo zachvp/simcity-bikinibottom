@@ -24,4 +24,9 @@ public class MockMaintenanceWorker extends Mock implements MaintenanceWorker {
 		log.add("Received message 'at destination'");
 	}
 
+	@Override
+	public void msgHereIsPayment(double payment) {
+		log.add("Received payment from PayRecipient.");
+	}
+
 }

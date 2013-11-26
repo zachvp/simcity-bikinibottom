@@ -87,10 +87,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		
-		if(task == TaskState.FIRST_TASK){
-			task = TaskState.NONE;
-			return true;
-		}
+//		if(task == TaskState.FIRST_TASK){
+//			task = TaskState.NONE;
+//			return true;
+//		}
 		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
@@ -122,6 +122,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
 		task = TaskState.DOING_TASK;
+		log.add("Fixing problem.");
 		DoGoToDwelling(wo.dwelling.getIDNumber());
 		waitForInput();
 		
@@ -147,7 +148,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	
 	/* -- Animation Routines --- */
 	private void DoGoToDwelling(int unitNumber){
-		Do("Going to dwelling.");
+//		Do("Going to dwelling.");
 		gui.DoGoToDwelling();
 		// deactivate role
 	}

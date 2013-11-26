@@ -43,10 +43,10 @@ private static final int startingminute = 0;
 	private Map<String,Integer> InventoryList ;
 	
 	//Working Hour
-	int startinghour = 6;
-	int startingminutes = 29;
-	int endinghour = 16;
-	int endingminutes = 30;
+		int startinghour 	= Constants.MarketWorkRoleStartingHour;
+		int startingminutes = Constants.MarketWorkRoleStartingMinutes;
+		int endinghour 		= Constants.MarketWorkRoleEndingHour;
+		int endingminutes	= Constants.MarketWorkRoleEndingMinutes;
 	
 	/**
 	 * PriceList in the market

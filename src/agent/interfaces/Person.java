@@ -203,5 +203,9 @@ public interface Person {
 	 * there aren't that many, remove all.
 	 */
 	void removeItemsFromInventory(String name, int amount);
+
+	/** Return the singular shopping list so it can be accessed by
+	 * all roles. */
+	Map<String, Integer> getShoppingList();
 	
 }

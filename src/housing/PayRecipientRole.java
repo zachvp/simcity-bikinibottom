@@ -1,19 +1,19 @@
 package housing;
 
+import housing.interfaces.Dwelling;
+import housing.interfaces.PayRecipient;
+import housing.interfaces.Resident;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import housing.interfaces.Dwelling;
-import housing.interfaces.PayRecipient;
-import housing.interfaces.Resident;
+import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
-import agent.interfaces.Person;
-import agent.mock.EventLog;
-import agent.Constants;
-import agent.Constants.Condition;
+import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 /**
  * PayRecipient is the generic money collector that charges

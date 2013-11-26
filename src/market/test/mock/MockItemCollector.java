@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import agent.Constants;
+import CommonSimpleClasses.Constants;
 import market.test.mock.LoggedEvent;
 import market.test.mock.EventLog;
 import market.Item;

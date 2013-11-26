@@ -1,11 +1,11 @@
 package housing.test.mock;
 
+import mock.EventLog;
+import mock.Mock;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.PersonAgent;
-import agent.mock.EventLog;
-import agent.mock.Mock;
 
 public class MockPayRecipient extends Mock implements PayRecipient {
 	/* ----- Data ----- */

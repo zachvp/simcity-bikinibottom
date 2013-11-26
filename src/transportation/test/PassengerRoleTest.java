@@ -32,9 +32,9 @@ import transportation.mapbuilder.test.MapBuilderTest;
 import transportation.test.mock.MockPassengerGui;
 import transportation.test.mock.MockPerson;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Constants;
 
 public class PassengerRoleTest {
 	

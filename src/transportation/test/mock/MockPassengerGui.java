@@ -2,7 +2,7 @@ package transportation.test.mock;
 
 import java.awt.Graphics2D;
 
-import agent.mock.EventLog;
+import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.PassengerGui;

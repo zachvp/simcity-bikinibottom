@@ -1,9 +1,9 @@
 package parser.test.mock;
 
+import mock.Mock;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
-import agent.mock.Mock;
 
 public class MockCityBuilding extends Mock implements CityBuilding {
 

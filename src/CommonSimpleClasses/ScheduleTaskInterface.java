@@ -1,4 +1,4 @@
-package agent.interfaces;
+package CommonSimpleClasses;
 
 /**
  * An interface for ScheduleTask that allows for flexible timing and
@@ -7,7 +7,18 @@ package agent.interfaces;
  *
  */
 public interface ScheduleTaskInterface {
+	
+	/**
+     * Executes the command every day at hour:minute.
+     */
 	public void scheduleDailyTask(Runnable command, int hour, int minute);
+	
+	/**
+	 * Executes the scheduled task at firstTime and every delay
+	 * milliseconds thereafter (game time).
+	 */
+	public void scheduleTaskAtInterval(Runnable command, long firstTime,
+			long delay);
 	
 	/**
 	 * Executes the command one time, at the next occurrence of hour:minute.

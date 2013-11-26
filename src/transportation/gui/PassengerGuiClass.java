@@ -53,8 +53,7 @@ public class PassengerGuiClass implements PassengerGui {
 				xPos += 1;
 			else if (xPos > xDestination)
 				xPos -= 1;
-
-			if (yPos < yDestination)
+			else if (yPos < yDestination)
 				yPos += 1;
 			else if (yPos > yDestination)
 				yPos -= 1;

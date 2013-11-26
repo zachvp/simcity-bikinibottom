@@ -52,11 +52,13 @@ public class AnimationPanel extends JPanel implements ActionListener {
         g2.fillRect(0, 0, WINDOWX, WINDOWY );
 
         
-        for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.draw(g2);
-            }
-        }
+        synchronized (guis) {
+			for (Gui gui : guis) {
+				if (gui.isPresent()) {
+					gui.draw(g2);
+				}
+			}
+		}
     }
     
     public void stopTimer(){

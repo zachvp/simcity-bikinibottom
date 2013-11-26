@@ -36,14 +36,18 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	// graphics
 	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
 	
-	// constants
-	private final int IMPATIENCE_TIME = 7;
 	
 	/* --- Constants --- */
 	private final int SHIFT_START_HOUR = 6;
 	private final int SHIFT_START_MINUTE = 0;
 	private final int SHIFT_END_HOUR = 12;
 	private final int SHIFT_END_MINUTE = 0;
+	
+	// time it takes before deactivating
+	private final int IMPATIENCE_TIME = 7;
+	
+	// price for fixing a dwelling
+	private final double SERVICE_CHARGE = 16;
 	
 	enum WorkOrderState {FILED, FIXED}
 	private class WorkOrder {
@@ -85,6 +89,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		if(task == TaskState.FIRST_TASK){
 			task = TaskState.NONE;
+			return true;
 		}
 		
 		synchronized(workOrders) {
@@ -127,9 +132,11 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		wo.state = WorkOrderState.FIXED;
 		wo.dwelling.getResident().msgDwellingFixed();
 		wo.dwelling.setCondition(Condition.GOOD);
-		workOrders.remove(wo);
 		
-		// TODO charge landlord for the service
+		// charge the landlord
+		wo.dwelling.getPayRecipient().msgServiceCharge(SERVICE_CHARGE, this);
+		
+		workOrders.remove(wo);
 		
 		log.add("Fixed problem.");
 		
@@ -153,27 +160,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	private void DoReturnHome(){
 		Do("Returning home");
 		gui.DoReturnHome();
-	}
-
-	/* --- Abstract methods from WorkRole --- */
-	@Override
-	public int getShiftStartHour() {
-		return SHIFT_START_HOUR;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return SHIFT_START_MINUTE;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return SHIFT_END_HOUR;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return SHIFT_END_MINUTE;
 	}
 
 	@Override
@@ -203,5 +189,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 
 	public void setWorkOrders(List<WorkOrder> workOrders) {
 		this.workOrders = workOrders;
+	}
+
+	public void msgHereIsPayment(double bill) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -120,27 +121,31 @@ public class InfoPanel extends JPanel implements ActionListener{
 		add(timePanel, BorderLayout.NORTH);
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void displayTime(){
+	
+	
+	private void getTimeDisplay(){
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(timeManager.currentSimTime());	
-		Date date = cal.getTime();
-		hour = date.getHours();
-		min = date.getMinutes();
-		sec = date.getSeconds();
-		hourStr = "" + hour;
-		minStr = "" + min;
-		secStr = ""+ sec;
-		if(hour<10){
-			hourStr = "0" + hour;
-		}
-		if(min<10){
-			minStr = "0" + min;
-		}
-		if(sec<10){
-			secStr = "0" + sec;
-		}
-		time.setText(hourStr +":"+minStr);
+		cal.setTimeInMillis(timeManager.currentSimTime());
+//		Date date = cal.getTime();
+//		hour = date.getHours();
+//		min = date.getMinutes();
+//		sec = date.getSeconds();
+//		hourStr = "" + hour;
+//		minStr = "" + min;
+//		secStr = ""+ sec;
+//		if(hour<10){
+//			hourStr = "0" + hour;
+//		}
+//		if(min<10){
+//			minStr = "0" + min;
+//		}
+//		if(sec<10){
+//			secStr = "0" + sec;
+//		}
+		
+		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm");
+		time.setText(format.format(cal.getTime()) + " in Encino, CA");
+		
 	}
 
 	/**
@@ -213,7 +218,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	class PrintTask extends TimerTask {
         public void run() {
-        	displayTime();
+        	getTimeDisplay();
         }
 	}
 

@@ -77,7 +77,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartTime();
+		this.lastTimeEatingOut = timeManager.fakeStartTime() - 2*Constants.DAY;
 		this.eatingOutWaitPeriod = Constants.DAY;
 		
 		this.workStartThreshold = 2 * Constants.HOUR;

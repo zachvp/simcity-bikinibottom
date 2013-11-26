@@ -135,5 +135,11 @@ public class MockPerson extends Mock implements Person{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Map<String, Integer> getShoppingList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

@@ -11,6 +11,7 @@ import com.sun.swing.internal.plaf.basic.resources.basic;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
@@ -56,6 +57,11 @@ public class VehicleGuiClass implements VehicleGui {
 
 	@Override
 	public void updatePosition() {
+		if (atEdgeOfCorner()) {
+			onPlace();
+			return;
+		}
+		
 		int xDestination = destination.position().x;
 		int yDestination = destination.position().y;
 		if (xPos < xDestination)
@@ -68,9 +74,17 @@ public class VehicleGuiClass implements VehicleGui {
 		else if (yPos > yDestination)
 			yPos -= 1;
 		
-		if (xPos == xDestination && yPos == yDestination) {
-			onPlace();
-		}
+		
+	}
+
+	public boolean atEdgeOfCorner() {
+		return manhattanDistanceFromDestination()
+				< Constants.SPACE_BETWEEN_BUILDINGS;
+	}
+	
+	private int manhattanDistanceFromDestination() {
+		return Math.abs(xPos - destination.position().x) +
+				Math.abs(yPos - destination.position().y);
 	}
 
 	private void onPlace() {

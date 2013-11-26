@@ -2,6 +2,8 @@ package transportation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import kelp.Kelp;
 import kelp.KelpClass;
@@ -50,6 +52,21 @@ public class RealPassengerRole extends PassengerRole {
 
 	//Role that requested the movement, if any.
 	private PassengerRequester requesterRole = null;
+
+	private Timer timer = new Timer();
+	
+	class CornerNotifier extends TimerTask {
+		private Corner corner;
+
+		public CornerNotifier(Corner corner) {
+			this.corner = corner;
+		}
+
+		@Override
+		public void run() {
+			corner.msgDoneCrossing();
+		}
+	}
 
 	public RealPassengerRole(Person person, CityLocation location) {
 		super(person, location);
@@ -175,6 +192,13 @@ public class RealPassengerRole extends PassengerRole {
 		} else {
 			if (!hasCar || path.get(0).type() != LocationTypeEnum.Corner) {
 				gui.doWalkTo(path.get(0));
+				
+				if (location.type() == LocationTypeEnum.Corner) {
+					Corner currCorner = (Corner)location;
+					currCorner.msgIAmCrossing();
+					timer.schedule(new CornerNotifier(currCorner), 1600);
+				}
+				
 				state = PassengerStateEnum.Walking;
 				return;
 			} else {

@@ -85,7 +85,6 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 			@Override
 			public void run() {
 				currentCorner.msgDoneCrossing();
-				
 			}
 		}, 400);
 		

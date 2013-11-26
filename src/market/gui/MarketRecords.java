@@ -82,7 +82,7 @@ public class MarketRecords {
 
         this.gui = gui;
         
-        initRoles();
+        
         
         
         
@@ -125,6 +125,7 @@ public class MarketRecords {
         	*/
 
         	gui.addGui(marketBackgroundLayout);
+        	initRoles();
     }
     
     public void initRoles(){
@@ -137,17 +138,17 @@ public class MarketRecords {
     	
     	//ItemCollectorRoles
     	ItemCollectorRole itemCollector1 = new ItemCollectorRole(null, building);
-    	ItemCollectorRole itemCollector2 = new ItemCollectorRole(null, building);
+    	//ItemCollectorRole itemCollector2 = new ItemCollectorRole(null, building);
     	
     	//ItemCollectorGuis
     	ItemCollectorGui itemCollector1Gui = new ItemCollectorGui(itemCollector1);
-    	ItemCollectorGui itemCollector2Gui = new ItemCollectorGui(itemCollector2);
+    	//ItemCollectorGui itemCollector2Gui = new ItemCollectorGui(itemCollector2);
     	itemCollector1Gui.setItemCollectorNumber(0);
-    	itemCollector2Gui.setItemCollectorNumber(1);
+    	//itemCollector2Gui.setItemCollectorNumber(1);
     	itemCollector1.setGui(itemCollector1Gui);
-    	itemCollector2.setGui(itemCollector2Gui);
+    	//itemCollector2.setGui(itemCollector2Gui);
     	gui.addGui(itemCollector1Gui);
-    	gui.addGui(itemCollector2Gui);
+    	//gui.addGui(itemCollector2Gui);
     	
     	//DeliveryGuyRoles
     	DeliveryGuyRole deliveryGuy1 = new DeliveryGuyRole(null, building);
@@ -167,11 +168,11 @@ public class MarketRecords {
     	
     	//Setting the inventoryList
     	itemCollector1.setInventoryList(cashier.getInventoryList());
-    	itemCollector1.setInventoryList(cashier.getInventoryList());
+    	//itemCollector2.setInventoryList(cashier.getInventoryList());
     	
     	//Setting Cashier in the ItemCollectors
     	itemCollector1.setCashier(cashier);
-    	itemCollector2.setCashier(cashier);
+    	//itemCollector2.setCashier(cashier);
     	
     	//Setting Cashier in the DeliveryGuys
     	deliveryGuy1.setCashier(cashier);
@@ -180,7 +181,7 @@ public class MarketRecords {
     	
     	//Put itemCollectors into the cashier's ItemCollector's list
     	cashier.getICList().add(itemCollector1);
-    	cashier.getICList().add(itemCollector2);
+    	//cashier.getICList().add(itemCollector2);
     	
     	//Put DeliveryGuys into the cashier's DeliveryGuy's list
     	cashier.getDGList().add(deliveryGuy1);

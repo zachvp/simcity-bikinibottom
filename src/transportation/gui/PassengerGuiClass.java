@@ -128,6 +128,12 @@ public class PassengerGuiClass implements PassengerGui {
 	private void resetXY() {
 		xPos = startLocation.position().x;
 		yPos = startLocation.position().y;
+		
+		if (startLocation instanceof CityBuilding) {
+			XYPos entrance = ((CityBuilding)startLocation).entrancePos();
+			xPos += entrance.x;
+			yPos += entrance.y;
+		}
 	}
 
 	@Override

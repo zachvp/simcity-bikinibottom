@@ -83,6 +83,10 @@ public class PersonAgent extends Agent implements Person {
 		
 	}
 	
+	public PersonAgent(String name){
+		this(name, IncomeLevel.MEDIUM);
+	}
+	
 	/* -------- Messages -------- */
 	
 	// from PassengerRole
@@ -90,7 +94,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		System.out.println("we're here captain");
+		print("we're here captain");
 	}
 	
 	/* -------- Scheduler -------- */

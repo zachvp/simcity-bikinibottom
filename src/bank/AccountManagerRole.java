@@ -1,16 +1,16 @@
 package bank;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.AccountManagerGui;
-import bank.gui.BankBuilding;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.Teller;
@@ -60,13 +60,9 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();//make STATIC
 	
-	int startHour = 9;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
 //	////////
 	
-	public AccountManagerRole(Person person, CityLocation loc) {
+	public AccountManagerRole(Person person, Building loc) {
 		super(person, loc);
 	}
 	
@@ -230,30 +226,6 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		return null;
 //	}
 	
-	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-
-	@Override
-	public int getShiftStartMinute() {
-		return startMinute;
-	}
-
-
-	@Override
-	public int getShiftEndHour() {
-		return endHour;
-	}
-
-
-	@Override
-	public int getShiftEndMinute() {
-		return endMinute;
-	}
-
-
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub

@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,7 +10,6 @@ import java.util.concurrent.Semaphore;
 
 import restaurant.strottma.gui.HostGui;
 import restaurant.strottma.interfaces.Customer;
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -40,18 +41,8 @@ public class HostRole extends WorkRole {
 	
 	private Semaphore atTable = new Semaphore(0,true);
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
-	public HostRole(Person person, CityLocation location) {
+	public HostRole(Person person, Building location) {
 		super(person, location);
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
 		
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
@@ -291,27 +282,7 @@ public class HostRole extends WorkRole {
 			return "table " + tableNumber;
 		}
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

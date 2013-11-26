@@ -2,13 +2,7 @@ package market;
 
 
 import java.util.ArrayList;
-
-import CommonSimpleClasses.CityLocation;
-import agent.Constants;
-
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -19,6 +13,7 @@ import market.interfaces.CashierGuiInterfaces;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
+import agent.Constants;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -41,13 +36,7 @@ private static final int startingminute = 0;
 	private List<DeliveryGuy> DGList = Collections.synchronizedList(new ArrayList<DeliveryGuy>() );
 	
 	private Map<String,Integer> InventoryList ;
-	
-	//Working Hour
-	int startinghour = 8;
-	int startingminutes = 29;
-	int endinghour = 18;
-	int endingminutes = 0;
-	
+		
 	private Map<String,Double>PriceList;
 	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems};
 	private Cashierstate state = Cashierstate.GoingToWork; 
@@ -477,18 +466,6 @@ private static final int startingminute = 0;
 	}
 	
 	//Shifts
-	public int getShiftStartHour(){
-		return startinghour;
-	}
-	public int getShiftStartMinute(){
-		return startingminutes;
-	}
-	public int getShiftEndHour(){
-		return endinghour;
-	}
-	public int getShiftEndMinute(){
-		return endingminutes;
-	}
 	public boolean isAtWork(){
 		if (this.isActive())
 			return true;

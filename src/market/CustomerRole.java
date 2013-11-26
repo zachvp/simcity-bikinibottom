@@ -1,17 +1,13 @@
 package market;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import market.gui.CustomerGui;
-import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
-import agent.Agent;
-import agent.PersonAgent;
 import agent.Role;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -177,7 +173,7 @@ public class CustomerRole extends Role implements Customer{
 				cashier.msgHereIsPayment(cash, this);
 				cash = 0;
 		}
-		if (cost != ExpectedCost){	//doesn’t match with the expected cost
+		if (cost != ExpectedCost){	//doesn't match with the expected cost
 			if (cash >= cost){
 				cashier.msgHereIsPayment(cost, this);
 				cash -= cost;

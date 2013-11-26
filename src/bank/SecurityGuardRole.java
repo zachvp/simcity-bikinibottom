@@ -1,13 +1,12 @@
 package bank;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import CommonSimpleClasses.CityLocation;
-import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.SecurityGuardGui;
@@ -57,31 +56,10 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
-	
-	int startHour = 9;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
-	
-	public SecurityGuardRole(Person person, CityLocation bank) {
+		
+	public SecurityGuardRole(Person person, Building bank) {
 		super(person, bank);
-//		this.name = name;
-		Runnable command = new Runnable(){
-			@Override
-			public void run() {
-				//do stuff
-				
-				msgLeaveWork();
-				}
-			
-		};
-		
-		// every day at TIME
-		int hour = 7;
-		int minute = 0;
-		
-		task.scheduleDailyTask(command, hour, minute);
-		
+		scheduleShiftEnd();
 	}
 	
 	public String getCustomerName() {
@@ -243,26 +221,6 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 	
 	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return startMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return endHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return endMinute;
-	}
-
-	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
 		return false;
@@ -273,13 +231,6 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
 	
-
-
-
-
 }
 

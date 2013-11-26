@@ -1,13 +1,13 @@
 package bank.test;
 
-import CommonSimpleClasses.CityLocation;
+import gui.Building;
+import junit.framework.TestCase;
 import agent.PersonAgent;
 import bank.BankCustomerRole;
 import bank.BankCustomerRole.State;
 import bank.gui.BankBuilding;
 import bank.test.mock.MockLoanManager;
 import bank.test.mock.MockTeller;
-import junit.framework.TestCase;
 
 public class BankCustomerTest extends TestCase
 {
@@ -18,8 +18,7 @@ public class BankCustomerTest extends TestCase
         MockTeller teller;
         MockLoanManager loanManager;
         
-        CityLocation testLocation = new BankBuilding(0,0,0,0);
-        
+        Building testBankBuilding = new BankBuilding(0,0,0,0);
         
         /**
          * This method is run before each test. You can use it to instantiate the class variables
@@ -27,7 +26,7 @@ public class BankCustomerTest extends TestCase
          */
         public void setUp() throws Exception{
                 super.setUp();  
-                bankCustomer = new BankCustomerRole(person, testLocation);
+                bankCustomer = new BankCustomerRole(person, testBankBuilding);
                 teller = new MockTeller("mockTeller");
                 loanManager = new MockLoanManager("mockLoanManager");
                 bankCustomer.setTeller(teller);

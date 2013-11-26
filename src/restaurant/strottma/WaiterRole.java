@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.Building;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -13,7 +15,6 @@ import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Cook.GrillOrPlate;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -47,20 +48,10 @@ public class WaiterRole extends WorkRole implements Waiter {
 
 	private BreakState bState;
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
-	public WaiterRole(Person person, CityLocation location) {
+	public WaiterRole(Person person, Building location) {
 		super(person, location);
 
 		this.bState = BreakState.NORMAL;
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
 	}
 	
 	public void setOthers(HostRole host, CookRole cook, Cashier cashier) {
@@ -558,27 +549,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 		}
 		
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.Building;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +13,6 @@ import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import restaurant.strottma.test.mock.EventLog;
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -30,21 +31,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	DecimalFormat df = new DecimalFormat("#.##");
 	private double money;
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-	
-	public CashierRole(Person person, CityLocation location) {
+	public CashierRole(Person person, Building location) {
 		super(person, location);
 
 		new Timer();
 		this.money = 200.00; // default
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
 	}
 
 	/* Messages */
@@ -264,27 +255,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		
 		public Market getMarket() { return market; }
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

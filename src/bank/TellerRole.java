@@ -2,11 +2,12 @@ package bank;
 
 
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.TellerGui;
@@ -30,14 +31,6 @@ public class TellerRole extends WorkRole implements Teller {
 	Semaphore active = new Semaphore(0, true);
 	TellerGui tellerGui;
 	int myDeskPosition;
-	
-	int startHour = 8;
-	int startMinute = 0;
-	int endHour = 6;
-	int endMinute = 0;
-	
-	
-
 	
 	SecurityGuard securityGuard;
 	
@@ -81,7 +74,7 @@ public class TellerRole extends WorkRole implements Teller {
 	LoanManager loanManager;
 	boolean endWorkShift = false;
 	
-	public TellerRole(Person person, CityLocation bank) {
+	public TellerRole(Person person, Building bank) {
 		super(person, bank);
 		
 		// ask everyone for rent
@@ -366,30 +359,7 @@ public class TellerRole extends WorkRole implements Teller {
 	public void setMyCustomers(List<MyCustomer> myCustomers) {
 		this.myCustomers = myCustomers;
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		
-		return startMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		
-		return endHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		
-		return endMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub

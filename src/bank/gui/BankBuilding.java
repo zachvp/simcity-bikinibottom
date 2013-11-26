@@ -27,7 +27,6 @@ public class BankBuilding extends Building {
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
-	private CityLocation bank;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -40,7 +39,6 @@ public class BankBuilding extends Building {
 		super(x, y, width, height);
 		entrancePosition = new XYPos(width/2, height);
 		bankGui = new BankGui();
-		this.bank = this;
 		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 		// TODO Auto-generated constructor stub
 		initRoles();
@@ -108,11 +106,10 @@ public class BankBuilding extends Building {
 		
 		BankCustomerRole role = existingRoles.get(person);
 		if(role == null) {
-			role = new BankCustomerRole(person, bank);
+			role = new BankCustomerRole(person, this);
 			BankCustomerGui bcg = new BankCustomerGui(role);
 			role.setGui(bcg);
 			bankGui.getAnimationPanel().addGui(bcg);
-			role.setLocation(bank);
 		}
 		else {
 			role.setPerson(person);

@@ -1,9 +1,10 @@
 package bank;
 
+import gui.Building;
+
 import java.util.concurrent.Semaphore;
 
-import CommonSimpleClasses.CityLocation;
-import agent.WorkRole;
+import agent.Role;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
 import bank.gui.BankCustomerGui;
@@ -19,7 +20,7 @@ import bank.interfaces.Teller;
 
 
 //Build should not be problem
-public class BankCustomerRole extends WorkRole implements BankCustomer {
+public class BankCustomerRole extends Role implements BankCustomer {
 	private String name;
 	
 	double cashInAccount;
@@ -41,7 +42,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //	PassengerRole passengerRole;
 
 	
-	public BankCustomerRole(Person person, CityLocation bank){
+	public BankCustomerRole(Person person, Building bank){
 		super(person, bank);
 //		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
@@ -66,7 +67,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		}
 	}
 	
-	public BankCustomerRole(Person person, CityLocation bank, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
+	public BankCustomerRole(Person person, Building bank, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
 		super(person, bank);
 		state = State.enteredBank;
 		this.accountId = accountId;
@@ -464,46 +465,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-
-
+	
 //	@Override
 //	public void msgFollowMeToTable(Waiter w, int x, int y, Map<String, Double> m) {
 //		// TODO Auto-generated method stub

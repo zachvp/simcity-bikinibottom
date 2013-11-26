@@ -23,10 +23,10 @@ public abstract class Role {
     private ScheduledExecutorService executor;
     
     /**
-     * Sets the Role's agent and location.
+     * Sets the Role's person and location.
      * 
-     * @see #getPerson()
-     * @see #getLocation()
+     * @see #getPerson
+     * @see #getLocation
      */
     protected Role(Person person, CityLocation location) {
     	this.person = person;
@@ -36,21 +36,32 @@ public abstract class Role {
     }
     
     /**
-     * Sets the Role's agent. Don't forget to set the location!
+     * Sets the Role's person. Don't forget to set the location!
      * 
-     * @see #getPerson()
-     * @see #setLocation()
+     * @see #getPerson
+     * @see #setLocation
      */
     protected Role(Person person) {
     	this(person, null);
     }
     
     /**
-     * Creates a Role, but doesn't set its agent or location. Don't forget to
+     * Sets the Role's location but not its person. The Role won't run without
+     * a person!
+     * 
+     * @see #setPerson
+     * @see #getLocation
+     */
+    protected Role(CityLocation location) {
+    	this(null, location);
+    }
+    
+    /**
+     * Creates a Role, but doesn't set its person or location. Don't forget to
      * set those before using the role!
      * 
-     * @see #setAgent()
-     * @see #setLocation()
+     * @see #setPerson
+     * @see #setLocation
      */
     protected Role() {
     	this(null, null);

@@ -1,9 +1,10 @@
 package bank;
 
+import gui.Building;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.RoleFactory;
 import agent.interfaces.Person;
@@ -13,9 +14,9 @@ import agent.interfaces.Person;
 public class BankRoleFactory implements RoleFactory{
 
 	Map<Person, Role> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
-	private CityLocation bank;
+	private Building bank;
 	
-	public BankRoleFactory(CityLocation bank) {
+	public BankRoleFactory(Building bank) {
 		this.bank = bank;
 		this.existingRoles = new HashMap<Person, Role>();
 	}

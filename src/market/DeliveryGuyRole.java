@@ -1,25 +1,15 @@
 package market;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
-import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Agent;
-import agent.Constants;
-import agent.PersonAgent;
-import agent.Role;
-import agent.TimeManager;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -38,13 +28,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
-
-	//Working Hour
-		int startinghour = 8;
-		int startingminutes = 29;
-		int endinghour = 18;
-		int endingminutes = 0;
-		
+	
 	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
 		super(person, Market);
 		name = NA;
@@ -165,28 +149,16 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		cashier = ca;
 	}
 	//Shifts
-		public int getShiftStartHour(){
-			return startinghour;
-		}
-		public int getShiftStartMinute(){
-			return startingminutes;
-		}
-		public int getShiftEndHour(){
-			return endinghour;
-		}
-		public int getShiftEndMinute(){
-			return endingminutes;
-		}
-		public boolean isAtWork(){
-			if (this.isActive())
-				return true;
-			else
-				return false;
-		}
-		public boolean isOnBreak(){
+	public boolean isAtWork(){
+		if (this.isActive())
+			return true;
+		else
 			return false;
-		}
-
+	}
+	public boolean isOnBreak(){
+		return false;
+	}
+	
 	private class Order{
 		List<Item> DeliveryList;
 		Customer OrderPerson;

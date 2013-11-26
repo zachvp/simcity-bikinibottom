@@ -1,10 +1,11 @@
 package bank;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.LoanManagerGui;
@@ -34,12 +35,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	int startHour = 9;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
-	
-	public LoanManagerRole(Person person, CityLocation bank) {
+	public LoanManagerRole(Person person, Building bank) {
 		super(person, bank);
 //		this.name = name;
 		
@@ -128,26 +124,6 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		}
 	}
 	
-	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return startMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return endHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return endMinute;
-	}
-
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub

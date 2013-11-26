@@ -1,9 +1,8 @@
 package agent;
 
-import classifieds.ClassifiedsClass;
-import housing.interfaces.Dwelling;
+import gui.Building;
 import agent.interfaces.Person;
-import CommonSimpleClasses.CityLocation;
+import classifieds.ClassifiedsClass;
 
 /**
  * Common interface for jobs that people can work at. Provides a couple of
@@ -14,6 +13,7 @@ import CommonSimpleClasses.CityLocation;
 public abstract class WorkRole extends Role {
 	
 	TimeManager tm = TimeManager.getInstance();
+	ScheduleTask tasker = new ScheduleTask();
 	
 	public WorkRole() {
 		super();
@@ -25,13 +25,13 @@ public abstract class WorkRole extends Role {
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
-	public WorkRole(Person person, CityLocation loc) {
-		super(person, loc);
+	public WorkRole(Person person, Building building) {
+		super(person, building);
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
-	public WorkRole(CityLocation loc) {
-		super(null, loc);
+	public WorkRole(Building building) {
+		super(building);
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
@@ -41,33 +41,61 @@ public abstract class WorkRole extends Role {
 	}
 	
 	/**
+	 * Schedules a recurring task: leave work at the end of the shift.
+	 */
+	protected void scheduleShiftEnd() {
+		// go off work
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				msgLeaveWork();
+			}
+		};
+		
+		// every day at the end of the shift
+		int hour = getShiftEndHour();
+		int minute = getShiftEndMinute();
+		
+		tasker.scheduleDailyTask(command, hour, minute);
+	}
+	
+	/**
 	 * The hour of day this person's work shift starts, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftStartHour();
+	public final int getShiftStartHour() {
+		return ((Building) getLocation()).getOpeningHour();
+	}
 	/**
 	 * The minute of the hour this person's work shift starts.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftStartMinute();
+	public final int getShiftStartMinute() {
+		return ((Building) getLocation()).getOpeningMinute();
+	}
 	/**
 	 * The hour of day this person's work shift ends, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftEndHour();
+	public final int getShiftEndHour() {
+		return ((Building) getLocation()).getClosingHour();
+	}
 	/**
 	 * The minute of the hour this person's work shift ends.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftEndMinute();
+	public final int getShiftEndMinute() {
+		return ((Building) getLocation()).getClosingMinute();
+	}
 	
 	/**
 	 * Whether this person's shift starts before midnight and ends after
 	 * midnight
 	 */
-	public boolean worksThroughMidnight() {
-		return getShiftStartHour() > getShiftEndHour() || (getShiftStartHour() == getShiftEndHour()
-				&& getShiftStartMinute() > getShiftEndMinute());
+	public final boolean worksThroughMidnight() {
+		return getShiftStartHour() > getShiftEndHour() ||
+				(getShiftStartHour() == getShiftEndHour()
+					&& getShiftStartMinute() > getShiftEndMinute());
 	}
 	
 	/** Whether the person is currently at work */
@@ -83,7 +111,7 @@ public abstract class WorkRole extends Role {
 	 * overflow, but assumes that no single shift is longer than 23 hours and
 	 * 59 minutes.
 	 */
-	public long workDuration() {
+	public final long workDuration() {
 		int durationHours = getShiftEndHour() - getShiftStartHour();
 		int durationMinutes = getShiftEndMinute() - getShiftStartMinute();
 		
@@ -102,11 +130,11 @@ public abstract class WorkRole extends Role {
 	}
 	
 	/** The time the next shift starts, in milliseconds since the epoch. */
-	public long nextShiftStartTime() {
+	public final long nextShiftStartTime() {
 		return tm.nextSuchTime(getShiftStartHour(), getShiftStartMinute());
 	}
 	/** The time the next shift ends, in milliseconds since the epoch. */
-	public long nextShiftEndTime() {
+	public final long nextShiftEndTime() {
 		return TimeManager.nextSuchTime(nextShiftStartTime(),
 				getShiftEndHour(), getShiftEndMinute());
 	}
@@ -114,20 +142,20 @@ public abstract class WorkRole extends Role {
 	 * The time the current or previous shift started, in milliseconds since
 	 * the epoch.
 	 */
-	public long previousShiftStartTime() {
+	public final long previousShiftStartTime() {
 		return tm.previousSuchTime(getShiftStartHour(), getShiftStartMinute());
 	}
 	/**
 	 * The time the current or previous shift ends or will end, in milliseconds
 	 * since the epoch.
 	 */
-	public long previousShiftEndTime() {
+	public final long previousShiftEndTime() {
 		return TimeManager.nextSuchTime(previousShiftStartTime(),
 				getShiftEndHour(), getShiftEndMinute());
 	}
 	
 	/** Whether the person should be at work right now. */
-	public boolean shouldBeAtWork() {
+	public final boolean shouldBeAtWork() {
 		return tm.isNowBetween(previousShiftStartTime(),
 				previousShiftEndTime());
 	}
@@ -136,7 +164,7 @@ public abstract class WorkRole extends Role {
 	 * Whether the person is late for work. That is, whether the person should
 	 * be at work, but isn't.
 	 */
-	public boolean isLate() {
+	public final boolean isLate() {
 		return !isAtWork() && !isOnBreak() && shouldBeAtWork(); 
 	}
 	
@@ -144,7 +172,7 @@ public abstract class WorkRole extends Role {
 	 * Returns the start time (in milliseconds since the epoch) of the current
 	 * or next shift.
 	 */
-	public long startTime() {
+	public final long startTime() {
 		if (shouldBeAtWork()) {
 			return previousShiftStartTime();
 		} else {

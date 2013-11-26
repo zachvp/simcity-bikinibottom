@@ -72,27 +72,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 //		DoReturnHome();
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return 6;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return 11;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return 0;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return false;

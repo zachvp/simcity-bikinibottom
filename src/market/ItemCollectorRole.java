@@ -3,15 +3,10 @@ package market;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import market.gui.ItemCollectorGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
@@ -48,13 +43,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		
 		
 	}
-	
-	//Working Hour
-		int startinghour = 8;
-		int startingminutes = 29;
-		int endinghour = 18;
-		int endingminutes = 0;
-	
 	
 	//Messages	
 	public void msgGetTheseItem(List<Item> ItemList, Customer c){
@@ -196,18 +184,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		state = s;
 	}
 	//Shifts
-	public int getShiftStartHour(){
-		return startinghour;
-	}
-	public int getShiftStartMinute(){
-		return startingminutes;
-	}
-	public int getShiftEndHour(){
-		return endinghour;
-	}
-	public int getShiftEndMinute(){
-		return endingminutes;
-	}
 	public boolean isAtWork(){
 		if (this.isActive())
 			return true;

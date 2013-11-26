@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.Building;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,7 +17,6 @@ import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
-import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -46,12 +47,7 @@ public class CookRole extends WorkRole implements Cook {
 		this.gui = cookGui;
 	}
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
-	public CookRole(Person person, CityLocation location) {
+	public CookRole(Person person, Building location) {
 		super(person, location);
 		
 		this.timer = new Timer();
@@ -60,11 +56,6 @@ public class CookRole extends WorkRole implements Cook {
 		this.markets = new ArrayList<Market>();
 		this.grills = new ArrayList<GrillOrPlate>();
 		this.plateAreas = new ArrayList<GrillOrPlate>();
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
 		
 		// new Food(name, quantity, capacity, low threshold, cooking time in milliseconds)
 		Food st = new Food("Steak",   3, 5, 2, 7*1000);
@@ -409,27 +400,7 @@ public class CookRole extends WorkRole implements Cook {
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

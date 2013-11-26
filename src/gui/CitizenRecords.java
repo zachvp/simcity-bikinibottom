@@ -4,7 +4,14 @@ import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import transportation.CornerAgent.MyCorner;
+import transportation.interfaces.Car;
+import transportation.interfaces.Corner;
+import transportation.interfaces.Passenger;
+import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
 import agent.Role;
@@ -67,6 +74,9 @@ public class CitizenRecords {
 			newPerson.addRole(role);
 			role.setPerson(newPerson);			
 		}
+		
+		//Adding car
+		if (hasCar) newPerson.instantiateCar();
 		
 		//PassegerRole passengerRole = new PassengerRole();
 		//TODO add all attributes to person

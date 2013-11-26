@@ -81,13 +81,6 @@ public class PersonAgent extends Agent implements Person {
 		// this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
 		
-		/*
-		Corner nearestCorner = (Corner) kelp.placesNearMe
-				(getPassengerRole().location,
-						LocationTypeEnum.Corner).get(0);
-		
-		setCar(new CarAgent(nearestCorner));
-		*/
 	}
 	
 	/* -------- Messages -------- */
@@ -616,6 +609,14 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void agentDo(String msg) {
 		Do(msg);
+	}
+
+	public void instantiateCar() {
+		Corner nearestCorner = (Corner) kelp.placesNearMe
+				(getPassengerRole().location,
+						LocationTypeEnum.Corner).get(0);
+		
+		setCar(new CarAgent(nearestCorner));
 	}
 	
 }

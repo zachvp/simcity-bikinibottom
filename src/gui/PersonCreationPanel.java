@@ -130,8 +130,8 @@ ClassifiedsChangedListener{
 		occupationsCB = new JComboBox<MyComboBoxItem>(occupationArray);
 		checkClassifiedsforHome();
 		residencesCB = new JComboBox<MyComboBoxItem>(residentArray);
-		wealthCB = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
-		carCB = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
+		wealthCB = new JComboBox<String>(new String[] {"Rich", "Middle", "Poor"});
+		carCB = new JComboBox<String>(new String[] {"Yes", "No"});
 
 		nameTextF.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -144,7 +144,7 @@ ClassifiedsChangedListener{
 		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
-		carCB.setSelectedIndex(2);
+		carCB.setSelectedIndex(1);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -248,8 +248,8 @@ ClassifiedsChangedListener{
 				nameTextF.setText("mr balloon hands");
 				occupationsCB.setSelectedIndex(0);
 				residencesCB.setSelectedIndex(0);
-				wealthCB.setSelectedIndex(1);
-				carCB.setSelectedIndex(2);
+				wealthCB.setSelectedIndex(0);
+				carCB.setSelectedIndex(1);
 			}
 			else{
 				msg.setText("Please complete all inputs");

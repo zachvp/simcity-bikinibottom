@@ -227,7 +227,7 @@ ClassifiedsChangedListener{
 		add(imagePanel, BorderLayout.WEST);
 		//add(south, BorderLayout.SOUTH);
 		
-		
+		carCB.setSelectedIndex(1);
 		classifiedsUpdated();
 		checkSomewhereforBuildings();
 	}

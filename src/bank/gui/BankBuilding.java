@@ -138,7 +138,7 @@ public class BankBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-
+		
 		BankCustomerRole role = existingRoles.get(person);
 		if(role == null) {//they have not been to bank and need a customer role
 			role = new BankCustomerRole(person, bank);

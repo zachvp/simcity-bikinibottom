@@ -158,7 +158,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 //		stateChanged();
 	}
 	public void msgGoToSecurityGuard(SecurityGuard sg){
-		System.out.println("YO waddup my nigggaaaaaaaaaaaaaa");
 		securityGuard = sg;
 		event = Event.goingToSecurityGuard;
 		stateChanged();

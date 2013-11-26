@@ -24,7 +24,7 @@ public class HospitalBuilding extends Building{
 	@Override
 	public XYPos entrancePos() {
 		// TODO Auto-generated method stub
-		return (new XYPos((int)x,(int)y));
+		return (new XYPos(0,0));
 	}
 
 	@Override

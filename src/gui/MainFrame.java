@@ -128,8 +128,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setMinimumSize(infoDim);
 		infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
 		infoPanelSlot.setOpaque(false);
+		infoPanelSlot.setLayout(new BorderLayout());
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);        
-		infoPanelSlot.add(infoPanel);
+		infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -137,9 +138,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		InfoListSlot.setMaximumSize(listDim);
 		InfoListSlot.setMinimumSize(listDim);
 		InfoListSlot.setOpaque(false);
+		//InfoListSlot.setLayout(new BorderLayout());
 
 		//Lists displaying People and Buildings in the city
+		//Dimension tabDim = new Dimension(listDim.width-60, listDim.height-47);
 		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.setOpaque(false);
+		//tabbedPane.setPreferredSize(tabDim);
 		buildingList = new InfoList(listDim.width, listDim.height);
 		personList = new InfoList(listDim.width, listDim.height);
 		buildingList.setOtherTab(personList);
@@ -153,7 +158,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingList.setBuildingView(buildingViewPanel);
 		tabbedPane.addTab("Buildings", buildingList);
 		tabbedPane.addTab("People", personList);
-		InfoListSlot.add(tabbedPane);
+		InfoListSlot.add(tabbedPane);//, BorderLayout.CENTER);
 		map.setInfoPanel(infoPanel);
 
 		//JPanel to hold infoPanelSlot and buildingListSlot

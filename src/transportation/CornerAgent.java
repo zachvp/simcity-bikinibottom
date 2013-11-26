@@ -30,7 +30,7 @@ public class CornerAgent extends Agent implements Corner {
 	
 	// TODO update DD
 	//True when a Vehicle is crossing through the intersection.
-	Integer crossroadBusy = 1;
+	private Integer crossroadBusy = 1;
 	
 	//List of corners adjacent to this one.
 	private List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
@@ -44,15 +44,15 @@ public class CornerAgent extends Agent implements Corner {
 	/*List of Vehicles waiting to cross and the Corners they 
 	 * want to drive to.
 	 */
-	Queue<IntersectionAction> waitingToCross =
+	private Queue<IntersectionAction> waitingToCross =
 			new ConcurrentLinkedQueue<IntersectionAction>();
 	
 	//List of entities waiting to get a copy of busstopList.
-	Queue<BusstopRequester> waitingForBusstops =
+	private Queue<BusstopRequester> waitingForBusstops =
 			new ConcurrentLinkedQueue<BusstopRequester>();
 	
 	//List of entities waiting to get a copy of adjacentCorners.
-	Queue<AdjCornerRequester> waitingForCorners =
+	private Queue<AdjCornerRequester> waitingForCorners =
 			new ConcurrentLinkedQueue<AdjCornerRequester>();
 	
 	//Reference to Kelp
@@ -115,7 +115,7 @@ public class CornerAgent extends Agent implements Corner {
 	}
 
 	@Override
-	protected boolean pickAndExecuteAnAction() { // TODO Update DD
+	public boolean pickAndExecuteAnAction() { // TODO Update DD
 		
 		synchronized (crossroadBusy) {
 			if (!waitingForBusstops.isEmpty()) {
@@ -265,6 +265,37 @@ public class CornerAgent extends Agent implements Corner {
 		stateChanged();
 		
 	}
+
+	/**
+	 * @return the crossroadBusy
+	 */
+	public Integer getCrossroadBusy() {
+		return crossroadBusy;
+	}
+
+	/**
+	 * @return the waitingForBusstops
+	 */
+	public Queue<BusstopRequester> getWaitingForBusstops() {
+		return waitingForBusstops;
+	}
+
+	/**
+	 * @return the waitingForCorners
+	 */
+	public Queue<AdjCornerRequester> getWaitingForCorners() {
+		return waitingForCorners;
+	}
+
+	/**
+	 * @return the waitingToCross
+	 */
+	public Queue<IntersectionAction> getWaitingToCross() {
+		return waitingToCross;
+	}
+
+
+
 
 
 }

@@ -10,6 +10,7 @@ import market.gui.CustomerGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
+import market.interfaces.CustomerGuiInterfaces;
 import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
@@ -24,7 +25,7 @@ import agent.interfaces.Person;
 public class CustomerRole extends Role implements Customer{
 	String name;
 	//private MarketBuilding workingBuilding = null;
-	private CustomerGui customerGui = null;
+	private CustomerGuiInterfaces customerGui = null;
 	
 	private List<Item> ShoppingList = new ArrayList<Item>();
 	boolean atBuilding;
@@ -50,8 +51,7 @@ public class CustomerRole extends Role implements Customer{
 	 */
 	public CustomerRole(String NA, double money, List<Item>SL, Person person){
 		super(person);
-		cash = person.getWallet().getCashOnHand();
-		cash = money;
+		setCash(money);
 		name = NA;
 		ShoppingList = SL;
 		
@@ -66,14 +66,15 @@ public class CustomerRole extends Role implements Customer{
 	public void goingToBuy(){
 		if (person.getWorkRole()!= null && person.getWorkRole().isAtWork()){
 			atBuilding = false;
-			state = Customerstate.GoingToOrder;
-			event = Customerevent.WaitingInLine;
+			setState(Customerstate.GoingToOrder);
+			setEvent(Customerevent.WaitingInLine);
 			stateChanged();
 		}	
 		else{
+			setCash(person.getWallet().getCashOnHand());
 			atBuilding = true;
-			state = Customerstate.EnteringMarket;
-			event = Customerevent.GoingToLine;
+			setState(Customerstate.EnteringMarket);
+			setEvent(Customerevent.GoingToLine);
 			stateChanged();
 		}
 	}
@@ -90,8 +91,8 @@ public class CustomerRole extends Role implements Customer{
 		 * if MissingItems!=Empty()?
 		 * 		Leave or Continue to Buy
 		 */
-		ActualCost = cost;
-		event = Customerevent.Paying;
+		setActualCost(cost);
+		setEvent(Customerevent.Paying);
 		stateChanged();
 	}
 
@@ -101,7 +102,7 @@ public class CustomerRole extends Role implements Customer{
 	 * @param Items The DeliveryList
 	 */
 	public void msgHereisYourItem(List<Item> Items) {
-		print ("Receive items from Cashier");
+		//print ("Receive items from Cashier");
 		
 		for (int i=0;i<Items.size();i++){
 			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
@@ -127,8 +128,8 @@ public class CustomerRole extends Role implements Customer{
 		}
 		*/
 		if (atBuilding){
-			state = Customerstate.Paid;
-			event = Customerevent.Leaving;
+			setState(Customerstate.Paid);
+			setEvent(Customerevent.Leaving);
 			stateChanged();
 		}
 	}
@@ -137,8 +138,8 @@ public class CustomerRole extends Role implements Customer{
 	 * When the cashier said that no item can be satisfied at all
 	 */
 	public void msgNoItem(){
-		state = Customerstate.Paid;
-		event = Customerevent.Leaving;
+		setState(Customerstate.Paid);
+		setEvent(Customerevent.Leaving);
 		stateChanged();
 	}
 	
@@ -149,8 +150,8 @@ public class CustomerRole extends Role implements Customer{
 	public void msgAnimationFinishedGoToCashier(){
 		//print ("At FrontDesk now");
 		atFrontDesk.release();
-		state = Customerstate.GoingToOrder;
-		event = Customerevent.WaitingInLine;
+		setState(Customerstate.GoingToOrder);
+		setEvent(Customerevent.WaitingInLine);
 		stateChanged();
 	}
 	
@@ -160,8 +161,8 @@ public class CustomerRole extends Role implements Customer{
 	 */
 	public void msgAnimationFinishedLeaveMarket(){
 		atExit.release();
-		state = Customerstate.NotAtMarket;
-		event = Customerevent.doneLeaving;
+		setState(Customerstate.NotAtMarket);
+		setEvent(Customerevent.doneLeaving);
 		this.deactivate();
 	}
 	
@@ -169,28 +170,28 @@ public class CustomerRole extends Role implements Customer{
 	/**
 	 * This is the CustomerRole's scheduler and do all the actions
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		
-		if (state == Customerstate.EnteringMarket && event == Customerevent.GoingToLine) 
+		if (getState() == Customerstate.EnteringMarket && getEvent() == Customerevent.GoingToLine) 
 		{
 			GoToFindCashier();
 			return true;
 		}
-		if (!atBuilding && state == Customerstate.GoingToOrder && event == Customerevent.WaitingInLine){
+		if (!atBuilding && getState() == Customerstate.GoingToOrder && getEvent() == Customerevent.WaitingInLine){
 			PhoneOrderItems(ShoppingList);
 			return true;
 		}
-		if (atBuilding && state == Customerstate.GoingToOrder && event == Customerevent.WaitingInLine) 
+		if (atBuilding && getState() == Customerstate.GoingToOrder && getEvent() == Customerevent.WaitingInLine) 
 		{
 			OrderItems(ShoppingList);
 			return true;
 		}
-		if (state == Customerstate.Waiting && event == Customerevent.Paying)
+		if (getState() == Customerstate.Waiting && getEvent() == Customerevent.Paying)
 		{
-				PayItems(ActualCost);
+				PayItems(getActualCost());
 				return true;
 		}
-		if (state == Customerstate.Paid && event == Customerevent.Leaving)
+		if (getState() == Customerstate.Paid && getEvent() == Customerevent.Leaving)
 		{
 				Leaving();
 				return true;
@@ -205,6 +206,7 @@ public class CustomerRole extends Role implements Customer{
 	 */
 	private void GoToFindCashier(){
 		//print ("Going to the Front Desk");
+		if(customerGui!=null)
 		customerGui.DoGoToFrontDesk();
 		try {
 			atFrontDesk.acquire();
@@ -225,7 +227,7 @@ public class CustomerRole extends Role implements Customer{
 			double CurrentPrice = PriceList.get(ShoppingList.get(i).name);
 			ExpectedCost = ExpectedCost + CurrentPrice*ShoppingList.get(i).amount;
 		}
-		state = Customerstate.Waiting;
+		setState(Customerstate.Waiting);
 	}
 	
 	/**
@@ -240,7 +242,7 @@ public class CustomerRole extends Role implements Customer{
 			double CurrentPrice = PriceList.get(ShoppingList.get(i).name);
 			ExpectedCost = ExpectedCost + CurrentPrice*ShoppingList.get(i).amount;
 		}
-		state = Customerstate.Waiting;
+		setState(Customerstate.Waiting);
 	}
 	
 	/**
@@ -249,29 +251,31 @@ public class CustomerRole extends Role implements Customer{
 	 */
 	private void PayItems(double cost){
 		//print ("Pay Items");
-		state = Customerstate.Paid;
+		setState(Customerstate.Paid);
 		if (cost == ExpectedCost){
-			if (cash >= cost){
+			if (getCash() >= cost){
 				cashier.msgHereIsPayment(cost, this);
-				cash -= cost;
-				state = Customerstate.Paid;
+				setCash(getCash() - cost);
+				setState(Customerstate.Paid);
 			}
-			else	//not enough money
-				cashier.msgHereIsPayment(cash, this);
-				cash = 0;
+			else{	//not enough money
+				cashier.msgHereIsPayment(getCash(), this);
+				setCash(0);
+			}
 		}
 		if (cost != ExpectedCost){	//doesn’t match with the expected cost
-			if (cash >= cost){
+			if (getCash() >= cost){
 				cashier.msgHereIsPayment(cost, this);
-				cash -= cost;
-				state = Customerstate.Paid;
+				setCash(getCash() - cost);
+				setState(Customerstate.Paid);
 			}
-			else	//not enough money
-				cashier.msgHereIsPayment(cash, this);
-				cash = 0;
+			else{	//not enough money
+				cashier.msgHereIsPayment(getCash(), this);
+				setCash(0);
+			}
 		}
 		
-		person.getWallet().setCashOnHand(cash);
+		person.getWallet().setCashOnHand(getCash());
 	}
 	
 	/**
@@ -289,8 +293,8 @@ public class CustomerRole extends Role implements Customer{
 	}
 	
 	//Utilities
-	public void setGui (CustomerGui cuGui){
-		customerGui = cuGui;
+	public void setGui (Gui cuGui){
+		customerGui = (CustomerGuiInterfaces) cuGui;
 	}
 	public Gui getGui (){
 		return customerGui;
@@ -314,7 +318,48 @@ public class CustomerRole extends Role implements Customer{
 	public void setPriceList (Map<String,Double> PL){
 		PriceList = PL;
 	}
+	
+	public void setCashOnHand (double money){
+		this.getPerson().getWallet().setCashOnHand(money);
+	}
+	
+	public double getCashOnHand(){
+		return this.getPerson().getWallet().getCashOnHand();
+	}
 
+	public double getCash() {
+		return cash;
+	}
+
+	public void setCash(double cash) {
+		this.cash = cash;
+	}
+
+	public Customerstate getState() {
+		return state;
+	}
+
+	public void setState(Customerstate state) {
+		this.state = state;
+	}
+
+	public Customerevent getEvent() {
+		return event;
+	}
+
+	public void setEvent(Customerevent event) {
+		this.event = event;
+	}
+
+	public double getActualCost() {
+		return ActualCost;
+	}
+
+	public void setActualCost(double actualCost) {
+		ActualCost = actualCost;
+	}
+
+	
 
 
 	

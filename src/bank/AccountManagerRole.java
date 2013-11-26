@@ -35,6 +35,8 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	private boolean atWork;
 	
+	double paycheckAmount = 300;
+	
 	enum TaskState {newAccount, pendingDeposit, pendingWithdraw};
 	class Task {
 		Task(Teller t, BankCustomer bc, TaskState state, int accountId, double deposit, double withdrawal){
@@ -63,15 +65,21 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	static Map<Integer, Account> accountMap = Collections.synchronizedMap(new HashMap<Integer, Account>());//make STATIC
 	
-	int startHour = 6;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 30;
+	int startHour;
+	int startMinute;
+	int endHour ;
+	int endMinute ;
 //	////////
 	
-	public AccountManagerRole(Person person, CityLocation loc) {
-		super(person, loc);
+	public AccountManagerRole(Person person, CityLocation bank) {
+		super(person, bank);
 		atWork = false;
+		
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
 	}
 	
 	public String getCustomerName() {
@@ -196,10 +204,19 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void goOffWork() {
-			doEndWorkDay();
-			acquireSemaphore(active);
-			this.deactivate();
-			atWork = false;
+		addPaycheckToWallet();
+		doEndWorkDay();
+		acquireSemaphore(active);
+		this.deactivate();
+		atWork = false;
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
 	//ANIMATION

@@ -13,6 +13,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
 import agent.Role;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -21,7 +22,7 @@ import agent.interfaces.Person;
  * @author Zach VP
  *
  */
-public class PayRecipientRole extends Role implements PayRecipient {
+public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	ScheduleTask task = new ScheduleTask();
@@ -161,5 +162,47 @@ public class PayRecipientRole extends Role implements PayRecipient {
 
 	public void setResidents(List<MyResident> residents) {
 		this.residents = residents;
+	}
+
+	@Override
+	public int getShiftStartHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
 	}
 }

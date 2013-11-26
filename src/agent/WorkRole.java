@@ -43,7 +43,6 @@ public abstract class WorkRole extends Role {
 	
 	public void setPerson(Person person) {
 		super.setPerson(person);
-		ClassifiedsClass.getClassifiedsInstance().notifyListeners();
 	}
 	
 	/**

@@ -246,19 +246,33 @@ public abstract class Role {
     
 	// ---- Schedule tasks
     public class ScheduleTask implements ScheduleTaskInterface {
+    	TimeManager tm = TimeManager.getInstance();
+    	
     	/**
          * Executes the command every day at hour:minute.
          */
-		public void scheduleDailyTask(Runnable command, int hour, int minute) {
-			TimeManager tm = TimeManager.getInstance();		
-			long initialDelay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+		public void scheduleDailyTask(Runnable command, int hour, int minute) {		
+			long initialDelay = tm.timeUntil(tm.nextSuchTime(hour, minute))
 					/TimeManager.CONVERSION_RATE;
-			long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
+			long delay = Constants.DAY/TimeManager.CONVERSION_RATE;
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
 			
 			Do("next occurrence of " + hour + ":" + minute + " is in " +
 					initialDelay/1000 + " seconds");
+		}
+		
+		/**
+		 * Executes the scheduled task at firstTime and every delay
+		 * milliseconds thereafter (game time).
+		 */
+		public void scheduleTaskAtInterval(Runnable command, long firstTime,
+				long delay) {
+			
+			long initialDelay = tm.timeUntil(firstTime);
+			long realDelay = delay/TimeManager.CONVERSION_RATE;
+			executor.scheduleWithFixedDelay(command, initialDelay, realDelay,
+					TimeUnit.MILLISECONDS);
 		}
     
 	
@@ -266,8 +280,7 @@ public abstract class Role {
 		 * Executes the command one time, at the next occurrence of hour:minute.
 		 */
 		public void scheduleTaskAtTime(Runnable command, int hour, int minute) {
-			TimeManager tm = TimeManager.getInstance();		
-			long delay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
+			long delay = tm.timeUntil(tm.nextSuchTime(hour, minute))
 					/TimeManager.CONVERSION_RATE;
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.schedule(command, delay, unit);
@@ -285,7 +298,7 @@ public abstract class Role {
 		 * 				second real time), delay should be 60000.
 		 */
 		public void scheduleTaskWithDelay(Runnable command, long delay) {
-			long convDelay = (int) delay/TimeManager.CONVERSION_RATE;
+			long convDelay = delay/TimeManager.CONVERSION_RATE;
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.schedule(command, convDelay, unit);
 			

@@ -84,7 +84,9 @@ public class BusstopAgent extends Agent implements Busstop {
 
 	@Override
 	public void msgIAmHere(Passenger p) {
-		peopleWaiting.add(p);
+		synchronized (peopleWaiting) {
+			peopleWaiting.add(p);
+		}
 	}
 
 	@Override
@@ -103,8 +105,10 @@ public class BusstopAgent extends Agent implements Busstop {
 	}
 	//Gives the passenger list to the bus and clears it.
 	public void givePassengers() {
-		currentBus.msgHereArePeople(peopleWaiting);
-		peopleWaiting.clear();
+		synchronized (peopleWaiting) {
+			currentBus.msgHereArePeople(peopleWaiting);
+			peopleWaiting.clear();
+		}
 		currentBus = null;
 	}
 

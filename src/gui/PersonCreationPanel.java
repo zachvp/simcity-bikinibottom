@@ -76,12 +76,18 @@ ClassifiedsChangedListener{
 		setBackground(Color.white);
 		setLayout(new BorderLayout());
 
+		//JPanel half = new JPanel();
+		//Dimension halfDim = new Dimension((int)(d.width*0.6), d.height);
+		
+		
+		
 		JPanel welcomeTextPanel = new JPanel();
 		JLabel welcomeText = new JLabel("Welcome to the Hospital!");	//north
 		Dimension textDim = new Dimension(d.width, (int)(d.height*0.3));
 		welcomeTextPanel.setPreferredSize(textDim);
 		welcomeTextPanel.setMaximumSize(textDim);
 		welcomeTextPanel.setMinimumSize(textDim);
+		welcomeTextPanel.setOpaque(false);
 		Font font = new Font("Serif", Font.BOLD, 20);
 
 		welcomeText.setFont(font);
@@ -92,7 +98,7 @@ ClassifiedsChangedListener{
 		
 		//Input Panel
 		JPanel inputPanel = new JPanel();
-		Dimension inputDim = new Dimension((int)(d.width*0.6), (int)(d.height*0.4));
+		Dimension inputDim = new Dimension((int)(d.width*0.6), (int)(d.height*0.7));
 		inputPanel.setPreferredSize(inputDim);
 		inputPanel.setMaximumSize(inputDim);
 		inputPanel.setMinimumSize(inputDim);
@@ -182,6 +188,8 @@ ClassifiedsChangedListener{
 		south.add(populateButton);
 		south.add(msg);
 		
+		inputPanel.add(south, BorderLayout.SOUTH);
+		
 		//Image Panel
 		try {
 			image = ImageIO.read(getClass().getResource("doctor.png"));
@@ -191,18 +199,19 @@ ClassifiedsChangedListener{
 		}		
 		JPanel imagePanel = new JPanel();
 		JLabel imageLabel = new JLabel(new ImageIcon(image));
-		Dimension iDim = new Dimension((int)(d.width*0.4), d.height);
+		Dimension iDim = new Dimension((int)(d.width*0.4), (int)(d.height*0.7));
 		imagePanel.setPreferredSize(iDim);
 		imagePanel.setMaximumSize(iDim);
 		imagePanel.setMinimumSize(iDim);
 		imagePanel.setLayout(new BorderLayout());
+		imagePanel.setOpaque(false);
 		imagePanel.add(imageLabel, BorderLayout.CENTER);
 		
 		
 		add(welcomeTextPanel, BorderLayout.NORTH);
 		add(inputPanel, BorderLayout.EAST);
 		add(imagePanel, BorderLayout.WEST);
-		add(south, BorderLayout.SOUTH);
+		//add(south, BorderLayout.SOUTH);
 		
 
 	}

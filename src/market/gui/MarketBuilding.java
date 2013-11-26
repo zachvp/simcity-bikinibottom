@@ -73,6 +73,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	@Override
 	public Role getCustomerRole(Person person) {
 		
+		/*
 		List<Item> ShoppingList = new ArrayList<Item>();
 		Map<String,Integer> GroceryList = new HashMap<String,Integer>();
 		for (int i=0;i<Constants.FOODS.size();i++){
@@ -91,15 +92,25 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 				ShoppingList.add(new Item(CommonSimpleClasses.Constants.CARS.get(i),GroceryList.get(CommonSimpleClasses.Constants.CARS.get(i))));
 			}
 		}
+		*/
+		List<Item> ShoppingList = new ArrayList<Item>();
+		Map<String,Integer> GroceryList = person.getResidentRole().getGroceries();
+		for (int i=0;i<Constants.FOODS.size();i++){
+			ShoppingList.add(new Item(Constants.FOODS.get(i), GroceryList.get(Constants.FOODS.get(i))));
+		}
+		for (int i=0;i<Constants.CARS.size();i++){
+			ShoppingList.add(new Item(Constants.CARS.get(i), GroceryList.get(Constants.CARS.get(i))));
+		}
+		
 		
 		if (MarketCustomerMap.containsKey(person)){
-			System.out.println("IF STATEMENT In Market's getCustomerRole");
+			//System.out.println("IF STATEMENT In Market's getCustomerRole");
 			MarketCustomerMap.get(person).setShoppingList(ShoppingList);
 			MarketCustomerMap.get(person).goingToBuy();
 			return MarketCustomerMap.get(person);
 		}
 		else {
-			System.out.println(" ELSE In Market's getCustomerRole");
+			//System.out.println(" ELSE In Market's getCustomerRole");
 			Role role = records.CreateCustomerRole(person.getName(), person.getWallet().getCashOnHand(), ShoppingList, person);
 			MarketCustomerMap.put(person, (CustomerRole)role);
 			return role;

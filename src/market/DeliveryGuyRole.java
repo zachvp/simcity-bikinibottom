@@ -133,6 +133,10 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 	protected boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
+		if (state == DeliveryGuystate.GoingToWork){
+			GoToWork();
+			return true;
+		}
 		if (Available == false){
 			GoDeliver();
 				return true;
@@ -145,6 +149,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	}
 
 	//Action
+	private void GoToWork(){
+		deliveryguyGui.BackReadyStation();
+	}
 	/**
 	 * Action to go deliver items!
 	 */
@@ -180,6 +187,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			e.printStackTrace();
 		}
 		this.deactivate();
+		state = DeliveryGuystate.GoingToWork;
 	}
 	
 	

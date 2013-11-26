@@ -2,6 +2,8 @@ package transportation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParseException;
 
@@ -52,6 +54,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	//Direction the `Vehicle` is currently moving towards.
 	private DirectionEnum currentDirection = DirectionEnum.West;
 	
+	Timer timer = new Timer();
+	
 	
 	public VehicleAgent(Corner currentCorner, boolean isBus) {
 		this.currentCorner = currentCorner;
@@ -76,7 +80,15 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	
 	public void msgDriveNow() {
 		event = VehicleEventEnum.AuthorizedToCross;
-		currentCorner.msgDoneCrossing();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				currentCorner.msgDoneCrossing();
+				
+			}
+		}, 400);
+		
 		stateChanged();
 	}
 

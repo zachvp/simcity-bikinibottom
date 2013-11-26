@@ -28,16 +28,14 @@ public class HousingComplex extends JPanel {
 	private final int SPACING = 10;
 	
 	// layout manager
-	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
+	private GridLayout complexLayout;
 
-	// payRecipient who manages the complex 
-// 	private Person payRecipientPerson; = new PersonAgent("Pay Recipient");
- 	
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
 	public HousingComplex() {
-		// set the layout manager
+		// create layout and set the layout manager
+		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 		this.setLayout(complexLayout);
 		
 		/**
@@ -50,38 +48,5 @@ public class HousingComplex extends JPanel {
 			housingUnits.add(gui);
 		}
 
-	}
-	
-	public void addResident(ResidentRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() == null){
-				unit.addResidentGui(role);
-				break;
-			}
-		}
-	}
-	
-	public void addPayRecipient(PayRecipientRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() != null){
-				unit.addPayRecipient(role);
-				break;
-			}
-		}
-	}
-	
-	public void addWorker(MaintenanceWorkerRole role){
-		for(HousingGui unit : housingUnits){
-			if(unit.getResident() != null){
-				unit.addWorker(role);
-				break;
-			}
-		}
-	}
-	
-	private void startAndActivate(Person person, Role role) {
-		( (Agent) person).startThread();
-		person.addRole(role);
-		( (Role) role).activate();
 	}
 }

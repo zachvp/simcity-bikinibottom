@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.TellerGui;

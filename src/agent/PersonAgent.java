@@ -14,6 +14,8 @@ import transportation.PassengerRole;
 import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;

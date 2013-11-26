@@ -1,6 +1,8 @@
-package agent.gui;
+package gui;
 
 import javax.swing.*;
+
+import agent.gui.Gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

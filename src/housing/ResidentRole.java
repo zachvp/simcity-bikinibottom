@@ -1,19 +1,21 @@
 package housing;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
-import agent.mock.EventLog;
-import agent.mock.MockScheduleTaskListener;
-import agent.Constants;
-import agent.Constants.Condition;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -247,7 +249,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
-		//TODO actually implement maintenance worker
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 	}

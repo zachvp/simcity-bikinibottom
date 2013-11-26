@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
-import agent.mock.EventLog;
 
 public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker {
 	/* --- Data --- */

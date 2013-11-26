@@ -1,5 +1,7 @@
 package bank.gui;
 
+import gui.AnimationPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +22,6 @@ import javax.swing.JTextField;
 import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.WorkRole;
-import agent.gui.AnimationPanel;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
 import bank.LoanManagerRole;

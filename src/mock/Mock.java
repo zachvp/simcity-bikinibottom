@@ -1,4 +1,4 @@
-package agent.mock;
+package mock;
 
 /**
  * This is the base class for all mocks.

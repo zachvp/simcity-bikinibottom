@@ -1,5 +1,7 @@
 package market.gui;
 
+import gui.AnimationPanel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +16,10 @@ import market.ItemCollectorRole;
 import market.interfaces.Cashier;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
-import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
 
 /**

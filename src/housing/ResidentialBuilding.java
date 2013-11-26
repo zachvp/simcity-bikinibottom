@@ -5,18 +5,12 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import bank.BankCustomerRole;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
-import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
-import housing.gui.ResidentRoleGui;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-import housing.interfaces.ResidentGui;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
@@ -27,20 +21,20 @@ import housing.interfaces.ResidentGui;
 
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
-	CityLocation residence;
+	private CityLocation residence;
 	
 	// location for the "door" to the building
-	XYPos entrancePos;
+	private XYPos entrancePos;
 	
 	// this displays after clicking on the ResidentialBuilding
-	HousingComplex complex;
+	private HousingComplex complex;
 	
 	// the "boss" or greeter for this building and the on-call Mr. Fix-it
-	PayRecipientRole landlord;
-	MaintenanceWorkerRole worker;
+	private PayRecipientRole landlord;
+	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
-	private Map<Person, Role> population;
+	public Map<Person, Role> population;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -56,12 +50,7 @@ public class ResidentialBuilding extends Building {
 		
 		// set up complex
 		this.residence = this;
-		this.complex = new HousingComplex();
-		
-		// add the resident roles
-		for(int i = 0; i < 4; i++){
-			this.population.put(null, new ResidentRole(null, this));
-		}
+		this.complex = new HousingComplex(this);
 		
 		// manager for this building 
 		landlord = new PayRecipientRole(null, this);
@@ -75,7 +64,18 @@ public class ResidentialBuilding extends Building {
 		this.timeOffset = instanceCount + timeDifference;
 		instanceCount++;
 	}
+	
+	public void addResident(ResidentRole resident){
+		this.population.put(null, resident);
+	}
+	
+	public MaintenanceWorkerRole getWorker(){
+		return worker;
+	}
 
+	public PayRecipientRole getPayRecipient(){
+		return landlord;
+	}
 	@Override
 	public XYPos entrancePos() {
 		return entrancePos;

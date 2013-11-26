@@ -9,10 +9,10 @@ import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
-import agent.Constants;
 
 public class BusstopAgent extends Agent implements Busstop {
 	

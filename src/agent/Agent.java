@@ -2,7 +2,9 @@ package agent;
 
 import java.util.concurrent.Semaphore;
 
-import agent.mock.EventLog;
+import mock.EventLog;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.StringUtil;
 
 /**
  * Base class for simple agents

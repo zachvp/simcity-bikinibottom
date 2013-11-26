@@ -5,11 +5,9 @@ import housing.interfaces.ResidentGui;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
-import agent.interfaces.ScheduleTaskInterface;
-import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
+import agent.interfaces.Person;
 
 /**
  * Base class for simple roles
@@ -241,83 +239,6 @@ public abstract class Role {
     	}
     }
     
-	// ---- Schedule tasks
-    public static class ScheduleTask implements ScheduleTaskInterface {
-    	private TimeManager tm = TimeManager.getInstance();
-        private ScheduledExecutorService executor
-        		= Executors.newSingleThreadScheduledExecutor();
-
-    	/**
-         * Executes the command every day at hour:minute.
-         */
-		public void scheduleDailyTask(Runnable command, int hour, int minute) {		
-			long initialDelay = tm.timeUntil(tm.nextSuchTime(hour, minute))
-					/TimeManager.CONVERSION_RATE;
-			long delay = Constants.DAY/TimeManager.CONVERSION_RATE;
-			TimeUnit unit = TimeUnit.MILLISECONDS;
-			executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
-			
-			if (Constants.DEBUG && Constants.PRINT) {
-				System.out.println("ScheduleTask: next occurrence of " +
-						hour + ":" + minute + " is in " + initialDelay/1000 +
-						" seconds");
-			}
-		}
-		
-		/**
-		 * Executes the scheduled task at firstTime and every delay
-		 * milliseconds thereafter (game time).
-		 */
-		public void scheduleTaskAtInterval(Runnable command, long firstTime,
-				long delay) {
-			
-			long initialDelay = tm.timeUntil(firstTime);
-			long realDelay = delay/TimeManager.CONVERSION_RATE;
-			executor.scheduleWithFixedDelay(command, initialDelay, realDelay,
-					TimeUnit.MILLISECONDS);
-			
-			if (Constants.DEBUG && Constants.PRINT) {
-				System.out.println("ScheduleTask: executing in " +
-						realDelay / 1000 + " seconds");
-			}
-		}
-    
-	
-		/**
-		 * Executes the command one time, at the next occurrence of hour:minute.
-		 */
-		public void scheduleTaskAtTime(Runnable command, int hour, int minute) {
-			long delay = tm.timeUntil(tm.nextSuchTime(hour, minute))
-					/TimeManager.CONVERSION_RATE;
-			TimeUnit unit = TimeUnit.MILLISECONDS;
-			executor.schedule(command, delay, unit);
-			
-			if (Constants.DEBUG && Constants.PRINT) {
-				System.out.println("ScheduleTask: next occurrence of " + hour +
-						":" + minute + " is in " + delay/1000 + " seconds");
-			}
-		}
-		
-		/**
-		 * Executes the command one time with the given delay.
-		 * 
-		 * @param command
-		 * @param delay IMPORTANT: this is game time delay, not real time delay.
-		 * 				To make the task execute in 1 minute of game time (half a
-		 * 				second real time), delay should be 60000.
-		 */
-		public void scheduleTaskWithDelay(Runnable command, long delay) {
-			long realDelay = delay/TimeManager.CONVERSION_RATE;
-			TimeUnit unit = TimeUnit.MILLISECONDS;
-			executor.schedule(command, realDelay, unit);
-			
-			if (Constants.DEBUG && Constants.PRINT) {
-				System.out.println("ScheduleTask: executing in " +
-						realDelay / 1000 + " seconds");
-			}
-		}
-    }
-
 	public void setGui(ResidentGui gui) {
 		// TODO Auto-generated method stub
 		

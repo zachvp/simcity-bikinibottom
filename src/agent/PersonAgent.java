@@ -63,7 +63,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Car car;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel){
+	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger){
 		super();
 		updateHungerLevel();
 		
@@ -73,7 +73,7 @@ public class PersonAgent extends Agent implements Person {
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = HungerLevel.FULL;
+		this.hungerLevel = hunger;
 		
 		this.timeManager = TimeManager.getInstance();
 		
@@ -91,7 +91,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL);
 		updateHungerLevel();
 	}
 	

@@ -20,7 +20,11 @@ public interface SecurityGuard {
     
     public abstract void msgAtDestination();
     
-    public abstract void setGui(SecurityGuardGui g);
+    public abstract void setGui(SecurityGuardGuiInterface g);
 
 	public abstract String getName();
+	
+	public abstract int getWaitingCustomersSize();
+	
+	public abstract int getTellerPositionsSize();
 }

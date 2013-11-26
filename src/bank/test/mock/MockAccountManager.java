@@ -14,9 +14,6 @@ import bank.interfaces.Teller;
  */
 public class MockAccountManager extends Mock implements AccountManager {
 
-        /**
-         * Reference to the Cashier under test that can be set by the unit test.
-         */
 	
 	public EventLog log = new EventLog();
 	

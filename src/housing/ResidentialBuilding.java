@@ -52,13 +52,16 @@ public class ResidentialBuilding extends Building {
 		
 		// keeps track of building members
 		this.population = new HashMap<Person, Role>();
+
+		// worker for this building
+		worker = new MaintenanceWorkerRole(null, this);
 		
 		// set up complex
 		this.complex = new HousingComplex(this);
 		
 		// manager for this building 
 		landlord = new PayRecipientRole(null, this);
-		worker = new MaintenanceWorkerRole(null, this, complex);
+		worker.setComplex(this.complex);
 		
 		// put the constant roles in the building map
 		this.population.put(null, landlord);

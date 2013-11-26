@@ -67,7 +67,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	int unit;
 	
 	/* --- Constructor --- */
-	public MaintenanceWorkerRoleGui(MaintenanceWorkerRole role, HousingComplex complex) {
+	public MaintenanceWorkerRoleGui(MaintenanceWorkerRole role) {
 		this.worker = role;
 		this.complex = complex;
 		
@@ -165,4 +165,10 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 		this.complex.removeGuiFromDwelling(this, unit);
 //		this.complex.addGuiToDwelling(this, this.unit);
 	}
+
+	@Override
+	public void setComplex(HousingComplex complex) {
+		this.complex = complex;
+	}
+	
 }

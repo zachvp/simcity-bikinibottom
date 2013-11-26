@@ -1,6 +1,7 @@
 package agent;
 
 import gui.Building;
+import CommonSimpleClasses.CityLocation;
 import agent.interfaces.Person;
 import classifieds.ClassifiedsClass;
 
@@ -35,9 +36,34 @@ public abstract class WorkRole extends Role {
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
+	@Override
 	public void setPerson(Person person) {
 		super.setPerson(person);
 		ClassifiedsClass.getClassifiedsInstance().notifyListeners();
+	}
+	
+	/**
+	 * Sets the WorkRole's location. MUST be an instance of {@link Building}
+	 * 
+	 * @throws IllegalArgumentException if loc is not a Building
+	 */
+	@Override
+	public void setLocation(CityLocation loc) {
+		if (!(loc instanceof Building)) {
+			throw new IllegalArgumentException("WorkRole's location must be "
+					+ "a Building!");
+		}
+	}
+	
+    /**
+     * Sets the {@link Building} corresponding to this Role's place on
+     * the map.
+     * 
+     * @param loc the building that applies to this work role,
+     * 		  or null if this role doesn't have a particular location
+     */
+	public void setLocation(Building loc) {
+		setLocation(loc);
 	}
 	
 	/**

@@ -23,9 +23,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	SecurityGuardGui securityGuardGui;
-	
-	ScheduleTask task = new ScheduleTask();
-	
+		
 	boolean endWorkShift = false;
 	
 	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());

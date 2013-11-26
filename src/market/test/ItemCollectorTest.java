@@ -89,7 +89,7 @@ public class ItemCollectorTest extends TestCase
 					assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 		
 		//Step 1
-				ItemCollector.msgGetTheseItem(collectingItemList, Customer1);
+				ItemCollector.msgGetTheseItem(collectingItemList);
 		
 				//Check Orders
 					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
@@ -97,7 +97,7 @@ public class ItemCollectorTest extends TestCase
 					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 					
 				//Check Orders (Got removed the order from Orders)
-					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
+					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
 				//Check InventoryList should be decreased
 					assertEquals("ItemCollector's InventoryList should have 60 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 60);
 					assertEquals("ItemCollector's InventoryList should have 70 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 70);
@@ -105,6 +105,10 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector's InventoryList should have 85 Toyoda in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Toyoda"), 85);
 					assertEquals("ItemCollector's InventoryList should have 90 Krabby Patty in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Krabby Patty"), 90);
 					assertEquals("ItemCollector's InventoryList should have 100 Coral Bits in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Coral Bits"), 100);
+				
+				//Check ItemCollector.PaEaA calls a function (GoGetItems)	
+					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
+					
 				//Check DeliverList if it is correct
 					assertEquals("ItemCollector's DeliverList should have 40 Kelp Rings in the DeliverList. It doesn't", (int) Cashier.DeliverList.get(0).amount, 40);
 					assertEquals("ItemCollector's DeliverList should have 30 LamboFinny in the DeliverList. It doesn't", (int) Cashier.DeliverList.get(1).amount, 30);
@@ -183,7 +187,7 @@ public class ItemCollectorTest extends TestCase
 					assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 		
 		//Step 1
-				ItemCollector.msgGetTheseItem(collectingItemList, Customer1);
+				ItemCollector.msgGetTheseItem(collectingItemList);
 		
 				//Check Orders
 					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
@@ -191,7 +195,7 @@ public class ItemCollectorTest extends TestCase
 					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 					
 				//Check Orders (Got removed the order from Orders)
-					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
+					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
 				//Check InventoryList should be decreased
 					assertEquals("ItemCollector's InventoryList should have 60 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 60);
 					assertEquals("ItemCollector's InventoryList should have 70 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 70);
@@ -199,6 +203,10 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector's InventoryList should have 85 Toyoda in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Toyoda"), 85);
 					assertEquals("ItemCollector's InventoryList should have 0 Krabby Patty in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Krabby Patty"), 0);
 					assertEquals("ItemCollector's InventoryList should have 0 Coral Bits in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Coral Bits"), 0);
+					
+				//Check ItemCollector.PaEaA calls a function (GoGetItems)	
+					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
+					
 				//Check DeliverList if it is correct
 					assertEquals("ItemCollector's DeliverList should have a list size of 6. It doesn't", (int) Cashier.DeliverList.size(), 6);
 					assertEquals("ItemCollector's DeliverList should have 40 Kelp Rings in the DeliverList. It doesn't", (int) Cashier.DeliverList.get(0).amount, 40);
@@ -273,7 +281,7 @@ public class ItemCollectorTest extends TestCase
 					assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 		
 		//Step 1
-				ItemCollector.msgGetTheseItem(collectingItemList, Customer1);
+				ItemCollector.msgGetTheseItem(collectingItemList);
 		
 				//Check Orders
 					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
@@ -281,7 +289,7 @@ public class ItemCollectorTest extends TestCase
 					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
 					
 				//Check Orders (Got removed the order from Orders)
-					assertEquals("ItemCollector should have 0 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 0);
+					assertEquals("ItemCollector should have 1 order in List of Orders. It doesn't.",ItemCollector.getOrders().size(), 1);
 				//Check InventoryList should be decreased
 					assertEquals("ItemCollector's InventoryList should have 0 Kelp Rings in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Kelp Rings"), 0);
 					assertEquals("ItemCollector's InventoryList should have 0 LamboFinny in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("LamboFinny"), 0);
@@ -289,6 +297,10 @@ public class ItemCollectorTest extends TestCase
 					assertEquals("ItemCollector's InventoryList should have 0 Toyoda in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Toyoda"), 0);
 					assertEquals("ItemCollector's InventoryList should have 0 Krabby Patty in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Krabby Patty"), 0);
 					assertEquals("ItemCollector's InventoryList should have 0 Coral Bits in the InventoryList initially. It doesn't", (int) ItemCollector.getInventoryMap().get("Coral Bits"), 0);
+					
+				//Check ItemCollector.PaEaA calls a function (GoGetItems)	
+					assertTrue("Cashier's scheduler shouldn't have returned true , but didn't.", ItemCollector.pickAndExecuteAnAction());
+					
 				//Check DeliverList if it is correct
 					assertEquals("ItemCollector's DeliverList should have a list size of 6. It doesn't", (int) Cashier.DeliverList.size(), 6);
 					assertEquals("ItemCollector's DeliverList should have 0 Kelp Rings in the DeliverList. It doesn't", (int) Cashier.DeliverList.get(0).amount, 0);

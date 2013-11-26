@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import agent.PersonAgent;
 import agent.interfaces.Person;
 import CommonSimpleClasses.Constants;
 import market.test.mock.LoggedEvent;
@@ -28,7 +29,7 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	}
 
 	@Override
-	public void msgGetTheseItem(List<Item> ItemList, Customer c) {
+	public void msgGetTheseItem(List<Item> ItemList) {
 		// TODO Auto-generated method stub
 		log.add(new LoggedEvent("ItemCollector : Received message msgGetTheseItem"));
 		
@@ -43,7 +44,7 @@ public class MockItemCollector extends Mock implements ItemCollector {
 		*/
 		
 		
-			Cashier.msgHereAreItems(ItemList, new ArrayList<Item>(), c);
+			Cashier.msgHereAreItems(ItemList, new ArrayList<Item>());
 		
 	}
 
@@ -110,7 +111,7 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	@Override
 	public Person getPerson() {
 		// TODO Auto-generated method stub
-		return null;
+		return new PersonAgent("name");
 	}
 	
 }

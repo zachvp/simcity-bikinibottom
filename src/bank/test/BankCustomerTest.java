@@ -5,7 +5,10 @@ import agent.PersonAgent;
 import bank.BankCustomerRole;
 import bank.BankCustomerRole.State;
 import bank.gui.BankBuilding;
+import bank.interfaces.BankCustomerGuiInterface;
+import bank.test.mock.MockBankCustomerGui;
 import bank.test.mock.MockLoanManager;
+import bank.test.mock.MockSecurityGuard;
 import bank.test.mock.MockTeller;
 import junit.framework.TestCase;
 
@@ -17,6 +20,8 @@ public class BankCustomerTest extends TestCase
         BankCustomerRole bankCustomer;
         MockTeller teller;
         MockLoanManager loanManager;
+        MockSecurityGuard securityGuard;
+        BankCustomerGuiInterface mockGui;
         
         CityLocation testLocation = new BankBuilding(0,0,0,0);
         
@@ -29,8 +34,11 @@ public class BankCustomerTest extends TestCase
                 super.setUp();  
                 bankCustomer = new BankCustomerRole(person, testLocation);
                 teller = new MockTeller("mockTeller");
+                securityGuard = new MockSecurityGuard("mockSecurityGuard");
                 loanManager = new MockLoanManager("mockLoanManager");
                 bankCustomer.setTeller(teller);
+                mockGui = new MockBankCustomerGui(bankCustomer);
+                bankCustomer.setGui(mockGui);
         }        
         /**
          * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
@@ -54,22 +62,30 @@ public class BankCustomerTest extends TestCase
         public void testOpenNewAccount()
         {
         	bankCustomer.setMoney(50);
-        	assertEquals("wrong state", bankCustomer.getState(), State.waiting);
+        	assertEquals("wrong state", bankCustomer.getState(), State.enteredBank);
           	assertEquals("wrong ID", bankCustomer.getAccountId(), -1);
         	assertEquals("Bank customer should start with $50, did not", bankCustomer.getWalletAmount(), 50.0);
             assertEquals(bankCustomer.getWalletThreshold(), 30.0);
             assertEquals(bankCustomer.getWalletCapacity(), 70.0);
             assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
-            bankCustomer.msgGotToTeller();
+            bankCustomer.msgGoToSecurityGuard(securityGuard);
+            assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+            assertTrue("message reception not logged", securityGuard.log.containsString("customer arrived" + bankCustomer));
+            assertEquals("wrong state", bankCustomer.getState(), State.waitingAtGuard);
+            
+            bankCustomer.msgGoToTeller(0, teller);
+//            assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
             assertTrue("message reception not logged", teller.log.containsString("received message" + 10));
+
+            assertEquals("wrong amount", bankCustomer.getCashAdjustAmount(), -10.0);
             assertEquals("wrong state", bankCustomer.getState(), State.openingAccount);
-            
-            bankCustomer.msgAccountOpened(1001);
-            assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
+
+            bankCustomer.msgAccountOpened(1000);
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
-            assertEquals("wrong amount", bankCustomer.getWalletAmount(), 40.0);
+            assertEquals("wrong money", bankCustomer.getWalletAmount(), 40.0);
             assertEquals("wrong state", bankCustomer.getState(), State.leaving);
+            assertTrue("message reception not logged", securityGuard.log.containsString("customer leaving" + bankCustomer));
 
             //starts action speakToTeller() to open new account
 //            assertEquals("state is incorrect", bankCustomer.getState(), State.waiting);
@@ -82,23 +98,41 @@ public class BankCustomerTest extends TestCase
         	bankCustomer.setMoney(50);
         	bankCustomer.setWalletAmount(20);
         	bankCustomer.setAccountId(1001);
-        	assertEquals("wrong state", bankCustomer.getState(), State.waiting);
+        	
+        	assertEquals("wrong state", bankCustomer.getState(), State.enteredBank);
+          	assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
+        	assertEquals("Bank customer should start with $50, did not", bankCustomer.getWalletAmount(), 20.0);
+            assertEquals(bankCustomer.getWalletThreshold(), 30.0);
+            assertEquals(bankCustomer.getWalletCapacity(), 70.0);
+            assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
+            bankCustomer.msgGoToSecurityGuard(securityGuard);
+            assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+            assertTrue("message reception not logged", securityGuard.log.containsString("customer arrived" + bankCustomer));
+            assertEquals("wrong state", bankCustomer.getState(), State.waitingAtGuard);
+            
+            bankCustomer.msgGoToTeller(0, teller);
+//            assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
+            assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+        	
+//        	assertEquals("wrong state", bankCustomer.getState(), State.gettingLoan);
           	assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
         	assertEquals("Bank customer should start with $20, did not", bankCustomer.getWalletAmount(), 20.0);
             assertEquals(bankCustomer.getWalletThreshold(), 30.0);
             assertEquals(bankCustomer.getWalletCapacity(), 70.0);
-            assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
-            bankCustomer.msgGotToTeller();
-            assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
-            assertEquals("wrong state", bankCustomer.getState(), State.gettingLoan);
             assertTrue("message reception not logged", teller.log.containsString("received loan message"));
+            assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
             bankCustomer.msgSpeakToLoanManager(loanManager, 0);
-            assertEquals("BC has wrong loanmanager", bankCustomer.getLoanManager(), loanManager);
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
             assertEquals("wrong state", bankCustomer.getState(), State.atLoanManager);
-            assertTrue("message reception not logged", loanManager.log.containsString("received loan message" + 30));
+            
+//            bankCustomer.msgSpeakToLoanManager(loanManager, 0);
+            assertEquals("BC has wrong loanmanager", bankCustomer.getLoanManager(), loanManager);
             bankCustomer.msgLoanApproved(30);
             assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+//            assertEquals("wrong state", bankCustomer.getState(), State.atLoanManager);
+            assertTrue("message reception not logged", loanManager.log.containsString("received loan message" + 30));
+//            bankCustomer.msgLoanApproved(30);
+//            assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
             assertEquals("money not updated with loan", 50.0, bankCustomer.getWalletAmount());
             assertEquals("wrong state", bankCustomer.getState(), State.leaving);
             
@@ -113,18 +147,21 @@ public class BankCustomerTest extends TestCase
         	bankCustomer.setMoney(50);
         	bankCustomer.setWalletAmount(20);
         	bankCustomer.setAccountAmount(accountCash);
-        	assertEquals("wrong state", bankCustomer.getState(), State.waiting);
+        	assertEquals("wrong state", bankCustomer.getState(), State.enteredBank);
         	assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
         	assertEquals("Bank customer should start with $20, did not", bankCustomer.getWalletAmount(), 20.0);
         	assertEquals("Bank Customer amount not started properly", bankCustomer.getAccountAmount(), 100.0);
         	assertEquals(bankCustomer.getWalletThreshold(), 30.0);
         	assertEquals(bankCustomer.getWalletCapacity(), 70.0);
         	assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
-        	bankCustomer.msgGotToTeller();
+        	bankCustomer.msgGoToSecurityGuard(securityGuard);
         	assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
-        	assertEquals("wrong state", bankCustomer.getState(), State.withdrawing);
-        	assertTrue("message reception not logged", teller.log.containsString("withdraw" + withdrawAmount));
-
+        	assertEquals("wrong state", bankCustomer.getState(), State.waitingAtGuard);
+        	 assertTrue("message reception not logged", securityGuard.log.containsString("customer arrived" + bankCustomer));
+        	 bankCustomer.msgGoToTeller(0, teller);
+        	 assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+        	 assertEquals("wrong state", bankCustomer.getState(), State.withdrawing);
+             assertTrue("message not gotten", teller.log.containsString("withdraw" + withdrawAmount));
         	bankCustomer.msgWithdrawSuccessful(withdrawAmount);
         	assertEquals(bankCustomer.getCashAdjustAmount(), withdrawAmount);
         	assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
@@ -143,17 +180,23 @@ public class BankCustomerTest extends TestCase
         	bankCustomer.setMoney(50);
         	bankCustomer.setWalletAmount(initialWalletAmount);
         	bankCustomer.setAccountAmount(initialAccountAmount);
-        	assertEquals("wrong state", bankCustomer.getState(), State.waiting);
+        	assertEquals("wrong state", bankCustomer.getState(), State.enteredBank);
         	assertEquals("wrong ID", bankCustomer.getAccountId(), 1001);
         	assertEquals("Bank customer should start with $200, did not", bankCustomer.getWalletAmount(), 200.0);
         	assertEquals("Bank Customer amount not started properly", bankCustomer.getAccountAmount(), 0.0);
         	assertEquals(bankCustomer.getWalletThreshold(), 30.0);
         	assertEquals(bankCustomer.getWalletCapacity(), 70.0);
         	assertFalse("scheduler called", bankCustomer.pickAndExecuteAnAction());
-        	bankCustomer.msgGotToTeller();
+        	bankCustomer.msgGoToSecurityGuard(securityGuard);
         	assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
-        	assertEquals("wrong state", bankCustomer.getState(), State.depositing);
-        	assertTrue("message reception not logged", teller.log.containsString("deposit" + depositAmount));
+        	assertEquals("wrong state", bankCustomer.getState(), State.waitingAtGuard);
+        	assertTrue("message reception not logged", securityGuard.log.containsString("customer arrived" + bankCustomer));
+        	bankCustomer.msgGoToTeller(0, teller);
+        	assertTrue("scheduler not called", bankCustomer.pickAndExecuteAnAction());
+        	assertTrue(teller.log.containsString("deposit" +  depositAmount));
+//        	assertEquals(bankCustomer.getCashAdjustAmount(), )
+        
+        	
         	bankCustomer.msgDepositSuccessful(depositAmount);
         	assertEquals("cash adjust amount not set", bankCustomer.getCashAdjustAmount(), depositAmount*-1);
 

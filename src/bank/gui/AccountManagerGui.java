@@ -31,6 +31,9 @@ public class AccountManagerGui implements Gui{
 	public static final int yTable = 250;
 	public static final int agentDim = 20;
 	
+	private int entranceX = 300;
+	private int entranceY = 500;
+	
 	int deskXPos = 300;
 	int deskYPos = 40;
 	
@@ -38,10 +41,10 @@ public class AccountManagerGui implements Gui{
 
 	public AccountManagerGui(AccountManagerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = deskXPos;
-		yPos = deskYPos;
-		xDestination = deskXPos;
-		yDestination = deskYPos;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 //		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);

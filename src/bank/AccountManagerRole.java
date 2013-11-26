@@ -32,6 +32,8 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	private Semaphore active = new Semaphore(0, true);
 	private AccountManagerGui accountManagerGui;
 	
+	private boolean atWork;
+	
 	enum TaskState {newAccount, pendingDeposit, pendingWithdraw};
 	class Task {
 		Task(Teller t, BankCustomer bc, TaskState state, int accountId, double deposit, double withdrawal){
@@ -60,7 +62,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();//make STATIC
 	
-	int startHour = 9;
+	int startHour = 6;
 	int startMinute = 0;
 	int endHour = 16;
 	int endMinute = 30;
@@ -68,6 +70,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	public AccountManagerRole(Person person, CityLocation loc) {
 		super(person, loc);
+		atWork = false;
 	}
 	
 	public String getCustomerName() {
@@ -75,7 +78,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	// Messages
 	
-	public void msgLeaveWork() {
+	public void msgLeaveWork() {//Called by securityguard to send all employees out once all customers have been served
 		endWorkShift = true;
 		stateChanged();
 	}
@@ -106,6 +109,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	public boolean pickAndExecuteAnAction() {
 //		
 //		System.out.println("HIYA");
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		for(Task t: tasks) {
 			if(t.state == TaskState.newAccount){
 				verifyNewAccount(t);
@@ -135,6 +143,12 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		return false;
 	}
 	// Actions
+	public void goToWork() {
+		doGoToDesk();
+		acquireSemaphore(active);
+		atWork = true;
+	}
+	
 	public void hackAddAccount(BankCustomer bc, double deposit, int testAccountId) {
         Account newAccount = new Account(bc, deposit);
         accountMap.put(testAccountId, newAccount);
@@ -184,6 +198,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 			doEndWorkDay();
 			acquireSemaphore(active);
 			this.deactivate();
+			atWork = false;
 	}
 	
 	//ANIMATION

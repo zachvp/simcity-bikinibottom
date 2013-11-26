@@ -8,7 +8,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.Constants;
+import agent.Constants;
 
 public class InfoPanel extends JPanel{
 

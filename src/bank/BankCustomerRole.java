@@ -8,6 +8,7 @@ import agent.interfaces.Person;
 import bank.gui.BankBuilding;
 import bank.gui.BankCustomerGui;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.BankCustomerGuiInterface;
 import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
@@ -31,7 +32,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	private int loanManagerXPos;
 	
-	BankCustomerGui bankCustomerGui;
+	BankCustomerGuiInterface bankCustomerGui;
 	/**
 	 * Constructor for CustomerAgent class
 	 *
@@ -46,7 +47,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
 //		this.name = name;
-		state = State.enteredBank;
+		state = State.enteredBank;//TODO update, if role reused, maybe change leaving to enteredBank?
 		this.getPerson().getWallet().setCashOnHand(10);
 //		person.getWallet().setCashOnHand(10);//TODO fix this, only done for testing
 //		myCash.amount = 10;
@@ -217,7 +218,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		Do("Entered scheduler");
+//		Do("Entered scheduler");
 //		Do("entered scheduler");
 		if(state == State.enteredBank && event == Event.goingToSecurityGuard) {
 			goToSecurityGuard();
@@ -391,7 +392,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	}
 	
 	
-	public void setGui(BankCustomerGui b) {
+	public void setGui(BankCustomerGuiInterface b) {
 		bankCustomerGui = b;
 	}
 	

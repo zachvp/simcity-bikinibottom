@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.TellerGui;
@@ -16,6 +15,7 @@ import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
+import bank.interfaces.TellerGuiInterface;
 
 /**
  * Restaurant customer agent.
@@ -29,12 +29,12 @@ public class TellerRole extends WorkRole implements Teller {
 	ScheduleTask task = new ScheduleTask();
 	
 	Semaphore active = new Semaphore(0, true);
-	TellerGui tellerGui;
+	TellerGuiInterface tellerGui;
 	int myDeskPosition;
 	
-	int startHour = 8;
+	int startHour = 6;
 	int startMinute = 0;
-	int endHour = 6;
+	int endHour = 16;
 	int endMinute = 0;
 	
 	
@@ -81,10 +81,12 @@ public class TellerRole extends WorkRole implements Teller {
 	private List<MyCustomer> myCustomers= new ArrayList<MyCustomer>();
 	LoanManager loanManager;
 	boolean endWorkShift = false;
+	boolean atWork;
 	
 	public TellerRole(Person person, CityLocation bank) {
 		super(person, bank);
 		
+		atWork = false;
 		// ask everyone for rent
 		Runnable command = new Runnable(){
 			@Override
@@ -180,6 +182,10 @@ public class TellerRole extends WorkRole implements Teller {
 	 */
 	public boolean pickAndExecuteAnAction() {
 //		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
 		for(MyCustomer mc : getMyCustomers()) {
 			if(mc.state == CustomerState.openingAccount) {
 				openNewAccount(mc);
@@ -236,6 +242,11 @@ public class TellerRole extends WorkRole implements Teller {
 		return false;
 	}
 	// Actions
+	
+	private void goToWork() {
+		atWork = true;
+		doGoToDesk();
+	}
 	
 	private void openNewAccount(MyCustomer mc) {
 		Do("opening account");
@@ -331,7 +342,7 @@ public class TellerRole extends WorkRole implements Teller {
 		}
 	}
 	
-	public void setGui(TellerGui g) {
+	public void setGui(TellerGuiInterface g) {
 		tellerGui = g;
 	}
 	

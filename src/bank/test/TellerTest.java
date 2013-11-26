@@ -5,9 +5,12 @@ import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import bank.TellerRole;
 import bank.gui.BankBuilding;
+import bank.interfaces.SecurityGuard;
 import bank.test.mock.MockAccountManager;
 import bank.test.mock.MockBankCustomer;
 import bank.test.mock.MockLoanManager;
+import bank.test.mock.MockSecurityGuard;
+import bank.test.mock.MockTellerGui;
 
 public class TellerTest extends TestCase
 {
@@ -17,6 +20,8 @@ public class TellerTest extends TestCase
 	MockBankCustomer bankCustomer;
 	MockAccountManager accountManager;// = new MockAccountManager("accountManager");
 	MockLoanManager loanManager;
+	SecurityGuard securityGuard;
+	MockTellerGui mockGui;
 
 	CityLocation testLocation = new BankBuilding(0,0,0,0);
 
@@ -35,9 +40,13 @@ public class TellerTest extends TestCase
         teller.setDeskPosition(0);
 		loanManager = new MockLoanManager("mockLoanManager");
 		accountManager = new MockAccountManager("mockAM");
+		mockGui = new MockTellerGui(teller);
+		securityGuard = new MockSecurityGuard("mocksecurityguard");
 		
 		teller.setAccountManager(accountManager);
 		teller.setLoanManager(loanManager);
+		teller.setSecurityGuard(securityGuard);
+		teller.setGui(mockGui);
 	}        
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.

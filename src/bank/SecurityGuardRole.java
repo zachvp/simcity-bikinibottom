@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.ScheduleTask;
+import agent.PersonAgent;
+import agent.Role;
 import agent.WorkRole;
+import agent.gui.Gui;
 import agent.interfaces.Person;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
@@ -27,6 +29,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	ScheduleTask task = new ScheduleTask();
 	
 	boolean endWorkShift = false;
+	boolean atWork;
 	
 	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
 
@@ -57,7 +60,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
 	
-	int startHour = 9;
+	int startHour = 6;
 	int startMinute = 0;
 	int endHour = 16;
 	int endMinute = 30;
@@ -65,18 +68,20 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	public SecurityGuardRole(Person person, CityLocation bank) {
 		super(person, bank);
 //		this.name = name;
+		atWork = false;
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
 				//do stuff
 				
 				msgLeaveWork();
+				System.out.println("ClOCKS RUN");
 				}
 			
 		};
 		
 		// every day at TIME
-		int hour = 7;
+		int hour = endHour;
 		int minute = 0;
 		
 		task.scheduleDailyTask(command, hour, minute);
@@ -129,6 +134,11 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	 */
 	public boolean pickAndExecuteAnAction() {
 	
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		for(TellerPosition tp: tellerPositions) {
 			if(!tp.occupied) {
 				for(WaitingCustomer w: waitingCustomers) {
@@ -161,6 +171,11 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 	// Actions
 	
+	private void goToWork() {
+		atWork = true;
+		doGoToDesk();
+	}
+	
 	private void sendToTeller(WaitingCustomer wc, TellerPosition tp) {
 		Do("sending customer to teller" + tellerPositions.size());
 		wc.bc.msgGoToTeller(tp.xPos, tp.t);
@@ -181,6 +196,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 				r.msgLeaveWork();
 			}
 			goOffWork();
+			this.deactivate();
+			atWork = false;
 		}
 	}
 	
@@ -206,6 +223,10 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	//ANIMATION #####################
 	public void msgAtDestination() {
 		active.release();
+	}
+	
+	public void doGoToDesk() {
+		securityGuardGui.DoGoToDesk();
 	}
 	
 	private void doEndWorkDay() {
@@ -272,6 +293,10 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+
+
 
 
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.WorkRole;
 
@@ -16,6 +17,9 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
+	
+	// graphics
+//	WorkerGui gui = new WorkerRoleGui(this);
 	
 	/* --- Constants --- */
 	private final int SHIFT_START_HOUR = 6;
@@ -76,6 +80,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		wo.state = WorkOrderState.FIXED;
 		wo.dwelling.getResident().msgDwellingFixed();
+		wo.dwelling.setCondition(Condition.GOOD);
 		workOrders.remove(wo);
 		
 		log.add("Fixed problem.");

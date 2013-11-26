@@ -43,13 +43,13 @@ public class ResidentRole extends Role implements Resident {
 	// state for tasks. The Role will deactivate if it is not performing any tasks.
 	// used to determine when the role should terminate and transition to a city role
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
-	TaskState task = TaskState.NONE;
+	TaskState task = TaskState.FIRST_TASK;
 	
 	// graphics
 	private ResidentGui gui;
 	
-	// TODO: this will be set true by the 
-	private boolean hungry = true;
+	// TODO: this will be set true by the person
+	private boolean hungry = false;
 	
 	// rent data
 	private double oweMoney = 0;
@@ -63,12 +63,13 @@ public class ResidentRole extends Role implements Resident {
 		}
 	});
 	
+	// TODO resolve buying groceries at market 
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
 	private final int EAT_TIME = 5; 
-	private final int IMPATIENCE_TIME = 5;
+	private final int IMPATIENCE_TIME = 7;
 	
 	/* ----- Class Data ----- */
 	/**
@@ -108,9 +109,14 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	@Override
-	public void msgDwellingFixed(){
+	public void msgDwellingFixed() {
 		Do("Received message 'dwelling fixed'");
-		dwelling.setCondition(Condition.GOOD);
+	}
+	
+	@Override
+	public void msgDwellingDegraded() {
+		Do("Received message 'dwelling degraded.'");
+		stateChanged();
 	}
 	
 	// sent from the gui when it has reached the target destination
@@ -135,11 +141,9 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(dwelling.getCondition() == Condition.POOR ||
 				dwelling.getCondition() == Condition.BROKEN) {
-			if(dwelling.getWorker() != null){
 				callMaintenenceWorker();
 				return true;
 			}
-		}
 		
 		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0) {
 			tryToMakePayment();

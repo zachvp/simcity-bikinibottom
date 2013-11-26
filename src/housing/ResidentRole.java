@@ -247,7 +247,6 @@ public class ResidentRole extends Role implements Resident {
 	
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
-		//TODO actually implement maintenance worker
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 	}

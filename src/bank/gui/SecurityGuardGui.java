@@ -76,10 +76,17 @@ public class SecurityGuardGui implements Gui{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.BLACK);
+		g.setColor(Color.BLUE);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
-				
+		drawInfo(g, agent.getName(), "Security");
 
+	}
+	
+	public void drawInfo(Graphics2D g, String name, String occupation) {
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos-10);
+		g.drawString(occupation, xPos, yPos);
+		
 	}
 	
 	

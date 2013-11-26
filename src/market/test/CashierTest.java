@@ -94,7 +94,7 @@ public class CashierTest extends TestCase
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
-			Cashier.setState(Cashierstate.Idle);
+			Cashier.setState(Cashierstate.Working);
 			
 		//Step 1
 			Cashier.addICList(ItemCollector1, Cashier.getInventoryList());
@@ -204,7 +204,7 @@ public class CashierTest extends TestCase
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
-			Cashier.setState(Cashierstate.Idle);
+			Cashier.setState(Cashierstate.Working);
 			Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 			{		//Initially The market has 100 inventory on each Item
 				for (int i = 0 ; i < CommonSimpleClasses.Constants.FOODS.size(); i++){
@@ -323,7 +323,7 @@ public class CashierTest extends TestCase
 		//Check Cashier.PaEaA calls no function (Do nothing)
 			assertFalse("Cashier's scheduler shouldn't have returned true , but didn't.", Cashier.pickAndExecuteAnAction());
 			
-			Cashier.setState(Cashierstate.Idle);
+			Cashier.setState(Cashierstate.Working);
 			Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 			{		//Initially The market has 100 inventory on each Item
 				for (int i = 0 ; i < CommonSimpleClasses.Constants.FOODS.size(); i++){

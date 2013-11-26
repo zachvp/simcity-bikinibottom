@@ -10,7 +10,7 @@ import market.ItemCollectorRole.ItemCollectorstate;
 public interface ItemCollector {
 	
 		//Message
-		public abstract void msgGetTheseItem(List<Item> ItemList, Customer c);
+		public abstract void msgGetTheseItem(List<Item> ItemList);
 		
 		public abstract int msgHowManyOrdersYouHave();
 		

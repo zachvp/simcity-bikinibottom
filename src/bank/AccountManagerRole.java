@@ -235,6 +235,10 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	// Accessors, etc.
+	
+//	public String getName() {
+//		return this.getPerson().getName();
+//	}
 
 	
 //	private MyCustomer findCustomer(BankCustomer b) {

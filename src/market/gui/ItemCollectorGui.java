@@ -25,21 +25,18 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
     
-    private  int HomePosX = 190;
-    private  int HomePosY = 195;
+    private  int HomePosX = 195;
+    private  int HomePosY = 200;
     
-    private  int CollectItemX = 170;
+    private  int CollectItemX = 220;
     private  int CollectItemY = 260;
-    
-    private static final int ExitX1 = 130;
-    private static final int ExitY1 = 150;
     
     private static final int ExitX = 130;
     private static final int ExitY = -30;
 
     private MarketInfoPanel panel;
     
-    private enum Command {noCommand, GoHome, CollectItem, GoToExit, GoToExit1 , GoToWork, NotAtWork, GoToWork1};
+    private enum Command {noCommand, GoHome, CollectItem, GoToExit, NotAtWork};
 	private Command command=Command.NotAtWork;
     
     public ItemCollectorGui(ItemCollector ic) {
@@ -52,8 +49,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     @Override
 	public void setItemCollectorNumber(int i){
     	if (i == 0){
-    		HomePosX = 195;
-    	    CollectItemX = 170;
+    		HomePosX = 225;
+    	    CollectItemX = 225;
     	}
     	else{
     		HomePosX = 255;
@@ -86,22 +83,11 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
         
         if (xPos == xDestination && yPos == yDestination) {
 
-        	if (command==Command.GoToWork){
-        		GoToWork();
-        		return;
-        	}
-        	else if (command==Command.GoToWork1){
-        		ContinueToWork();
-        		return;
-        	}
-        	else if (command==Command.GoHome) {
+        	if (command==Command.GoHome) {
 				agent.Ready();
         	}
 			else if (command==Command.CollectItem) {
 				agent.AtCollectStation();
-			}
-			else if (command==Command.GoToExit1){
-				ContinueOffWork();
 			}
 			else if (command==Command.GoToExit){
 				command= Command.NotAtWork;
@@ -125,21 +111,6 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	panel.UpdateInventoryLevelWithoutButton();
     }
     
-    /* (non-Javadoc)
-	 * @see market.gui.ItemCollectorGuiInterfaces#GoToWork()
-	 */
-    @Override
-	public void GoToWork(){
-    	xDestination = ExitX1;
-    	yDestination = ExitY1;
-    	command = command.GoToWork1;
-    }
-    
-    public void ContinueToWork(){
-    	xDestination = HomePosX;
-    	yDestination = HomePosY;
-    	command = command.GoHome;
-    }
     
     /* (non-Javadoc)
 	 * @see market.gui.ItemCollectorGuiInterfaces#BackReadyStation()
@@ -167,20 +138,15 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 	 */
     @Override
 	public void OffWork(){
-    	xDestination = ExitX1;
-    	yDestination = ExitY1;
-    	command=Command.GoToExit1;
+    	xDestination = ExitX;
+    	yDestination = ExitY;
+    	command=Command.GoToExit;
     }
     
     /* (non-Javadoc)
 	 * @see market.gui.ItemCollectorGuiInterfaces#ContinueOffWork()
 	 */
-    @Override
-	public void ContinueOffWork(){
-    	xDestination = ExitX;
-    	yDestination = ExitY;
-    	command=Command.GoToExit;
-    }
+
 
     /* (non-Javadoc)
 	 * @see market.gui.ItemCollectorGuiInterfaces#draw(java.awt.Graphics2D)

@@ -15,7 +15,7 @@ public interface Cashier {
 
 	public abstract void msgIWantItem(List<Item> ShoppingList, Customer C);
 
-	public abstract void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c);
+	public abstract void msgHereAreItems(List<Item> Items, List<Item> MissingItems);
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
 	

@@ -52,7 +52,7 @@ private static final int startingminute = 0;
 	 * PriceList in the market
 	 */
 	private Map<String,Double>PriceList;
-	public enum Cashierstate {GoingToWork, Idle, OffWork, GoingToGetItems, NotAtWork};
+	public enum Cashierstate {GoingToWork, Working, OffWork, NotAtWork};
 	private Cashierstate state = Cashierstate.NotAtWork; 
 	public enum Customerstate {Arrived, Ordered, Collected, Paid, OrderPlaced, WaitingForCheck, GivenItems, Failed, EpicFailed}
 	
@@ -96,8 +96,6 @@ private static final int startingminute = 0;
 			@Override
 			public void run() {
 				msgLeaveWork();
-				print ("LamboFinnyI" + InventoryList.get("LamboFinny"));
-				print ("LamboFinnyP" + PriceList.get("LamboFinny"));
 			
 			}
 		};
@@ -158,55 +156,31 @@ private static final int startingminute = 0;
 	 * @param MissingItems A list that contains all the missing items
 	 * @param c The customer
 	 */
-	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems, Customer c)
+	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems)
 	{
 		//print ("Received Items from ItemCollector");
-		setState(Cashierstate.GoingToGetItems);
 		
-		int ShoppingListSize = 0;
-		for (int i=0;i<Items.size();i++){
-			ShoppingListSize += Items.get(i).amount;
-		}
-		int MissingItemListSize = 0;
-		for (int i=0;i<MissingItems.size();i++){
-			MissingItemListSize += MissingItems.get(i).amount;
-		}
-		//print ("ShoppingListSize : " + ShoppingListSize);
-		//print ("MissingItemListSize : " + MissingItemListSize);
-		
-		synchronized(getMyCustomerList()){
-			for (int i=0;i<getMyCustomerList().size();i++){
-				if (getMyCustomerList().get(i).c == c)
-				{
-					//When there is no item in the shoppinglist can be satisified
-					if (ShoppingListSize == 0){
-						//print ("Epic Failed");
-						getMyCustomerList().get(i).state = Customerstate.EpicFailed;
-						getMyCustomerList().get(i).MissingItemList = MissingItems;
-						break;
-					}
-					//When there is some items that cannot be fulfilled
-					else if (MissingItemListSize != 0){
-						//print ("failed");
-						getMyCustomerList().get(i).state = Customerstate.Failed;
-						getMyCustomerList().get(i).MissingItemList = MissingItems;
-						getMyCustomerList().get(i).setDeliveryList(Items);
-						break;
-					}
-					//All items can be fulfilled
-					else
-						//print ("no problem");
-						getMyCustomerList().get(i).state = Customerstate.Collected;
-						getMyCustomerList().get(i).setDeliveryList(Items);
-						break;
-				}
-			
-				
+			//When there is no item in the shoppinglist can be satisified
+			if (Items.size() == 0){
+				//print ("Epic Failed");
+				getMyCustomerList().get(0).state = Customerstate.EpicFailed;
+				getMyCustomerList().get(0).MissingItemList = MissingItems;
 			}
-		}
-		
-		
-		
+			//When there is some items that cannot be fulfilled
+			else if (MissingItems.size() != 0){
+				//print ("failed");
+				getMyCustomerList().get(0).state = Customerstate.Failed;
+				getMyCustomerList().get(0).MissingItemList = MissingItems;
+				getMyCustomerList().get(0).setDeliveryList(Items);
+			}
+			//All items can be fulfilled
+			else{
+				//print ("no problem");
+				getMyCustomerList().get(0).state = Customerstate.Collected;
+				getMyCustomerList().get(0).setDeliveryList(Items);
+			}
+			
+						
 		stateChanged();
 	}			
 	
@@ -218,14 +192,9 @@ private static final int startingminute = 0;
 	public void msgHereIsPayment(double payment, Customer c)
 	{
 		//print ("Receive payment from Customer ");
-		synchronized(getMyCustomerList()){
-			for (int i=0;i<getMyCustomerList().size();i++){
-				if (getMyCustomerList().get(i).c == c){
-					getMyCustomerList().get(i).state = Customerstate.Paid;
-					setCash(getCash() + payment);
-				}
-			}
-		}
+			getMyCustomerList().get(0).state = Customerstate.Paid;
+			setCash(getCash() + payment);
+
 		cashierGui.Update();
 		stateChanged();
 	}
@@ -246,8 +215,8 @@ private static final int startingminute = 0;
 	public void AtFrontDesk(){
 		//System.out.println("AtFrontDesk");
 		atFrontDesk.release();
-		setState(Cashierstate.Idle);
-		stateChanged();
+		setState(Cashierstate.Working);
+		//stateChanged();
 	}
 	
 	/**
@@ -256,7 +225,7 @@ private static final int startingminute = 0;
 	 */
 	public void AtBench(){
 		atBench.release();
-		stateChanged();
+		//stateChanged();
 	}
 	
 	/**
@@ -283,6 +252,34 @@ private static final int startingminute = 0;
 			GoToWork();
 			return true;
 		}
+		
+		if (getMyCustomerList().get(0) != null){
+			
+			if (getMyCustomerList().get(0).state == Customerstate.Ordered && getState() == Cashierstate.Working){
+				if(getICList().get(0).getPerson()!=null){
+					ItemCollector tempIC = getICList().get(0);
+					GoGetItems(getMyCustomerList().get(0),tempIC);
+					return true;
+				}
+			}
+			
+			if(getMyCustomerList().get(0).state == Customerstate.EpicFailed && getState() == Cashierstate.Working){
+				TellCustomerEpicFail(getMyCustomerList().get(0));
+				return true;
+			}
+			
+			if ((getMyCustomerList().get(0).state == Customerstate.Failed || getMyCustomerList().get(0).state == Customerstate.Collected) && getState() == Cashierstate.Working){
+				CalculatePayment(getMyCustomerList().get(0));
+				return true;
+			}
+			
+			if(getMyCustomerList().get(0).state == Customerstate.Paid && getState() == Cashierstate.Working){
+				GiveItems(getMyCustomerList().get(0));
+				return true;
+			}
+		}
+		
+		/*
 		synchronized(getMyCustomerList()){
 			for (int i=0;i<getMyCustomerList().size();i++){
 				if (getMyCustomerList().get(i).state == Customerstate.Ordered && getState() == Cashierstate.Idle){
@@ -330,16 +327,14 @@ private static final int startingminute = 0;
 				}
 			}
 		}
+		*/
 		
 		if (getMyCustomerList().isEmpty() && getState() == Cashierstate.OffWork){
 			OffWork();
 			return true;
 		}
 		
-		if (getState() == Cashierstate.GoingToGetItems){
-			CollectItemsFromBench();
-			return true;
-		}
+
 
 		return false;
 
@@ -355,7 +350,7 @@ private static final int startingminute = 0;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		state = Cashierstate.Idle;
+		state = Cashierstate.Working;
 	}
 	
 	/**
@@ -372,9 +367,10 @@ private static final int startingminute = 0;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		MC.itemCollector = IC;
 		MC.state = Customerstate.OrderPlaced;
-		MC.itemCollector.msgGetTheseItem(MC.OrderList, MC.c);
+		MC.itemCollector.msgGetTheseItem(MC.OrderList);
 		
 		cashierGui.GoToFrontDesk();
 		try {
@@ -386,25 +382,7 @@ private static final int startingminute = 0;
 		
 	}
 	
-	/**
-	 * Animate to go to bench and collect items and go back to front desk
-	 */
-	private void CollectItemsFromBench(){
-		cashierGui.GoToBench();
-		try {
-			atBench.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		cashierGui.GoToFrontDesk();
-		try {
-			atFrontDesk.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 
 	/**
 	 * An action to tell the customer none of his order can be satisfied
@@ -414,13 +392,7 @@ private static final int startingminute = 0;
 		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		MC.c.msgNoItem();
-		synchronized(getMyCustomerList()){
-			for (int i=0;i<MyCustomerList.size();i++){
-				if (MC == MyCustomerList.get(i)){
-					MyCustomerList.remove(i);
-				}
-			}
-		}
+					MyCustomerList.remove(0);
 		
 	}
 	
@@ -450,11 +422,7 @@ private static final int startingminute = 0;
 		if (MC.Building == null){
 			MC.c.msgHereisYourItem(MC.getDeliveryList());
 			synchronized(getMyCustomerList()){
-				for (int i=0;i<MyCustomerList.size();i++){
-					if (MC == MyCustomerList.get(i)){
-						MyCustomerList.remove(i);
-					}
-				}
+						MyCustomerList.remove(0);
 			}
 		}
 		else
@@ -464,14 +432,8 @@ private static final int startingminute = 0;
 						MC.deliveryGuy = getDGList().get(i);
 						MC.deliveryGuy.msgDeliverIt(MC.getDeliveryList(), MC.c, MC.Building);
 						synchronized(getMyCustomerList()){
-							for (int j=0;j<MyCustomerList.size();j++){
-								if (MC == MyCustomerList.get(j)){
-									MyCustomerList.remove(j);
-									break;
-								}
-							}
+								MyCustomerList.remove(0);
 						}
-						break;
 					}
 				}
 			}

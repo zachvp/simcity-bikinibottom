@@ -21,4 +21,6 @@ public interface SecurityGuard {
     public abstract void msgAtDestination();
     
     public abstract void setGui(SecurityGuardGui g);
+
+	public abstract String getName();
 }

@@ -35,7 +35,7 @@ public abstract class Building extends Rectangle2D.Double
 	protected static final int defaultEndHour = 17;
 	protected static final int defaultEndMinute = 0;
 	
-	protected int timeOffset = 0;
+	protected int timeOffset;
 	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );

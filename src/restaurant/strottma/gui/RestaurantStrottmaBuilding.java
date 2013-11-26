@@ -38,14 +38,14 @@ public class RestaurantStrottmaBuilding extends Building {
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static int timeDifference = 6;
+	private static final int timeDifference = 6;
 	
 	public RestaurantStrottmaBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.existingRoles = new HashMap<Person, Role>();
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
 		
 		initRoles();

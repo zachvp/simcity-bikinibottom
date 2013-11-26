@@ -38,11 +38,16 @@ public class ResidentialBuilding extends Building {
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static int timeDifference = 6;
+	private static final int timeDifference = 6;
 	
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		// set up proper coordinates
 		super(x, y, width, height);
+		
+		// Stagger opening/closing time
+		this.timeOffset = instanceCount * timeDifference;
+		instanceCount++;
+		
 		this.entrancePos = new XYPos(width/2, height);
 		
 		// keeps track of building members
@@ -60,9 +65,6 @@ public class ResidentialBuilding extends Building {
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
 		
-		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
-		instanceCount++;
 	}
 	
 	public void addResident(ResidentRole resident){

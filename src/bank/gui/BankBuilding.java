@@ -37,7 +37,7 @@ public class BankBuilding extends Building {
 
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static int timeDifference = 6;
+	private static final int timeDifference = 6;
 
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
@@ -53,12 +53,12 @@ public class BankBuilding extends Building {
 		bankGui = new BankGui();
 		this.bank = this;
 		this.existingRoles = new HashMap<Person, BankCustomerRole>();
-		// TODO Auto-generated constructor stub
-		initRoles();
 
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
+		
+		initRoles();
 	}
 
 	private void initRoles() {
@@ -167,6 +167,13 @@ public class BankBuilding extends Building {
 		role.msgGoToSecurityGuard(getSecurity());
 
 		return role;
+	}
+	/*
+	 * method to set open sign on bank counter to TRUE when open or FALSE when closed
+	 * called by SecurityGuard
+	 */
+	public void changeOpenSign(boolean b, int hour, int minute) {
+		bankGui.getLayoutGui().setOpen(b, hour, minute);
 	}
 
 	@Override

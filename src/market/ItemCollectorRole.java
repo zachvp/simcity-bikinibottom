@@ -50,7 +50,6 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 *
 	 */
 	private class Order {
-		public Customer c;
 		public List<Item> OrderList = new ArrayList<Item>();
 		public List<Item> DeliverList = new ArrayList<Item>();
 		public List<Item> MissingItemList = new ArrayList<Item>();
@@ -80,11 +79,9 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		 * @param ItemList the list of Items that are requested
 		 * @param c the customer
 		 */
-	public void msgGetTheseItem(List<Item> ItemList, Customer c){
-		System.out.println("Receive msg from Cashier to get items");
+	public void msgGetTheseItem(List<Item> ItemList){
 		//print ("Received msg to get items");
 		Order o = new Order();
-		o.c = c;
 		o.OrderList = ItemList;
 		o.state = Orderstate.JustReceived;
 
@@ -233,7 +230,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		
 		for (int i=0;i<Orders.size();i++){
 			if (o == Orders.get(i)){
-					cashier.msgHereAreItems(o.DeliverList, o.MissingItemList, o.c);
+					cashier.msgHereAreItems(o.DeliverList, o.MissingItemList);
 					Orders.remove(i);
 					break;
 			}

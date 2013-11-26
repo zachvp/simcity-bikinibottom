@@ -82,7 +82,7 @@ public class MarketRecords {
 
         this.gui = gui;
         
-        initRoles();
+        
         
         
         
@@ -125,6 +125,7 @@ public class MarketRecords {
         	*/
 
         	gui.addGui(marketBackgroundLayout);
+        	initRoles();
     }
     
     public void initRoles(){

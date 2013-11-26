@@ -34,14 +34,17 @@ public class LoanManagerGui implements Gui{
 	int deskXPos = 30;
 	int deskYPos = 170;
 	
+	int entranceX = 300;
+	int entranceY = 500;
+	
 	boolean canRelease = false;
 
 	public LoanManagerGui(LoanManagerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = deskXPos;
-		yPos = deskYPos;
-		xDestination = deskXPos;
-		yDestination = deskYPos;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 //		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);

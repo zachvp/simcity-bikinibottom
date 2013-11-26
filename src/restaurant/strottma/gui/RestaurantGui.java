@@ -27,6 +27,7 @@ public class RestaurantGui extends JPanel implements ActionListener {
     private ArrayList<Agent> agents = new ArrayList<Agent>();
     private ArrayList<Role> roles = new ArrayList<Role>();
     
+    /*
     private PersonAgent sarah = new PersonAgent("Sarah");
     private PersonAgent john = new PersonAgent("John");
     private PersonAgent mike = new PersonAgent("Mike");
@@ -34,7 +35,7 @@ public class RestaurantGui extends JPanel implements ActionListener {
     // TODO Markets probably shouldn't be people.
     private PersonAgent marketPerson1 = new PersonAgent("Market1");
     private PersonAgent marketPerson2 = new PersonAgent("Market2");
-    
+    */
     
    // private HostRole host = new HostRole(sarah, building);
    // private CookRole cook = new CookRole(john, building);

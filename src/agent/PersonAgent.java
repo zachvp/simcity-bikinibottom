@@ -63,7 +63,7 @@ public class PersonAgent extends Agent implements Person {
 		this.roles = new HashSet<Role>();
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = HungerLevel.NEUTRAL;
+		this.hungerLevel = HungerLevel.HUNGRY;
 		
 		this.timeManager = TimeManager.getInstance();
 		
@@ -75,7 +75,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
 		this.wallet = new Wallet(); // medium income level
-		// this.wallet.setCashOnHand(9001.00);
+		 this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
 	}
 	
@@ -121,6 +121,7 @@ public class PersonAgent extends Agent implements Person {
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			activateRoleForLoc(getPassengerRole().getLocation(),
 					atLocationForWork());
+			event = PersonEvent.NONE;
 			return true;
 		}
 		
@@ -158,6 +159,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 
 		// No actions were performed.
+
 		return false;
 	}
 

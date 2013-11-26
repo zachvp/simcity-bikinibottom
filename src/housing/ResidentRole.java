@@ -91,8 +91,9 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent, CityLocation residence) {
+	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling) {
 		super(agent, residence);
+		this.dwelling = dwelling;
 	}
 	
 	/* ----- Messages ----- */

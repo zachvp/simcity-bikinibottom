@@ -91,7 +91,7 @@ public class CustomerRole extends Role implements Customer{
 		 * if MissingItems!=Empty()?
 		 * 		Leave or Continue to Buy
 		 */
-		ActualCost = cost;
+		setActualCost(cost);
 		setEvent(Customerevent.Paying);
 		stateChanged();
 	}
@@ -102,7 +102,7 @@ public class CustomerRole extends Role implements Customer{
 	 * @param Items The DeliveryList
 	 */
 	public void msgHereisYourItem(List<Item> Items) {
-		print ("Receive items from Cashier");
+		//print ("Receive items from Cashier");
 		
 		for (int i=0;i<Items.size();i++){
 			person.addItemsToInventory(Items.get(i).name, Items.get(i).amount);
@@ -188,7 +188,7 @@ public class CustomerRole extends Role implements Customer{
 		}
 		if (getState() == Customerstate.Waiting && getEvent() == Customerevent.Paying)
 		{
-				PayItems(ActualCost);
+				PayItems(getActualCost());
 				return true;
 		}
 		if (getState() == Customerstate.Paid && getEvent() == Customerevent.Leaving)
@@ -258,9 +258,10 @@ public class CustomerRole extends Role implements Customer{
 				setCash(getCash() - cost);
 				setState(Customerstate.Paid);
 			}
-			else	//not enough money
+			else{	//not enough money
 				cashier.msgHereIsPayment(getCash(), this);
 				setCash(0);
+			}
 		}
 		if (cost != ExpectedCost){	//doesn’t match with the expected cost
 			if (getCash() >= cost){
@@ -268,9 +269,10 @@ public class CustomerRole extends Role implements Customer{
 				setCash(getCash() - cost);
 				setState(Customerstate.Paid);
 			}
-			else	//not enough money
+			else{	//not enough money
 				cashier.msgHereIsPayment(getCash(), this);
 				setCash(0);
+			}
 		}
 		
 		person.getWallet().setCashOnHand(getCash());
@@ -349,6 +351,15 @@ public class CustomerRole extends Role implements Customer{
 		this.event = event;
 	}
 
+	public double getActualCost() {
+		return ActualCost;
+	}
+
+	public void setActualCost(double actualCost) {
+		ActualCost = actualCost;
+	}
+
+	
 
 
 	

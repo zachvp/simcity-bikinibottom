@@ -218,7 +218,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	class PrintTask extends TimerTask {
         public void run() {
-        	displayTime();
+        	getTimeDisplay();
         }
 	}
 

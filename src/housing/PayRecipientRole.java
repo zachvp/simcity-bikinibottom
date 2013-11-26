@@ -12,7 +12,6 @@ import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -26,6 +25,14 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
 	ScheduleTask task = new ScheduleTask();
+	
+	/* --- Constants --- */
+	// TODO when should shift end?
+	private final int SHIFT_START_HOUR = 6;
+	private final int SHIFT_START_MINUTE = 0;
+	private final int SHIFT_END_HOUR = 12;
+	private final int SHIFT_END_MINUTE = 0;
+	
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -67,8 +74,8 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		};
 		
 		// every day at noon
-		int hour = 6;
-		int minute = 5;
+		int hour = 12;
+		int minute = 0;
 		
 		task.scheduleDailyTask(command, hour, minute);
 	}
@@ -164,45 +171,39 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		this.residents = residents;
 	}
 
+	/* --- Abstract methods inherited from WorkRole --- */
 	@Override
 	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return SHIFT_START_HOUR;
 	}
 
 	@Override
 	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return SHIFT_START_MINUTE;
 	}
 
 	@Override
 	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return SHIFT_END_HOUR;
 	}
 
 	@Override
 	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
+		return SHIFT_END_MINUTE;
 	}
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		deactivate();
 	}
 }

@@ -61,9 +61,13 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		}
 	}
 	
-	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence, HousingComplex complex) {
+	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence) {
 		super(agent, residence);
-		this.gui = new MaintenanceWorkerRoleGui(this, complex);
+		this.gui = new MaintenanceWorkerRoleGui(this);
+	}
+	
+	public void setComplex(HousingComplex complex) {
+		gui.setComplex(complex);
 	}
 
 //	public MaintenanceWorkerRole(PersonAgent person) {

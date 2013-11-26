@@ -45,8 +45,8 @@ private static final int startingminute = 0;
 	//Working Hour
 	int startinghour = 6;
 	int startingminutes = 29;
-	int endinghour = 18;
-	int endingminutes = 0;
+	int endinghour = 16;
+	int endingminutes = 30;
 	
 	/**
 	 * PriceList in the market
@@ -103,8 +103,8 @@ private static final int startingminute = 0;
 		
 		
 		
-		int hour = 18;
-		int minute = 0;
+		int hour = 16;
+		int minute = 30;
 		
 		task.scheduleDailyTask(command, hour, minute);
 			
@@ -253,29 +253,31 @@ private static final int startingminute = 0;
 			return true;
 		}
 		
-		if (getMyCustomerList().get(0) != null){
-			
-			if (getMyCustomerList().get(0).state == Customerstate.Ordered && getState() == Cashierstate.Working){
-				if(getICList().get(0).getPerson()!=null){
-					ItemCollector tempIC = getICList().get(0);
-					GoGetItems(getMyCustomerList().get(0),tempIC);
+		if (getMyCustomerList().size()!= 0){
+			if (getMyCustomerList().get(0) != null){
+
+				if (getMyCustomerList().get(0).state == Customerstate.Ordered && getState() == Cashierstate.Working){
+					if(getICList().get(0).getPerson()!=null){
+						ItemCollector tempIC = getICList().get(0);
+						GoGetItems(getMyCustomerList().get(0),tempIC);
+						return true;
+					}
+				}
+
+				if(getMyCustomerList().get(0).state == Customerstate.EpicFailed && getState() == Cashierstate.Working){
+					TellCustomerEpicFail(getMyCustomerList().get(0));
 					return true;
 				}
-			}
-			
-			if(getMyCustomerList().get(0).state == Customerstate.EpicFailed && getState() == Cashierstate.Working){
-				TellCustomerEpicFail(getMyCustomerList().get(0));
-				return true;
-			}
-			
-			if ((getMyCustomerList().get(0).state == Customerstate.Failed || getMyCustomerList().get(0).state == Customerstate.Collected) && getState() == Cashierstate.Working){
-				CalculatePayment(getMyCustomerList().get(0));
-				return true;
-			}
-			
-			if(getMyCustomerList().get(0).state == Customerstate.Paid && getState() == Cashierstate.Working){
-				GiveItems(getMyCustomerList().get(0));
-				return true;
+
+				if ((getMyCustomerList().get(0).state == Customerstate.Failed || getMyCustomerList().get(0).state == Customerstate.Collected) && getState() == Cashierstate.Working){
+					CalculatePayment(getMyCustomerList().get(0));
+					return true;
+				}
+
+				if(getMyCustomerList().get(0).state == Customerstate.Paid && getState() == Cashierstate.Working){
+					GiveItems(getMyCustomerList().get(0));
+					return true;
+				}
 			}
 		}
 		

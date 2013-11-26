@@ -6,11 +6,10 @@ package transportation.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import agent.Constants;
-
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;

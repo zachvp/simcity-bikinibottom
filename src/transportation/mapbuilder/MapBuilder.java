@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
-import agent.Constants;
 import transportation.BusstopAgent;
 import transportation.CornerAgent;
 import transportation.interfaces.Corner;

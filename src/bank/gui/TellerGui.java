@@ -34,14 +34,17 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 	int deskXPos = 250;
 	int deskYPos = 130;
 	
+	int entranceX = 300;
+	int entranceY = 500;
+	
 	boolean canRelease = false;
 
 	public TellerGui(TellerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = deskXPos;
-		yPos = deskYPos;
-		xDestination = deskXPos;
-		yDestination = deskYPos;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 //		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);

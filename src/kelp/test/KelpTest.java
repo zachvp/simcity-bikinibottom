@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import agent.Constants;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import parser.BuildingDef;

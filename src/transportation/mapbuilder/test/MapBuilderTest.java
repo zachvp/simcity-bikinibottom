@@ -16,9 +16,9 @@ import sun.net.www.content.text.PlainTextInputStream;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.mapbuilder.MapBuilder;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
-import agent.Constants;
 
 
 // TODO update to test busstop orientations

@@ -4,6 +4,8 @@ import classifieds.ClassifiedsClass;
 import housing.interfaces.Dwelling;
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.TimeManager;
 
 /**
  * Common interface for jobs that people can work at. Provides a couple of

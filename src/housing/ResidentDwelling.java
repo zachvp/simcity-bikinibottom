@@ -1,8 +1,8 @@
 package housing;
 
+import mock.EventLog;
 import classifieds.ClassifiedsClass;
-import agent.Constants;
-import agent.mock.EventLog;
+import CommonSimpleClasses.Constants;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;

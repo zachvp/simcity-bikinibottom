@@ -5,9 +5,9 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.RoleFactory;
-import agent.TimeManager;
 
 /**
  * Every building must have a class that represents

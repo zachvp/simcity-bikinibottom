@@ -1,8 +1,8 @@
 package housing.test;
 
+import mock.MockScheduleTaskListener;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import agent.Constants.Condition;
-import agent.mock.MockScheduleTaskListener;
 import housing.ResidentRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;

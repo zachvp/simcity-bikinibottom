@@ -3,6 +3,8 @@ package transportation.test.mock;
 import java.util.Map;
 
 import market.Item;
+import mock.EventLog;
+import mock.Mock;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -10,8 +12,6 @@ import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
-import agent.mock.EventLog;
-import agent.mock.Mock;
 
 public class MockPerson extends Mock implements Person{
 	

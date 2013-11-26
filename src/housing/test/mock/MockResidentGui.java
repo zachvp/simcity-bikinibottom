@@ -1,6 +1,6 @@
 package housing.test.mock;
 
-import agent.mock.EventLog;
+import mock.EventLog;
 import housing.gui.LayoutGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;

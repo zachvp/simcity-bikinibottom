@@ -72,6 +72,12 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 			
 		}
 
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
+		}
+
 		
 
 }

@@ -1,5 +1,6 @@
 package housing.gui;
 
+import gui.AnimationPanel;
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
 import housing.ResidentDwelling;
@@ -15,10 +16,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
-import agent.Constants.Condition;
-import agent.gui.AnimationPanel;
 
 /**
  * HousingGui displays individual housing units. It pulls together all of the

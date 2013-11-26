@@ -73,6 +73,12 @@ public class MockTeller extends Mock implements Teller {
 			
 		}
 
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
+		}
+
 
 		
        

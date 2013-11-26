@@ -23,8 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import transportation.gui.TransportationGuiController;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Constants;
 import agent.gui.Gui;
 
 /**

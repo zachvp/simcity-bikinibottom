@@ -1,8 +1,8 @@
-package agent.mock;
+package mock;
 
 import java.util.LinkedList;
 
-import agent.Constants;
+import CommonSimpleClasses.Constants;
 
 /**
  * This class should be used by Mock agents to log significant events. For

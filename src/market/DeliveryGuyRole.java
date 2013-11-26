@@ -43,11 +43,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public enum DeliveryGuystate {NotAtWork, GoingToWork, Idle, OffWork, Delivering};
 	DeliveryGuystate state = DeliveryGuystate.NotAtWork;
 
-	//Working Hour
-		int startinghour 	= Constants.MarketWorkRoleStartingHour;
-		int startingminutes = Constants.MarketWorkRoleStartingMinutes;
-		int endinghour 		= Constants.MarketWorkRoleEndingHour;
-		int endingminutes	= Constants.MarketWorkRoleEndingMinutes;
+
 		
 		/**
 		 * The one and only one constructor for the DeliveryGuyRole
@@ -211,19 +207,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public void setCashier(Cashier ca){
 		cashier = ca;
 	}
-	//Shifts
-		public int getShiftStartHour(){
-			return startinghour;
-		}
-		public int getShiftStartMinute(){
-			return startingminutes;
-		}
-		public int getShiftEndHour(){
-			return endinghour;
-		}
-		public int getShiftEndMinute(){
-			return endingminutes;
-		}
+
 		public boolean isAtWork(){
 			if (this.isActive())
 				return true;

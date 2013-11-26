@@ -266,29 +266,6 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		}
 //		return null;
 //	}
-	
-	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-
-	@Override
-	public int getShiftStartMinute() {
-		return startMinute;
-	}
-
-
-	@Override
-	public int getShiftEndHour() {
-		return endHour;
-	}
-
-
-	@Override
-	public int getShiftEndMinute() {
-		return endMinute;
-	}
 
 
 	@Override

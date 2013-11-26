@@ -20,6 +20,7 @@ import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
@@ -64,6 +65,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	public PersonAgent(String name, IncomeLevel incomeLevel){
 		super();
+		updateHungerLevel();
 		
 		this.name = name;
 		this.roles = new HashSet<Role>();
@@ -71,13 +73,13 @@ public class PersonAgent extends Agent implements Person {
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = HungerLevel.HUNGRY;
+		this.hungerLevel = HungerLevel.FULL;
 		
 		this.timeManager = TimeManager.getInstance();
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartTime();
+		this.lastTimeEatingOut = timeManager.fakeStartTime() - 2*Constants.DAY;
 		this.eatingOutWaitPeriod = Constants.DAY;
 		
 		this.workStartThreshold = 2 * Constants.HOUR;
@@ -90,6 +92,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	public PersonAgent(String name){
 		this(name, IncomeLevel.MEDIUM);
+		updateHungerLevel();
 	}
 	
 	/* -------- Messages -------- */
@@ -287,9 +290,40 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
-	@Override
-	public Map<String, Integer> getShoppingList(){
-		return shoppingList;
+	//updates hunger level to decrease as day goes on
+	public void updateHungerLevel() {
+		int interval = 3;
+		ScheduleTask task = new ScheduleTask();
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+					doUpdateHungerLevel();
+				}
+			
+		};
+		task.scheduleTaskAtInterval(command, TimeManager.getInstance().currentSimTime(), 4 * Constants.HOUR);
+		
+	}
+	
+	private void doUpdateHungerLevel() {
+		if(this.hungerLevel == HungerLevel.FULL) {
+			this.hungerLevel = HungerLevel.SATISFIED;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.SATISFIED) {
+			this.hungerLevel = HungerLevel.NEUTRAL;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.NEUTRAL) {
+			this.hungerLevel = HungerLevel.HUNGRY;
+			return;
+		}
+		else if(this.hungerLevel == HungerLevel.HUNGRY) {
+			this.hungerLevel = HungerLevel.STARVING;
+			return;
+		}
+		
 	}
 	
 	// ---- Eating out
@@ -631,6 +665,12 @@ public class PersonAgent extends Agent implements Person {
 						LocationTypeEnum.Corner).get(0);
 		
 		setCar(new CarAgent(nearestCorner));
+	}
+
+	@Override
+	public Map<String, Integer> getShoppingList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

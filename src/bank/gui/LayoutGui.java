@@ -113,8 +113,8 @@ public class LayoutGui implements Gui{
 	public void drawLetter(Graphics2D g, String letter) {
 		g.setColor(Color.black);
 		g.drawString(letter, xPos+130, yPos-5);
-		g.drawString("" + hour, xPos+200, yPos-5);
-		g.drawString("" + minute, xPos+200, yPos+5);
+		g.drawString("" + hour + " - " + minute, xPos+170, yPos-5);
+//		g.drawString("" + minute, xPos+200, yPos+5);
 
 	}
 	

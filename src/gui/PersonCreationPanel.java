@@ -25,6 +25,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.junit.Ignore;
+
+import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import agent.WorkRole;
 import classifieds.Classifieds;
@@ -42,12 +46,14 @@ ClassifiedsChangedListener{
 	
 	class MyComboBoxItem {
 		public Object object;
-		public MyComboBoxItem(Object object) {
+		private String blankString;
+		public MyComboBoxItem(Object object, String blankString) {
 			this.object = object;
+			this.blankString = blankString;
 		}
 		public String toString() {
 			if (object != null) return object.toString();
-			else return "None";
+			else return blankString;
 		}
 	}
 
@@ -55,11 +61,14 @@ ClassifiedsChangedListener{
 	Classifieds classifieds = ClassifiedsClass.getClassifiedsInstance();
 
 	JTextField nameTextF;
+	JComboBox<MyComboBoxItem> buildingsCB;
 	JComboBox<MyComboBoxItem> occupationsCB;
 	JComboBox<MyComboBoxItem> residencesCB;
 	JComboBox<String> wealthCB;
 	JComboBox<String> carCB;
 	JButton createButton;
+	ArrayList<MyComboBoxItem> buildList = new ArrayList<MyComboBoxItem>();
+	MyComboBoxItem[] buildingArray;
 	ArrayList<MyComboBoxItem> occList = new ArrayList<MyComboBoxItem>();
 	MyComboBoxItem[] occupationArray;
 	ArrayList<MyComboBoxItem> resList = new ArrayList<MyComboBoxItem>();
@@ -108,25 +117,28 @@ ClassifiedsChangedListener{
 		inputPanel.setOpaque(false);
 		
 		JPanel inputPanelLeft = new JPanel();
-		Dimension inputDimL = new Dimension((int)(d.width*0.12), (int)(d.height*0.4));
+		Dimension inputDimL = new Dimension((int)(d.width*0.14), (int)(d.height*0.4));
 		inputPanelLeft.setPreferredSize(inputDimL);
 		inputPanelLeft.setMaximumSize(inputDimL);
 		inputPanelLeft.setMinimumSize(inputDimL);
-		inputPanelLeft.setLayout(new GridLayout(5,1,5,5));
+		inputPanelLeft.setLayout(new GridLayout(6,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelLeft.setOpaque(false);
 		
 		JPanel inputPanelright = new JPanel();
-		Dimension inputDimR = new Dimension((int)(d.width*0.48), (int)(d.height*0.4));
+		Dimension inputDimR = new Dimension((int)(d.width*0.46), (int)(d.height*0.4));
 		inputPanelright.setPreferredSize(inputDimR);
 		inputPanelright.setMaximumSize(inputDimR);
 		inputPanelright.setMinimumSize(inputDimR);
-		inputPanelright.setLayout(new GridLayout(5,1,5,5));
+		inputPanelright.setLayout(new GridLayout(6,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelright.setOpaque(false);
 		
 
-		nameTextF = new JTextField("Enter a name");		
+		nameTextF = new JTextField("Enter a name");
+		checkSomewhereforBuildings();
+		buildingsCB = new JComboBox<MyComboBoxItem>(buildingArray);
+		buildingsCB.addActionListener(this);
 		checkClassifiedsforJobs();
 		occupationsCB = new JComboBox<MyComboBoxItem>(occupationArray);
 		checkClassifiedsforHome();
@@ -142,6 +154,7 @@ ClassifiedsChangedListener{
 		
 		// default values for person creation
 		nameTextF.setText("mr balloon hands");
+		buildingsCB.setSelectedIndex(0);
 		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
@@ -149,6 +162,8 @@ ClassifiedsChangedListener{
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
+		inputPanelLeft.add(new JLabel("Workplace: "));
+		inputPanelright.add(buildingsCB);
 		inputPanelLeft.add(new JLabel("Job: "));
 		inputPanelright.add(occupationsCB);
 		inputPanelLeft.add(new JLabel("Residence: "));
@@ -174,7 +189,7 @@ ClassifiedsChangedListener{
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
 		
-		populateButton = new JButton("Populate city");
+		populateButton = new JButton("Populate selected workplace");
 		populateButton.addActionListener(this);
 
 		ClassifiedsClass.getClassifiedsInstance().addListener(this);
@@ -189,7 +204,7 @@ ClassifiedsChangedListener{
 		
 		inputPanel.add(south, BorderLayout.SOUTH);
 		
-		//Image Panel
+		//Image Panel 
 		try {
 			image = ImageIO.read(getClass().getResource("doctor.png"));
 
@@ -212,7 +227,9 @@ ClassifiedsChangedListener{
 		add(imagePanel, BorderLayout.WEST);
 		//add(south, BorderLayout.SOUTH);
 		
-
+		carCB.setSelectedIndex(1);
+		classifiedsUpdated();
+		checkSomewhereforBuildings();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -256,7 +273,8 @@ ClassifiedsChangedListener{
 				msg.setText("Please complete all inputs");
 			}
 			
-			classifiedsUpdated();
+			checkClassifiedsforJobs();
+			checkClassifiedsforHome();
 		} else if (e.getSource() == populateButton){
 			// TODO check for residences too!
 			if (resList.size() < occList.size()) {
@@ -268,9 +286,13 @@ ClassifiedsChangedListener{
 				occupationsCB.setSelectedIndex(1);
 				residencesCB.setSelectedIndex(1);
 				actionPerformed(new ActionEvent(createButton, 0, ""));
-				classifiedsUpdated();
+				checkClassifiedsforJobs();
+				checkClassifiedsforHome();
 				
 			}
+		} else if (e.getSource() == buildingsCB) {
+			checkClassifiedsforJobs();
+			checkClassifiedsforHome();
 		}
 		//		
 		//		if (e.getSource() == occupationsCB) {
@@ -282,6 +304,7 @@ ClassifiedsChangedListener{
 	}
 
 	public void classifiedsUpdated() {
+		checkSomewhereforBuildings();
 		checkClassifiedsforJobs();
 		checkClassifiedsforHome();
 	}
@@ -289,13 +312,17 @@ ClassifiedsChangedListener{
 	//TODO needs testing
 	private void checkClassifiedsforJobs(){
 		occList.clear();
-		occList.add(new MyComboBoxItem(null));
+		occList.add(new MyComboBoxItem(null,"None"));
 
 		ArrayList<WorkRole> newJobs = new ArrayList<WorkRole>();
-		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(null, true));
+		MyComboBoxItem comboBoxItem = (MyComboBoxItem)buildingsCB.getSelectedItem();
+		CityBuilding building = null;
+		if (comboBoxItem != null) building = (CityBuilding) comboBoxItem.object;
+		newJobs.addAll((ArrayList<WorkRole>) classifieds.getJobsForBuilding(building
+				, true));
 
 		for(WorkRole w: newJobs){
-			occList.add(new MyComboBoxItem(w));
+			occList.add(new MyComboBoxItem(w,"None"));
 		}
 		occupationArray = occList.toArray(new MyComboBoxItem[newJobs.size()]);
 
@@ -311,13 +338,13 @@ ClassifiedsChangedListener{
 	//TODO needs testing
 	private void checkClassifiedsforHome(){
 		resList.clear();
-		resList.add(new MyComboBoxItem(null));
+		resList.add(new MyComboBoxItem(null,"None"));
 
 		ArrayList<Dwelling> newHomes = new ArrayList<Dwelling>();
 		newHomes.addAll((ArrayList<Dwelling>) classifieds.getRooms(true));
 
 		for(Dwelling w: newHomes){
-			resList.add(new MyComboBoxItem(w)); //TODO check if name is correct
+			resList.add(new MyComboBoxItem(w,"None")); //TODO check if name is correct
 		}
 		residentArray = resList.toArray(new MyComboBoxItem[newHomes.size()]);
 		
@@ -325,6 +352,26 @@ ClassifiedsChangedListener{
 			residencesCB.removeAllItems();
 			for (MyComboBoxItem c: residentArray){
 				residencesCB.addItem(c);
+			}
+		}
+	}
+	
+	private void checkSomewhereforBuildings() {
+		buildList.clear();
+		buildList.add(new MyComboBoxItem(null,"All"));
+		
+		ArrayList<CityLocation> newBuildings = new ArrayList<CityLocation>();
+		newBuildings.addAll(classifieds.getWorkplaces());
+		
+		for(CityLocation l: newBuildings){
+			buildList.add(new MyComboBoxItem(l,"All")); //TODO check if name is correct
+		}
+		buildingArray = buildList.toArray(new MyComboBoxItem[newBuildings.size()]);
+		
+		if(buildingsCB != null){
+			buildingsCB.removeAllItems();
+			for (MyComboBoxItem c: buildingArray){
+				buildingsCB.addItem(c);
 			}
 		}
 	}

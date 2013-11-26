@@ -128,8 +128,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setMinimumSize(infoDim);
 		infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
 		infoPanelSlot.setOpaque(false);
+		infoPanelSlot.setLayout(new BorderLayout());
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);        
-		infoPanelSlot.add(infoPanel);
+		infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));

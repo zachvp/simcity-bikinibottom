@@ -1,6 +1,5 @@
 package housing;
 
-import housing.ResidentRole.TaskState;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -11,7 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.WorkRole;
@@ -21,12 +23,21 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	public EventLog log = new EventLog();
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
 	
+	// listens to the schedule for completion
+	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	
+	// used to create time delays and schedule events
+	private ScheduleTask schedule = new ScheduleTask();
+	
 	// prevents the role from being deactivated prematurely
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
 	TaskState task = TaskState.FIRST_TASK;
 	
 	// graphics
 	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
+	
+	// constants
+	private final int IMPATIENCE_TIME = 7;
 	
 	/* --- Constants --- */
 	private final int SHIFT_START_HOUR = 6;
@@ -83,6 +94,21 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 					return true;
 				}
 			}
+		}
+		
+		
+		// check for idleness
+		if(task == TaskState.NONE){
+			Runnable command = new Runnable() {
+				public void run(){
+					Do("Deactivating role");
+					task = TaskState.FIRST_TASK;
+					deactivate();
+				}
+			};
+			// schedule a delay for food consumption
+			listener.taskFinished(schedule);
+			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
 		}
 		
 		return false;

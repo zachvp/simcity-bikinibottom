@@ -1,5 +1,6 @@
 package housing;
 
+import housing.ResidentRole.TaskState;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent;
@@ -24,7 +26,9 @@ import agent.interfaces.Person;
 public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask schedule = new ScheduleTask();
+	
+	// used to create time delays and schedule events
 	
 	/* --- Constants --- */
 	// TODO when should shift end?
@@ -33,6 +37,10 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	private final int SHIFT_END_HOUR = 12;
 	private final int SHIFT_END_MINUTE = 0;
 	
+	private final int IMPATIENCE_TIME = 7;
+	
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
+	TaskState task = TaskState.FIRST_TASK;	
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -77,7 +85,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		int hour = 12;
 		int minute = 0;
 		
-		task.scheduleDailyTask(command, hour, minute);
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 	
 	public PayRecipientRole(PersonAgent payRecipientPerson) {
@@ -96,6 +104,10 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
+		
+		if(task == TaskState.FIRST_TASK){
+			task = TaskState.NONE;
+		}
 		
 		synchronized(residents){
 			for(MyResident mr : residents){

@@ -7,6 +7,7 @@ import agent.gui.Gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class AnimationPanel extends JPanel implements ActionListener {
     private final int REFRESH_RATE = 5;
 
     /** Keeps track of all the guis in the panel */
-    private List<Gui> guis = new ArrayList<Gui>();
+    private List<Gui> guis = 
+    		Collections.synchronizedList(new ArrayList<Gui>());
     
     public AnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
@@ -32,12 +34,13 @@ public class AnimationPanel extends JPanel implements ActionListener {
     }
 
 	public void actionPerformed(ActionEvent e) {
-		for(Gui gui : guis) {
-            if (gui.isPresent()) {
-                gui.updatePosition();
-            }
-        }
-		
+		synchronized (guis) {
+			for (Gui gui : guis) {
+				if (gui.isPresent()) {
+					gui.updatePosition();
+				}
+			}
+		}
 		repaint();  //Will have paintComponent called
 	}
 

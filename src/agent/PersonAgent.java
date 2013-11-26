@@ -72,7 +72,7 @@ public class PersonAgent extends Agent implements Person {
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
 		this.wallet = new Wallet(); // medium income level
-		this.wallet.setCashOnHand(9001.00);
+		// this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
 	}
 	
@@ -135,7 +135,7 @@ public class PersonAgent extends Agent implements Person {
 					return true;
 				 }
 			}
-			if (hasFoodAtHome()) {
+			if (hasFoodAtHome() || hasFoodInInventory()) {
 				goHome();
 				return true;
 			} else {
@@ -531,6 +531,19 @@ public class PersonAgent extends Agent implements Person {
 	public boolean hasFoodAtHome() {
 		ResidentRole res = getResidentRole();
 		return (res != null) && res.thereIsFoodAtHome();
+	}
+	
+	public boolean hasFoodInInventory() {
+		for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
+			if (entry.getValue() >= 1 &&
+					Constants.FOODS.contains(entry.getKey())) {
+				
+				// There's some food in the inventory
+				return true;
+			}
+		}
+		// No foods in inventory
+		return false;
 	}
 	
 	public boolean needToGoToBank() {

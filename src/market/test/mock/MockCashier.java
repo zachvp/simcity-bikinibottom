@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import market.Item;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
@@ -21,18 +22,15 @@ public class MockCashier extends Mock implements Cashier {
 	 */
 	public ItemCollector itemCollector;
 	public List<Item>ShoppingList;
+	public List<Item>MissingList;
+	public List<Item>DeliverList;
 	
 	public MockCashier(String name) {
 		super(name);
 
 	}
 
-	@Override
-	public void msgPhoneOrder(List<Item> ShoppingList, Customer C,
-			CityBuilding building) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) {
@@ -43,7 +41,8 @@ public class MockCashier extends Mock implements Cashier {
 	@Override
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems,
 			Customer c) {
-		// TODO Auto-generated method stub
+		DeliverList = Items;
+		MissingList = MissingItems;
 		
 	}
 
@@ -115,6 +114,15 @@ public class MockCashier extends Mock implements Cashier {
 	public Map<String, Integer> getInventoryList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	@Override
+	public void msgPhoneOrder(List<Item> ShoppingList, Customer C,
+			CityLocation building) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

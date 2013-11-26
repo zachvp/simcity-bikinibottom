@@ -2,9 +2,7 @@ package housing.gui;
 
 import housing.MaintenanceWorkerRole;
 import housing.PayRecipientRole;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-
+import housing.ResidentRole;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import agent.Agent;
-import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -31,21 +28,14 @@ public class HousingComplex extends JPanel {
 	private final int SPACING = 10;
 	
 	// layout manager
-	private GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
+	private GridLayout complexLayout;
 
-	// payRecipient who manages the complex 
- 	private Person payRecipientPerson = new PersonAgent("Pay Recipient");
- 	private PayRecipient payRecipientRole = new PayRecipientRole(payRecipientPerson);
- 	
- 	// maintenance worker who repairs dwellings
- 	private Person workerPerson = new PersonAgent("Maintenance Worker");
- 	private MaintenanceWorker worker = new MaintenanceWorkerRole((PersonAgent) workerPerson);
- 	
-	
+	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
 	public HousingComplex() {
-		// set the layout manager
+		// create layout and set the layout manager
+		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
 		this.setLayout(complexLayout);
 		
 		/**
@@ -53,27 +43,10 @@ public class HousingComplex extends JPanel {
 		 * be partitioned according to the GridLayout.
 		 */
 		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, payRecipientRole, worker);
+			HousingGui gui = new HousingGui(i);
 			this.add(gui);
 			housingUnits.add(gui);
 		}
-		
-		// activate complex manager
-		startAndActivate(payRecipientPerson, (Role) payRecipientRole);
-		startAndActivate(workerPerson, (Role) worker);
-	}
-	
-	private void startAndActivate(Person person, Role payRecipientRole) {
-		((Agent) payRecipientPerson).startThread();
-		payRecipientPerson.addRole((Role) payRecipientRole);
-		((Role) payRecipientRole).activate();
-	}
 
-	public PayRecipient getPayRecipientRole() {
-		return payRecipientRole;
-	}
-
-	public void setPayRecipientRole(PayRecipientRole payRecipientRole) {
-		this.payRecipientRole = payRecipientRole;
 	}
 }

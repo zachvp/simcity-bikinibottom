@@ -1,5 +1,6 @@
 package housing;
 
+import gui.Building;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
@@ -28,8 +30,12 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		}
 	}
 	
-	public MaintenanceWorkerRole(PersonAgent agent) {
-		super(agent);
+	public MaintenanceWorkerRole(PersonAgent agent, Building residence) {
+		super(agent, residence);
+	}
+
+	public MaintenanceWorkerRole(PersonAgent person) {
+		super(person);
 	}
 
 	/* --- Messages --- */

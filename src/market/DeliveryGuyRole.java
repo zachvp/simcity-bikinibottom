@@ -14,6 +14,11 @@ import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
 
+/**
+ * The role in the market to deliver items
+ * @author AnThOnY
+ *
+ */
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private MarketBuilding workingBuilding = null;
 	private DeliveryGuyGui deliveryguyGui = null;
@@ -27,8 +32,14 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private Semaphore atExit = new Semaphore (0,true);
 	
 	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
-	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
+	DeliveryGuystate state = DeliveryGuystate.GoingToWork;		
 	
+	/**
+	 * The one and only one constructor for the DeliveryGuyRole
+	 * @param NA name of the person
+	 * @param person person himself
+	 * @param Market the Market that the deliveryGuy is working in
+	 */
 	public DeliveryGuyRole(String NA, Person person, MarketBuilding Market){
 		super(person, Market);
 		name = NA;
@@ -37,24 +48,34 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	}
 	
 	//Messages
+	/**
+	 * It will return whether the DeliveryGuy is on a mission or not
+	 */
 		public boolean msgAreYouAvailable() {
 			return Available;
 		}
 
 		
-		@Override
+		/**
+		 * The msg for calling the DeliveryGuy to leave work
+		 */
 		public void msgLeaveWork(){
 			state = DeliveryGuystate.OffWork;
 			stateChanged();
 		}
 
-		
-		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CommonSimpleClasses.CityBuilding building) {
+		/**
+		 * The message from Cashier to go deliver item to the building (restaurant)
+		 */
+		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CommonSimpleClasses.CityLocation building) {
 			CurrentOrder = new Order(DeliveryList, OrderPerson, building);
 			 Available = false;
 			 stateChanged();
 		}
 		
+		/**
+		 * a msg from outside world that notifying the role has arrived a location (either Restaurant or Market)
+		 */
 		public void msgArrivedDestination(){
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
 			{
@@ -69,20 +90,34 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		}
 		
 	//Animations
+		/**
+		 * Animation!
+		 */
 		public void Ready(){
 			Available = true;
 		}
 		
+		/**
+		 * Animation!
+		 */
 		public void AtDeliverExit(){
 			atDeliver.release();
 		}
 		
+		/**
+		 * Animation!
+		 */
 		public void AtExit(){
 			atExit.release();
 		}
 		
 	
 	//Scheduler
+		/**
+		 * DeliveryGuy's PaEaA
+		 * he is either available or not
+		 * AND offWork thats it
+		 */
 	protected boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
 		if (Available == false){
@@ -97,6 +132,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	}
 
 	//Action
+	/**
+	 * Action to go deliver items!
+	 */
 	private void GoDeliver(){
 		
 		// animation to go to the location (Building)
@@ -117,6 +155,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		//Available = true;
 	}
 	
+	/**
+	 * call off work
+	 */
 	private void OffWork(){
 		deliveryguyGui.OffWork();
 		try {
@@ -162,9 +203,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	private class Order{
 		List<Item> DeliveryList;
 		Customer OrderPerson;
-		CommonSimpleClasses.CityBuilding Building;
+		CommonSimpleClasses.CityLocation Building;
 		
-		Order(List<Item> DList, Customer OP, CommonSimpleClasses.CityBuilding CB){
+		Order(List<Item> DList, Customer OP, CommonSimpleClasses.CityLocation CB){
 			DeliveryList = DList;
 			OrderPerson = OP;
 			Building = CB;

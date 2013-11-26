@@ -1,8 +1,5 @@
 package housing.gui;
 
-import housing.MaintenanceWorkerRole;
-import housing.PayRecipientRole;
-import housing.ResidentRole;
 import housing.ResidentialBuilding;
 
 import java.awt.GridLayout;
@@ -10,11 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-
-import CommonSimpleClasses.CityBuilding;
-import agent.Agent;
-import agent.Role;
-import agent.interfaces.Person;
 
 /**
  * HousingComplex is the equivalent of one building unit. It has 4 subdivisions
@@ -28,7 +20,7 @@ public class HousingComplex extends JPanel {
 	private final int UNIT_COUNT = 4;
 	private final int ROWS = 2;
 	private final int COLUMNS = 2;
-	private final int SPACING = 10;
+	private final int SPACING = 5;
 	
 	// layout manager
 	private GridLayout complexLayout;

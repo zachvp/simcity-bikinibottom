@@ -23,9 +23,13 @@ public class HousingGui extends JPanel {
 	/** Index is the slot in the complex the gui lies in.  */
 	int index;
 	
+	// constants
+	private final int ROOM_WIDTH = 300;
+	private final int ROOM_HEIGHT= 245;
+	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
-	LayoutGui layoutGui = new LayoutGui(500, 500);
+	LayoutGui layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT);
 
 	// back-end housing containers that contains the resident, payRecipient, and worker
 	ResidentDwelling dwelling;

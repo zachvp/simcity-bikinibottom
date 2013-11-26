@@ -31,17 +31,18 @@ public class LayoutGui implements Gui {
 	private BufferedImage backgroundImage;
 	private ImageIcon icon;
 	
-	public LayoutGui(int roomWidth, int roomHeight) {
-		ROOM_WIDTH = roomWidth;
-		ROOM_HEIGHT = roomHeight;
+	public LayoutGui(int dwellingWidth, int dwellingHeight) {
+		ROOM_WIDTH = dwellingWidth;
+		ROOM_HEIGHT = dwellingHeight;
 		
 		// place all of the residential items
-		STOVE_POSITION = new Dimension(ROOM_WIDTH/2, ROOM_HEIGHT/3);
-		TABLE_POSITION = new Dimension(ROOM_WIDTH/4, ROOM_HEIGHT/4);
-		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH/4, 5);
-		DOOR_POSITION = new Dimension(0, ROOM_HEIGHT/4);
-		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH/2, 0);
+		STOVE_POSITION = new Dimension(ROOM_WIDTH, ROOM_HEIGHT);
+		TABLE_POSITION = new Dimension(ROOM_WIDTH/2, ROOM_HEIGHT/2);
+		POTTED_PLANT_POSITION = new Dimension(ROOM_WIDTH - 55, ROOM_HEIGHT - 85);
+		DOOR_POSITION = new Dimension(ROOM_WIDTH - 100, 25);
+		REFRIGERATOR_POSITION = new Dimension(ROOM_WIDTH, 0);
 		
+		// add the background image
 		try {
 			backgroundImage = ImageIO.read(getClass().getResource("apartment_background.png"));
 		} catch (IOException e) {

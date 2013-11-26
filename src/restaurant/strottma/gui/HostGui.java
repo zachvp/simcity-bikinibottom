@@ -7,6 +7,8 @@ import restaurant.strottma.HostRole.Table;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class HostGui implements Gui {
 
     private HostRole role = null;

@@ -7,7 +7,6 @@ import housing.interfaces.ResidentGui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import agent.Role;
 import agent.gui.Gui;
 
 /**
@@ -20,8 +19,12 @@ import agent.gui.Gui;
 public class ResidentRoleGui implements Gui, ResidentGui {
 
 	private Resident resident = null;
-	private boolean canRelease = false;// this prevents excessive releases from occurring
-	private boolean waiting = false;// checks if resident is going to be idle
+	
+	// this prevents excessive releases from occurring
+	private boolean canRelease = false;
+	
+	// checks if resident is going to be idle
+	private boolean waiting = false;
 	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
@@ -31,14 +34,19 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	String eatingFood = "null";
 
 	/* --- Hardcoded Positions --- */
-	private int xPos = 20, yPos = 20;//default resident position
-	private int xDestination = 100, yDestination = 100;//default start position
+	// default resident position
+	private int xPos, yPos;
+	private int xDestination = 50, yDestination = 50;//default start position
 	private final int JAZZER_SPOT_X = 0;
 	private final int JAZZER_SPOT_Y = 0;
 	
 	/* --- Constructor --- */
 	public ResidentRoleGui(ResidentRole role) {
 		this.resident = role;
+		
+		// set start position of resident
+		xPos = 350;
+		yPos = 25;
 	}
 
 	/**
@@ -120,9 +128,9 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		return yPos;
 	}
 	
-	public void setLayoutGui(LayoutGui gui){
-		layoutGui = gui;
-	}
+//	public void setLayoutGui(LayoutGui gui){
+//		layoutGui = gui;
+//	}
 
 //	public void pause(){
 //		agent.pause();

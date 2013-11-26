@@ -385,9 +385,4 @@ public class ResidentRole extends Role implements Resident {
 	public Dwelling getDwelling() {
 		return dwelling;
 	}
-
-	public void setLayoutGui(LayoutGui layoutGui) {
-		this.gui.setLayoutGui(layoutGui);
-		
-	}
 }

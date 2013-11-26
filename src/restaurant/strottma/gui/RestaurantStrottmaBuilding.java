@@ -25,7 +25,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	private Map<Person, Role> existingRoles;
 	private HostRole host;
 	private InfoPanel infoPanel = new InfoPanel();
-	private AnimationPanel animationPanel = new AnimationPanel();
+	RestaurantGui restaurantGui = new RestaurantGui();
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -86,7 +86,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	public JPanel getAnimationPanel() {
 		// TODO initialize the animation panel
 		//JPanel animationPanel = new agent.gui.AnimationPanel();
-		return animationPanel;
+		return restaurantGui.getAnimationPanel();
 	}
 	
 	@Override

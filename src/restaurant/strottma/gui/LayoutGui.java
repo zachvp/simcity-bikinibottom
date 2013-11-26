@@ -50,13 +50,14 @@ public class LayoutGui implements Gui{
 		private List<GrillOrPlate> plateAreas = new ArrayList<GrillOrPlate>();
 		
 		
-	    BufferedImage image, tableImage;
+	    BufferedImage image, tableImage, grillImage;
 	    ImageIcon icon;
 
 	    public LayoutGui() {
 	    	try {
 				image = ImageIO.read(getClass().getResource("floor.png"));
 				tableImage = ImageIO.read(getClass().getResource("table.png"));
+				grillImage = ImageIO.read(getClass().getResource("grill.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -102,8 +103,15 @@ public class LayoutGui implements Gui{
 	        
 	     // draw the grills
 	    	for (GrillOrPlate grill : grills) {
-	    		g.setColor(Color.DARK_GRAY);
-	    		g.drawRect(grill.getX(), grill.getY(), 30, 30);
+	    		//g.setColor(Color.DARK_GRAY);
+	    		//g.drawRect(grill.getX(), grill.getY(), 30, 30);
+	    		Rectangle2D r = new Rectangle2D.Double(grill.getX(), grill.getY(), 30,30);
+	    		Rectangle2D tr = new Rectangle2D.Double(grill.getX(), grill.getY(),30,30);
+	    		TexturePaint tp = new TexturePaint(grillImage, tr);
+	    		g2.setPaint(tp);
+	    		g2.fill(r);
+	    		
+	    		
 	    		if (grill.orderVisible() && grill.getOrder() != null) {
 	    			g.setColor(Color.BLACK);
 	    			g.drawString(grill.getOrder().getChoice().substring(0, 2),

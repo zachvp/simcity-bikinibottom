@@ -8,9 +8,10 @@ import java.util.concurrent.Semaphore;
 import agent.gui.Gui;
 import bank.SecurityGuardRole;
 import bank.interfaces.SecurityGuard;
+import bank.interfaces.SecurityGuardGuiInterface;
 
 
-public class SecurityGuardGui implements Gui{
+public class SecurityGuardGui implements Gui, SecurityGuardGuiInterface{
 
 	private SecurityGuard agent = null;
 	private boolean isPresent = true;

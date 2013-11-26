@@ -13,7 +13,9 @@ import market.Item;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import market.interfaces.DeliveryReceiver;
 import market.interfaces.ItemCollector;
+import market.interfaces.PhonePayer;
 
 public class MockCashier extends Mock implements Cashier {
 
@@ -128,17 +130,17 @@ public class MockCashier extends Mock implements Cashier {
 		return null;
 	}
 
+	public void setCustomer (Customer c){
+		customer = c;
+	}
+
 
 
 	@Override
-	public void msgPhoneOrder(List<Item> ShoppingList, Customer C,
-			CityLocation building) {
+	public void msgPhoneOrder(List<Item> ShoppingList, PhonePayer pP,
+			DeliveryReceiver rP, CityLocation building) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public void setCustomer (Customer c){
-		customer = c;
 	}
 
 	

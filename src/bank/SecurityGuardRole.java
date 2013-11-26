@@ -16,6 +16,7 @@ import agent.interfaces.Person;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.SecurityGuard;
+import bank.interfaces.SecurityGuardGuiInterface;
 import bank.interfaces.Teller;
 
 /**
@@ -26,7 +27,7 @@ import bank.interfaces.Teller;
 public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
-	SecurityGuardGui securityGuardGui;
+	SecurityGuardGuiInterface securityGuardGui;
 	
 	BankBuilding bankBuilding;
 	
@@ -114,11 +115,23 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		endWorkShift = true;
 		stateChanged();
 	}
-	public void addTeller(Teller t, int deskX) {
+	public void addTeller(Teller t, int deskX) {//initializes tellers and welcomes new ones to the banco
 		tellerPositions.add(new TellerPosition(t, 250 + (deskX *50), 170, false));
 		stateChanged();
 	}
-	
+	/*
+	 * starts bank process by either qeueuing up customer in line or directing to teller
+	 * @see bank.interfaces.SecurityGuard#msgCustomerArrived(bank.interfaces.BankCustomer)
+	 */
+	public void msgCustomerArrived(BankCustomer bc) {
+		Do("customer arrived in bank");
+		waitingCustomers.add(new WaitingCustomer(bc, customerState.waiting));
+		stateChanged();
+	}
+	/*
+	 * allows another customer to go to teller, or allows employees to go home if it is the end of the day
+	 * @see bank.interfaces.SecurityGuard#msgLeavingBank(bank.interfaces.BankCustomer)
+	 */
 	public void msgLeavingBank(BankCustomer bc) {
 		synchronized(waitingCustomers) {
 			for(WaitingCustomer w: waitingCustomers) {
@@ -129,12 +142,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		}
 		stateChanged();
 	}
-	
-	public void msgCustomerArrived(BankCustomer bc) {
-		Do("customer arrived in bank");
-		waitingCustomers.add(new WaitingCustomer(bc, customerState.waiting));
-		stateChanged();
-	}
+
 	public void msgTellerOpen(Teller t) {
 		Do("teller is open");
 		for(TellerPosition tp: tellerPositions) {
@@ -271,13 +279,21 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 //		loanManagerGui.DoLeaveBank();
 //	}
 //	
-	public void setGui(SecurityGuardGui sg) {
+	public void setGui(SecurityGuardGuiInterface sg) {
 		securityGuardGui = sg;
 	}
 	
 
 	// Accessors, etc.
 
+	public int getWaitingCustomersSize() {
+		return waitingCustomers.size();
+	}
+	
+	public int getTellerPositionsSize() {
+		return tellerPositions.size();
+	}
+	
 	public void addRole(WorkRole r) {
 		workRoles.add(r);
 	}
@@ -289,6 +305,26 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 			
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public int getShiftStartHour() {
+		return startHour;
+	}
+
+	@Override
+	public int getShiftStartMinute() {
+		return startMinute;
+	}
+
+	@Override
+	public int getShiftEndHour() {
+		return endHour;
+	}
+
+	@Override
+	public int getShiftEndMinute() {
+		return endMinute;
 	}
 
 	@Override
@@ -302,6 +338,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 
 

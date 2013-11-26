@@ -63,7 +63,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Car car;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger){
+	public PersonAgent(String name, IncomeLevel incomeLevel){
 		super();
 		updateHungerLevel();
 		
@@ -73,7 +73,7 @@ public class PersonAgent extends Agent implements Person {
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 		
 		this.event = PersonEvent.NONE;
-		this.hungerLevel = hunger;
+		this.hungerLevel = HungerLevel.FULL;
 		
 		this.timeManager = TimeManager.getInstance();
 		
@@ -91,7 +91,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL);
+		this(name, IncomeLevel.MEDIUM);
 		updateHungerLevel();
 	}
 	
@@ -290,6 +290,7 @@ public class PersonAgent extends Agent implements Person {
 		this.car = car;
 	}
 	
+<<<<<<< HEAD
 	//updates hunger level to decrease as day goes on
 	public void updateHungerLevel() {
 		int interval = 3;
@@ -324,6 +325,11 @@ public class PersonAgent extends Agent implements Person {
 			return;
 		}
 		
+=======
+	@Override
+	public Map<String, Integer> getShoppingList(){
+		return shoppingList;
+>>>>>>> master
 	}
 	
 	// ---- Eating out
@@ -634,7 +640,8 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
-	public enum HungerLevel {STARVING, HUNGRY, NEUTRAL, SATISFIED, FULL}
+	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
+			FULL}
 	
 	// ---- Methods to avoid weird inheritance issues
 	
@@ -664,12 +671,6 @@ public class PersonAgent extends Agent implements Person {
 						LocationTypeEnum.Corner).get(0);
 		
 		setCar(new CarAgent(nearestCorner));
-	}
-
-	@Override
-	public Map<String, Integer> getShoppingList() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

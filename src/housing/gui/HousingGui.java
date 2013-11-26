@@ -1,24 +1,13 @@
 package housing.gui;
 
 import gui.AnimationPanel;
-import housing.MaintenanceWorkerRole;
-import housing.PayRecipientRole;
 import housing.ResidentDwelling;
-import housing.ResidentRole;
 import housing.ResidentialBuilding;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.Constants.Condition;
-import agent.PersonAgent;
-import agent.Role;
 
 /**
  * HousingGui displays individual housing units. It pulls together all of the

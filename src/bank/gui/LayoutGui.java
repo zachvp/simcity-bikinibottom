@@ -95,6 +95,8 @@ public class LayoutGui implements Gui{
 		loanManagerDesk.setColor(Color.YELLOW);
 		loanManagerDesk.fillRect(50, 140, 20, 60);
 		loanManagerDesk.fillRect(0, 200, 70, 20);
+		
+//		drawLetter(g2, "open");
 
 	}
 

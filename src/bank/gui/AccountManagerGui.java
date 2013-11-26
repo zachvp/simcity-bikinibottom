@@ -7,11 +7,12 @@ import java.util.concurrent.Semaphore;
 
 import agent.gui.Gui;
 import bank.AccountManagerRole;
+import bank.interfaces.AccountManager;
 
 
 public class AccountManagerGui implements Gui{
 
-	private AccountManagerRole agent = null;
+	private AccountManager agent = null;
 	private boolean isPresent = true;
 
 
@@ -75,16 +76,17 @@ public class AccountManagerGui implements Gui{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.BLACK);
+		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
-				
+		drawInfo(g, agent.getName(), "Account Manager");		
 
 	}
 	
 	
-	public void drawLetter(Graphics2D g, String letter) {
+	public void drawInfo(Graphics2D g, String name, String occupation) {
 		g.setColor(Color.black);
-		g.drawString(letter, xPos+10, yPos+10);
+		g.drawString(name, xPos, yPos-10);
+		g.drawString(occupation, xPos, yPos);
 		
 	}
 

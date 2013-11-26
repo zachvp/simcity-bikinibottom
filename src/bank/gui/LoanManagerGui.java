@@ -77,8 +77,15 @@ public class LoanManagerGui implements Gui{
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
-				
+		drawInfo(g, agent.getName(),  "Loan Manager");	
 
+	}
+	
+	public void drawInfo(Graphics2D g, String name, String occupation) {
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos-10);
+		g.drawString(occupation, xPos, yPos);
+		
 	}
 	
 	

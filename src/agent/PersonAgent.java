@@ -666,6 +666,12 @@ public class PersonAgent extends Agent implements Person {
 		
 		setCar(new CarAgent(nearestCorner));
 	}
+
+	@Override
+	public Map<String, Integer> getShoppingList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 

@@ -156,19 +156,22 @@ public class ResidentRole extends Role implements Resident {
 		
 		// idle behavior
 		DoJazzercise();
+		DoMoveGary();
 		
-		/* set a delay. If the timer expires, then the resident has taken care of business
+		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		Runnable command = new Runnable() {
-			public void run(){
-				deactivate();
-			}
-		};
+		if(task == TaskState.NONE){
+			Runnable command = new Runnable() {
+				public void run(){
+					Do("Deactivating role");
+					deactivate();
+				}
+			};
+			// schedule a delay for food consumption
+			listener.taskFinished(schedule);
+			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		}
 		
-		// schedule a delay for food consumption
-		listener.taskFinished(schedule);
-		schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
-		*/
 		return false;
 	}
 	
@@ -193,6 +196,7 @@ public class ResidentRole extends Role implements Resident {
 			person.getWallet().setCashOnHand(cash);
 			Do("Not enough money to cover full cost. Cash now " + cash);
 			// TODO person.needToGoToBank()
+			person.getWallet().setMoneyNeeded(person.getWallet().getMoneyNeeded() + oweMoney);
 		}
 		else {
 			Do("Don't have any money to pay my dues.");
@@ -271,6 +275,7 @@ public class ResidentRole extends Role implements Resident {
 		Runnable command = new Runnable(){
 			public void run(){
 				timerDoneCooking();
+				DoMoveGary();
 			}
 		};
 		

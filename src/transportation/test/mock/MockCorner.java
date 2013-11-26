@@ -2,6 +2,7 @@ package transportation.test.mock;
 
 import java.util.List;
 
+import mock.Mock;
 import transportation.CornerAgent.MyCorner;
 import transportation.IntersectionAction;
 import transportation.interfaces.AdjCornerRequester;
@@ -10,7 +11,6 @@ import transportation.interfaces.BusstopRequester;
 import transportation.interfaces.Corner;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
-import agent.mock.Mock;
 
 public class MockCorner extends Mock implements Corner {
 

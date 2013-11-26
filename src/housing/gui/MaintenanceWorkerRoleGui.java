@@ -1,18 +1,12 @@
 package housing.gui;
 
 import housing.MaintenanceWorkerRole;
-import housing.ResidentRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
-import housing.interfaces.Resident;
-import housing.interfaces.ResidentGui;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -69,7 +63,6 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	/* --- Constructor --- */
 	public MaintenanceWorkerRoleGui(MaintenanceWorkerRole role) {
 		this.worker = role;
-		this.complex = complex;
 		
 		try {
 			workerImage = ImageIO.read(getClass().getResource("spongebob.png"));

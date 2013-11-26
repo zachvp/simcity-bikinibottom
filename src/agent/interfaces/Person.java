@@ -139,9 +139,6 @@ public interface Person {
 		 * 
 		 * @see #Wallet(IncomeLevel)
 		 */
-		public Wallet() {
-			this(IncomeLevel.MEDIUM);
-		}
 		
 		public IncomeLevel getIncomeLevel() {
 			return this.incomeLevel;

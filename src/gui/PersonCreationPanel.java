@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import CommonSimpleClasses.Constants;
 import agent.WorkRole;
 import classifieds.Classifieds;
 import classifieds.ClassifiedsChangedListener;
@@ -130,8 +131,8 @@ ClassifiedsChangedListener{
 		occupationsCB = new JComboBox<MyComboBoxItem>(occupationArray);
 		checkClassifiedsforHome();
 		residencesCB = new JComboBox<MyComboBoxItem>(residentArray);
-		wealthCB = new JComboBox<String>(new String[] {"Select a Status", "Rich", "Middle", "Poor"});
-		carCB = new JComboBox<String>(new String[] {"Has a Car", "Yes", "No"});
+		wealthCB = new JComboBox<String>(new String[] {"Rich", "Middle", "Poor"});
+		carCB = new JComboBox<String>(new String[] {"Yes", "No"});
 
 		nameTextF.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -144,7 +145,7 @@ ClassifiedsChangedListener{
 		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
-		carCB.setSelectedIndex(2);
+		carCB.setSelectedIndex(1);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -239,7 +240,7 @@ ClassifiedsChangedListener{
 				//PersonAgent newPerson = new PersonAgent(name);
 				//TODO add all person info
 				citizenRecords.addCitizen(name, job, home, status, hasCar);
-				System.out.println(name +" has been added to your city!");
+				if (Constants.PRINT) System.out.println(name +" has been added to your city!");
 
 				//TODO pull up newPerson's infopanel
 				msg.setText(name + " was created.");
@@ -248,8 +249,8 @@ ClassifiedsChangedListener{
 				nameTextF.setText("mr balloon hands");
 				occupationsCB.setSelectedIndex(0);
 				residencesCB.setSelectedIndex(0);
-				wealthCB.setSelectedIndex(1);
-				carCB.setSelectedIndex(2);
+				wealthCB.setSelectedIndex(0);
+				carCB.setSelectedIndex(1);
 			}
 			else{
 				msg.setText("Please complete all inputs");

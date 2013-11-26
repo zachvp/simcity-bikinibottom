@@ -5,8 +5,10 @@ import housing.ResidentRole;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import kelp.Kelp;
 import kelp.KelpClass;
@@ -28,7 +30,7 @@ import agent.interfaces.Person;
  */
 public class PersonAgent extends Agent implements Person {
 	private String name;
-	private List<Role> roles;
+	private Set<Role> roles;
 	
 	private PersonEvent event;
 	private HungerLevel hungerLevel;
@@ -59,7 +61,7 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		
 		this.name = name;
-		this.roles = new ArrayList<Role>();
+		this.roles = new HashSet<Role>();
 		
 		this.event = PersonEvent.NONE;
 		this.hungerLevel = HungerLevel.NEUTRAL;

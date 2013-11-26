@@ -187,13 +187,14 @@ ClassifiedsChangedListener{
 			classifiedsUpdated();
 		} else if (e.getSource() == populateButton){
 			// TODO check for residences too!
-			/* if (resList.size() < occList.size())
-			 * 		show some kind of message and return;
-			 *
-			 */
+			if (resList.size() < occList.size()) {
+				msg.setText("Not enough housing for all required workers.");
+				return;
+			}
+			
 			while(occList.size() > 1) {
 				occupationsCB.setSelectedIndex(1);
-				//residencesCB.setSelectedIndex(1);
+				residencesCB.setSelectedIndex(1);
 				actionPerformed(new ActionEvent(createButton, 0, ""));
 				classifiedsUpdated();
 				
@@ -247,6 +248,13 @@ ClassifiedsChangedListener{
 			resList.add(new MyComboBoxItem(w)); //TODO check if name is correct
 		}
 		residentArray = resList.toArray(new MyComboBoxItem[newHomes.size()]);
+		
+		if(residencesCB != null){
+			residencesCB.removeAllItems();
+			for (MyComboBoxItem c: residentArray){
+				residencesCB.addItem(c);
+			}
+		}
 	}
 
 	/**

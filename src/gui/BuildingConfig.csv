@@ -12,7 +12,7 @@
 #with an digit,
 6,Hospital
 3,Market1
-0,House1
+4,House1
 3,Market2
 2,Bank2
 1,Restaurant1
@@ -34,9 +34,9 @@
 0,Mock15
 0,Mock16
 0,Mock17
-0,Mock18
-0,Mock19
-0,Mock20
-0,Mock21
-0,Mock22
-0,Mock23
+4,Mock18
+4,Mock19
+4,Mock20
+4,Mock21
+4,Mock22
+4,Mock23

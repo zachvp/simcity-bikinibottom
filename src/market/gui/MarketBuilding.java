@@ -30,23 +30,26 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	XYPos entrancePosition;
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
-	private MarketRecords records = new MarketRecords(animationPanel, this);
-	JPanel info = new MarketInfoPanel(getRecords());
+	private MarketRecords records;
+	JPanel info;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static int timeDifference = 6;
+	private static final int timeDifference = 6;
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		entrancePosition = new XYPos((width/2), height);
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
+		
+		records = new MarketRecords(animationPanel, this);
+		info = new MarketInfoPanel(getRecords());
 	}
 
 	@Override

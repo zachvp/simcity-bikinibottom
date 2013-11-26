@@ -30,4 +30,9 @@ public class MockResident extends Mock implements Resident {
 	public void msgDwellingFixed() {
 		log.add("Dwelling is fixed.");
 	}
+
+	@Override
+	public void msgDwellingDegraded() {
+		log.add("Dwelling is degraded.");
+	}
 }

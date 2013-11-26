@@ -8,6 +8,7 @@ import java.util.Map;
 
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import market.Item;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
@@ -17,11 +18,12 @@ import market.interfaces.ItemCollector;
 public class MockCashier extends Mock implements Cashier {
 
 	public EventLog log = new EventLog();
+	Customer customer ;
 	/**
 	 * Reference to the Cashier under test that can be set by the unit test.
 	 */
 	public ItemCollector itemCollector;
-	public List<Item>ShoppingList;
+	public List<Item>SL;
 	public List<Item>MissingList;
 	public List<Item>DeliverList;
 	
@@ -35,6 +37,14 @@ public class MockCashier extends Mock implements Cashier {
 	@Override
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) {
 		// TODO Auto-generated method stub
+		SL = ShoppingList;
+		log.add(new LoggedEvent("Cashier : Received message msgIWantItem"));
+		double cost = 0;
+		for (int i =0; i<ShoppingList.size();i++){
+			double CurrentItemPrice = Constants.MarketPriceList.get(ShoppingList.get(i).name);
+			cost += CurrentItemPrice*ShoppingList.get(i).amount;
+		}
+		customer.msgHereisYourTotal(cost, MissingList);
 		
 	}
 
@@ -48,6 +58,9 @@ public class MockCashier extends Mock implements Cashier {
 	@Override
 	public void msgHereIsPayment(double payment, Customer c) {
 		// TODO Auto-generated method stub
+		log.add(new LoggedEvent("Cashier : Received message msgHereIsPayment"));
+		
+		customer.msgHereisYourItem(SL);
 		
 	}
 
@@ -122,6 +135,10 @@ public class MockCashier extends Mock implements Cashier {
 			CityLocation building) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setCustomer (Customer c){
+		customer = c;
 	}
 
 	

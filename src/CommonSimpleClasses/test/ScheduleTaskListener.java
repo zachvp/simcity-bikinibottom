@@ -1,4 +1,4 @@
-package agent.test;
+package CommonSimpleClasses.test;
 
 import java.util.EventListener;
 

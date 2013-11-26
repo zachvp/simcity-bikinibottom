@@ -1,7 +1,7 @@
 package mock;
 
 import CommonSimpleClasses.ScheduleTaskInterface;
-import agent.test.ScheduleTaskListener;
+import CommonSimpleClasses.test.ScheduleTaskListener;
 
 /**
  * Upon completion of the ScheduleTask event, MockScheduleTaskListener will

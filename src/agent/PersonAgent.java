@@ -634,8 +634,7 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Enumerations
 	
 	private enum PersonEvent {NONE, ARRIVED_AT_LOCATION}
-	public enum HungerLevel {UNKNOWN, STARVING, HUNGRY, NEUTRAL, SATISFIED,
-			FULL}
+	public enum HungerLevel {STARVING, HUNGRY, NEUTRAL, SATISFIED, FULL}
 	
 	// ---- Methods to avoid weird inheritance issues
 	

@@ -247,6 +247,13 @@ ClassifiedsChangedListener{
 			resList.add(new MyComboBoxItem(w)); //TODO check if name is correct
 		}
 		residentArray = resList.toArray(new MyComboBoxItem[newHomes.size()]);
+		
+		if(residencesCB != null){
+			residencesCB.removeAllItems();
+			for (MyComboBoxItem c: residentArray){
+				residencesCB.addItem(c);
+			}
+		}
 	}
 
 	/**

@@ -3,6 +3,7 @@ package housing;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
@@ -10,17 +11,18 @@ import housing.interfaces.PayRecipient;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
- * or expanded to be a full home.
+ * or expanded to be a full home. It contains all of the Role information
+ * necessary for a house. HousingGui is the graphical representation of this.
  * @author Zach VP
- *
  */
 
 public class ResidentDwelling implements Dwelling {
 	/* --- Data --- */
-	EventLog log = new EventLog();
+	public EventLog log = new EventLog();
 	
 	// building the dwelling belongs to
 	private ResidentialBuilding building;
+	private ScheduleTask schedule = new ScheduleTask();
 	
 	/* --- Housing slots --- */
 	// roles
@@ -55,7 +57,7 @@ public class ResidentDwelling implements Dwelling {
 		this.condition = startCondition;
 		
 		// determine the starting monthly payment for the property
-		switch(condition){
+		switch(this.condition){
 			case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
 			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
 			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
@@ -65,6 +67,22 @@ public class ResidentDwelling implements Dwelling {
 		
 		// Adding to classifieds!
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
+		
+		// degrade condition of dwelling each day
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				// TODO make the dwelling degrade gradually
+				condition = Constants.Condition.POOR;
+			}
+		};
+				
+		// every day at noon
+		int hour = 6;
+		int minute = 10;
+		
+		// TODO make this work in a non-role class
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	public void setCondition(Constants.Condition condition){

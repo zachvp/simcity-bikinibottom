@@ -59,6 +59,7 @@ ClassifiedsChangedListener{
 	MyComboBoxItem[] residentArray;
 
 	JLabel msg;
+	private JButton populateButton;
 
 	public PersonCreationPanel(){
 		Dimension d = new Dimension(600, 490);
@@ -122,6 +123,9 @@ ClassifiedsChangedListener{
 
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
+		
+		populateButton = new JButton("Populate city");
+		populateButton.addActionListener(this);
 
 		ClassifiedsClass.getClassifiedsInstance().addListener(this);
 
@@ -134,6 +138,7 @@ ClassifiedsChangedListener{
 		add(welcomeText);
 		add(inputPanel);
 		add(createButton);
+		add(populateButton);
 		add(msg);
 
 	}
@@ -180,6 +185,19 @@ ClassifiedsChangedListener{
 			}
 			
 			classifiedsUpdated();
+		} else if (e.getSource() == populateButton){
+			// TODO check for residences too!
+			/* if (resList.size() < occList.size())
+			 * 		show some kind of message and return;
+			 *
+			 */
+			while(occList.size() > 1) {
+				occupationsCB.setSelectedIndex(1);
+				//residencesCB.setSelectedIndex(1);
+				actionPerformed(new ActionEvent(createButton, 0, ""));
+				classifiedsUpdated();
+				
+			}
 		}
 		//		
 		//		if (e.getSource() == occupationsCB) {

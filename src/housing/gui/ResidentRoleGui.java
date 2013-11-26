@@ -6,6 +6,11 @@ import housing.interfaces.ResidentGui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import agent.gui.Gui;
 
@@ -29,10 +34,18 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
+	
+	// image for Resident
+	private BufferedImage spongebob;
+	private ImageIcon residentIcon;
+	
+	// image for krabby patty
+	private BufferedImage krabbyPatty;
+	private ImageIcon krabbyPattyIcon;
 
 	// set up labels
 	String guiName = "Resident";
-	String eatingFood = "null";
+	boolean eatingFood = false;
 
 	/* --- Hardcoded Positions --- */
 	// default resident position
@@ -46,9 +59,18 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private final int JAZZER_SPOT_Y = yPos;
 	
 	/* --- Constructor --- */
-	public ResidentRoleGui(ResidentRole role) {
+	public ResidentRoleGui(ResidentRole role, LayoutGui gui) {
 		this.resident = role;
+		this.layoutGui = gui;
 		
+		try {
+			spongebob = ImageIO.read(getClass().getResource("spongebob.png"));
+			krabbyPatty = ImageIO.read(getClass().getResource("krabby_patty.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		residentIcon = new ImageIcon(spongebob);
+		krabbyPattyIcon = new ImageIcon(krabbyPatty);
 	}
 
 	/**
@@ -70,14 +92,17 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		}
 	}
 
+	/* --- Draw the Resident Graphics --- */
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GRAY);
-		g.fillRect(xPos, yPos, 20, 20);
+		// draw the residence image
+		g.drawImage(residentIcon.getImage(), xPos, yPos, null);
 	    	
 		g.setColor(Color.BLACK);
-		g.drawString(guiName, xPos, yPos);
 		
-		g.drawString(eatingFood, xPos+5, yPos+15);
+//		g.drawString(eatingFood, xPos+5, yPos+15);
+		if(eatingFood == true){
+			g.drawImage(krabbyPattyIcon.getImage(), xPos, yPos, null);
+		}
 	}
 
 	public boolean isPresent() {
@@ -86,6 +111,10 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 
 	public Resident getAgent(){
 		return resident;
+	}
+	
+	public void DoMoveGary(){
+		layoutGui.DoMoveGary();
 	}
 
 	public void DoGoToStove() {
@@ -104,7 +133,6 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	
 	public void DoGoToRefrigerator(){
 		waiting = false;
-		if(layoutGui == null) System.out.println("Gui is null");
 		xDestination = layoutGui.getRefrigeratorPosition().width;
 		yDestination = layoutGui.getRefrigeratorPosition().height;
 		canRelease = true;
@@ -116,8 +144,8 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		yDestination = JAZZER_SPOT_Y;
 	}
 	
-	public void setFood(String foodType){
-		eatingFood = foodType;
+	public void setFood(boolean state){
+		eatingFood = state;
 	}
 
 	public int getXPos() {

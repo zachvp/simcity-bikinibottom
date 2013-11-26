@@ -6,6 +6,7 @@ import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
@@ -48,7 +49,7 @@ public class ResidentDwelling implements Dwelling {
 	PersonAgent person = new PersonAgent("Spongebob");
 	
 	/* --- Constructor --- */
-	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building) {
+	public ResidentDwelling(int ID, Constants.Condition startCondition, ResidentialBuilding building, LayoutGui gui) {
 		super();
 
 		this.building = building;
@@ -58,7 +59,7 @@ public class ResidentDwelling implements Dwelling {
 		
 //		this.resident = new ResidentRole(null, building, this);
 		// TODO implemented test
-		this.resident = new ResidentRole(person, building, this);
+		this.resident = new ResidentRole(person, building, this, gui);
 		person.addRole(resident);
 		person.startThread();
 		resident.activate();

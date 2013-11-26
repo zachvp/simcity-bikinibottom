@@ -41,10 +41,11 @@ public class HousingGui extends JPanel {
 		this.index = index;
 		this.index %= 4;
 		
-		// initialize the dwelling
-		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building);
 		// initialize the graphical layout of the dwelling
 		layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT, index);
+		
+		// initialize the dwelling
+		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building, layoutGui);
 		
 		switch(this.index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;

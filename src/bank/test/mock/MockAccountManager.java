@@ -49,6 +49,12 @@ public class MockAccountManager extends Mock implements AccountManager {
 					
 		}
 
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
+		}
+
 		
 		
        

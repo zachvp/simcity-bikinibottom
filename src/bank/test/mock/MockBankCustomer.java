@@ -64,7 +64,7 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 
 		@Override
 		public void msgSpeakToLoanManager(LoanManager lm, int xLoc) {
-			log.add("sent to loanmanager");
+			log.add("sent to loanmanager" + lm);
 			
 		}
 		

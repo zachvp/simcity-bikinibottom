@@ -250,6 +250,7 @@ public class TellerRole extends WorkRole implements Teller {
 			goOffWork();
 			return true;
 		}
+
 		return false;
 	}
 	// Actions

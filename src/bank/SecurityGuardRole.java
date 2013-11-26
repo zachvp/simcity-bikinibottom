@@ -84,7 +84,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 				
 				msgLeaveWork();
 				
-				bankBuilding.changeOpenSign(false, startHour, startMinute);
+				bankBuilding.changeOpenSign(false, startHour, endHour);
 //				System.out.println("ClOCKS RUN");
 				}
 			
@@ -94,7 +94,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		int hour = ((BankBuilding) bank).getClosingHour();
 		int minute = ((BankBuilding) bank).getClosingMinute();
 		
-		bankBuilding . changeOpenSign(false, startHour, startMinute);
+		bankBuilding . changeOpenSign(false, startHour, endHour);
 		task.scheduleDailyTask(command, hour, minute);
 		
 		startHour = ((BankBuilding) bank).getOpeningHour();
@@ -190,7 +190,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	private void goToWork() {
 		atWork = true;
-		bankBuilding.changeOpenSign(true, startHour, startMinute);
+		bankBuilding.changeOpenSign(true, startHour, endHour);
 		doGoToDesk();
 		acquireSemaphore(active);
 	}

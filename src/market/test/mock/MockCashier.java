@@ -39,8 +39,7 @@ public class MockCashier extends Mock implements Cashier {
 	}
 
 	@Override
-	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems,
-			Customer c) {
+	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems) {
 		DeliverList = Items;
 		MissingList = MissingItems;
 		

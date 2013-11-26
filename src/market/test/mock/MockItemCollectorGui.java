@@ -39,11 +39,7 @@ public class MockItemCollectorGui extends Mock implements ItemCollectorGuiInterf
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void GoToWork() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public void BackReadyStation() {
 		// TODO Auto-generated method stub
@@ -61,11 +57,7 @@ public class MockItemCollectorGui extends Mock implements ItemCollectorGuiInterf
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void ContinueOffWork() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub

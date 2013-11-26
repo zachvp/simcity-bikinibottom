@@ -11,12 +11,15 @@ import javax.swing.JPanel;
 
 import market.CustomerRole;
 import market.Item;
+import market.interfaces.DeliveryGuy;
+import market.interfaces.ItemCollector;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.RoleFactory;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 
@@ -133,6 +136,33 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 
 	public void setRecords(MarketRecords records) {
 		this.records = records;
+	}
+	
+	@Override
+	public boolean isOpen() {
+		return cashierOnDuty() && /*deliveryGuyOnDuty() &&*/ itemCollectorOnDuty();
+	}
+	
+	public boolean cashierOnDuty() {
+		return records.cashier.isAtWork();
+	}
+	
+	public boolean deliveryGuyOnDuty() {
+		for (DeliveryGuy dg : records.cashier.getDGList()) {
+			if (dg instanceof WorkRole && ((WorkRole) dg).isAtWork()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean itemCollectorOnDuty() {
+		for (ItemCollector ic : records.cashier.getICList()) {
+			if (ic instanceof WorkRole && ((WorkRole) ic).isAtWork()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

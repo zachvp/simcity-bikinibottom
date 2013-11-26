@@ -11,15 +11,18 @@ import java.util.Set;
 
 import kelp.Kelp;
 import kelp.KelpClass;
+import transportation.CarAgent;
 import transportation.PassengerRole;
 import transportation.RealPassengerRole;
 import transportation.interfaces.Car;
+import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
+import agent.interfaces.Person.Wallet.IncomeLevel;
 
 /**
  * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
@@ -56,7 +59,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Car car;
 	
-	public PersonAgent(String name){
+	public PersonAgent(String name, IncomeLevel incomeLevel){
 		super();
 		
 		this.name = name;
@@ -74,9 +77,17 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
-		this.wallet = new Wallet(); // medium income level
+		this.wallet = new Wallet(incomeLevel); // medium income level
 		// this.wallet.setCashOnHand(9001.00);
 		this.inventory = new HashMap<String, Integer>();
+		
+		/*
+		Corner nearestCorner = (Corner) kelp.placesNearMe
+				(getPassengerRole().location,
+						LocationTypeEnum.Corner).get(0);
+		
+		setCar(new CarAgent(nearestCorner));
+		*/
 	}
 	
 	/* -------- Messages -------- */

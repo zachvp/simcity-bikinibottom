@@ -52,5 +52,7 @@ public interface Corner extends CityLocation {
 
 	public DirectionEnum getDirForCorner(Corner corner) throws Exception;
 
+	public void msgIAmCrossing();
+
 	
 }

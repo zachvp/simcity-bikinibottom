@@ -145,7 +145,7 @@ ClassifiedsChangedListener{
 		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
-		carCB.setSelectedIndex(1);
+		carCB.setSelectedIndex(0);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -234,7 +234,7 @@ ClassifiedsChangedListener{
 				occupationsCB.setSelectedIndex(0);
 				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(0);
-				carCB.setSelectedIndex(0);
+				carCB.setSelectedIndex(1);
 
 				//create new PersonAgent
 				//PersonAgent newPerson = new PersonAgent(name);

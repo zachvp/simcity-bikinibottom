@@ -28,8 +28,9 @@ public class CornerAgent extends Agent implements Corner {
 		}
 	}
 	
+	// TODO update DD
 	//True when a Vehicle is crossing through the intersection.
-	boolean crossroadBusy = false;
+	Integer crossroadBusy = 1;
 	
 	//List of corners adjacent to this one.
 	private List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
@@ -107,21 +108,26 @@ public class CornerAgent extends Agent implements Corner {
 
 	@Override
 	public void msgDoneCrossing() {
-		crossroadBusy = false;
+		synchronized (adjacentCorners) {
+			crossroadBusy++;
+		}
 		stateChanged();
 	}
 
 	@Override
 	protected boolean pickAndExecuteAnAction() { // TODO Update DD
-		if (!waitingForBusstops.isEmpty()) {
-			sendBusstopInfo();
-			return true;
-		} else if (!waitingForCorners.isEmpty()) {
-			sendAdjCornerInfo();
-			return true;
-		} else if (!waitingToCross.isEmpty() && !crossroadBusy) {
-			letSomeoneThrough();
-			return true;
+		
+		synchronized (crossroadBusy) {
+			if (!waitingForBusstops.isEmpty()) {
+				sendBusstopInfo();
+				return true;
+			} else if (!waitingForCorners.isEmpty()) {
+				sendAdjCornerInfo();
+				return true;
+			} else if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
+				letSomeoneThrough();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -140,7 +146,7 @@ public class CornerAgent extends Agent implements Corner {
 
 	// Lets a waiting `Vehicle` cross the intersection.
 	private void letSomeoneThrough() {
-		crossroadBusy = true;
+		crossroadBusy--;
 		IntersectionAction iA = waitingToCross.remove();
 		iA.v.msgDriveNow();
 	}
@@ -249,6 +255,15 @@ public class CornerAgent extends Agent implements Corner {
 			}
 		}
 		throw new Exception("Couldn't find nextCorner in adjCorners.");
+	}
+
+	@Override
+	public void msgIAmCrossing() {
+		synchronized (crossroadBusy) {
+			crossroadBusy--;
+		}
+		stateChanged();
+		
 	}
 
 

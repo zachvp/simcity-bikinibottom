@@ -5,10 +5,7 @@ import gui.test.MockBuilding;
 import housing.ResidentialBuilding;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
@@ -54,7 +51,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
 	//TODO  write down steps to test GUI manually 
-
 
 	private int WINDOWX = 1200;
 	private int WINDOWY = 700;

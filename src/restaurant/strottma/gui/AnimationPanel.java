@@ -1,10 +1,15 @@
 package restaurant.strottma.gui;
 
+import gui.InfoPanel;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -21,6 +26,9 @@ public class AnimationPanel extends JPanel implements ActionListener {
     private Dimension bufferSize;
 
     private List<Gui> guis = new ArrayList<Gui>();
+    
+    BufferedImage image;
+    ImageIcon icon;
 
     public AnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
@@ -32,6 +40,13 @@ public class AnimationPanel extends JPanel implements ActionListener {
  
     	Timer timer = new Timer(TIMER_DELAY, this );
     	timer.start();
+    	
+    	try {
+			image = ImageIO.read(getClass().getResource("floor.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		icon = new ImageIcon(image);
     }
 
 	public void actionPerformed(ActionEvent e) {
@@ -42,9 +57,8 @@ public class AnimationPanel extends JPanel implements ActionListener {
         Graphics2D g2 = (Graphics2D)g;
 
         //Clear the screen by painting a rectangle the size of the frame
-        g2.setColor(getBackground());
-        g2.fillRect(0, 0, WINDOWX, WINDOWY );
-
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.drawImage(icon.getImage(), 0, 0, null);
         /*
          * now drawn in HostGui
         //Here is the table

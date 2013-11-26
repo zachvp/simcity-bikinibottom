@@ -11,12 +11,15 @@ import javax.swing.JPanel;
 
 import market.CustomerRole;
 import market.Item;
+import market.interfaces.DeliveryGuy;
+import market.interfaces.ItemCollector;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.RoleFactory;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 
@@ -27,7 +30,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	XYPos entrancePosition;
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
-	private MarketRecords records = new MarketRecords(animationPanel, this);
+	private MarketRecords records;
 	JPanel info = new MarketInfoPanel(getRecords());
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
@@ -35,15 +38,17 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static int timeDifference = 6;
+	private static final int timeDifference = 6;
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		entrancePosition = new XYPos((width/2), height);
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount + timeDifference;
+		this.timeOffset = instanceCount * timeDifference;
 		instanceCount++;
+		
+		records = new MarketRecords(animationPanel, this);
 	}
 
 	@Override
@@ -133,6 +138,33 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 
 	public void setRecords(MarketRecords records) {
 		this.records = records;
+	}
+	
+	@Override
+	public boolean isOpen() {
+		return cashierOnDuty() && /*deliveryGuyOnDuty() &&*/ itemCollectorOnDuty();
+	}
+	
+	public boolean cashierOnDuty() {
+		return records.cashier.isAtWork();
+	}
+	
+	public boolean deliveryGuyOnDuty() {
+		for (DeliveryGuy dg : records.cashier.getDGList()) {
+			if (dg instanceof WorkRole && ((WorkRole) dg).isAtWork()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean itemCollectorOnDuty() {
+		for (ItemCollector ic : records.cashier.getICList()) {
+			if (ic instanceof WorkRole && ((WorkRole) ic).isAtWork()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

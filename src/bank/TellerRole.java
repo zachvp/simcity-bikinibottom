@@ -10,6 +10,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.gui.TellerGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
@@ -33,10 +34,12 @@ public class TellerRole extends WorkRole implements Teller {
 	TellerGuiInterface tellerGui;
 	int myDeskPosition;
 	
-	int startHour = 6;
-	int startMinute = 0;
-	int endHour = 16;
-	int endMinute = 0;
+	int startHour;
+	int startMinute;
+	int endHour;
+	int endMinute;
+	
+	double paycheckAmount = 200;
 	
 	
 
@@ -94,7 +97,7 @@ public class TellerRole extends WorkRole implements Teller {
 			public void run() {
 				//do stuff
 				
-				msgLeaveWork();
+//				msgLeaveWork();
 				}
 			
 		};
@@ -102,6 +105,13 @@ public class TellerRole extends WorkRole implements Teller {
 		// every day at noon
 		int hour = 17;
 		int minute = 0;
+		
+		//sets start and end times for person scheduler
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
 		
 		task.scheduleDailyTask(command, hour, minute);
 	}
@@ -313,11 +323,18 @@ public class TellerRole extends WorkRole implements Teller {
 	   securityGuard.msgTellerOpen(this);
 	}
 	private void goOffWork() {
+		addPaycheckToWallet();
 		doEndWorkDay();
 		acquireSemaphore(active);
-		
 		this.deactivate();
-		
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 
 	//ANIMATION

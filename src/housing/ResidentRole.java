@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import housing.gui.LayoutGui;
+import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
@@ -34,13 +35,18 @@ public class ResidentRole extends Role implements Resident {
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
-	private ScheduleTask task = new ScheduleTask();
+	private ScheduleTask schedule = new ScheduleTask();
+	
+	// state for tasks. The Role will deactivate if it is not performing any tasks.
+	// used to determine when the role should terminate and transition to a city role
+	enum TaskState { NONE, DOING_TASK }
+	TaskState task = TaskState.NONE;
 	
 	// graphics
-	private ResidentGui gui;
+	private ResidentGui gui = new ResidentRoleGui(this);
 	
-	// TODO: un-hack these
-	private boolean hungry = true;
+	// TODO: this will be set true by the 
+	private boolean hungry = false;
 	
 	// rent data
 	private double oweMoney = 0;
@@ -84,21 +90,6 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent, CityLocation residence) {
 		super(agent, residence);
-		
-		// ask everyone for rent
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				dwelling.setCondition(Condition.POOR);
-				stateChanged();
-			}
-		};
-		
-		// every day at noon
-		int hour = 6;
-		int minute = 10;
-		
-		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 	/* ----- Messages ----- */
@@ -131,9 +122,10 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(dwelling.getCondition() == Condition.POOR ||
 				dwelling.getCondition() == Condition.BROKEN) {
-			if(dwelling.getWorker() != null)
+			if(dwelling.getWorker() != null){
 				callMaintenenceWorker();
-			return true;
+				return true;
+			}
 		}
 		
 		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0) {
@@ -204,8 +196,8 @@ public class ResidentRole extends Role implements Resident {
 				DoJazzercise();
 			}
 		};
-		listener.taskFinished(task);
-		task.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
 		waitForInput();
 	}
 	
@@ -241,8 +233,8 @@ public class ResidentRole extends Role implements Resident {
 		};
 		
 		// cook the food for the proper time
-		listener.taskFinished(task);
-		task.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
 	}
 	
 	private void callMaintenenceWorker(){

@@ -281,10 +281,5 @@ public abstract class Role {
 				Do("executing in " + convDelay / 1000 + " seconds");
 		}
     }
-
-	public void setGui(ResidentGui gui) {
-		// TODO Auto-generated method stub
-		
-	}
 }
 

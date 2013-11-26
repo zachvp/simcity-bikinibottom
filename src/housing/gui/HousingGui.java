@@ -1,22 +1,11 @@
 package housing.gui;
 
-import housing.MaintenanceWorkerRole;
-import housing.PayRecipientRole;
 import housing.ResidentDwelling;
-import housing.ResidentRole;
 import housing.ResidentialBuilding;
-import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.PayRecipient;
-
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JPanel;
 
-import agent.PersonAgent;
-import agent.Role;
 import agent.Constants.Condition;
 import agent.gui.AnimationPanel;
 

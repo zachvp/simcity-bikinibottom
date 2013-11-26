@@ -17,6 +17,7 @@ public class LayoutGui implements Gui {
 	private final int ROOM_HEIGHT;
 	private final int BASE_SIZE = 20;
 	
+	// constants for appliance positions
 	private final Dimension STOVE_POSITION;
 	private final Dimension TABLE_POSITION;
 	final Dimension POTTED_PLANT_POSITION;

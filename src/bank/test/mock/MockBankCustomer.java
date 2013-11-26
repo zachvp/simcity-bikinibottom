@@ -35,7 +35,7 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 		}
 		
 		public void msgGoToTeller(int xLoc, Teller t){
-			
+			log.add("received"+t);
 		}
 
 		@Override

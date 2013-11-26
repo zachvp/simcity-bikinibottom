@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.WorkRole;
@@ -46,9 +47,14 @@ public class BankBuilding extends Building {
 	AccountManagerRole account;
 	LoanManagerRole loan;
 	List<TellerRole> tellers;
+	
+	int openHour, closeHour;
 
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		
+		
+		
 		entrancePosition = new XYPos(width/2, height);
 		bankGui = new BankGui();
 		this.bank = this;
@@ -59,6 +65,10 @@ public class BankBuilding extends Building {
 		instanceCount++;
 		
 		initRoles();
+		
+		openHour = this.getOpeningHour();
+		closeHour = this.getClosingHour();
+		changeOpenSign(TimeManager.getInstance().isNowBetween(openHour, closeHour), openHour, closeHour);
 	}
 
 	private void initRoles() {
@@ -218,6 +228,10 @@ public class BankBuilding extends Building {
 			if (teller.isAtWork()) { return true; }
 		}
 		return false;
+	}
+	
+	public int getNumberOfTellers() {
+		return tellers.size();
 	}
 
 }

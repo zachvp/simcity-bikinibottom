@@ -4,6 +4,7 @@ import agent.WorkRole;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.SecurityGuard;
+import bank.interfaces.SecurityGuardGuiInterface;
 import bank.interfaces.Teller;
 
 
@@ -49,9 +50,21 @@ public class MockSecurityGuard extends Mock implements SecurityGuard {
 	}
 
 	@Override
-	public void setGui(SecurityGuardGui g) {
+	public void setGui(SecurityGuardGuiInterface g) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int getWaitingCustomersSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTellerPositionsSize() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

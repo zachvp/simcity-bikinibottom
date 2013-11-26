@@ -74,4 +74,9 @@ public class MockDwelling implements Dwelling {
 		this.payRecipient = payRecipient;
 	}
 
+	@Override
+	public PayRecipient getPayRecipient() {
+		return payRecipient;
+	}
+
 }

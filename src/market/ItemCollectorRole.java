@@ -34,7 +34,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	private String name;
 	private Cashier cashier;
 	private Map<String, Integer> InventoryList = null;
-	private List<Order> Orders = Collections.synchronizedList(new ArrayList<Order>());
+	private List<Order> Orders = new ArrayList<Order>();
 
 	private Semaphore atStation = new Semaphore (0,true);
 	private Semaphore atHome = new Semaphore (0,true);
@@ -43,6 +43,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	public enum ItemCollectorstate {GoingToWork, Idle, OffWork, GettingItem, NotAtWork};
 	ItemCollectorstate state = ItemCollectorstate.NotAtWork;
 	
+	public enum Orderstate {JustReceived, Collected, PlacedAtBench};
 	/**
 	 * this is a private class for ItemCollector to keep track his work
 	 * @author AnThOnY
@@ -50,7 +51,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 */
 	private class Order {
 		public Customer c;
-		public List<Item> ItemList = new ArrayList<Item>();
+		public List<Item> OrderList = new ArrayList<Item>();
+		public List<Item> DeliverList = new ArrayList<Item>();
+		public List<Item> MissingItemList = new ArrayList<Item>();
+		Orderstate state;
 	}
 	
 	/**
@@ -81,10 +85,10 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		//print ("Received msg to get items");
 		Order o = new Order();
 		o.c = c;
-		o.ItemList = ItemList;
-		synchronized(getOrders()){
+		o.OrderList = ItemList;
+		o.state = Orderstate.JustReceived;
+
 			getOrders().add(o);
-		}
 		stateChanged();
 	}
 
@@ -137,11 +141,23 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			GoToWork();
 		}
 		
-		if(getOrders().size()!=0){
-			GoGetItems(getOrders().get(0));
-			return true;
-		}
+
+			for (int i=0;i<getOrders().size();i++){
+				if(getOrders().get(i).state == Orderstate.JustReceived ){
+					GoGetItems(getOrders().get(i));
+					return true;
+				}
+			}
 		
+		
+
+			for (int i=0;i<getOrders().size();i++){
+				if(getOrders().get(i).state == Orderstate.Collected){
+					GoGiveItems(getOrders().get(i));
+					return true;
+				}
+			}
+	
 		if (state == ItemCollectorstate.OffWork && getOrders().size()==0){
 			OffWork();
 			return true;
@@ -152,7 +168,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	//Actions
 	private void GoToWork(){
 		state = ItemCollectorstate.GoingToWork;
-		itemcollectorGui.GoToWork();
+		itemcollectorGui.BackReadyStation();
 		try {
 			atHome.acquire();
 		} catch (InterruptedException e) {
@@ -174,35 +190,39 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		synchronized(getOrders()){
-			for (int i=0;i<getOrders().size();i++){
-				if (o == getOrders().get(i)){
-					getOrders().remove(i);
-				}
-			}
-		}
+		
 		List<Item> MissingList = new ArrayList<Item>();
 		List<Item> DeliverList = new ArrayList<Item>();
-		for(int i=0;i<o.ItemList.size();i++){
-			int CurrentItem = getInventoryMap().get(o.ItemList.get(i).name);	//Retrieve the item type from the InventoryList
-			if (CurrentItem >= o.ItemList.get(i).amount){	//enough inventories to satisfy
-				CurrentItem -= o.ItemList.get(i).amount;
-				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
-				Item tempitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount);
+		
+		
+		for(int i=0;i<o.OrderList.size();i++){
+			int CurrentItem = getInventoryMap().get(o.OrderList.get(i).name);	//Retrieve the item type from the InventoryList
+			if (CurrentItem >= o.OrderList.get(i).amount){	//enough inventories to satisfy
+				CurrentItem -= o.OrderList.get(i).amount;
+				getInventoryMap().put(o.OrderList.get(i).name, CurrentItem);
+				Item tempitem = new Item(o.OrderList.get(i).name, o.OrderList.get(i).amount);
 				DeliverList.add(tempitem);
 			}
 			else		//not enough inventories to satisfy the order
 			{			//Add into it anyway (Try to satisfy the order)
-				Item tempitem = new Item(o.ItemList.get(i).name, CurrentItem);
+				Item tempitem = new Item(o.OrderList.get(i).name, CurrentItem);
 				
 				
 				DeliverList.add(tempitem);
-				Item Missingitem = new Item(o.ItemList.get(i).name, o.ItemList.get(i).amount - CurrentItem);
+				Item Missingitem = new Item(o.OrderList.get(i).name, o.OrderList.get(i).amount - CurrentItem);
 				CurrentItem = 0;
-				getInventoryMap().put(o.ItemList.get(i).name, CurrentItem);
+				getInventoryMap().put(o.OrderList.get(i).name, CurrentItem);
 				MissingList.add(Missingitem);
 			}
 		}
+		o.DeliverList = DeliverList;
+		o.MissingItemList = MissingList;
+		o.state = Orderstate.Collected;
+		return;
+	}
+	
+	private void GoGiveItems(Order o){
+		o.state = Orderstate.PlacedAtBench;
 		itemcollectorGui.BackReadyStation();
 		try {
 			atHome.acquire();
@@ -211,7 +231,14 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			e.printStackTrace();
 		}
 		
-		getCashier().msgHereAreItems(DeliverList, MissingList, o.c);
+		for (int i=0;i<Orders.size();i++){
+			if (o == Orders.get(i)){
+					cashier.msgHereAreItems(o.DeliverList, o.MissingItemList, o.c);
+					Orders.remove(i);
+					break;
+			}
+		}
+
 		
 		return;
 	}

@@ -23,7 +23,6 @@ public class MockScheduleTaskListener implements ScheduleTaskListener {
 		
 		synchronized(this) {
 			notifyAll();
-			log.add("Task finished");
 		}
 	}
 	

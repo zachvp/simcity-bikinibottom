@@ -172,7 +172,6 @@ public class ResidentRole extends Role implements Resident {
 		if(task == TaskState.NONE){
 			Runnable command = new Runnable() {
 				public void run(){
-					Do("Deactivating role");
 					task = TaskState.FIRST_TASK;
 					deactivate();
 				}

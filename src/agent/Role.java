@@ -22,7 +22,6 @@ public abstract class Role {
     private boolean active = false;
     // private boolean awaitingInput = false;
     private Semaphore awaitingInputSem = new Semaphore(0, true);
-    private ScheduledExecutorService executor;
     
     /**
      * Sets the Role's person and location.
@@ -33,8 +32,6 @@ public abstract class Role {
     protected Role(Person person, CityLocation location) {
     	this.person = person;
     	this.location = location;
-    	
-		this.executor = Executors.newSingleThreadScheduledExecutor();
     }
     
     /**
@@ -245,9 +242,11 @@ public abstract class Role {
     }
     
 	// ---- Schedule tasks
-    public class ScheduleTask implements ScheduleTaskInterface {
-    	TimeManager tm = TimeManager.getInstance();
-    	
+    public static class ScheduleTask implements ScheduleTaskInterface {
+    	private TimeManager tm = TimeManager.getInstance();
+        private ScheduledExecutorService executor
+        		= Executors.newSingleThreadScheduledExecutor();
+
     	/**
          * Executes the command every day at hour:minute.
          */
@@ -258,8 +257,11 @@ public abstract class Role {
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
 			
-			Do("next occurrence of " + hour + ":" + minute + " is in " +
-					initialDelay/1000 + " seconds");
+			if (Constants.DEBUG && Constants.PRINT) {
+				System.out.println("ScheduleTask: next occurrence of " +
+						hour + ":" + minute + " is in " + initialDelay/1000 +
+						" seconds");
+			}
 		}
 		
 		/**
@@ -273,6 +275,11 @@ public abstract class Role {
 			long realDelay = delay/TimeManager.CONVERSION_RATE;
 			executor.scheduleWithFixedDelay(command, initialDelay, realDelay,
 					TimeUnit.MILLISECONDS);
+			
+			if (Constants.DEBUG && Constants.PRINT) {
+				System.out.println("ScheduleTask: executing in " +
+						realDelay / 1000 + " seconds");
+			}
 		}
     
 	
@@ -285,8 +292,10 @@ public abstract class Role {
 			TimeUnit unit = TimeUnit.MILLISECONDS;
 			executor.schedule(command, delay, unit);
 			
-			Do("next occurrence of " + hour + ":" + minute + " is in " +
-					delay/1000 + " seconds");
+			if (Constants.DEBUG && Constants.PRINT) {
+				System.out.println("ScheduleTask: next occurrence of " + hour +
+						":" + minute + " is in " + delay/1000 + " seconds");
+			}
 		}
 		
 		/**
@@ -298,11 +307,14 @@ public abstract class Role {
 		 * 				second real time), delay should be 60000.
 		 */
 		public void scheduleTaskWithDelay(Runnable command, long delay) {
-			long convDelay = delay/TimeManager.CONVERSION_RATE;
+			long realDelay = delay/TimeManager.CONVERSION_RATE;
 			TimeUnit unit = TimeUnit.MILLISECONDS;
-			executor.schedule(command, convDelay, unit);
+			executor.schedule(command, realDelay, unit);
 			
-				Do("executing in " + convDelay / 1000 + " seconds");
+			if (Constants.DEBUG && Constants.PRINT) {
+				System.out.println("ScheduleTask: executing in " +
+						realDelay / 1000 + " seconds");
+			}
 		}
     }
 

@@ -42,12 +42,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private long eatingOutWaitPeriod;
 	
-	/**
-	 * If there is less than this much time before work starts, the person
-	 * considers work to be starting soon. (In game time, not real time.)
-	 */
-	private long workStartThreshold;
-	
 	private Wallet wallet;
 	private Map<String, Integer> inventory;
 	
@@ -68,8 +62,6 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.lastTimeEatingOut = timeManager.fakeStartTime();
 		this.eatingOutWaitPeriod = Constants.DAY;
-		
-		this.workStartThreshold = 2 * Constants.HOUR;
 		
 		this.wallet = new Wallet(); // medium income level
 		// this.wallet.setCashOnHand(9001.00);
@@ -118,6 +110,7 @@ public class PersonAgent extends Agent implements Person {
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
 			activateRoleForLoc(getPassengerRole().getLocation(),
 					atLocationForWork());
+			getPassengerRole().deactivate();
 			return true;
 		}
 		
@@ -352,26 +345,7 @@ public class PersonAgent extends Agent implements Person {
 	public void setHungerToFull() {
 		setHungerToFull(false);
 	}
-	
-	// ---- Work starting soon
-	
-	/**
-	 * If there is less than this much time before work starts, the person
-	 * considers work to be starting soon. (In game time, not real time.)
-	 */
-	public long getWorkStartThreshold() {
-		return this.workStartThreshold;
-	}
-	
-	/**
-	 * @param if there is less than this much time before work starts, the
-	 * person will now consider work to be starting soon. (In game time, not
-	 * real time.)
-	 */
-	public void setWorkStartThreshold(long newThresh) {
-		this.workStartThreshold = newThresh;
-	}	
-	
+		
 	// ---- Methods for finding special roles
 	
 	@Override
@@ -482,8 +456,7 @@ public class PersonAgent extends Agent implements Person {
 		if (workRole == null) {
 			return false;
 		}
-		long workStartTime = workRole.startTime();
-		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
+		return workRole.workStartsSoon();
 	}
 	
 	/**

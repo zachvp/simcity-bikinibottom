@@ -18,21 +18,25 @@ public abstract class WorkRole extends Role {
 	
 	public WorkRole() {
 		super();
+		scheduleShiftStart();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person) {
 		super(person);
+		scheduleShiftStart();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person, Building building) {
 		super(person, building);
+		scheduleShiftStart();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Building building) {
 		super(building);
+		scheduleShiftStart();
 		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
@@ -64,6 +68,22 @@ public abstract class WorkRole extends Role {
      */
 	public void setLocation(Building loc) {
 		setLocation(loc);
+	}
+	
+	protected void scheduleShiftStart() {
+		// wake up
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				stateChanged();
+			}
+		};
+		
+		// every day at the end of the shift
+		int hour = getShiftStartHour() - workSoonThresholdHour();
+		int minute = getShiftStartMinute() - workSoonThresholdMinute();
+		
+		tasker.scheduleDailyTask(command, hour, minute);
 	}
 	
 	/**
@@ -204,6 +224,33 @@ public abstract class WorkRole extends Role {
 		} else {
 			return nextShiftStartTime();
 		}
+	}
+	
+	public final boolean workStartsSoon() {
+		return TimeManager.getInstance().timeUntil(startTime())
+				<= workSoonThreshold();
+	}
+		
+	protected final long workSoonThreshold() {
+		return workSoonThresholdHour() * Constants.HOUR +
+				workSoonThresholdMinute() * Constants.MINUTE;
+	}
+	
+	/**
+	 * If there are fewer than this many hours and
+	 * {@link #workSoonThresholdMinute} minutes until work, consider work to
+	 * start soon.
+	 */
+	protected int workSoonThresholdHour() {
+		return 2;
+	}
+	
+	/**
+	 * If there are fewer than {@link #workSoonThresholdHour} hours and
+	 * this many minutes until work, consider work to start soon.
+	 */
+	protected int workSoonThresholdMinute() {
+		return 0;
 	}
 	
 	/**

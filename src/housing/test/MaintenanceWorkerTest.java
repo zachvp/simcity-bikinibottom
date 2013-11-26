@@ -2,9 +2,11 @@ package housing.test;
 
 import housing.MaintenanceWorkerRole;
 import housing.interfaces.Dwelling;
+import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockMaintenanceWorkerGui;
+import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResident;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
@@ -19,10 +21,13 @@ public class MaintenanceWorkerTest extends TestCase {
 	// mock roles
 	Resident resident = new MockResident("Resident");
 	Dwelling dwelling = new MockDwelling(resident, Condition.GOOD);
+	PayRecipient payRecipient = new MockPayRecipient("Pay Recipient");
 
 	protected void setUp() throws Exception {
 		super.setUp();
 		worker.setGui(gui);
+		
+		dwelling.setPayRecipient(payRecipient);
 	}
 	
 	/**

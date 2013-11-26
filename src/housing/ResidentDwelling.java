@@ -53,7 +53,7 @@ public class ResidentDwelling implements Dwelling {
 		this.resident = new ResidentRole(null, building);
 		this.building.addResident(resident);
 		
-		log.add("Creating dwelling with start condition " + startCondition);
+//		log.add("Creating dwelling with start condition " + startCondition);
 		this.condition = startCondition;
 		
 		// determine the starting monthly payment for the property

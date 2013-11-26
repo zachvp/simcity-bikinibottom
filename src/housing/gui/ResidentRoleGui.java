@@ -19,8 +19,12 @@ import agent.gui.Gui;
 public class ResidentRoleGui implements Gui, ResidentGui {
 
 	private Resident resident = null;
-	private boolean canRelease = false;// this prevents excessive releases from occurring
-	private boolean waiting = false;// checks if resident is going to be idle
+	
+	// this prevents excessive releases from occurring
+	private boolean canRelease = false;
+	
+	// checks if resident is going to be idle
+	private boolean waiting = false;
 	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
@@ -32,7 +36,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	/* --- Hardcoded Positions --- */
 	// default resident position
 	private int xPos, yPos;
-	private int xDestination = 100, yDestination = 100;//default start position
+	private int xDestination = 50, yDestination = 50;//default start position
 	private final int JAZZER_SPOT_X = 0;
 	private final int JAZZER_SPOT_Y = 0;
 	

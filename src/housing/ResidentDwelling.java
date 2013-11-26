@@ -153,8 +153,8 @@ public class ResidentDwelling implements Dwelling {
 		return payRecipient;
 	}
 
-	public void setPayRecipient(PayRecipientRole payRecipient) {
-		this.payRecipient = payRecipient;
+	public void setPayRecipient(PayRecipient payRecipient) {
+		this.payRecipient = (PayRecipientRole) payRecipient;
 	}
 
 	public double getMonthlyPaymentAmount() {

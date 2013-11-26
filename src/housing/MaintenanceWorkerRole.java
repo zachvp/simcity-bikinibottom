@@ -70,6 +70,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 //		super(person);
 //	}
 
+	public MaintenanceWorkerRole(PersonAgent person) {
+		// TODO Auto-generated constructor stub
+	}
+
 	/* --- Messages --- */
 	public void msgFileWorkOrder(Dwelling dwelling) {
 		if(dwelling == null) {

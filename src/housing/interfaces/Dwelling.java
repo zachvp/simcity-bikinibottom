@@ -17,7 +17,7 @@ public interface Dwelling {
 
 	MaintenanceWorker getWorker();
 
-	void setPayRecipient(PayRecipientRole payRecipient);
+	void setPayRecipient(PayRecipient payRecipient);
 	
 	public PayRecipient getPayRecipient();
 

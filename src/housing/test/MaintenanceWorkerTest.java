@@ -21,7 +21,7 @@ public class MaintenanceWorkerTest extends TestCase {
 	// mock roles
 	Resident resident = new MockResident("Resident");
 	Dwelling dwelling = new MockDwelling(resident, Condition.GOOD);
-	PayRecipient payRecipient= new MockPayRecipient("Pay Recipient");
+	PayRecipient payRecipient = new MockPayRecipient("Pay Recipient");
 
 	protected void setUp() throws Exception {
 		super.setUp();

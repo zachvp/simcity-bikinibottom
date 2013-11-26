@@ -16,9 +16,9 @@ import junit.framework.TestCase;
 
 public class ResidentTest extends TestCase {
 	// testing Roles and Agents
-	PersonAgent residentPerson = new PersonAgent("Resident");
-	ResidentRole resident = new ResidentRole(residentPerson, null);
-	ResidentGui gui = new MockResidentGui(resident);
+		PersonAgent residentPerson = new PersonAgent("Resident");
+		ResidentRole resident;
+		ResidentGui gui = new MockResidentGui(resident);
 	
 	// mock roles
 	PayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
@@ -30,8 +30,9 @@ public class ResidentTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		resident.setDwelling(dwelling);
 		dwelling.setCondition(Condition.GOOD);
+		
+		resident = new ResidentRole(residentPerson, null, dwelling);
 	}
 	
 	/**

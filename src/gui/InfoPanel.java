@@ -108,8 +108,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 //			secStr = "0" + sec;
 //		}
 		
-		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm z");
-		time.setText(format.format(cal.getTime()));
+		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm");
+		time.setText(format.format(cal.getTime()) + " in Encino, CA");
 		
 	}
 

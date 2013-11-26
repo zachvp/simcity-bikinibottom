@@ -139,14 +139,7 @@ public interface Constants {
 	public static final int CoralBitsInitialAmount   = 100;
 	public static final int KelpRingsInitialAmount   = 100;
 	
-	/**
-	 * The Market's WorkRoles' StartingHour, StartingMinutes, EndingHour, EndingMinutes
-	 */
-	public static final int MarketWorkRoleStartingHour 		= 6;
-	public static final int MarketWorkRoleStartingMinutes 	= 29;
-	public static final int MarketWorkRoleEndingHour 		= 18;
-	public static final int MarketWorkRoleEndingMinutes 	= 0;
-	
+
 	/**
 	 * The PriceList of the market
 	 */

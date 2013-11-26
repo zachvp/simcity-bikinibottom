@@ -11,10 +11,10 @@ import javax.swing.JPanel;
 
 import market.CustomerRole;
 import market.Item;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Constants;
 import agent.Role;
 import agent.RoleFactory;
 import agent.interfaces.Person;
@@ -70,10 +70,10 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		List<Item> ShoppingList = new ArrayList<Item>();
 		Map<String,Integer> GroceryList = new HashMap<String,Integer>();
 		for (int i=0;i<Constants.FOODS.size();i++){
-			GroceryList.put(agent.Constants.FOODS.get(i), 100);
+			GroceryList.put(Constants.FOODS.get(i), 100);
 		}
 		for (int i=0;i<Constants.CARS.size();i++){
-			GroceryList.put(agent.Constants.CARS.get(i), 100);
+			GroceryList.put(Constants.CARS.get(i), 100);
 		}
 		{
 			//FOODS

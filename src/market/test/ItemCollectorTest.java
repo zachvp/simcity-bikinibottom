@@ -35,7 +35,7 @@ public class ItemCollectorTest extends TestCase
 		super.setUp();		
 
 		PersonAgent ItemCollectorGuy = new PersonAgent ("John");
-		ItemCollector = new ItemCollectorRole("John", ItemCollectorGuy, new MarketBuilding(1,1,1,1));	
+		ItemCollector = new ItemCollectorRole(ItemCollectorGuy, new MarketBuilding(1,1,1,1));	
 		ItemCollectorGuiInterfaces itemCollectorGui = new MockItemCollectorGui(ItemCollector);
 		ItemCollector.setGui(itemCollectorGui);
 		ItemCollector.setCashier(Cashier);

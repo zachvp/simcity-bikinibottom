@@ -47,7 +47,7 @@ public class CashierTest extends TestCase
 		
 		
 		PersonAgent cashier = new PersonAgent ("John");
-		Cashier = new CashierRole("John", 100, cashier, new MarketBuilding(1,1,1,1), InventoryList);	
+		Cashier = new CashierRole(cashier, new MarketBuilding(1,1,1,1), InventoryList);	
 		
 		Customer1 = new MockCustomer("mockcustomer");		
 		Customer2 = new MockCustomer("mockcustomer");

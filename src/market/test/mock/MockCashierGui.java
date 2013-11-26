@@ -98,6 +98,18 @@ public class MockCashierGui extends Mock implements CashierGuiInterfaces {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void WalkToWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void GoToWork() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	

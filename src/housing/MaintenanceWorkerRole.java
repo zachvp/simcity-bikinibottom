@@ -1,5 +1,6 @@
 package housing;
 
+import housing.ResidentRole.TaskState;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -19,6 +20,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
+	
+	// prevents the role from being deactivated prematurely
+	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
+	TaskState task = TaskState.FIRST_TASK;
 	
 	// graphics
 	MaintenanceWorkerGui gui = new MaintenanceWorkerRoleGui(this);
@@ -67,6 +72,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		
+		if(task == TaskState.FIRST_TASK){
+			task = TaskState.NONE;
+		}
+		
 		synchronized(workOrders) {
 			for(WorkOrder wo : workOrders) {
 				if(wo.state == WorkOrderState.FILED){
@@ -81,6 +90,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
+		task = TaskState.DOING_TASK;
 		DoGoToDwelling(wo.dwelling.getIDNumber());
 		waitForInput();
 		
@@ -99,6 +109,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		DoReturnHome();
 		waitForInput();
+		task = TaskState.NONE;
 	}
 	
 	/* -- Animation Routines --- */

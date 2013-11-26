@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,12 +50,13 @@ public class LayoutGui implements Gui{
 		private List<GrillOrPlate> plateAreas = new ArrayList<GrillOrPlate>();
 		
 		
-	    BufferedImage image;
+	    BufferedImage image, tableImage;
 	    ImageIcon icon;
 
 	    public LayoutGui() {
 	    	try {
 				image = ImageIO.read(getClass().getResource("floor.png"));
+				tableImage = ImageIO.read(getClass().getResource("table.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -86,9 +89,15 @@ public class LayoutGui implements Gui{
 	        g2.fillRect(0, 0, WINDOWX, WINDOWY);
 	        g2.drawImage(icon.getImage(), 0, 0, null);
 	        
-	        g.setColor(Color.YELLOW);
+	        
+	        //g.setColor(Color.YELLOW);
 	        for (Table t : tables) {
-	        	g.fillRect(t.x, t.y, TABLE_WIDTH, TABLE_HEIGHT);
+	        	Rectangle2D r = new Rectangle2D.Double(t.x, t.y, TABLE_WIDTH,TABLE_HEIGHT);
+	    		Rectangle2D tr = new Rectangle2D.Double(t.x, t.y,TABLE_WIDTH,TABLE_HEIGHT);
+	    		TexturePaint tp = new TexturePaint(tableImage, tr);
+	    		g2.setPaint(tp);
+	    		g2.fill(r);
+	        	//g.fillRect(t.x, t.y, TABLE_WIDTH, TABLE_HEIGHT);
 	        }
 	        
 	     // draw the grills

@@ -2,7 +2,9 @@ package agent;
 
 import java.util.concurrent.Semaphore;
 
-import agent.mock.EventLog;
+import mock.EventLog;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.StringUtil;
 
 /**
  * Base class for simple agents
@@ -85,7 +87,7 @@ public abstract class Agent {
      */
     public synchronized void startThread() {
         if (agentThread == null) {
-            agentThread = new AgentThread(getName());
+            agentThread = new AgentThread(getName(), this);
             agentThread.start(); // causes the run method to execute in the AgentThread below
         } else {
             agentThread.interrupt();//don't worry about this for now
@@ -127,9 +129,12 @@ public abstract class Agent {
      */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
+        //Pointer for debugging purposes
+		private Agent agent;
 
-        private AgentThread(String name) {
+        private AgentThread(String name, Agent agent) {
             super(name);
+            this.agent = agent;
         }
 
         public void run() {

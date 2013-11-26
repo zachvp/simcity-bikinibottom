@@ -5,7 +5,7 @@ import housing.interfaces.Dwelling;
 import housing.interfaces.Resident;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockResident;
-import agent.Constants.Condition;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import junit.framework.TestCase;
 

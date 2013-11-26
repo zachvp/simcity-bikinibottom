@@ -5,9 +5,9 @@ import gui.Building;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import agent.Constants;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;

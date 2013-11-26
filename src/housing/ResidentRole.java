@@ -1,19 +1,22 @@
 package housing;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import housing.gui.LayoutGui;
+import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import mock.EventLog;
+import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
-import agent.mock.EventLog;
-import agent.mock.MockScheduleTaskListener;
-import agent.Constants;
-import agent.Constants.Condition;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -34,13 +37,18 @@ public class ResidentRole extends Role implements Resident {
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
-	private ScheduleTask task = new ScheduleTask();
+	private ScheduleTask schedule = new ScheduleTask();
+	
+	// state for tasks. The Role will deactivate if it is not performing any tasks.
+	// used to determine when the role should terminate and transition to a city role
+	enum TaskState { NONE, DOING_TASK }
+	TaskState task = TaskState.NONE;
 	
 	// graphics
-	private ResidentGui gui;
+	private ResidentGui gui = new ResidentRoleGui(this);
 	
-	// TODO: un-hack these
-	private boolean hungry = true;
+	// TODO: this will be set true by the 
+	private boolean hungry = false;
 	
 	// rent data
 	private double oweMoney = 0;
@@ -59,6 +67,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 5; 
+	private final int IMPATIENCE_TIME = 5;
 	
 	/* ----- Class Data ----- */
 	/**
@@ -84,21 +93,6 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent, CityLocation residence) {
 		super(agent, residence);
-		
-		// ask everyone for rent
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				dwelling.setCondition(Condition.POOR);
-				stateChanged();
-			}
-		};
-		
-		// every day at noon
-		int hour = 6;
-		int minute = 10;
-		
-		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 	/* ----- Messages ----- */
@@ -115,6 +109,7 @@ public class ResidentRole extends Role implements Resident {
 		dwelling.setCondition(Condition.GOOD);
 	}
 	
+	// sent from the gui when it has reached the target destination
 	public void msgAtDestination() {
 		doneWaitingForInput();
 	}
@@ -131,13 +126,14 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(dwelling.getCondition() == Condition.POOR ||
 				dwelling.getCondition() == Condition.BROKEN) {
-			if(dwelling.getWorker() != null)
+			if(dwelling.getWorker() != null){
 				callMaintenenceWorker();
-			return true;
+				return true;
+			}
 		}
 		
 		if(oweMoney > 0 && person.getWallet().getCashOnHand() > 0) {
-			makePayment();
+			tryToMakePayment();
 			return true;
 		}
 		
@@ -156,15 +152,30 @@ public class ResidentRole extends Role implements Resident {
 		
 		// idle behavior
 		DoJazzercise();
+		
+		// set a delay. If the timer expires, then the resident has taken care of business
+		// at home and is free to roam the streets
+		Runnable command = new Runnable() {
+			public void run(){
+				deactivate();
+			}
+		};
+		
+		// schedule a delay for food consumption
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+		
 		return false;
 	}
 	
 	/* ----- Actions ----- */
-	private void makePayment() {
+	private void tryToMakePayment() {
 		Do("Attempting to make payment. Cash amount is "
 				+ person.getWallet().getCashOnHand());
 		
+		// used for easy comparison
 		double cash = person.getWallet().getCashOnHand();
+		
 		if(cash >= oweMoney) {
 			payee.msgHereIsPayment(oweMoney, this);
 			cash -= oweMoney;
@@ -177,22 +188,28 @@ public class ResidentRole extends Role implements Resident {
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
 			Do("Not enough money to cover full cost. Cash now " + cash);
+			// TODO person.needToGoToBank()
 		}
 		else {
 			Do("Don't have any money to pay my dues.");
+			// TODO person.needToGoToBank()
 		}
 	}
 	
 	private void eatFood() {
 		hungry = false;
-		Do("Eating food " + food.type);
 		
+		// pick up the food
 		DoGoToStove();
 		waitForInput();
 		
+		// display the food being carried
 		DoSetFood(food.type);
+		
+		// got sit at table and eat
 		DoGoToTable();
 		waitForInput();
+		Do("Eating food " + food.type);
 		
 		// set a timer for eating
 		Runnable command = new Runnable() {
@@ -204,12 +221,21 @@ public class ResidentRole extends Role implements Resident {
 				DoJazzercise();
 			}
 		};
-		listener.taskFinished(task);
-		task.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
+		
+		// schedule a delay for food consumption
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, EAT_TIME * Constants.MINUTE);
 		waitForInput();
+		
+		// the cook/eat food task has completed, so the role is free to deactivate
+		task = TaskState.NONE;
 	}
 	
 	private void cookFood(Food f) {
+		// begin the cook/eat food task. The role will not be allowed to deactivate
+		// until the task is complete
+		task = TaskState.DOING_TASK;
+		
 		Do("Cooking food");
 		food = f;
 		
@@ -241,13 +267,12 @@ public class ResidentRole extends Role implements Resident {
 		};
 		
 		// cook the food for the proper time
-		listener.taskFinished(task);
-		task.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
+		listener.taskFinished(schedule);
+		schedule.scheduleTaskWithDelay(command, food.cookTime * Constants.MINUTE);
 	}
 	
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
-		//TODO actually implement maintenance worker
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 	}

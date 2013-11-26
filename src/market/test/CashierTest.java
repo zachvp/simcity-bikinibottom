@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import agent.Constants;
+import CommonSimpleClasses.Constants;
 import agent.PersonAgent;
 import junit.framework.TestCase;
 import market.CashierRole;
@@ -213,11 +213,11 @@ public class CashierTest extends TestCase
 			Cashier.setState(Cashierstate.Idle);
 			Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 			{		//Initially The market has 100 inventory on each Item
-				for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
-					InventoryList.put(agent.Constants.FOODS.get(i), 100);
+				for (int i = 0 ; i < CommonSimpleClasses.Constants.FOODS.size(); i++){
+					InventoryList.put(CommonSimpleClasses.Constants.FOODS.get(i), 100);
 				}
-				for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
-					InventoryList.put(agent.Constants.CARS.get(i), 0);
+				for (int i = 0 ; i < CommonSimpleClasses.Constants.CARS.size(); i++){
+					InventoryList.put(CommonSimpleClasses.Constants.CARS.get(i), 0);
 				}
 			}
 			
@@ -336,11 +336,11 @@ public class CashierTest extends TestCase
 			Cashier.setState(Cashierstate.Idle);
 			Map<String,Integer> InventoryList = new HashMap<String,Integer>();
 			{		//Initially The market has 100 inventory on each Item
-				for (int i = 0 ; i < agent.Constants.FOODS.size(); i++){
-					InventoryList.put(agent.Constants.FOODS.get(i), 100);
+				for (int i = 0 ; i < CommonSimpleClasses.Constants.FOODS.size(); i++){
+					InventoryList.put(CommonSimpleClasses.Constants.FOODS.get(i), 100);
 				}
-				for (int i = 0 ; i < agent.Constants.CARS.size(); i++){
-					InventoryList.put(agent.Constants.CARS.get(i), 0);
+				for (int i = 0 ; i < CommonSimpleClasses.Constants.CARS.size(); i++){
+					InventoryList.put(CommonSimpleClasses.Constants.CARS.get(i), 0);
 				}
 			}
 			

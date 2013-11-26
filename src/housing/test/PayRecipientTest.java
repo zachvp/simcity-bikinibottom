@@ -1,7 +1,7 @@
 package housing.test;
 
+import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import agent.Constants.Condition;
 import housing.PayRecipientRole;
 import housing.PayRecipientRole.MyResident;
 import housing.test.mock.MockDwelling;

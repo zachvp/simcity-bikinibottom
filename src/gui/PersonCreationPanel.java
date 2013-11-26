@@ -2,17 +2,23 @@ package gui;
 
 import housing.interfaces.Dwelling;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -60,6 +66,7 @@ ClassifiedsChangedListener{
 
 	JLabel msg;
 	private JButton populateButton;
+	private BufferedImage image;
 
 	public PersonCreationPanel(){
 		Dimension d = new Dimension(600, 490);
@@ -67,27 +74,56 @@ ClassifiedsChangedListener{
 		setMaximumSize(d);
 		setMinimumSize(d);
 		setBackground(Color.white);
-		//setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
-		JLabel welcomeText = new JLabel("Welcome to the Hospital!");
-		Dimension textDim = new Dimension(d.width, (int)(d.height*0.2));
-		welcomeText.setPreferredSize(textDim);
-		welcomeText.setMaximumSize(textDim);
-		welcomeText.setMinimumSize(textDim);
+		//JPanel half = new JPanel();
+		//Dimension halfDim = new Dimension((int)(d.width*0.6), d.height);
+		
+		
+		
+		JPanel welcomeTextPanel = new JPanel();
+		JLabel welcomeText = new JLabel("Welcome to the Hospital!");	//north
+		Dimension textDim = new Dimension(d.width, (int)(d.height*0.3));
+		welcomeTextPanel.setPreferredSize(textDim);
+		welcomeTextPanel.setMaximumSize(textDim);
+		welcomeTextPanel.setMinimumSize(textDim);
+		welcomeTextPanel.setOpaque(false);
 		Font font = new Font("Serif", Font.BOLD, 20);
 
 		welcomeText.setFont(font);
+		welcomeTextPanel.add(welcomeText);
 
 		//TODO test
 		//		WorkRole test = new TellerRole(null, null);
-
+		
+		//Input Panel
 		JPanel inputPanel = new JPanel();
-		Dimension inputDim = new Dimension(d.width, (int)(d.height*0.3));
+		Dimension inputDim = new Dimension((int)(d.width*0.6), (int)(d.height*0.7));
 		inputPanel.setPreferredSize(inputDim);
 		inputPanel.setMaximumSize(inputDim);
 		inputPanel.setMinimumSize(inputDim);
-		inputPanel.setLayout(new GridLayout(5,2,5,5));
-		inputPanel.setBackground(Color.white);
+		inputPanel.setLayout(new BorderLayout());
+		//inputPanel.setBackground(Color.white);
+		inputPanel.setOpaque(false);
+		
+		JPanel inputPanelLeft = new JPanel();
+		Dimension inputDimL = new Dimension((int)(d.width*0.12), (int)(d.height*0.4));
+		inputPanelLeft.setPreferredSize(inputDimL);
+		inputPanelLeft.setMaximumSize(inputDimL);
+		inputPanelLeft.setMinimumSize(inputDimL);
+		inputPanelLeft.setLayout(new GridLayout(5,1,5,5));
+		//inputPanel.setBackground(Color.white);
+		inputPanelLeft.setOpaque(false);
+		
+		JPanel inputPanelright = new JPanel();
+		Dimension inputDimR = new Dimension((int)(d.width*0.48), (int)(d.height*0.4));
+		inputPanelright.setPreferredSize(inputDimR);
+		inputPanelright.setMaximumSize(inputDimR);
+		inputPanelright.setMinimumSize(inputDimR);
+		inputPanelright.setLayout(new GridLayout(5,1,5,5));
+		//inputPanel.setBackground(Color.white);
+		inputPanelright.setOpaque(false);
+		
 
 		nameTextF = new JTextField("Enter a name");		
 		checkClassifiedsforJobs();
@@ -110,17 +146,30 @@ ClassifiedsChangedListener{
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(2);
 
-		inputPanel.add(new JLabel("Name: "));
-		inputPanel.add(nameTextF);
-		inputPanel.add(new JLabel("Occupation: "));
-		inputPanel.add(occupationsCB);
-		inputPanel.add(new JLabel("Residence: "));
-		inputPanel.add(residencesCB);
-		inputPanel.add(new JLabel("Status: "));
-		inputPanel.add(wealthCB);
-		inputPanel.add(new JLabel("Car: "));
-		inputPanel.add(carCB);
-
+		inputPanelLeft.add(new JLabel("Name: "));
+		inputPanelright.add(nameTextF);
+		inputPanelLeft.add(new JLabel("Occupation: "));
+		inputPanelright.add(occupationsCB);
+		inputPanelLeft.add(new JLabel("Residence: "));
+		inputPanelright.add(residencesCB);
+		inputPanelLeft.add(new JLabel("Status: "));
+		inputPanelright.add(wealthCB);
+		inputPanelLeft.add(new JLabel("Car: "));
+		inputPanelright.add(carCB);
+		
+		inputPanel.add(inputPanelLeft, BorderLayout.WEST);
+		inputPanel.add(inputPanelright, BorderLayout.EAST);
+		
+		//Buttons and msg
+		JPanel south  = new JPanel();
+		Dimension sDim = new Dimension((int)(d.width*0.6), (int)(d.height*0.3));
+		south.setPreferredSize(sDim);
+		south.setMaximumSize(sDim);
+		south.setMinimumSize(sDim);
+		//south.setLayout(new GridLayout(5,2,5,5));
+		//south.setBackground(Color.white);
+		south.setOpaque(false);
+		
 		createButton = new JButton("Create");
 		createButton.addActionListener(this);
 		
@@ -130,16 +179,40 @@ ClassifiedsChangedListener{
 		ClassifiedsClass.getClassifiedsInstance().addListener(this);
 
 		msg = new JLabel("");
-		Dimension msgDim = new Dimension(d.width, (int)(d.height*0.2));
+		Dimension msgDim = new Dimension(d.width, (int)(d.height*0.3));
 		msg.setPreferredSize(msgDim);
 		msg.setMaximumSize(msgDim);
 		msg.setMinimumSize(msgDim);
+		
+		south.add(createButton);
+		south.add(populateButton);
+		south.add(msg);
+		
+		inputPanel.add(south, BorderLayout.SOUTH);
+		
+		//Image Panel
+		try {
+			image = ImageIO.read(getClass().getResource("doctor.png"));
 
-		add(welcomeText);
-		add(inputPanel);
-		add(createButton);
-		add(populateButton);
-		add(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+		JPanel imagePanel = new JPanel();
+		JLabel imageLabel = new JLabel(new ImageIcon(image));
+		Dimension iDim = new Dimension((int)(d.width*0.4), (int)(d.height*0.7));
+		imagePanel.setPreferredSize(iDim);
+		imagePanel.setMaximumSize(iDim);
+		imagePanel.setMinimumSize(iDim);
+		imagePanel.setLayout(new BorderLayout());
+		imagePanel.setOpaque(false);
+		imagePanel.add(imageLabel, BorderLayout.CENTER);
+		
+		
+		add(welcomeTextPanel, BorderLayout.NORTH);
+		add(inputPanel, BorderLayout.EAST);
+		add(imagePanel, BorderLayout.WEST);
+		//add(south, BorderLayout.SOUTH);
+		
 
 	}
 
@@ -187,13 +260,14 @@ ClassifiedsChangedListener{
 			classifiedsUpdated();
 		} else if (e.getSource() == populateButton){
 			// TODO check for residences too!
-			/* if (resList.size() < occList.size())
-			 * 		show some kind of message and return;
-			 *
-			 */
+			if (resList.size() < occList.size()) {
+				msg.setText("Not enough housing for all required workers.");
+				return;
+			}
+			
 			while(occList.size() > 1) {
 				occupationsCB.setSelectedIndex(1);
-				//residencesCB.setSelectedIndex(1);
+				residencesCB.setSelectedIndex(1);
 				actionPerformed(new ActionEvent(createButton, 0, ""));
 				classifiedsUpdated();
 				
@@ -247,6 +321,13 @@ ClassifiedsChangedListener{
 			resList.add(new MyComboBoxItem(w)); //TODO check if name is correct
 		}
 		residentArray = resList.toArray(new MyComboBoxItem[newHomes.size()]);
+		
+		if(residencesCB != null){
+			residencesCB.removeAllItems();
+			for (MyComboBoxItem c: residentArray){
+				residencesCB.addItem(c);
+			}
+		}
 	}
 
 	/**

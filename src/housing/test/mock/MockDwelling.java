@@ -1,7 +1,7 @@
 package housing.test.mock;
 
-import agent.Constants.Condition;
-import agent.mock.EventLog;
+import mock.EventLog;
+import CommonSimpleClasses.Constants.Condition;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;

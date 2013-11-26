@@ -17,6 +17,7 @@ public class LayoutGui implements Gui {
 	private final int ROOM_HEIGHT;
 	private final int BASE_SIZE = 20;
 	
+	// constants for appliance positions
 	private final Dimension STOVE_POSITION;
 	private final Dimension TABLE_POSITION;
 	final Dimension POTTED_PLANT_POSITION;
@@ -56,9 +57,9 @@ public class LayoutGui implements Gui {
 		g.setColor(Color.BLACK);
 		g.drawString("Stove", STOVE_POSITION.width, STOVE_POSITION.height + BASE_SIZE);
 		g.drawString("Table", TABLE_POSITION.width, TABLE_POSITION.height  + BASE_SIZE);
-		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height  + BASE_SIZE);
+		g.drawString("Potted Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height + BASE_SIZE);
 		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
-		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height  + BASE_SIZE);
+		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
 	}
 
 	@Override

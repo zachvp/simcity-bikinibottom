@@ -7,16 +7,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mock.EventLog;
 import CommonSimpleClasses.CityLocation;
 import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
-import agent.mock.EventLog;
 
 public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker {
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	private List<WorkOrder> workOrders = Collections.synchronizedList(new ArrayList<WorkOrder>());
+	
+	/* --- Constants --- */
+	private final int SHIFT_START_HOUR = 6;
+	private final int SHIFT_START_MINUTE = 0;
+	private final int SHIFT_END_HOUR = 12;
+	private final int SHIFT_END_MINUTE = 0;
 	
 	enum WorkOrderState {FILED, FIXED}
 	private class WorkOrder {
@@ -78,29 +83,30 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 //		DoReturnHome();
 	}
 
+	/* --- Abstract methods from WorkRole --- */
 	@Override
 	public int getShiftStartHour() {
-		return 6;
+		return SHIFT_START_HOUR;
 	}
 
 	@Override
 	public int getShiftStartMinute() {
-		return 0;
+		return SHIFT_START_MINUTE;
 	}
 
 	@Override
 	public int getShiftEndHour() {
-		return 11;
+		return SHIFT_END_HOUR;
 	}
 
 	@Override
 	public int getShiftEndMinute() {
-		return 0;
+		return SHIFT_END_MINUTE;
 	}
 
 	@Override
 	public boolean isAtWork() {
-		return false;
+		return isActive();
 	}
 
 	@Override
@@ -111,10 +117,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		deactivate();
 	}
 
+	/* --- Getters for testing purposes --- */
 	public List<WorkOrder> getWorkOrders() {
 		return workOrders;
 	}

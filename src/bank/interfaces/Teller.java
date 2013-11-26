@@ -16,4 +16,6 @@ public interface Teller {
         public abstract void msgWithdrawSuccessful(BankCustomer bc, int accountId, double withdrawAmount);
         
         public abstract void msgINeedALoan(BankCustomer bc);
+        
+        public abstract void msgAtDestination();
         }

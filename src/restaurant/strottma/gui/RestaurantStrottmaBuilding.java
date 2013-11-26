@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 
 import restaurant.strottma.CustomerRole;
 import restaurant.strottma.HostRole;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
-import agent.Constants;
 import agent.Role;
 import agent.interfaces.Person;
 

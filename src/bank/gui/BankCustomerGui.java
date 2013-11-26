@@ -7,9 +7,10 @@ import java.util.concurrent.Semaphore;
 
 import agent.gui.Gui;
 import bank.BankCustomerRole;
+import bank.interfaces.BankCustomerGuiInterface;
 
 
-public class BankCustomerGui implements Gui{
+public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 
 	private BankCustomerRole agent = null;
 	private boolean isPresent = true;

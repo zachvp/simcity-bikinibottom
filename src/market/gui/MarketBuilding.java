@@ -1,5 +1,7 @@
 package market.gui;
 
+import gui.AnimationPanel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,13 +11,12 @@ import javax.swing.JPanel;
 
 import market.CustomerRole;
 import market.Item;
+import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Constants;
 import agent.Role;
 import agent.RoleFactory;
-import agent.TimeManager;
-import agent.gui.AnimationPanel;
 import agent.interfaces.Person;
 
 
@@ -76,12 +77,12 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		}
 		{
 			//FOODS
-			for (int i=0;i<agent.Constants.FOODS.size();i++){
-				ShoppingList.add(new Item(agent.Constants.FOODS.get(i),GroceryList.get(agent.Constants.FOODS.get(i))));
+			for (int i=0;i<CommonSimpleClasses.Constants.FOODS.size();i++){
+				ShoppingList.add(new Item(CommonSimpleClasses.Constants.FOODS.get(i),GroceryList.get(CommonSimpleClasses.Constants.FOODS.get(i))));
 			}
 			//CARS
-			for (int i=0;i<agent.Constants.CARS.size();i++){
-				ShoppingList.add(new Item(agent.Constants.CARS.get(i),GroceryList.get(agent.Constants.CARS.get(i))));
+			for (int i=0;i<CommonSimpleClasses.Constants.CARS.size();i++){
+				ShoppingList.add(new Item(CommonSimpleClasses.Constants.CARS.get(i),GroceryList.get(CommonSimpleClasses.Constants.CARS.get(i))));
 			}
 		}
 		

@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 4;
-	private final int ROWS = 2;
-	private final int COLUMNS = 2;
+	private final int UNIT_COUNT = 9;
+	private final int ROWS = 3;
+	private final int COLUMNS = 3;
 	private final int SPACING = 5;
 	
 	// layout manager

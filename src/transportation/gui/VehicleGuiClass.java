@@ -30,6 +30,11 @@ public class VehicleGuiClass implements VehicleGui {
 	private Vehicle vehicle;
 	private boolean isBus;
 	private boolean isPresent;
+	private VehicleGuiStateEnum state = VehicleGuiStateEnum.NotMoving;
+	enum VehicleGuiStateEnum {
+		Moving,
+		NotMoving
+	}
 	
 	public VehicleGuiClass(Vehicle vehicle,
 			Corner currentLocation, boolean isBus) {
@@ -69,7 +74,8 @@ public class VehicleGuiClass implements VehicleGui {
 	}
 
 	private void onPlace() {
-		if (startLocation != destination){
+		if (state == VehicleGuiStateEnum.Moving){
+			state = VehicleGuiStateEnum.NotMoving;
 			startLocation = destination;
 			try {
 				vehicle.msgArrivedAtCorner(destination);
@@ -138,6 +144,7 @@ public class VehicleGuiClass implements VehicleGui {
 
 	@Override
 	public void doMoveToCorner(Corner destination) {
+		state = VehicleGuiStateEnum.Moving;
 		this.destination = destination;
 	}
 

@@ -23,7 +23,7 @@ import java.util.Vector;
  * including host, cook, waiters, and customers.
  */
 public class RestaurantPanel extends JPanel {
-	// CONSTANTS FOR USE IN CONSTRUCTOR
+	/*// CONSTANTS FOR USE IN CONSTRUCTOR
 	private static final int LAYOUT_ROWS = 1;
     private static final int LAYOUT_COLUMNS = 3;
     private static final int LAYOUT_HGAP = 20;
@@ -131,7 +131,7 @@ public class RestaurantPanel extends JPanel {
     /**
      * Sets up the restaurant label that includes the menu,
      * and host and cook information
-     */
+     * /
     private void initRestLabel() {
         JLabel label = new JLabel();
         //restLabel.setLayout(new BoxLayout((Container)restLabel, BoxLayout.Y_AXIS));
@@ -152,7 +152,7 @@ public class RestaurantPanel extends JPanel {
      *
      * @param type indicates whether the person is a customer or waiter
      * @param name name of person
-     */
+     * /
     public void showInfo(String type, String name) {
 
         if (type.equals("Customers")) {
@@ -160,7 +160,7 @@ public class RestaurantPanel extends JPanel {
             for (int i = 0; i < customers.size(); i++) {
                 CustomerRole temp = customers.get(i);
                 if (temp.getName() == name)
-                    gui.updateInfoPanel(temp);
+                    //gui.updateInfoPanel(temp);
             }
         }
     }
@@ -170,7 +170,7 @@ public class RestaurantPanel extends JPanel {
      *
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
-     */
+     * /
     public Role addPerson(String type, String name) {
     	
     	if (type.equals("Customers")) {
@@ -220,7 +220,7 @@ public class RestaurantPanel extends JPanel {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      * @return null if the Role can't be found
-     */
+     * /
     public Role findRole(String type, String name) {
     	if (type.equals("Customers")) {
     		CustomerRole c = null;
@@ -255,6 +255,6 @@ public class RestaurantPanel extends JPanel {
     	for (Agent a : agents) {
     		a.resumeThread();
     	}
-    }
+    }*/
 
 }

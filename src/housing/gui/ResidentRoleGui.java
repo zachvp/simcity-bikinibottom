@@ -16,11 +16,16 @@ import agent.gui.Gui;
  * @author Zach VP
  *
  */
+
 public class ResidentRoleGui implements Gui, ResidentGui {
 
 	private Resident resident = null;
-	private boolean canRelease = false;// this prevents excessive releases from occurring
-	private boolean waiting = false;// checks if resident is going to be idle
+	
+	// this prevents excessive releases from occurring
+	private boolean canRelease = false;
+	
+	// checks if resident is going to be idle
+	private boolean waiting = false;
 	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;

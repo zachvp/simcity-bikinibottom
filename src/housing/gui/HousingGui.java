@@ -47,15 +47,19 @@ public class HousingGui extends JPanel {
 	LayoutGui layoutGui = new LayoutGui(500, 500);
 
 	// back-end housing containers
-	ResidentDwelling dwelling = new ResidentDwelling(resident, payRecipientRole, worker, index, Condition.GOOD);
+	ResidentDwelling dwelling;
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
-
+	
 	public HousingGui(int index) {
 		this.index = index;
+		this.index %= 4;
 		
-		switch(index){
+		// initialize the dwelling
+		this.dwelling = new ResidentDwelling(index, Condition.GOOD);
+		
+		switch(this.index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
 			case 1: housingAnimationPanel.setBackground(Color.RED); break;
 			case 2: housingAnimationPanel.setBackground(Color.GREEN); break;

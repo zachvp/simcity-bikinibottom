@@ -70,12 +70,17 @@ public class ResidentDwelling implements Dwelling {
 		
 		// determine the starting monthly payment for the property
 		switch(condition){
-		case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
-		case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
-		case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
-		case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
-		default : this.monthlyPaymentAmount = 0; break;
+			case GOOD : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT; break;
+			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
+			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			default : this.monthlyPaymentAmount = 0; break;
+		}
 	}
+
+	public ResidentDwelling(int index, Condition startCondition) {
+		this.IDNumber = index;
+		this.condition = startCondition;
 	}
 
 	public void setCondition(Constants.Condition condition){

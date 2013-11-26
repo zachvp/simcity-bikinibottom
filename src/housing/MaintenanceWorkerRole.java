@@ -154,6 +154,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	public void msgLeaveWork() {
 		deactivate();
 	}
+	
+	public void setGui(MaintenanceWorkerGui gui){
+		this.gui = gui;
+	}
 
 	/* --- Getters for testing purposes --- */
 	public List<WorkOrder> getWorkOrders() {

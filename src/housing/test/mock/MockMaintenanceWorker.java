@@ -4,6 +4,7 @@ import mock.EventLog;
 import mock.Mock;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
+import housing.interfaces.MaintenanceWorkerGui;
 
 public class MockMaintenanceWorker extends Mock implements MaintenanceWorker {
 	/* --- Data --- */

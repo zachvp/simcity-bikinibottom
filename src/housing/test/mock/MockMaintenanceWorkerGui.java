@@ -1,17 +1,17 @@
 package housing.test.mock;
 
 import mock.EventLog;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
-import housing.interfaces.Resident;
 
 public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	EventLog log = new EventLog();
-	Resident resident;
+	MaintenanceWorker worker;
 	
 	boolean hasTool = false;
 
-	public MockMaintenanceWorkerGui(Resident resident) {
-		this.resident = resident;
+	public MockMaintenanceWorkerGui(MaintenanceWorker worker) {
+		this.worker = worker;
 	}
 
 	@Override
@@ -22,15 +22,18 @@ public class MockMaintenanceWorkerGui implements MaintenanceWorkerGui {
 	@Override
 	public void DoGoToDwelling() {
 		log.add("Going to dwelling");
+		worker.msgAtDestination();
 	}
 
 	@Override
 	public void DoFixProblem() {
 		log.add("Going to dwelling");
+		worker.msgAtDestination();
 	}
 
 	@Override
 	public void DoReturnHome() {
 		log.add("Going to dwelling");
+		worker.msgAtDestination();
 	}
 }

@@ -1,6 +1,7 @@
 package housing;
 
 import housing.interfaces.Dwelling;
+import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 
@@ -26,12 +27,12 @@ import agent.interfaces.Person;
 public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Data ----- */
 	public EventLog log = new EventLog();
-	ScheduleTask schedule = new ScheduleTask();
 	
 	// for testing. Listens to the ScheduleTask 
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
+	ScheduleTask schedule = new ScheduleTask();
 	
 	/* --- Constants --- */
 	// TODO when should shift end?
@@ -40,10 +41,17 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	private final int SHIFT_END_HOUR = 12;
 	private final int SHIFT_END_MINUTE = 0;
 	
+	
+	// how long role waits before deactivating
 	private final int IMPATIENCE_TIME = 7;
 	
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
-	TaskState task = TaskState.FIRST_TASK;	
+	TaskState task = TaskState.FIRST_TASK;
+	
+	
+	// data for the worker
+	MaintenanceWorkerRole worker;
+	private List<Double> bills = Collections.synchronizedList(new ArrayList<Double>());
 	
 	/* ----- Resident Data ----- */
 	private List<MyResident> residents = Collections.synchronizedList(new ArrayList<MyResident>());
@@ -104,26 +112,44 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		Do("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
+	
+	public void msgServiceCharge(double charge, MaintenanceWorker worker) {
+		Do("Received bill for charge");
+		bills.add(charge);
+		stateChanged();
+	}
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
 		
-		if(task == TaskState.FIRST_TASK){
+		if(task == TaskState.FIRST_TASK) {
 			task = TaskState.NONE;
+			return true;
 		}
 		
-		synchronized(residents){
+		// make payment(s) to the maintenance worker
+		if(person.getWallet().getCashOnHand() > 0) {
+			for(double bill : bills){
+				tryToMakePayment(bill);
+			}
+			return true;
+		}
+		
+		
+		// charge all residents after time of the month has passed
+		synchronized(residents) {
 			for(MyResident mr : residents){
-				if(mr.state == PaymentState.PAYMENT_DUE){
+				if(mr.state == PaymentState.PAYMENT_DUE) {
 					chargeResident(mr);
 					return true;
 				}
 			}
 		}
 		
-		synchronized(residents){
-			for(MyResident mr : residents){
-				if(mr.state == PaymentState.PAYMENT_RECEIVED){
+		// see if the resident has paid the bill
+		synchronized(residents) {
+			for(MyResident mr : residents) {
+				if(mr.state == PaymentState.PAYMENT_RECEIVED) {
 					checkResidentPayment(mr);
 					return true;
 				}
@@ -133,7 +159,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		Runnable command = new Runnable() {
 			@Override
 			public void run() {
-				
+				deactivate();
 			}
 		};
 		
@@ -144,7 +170,25 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	}
 
 	/* ----- Actions ----- */
-	private void checkResidentPayment(MyResident mr){
+	private void tryToMakePayment(double bill) {
+		Do("Attempting to pay service charge");
+		
+		double cash = person.getWallet().getCashOnHand();
+		
+		if(cash >= bill){
+			worker.msgHereIsPayment(bill);
+			cash -= bill;
+			person.getWallet().setCashOnHand(cash);
+			bills.remove(bill);
+		}
+		
+		else {
+			Do("Not enough money to pay service charge.");
+			person.getWallet().setMoneyNeeded(person.getWallet().getMoneyNeeded() + bill);
+		}
+	}
+	
+	private void checkResidentPayment(MyResident mr) {
 		Do("Checking payment for resident #" + mr.dwelling.getIDNumber());
 		mr.owes -= mr.hasPaid;
 		

@@ -98,7 +98,7 @@ public class CitizenRecords {
 		
 		
 		PersonAgent newPerson  = new PersonAgent
-				(name, incomeLevel, hunger, goToRestaurant);
+				(name, incomeLevel, hunger, goToRestaurant, true);
 		
 		//Assigning job
 		if (job != null) {

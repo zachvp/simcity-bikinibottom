@@ -63,8 +63,9 @@ public class PersonAgent extends Agent implements Person {
 	private Map<String, Integer> inventory;
 	
 	private Car car;
+	private boolean clearFoodAtHome = false;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant){
+	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
 		super();
 		updateHungerLevel();
 		
@@ -81,6 +82,7 @@ public class PersonAgent extends Agent implements Person {
 		this.kelp = KelpClass.getKelpInstance();
 		
 		setWantsToEatOut(goToRestaurant);
+		clearFoodAtHome = (!foodAtHome);
 		
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
@@ -91,7 +93,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true);
 		updateHungerLevel();
 	}
 	
@@ -111,6 +113,11 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	@Override
 	protected boolean pickAndExecuteAnAction() {
+		// Clear the fridge if necessary
+		if (clearFoodAtHome && getResidentRole() != null) {
+			getResidentRole().clearFoodAtHome();
+		}
+		
 		// First, the Role rules.
 		
 		boolean roleExecuted = false;

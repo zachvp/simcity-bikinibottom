@@ -64,7 +64,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Car car;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger){
+	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant){
 		super();
 		updateHungerLevel();
 		
@@ -80,7 +80,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
-		setWantsToEatOut(true);
+		setWantsToEatOut(goToRestaurant);
 		
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
@@ -91,7 +91,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true);
 		updateHungerLevel();
 	}
 	

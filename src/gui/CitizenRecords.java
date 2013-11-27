@@ -46,7 +46,7 @@ public class CitizenRecords {
 		personInfoList.addToList(person.getName());
 	}
 	public void addCitizen(String name, WorkRole job, Dwelling home, String status,
-			boolean hasCar, String hungerLevel) {
+			boolean hasCar, String hungerLevel, String restaurant) {
 		
 		//Assigning income level
 		IncomeLevel incomeLevel;
@@ -84,7 +84,21 @@ public class CitizenRecords {
 			break;
 		}
 		
-		PersonAgent newPerson  = new PersonAgent(name, incomeLevel, hunger);
+		//Assigning willing to go to Restaurant or not
+		boolean goToRestaurant;
+		switch (restaurant) {
+		case "Not willing to go":
+			goToRestaurant = false;
+			break;
+		default:
+		case "Willing to go":
+			goToRestaurant = true;
+			break;
+		}
+		
+		
+		PersonAgent newPerson  = new PersonAgent
+				(name, incomeLevel, hunger, goToRestaurant);
 		
 		//Assigning job
 		if (job != null) {

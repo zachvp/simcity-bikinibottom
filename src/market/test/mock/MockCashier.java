@@ -143,6 +143,14 @@ public class MockCashier extends Mock implements Cashier {
 		
 	}
 
+
+
+	@Override
+	public void msgHereIsPayment(double total, PhonePayer phonePayer) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 
 	

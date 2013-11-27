@@ -3,12 +3,13 @@ package market.gui;
 import market.CashierRole;
 import market.CustomerRole;
 import market.interfaces.DeliveryGuy;
+import market.interfaces.DeliveryGuyGuiInterfaces;
 
 import java.awt.*;
 
 import agent.gui.Gui;
 
-public class DeliveryGuyGui implements Gui {
+public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
 
     private DeliveryGuy agent = null;
 
@@ -34,7 +35,11 @@ public class DeliveryGuyGui implements Gui {
         this.agent = dg;
     }
 
-    public void updatePosition() {
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#updatePosition()
+	 */
+    @Override
+	public void updatePosition() {
         if (xPos < xDestination)
             xPos++;
         else if (xPos > xDestination)
@@ -60,38 +65,66 @@ public class DeliveryGuyGui implements Gui {
 
 
     }
-    public void BackReadyStation(){
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#BackReadyStation()
+	 */
+    @Override
+	public void BackReadyStation(){
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command = command.GoHome;
     }
     
-    public void GoDeliver(){
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#GoDeliver()
+	 */
+    @Override
+	public void GoDeliver(){
     	xDestination = DeliverExitX;
     	yDestination = DeliverExitY;
     	command = command.GoDeliver;
     }
     
-    public void OffWork(){
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#OffWork()
+	 */
+    @Override
+	public void OffWork(){
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = command.GoToExit;
     }
 
-    public void draw(Graphics2D g) {
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#draw(java.awt.Graphics2D)
+	 */
+    @Override
+	public void draw(Graphics2D g) {
         g.setColor(Color.ORANGE);
         g.fillRect(xPos, yPos, DeliveryGuyWidth, DeliveryGuyHeight);
     }
 
-    public boolean isPresent() {
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#isPresent()
+	 */
+    @Override
+	public boolean isPresent() {
         return true;
     }
 
-    public int getXPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#getXPos()
+	 */
+    @Override
+	public int getXPos() {
         return xPos;
     }
 
-    public int getYPos() {
+    /* (non-Javadoc)
+	 * @see market.gui.DeliveryGuyGuiInterfaces#getYPos()
+	 */
+    @Override
+	public int getYPos() {
         return yPos;
     }
 }

@@ -1,7 +1,6 @@
 package mock;
 
 import CommonSimpleClasses.ScheduleTaskInterface;
-import CommonSimpleClasses.test.ScheduleTaskListener;
 
 /**
  * Upon completion of the ScheduleTask event, MockScheduleTaskListener will
@@ -9,7 +8,7 @@ import CommonSimpleClasses.test.ScheduleTaskListener;
  * @author Zach VP
  *
  */
-public class MockScheduleTaskListener implements ScheduleTaskListener {
+public class MockScheduleTaskListener  {
 	private ScheduleTaskInterface Event;
 	public EventLog log = new EventLog();
 	
@@ -17,7 +16,6 @@ public class MockScheduleTaskListener implements ScheduleTaskListener {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public void taskFinished(ScheduleTaskInterface Event) {
 		this.Event = Event;
 		

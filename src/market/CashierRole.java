@@ -15,6 +15,7 @@ import market.interfaces.DeliveryGuy;
 import market.interfaces.DeliveryReceiver;
 import market.interfaces.ItemCollector;
 import market.interfaces.PhonePayer;
+import market.test.mock.EventLog;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
@@ -27,6 +28,9 @@ import agent.interfaces.Person;
  *
  */
 public class CashierRole extends WorkRole implements Cashier {
+	
+	public EventLog log = new EventLog();
+	
 
 private static final int startingminute = 0;
 	//public EventLog log = new EventLog();
@@ -208,9 +212,33 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	public void msgHereIsPayment(double payment, Customer c)
 	{
 		//print ("Receive payment from Customer ");
-			getMyCustomerList().get(0).state = Customerstate.Paid;
-			setCash(getCash() + payment);
-
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if(getMyCustomerList().get(i).c != null){
+				if(getMyCustomerList().get(i).c == c){
+					getMyCustomerList().get(i).state = Customerstate.Paid;
+					setCash(getCash() + payment);
+				}
+			}
+		}
+		cashierGui.Update();
+		stateChanged();
+	}
+	
+	/**
+	 * This is the message from the PhonePayer that pays on phone
+	 * @param payment is the total amount of the PhonePayer that can pay
+	 * @param pP PhonePayer himself
+	 */
+	public void msgHereIsPayment(double payment, PhonePayer pP)
+	{
+		//print ("Receive payment from Customer ");
+		for (int i=0;i<getMyCustomerList().size();i++){
+			if (getMyCustomerList().get(i).phoneOrder!=null)
+				if(getMyCustomerList().get(i).phoneOrder.personPayingDelivery == pP){
+					getMyCustomerList().get(i).state = Customerstate.Paid;
+					setCash(getCash() + payment);
+				}	
+		}
 		cashierGui.Update();
 		stateChanged();
 	}

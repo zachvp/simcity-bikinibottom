@@ -32,6 +32,7 @@ Picture | Building | Developer |
 ![Market](img/market.png) | Market | Anthony
 ![House](img/pineapple_house.png) | Apartment | Zach
 ![Hospital](img/hospital.png) | Hospital | Victoria
+![Busstop](img/bus_stop.png) | Busstop | Diego
 
 ##Our GUI
 Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building. Special event such as opening, closing, charging residents, and housing degredation occurs at certain times (specified in building info panels).

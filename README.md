@@ -1,6 +1,6 @@
 ##Introduction
 
-Welcome to Bikini Bottom! 
+Welcome to Bikini Bottom! Our SimCity models Bikini Bottom from the show Spongebob Squarepants. All images are taken from the show and are not intended to be original art.
 
 ##Our Buildings
 Picture | Building | Developer | 
@@ -12,11 +12,11 @@ Picture | Building | Developer |
 ![Hospital](img/hospital.png) | Hospital | Victoria
 
 ##Our GUI
-Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up.
+Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residence's.
 
 ![GUI Fields](img/guiFields.png)
 
-Our creation panel has two buttons. The "Create" button creates one person with the selected attributes. The "Populate selected workplace" button creates enough people to fill all jobs in the selected workplace, giving them the default attributes and a residence.
+Our creation panel has two buttons. The "Create" button creates one person with the selected attributes. The "Populate selected workplace" button creates enough people to fill all jobs in the selected workplace, giving them the default attributes and a residence. You may also mix and match combo boxes to create the proper scenario.
 
 ###Gui Details
 + The small green squares are citizens of Bikini Bottom walking through the streets
@@ -56,7 +56,9 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.
+  + After clicking on a Pineapple, a view opens up displaying all of the apartments inside a complex. Apartments house all the residents of SimCity including the Landlords and MaintenanceWorkers. Additionally, an info panel pops up with the name of the house.
 + Abstract GUI classes for animation.
+  + Modified Restaurant Gui managers for SimCity.
 + Rent scenarios force trips to bank
 
 ###Jack Lucas

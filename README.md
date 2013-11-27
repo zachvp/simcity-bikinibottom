@@ -56,7 +56,7 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 ###Diego von Beck
 + Person creation panel (with Victoria)
 	+ Classifieds class that keeps track of all WorkRoles by building and availability, and all residential rooms by availability.
-	+ Workplace, job, residence, status, hunger level and car checking and setting.
+	+ Workplace, job, residence, status, hunger level, willingness to go to restaurant, food at home, and car checking and setting.
 + Transportation (Buses, cars and walking people) design, implementation and GUI.
 	+ Map builder class that creates and links the corners, bus stops, and creates the bus routes.
 + Parsers for configuration files.

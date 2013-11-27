@@ -669,8 +669,7 @@ public class PersonAgent extends Agent implements Person {
 
 	@Override
 	public Map<String, Integer> getShoppingList() {
-		// TODO Auto-generated method stub
-		return null;
+		return shoppingList;
 	}
 	
 }

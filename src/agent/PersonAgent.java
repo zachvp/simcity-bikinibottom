@@ -116,6 +116,7 @@ public class PersonAgent extends Agent implements Person {
 		// Clear the fridge if necessary
 		if (clearFoodAtHome && getResidentRole() != null) {
 			getResidentRole().clearFoodAtHome();
+			clearFoodAtHome = false;
 		}
 		
 		// First, the Role rules.

@@ -8,7 +8,7 @@ Upon the launch of the frame:
 
 Creating a Person
 Click on the Hospital either in the map or on the list to pull up the Person Creation Panel.
-In the Person Creation Panel, there should be 1 text field, 6 combo boxes and 2 buttons.
+In the Person Creation Panel, there should be 1 text field, 8 combo boxes and 2 buttons.
 The text field is for a name, and the combo boxes provide options for customizing the
 details in a new Person. 
 

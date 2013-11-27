@@ -405,7 +405,7 @@ public class TellerRole extends WorkRole implements Teller {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

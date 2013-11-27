@@ -330,7 +330,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

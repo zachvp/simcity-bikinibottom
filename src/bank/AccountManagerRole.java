@@ -271,7 +271,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 

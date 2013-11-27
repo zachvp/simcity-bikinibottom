@@ -69,6 +69,7 @@ ClassifiedsChangedListener{
 	JComboBox<String> carCB;
 	JComboBox<String> hungerCB;
 	JComboBox<String> restaurantCB;
+	JComboBox<String> foodCB;
 	JButton createButton;
 	ArrayList<MyComboBoxItem> buildList = new ArrayList<MyComboBoxItem>();
 	MyComboBoxItem[] buildingArray;
@@ -124,7 +125,7 @@ ClassifiedsChangedListener{
 		inputPanelLeft.setPreferredSize(inputDimL);
 		inputPanelLeft.setMaximumSize(inputDimL);
 		inputPanelLeft.setMinimumSize(inputDimL);
-		inputPanelLeft.setLayout(new GridLayout(8,1,5,5));
+		inputPanelLeft.setLayout(new GridLayout(9,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelLeft.setOpaque(false);
 		
@@ -133,7 +134,7 @@ ClassifiedsChangedListener{
 		inputPanelright.setPreferredSize(inputDimR);
 		inputPanelright.setMaximumSize(inputDimR);
 		inputPanelright.setMinimumSize(inputDimR);
-		inputPanelright.setLayout(new GridLayout(8,1,5,5));
+		inputPanelright.setLayout(new GridLayout(9,1,5,5));
 		//inputPanel.setBackground(Color.white);
 		inputPanelright.setOpaque(false);
 		
@@ -152,6 +153,8 @@ ClassifiedsChangedListener{
 				{"Willing to go", "Not willing to go"});
 		hungerCB = new JComboBox<String>(new String[] {"Starving", "Hungry",
 						"Neutral", "Satisfied", "Full"});
+		foodCB = new JComboBox<String>(new String[] {"Has food at home",
+				"Doesn't have food at home"});
 
 		nameTextF.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -168,6 +171,7 @@ ClassifiedsChangedListener{
 		carCB.setSelectedIndex(0);
 		hungerCB.setSelectedIndex(4);
 		restaurantCB.setSelectedIndex(0);
+		foodCB.setSelectedIndex(0);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -183,6 +187,8 @@ ClassifiedsChangedListener{
 		inputPanelright.add(hungerCB);
 		inputPanelLeft.add(new JLabel("Restaurant: "));
 		inputPanelright.add(restaurantCB);
+		inputPanelLeft.add(new JLabel("Food: "));
+		inputPanelright.add(foodCB);
 		inputPanelLeft.add(new JLabel("Car: "));
 		inputPanelright.add(carCB);
 		
@@ -243,6 +249,7 @@ ClassifiedsChangedListener{
 		carCB.setSelectedIndex(1);
 		hungerCB.setSelectedIndex(4);
 		restaurantCB.setSelectedIndex(0);
+		foodCB.setSelectedIndex(0);
 		classifiedsUpdated();
 		checkSomewhereforBuildings();
 	}
@@ -262,6 +269,7 @@ ClassifiedsChangedListener{
 				String status = (String) wealthCB.getSelectedItem();
 				String hungerLevel = (String) hungerCB.getSelectedItem();
 				String restaurant = (String) restaurantCB.getSelectedItem();
+				String foodAtHome = (String) foodCB.getSelectedItem();
 				boolean hasCar = ((String) carCB.getSelectedItem())
 						.equals("Yes");
 				if (!incompleteInputs(name, status,
@@ -274,12 +282,13 @@ ClassifiedsChangedListener{
 					carCB.setSelectedIndex(1);
 					restaurantCB.setSelectedIndex(0);
 					hungerCB.setSelectedIndex(4);
+					foodCB.setSelectedIndex(0);
 
 					//create new PersonAgent
 					//PersonAgent newPerson = new PersonAgent(name);
 					//TODO add all person info
 					citizenRecords.addCitizen(name, job, home, status, hasCar,
-							hungerLevel, restaurant);
+							hungerLevel, restaurant, foodAtHome);
 					if (Constants.PRINT)
 						System.out.println(name
 								+ " has been added to your city!");
@@ -295,6 +304,7 @@ ClassifiedsChangedListener{
 					carCB.setSelectedIndex(1);
 					restaurantCB.setSelectedIndex(0);
 					hungerCB.setSelectedIndex(4);
+					foodCB.setSelectedIndex(0);
 				} else {
 					msg.setText("Please complete all inputs");
 				}

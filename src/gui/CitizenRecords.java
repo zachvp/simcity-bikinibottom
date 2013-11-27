@@ -46,7 +46,7 @@ public class CitizenRecords {
 		personInfoList.addToList(person.getName());
 	}
 	public void addCitizen(String name, WorkRole job, Dwelling home, String status,
-			boolean hasCar, String hungerLevel, String restaurant) {
+			boolean hasCar, String hungerLevel, String restaurant, String foodAtHome) {
 		
 		//Assigning income level
 		IncomeLevel incomeLevel;
@@ -98,7 +98,7 @@ public class CitizenRecords {
 		
 		
 		PersonAgent newPerson  = new PersonAgent
-				(name, incomeLevel, hunger, goToRestaurant, true);
+				(name, incomeLevel, hunger, goToRestaurant, (foodAtHome.equals("Has food at home")));
 		
 		//Assigning job
 		if (job != null) {

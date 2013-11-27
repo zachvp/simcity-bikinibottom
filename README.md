@@ -81,9 +81,10 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.
   + After clicking on a Pineapple, a view opens up displaying all of the apartments inside a complex. Apartments house all the residents of SimCity including the Landlords and MaintenanceWorkers. Additionally, an info panel pops up with the name of the house.
+  + Residents are represented by Spongebob, who has the pet snail Gary. 
 + Abstract GUI classes for animation.
   + Modified Restaurant Gui managers for SimCity.
-+ Rent scenarios force trips to bank
++ Rent scenarios force trips to bank since the residents rarely have enough money to pay.
 
 ###Jack Lucas
 + Bank design, implementation and GUI.

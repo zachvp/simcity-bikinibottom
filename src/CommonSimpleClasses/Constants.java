@@ -45,12 +45,12 @@ public interface Constants {
 	/**
 	 * Whether EventLog should log events.
 	 */
-	public static final boolean LOG = true;
+	public static final boolean LOG = false;
 	
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = false;
+	public static final boolean PRINT = true;
 	
     /**
      * The number of milliseconds in a second

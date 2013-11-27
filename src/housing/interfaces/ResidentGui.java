@@ -14,4 +14,6 @@ public interface ResidentGui {
 	public void DoMoveGary();
 
 	public void setPresent(boolean b);
+
+	public void DoShowSpeech(String speech);
 }

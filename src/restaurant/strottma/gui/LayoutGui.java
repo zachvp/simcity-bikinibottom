@@ -113,7 +113,7 @@ public class LayoutGui implements Gui{
 	    		
 	    		
 	    		if (grill.orderVisible() && grill.getOrder() != null) {
-	    			g.setColor(Color.BLACK);
+	    			g.setColor(Color.WHITE);
 	    			g.drawString(grill.getOrder().getChoice().substring(0, 2),
 	    					grill.getX()+10, grill.getY()+20);
 	    		}

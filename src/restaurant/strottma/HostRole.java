@@ -234,7 +234,7 @@ public class HostRole extends WorkRole {
 		Do("Added " + w);
 		
 		// assign a wait position
-		w.setWaitY(14 + 30*this.waiters.size());
+		w.setWaitY(130 + 30*this.waiters.size());
 		
 		this.waiters.add(new MyWaiter(w));
 		stateChanged();

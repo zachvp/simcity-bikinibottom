@@ -1,15 +1,20 @@
 package housing;
 
+import java.awt.GridLayout;
+
+import housing.gui.HousingInfoPanel;
+
 import javax.swing.JFrame;
 
 public class MainFile extends JFrame {
 	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
-//	HousingComplex complex = new HousingComplex(building);
-		
-
+//	HousingInfoPanel panel = new HousingInfoPanel(building);
+	
 	public MainFile() {
+		this.setLayout(new GridLayout(2, 1));
 		this.add(building.getComplex());
-		this.setBounds(50, 50, 600, 490);
+//		this.add(panel);
+		this.setBounds(50, 50, 600, 600);
 	}
 	
 	// TODO this is simply a test main() method

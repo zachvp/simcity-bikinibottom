@@ -2,15 +2,16 @@ package housing;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
+import housing.gui.HousingInfoPanel;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
@@ -34,7 +35,9 @@ public class ResidentialBuilding extends Building {
 	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
-	public Map<Person, Role> population;
+	public Map<Person, Role> population = new HashMap<Person, Role>();
+	
+	private HousingInfoPanel housingInfoPanel = new HousingInfoPanel(population);
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -50,23 +53,25 @@ public class ResidentialBuilding extends Building {
 		
 		this.entrancePos = new XYPos(width/2, height);
 		
-		// keeps track of building members
-		this.population = new HashMap<Person, Role>();
-
 		// worker for this building
 		worker = new MaintenanceWorkerRole(null, this);
+		
+		// manager for this building 
+		landlord = new PayRecipientRole(null, this);
 		
 		// set up complex
 		this.complex = new HousingComplex(this);
 		
-		// manager for this building 
-		landlord = new PayRecipientRole(null, this);
 		worker.setComplex(this.complex);
 		
 		// put the constant roles in the building map
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
 		
+	}
+	
+	public Map<Person, Role> getPopulation(){
+		return population;
 	}
 	
 	public void addResident(ResidentRole resident){
@@ -113,8 +118,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		// TODO Auto-generated method stub
-		return new JPanel();
+		return housingInfoPanel;
 	}
 	
 }

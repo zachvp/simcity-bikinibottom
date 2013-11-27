@@ -60,7 +60,7 @@ public class DeliveryGuyTest extends TestCase
 		building = null;
 		
 		
-	}	
+	}
 	
 	/**
 	 * This tests the cashier under very simple terms: 1 MarketCustomer comes to market and 1 ItemCollector (Enough Inventory)
@@ -91,3 +91,4 @@ public class DeliveryGuyTest extends TestCase
 		
 	}
 }
+

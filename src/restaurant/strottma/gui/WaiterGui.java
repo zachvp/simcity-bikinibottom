@@ -46,7 +46,7 @@ public class WaiterGui implements Gui {
     private static final int CASHIER_Y = -HEIGHT;
     
     // customer waiting area
-    private static final int CUST_WAIT_X = 130-100;
+    private static final int CUST_WAIT_X = 130;//-100;
     private static final int CUST_WAIT_Y = 80;
     
     private boolean shouldMsg;

@@ -10,7 +10,7 @@ import agent.gui.Gui;
 public class CustomerGui implements Gui{
 
 	private CustomerRole role = null;
-	private boolean isPresent = false;
+	private boolean isPresent = true;
 	private boolean isHungry = false;
 	
 	private String text = null; // the text to display

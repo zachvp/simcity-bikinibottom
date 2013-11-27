@@ -108,27 +108,36 @@ public class CornerAgent extends Agent implements Corner {
 
 	@Override
 	public void msgDoneCrossing() {
-		synchronized (adjacentCorners) {
+		synchronized (crossroadBusy) {
 			crossroadBusy++;
 		}
 		stateChanged();
 	}
 
 	@Override
+	public void msgIAmCrossing() {
+		synchronized (crossroadBusy) {
+			crossroadBusy--;
+		}
+		stateChanged();
+		
+	}
+
+	@Override
 	public boolean pickAndExecuteAnAction() { // TODO Update DD
 		
-		synchronized (crossroadBusy) {
 			if (!waitingForBusstops.isEmpty()) {
 				sendBusstopInfo();
 				return true;
 			} else if (!waitingForCorners.isEmpty()) {
 				sendAdjCornerInfo();
 				return true;
-			} else if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
-				letSomeoneThrough();
-				return true;
+			} else synchronized (crossroadBusy) { 
+				if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
+					letSomeoneThrough();
+					return true;
+				}
 			}
-		}
 		return false;
 	}
 
@@ -255,15 +264,6 @@ public class CornerAgent extends Agent implements Corner {
 			}
 		}
 		throw new Exception("Couldn't find nextCorner in adjCorners.");
-	}
-
-	@Override
-	public void msgIAmCrossing() {
-		synchronized (crossroadBusy) {
-			crossroadBusy--;
-		}
-		stateChanged();
-		
 	}
 
 	/**

@@ -43,14 +43,14 @@ public class ResidentialBuilding extends Building {
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static final int timeDifference = 6;
+	private static final int timeDifference = 12;
 	
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		// set up proper coordinates
 		super(x, y, width, height);
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount * timeDifference;
+		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
 		this.entrancePos = new XYPos(width/2, height);

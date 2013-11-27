@@ -36,22 +36,14 @@ public class HostRole extends WorkRole {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	
+	private boolean offWork = false;
+	
 	private HostGui hostGui = null;
 	
 	private Semaphore atTable = new Semaphore(0,true);
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
 	public HostRole(Person person, CityLocation location) {
 		super(person, location);
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
 		
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
@@ -60,6 +52,12 @@ public class HostRole extends WorkRole {
 			int y = (ix % TABLES_PER_COLUMN) * TABLE_SPACING + TABLE_Y_OFFSET;
 			tables.add(new Table(ix, x, y));//how you add to a collections
 		}
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 
 	public List<Customer> getWaitingCustomers() {
@@ -97,8 +95,7 @@ public class HostRole extends WorkRole {
 	
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		offWork = true;
 	}
 	
 	/**
@@ -150,6 +147,8 @@ public class HostRole extends WorkRole {
 				}
 			}
 		}
+		
+		if (offWork) { deactivate(); }
 		
 		return false;
 		//we have tried all our rules and found
@@ -291,27 +290,7 @@ public class HostRole extends WorkRole {
 			return "table " + tableNumber;
 		}
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

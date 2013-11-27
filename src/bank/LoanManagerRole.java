@@ -165,7 +165,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

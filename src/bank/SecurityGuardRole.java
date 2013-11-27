@@ -31,7 +31,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	BankBuilding bankBuilding;
 	
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask task = ScheduleTask.getInstance();
 	
 	boolean endWorkShift = false;
 	boolean atWork;
@@ -330,7 +330,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

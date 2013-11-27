@@ -38,7 +38,7 @@ public class BankBuilding extends Building {
 
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static final int timeDifference = 6;
+	private static final int timeDifference = 12;
 
 	//private AnimationPanel animationPanel = new AnimationPanel();
 	BankGui bankGui;
@@ -61,7 +61,7 @@ public class BankBuilding extends Building {
 		this.existingRoles = new HashMap<Person, BankCustomerRole>();
 
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount * timeDifference;
+		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
 		initRoles();

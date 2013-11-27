@@ -65,6 +65,7 @@ public class RealPassengerRole extends PassengerRole {
 		@Override
 		public void run() {
 			corner.msgDoneCrossing();
+			stateChanged();
 		}
 	}
 
@@ -195,8 +196,8 @@ public class RealPassengerRole extends PassengerRole {
 				
 				if (location.type() == LocationTypeEnum.Corner) {
 					Corner currCorner = (Corner)location;
-					currCorner.msgIAmCrossing();
 					timer.schedule(new CornerNotifier(currCorner), 1600);
+					currCorner.msgIAmCrossing();
 				}
 				
 				state = PassengerStateEnum.Walking;

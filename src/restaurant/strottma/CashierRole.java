@@ -29,22 +29,19 @@ public class CashierRole extends WorkRole implements Cashier {
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	DecimalFormat df = new DecimalFormat("#.##");
 	private double money;
-	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
+	private boolean leaveWork = false;
 	
 	public CashierRole(Person person, CityLocation location) {
 		super(person, location);
 
 		new Timer();
 		this.money = 200.00; // default
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		leaveWork = false;
 	}
 
 	/* Messages */
@@ -81,8 +78,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		leaveWork = true;
 	}
 	
 	
@@ -117,6 +113,8 @@ public class CashierRole extends WorkRole implements Cashier {
 				}
 			}
 		}
+		
+		if (leaveWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -264,27 +262,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		
 		public Market getMarket() { return market; }
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

@@ -1,25 +1,23 @@
 ###Importing to Eclipse
   + Simply run Eclipse by clicking on its icon. If it is the first time running Eclipse, you will be prompted for the location of your workspace. Think of the Eclipse Workspace as your "My Documents"/"Documents" directory, but for Eclipse projects. You may use the default location if you wish or make-up your own.
   + Next you import the restaurant application:
-    + File -> New -> Other
-    + Choose Java Project from Existing Ant Buildfile
+    + Using the SSH from the main code repo, clone the repository into your directory of choice.
+    + File -> New -> Java Project
+    + Name the project team23_test
+    + Make sure the execution environment JRE is set to JavaSE-1.7
+    + Uncheck the "use default location" box to enable the browse button.
     + Click on the Browse button
-    + Navigate to the git repository you cloned in the previous section
-    + Choose the build.xml file.
-    + [IMP]: Check the Link to the buildfile in the file system box
+    + Navigate to the team23 git repository you cloned
+    + Press next
+    + Click the libraries tab, click add library, select JUnit, and click next
+    + Make sure JUnit 4 is selected.
     + Press Finish
 
-###Running the Project
-  + To run the main application, navigate to the "RestaurantGui.java" file and press the green run button.
-  + To run the tests, navigate to the "CashierTest.java" file and press the run button.
-
-###Adding JUnit
-  + JUnit will not be available by default.
-  + To import it, first right-click on the src folder in the Eclipse Package Explorer, mouse over "build path," then click "configure build path."
-  + Click the "Libraries" tab.
-  + Click the "Add Library" button, and find JUnit 3.
-  + Click on JUnit3, then press OK to add it.
-  + Click OK again to configure the build path.
+###Running the Project and Tests
+  + Navigate to the "Gui" package and find the "MainFrame.java" file
+  + Right-click on the file and mouse over "run as" then click "java application"
+  + The test takes a while to start, but it is normal
+  + To run the tests, navigate to `[package].test` and run the tests for each package
 
 ---
 ##Introduction
@@ -36,11 +34,17 @@ Picture | Building | Developer |
 ![Hospital](img/hospital.png) | Hospital | Victoria
 
 ##Our GUI
-Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residence's.
+Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building. Special event such as opening, closing, charging residents, and housing degredation occurs at certain times (specified in building info panels).
 
 ![GUI Fields](img/guiFields.png)
 
 Our creation panel has two buttons. The "Create" button creates one person with the selected attributes. The "Populate selected workplace" button creates enough people to fill all jobs in the selected workplace, giving them the default attributes and a residence. You may also mix and match combo boxes to create the proper scenario.
+
+###Scenarios
++ Select the building you would like to observe in the combo box
++ Click "populate building" to create people to fill the building's roles
++ Click on the proper building to see what happens within
++ Lower building numbers correspond to buildings to the top and left
 
 ###Gui Details
 + The small green squares are citizens of Bikini Bottom walking through the streets
@@ -81,7 +85,7 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.
   + After clicking on a Pineapple, a view opens up displaying all of the apartments inside a complex. Apartments house all the residents of SimCity including the Landlords and MaintenanceWorkers. Additionally, an info panel pops up with the name of the house.
-  + Landlords charge residents every day at 9am game time, while apartments must be maintained every day at 4pm
+  + Landlords charge residents every day at 9am game time, while apartments must be maintained every day at 4pm. Maintenance workers enter apartments in the form of white squares when fixing apartments.
   + Residents eat when they have not been to a resident in a while. Residents make a Krabby Patty when they are hungry.
   + Residents are represented by Spongebob, who has the pet snail Gary. 
 + Abstract GUI classes for animation.
@@ -113,5 +117,6 @@ You will create enough people to cover every employment spot in the city. This i
 + There is no system in place that would result in denying a loan.
 + Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
 + There should be different behavior on weekends.
-
-
++ Customers are unable to leave the market no matter the circumstances if they have an empty grocery list and they do not have a place to live.
+  + Customers only add to the grocery list when their food at home runs low
++ Buses sometimes get stuck at intersections

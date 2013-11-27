@@ -29,6 +29,7 @@ public class CookRole extends WorkRole implements Cook {
 	// private CookGui cookGui = null;
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Timer timer;
+	private boolean offWork = false;
 	
 	private Map<String, Food> foods;
 	private List<Market> markets;
@@ -46,11 +47,6 @@ public class CookRole extends WorkRole implements Cook {
 		this.gui = cookGui;
 	}
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
 	public CookRole(Person person, CityLocation location) {
 		super(person, location);
 		
@@ -61,11 +57,6 @@ public class CookRole extends WorkRole implements Cook {
 		this.grills = new ArrayList<GrillOrPlate>();
 		this.plateAreas = new ArrayList<GrillOrPlate>();
 		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
-		
 		// new Food(name, quantity, capacity, low threshold, cooking time in milliseconds)
 		Food st = new Food("Steak",   3, 5, 2, 7*1000);
 		Food ck = new Food("Chicken", 0, 5, 2, 5*1000);
@@ -74,18 +65,24 @@ public class CookRole extends WorkRole implements Cook {
 		
 		// create grills
 		for (int i = 0; i < 5; i++) {
-			grills.add(new GrillOrPlate(850-400, 14 + 30*i));
+			grills.add(new GrillOrPlate(850-400, 114 + 30*i));
 		}
 		
 		// create plating areas
 		for (int i = 0; i < 5; i++) {
-			plateAreas.add(new GrillOrPlate(750-400, 14 + 30*i));
+			plateAreas.add(new GrillOrPlate(750-400, 114 + 30*i));
 		}
 		
 		this.foods.put(st.name, st);
 		this.foods.put(ck.name, ck);
 		this.foods.put(sa.name, sa);
 		this.foods.put(pz.name, pz);
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 	
 	public void addMarket(Market m) {
@@ -140,8 +137,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		offWork = true;
 	}
 	
 	/**
@@ -183,6 +179,8 @@ public class CookRole extends WorkRole implements Cook {
 		}
 		
 		DoGoHome(); // return to default position if nothing to do
+		
+		if (offWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -409,27 +407,7 @@ public class CookRole extends WorkRole implements Cook {
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

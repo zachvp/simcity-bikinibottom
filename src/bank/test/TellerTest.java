@@ -112,7 +112,7 @@ public class TellerTest extends TestCase
 		assertTrue("Scheduler not called", teller.pickAndExecuteAnAction());
 
 //		assertTrue("message not received", bankCustomer.log.containsString("sent to loanmanager"));
-		assertEquals(teller.getMyCustomers().size(), 0);
+		assertEquals(teller.getMyCustomers().size(), 1);
 
 	}
 	
@@ -127,19 +127,33 @@ public class TellerTest extends TestCase
 		assertEquals(teller.getMyCustomers().get(0).getBankCustomer(), bankCustomer);
 		assertEquals(teller.getMyCustomers().get(0).getWithdrawal(), withdrawAmount);
 		
-		assertTrue("Scheduler not called", teller.pickAndExecuteAnAction());
-		assertTrue("message not received", accountManager.log.containsString("withdraw"+ withdrawAmount));
-
-		teller.msgWithdrawSuccessful(bankCustomer, accountId, withdrawAmount);
-		assertEquals(teller.getMyCustomers().size(), 1);
+		/*INTERLEAVING*/
+		teller.msgDepositMoney(bankCustomer, accountId , 4);
+		assertEquals(teller.getMyCustomers().size(), 2);
 		assertEquals(teller.getMyCustomers().get(0).getBankCustomer(), bankCustomer);
-		assertEquals(teller.getMyCustomers().get(0).getWithdrawal(), withdrawAmount);
-	
+		assertEquals(teller.getMyCustomers().get(0).getDeposit(), 0.0);
+		assertEquals(teller.getMyCustomers().get(1).getDeposit(), 4.0);
+		/*END INTERLEAVING*/
+		
 		assertTrue("Scheduler not called", teller.pickAndExecuteAnAction());
 		
-		assertTrue("message not received", bankCustomer.log.containsString("withdraw"+ withdrawAmount));
+		
+		teller.msgWithdrawSuccessful(bankCustomer, accountId, withdrawAmount);
+		assertEquals(teller.getMyCustomers().size(), 2);//2 due to interleaving
+		assertEquals(teller.getMyCustomers().get(0).getBankCustomer(), bankCustomer);
+		assertEquals(teller.getMyCustomers().get(0).getWithdrawal(), withdrawAmount);
 
-		assertEquals(teller.getMyCustomers().size(), 0);
+		teller.msgWithdrawSuccessful(bankCustomer, accountId, withdrawAmount);
+
+		assertTrue("Scheduler not called", teller.pickAndExecuteAnAction());
+//		assertTrue("message not received", accountManager.log.containsString("withdraw"+ withdrawAmount));
+
+//		assertTrue("message not received", bankCustomer.log.containsString("withdraw"+ withdrawAmount));
+
+		assertTrue("Scheduler not called", teller.pickAndExecuteAnAction());
+
+		
+		assertEquals(teller.getMyCustomers().size(), 1);
 
 	}
 

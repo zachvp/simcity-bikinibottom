@@ -1,8 +1,6 @@
 package housing.gui;
 
-import housing.ResidentialBuilding;
 
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;

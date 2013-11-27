@@ -263,7 +263,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 
-		System.out.println("POOOPEY");
 		return false;
 	}
 

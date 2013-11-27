@@ -28,7 +28,7 @@ public class TellerRole extends WorkRole implements Teller {
 	private String name;
 	
 	//need to instantiate the Task Scheduler now. Edited by Zach
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask task = ScheduleTask.getInstance();
 	
 	Semaphore active = new Semaphore(0, true);
 	TellerGuiInterface tellerGui;
@@ -405,7 +405,7 @@ public class TellerRole extends WorkRole implements Teller {
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

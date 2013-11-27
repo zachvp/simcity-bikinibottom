@@ -32,7 +32,7 @@ Picture | Building | Developer |
 ![Hospital](img/hospital.png) | Hospital | Victoria
 
 ##Our GUI
-Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residence's.
+Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building.
 
 ![GUI Fields](img/guiFields.png)
 
@@ -77,7 +77,7 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.
   + After clicking on a Pineapple, a view opens up displaying all of the apartments inside a complex. Apartments house all the residents of SimCity including the Landlords and MaintenanceWorkers. Additionally, an info panel pops up with the name of the house.
-  + Landlords charge residents every day at 9am game time, while apartments must be maintained every day at 4pm
+  + Landlords charge residents every day at 9am game time, while apartments must be maintained every day at 4pm. Maintenance workers enter apartments in the form of white squares when fixing apartments.
   + Residents eat when they have not been to a resident in a while. Residents make a Krabby Patty when they are hungry.
   + Residents are represented by Spongebob, who has the pet snail Gary. 
 + Abstract GUI classes for animation.

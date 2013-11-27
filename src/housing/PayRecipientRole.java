@@ -105,7 +105,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		};
 		
 		// every day at noon
-		int hour = 12;
+		int hour = 9;
 		int minute = 0;
 		
 		schedule.scheduleDailyTask(command, hour, minute);

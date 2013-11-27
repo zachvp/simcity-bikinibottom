@@ -24,6 +24,7 @@ import agent.interfaces.Person;
  */
 public class WaiterRole extends WorkRole implements Waiter {
 	
+	
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	
 	private Semaphore multiStepAction = new Semaphore(0,true);

@@ -124,7 +124,7 @@ public class CustomerRole extends Role implements Customer {
 	public void gotHungry() { // from gui
 		print("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
-		person.setHungerLevel(HungerLevel.HUNGRY);
+		// person.setHungerLevel(HungerLevel.HUNGRY);
 		stateChanged();
 	}
 

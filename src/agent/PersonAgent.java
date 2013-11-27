@@ -157,7 +157,7 @@ public class PersonAgent extends Agent implements Person {
 					return true;
 				 }
 			}
-			if (hasFoodAtHome() || hasFoodInInventory()) {
+			if (getResidentRole() != null && getResidentRole().getDwelling() != null && hasFoodAtHome() || hasFoodInInventory()) {
 				goHome();
 				return true;
 			} else {

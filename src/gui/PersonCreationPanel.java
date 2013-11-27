@@ -302,6 +302,11 @@ ClassifiedsChangedListener{
 				msg.setText("Not enough housing for all required workers.");
 				return;
 			}
+			if(nameTextF.getText()==null || nameTextF.getText().equals("")){
+				msg.setText("Please complete all inputs");
+				return;
+
+			}
 			
 			while(occList.size() > 1) {
 				occupationsCB.setSelectedIndex(1);

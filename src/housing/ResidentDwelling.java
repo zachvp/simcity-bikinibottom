@@ -111,7 +111,7 @@ public class ResidentDwelling implements Dwelling {
 		
 		
 		// degrade condition every day
-		int hour = 11;
+		int hour = 16;
 		int minute = 0;
 		
 		schedule.scheduleDailyTask(command, hour, minute);

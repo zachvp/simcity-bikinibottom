@@ -75,4 +75,16 @@ public class MockPassengerGui implements PassengerGui {
 		
 	}
 
+	@Override
+	public void startShowing() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

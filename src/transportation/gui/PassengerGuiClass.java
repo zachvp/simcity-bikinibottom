@@ -237,4 +237,14 @@ public class PassengerGuiClass implements PassengerGui {
 		}
 	}
 
+	@Override
+	public void startShowing() {
+		isPresent = true;
+	}
+
+	@Override
+	public void hide() {
+		isPresent = false;
+	}
+
 }

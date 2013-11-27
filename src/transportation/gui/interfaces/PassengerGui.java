@@ -23,4 +23,8 @@ public interface PassengerGui extends Gui {
 
 	void doExitBus(Corner location, boolean orientation);
 
+	void startShowing();
+
+	void hide();
+
 }

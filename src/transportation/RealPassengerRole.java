@@ -88,6 +88,7 @@ public class RealPassengerRole extends PassengerRole {
 		state = PassengerStateEnum.DecisionTime;
 		useBus = willingToUseBus;
 		hasCar = (getPerson().getCar() != null);
+		gui.startShowing();
 		stateChanged();
 
 	}
@@ -151,6 +152,7 @@ public class RealPassengerRole extends PassengerRole {
 		//If passenger got to destination
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
+			gui.hide();
 			deactivate();
 			if (requesterRole == null) ((Person) getPerson())
 										.msgArrivedAtDestination();

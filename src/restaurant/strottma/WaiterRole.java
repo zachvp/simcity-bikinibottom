@@ -48,20 +48,18 @@ public class WaiterRole extends WorkRole implements Waiter {
 
 	private BreakState bState;
 	
-	int shiftStartHour;
-	int shiftStartMinute;
-	int shiftEndHour;
-	int shiftEndMinute;
-
+	private boolean offWork = false;
+	
 	public WaiterRole(Person person, CityLocation location) {
 		super(person, location);
 
 		this.bState = BreakState.NORMAL;
-		
-		this.shiftStartHour = 8; // 08:00
-		this.shiftStartMinute = 0;
-		this.shiftEndHour = 20; // 20:00
-		this.shiftEndMinute = 0;
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = true;
 	}
 	
 	public void setOtherRoles(HostRole host, CookRole cook, Cashier cashier) {
@@ -162,8 +160,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		offWork = true;
 	}
 	
 	/**
@@ -246,6 +243,8 @@ public class WaiterRole extends WorkRole implements Waiter {
 		}
 		
 		DoLeaveCustomer();
+		
+		if (offWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -554,27 +553,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 		}
 		
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		return shiftStartHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		return shiftStartMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		return shiftEndHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		return shiftEndMinute;
-	}
-
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();

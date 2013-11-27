@@ -163,7 +163,7 @@ ClassifiedsChangedListener{
 		residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(0);
-		hungerCB.setSelectedIndex(2);
+		hungerCB.setSelectedIndex(4);
 
 		inputPanelLeft.add(new JLabel("Name: "));
 		inputPanelright.add(nameTextF);
@@ -235,7 +235,7 @@ ClassifiedsChangedListener{
 		//add(south, BorderLayout.SOUTH);
 		
 		carCB.setSelectedIndex(1);
-		hungerCB.setSelectedIndex(2);
+		hungerCB.setSelectedIndex(4);
 		classifiedsUpdated();
 		checkSomewhereforBuildings();
 	}
@@ -261,7 +261,7 @@ ClassifiedsChangedListener{
 				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(0);
 				carCB.setSelectedIndex(1);
-				hungerCB.setSelectedIndex(2);
+				hungerCB.setSelectedIndex(4);
 
 				//create new PersonAgent
 				//PersonAgent newPerson = new PersonAgent(name);
@@ -278,7 +278,7 @@ ClassifiedsChangedListener{
 				residencesCB.setSelectedIndex(0);
 				wealthCB.setSelectedIndex(0);
 				carCB.setSelectedIndex(1);
-				hungerCB.setSelectedIndex(2);
+				hungerCB.setSelectedIndex(4);
 			}
 			else{
 				msg.setText("Please complete all inputs");

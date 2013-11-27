@@ -266,6 +266,7 @@ public class CustomerRole extends Role implements Customer {
 		}
 		if (state == CustomerState.LEAVING && event == CustomerEvent.DONE_LEAVING){
 			state = CustomerState.DOING_NOTHING;
+			deactivate();
 			//no action
 			return true;
 		}

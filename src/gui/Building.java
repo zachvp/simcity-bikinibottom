@@ -30,9 +30,9 @@ public abstract class Building extends Rectangle2D.Double
 	LocationTypeEnum type;
 	JPanel info;
 	
-	protected static final int defaultStartHour = 9;
+	protected static final int defaultStartHour = 8;
 	protected static final int defaultStartMinute = 0;
-	protected static final int defaultEndHour = 17;
+	protected static final int defaultEndHour = 22;
 	protected static final int defaultEndMinute = 0;
 	
 	protected int timeOffset;

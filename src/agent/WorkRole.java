@@ -55,7 +55,7 @@ public abstract class WorkRole extends Role {
 		int initHour = (getShiftStartHour() - getWorkStartThresholdHours());
 		int initMin = (getShiftStartMinute() - getWorkStartThresholdMinutes());
 		
-		ScheduleTask task = new ScheduleTask();
+		ScheduleTask task = ScheduleTask.getInstance();
 		
 		Runnable command = new Runnable(){
 			@Override

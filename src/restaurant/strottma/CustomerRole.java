@@ -35,7 +35,7 @@ public class CustomerRole extends Role implements Customer {
 	
 	public static int WS_COUNT = 5;
 	public static int WS_X_OFFSET = 100-100; // how far the whole area is offset
-	public static int WS_Y_OFFSET = 14;
+	public static int WS_Y_OFFSET = 114;
 	public static int WS_X_SPACING = 10; // how far each spot is separated from the last
 	public static int WS_Y_SPACING = 10;
 	public static int WS_WIDTH = 20;
@@ -124,7 +124,7 @@ public class CustomerRole extends Role implements Customer {
 	public void gotHungry() { // from gui
 		print("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
-		person.setHungerLevel(HungerLevel.HUNGRY);
+		// person.setHungerLevel(HungerLevel.HUNGRY);
 		stateChanged();
 	}
 
@@ -266,6 +266,7 @@ public class CustomerRole extends Role implements Customer {
 		}
 		if (state == CustomerState.LEAVING && event == CustomerEvent.DONE_LEAVING){
 			state = CustomerState.DOING_NOTHING;
+			deactivate();
 			//no action
 			return true;
 		}

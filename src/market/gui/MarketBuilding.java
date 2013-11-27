@@ -14,9 +14,7 @@ import market.Item;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.ItemCollector;
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.RoleFactory;
 import agent.WorkRole;
@@ -38,14 +36,14 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static final int timeDifference = 6;
+	private static final int timeDifference = 12;
 	
 	public MarketBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		entrancePosition = new XYPos((width/2), height);
 		
 		// Stagger opening/closing time
-		this.timeOffset = instanceCount * timeDifference;
+		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
 		records = new MarketRecords(animationPanel, this);
@@ -96,10 +94,14 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		List<Item> ShoppingList = new ArrayList<Item>();
 		Map<String,Integer> GroceryList = person.getShoppingList();
 		for (int i=0;i<Constants.FOODS.size();i++){
-			ShoppingList.add(new Item(Constants.FOODS.get(i), GroceryList.get(Constants.FOODS.get(i))));
+			Integer numOfItems = GroceryList.get(Constants.FOODS.get(i));
+			if (numOfItems == null) numOfItems = 0;
+			ShoppingList.add(   new Item(   Constants.FOODS.get(i), numOfItems)    );
 		}
 		for (int i=0;i<Constants.CARS.size();i++){
-			ShoppingList.add(new Item(Constants.CARS.get(i), GroceryList.get(Constants.CARS.get(i))));
+			Integer numOfItems = GroceryList.get(Constants.CARS.get(i));
+			if (numOfItems == null) numOfItems = 0;
+			ShoppingList.add(new Item(Constants.CARS.get(i), numOfItems));
 		}
 		
 		

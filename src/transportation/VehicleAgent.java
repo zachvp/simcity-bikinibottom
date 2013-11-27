@@ -85,6 +85,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 			@Override
 			public void run() {
 				currentCorner.msgDoneCrossing();
+				stateChanged();
 			}
 		}, 400);
 		
@@ -104,8 +105,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 			} else if (state == VehicleStateEnum.OnStreet
 					&& event == VehicleEventEnum.ArrivedAtCorner
 					&& !currentPath.isEmpty()) {
-				currentCorner.msgYourAdjCorners(this);
 				state = VehicleStateEnum.Requesting;
+				currentCorner.msgYourAdjCorners(this);
 				return true;
 			} else if (state == VehicleStateEnum.Requesting 
 					&& (event == VehicleEventEnum.ReceivedAdjCorners

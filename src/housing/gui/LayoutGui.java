@@ -47,7 +47,7 @@ public class LayoutGui implements Gui {
 	int garyXDestination = garyX, garyYDestination = garyY;
 	
 	// timer for gary
-	ScheduleTask move = new ScheduleTask(); 
+	ScheduleTask move = ScheduleTask.getInstance(); 
 	
 	public LayoutGui(int dwellingWidth, int dwellingHeight, int index) {
 		ROOM_WIDTH = dwellingWidth / 3;

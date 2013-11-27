@@ -32,11 +32,10 @@ public class CashierRole extends WorkRole implements Cashier {
 	public EventLog log = new EventLog();
 	
 
-private static final int startingminute = 0;
 	//public EventLog log = new EventLog();
 	private CashierGuiInterfaces cashierGui = null;
 	private double MarketTotalMoney;
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask task = ScheduleTask.getInstance();
 	
 private Semaphore atFrontDesk = new Semaphore(0,true);
 	private Semaphore atBench = new Semaphore (0,true);

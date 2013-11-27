@@ -14,6 +14,15 @@ public class ScheduleTask implements ScheduleTaskInterface {
 	private TimeManager tm = TimeManager.getInstance();
     private ScheduledExecutorService executor
     		= Executors.newSingleThreadScheduledExecutor();
+    
+    private static ScheduleTask instance;
+    
+    private ScheduleTask() {}
+    
+    public static ScheduleTask getInstance() {
+    	if (instance == null) { instance = new ScheduleTask(); }
+    	return instance;
+    }
 
     @Override
 	public void scheduleDailyTask(Runnable command, int hour, int minute) {		

@@ -34,14 +34,17 @@ Picture | Building | Developer |
 ![Hospital](img/hospital.png) | Hospital | Victoria
 
 ##Our GUI
-Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building. Special event such as opening, closing, charging residents, and housing degredation occurs at certain times.
+Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building. Special event such as opening, closing, charging residents, and housing degredation occurs at certain times (specified in building info panels).
 
 ![GUI Fields](img/guiFields.png)
 
 Our creation panel has two buttons. The "Create" button creates one person with the selected attributes. The "Populate selected workplace" button creates enough people to fill all jobs in the selected workplace, giving them the default attributes and a residence. You may also mix and match combo boxes to create the proper scenario.
 
 ###Scenarios
-+ Person goes to bank: 
++ Select the building you would like to observe in the combo box
++ Click "populate building" to create people to fill the building's roles
++ Click on the proper building to see what happens within
++ Lower building numbers correspond to buildings to the top and left
 
 ###Gui Details
 + The small green squares are citizens of Bikini Bottom walking through the streets

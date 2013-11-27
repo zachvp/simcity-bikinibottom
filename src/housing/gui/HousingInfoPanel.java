@@ -16,13 +16,15 @@ import agent.interfaces.Person;
 
 public class HousingInfoPanel extends JPanel {
 	Map<Person, JLabel> labels = new HashMap<Person, JLabel>();
-	Set<Person> people;
+	Map<Person, Role> people;
+	Set<Person> population;
 
 	public HousingInfoPanel(Map<Person, Role> people) {
+		this.people = people;
 		
 		this.setLayout(new GridLayout(2, 1));
 		
-//		add(new JLabel(building.getName()));
+		add(new JLabel("Residence"));
 		
 		JPanel panel = new JPanel(new GridLayout(3,0));
 		
@@ -34,7 +36,9 @@ public class HousingInfoPanel extends JPanel {
 	
 	public void updatePanel(){
 		int i = 0;
-		for(Person p : people){
+		population = people.keySet();
+		
+		for(Person p : population){
 			labels.get(i).setText(p.getName());
 			i++;
 		}

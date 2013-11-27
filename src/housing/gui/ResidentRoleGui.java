@@ -59,8 +59,8 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private int xDestination, yDestination;//default start position
 	
 	// prime location for Jazzercising
-	private final int JAZZER_SPOT_X = xPos;
-	private final int JAZZER_SPOT_Y = yPos;
+	private final int JAZZER_SPOT_X = 130;
+	private final int JAZZER_SPOT_Y = 15;
 	
 	/* --- Constructor --- */
 	public ResidentRoleGui(ResidentRole role, LayoutGui gui) {

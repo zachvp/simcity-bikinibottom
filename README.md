@@ -52,6 +52,7 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 		+ Name field checking and assigning.
 + Restaurant integration (with Erik)
 + Image editing and collection for MainFrame and Building role GUIs.
++ Mentored other group members with their AnimationPanel and other GUI elements.
 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.

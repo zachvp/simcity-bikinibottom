@@ -25,7 +25,7 @@ public class ResidentDwelling implements Dwelling {
 	
 	// building the dwelling belongs to
 	private ResidentialBuilding building;
-	private ScheduleTask schedule = new ScheduleTask();
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	/* --- Housing slots --- */
 	// roles

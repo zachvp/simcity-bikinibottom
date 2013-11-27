@@ -28,7 +28,7 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
-	private ScheduleTask schedule = new ScheduleTask();
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	// prevents the role from being deactivated prematurely
 	enum TaskState { FIRST_TASK, NONE, DOING_TASK }

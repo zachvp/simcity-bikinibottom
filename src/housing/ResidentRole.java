@@ -38,7 +38,7 @@ public class ResidentRole extends Role implements Resident {
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
-	private ScheduleTask schedule = new ScheduleTask();
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	/** 
 	 * State for tasks. The Role will deactivate if it is not performing any tasks.

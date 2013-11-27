@@ -297,7 +297,7 @@ public class PersonAgent extends Agent implements Person {
 	//updates hunger level to decrease as day goes on
 	public void updateHungerLevel() {
 		int interval = 3;
-		ScheduleTask task = new ScheduleTask();
+		ScheduleTask task = ScheduleTask.getInstance();
 		
 		Runnable command = new Runnable(){
 			@Override

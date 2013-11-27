@@ -32,7 +32,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
 	
 	// used to create time delays and schedule events
-	ScheduleTask schedule = new ScheduleTask();
+	ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	/* --- Constants --- */
 	// TODO when should shift end?

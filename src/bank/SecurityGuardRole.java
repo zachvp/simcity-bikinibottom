@@ -31,7 +31,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	BankBuilding bankBuilding;
 	
-	ScheduleTask task = new ScheduleTask();
+	ScheduleTask task = ScheduleTask.getInstance();
 	
 	boolean endWorkShift = false;
 	boolean atWork;

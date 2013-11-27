@@ -1,5 +1,8 @@
 package gui;
 
+import housing.ResidentialBuilding;
+import housing.gui.HousingInfoPanel;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -189,6 +192,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 		if (b instanceof MarketBuilding){
 			((MarketBuilding) b).UpdateInfoPanel();
 		}
+		//if(b instanceof ResidentialBuilding){
+		//	 ((HousingInfoPanel)(b.getInfoPanel())).updatePanel();
+		//}
 		
 		CardLayout cl = (CardLayout)(card.getLayout());
 		if(b.getInfoPanel() == null){

@@ -11,21 +11,18 @@ import housing.ResidentialBuilding;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import agent.Role;
 import agent.interfaces.Person;
 
 public class HousingInfoPanel extends JPanel {
 	Map<Person, JLabel> labels = new HashMap<Person, JLabel>();
-	ResidentialBuilding building;
 	Set<Person> people;
 
-	public HousingInfoPanel(ResidentialBuilding building) {
-		building.setName("Residence");
-		this.building = building;
-		people = building.getPopulation();
+	public HousingInfoPanel(Map<Person, Role> people) {
 		
 		this.setLayout(new GridLayout(2, 1));
 		
-		add(new JLabel(building.getName()));
+//		add(new JLabel(building.getName()));
 		
 		JPanel panel = new JPanel(new GridLayout(3,0));
 		
@@ -36,8 +33,6 @@ public class HousingInfoPanel extends JPanel {
 }
 	
 	public void updatePanel(){
-		people = building.getPopulation();
-		
 		int i = 0;
 		for(Person p : people){
 			labels.get(i).setText(p.getName());

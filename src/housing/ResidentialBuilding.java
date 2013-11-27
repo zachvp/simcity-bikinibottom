@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
@@ -36,7 +35,9 @@ public class ResidentialBuilding extends Building {
 	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
-	public Map<Person, Role> population;
+	public Map<Person, Role> population = new HashMap<Person, Role>();
+	
+	private HousingInfoPanel housingInfoPanel = new HousingInfoPanel(population);
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -52,9 +53,6 @@ public class ResidentialBuilding extends Building {
 		
 		this.entrancePos = new XYPos(width/2, height);
 		
-		// keeps track of building members
-		this.population = new HashMap<Person, Role>();
-
 		// worker for this building
 		worker = new MaintenanceWorkerRole(null, this);
 		
@@ -72,8 +70,8 @@ public class ResidentialBuilding extends Building {
 		
 	}
 	
-	public Set<Person> getPopulation(){
-		return population.keySet();
+	public Map<Person, Role> getPopulation(){
+		return population;
 	}
 	
 	public void addResident(ResidentRole resident){
@@ -120,7 +118,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		return new HousingInfoPanel(this);
+		return housingInfoPanel;
 	}
 	
 }

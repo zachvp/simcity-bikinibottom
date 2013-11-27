@@ -249,51 +249,58 @@ ClassifiedsChangedListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == createButton){
-			MyComboBoxItem jobItem = (MyComboBoxItem)(occupationsCB.
-					getSelectedItem());
-			MyComboBoxItem homeItem = (MyComboBoxItem)(residencesCB.
-					getSelectedItem());
 			
-			String name = nameTextF.getText();
-			WorkRole job = (WorkRole)(jobItem.object);
-			Dwelling home = (Dwelling)(homeItem.object);
-			String status = (String)wealthCB.getSelectedItem();
-			String hungerLevel = (String)hungerCB.getSelectedItem();
-			String restaurant = (String)restaurantCB.getSelectedItem();
-			boolean hasCar = ((String)carCB.getSelectedItem()).equals("Yes");
+			if (((MyComboBoxItem)residencesCB.getSelectedItem())
+					.object != null) {
+				MyComboBoxItem jobItem = (MyComboBoxItem) (occupationsCB
+						.getSelectedItem());
+				MyComboBoxItem homeItem = (MyComboBoxItem) (residencesCB
+						.getSelectedItem());
+				String name = nameTextF.getText();
+				WorkRole job = (WorkRole) (jobItem.object);
+				Dwelling home = (Dwelling) (homeItem.object);
+				String status = (String) wealthCB.getSelectedItem();
+				String hungerLevel = (String) hungerCB.getSelectedItem();
+				String restaurant = (String) restaurantCB.getSelectedItem();
+				boolean hasCar = ((String) carCB.getSelectedItem())
+						.equals("Yes");
+				if (!incompleteInputs(name, status,
+						(String) carCB.getSelectedItem())) {
+					//reset input fields
+					nameTextF.setText("");
+					occupationsCB.setSelectedIndex(0);
+					residencesCB.setSelectedIndex(0);
+					wealthCB.setSelectedIndex(0);
+					carCB.setSelectedIndex(1);
+					restaurantCB.setSelectedIndex(0);
+					hungerCB.setSelectedIndex(4);
 
-			if(!incompleteInputs(name, status, (String)carCB.getSelectedItem())){
-				//reset input fields
-				nameTextF.setText("");
-				occupationsCB.setSelectedIndex(0);
-				residencesCB.setSelectedIndex(0);
-				wealthCB.setSelectedIndex(0);
-				carCB.setSelectedIndex(1);
-				restaurantCB.setSelectedIndex(0);
-				hungerCB.setSelectedIndex(4);
+					//create new PersonAgent
+					//PersonAgent newPerson = new PersonAgent(name);
+					//TODO add all person info
+					citizenRecords.addCitizen(name, job, home, status, hasCar,
+							hungerLevel, restaurant);
+					if (Constants.PRINT)
+						System.out.println(name
+								+ " has been added to your city!");
 
-				//create new PersonAgent
-				//PersonAgent newPerson = new PersonAgent(name);
-				//TODO add all person info
-				citizenRecords.addCitizen(name, job, home, status, hasCar, hungerLevel, restaurant);
-				if (Constants.PRINT) System.out.println(name +" has been added to your city!");
+					//TODO pull up newPerson's infopanel
+					msg.setText(name + " was created.");
 
-				//TODO pull up newPerson's infopanel
-				msg.setText(name + " was created.");
-				
-				// default values for person creation
-				nameTextF.setText("mr balloon hands");
-				occupationsCB.setSelectedIndex(0);
-				residencesCB.setSelectedIndex(0);
-				wealthCB.setSelectedIndex(0);
-				carCB.setSelectedIndex(1);
-				restaurantCB.setSelectedIndex(0);
-				hungerCB.setSelectedIndex(4);
+					// default values for person creation
+					nameTextF.setText("mr balloon hands");
+					occupationsCB.setSelectedIndex(0);
+					residencesCB.setSelectedIndex(0);
+					wealthCB.setSelectedIndex(0);
+					carCB.setSelectedIndex(1);
+					restaurantCB.setSelectedIndex(0);
+					hungerCB.setSelectedIndex(4);
+				} else {
+					msg.setText("Please complete all inputs");
+				}
+			} else {
+				msg.setText("Can't create a person without a house");
 			}
-			else{
-				msg.setText("Please complete all inputs");
-			}
-			
 			checkClassifiedsforJobs();
 			checkClassifiedsforHome();
 		} else if (e.getSource() == populateButton){

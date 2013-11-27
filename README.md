@@ -13,9 +13,10 @@
     + Make sure JUnit 4 is selected.
     + Press Finish
 
-###Running the Project
+###Running the Project and Tests
   + Navigate to the "Gui" package and find the "MainFrame.java" file
   + Right-click on the file and mouse over "run as" then click "java application"
+  + The test takes a while to start, but it is normal
   + To run the tests, navigate to `[package].test` and run the tests for each package
 
 ---
@@ -38,6 +39,9 @@ Bikini Bottom comes with an integrated person creation panel. Click in a hospita
 ![GUI Fields](img/guiFields.png)
 
 Our creation panel has two buttons. The "Create" button creates one person with the selected attributes. The "Populate selected workplace" button creates enough people to fill all jobs in the selected workplace, giving them the default attributes and a residence. You may also mix and match combo boxes to create the proper scenario.
+
+###Scenarios
++ Person goes to bank: 
 
 ###Gui Details
 + The small green squares are citizens of Bikini Bottom walking through the streets
@@ -110,5 +114,6 @@ You will create enough people to cover every employment spot in the city. This i
 + There is no system in place that would result in denying a loan.
 + Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
 + There should be different behavior on weekends.
++ People should be able to buy cars at the market, but they choose not to.
 
 

@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel{
 		
 		add(label);
 		add(openHours);
-		add(amStatus);
+//		add(amStatus);
 		//add (amLabel);
 	}
 

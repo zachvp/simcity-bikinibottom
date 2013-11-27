@@ -70,15 +70,40 @@ public class SecurityGuardTest extends TestCase
 
 	}
 	
-	public void testWelcomeCustomerToBank() {
+	public void testOneCustomer() {
 		
 		
 		sg.msgCustomerArrived(bankCustomer);
 		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 1);
 		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
 		//send to teller action called
-		assertTrue("message sent", bankCustomer.log.containsString("received" + teller));
+//		assertTrue("message sent", bankCustomer.log.containsString("received" + teller));
+		sg.msgLeavingBank(bankCustomer);
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 1);
+		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 0);
+
+	}
+	
+	public void testMultipleCustomers() {
+		sg.msgCustomerArrived(bankCustomer);
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 1);
+		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
 		
+		sg.msgCustomerArrived(bankCustomer);
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 2);
+		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
+		
+		sg.msgLeavingBank(bankCustomer);
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 2);
+		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 1);
+
+		sg.msgLeavingBank(bankCustomer);
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 1);
+		assertTrue("scheduler not returning", sg.pickAndExecuteAnAction());
+		assertEquals("waitingcustomers list wrong size", sg.getWaitingCustomersSize(), 0);
+
 	}
 	
 }

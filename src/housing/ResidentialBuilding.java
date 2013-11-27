@@ -11,6 +11,7 @@ import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
 import housing.gui.HousingComplex;
+import housing.gui.HousingInfoPanel;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
@@ -56,17 +57,22 @@ public class ResidentialBuilding extends Building {
 		// worker for this building
 		worker = new MaintenanceWorkerRole(null, this);
 		
+		// manager for this building 
+		landlord = new PayRecipientRole(null, this);
+		
 		// set up complex
 		this.complex = new HousingComplex(this);
 		
-		// manager for this building 
-		landlord = new PayRecipientRole(null, this);
 		worker.setComplex(this.complex);
 		
 		// put the constant roles in the building map
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
 		
+	}
+	
+	public Map<Person, Role> getPopulation(){
+		return population;
 	}
 	
 	public void addResident(ResidentRole resident){

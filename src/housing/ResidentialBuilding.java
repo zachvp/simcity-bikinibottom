@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
-import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import housing.ResidentialBuilding;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -29,7 +27,9 @@ public class HousingInfoPanel extends JPanel {
 		JPanel panel = new JPanel(new GridLayout(3,0));
 		
 		for(int i = 0; i < 9; i++){
+			JLabel label = new JLabel();
 			panel.add(new JLabel("Testicle"));
+			labels.put(null, label);
 		}
 		add(panel);
 }

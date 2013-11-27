@@ -32,7 +32,7 @@ public class CookGui implements Gui {
         
     // refrigerator location
     private static final int FRIDGE_X = 950-400;
-    private static final int FRIDGE_Y = 74;
+    private static final int FRIDGE_Y = 174;
         
     private boolean shouldMsg; // should we message the gui?
     private String orderText = null; // used to display the customer's food

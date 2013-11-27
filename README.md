@@ -118,6 +118,4 @@ You will create enough people to cover every employment spot in the city. This i
 + There is no system in place that would result in denying a loan.
 + Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
 + There should be different behavior on weekends.
-+ Customers are unable to leave the market no matter the circumstances if they have an empty grocery list and they do not have a place to live.
-  + Customers only add to the grocery list when their food at home runs low
 + Buses sometimes get stuck at intersections

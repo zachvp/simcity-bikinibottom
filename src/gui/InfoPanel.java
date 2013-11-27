@@ -117,8 +117,8 @@ public class InfoPanel extends JPanel implements ActionListener{
     	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
 		time = new JLabel();
 		timePanel.add(time);
-		timePanel.setBorder(BorderFactory.createEtchedBorder());
-		card.setBorder(BorderFactory.createEtchedBorder());
+		//timePanel.setBorder(BorderFactory.createEtchedBorder());
+		//card.setBorder(BorderFactory.createEtchedBorder());
 		
 		add(card, BorderLayout.SOUTH);
 		add(timePanel, BorderLayout.NORTH);

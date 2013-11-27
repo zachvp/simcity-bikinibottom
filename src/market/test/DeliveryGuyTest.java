@@ -56,10 +56,11 @@ public class DeliveryGuyTest extends TestCase
 		ICList.add(ItemCollector1);
 		
 		
-	}	
+	}
 	
 	/**
 	 * This tests the cashier under very simple terms: 1 MarketCustomer comes to market and 1 ItemCollector (Enough Inventory)
 	 */
 	public void testOne1MarketCustomer1ItemCollectorScenario()
-	{
+	{}
+}

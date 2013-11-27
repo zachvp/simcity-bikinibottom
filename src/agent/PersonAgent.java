@@ -580,7 +580,8 @@ public class PersonAgent extends Agent implements Person {
 	 * eating out.
 	 */
 	public boolean wantsToEatOut() {
-		return -timeManager.timeUntil(lastTimeEatingOut)
+		return wallet.getIncomeLevel() != IncomeLevel.POOR
+				&& -timeManager.timeUntil(lastTimeEatingOut)
 				>= this.eatingOutWaitPeriod;
 	}
 	

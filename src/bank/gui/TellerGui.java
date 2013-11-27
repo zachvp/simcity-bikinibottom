@@ -3,7 +3,13 @@ package bank.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
+
+import javax.imageio.ImageIO;
 
 import bank.TellerRole;
 import bank.interfaces.TellerGuiInterface;
@@ -29,15 +35,17 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 
 	public static final int xTable = 200;
 	public static final int yTable = 250;
-	public static final int agentDim = 20;
+	public static final int agentDimW = 20;
+	public static final int agentDimH = 40;
 	
 	int deskXPos = 250;
-	int deskYPos = 130;
+	int deskYPos = 110;
 	
 	int entranceX = 300;
 	int entranceY = 500;
 	
 	boolean canRelease = false;
+	BufferedImage image;
 
 	public TellerGui(TellerRole c){ //HostAgent m) {
 		agent = c;
@@ -50,6 +58,12 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 //		DoGoToTeller(200);
 		//maitreD = m;
 //		this.gui = gui;
+		
+		try {
+			image = ImageIO.read(getClass().getResource("teller.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updatePosition() {
@@ -75,8 +89,13 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.CYAN);
-		g.fillRect(xPos, yPos, agentDim, agentDim);
+		//g.setColor(Color.CYAN);
+		//g.fillRect(xPos, yPos, agentDim, agentDim);
+		Rectangle2D r = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);
+		Rectangle2D tr = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);
+		TexturePaint tp = new TexturePaint(image, tr);
+		g.setPaint(tp);
+		g.fill(r);
 		drawInfo(g, agent.getName(), "Teller");
 
 	}

@@ -175,6 +175,11 @@ public class PersonAgent extends Agent implements Person {
 				return true;
 			}
 		}
+		
+		if (getResidentRole() != null) {
+			goHome();
+			return true;
+		}
 
 		// No actions were performed.
 

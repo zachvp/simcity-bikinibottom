@@ -68,7 +68,7 @@ public class PersonAgent extends Agent implements Person {
 		updateHungerLevel();
 		
 		this.name = name;
-		this.roles = new HashSet<Role>();
+		this.roles = Collections.synchronizedSet(new HashSet<Role>());
 		
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
 		
@@ -116,6 +116,7 @@ public class PersonAgent extends Agent implements Person {
 		boolean roleExecuted = false;
 		boolean roleActive = false;
 		
+		synchronized (roles) {
 		for (Role r : roles) {
 			if (r.isActive()) {
 //				if (r.isAwaitingInput()) {
@@ -127,6 +128,7 @@ public class PersonAgent extends Agent implements Person {
 					roleActive = true;
 //				}
 			}
+		}
 		}
 		
 		// if at least one role's scheduler returned true, return true
@@ -251,16 +253,18 @@ public class PersonAgent extends Agent implements Person {
 	 * @param forWork only activates a WorkRole if this is true
 	 */
 	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
-		for (Role r : roles) {
-			if (loc.equals(r.getLocation())
-					&& (forWork == (r instanceof WorkRole))
-					&& !(r instanceof PassengerRole)) {
-				
-				r.activate();
-				return;
+		
+		synchronized (roles) {
+			for (Role r : roles) {
+				if (loc.equals(r.getLocation())
+						&& (forWork == (r instanceof WorkRole))
+						&& !(r instanceof PassengerRole)) {
+
+					r.activate();
+					return;
+				}
 			}
 		}
-		
 		if (forWork) {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
@@ -433,13 +437,14 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public PassengerRole getPassengerRole() {
-		// Get the PassengerRole if there is one.
-		for (Role r : roles) {
-			if (r instanceof PassengerRole) {
-				return (PassengerRole) r;
+		synchronized (roles) {
+			// Get the PassengerRole if there is one.
+			for (Role r : roles) {
+				if (r instanceof PassengerRole) {
+					return (PassengerRole) r;
+				}
 			}
 		}
-		
 		// Else, create a new one.
 		CityLocation hospital = null;
 		for (CityLocation loc : kelp.placesNearMe(new XYPos(),
@@ -459,9 +464,11 @@ public class PersonAgent extends Agent implements Person {
 
 	@Override
 	public ResidentRole getResidentRole() {
-		for (Role r : roles) {
-			if (r instanceof ResidentRole) {
-				return (ResidentRole) r;
+		synchronized (roles) {
+			for (Role r : roles) {
+				if (r instanceof ResidentRole) {
+					return (ResidentRole) r;
+				}
 			}
 		}
 		return null;
@@ -469,9 +476,11 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public WorkRole getWorkRole() {
-		for (Role r : roles) {
-			if (r instanceof WorkRole) {
-				return (WorkRole) r;
+		synchronized (roles) {
+			for (Role r : roles) {
+				if (r instanceof WorkRole) {
+					return (WorkRole) r;
+				}
 			}
 		}
 		return null;

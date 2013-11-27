@@ -32,7 +32,6 @@ public class CashierRole extends WorkRole implements Cashier {
 	public EventLog log = new EventLog();
 	
 
-private static final int startingminute = 0;
 	//public EventLog log = new EventLog();
 	private CashierGuiInterfaces cashierGui = null;
 	private double MarketTotalMoney;

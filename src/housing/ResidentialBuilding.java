@@ -30,6 +30,8 @@ public class ResidentialBuilding extends Building {
 	// this displays after clicking on the ResidentialBuilding
 	private HousingComplex complex;
 	
+	private boolean name = false;
+	
 	// the "boss" or greeter for this building and the on-call Mr. Fix-it
 	private PayRecipientRole landlord;
 	private MaintenanceWorkerRole worker;
@@ -37,7 +39,7 @@ public class ResidentialBuilding extends Building {
 	// used for producing jobs and residential roads in the complex
 	public Map<Person, Role> population = new HashMap<Person, Role>();
 	
-	private HousingInfoPanel housingInfoPanel = new HousingInfoPanel(population);
+	private HousingInfoPanel housingInfoPanel;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -68,6 +70,7 @@ public class ResidentialBuilding extends Building {
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
 		
+		housingInfoPanel = new HousingInfoPanel(population);
 	}
 	
 	public Map<Person, Role> getPopulation(){
@@ -118,6 +121,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
+		if(!name) { housingInfoPanel.name(this.getName()); name = true; }
 		return housingInfoPanel;
 	}
 	

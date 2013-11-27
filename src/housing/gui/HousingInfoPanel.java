@@ -1,5 +1,7 @@
 package housing.gui;
 
+import housing.ResidentialBuilding;
+
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
@@ -22,16 +24,14 @@ public class HousingInfoPanel extends JPanel {
 		
 		this.setLayout(new GridLayout(2, 1));
 		
-		add(new JLabel("Residence"));
-		
 		JPanel panel = new JPanel(new GridLayout(3,0));
 		
-		for(int i = 0; i < 9; i++){
-			JLabel label = new JLabel();
-			panel.add(new JLabel("Testicle"));
-			labels.put(null, label);
-		}
-		add(panel);
+//		for(int i = 0; i < 9; i++){
+//			JLabel label = new JLabel();
+//			panel.add(new JLabel("Resident"));
+//			labels.put(null, label);
+//		}
+//		add(panel);
 }
 	
 	public void updatePanel(){
@@ -42,5 +42,9 @@ public class HousingInfoPanel extends JPanel {
 			labels.get(i).setText(p.getName());
 			i++;
 		}
+	}
+	
+	public void name(String name) {
+		add(new JLabel(name));
 	}
 }

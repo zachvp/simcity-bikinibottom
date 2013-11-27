@@ -68,12 +68,12 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		this.layoutGui = gui;
 		
 		// randomize number for resident gui
-		Random generator = new Random();
-		int res = generator.nextInt(2);
+//		Random generator = new Random();
+//		int res = generator.nextInt(2);
 		
 		try {
-			if(res == 0) resImage = ImageIO.read(getClass().getResource("spongebob.png"));
-			else if (res == 1) resImage = ImageIO.read(getClass().getResource("squidward.png"));
+			resImage = ImageIO.read(getClass().getResource("spongebob.png"));
+//			else if (res == 1) resImage = ImageIO.read(getClass().getResource("squidward.png"));
 			
 			krabbyPatty = ImageIO.read(getClass().getResource("krabby_patty.png"));
 		} catch (IOException e) {

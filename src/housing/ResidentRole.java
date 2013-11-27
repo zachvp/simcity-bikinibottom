@@ -59,9 +59,10 @@ public class ResidentRole extends Role implements Resident {
 	private Dwelling dwelling;
 	
 	// food data
+	// Constructor: String type, int amount, int low, int capacity, int cookTime
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 1, 0, 4, 10));
+			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));
 		}
 	});
 	
@@ -174,14 +175,15 @@ public class ResidentRole extends Role implements Resident {
 		if(task == TaskState.NONE){
 			Runnable command = new Runnable() {
 				public void run(){
-					task = TaskState.FIRST_TASK;
 					gui.setPresent(false);
+					task = TaskState.FIRST_TASK;
 					deactivate();
 				}
 			};
 			// schedule a delay for food consumption
 			listener.taskFinished(schedule);
 			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+			return true;
 		}
 		
 		return false;

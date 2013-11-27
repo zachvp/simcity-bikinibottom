@@ -1,6 +1,7 @@
 ###Importing to Eclipse
   + Simply run Eclipse by clicking on its icon. If it is the first time running Eclipse, you will be prompted for the location of your workspace. Think of the Eclipse Workspace as your "My Documents"/"Documents" directory, but for Eclipse projects. You may use the default location if you wish or make-up your own.
   + Next you import the restaurant application:
+    + Using the SSH from the main code repo, clone the repository into your directory of choice.
     + File -> New -> Java Project
     + Name the project team23_test
     + Make sure the execution environment JRE is set to JavaSE-1.7
@@ -32,7 +33,7 @@ Picture | Building | Developer |
 ![Hospital](img/hospital.png) | Hospital | Victoria
 
 ##Our GUI
-Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building.
+Bikini Bottom comes with an integrated person creation panel. Click in a hospital to pull it up. Here the user may spawn people with certain names and select roles and residences. Hours are displayed in the info panel after clicking on the building. Special event such as opening, closing, charging residents, and housing degredation occurs at certain times.
 
 ![GUI Fields](img/guiFields.png)
 

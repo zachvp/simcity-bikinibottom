@@ -3,7 +3,6 @@ Graphical User Interface Test File
 Initial Start-up
 Upon the launch of the frame:
 	The buses should be running, performing its route around the city. 
-	The clock at the top of the Information Panel should be running.
 	The Kelp sign is in the Building View Panel.
 
 Creating a Person
@@ -30,7 +29,6 @@ Looking inside a Building
 Click on either a building on the map or a building name on the list:
 	Should pull up the interior view of that building.
 	Should pull up the Information Panel for that Building.
-	Time should still be displayed in the Information Panel.
 
 If a MockBuilding is available:
 	Click on a MockBuilding (SnailPo sign) and the Kelp sign appears.
@@ -41,6 +39,5 @@ Click on a name in the People list should bring up that person's information in 
 InformationPanel.
 Click on a building name in the building list and that building's animation panel
 should appear in the building view and its information should appear in the InformationPanel.
-The time should still be displayed in the Information Panel.
 
 	

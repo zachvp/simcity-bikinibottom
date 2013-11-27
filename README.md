@@ -114,6 +114,6 @@ You will create enough people to cover every employment spot in the city. This i
 + There is no system in place that would result in denying a loan.
 + Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
 + There should be different behavior on weekends.
-+ People should be able to buy cars at the market, but they choose not to.
++ Customers are unable to leave the market no matter the circumstances
 
 

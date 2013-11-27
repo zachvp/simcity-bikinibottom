@@ -59,7 +59,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	@Override
 	public void activate() {
 		super.activate();
-		offWork = true;
+		offWork = false;
 	}
 	
 	public void setOtherRoles(HostRole host, CookRole cook, Cashier cashier) {

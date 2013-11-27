@@ -2,6 +2,7 @@ package housing;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -71,8 +72,8 @@ public class ResidentialBuilding extends Building {
 		
 	}
 	
-	public Map<Person, Role> getPopulation(){
-		return population;
+	public Set<Person> getPopulation(){
+		return population.keySet();
 	}
 	
 	public void addResident(ResidentRole resident){
@@ -119,8 +120,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		// TODO Auto-generated method stub
-		return new JPanel();
+		return new HousingInfoPanel(this);
 	}
 	
 }

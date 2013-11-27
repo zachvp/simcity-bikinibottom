@@ -118,8 +118,8 @@ public interface Person {
 					this.moneyNeeded = 0;
 					break;
 				case RICH:
-					this.cashOnHand = 100;
-					this.tooMuch = 300;
+					this.cashOnHand = 300;
+					this.tooMuch = 100;
 					this.tooLittle = 50;
 					this.moneyNeeded = 0;
 					break;

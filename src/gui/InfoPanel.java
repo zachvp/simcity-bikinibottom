@@ -164,15 +164,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
 				);*/
 		
-		nameL.setText("Name: ");
+		nameL.setText("Name & Loc.: ");
 		jobL.setText("Job: ");
 		residenceL.setText("Residence: ");
 		moneyL.setText("Money: ");
 		hungerL.setText("Hunger Level: ");
 		
 		
-		name.setText(person.getName());
-		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().getShortName()));
+		name.setText(person.getName() + " @ " + person.getPassengerRole().getLocation());
+		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().toString()));
 		residence.setText(""+(person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()));
 		money.setText("$"+person.getWallet().getCashOnHand());
 		hunger.setText(""+person.getHungerLevel());		

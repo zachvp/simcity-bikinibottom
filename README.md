@@ -115,5 +115,4 @@ You will create enough people to cover every employment spot in the city. This i
 + Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
 + There should be different behavior on weekends.
 + Customers are unable to leave the market no matter the circumstances
-
-
++ Buses sometimes get stuck at intersections

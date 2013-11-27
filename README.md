@@ -1,3 +1,27 @@
+###Importing to Eclipse
+  + Simply run Eclipse by clicking on its icon. If it is the first time running Eclipse, you will be prompted for the location of your workspace. Think of the Eclipse Workspace as your "My Documents"/"Documents" directory, but for Eclipse projects. You may use the default location if you wish or make-up your own.
+  + Next you import the restaurant application:
+    + File -> New -> Other
+    + Choose Java Project from Existing Ant Buildfile
+    + Click on the Browse button
+    + Navigate to the git repository you cloned in the previous section
+    + Choose the build.xml file.
+    + [IMP]: Check the Link to the buildfile in the file system box
+    + Press Finish
+
+###Running the Project
+  + To run the main application, navigate to the "RestaurantGui.java" file and press the green run button.
+  + To run the tests, navigate to the "CashierTest.java" file and press the run button.
+
+###Adding JUnit
+  + JUnit will not be available by default.
+  + To import it, first right-click on the src folder in the Eclipse Package Explorer, mouse over "build path," then click "configure build path."
+  + Click the "Libraries" tab.
+  + Click the "Add Library" button, and find JUnit 3.
+  + Click on JUnit3, then press OK to add it.
+  + Click OK again to configure the build path.
+
+---
 ##Introduction
 
 Welcome to Bikini Bottom! Our SimCity models Bikini Bottom from the show Spongebob Squarepants. All images are taken from the show and are not intended to be original art.

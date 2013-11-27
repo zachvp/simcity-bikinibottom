@@ -36,6 +36,8 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	// determines whether to render the gui
 	private boolean present = false;
 	
+	private String speech = "";
+	
 	// used as reference for furniture and appliance positions
 	LayoutGui layoutGui;
 	
@@ -109,7 +111,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	    	
 		g.setColor(Color.BLACK);
 		
-//		g.drawString(eatingFood, xPos+5, yPos+15);
+		g.drawString(speech, xPos+5, yPos+10);
 		if(eatingFood == true){
 			g.drawImage(krabbyPattyIcon.getImage(), xPos, yPos, null);
 		}
@@ -169,5 +171,10 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	@Override
 	public void setPresent(boolean b) {
 		present = b;
+	}
+
+	@Override
+	public void DoShowSpeech(String speech) {
+		this.speech = speech;
 	}
 }

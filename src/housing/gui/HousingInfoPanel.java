@@ -25,13 +25,15 @@ public class HousingInfoPanel extends JPanel {
 		this.setLayout(new GridLayout(2, 1));
 		
 		JPanel panel = new JPanel(new GridLayout(3,0));
+		panel.add(new JLabel("Rent will be charged at 9."));
+		panel.add(new JLabel("Rooms will break down at 16."));
 		
 //		for(int i = 0; i < 9; i++){
 //			JLabel label = new JLabel();
 //			panel.add(new JLabel("Resident"));
 //			labels.put(null, label);
 //		}
-//		add(panel);
+		add(panel);
 }
 	
 	public void updatePanel(){

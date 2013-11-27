@@ -66,6 +66,10 @@ public class ResidentRole extends Role implements Resident {
 		}
 	});
 	
+	public void clearFoodAtHome() {
+		refrigerator.clear();
+	}
+	
 	// TODO resolve buying groceries at market 
 	private Food food = null;// the food the resident is currently eating
 	
@@ -107,12 +111,14 @@ public class ResidentRole extends Role implements Resident {
 	public void msgPaymentDue(double amount) {
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
+		DoShowSpeech("I owe rent!");
 		stateChanged();
 	}
 	
 	@Override
 	public void msgDwellingFixed() {
 		Do("Received message 'dwelling fixed'");
+		DoShowSpeech("My apartment is fixed!");
 	}
 	
 	@Override
@@ -130,7 +136,6 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		
 		if(task == TaskState.FIRST_TASK){
 			gui.setPresent(true);
 			task = TaskState.NONE;
@@ -191,6 +196,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Actions ----- */
 	private void tryToMakePayment() {
+		DoShowSpeech("Rent is due!");
 		Do("Attempting to make payment. Cash amount is "
 				+ person.getWallet().getCashOnHand());
 		
@@ -222,10 +228,12 @@ public class ResidentRole extends Role implements Resident {
 	private void eatFood() {
 		hungry = false;
 		Do("Eating food " + food.type);
+		DoShowSpeech("Eating food.");
 		
 		// pick up the food
 		DoGoToStove();
 		waitForInput();
+		DoShowSpeech("");
 		
 		// display the food being carried
 		DoSetFood(true);
@@ -240,8 +248,8 @@ public class ResidentRole extends Role implements Resident {
 				DoSetFood(false);
 				food = null;
 				doneWaitingForInput();
-				stateChanged();
 				DoJazzercise();
+				stateChanged();
 			}
 		};
 		
@@ -259,15 +267,15 @@ public class ResidentRole extends Role implements Resident {
 		// begin the cook/eat food task. The role will not be allowed to deactivate
 		// until the task is complete
 		task = TaskState.DOING_TASK;
-		
+		DoShowSpeech("Cooking food");
 		Do("Cooking food");
 		food = f;
-		if(food == null) Do("Food is nulll");
 		
 		// retrieve food from refrigerator
 		DoGoToRefrigerator();
 		waitForInput();
 		DoMoveGary();
+		DoShowSpeech("");
 		
 		// carry food from fridge to stove
 		DoSetFood(true);
@@ -300,12 +308,17 @@ public class ResidentRole extends Role implements Resident {
 	
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
+		DoShowSpeech("Calling maintenance worker!");
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();
 	}
 	
 	/* --- Animation Routines --- */
+	private void DoShowSpeech(String speech) {
+		gui.DoShowSpeech(speech);
+	}
+	
 	private void DoMoveGary(){
 		gui.DoMoveGary();
 	}

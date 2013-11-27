@@ -1,25 +1,21 @@
 ###Importing to Eclipse
   + Simply run Eclipse by clicking on its icon. If it is the first time running Eclipse, you will be prompted for the location of your workspace. Think of the Eclipse Workspace as your "My Documents"/"Documents" directory, but for Eclipse projects. You may use the default location if you wish or make-up your own.
   + Next you import the restaurant application:
-    + File -> New -> Other
-    + Choose Java Project from Existing Ant Buildfile
+    + File -> New -> Java Project
+    + Name the project team23_test
+    + Make sure the execution environment JRE is set to JavaSE-1.7
+    + Uncheck the "use default location" box to enable the browse button.
     + Click on the Browse button
-    + Navigate to the git repository you cloned in the previous section
-    + Choose the build.xml file.
-    + [IMP]: Check the Link to the buildfile in the file system box
+    + Navigate to the team23 git repository you cloned
+    + Press next
+    + Click the libraries tab, click add library, select JUnit, and click next
+    + Make sure JUnit 4 is selected.
     + Press Finish
 
 ###Running the Project
-  + To run the main application, navigate to the "RestaurantGui.java" file and press the green run button.
-  + To run the tests, navigate to the "CashierTest.java" file and press the run button.
-
-###Adding JUnit
-  + JUnit will not be available by default.
-  + To import it, first right-click on the src folder in the Eclipse Package Explorer, mouse over "build path," then click "configure build path."
-  + Click the "Libraries" tab.
-  + Click the "Add Library" button, and find JUnit 3.
-  + Click on JUnit3, then press OK to add it.
-  + Click OK again to configure the build path.
+  + Navigate to the "Gui" package and find the "MainFrame.java" file
+  + Right-click on the file and mouse over "run as" then click "java application"
+  + To run the tests, navigate to `[package].test` and run the tests for each package
 
 ---
 ##Introduction

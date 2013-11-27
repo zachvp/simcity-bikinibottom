@@ -10,5 +10,8 @@
 .classpath
 .project
 
-# Binary files #
+# Binary Files #
 *.class
+
+# Git Merge Files #
+*.orig

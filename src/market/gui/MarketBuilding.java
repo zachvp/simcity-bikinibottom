@@ -93,17 +93,22 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		*/
 		List<Item> ShoppingList = new ArrayList<Item>();
 		Map<String,Integer> GroceryList = person.getShoppingList();
+		boolean empty = true;
 		for (int i=0;i<Constants.FOODS.size();i++){
 			Integer numOfItems = GroceryList.get(Constants.FOODS.get(i));
 			if (numOfItems == null) numOfItems = 0;
+			if (numOfItems > 0) empty = false;
 			ShoppingList.add(   new Item(   Constants.FOODS.get(i), numOfItems)    );
 		}
 		for (int i=0;i<Constants.CARS.size();i++){
 			Integer numOfItems = GroceryList.get(Constants.CARS.get(i));
 			if (numOfItems == null) numOfItems = 0;
+			if (numOfItems > 0) empty = false;
 			ShoppingList.add(new Item(Constants.CARS.get(i), numOfItems));
 		}
-		
+		if (empty) {
+			ShoppingList.add(new Item(Constants.FOODS.get(0), 5));
+		}
 		
 		if (MarketCustomerMap.containsKey(person)){
 			//System.out.println("IF STATEMENT In Market's getCustomerRole");

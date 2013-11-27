@@ -114,7 +114,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		timer = new java.util.Timer();
 
-    	timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
+    	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
 		time = new JLabel();
 		timePanel.add(time);
 		timePanel.setBorder(BorderFactory.createEtchedBorder());

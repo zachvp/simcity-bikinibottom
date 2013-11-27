@@ -1,6 +1,7 @@
 package agent;
 
 import gui.Building;
+import gui.HospitalBuilding;
 import housing.ResidentRole;
 
 import java.util.Collections;
@@ -79,8 +80,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		this.kelp = KelpClass.getKelpInstance();
 		
-		this.lastTimeEatingOut = timeManager.fakeStartTime() - 3*Constants.DAY;
-		this.eatingOutWaitPeriod = Constants.DAY / 2;
+		this.lastTimeEatingOut = timeManager.fakeStartTime() - Constants.DAY/2;
+		this.eatingOutWaitPeriod = 3*Constants.DAY;
 		
 		this.workStartThreshold = 2 * Constants.HOUR;
 		
@@ -271,7 +272,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		
 		// There is no role for this location! Get a new one.
-		if (loc instanceof Building) {
+		if (loc instanceof Building && !(loc instanceof HospitalBuilding)) {
 			Building building = (Building) loc;
 			Role role = building.getCustomerRole(this);
 			role.activate();
@@ -592,6 +593,22 @@ public class PersonAgent extends Agent implements Person {
 		return wallet.getIncomeLevel() != IncomeLevel.POOR
 				&& -timeManager.timeUntil(lastTimeEatingOut)
 				>= this.eatingOutWaitPeriod;
+	}
+	
+	/**
+	 * Sets whether or not the person will eat out next time it's hungry
+	 * (within the next two days)
+	 */
+	public void setWantsToEatOut(boolean eatOut) {
+		if (eatOut) {
+			this.lastTimeEatingOut =
+					timeManager.fakeStartTime() - 3*Constants.DAY;
+			this.eatingOutWaitPeriod = Constants.DAY/2;
+		} else {
+			this.lastTimeEatingOut =
+					timeManager.fakeStartTime() - Constants.DAY/2;
+			this.eatingOutWaitPeriod = 3*Constants.DAY;
+		}
 	}
 	
 	/** Whether this person has food at home. */

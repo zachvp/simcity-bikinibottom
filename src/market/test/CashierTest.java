@@ -15,12 +15,14 @@ import market.CashierRole.Customerstate;
 import market.gui.CashierGui;
 import market.gui.MarketBuilding;
 import market.interfaces.ItemCollector;
+import market.test.mock.EventLog;
 import market.test.mock.MockCashierGui;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
 
 public class CashierTest extends TestCase
 {
+	public EventLog log = new EventLog();
 	CashierRole Cashier;
 	MockCashierGui cashierGui;
 	MockCustomer Customer1;

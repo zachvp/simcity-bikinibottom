@@ -7,7 +7,7 @@ import agent.WorkRole;
 
 public interface PhonePayer {
 	
-	public abstract void msgHereIsYourTotal(double total, WorkRole role);
+	public abstract void msgHereIsYourTotal(double total, Cashier cashier);
 
 	
 }

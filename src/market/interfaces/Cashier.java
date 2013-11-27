@@ -20,6 +20,8 @@ public interface Cashier {
 
 	public abstract void msgHereIsPayment(double payment, Customer c);
 	
+	public abstract void msgHereIsPayment(double total, PhonePayer phonePayer);
+	
 	public abstract void msgLeaveWork();
 
 	//Utilities
@@ -35,6 +37,8 @@ public interface Cashier {
 	public abstract void AtFrontDesk();
 	public abstract void AtBench();
 	public abstract void AtExit();
+
+	
 
 	
 	

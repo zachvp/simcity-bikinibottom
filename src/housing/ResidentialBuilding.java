@@ -120,7 +120,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		return new HousingInfoPanel(this);
+		return new HousingInfoPanel(population);
 	}
 	
 }

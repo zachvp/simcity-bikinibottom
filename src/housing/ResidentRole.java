@@ -136,6 +136,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		
 		if(task == TaskState.FIRST_TASK){
 			gui.setPresent(true);
 			task = TaskState.NONE;
@@ -185,7 +186,8 @@ public class ResidentRole extends Role implements Resident {
 					deactivate();
 				}
 			};
-			// schedule a delay for food consumption
+			
+			// resident role will deactivate after the delay below
 			listener.taskFinished(schedule);
 			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
 			return true;

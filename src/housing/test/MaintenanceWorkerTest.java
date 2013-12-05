@@ -1,10 +1,10 @@
 package housing.test;
 
-import housing.MaintenanceWorkerRole;
-import housing.ResidentialBuilding;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
+import housing.roles.MaintenanceWorkerRole;
+import housing.roles.ResidentialBuilding;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockMaintenanceWorkerGui;
 import housing.test.mock.MockPayRecipient;

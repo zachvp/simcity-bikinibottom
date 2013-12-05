@@ -1,4 +1,4 @@
-package housing;
+package housing.roles;
 
 import java.awt.GridLayout;
 

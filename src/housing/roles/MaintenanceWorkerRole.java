@@ -1,4 +1,4 @@
-package housing;
+package housing.roles;
 
 import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;

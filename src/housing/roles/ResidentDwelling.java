@@ -1,4 +1,4 @@
-package housing;
+package housing.roles;
 
 import agent.PersonAgent;
 import agent.gui.Gui;

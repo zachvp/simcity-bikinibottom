@@ -1,12 +1,14 @@
 package housing.gui;
 
-import housing.MaintenanceWorkerRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
+import housing.roles.MaintenanceWorkerRole;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 

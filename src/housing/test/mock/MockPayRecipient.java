@@ -2,11 +2,11 @@ package housing.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
-import housing.MaintenanceWorkerRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
+import housing.roles.MaintenanceWorkerRole;
 import agent.PersonAgent;
 
 public class MockPayRecipient extends Mock implements PayRecipient {

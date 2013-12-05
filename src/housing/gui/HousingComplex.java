@@ -1,6 +1,6 @@
 package housing.gui;
 
-import housing.ResidentialBuilding;
+import housing.roles.ResidentialBuilding;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;

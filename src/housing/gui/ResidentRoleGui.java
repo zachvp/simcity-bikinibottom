@@ -1,8 +1,8 @@
 package housing.gui;
 
-import housing.ResidentRole;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
+import housing.roles.ResidentRole;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

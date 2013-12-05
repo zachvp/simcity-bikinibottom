@@ -2,7 +2,7 @@ package gui;
 
 
 import gui.test.MockBuilding;
-import housing.ResidentialBuilding;
+import housing.roles.ResidentialBuilding;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

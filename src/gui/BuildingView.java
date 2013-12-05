@@ -31,7 +31,8 @@ public class BuildingView extends JPanel implements ActionListener{
 		d = new Dimension(w, h);//(w-15, h-70);
 		setSize(d);
 		setLayout(new CardLayout());
-		setBackground(Color.white);
+		//setBackground(Color.white);
+		setOpaque(false);
 		try {
 			image = ImageIO.read(getClass().getResource("test//welcomeCard.png"));
 		} catch (IOException e) {

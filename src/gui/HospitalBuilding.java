@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import CommonSimpleClasses.XYPos;
 import agent.Role;
@@ -13,17 +14,22 @@ public class HospitalBuilding extends Building{
 	
 	CitizenRecords records;
 	ArrayList<Building> buildings;
-	PersonCreationPanel panel = new PersonCreationPanel();
-	
+	JPanel panel = new JPanel();
+	PersonCreationPanel personPanel = new PersonCreationPanel();
+	JPanel scenarioPanel = new JPanel();
 
 	public HospitalBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.setOpaque(false);
+		tabbedPane.addTab("Create a Person", personPanel);
+		tabbedPane.addTab("Scenarios", scenarioPanel);
+		panel.setOpaque(false);
+		panel.add(tabbedPane);
 	}
 
 	@Override
 	public XYPos entrancePos() {
-		// TODO Auto-generated method stub
 		return (new XYPos((int)(width/2),(int)height));
 	}
 
@@ -35,7 +41,6 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public LocationTypeEnum type() {
-		// TODO Auto-generated method stub
 		return LocationTypeEnum.Hospital;
 	}
 
@@ -53,13 +58,12 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public JPanel getInfoPanel() {
-		
 		return new JPanel();
 	}
 
 	public void setRecords(CitizenRecords citizenRecords) {
 		records = citizenRecords;
-		panel.setRecords(records);
+		personPanel.setRecords(records);
 	}
 	public void setBuildings(ArrayList<Building> b){
 		buildings = b;

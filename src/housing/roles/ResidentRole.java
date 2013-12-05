@@ -77,7 +77,7 @@ public class ResidentRole extends Role implements Resident {
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
-	private final int EAT_TIME = 5; 
+	private final int EAT_TIME = 3; 
 	private final int IMPATIENCE_TIME = 7;
 	
 	/* ----- Class Data ----- */
@@ -142,7 +142,6 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(!timerSet){
 			gui.setPresent(true);
-			return true;
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
@@ -177,7 +176,6 @@ public class ResidentRole extends Role implements Resident {
 		// idle behavior
 		DoJazzercise();
 		DoMoveGary();
-		deactivate();
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets

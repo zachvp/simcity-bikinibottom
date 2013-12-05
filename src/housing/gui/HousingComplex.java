@@ -19,10 +19,10 @@ import agent.gui.Gui;
 public class HousingComplex extends JPanel {
 	/* --- Data --- */
 	// some configuration constants
-	private final int UNIT_COUNT = 9;
-	private final int ROWS = 3;
-	private final int COLUMNS = 3;
-	private final int SPACING = 5;
+	private final int UNIT_COUNT = 1;
+	private final int ROWS = 1;
+	private final int COLUMNS = 1;
+	private final int SPACING = 0;
 	
 	// layout manager
 	private GridLayout complexLayout;

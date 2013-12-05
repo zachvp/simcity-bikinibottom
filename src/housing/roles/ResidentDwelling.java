@@ -70,23 +70,24 @@ public class ResidentDwelling implements Dwelling {
 		// TODO implemented test hacks
 		if(Constants.DEBUG){
 			this.person = new PersonAgent("Spongebob");
-//			this.workPerson = new PersonAgent("Maintenence Worker");
-//			this.payPerson = new PersonAgent("Landlord");
+			this.workPerson = new PersonAgent("Maintenence Worker");
+			this.payPerson = new PersonAgent("Landlord");
 			
 			this.resident = new ResidentRole(person, building, this, gui);
 			this.person.addRole(resident);
 			this.person.startThread();
 			this.resident.activate();
 			
-//			this.worker = new MaintenanceWorkerRole(workPerson, building);
-//			this.workPerson.addRole(worker);
-//			this.workPerson.startThread();
-//			this.worker.activate();
-//			
-//			this.payRecipient = new PayRecipientRole(payPerson, building);
-//			this.payPerson.addRole(payRecipient);
-//			this.payPerson.startThread();
-//			this.payRecipient.activate();
+			this.worker = new MaintenanceWorkerRole(workPerson, building);
+			this.worker.setComplex(building.getComplex());
+			this.workPerson.addRole(worker);
+			this.workPerson.startThread();
+			this.worker.activate();
+			
+			this.payRecipient = new PayRecipientRole(payPerson, building);
+			this.payPerson.addRole(payRecipient);
+			this.payPerson.startThread();
+			this.payRecipient.activate();
 		}
 		// ---- end test hacks
 		
@@ -107,23 +108,24 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 		
 		// degrade condition of dwelling each day
-//		Runnable command = new Runnable() {
-//			@Override
-//			public void run() {
-//				// TODO make the dwelling degrade gradually
-//				condition = Constants.Condition.POOR;
-//				resident.msgDwellingDegraded();
-//			}
-//		};
-//		// TODO test 
-//		condition = Constants.Condition.POOR;
-//		resident.msgDwellingDegraded();
-//		
-//		
-//		// degrade condition every day
-//		int hour = 16;
-//		int minute = 0;
-//		schedule.scheduleDailyTask(command, hour, minute);
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				// TODO make the dwelling degrade gradually
+				condition = Constants.Condition.POOR;
+				resident.msgDwellingDegraded();
+			}
+		};
+		
+		// TODO test 
+		condition = Constants.Condition.POOR;
+		resident.msgDwellingDegraded();
+		
+		
+		// degrade condition every day
+		int hour = 16;
+		int minute = 0;
+		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	public void setCondition(Constants.Condition condition){

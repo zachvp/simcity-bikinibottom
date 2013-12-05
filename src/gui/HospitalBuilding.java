@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class HospitalBuilding extends Building{
 		tabbedPane.addTab("Create a Person", personPanel);
 		tabbedPane.addTab("Scenarios", scenarioPanel);
 		panel.setOpaque(false);
-		panel.add(tabbedPane);
+		panel.setLayout(new BorderLayout());
+		panel.add(tabbedPane, BorderLayout.CENTER);
 	}
 
 	@Override
@@ -52,7 +54,6 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public JPanel getAnimationPanel() {
-		// TODO Auto-generated method stub
 		return panel;
 	}
 

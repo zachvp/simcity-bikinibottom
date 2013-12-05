@@ -47,7 +47,6 @@ public class HousingComplex extends JPanel {
 
 	}
 	
-	
 	// this is to get a maintenance worker in the right building
 	public void addGuiToDwelling(Gui gui, int unitNumber) {
 		for(HousingGui unit : housingUnits) {
@@ -57,6 +56,7 @@ public class HousingComplex extends JPanel {
 		}
 	}
 	
+	// take the gui out once it's done visiting/fixing
 	public void removeGuiFromDwelling(Gui gui, int unitNumber) {
 		for(HousingGui unit : housingUnits) {
 			if(unit.getIndex() == unitNumber) {

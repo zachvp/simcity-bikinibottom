@@ -110,10 +110,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		
 		schedule.scheduleDailyTask(command, hour, minute);
 	}
-	
-	public PayRecipientRole(PersonAgent payRecipientPerson) {
-		super(payRecipientPerson);
-	}
 
 	/* ----- Messages ----- */
 	public void msgHereIsPayment(double amount, Resident r) {

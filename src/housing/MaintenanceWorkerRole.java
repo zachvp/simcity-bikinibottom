@@ -70,14 +70,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		gui.setComplex(complex);
 	}
 
-//	public MaintenanceWorkerRole(PersonAgent person) {
-//		super(person);
-//	}
-
-	public MaintenanceWorkerRole(PersonAgent person) {
-		// TODO Auto-generated constructor stub
-	}
-
 	/* --- Messages --- */
 	public void msgFileWorkOrder(Dwelling dwelling) {
 		if(dwelling == null) {

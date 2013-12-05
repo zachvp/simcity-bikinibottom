@@ -18,7 +18,6 @@ import CommonSimpleClasses.Constants.Condition;
  * GUI and animation elements including the AnimationPanel, role graphics, and
  * layout graphics. 
  * @author Zach VP
- *
  */
 
 public class HousingGui extends JPanel {

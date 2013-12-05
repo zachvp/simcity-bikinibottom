@@ -1,5 +1,6 @@
 package housing;
 
+import agent.PersonAgent;
 import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
@@ -28,6 +29,7 @@ public class ResidentDwelling implements Dwelling {
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	/* --- Housing slots --- */
+	
 	// roles
 	private ResidentRole resident;
 	private MaintenanceWorkerRole worker;
@@ -44,40 +46,48 @@ public class ResidentDwelling implements Dwelling {
 	// cost constant depending on housing condition
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
-	// TODO just a test person
-//	PersonAgent person = new PersonAgent("Spongebob");
-//	PersonAgent workPerson = new PersonAgent("Maintenence Worker");
-//	PersonAgent payPerson = new PersonAgent("Landlord");
+	// TODO just test people
+	PersonAgent person;
+	PersonAgent workPerson;
+	PersonAgent payPerson;
 	// end test
 	
 	/* --- Constructor --- */
 	public ResidentDwelling(int ID, Constants.Condition startCondition,
 			ResidentialBuilding building, LayoutGui gui, HousingComplex complex) {
 		super();
-
+		
+		// TODO actual code below
 		this.building = building;
 		
-		this.payRecipient = building.getPayRecipient();
-		// TODO uncomment next 2 lines
-		this.worker = building.getWorker();
-		this.resident = new ResidentRole(null, building, this, gui);
+		if(!Constants.DEBUG){
+			this.payRecipient = building.getPayRecipient();
+			this.worker = building.getWorker();
+			this.resident = new ResidentRole(null, building, this, gui);
+		}
+		// end actual code
 		
 		// TODO implemented test hacks
-//		this.resident = new ResidentRole(person, building, this, gui);
-//		person.addRole(resident);
-//		person.startThread();
-//		resident.activate();
-//		
-//		this.worker = new MaintenanceWorkerRole(workPerson, building, complex);
-//		workPerson.addRole(worker);
-//		workPerson.startThread();
-//		worker.activate();
-//		
-//		this.payRecipient = new PayRecipientRole(payPerson);
-//		payPerson.addRole(payRecipient);
-//		payPerson.startThread();
-//		payRecipient.activate();
-		
+		if(Constants.DEBUG){
+			this.person = new PersonAgent("Spongebob");
+//			this.workPerson = new PersonAgent("Maintenence Worker");
+//			this.payPerson = new PersonAgent("Landlord");
+			
+			this.resident = new ResidentRole(person, building, this, gui);
+			this.person.addRole(resident);
+			this.person.startThread();
+			this.resident.activate();
+			
+//			this.worker = new MaintenanceWorkerRole(workPerson, building);
+//			this.workPerson.addRole(worker);
+//			this.workPerson.startThread();
+//			this.worker.activate();
+//			
+//			this.payRecipient = new PayRecipientRole(payPerson, building);
+//			this.payPerson.addRole(payRecipient);
+//			this.payPerson.startThread();
+//			this.payRecipient.activate();
+		}
 		// ---- end test hacks
 		
 		this.building.addResident(resident);
@@ -97,24 +107,23 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 		
 		// degrade condition of dwelling each day
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				// TODO make the dwelling degrade gradually
-				condition = Constants.Condition.POOR;
-				resident.msgDwellingDegraded();
-			}
-		};
-		// TODO test 
-		condition = Constants.Condition.POOR;
-		resident.msgDwellingDegraded();
-		
-		
-		// degrade condition every day
-		int hour = 16;
-		int minute = 0;
-		
-		schedule.scheduleDailyTask(command, hour, minute);
+//		Runnable command = new Runnable() {
+//			@Override
+//			public void run() {
+//				// TODO make the dwelling degrade gradually
+//				condition = Constants.Condition.POOR;
+//				resident.msgDwellingDegraded();
+//			}
+//		};
+//		// TODO test 
+//		condition = Constants.Condition.POOR;
+//		resident.msgDwellingDegraded();
+//		
+//		
+//		// degrade condition every day
+//		int hour = 16;
+//		int minute = 0;
+//		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	public void setCondition(Constants.Condition condition){

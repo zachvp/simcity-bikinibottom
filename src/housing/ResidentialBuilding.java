@@ -2,7 +2,6 @@ package housing;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -22,7 +21,6 @@ import housing.gui.HousingInfoPanel;
 
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
-//	private CityLocation residence;
 	
 	// location for the "door" to the building
 	private XYPos entrancePos;
@@ -30,6 +28,7 @@ public class ResidentialBuilding extends Building {
 	// this displays after clicking on the ResidentialBuilding
 	private HousingComplex complex;
 	
+	// prevents the repeated retrieval of the building name
 	private boolean name = false;
 	
 	// the "boss" or greeter for this building and the on-call Mr. Fix-it
@@ -53,24 +52,25 @@ public class ResidentialBuilding extends Building {
 		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
+		// set the position of where the door of the complex will be
 		this.entrancePos = new XYPos(width/2, height);
 		
 		// worker for this building
-		worker = new MaintenanceWorkerRole(null, this);
+		this.worker = new MaintenanceWorkerRole(null, this);
 		
 		// manager for this building 
-		landlord = new PayRecipientRole(null, this);
+		this.landlord = new PayRecipientRole(null, this);
 		
 		// set up complex
 		this.complex = new HousingComplex(this);
 		
-		worker.setComplex(this.complex);
+		this.worker.setComplex(this.complex);
 		
 		// put the constant roles in the building map
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
 		
-		housingInfoPanel = new HousingInfoPanel(population);
+		this.housingInfoPanel = new HousingInfoPanel(population);
 	}
 	
 	public Map<Person, Role> getPopulation(){

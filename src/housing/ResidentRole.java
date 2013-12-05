@@ -180,21 +180,21 @@ public class ResidentRole extends Role implements Resident {
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		if(!timerSet){
-			Runnable command = new Runnable() {
-				public void run(){
-					gui.setPresent(false);
-					timerSet = false;
-					deactivate();
-				}
-			};
-			
-			// resident role will deactivate after the delay below
-			listener.taskFinished(schedule);
-			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
-			timerSet = true;
-			return true;
-		}
+//		if(!timerSet){
+//			Runnable command = new Runnable() {
+//				public void run(){
+//					gui.setPresent(false);
+//					timerSet = false;
+//					deactivate();
+//				}
+//			};
+//			
+//			// resident role will deactivate after the delay below
+//			listener.taskFinished(schedule);
+//			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+//			timerSet = true;
+//			return true;
+//		}
 		
 		return false;
 	}

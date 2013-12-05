@@ -14,7 +14,9 @@ import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
 import bank.gui.SecurityGuardGui;
+import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.SecurityGuardGuiInterface;
 import bank.interfaces.Teller;
@@ -39,7 +41,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	double paycheckAmount = 200;
 	
 	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
-
+	AccountManager accountManager;
+	
 	public enum customerState{waiting, inBank, leaving};
 	class WaitingCustomer {
 		WaitingCustomer(BankCustomer b, customerState s){
@@ -66,6 +69,17 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	List<TellerPosition> tellerPositions = new ArrayList<TellerPosition>();
 	List<WaitingCustomer> waitingCustomers = new ArrayList<WaitingCustomer>();
+	
+	enum robberState {entered, robbing, leaving, done};
+	class MyRobber{
+		MyRobber(Robber r, robberState state) {
+			this.r = r;
+			this.state = state;
+		}
+		Robber r;
+		robberState state;
+	}
+	List<MyRobber> robbers = new ArrayList<MyRobber>();
 	
 	int startHour;
 	int startMinute;
@@ -152,6 +166,20 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		}
 		stateChanged();
 	}
+	
+	public void msgIAmRobbingTheBank(Robber r) {
+		robbers.add(new MyRobber(r, robberState.entered));
+		stateChanged();
+	}
+
+	public void msgRobberLeavingBank(Robber r) {
+		for(MyRobber mr: robbers) {
+			if(mr.r == r) {
+				mr.state = robberState.leaving;
+			}
+		}
+		stateChanged();
+	}
 
 	
 	/**
@@ -159,9 +187,25 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	 */
 	public boolean pickAndExecuteAnAction() {
 	
+		
+		
 		if(!atWork) {
 			goToWork();
 			return true;
+		}
+		
+		for(MyRobber m: robbers){
+			if(m.state == robberState.entered){
+				tryToStopRobber(m);
+				return true;
+			}
+		}
+		
+		for(MyRobber m: robbers){
+			if(m.state == robberState.leaving){
+				removeRobber(m);
+				return true;
+			}
 		}
 		
 		for(TellerPosition tp: tellerPositions) {
@@ -195,6 +239,16 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		return false;
 	}
 	// Actions
+	
+	private void tryToStopRobber(MyRobber mr) {
+		mr.r.msgAttemptToStop(accountManager, false); //TODO, make success of stop attemp random
+		mr.state = robberState.robbing;
+		
+	}
+	
+	private void removeRobber(MyRobber mr) {
+		mr.state = robberState.done;
+	}
 	
 	private void goToWork() {
 		atWork = true;
@@ -296,6 +350,9 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	public void addRole(WorkRole r) {
 		workRoles.add(r);
+		if(r instanceof AccountManager) {
+			accountManager = (AccountManager) r;//TODO Test, this is for robber to know who AM is
+		}
 	}
 	
 	private void acquireSemaphore(Semaphore s) {
@@ -338,6 +395,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
 
 
 

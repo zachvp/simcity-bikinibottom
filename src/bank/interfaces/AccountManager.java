@@ -9,6 +9,8 @@ public interface AccountManager {
 	
 	public abstract void msgWithdrawMoney(Teller t, BankCustomer bc, int AccountId, double amount);
 
+	public abstract void msgGiveMeTheMoney(Robber r, double amount);
+	
 	public abstract String getName();
 
 	public abstract void msgAtDestination();

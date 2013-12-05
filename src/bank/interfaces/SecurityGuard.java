@@ -18,6 +18,10 @@ public interface SecurityGuard {
     
     public abstract void addTeller(Teller t, int deskX);
     
+    public abstract void msgIAmRobbingTheBank(Robber r);
+    
+    public abstract void msgRobberLeavingBank(Robber r);
+    
     public abstract void msgAtDestination();
     
     public abstract void setGui(SecurityGuardGuiInterface g);

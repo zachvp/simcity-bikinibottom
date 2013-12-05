@@ -14,6 +14,7 @@ import bank.gui.AccountManagerGui;
 import bank.gui.BankBuilding;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.Teller;
 
 
@@ -65,6 +66,19 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	static Map<Integer, Account> accountMap = Collections.synchronizedMap(new HashMap<Integer, Account>());//make STATIC
 	
+	enum robberState {asking, done};
+	class MyRobber {
+		MyRobber(Robber r, double stealAmount, robberState s){
+			this.r = r;
+			this.stealAmount = stealAmount;
+			this.state = s;
+		}
+		Robber r;
+		double stealAmount;
+		robberState state;
+	}
+	List<MyRobber> robbers = new ArrayList<MyRobber>();
+	
 	int startHour;
 	int startMinute;
 	int endHour ;
@@ -112,12 +126,24 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		stateChanged();
 	}
 	
+	public void msgGiveMeTheMoney(Robber r, double amount) {
+		robbers .add(new MyRobber(r, amount, robberState.asking));
+		stateChanged();
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
 //		
 //		System.out.println("HIYA");
+		for(MyRobber m : robbers) {
+			if(m.state == robberState.asking){
+				giveMoneyToRobber(m);
+				return true;
+			}
+		}
+		
 		if(!atWork) {
 			goToWork();
 			return true;
@@ -164,6 +190,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
        // t.t.msgNewAccountVerified(t.bc, currentIdNum);
        // tasks.remove(t);
         //currentIdNum++; 
+	}
+	
+	private void giveMoneyToRobber(MyRobber mr) {
+		mr.r.msgGiveMoneyToRobber(mr.stealAmount);
+		mr.state = robberState.done;
 	}
 	
 	private void verifyNewAccount(Task t) {

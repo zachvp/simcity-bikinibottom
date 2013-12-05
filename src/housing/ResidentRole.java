@@ -44,8 +44,11 @@ public class ResidentRole extends Role implements Resident {
 	 * State for tasks. The Role will deactivate if it is not performing any tasks.
 	 * used to determine when the role should terminate and transition to a city role
 	*/
-	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
-	TaskState task = TaskState.FIRST_TASK;
+//	enum TaskState { FIRST_TASK, NONE, DOING_TASK, READY_TO_LEAVE }
+//	TaskState task = TaskState.FIRST_TASK;
+	
+	// checks to see if a timer is currently scheduled
+	private boolean timerSet = false;
 	
 	// graphics
 	private ResidentGui gui;
@@ -137,9 +140,8 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		
-		if(task == TaskState.FIRST_TASK){
+		if(!timerSet){
 			gui.setPresent(true);
-			task = TaskState.NONE;
 			return true;
 		}
 		
@@ -178,11 +180,11 @@ public class ResidentRole extends Role implements Resident {
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		if(task == TaskState.NONE){
+		if(!timerSet){
 			Runnable command = new Runnable() {
 				public void run(){
 					gui.setPresent(false);
-					task = TaskState.FIRST_TASK;
+					timerSet = false;
 					deactivate();
 				}
 			};
@@ -190,6 +192,7 @@ public class ResidentRole extends Role implements Resident {
 			// resident role will deactivate after the delay below
 			listener.taskFinished(schedule);
 			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+			timerSet = true;
 			return true;
 		}
 		
@@ -261,14 +264,14 @@ public class ResidentRole extends Role implements Resident {
 		waitForInput();
 		
 		// the cook/eat food task has completed, so the role is free to deactivate
-		task = TaskState.NONE;
+		timerSet = false;
 		DoMoveGary();
 	}
 	
 	private void cookFood(Food f) {
 		// begin the cook/eat food task. The role will not be allowed to deactivate
 		// until the task is complete
-		task = TaskState.DOING_TASK;
+		timerSet = true;
 		DoShowSpeech("Cooking food");
 		Do("Cooking food");
 		food = f;

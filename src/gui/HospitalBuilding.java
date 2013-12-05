@@ -37,7 +37,6 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public Role getGreeter() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -48,13 +47,14 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return panel;
+		//TODO change back to
+		//return panel;
+		return personPanel;
 	}
 
 	@Override

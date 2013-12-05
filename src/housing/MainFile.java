@@ -2,8 +2,6 @@ package housing;
 
 import java.awt.GridLayout;
 
-import housing.gui.HousingInfoPanel;
-
 import javax.swing.JFrame;
 
 public class MainFile extends JFrame {

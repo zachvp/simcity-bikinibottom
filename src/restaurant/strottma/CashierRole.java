@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 
+import market.interfaces.PhonePayer;
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
@@ -20,7 +21,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CashierRole extends WorkRole implements Cashier {
+public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 
 	public EventLog log = new EventLog();
 
@@ -272,6 +273,13 @@ public class CashierRole extends WorkRole implements Cashier {
 	public boolean isOnBreak() {
 		// TODO maybe cashiers can go on breaks in v3
 		return false;
+	}
+
+	@Override
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -3,7 +3,6 @@ package market.interfaces;
 import java.util.List;
 
 import market.Item;
-import agent.WorkRole;
 
 public interface DeliveryReceiver {
 

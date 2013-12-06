@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import market.Item;
+import market.interfaces.DeliveryReceiver;
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.CookGui;
 import restaurant.strottma.interfaces.Cook;
@@ -24,7 +26,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CookRole extends WorkRole implements Cook {
+public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 
 	// private CookGui cookGui = null;
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
@@ -417,6 +419,16 @@ public class CookRole extends WorkRole implements Cook {
 	public boolean isOnBreak() {
 		// TODO maybe cooks can go on breaks in v3
 		return false;
+	}
+	@Override
+	public void msgNoItem() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -8,7 +8,7 @@ public class SingletonTimer extends Timer {
 	
 	private SingletonTimer(){super();}
 	
-	static synchronized SingletonTimer getInstance() {
+	static synchronized public SingletonTimer getInstance() {
 		if (instance == null) instance = new SingletonTimer();
 		return instance;
 	}

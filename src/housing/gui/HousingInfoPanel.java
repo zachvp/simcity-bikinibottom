@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -21,12 +22,11 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	Map<Person, Role> people;
 	Set<Person> population;
 
-	public HousingInfoPanel(Map<Person, Role> people) {
-		this.people = people;
+	public HousingInfoPanel(CityLocation building) {
 		
 		this.setLayout(new GridLayout(2, 1));
 		
-		JPanel panel = new JPanel(new GridLayout(3,0));
+		JPanel panel = new JPanel(new GridLayout(2,0));
 		panel.add(new JLabel("Ask every resident for rent."));
 		panel.add(new JLabel("Summon a maintenance worker."));
 		

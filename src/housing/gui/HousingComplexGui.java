@@ -3,6 +3,7 @@ package housing.gui;
 import housing.backend.HousingComplex;
 import housing.backend.ResidentDwelling;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,8 @@ public class HousingComplexGui extends JPanel {
 			HousingGui gui = new HousingGui(i, dwelling);
 			this.add(gui);
 			housingUnits.add(gui);
+			this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH,
+					Constants.ANIMATION_PANEL_HEIGHT));
 		}
 	}
 

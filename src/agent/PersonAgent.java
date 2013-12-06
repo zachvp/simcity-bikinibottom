@@ -449,7 +449,7 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Methods for finding special roles
 	
 	@Override
-	public PassengerRole getPassengerRole() {
+	public synchronized PassengerRole getPassengerRole() {
 		synchronized (roles) {
 			// Get the PassengerRole if there is one.
 			for (Role r : roles) {

@@ -185,12 +185,12 @@ public interface Constants {
 	/**
 	 * Number of units per housing structure
 	 */
-	public final int HOUSING_UNIT_COUNT = 9;
+	public final int HOUSING_UNIT_COUNT = 1;
 	
 	/**
 	 * Spacing between units in a ChousingComplex
 	 */
-	public final int HOUSING_UNIT_SPACING = 5;
+	public final int HOUSING_UNIT_SPACING = 0;
 	
 	/**
 	 * Conditions for Dwellings

@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 
 import CommonSimpleClasses.Constants;
 
-
 @SuppressWarnings("serial")
 public class TestFile extends JFrame {
 	
@@ -23,8 +22,8 @@ public class TestFile extends JFrame {
 		this.add(building.getAnimationPanel());
 		this.add(panel);
 		
-//		this.setBounds(50, 50, 600, 600);
-		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH * 2, Constants.ANIMATION_PANEL_HEIGHT));
+		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH * 2,
+				Constants.ANIMATION_PANEL_HEIGHT));
 		this.pack();
 	}
 	

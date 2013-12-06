@@ -1,6 +1,7 @@
-package housing.gui;
+package housing;
 
 import housing.backend.ResidentialBuilding;
+import housing.gui.HousingInfoPanel;
 
 import java.awt.GridLayout;
 

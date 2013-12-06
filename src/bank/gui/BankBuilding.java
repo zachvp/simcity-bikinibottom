@@ -18,6 +18,7 @@ import agent.interfaces.Person;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
 import bank.LoanManagerRole;
+import bank.RobberRole;
 import bank.SecurityGuardRole;
 import bank.TellerRole;
 import bank.interfaces.SecurityGuard;
@@ -34,6 +35,7 @@ public class BankBuilding extends Building {
 	InfoPanel infoPanel;
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	Map<Person, RobberRole> existingRobberRoles = new HashMap<Person, RobberRole>();
 	private CityLocation bank;
 
 	// Constants for staggering opening/closing time
@@ -169,6 +171,31 @@ public class BankBuilding extends Building {
 			bankGui.getAnimationPanel().addGui(bcg);
 			role.setLocation(bank);
 			existingRoles.put(person, role);
+			person.addRole(role);
+		}
+		else {
+//			role.setPerson(person);
+		}
+		role.msgGoToSecurityGuard(getSecurity());
+
+		return role;
+	}
+	/**
+	 * Gives person a robber role when they
+	 * are told to rob bank in infoPanel
+	 * @param person
+	 * @return
+	 */
+	public Role getRobberRole(Person person) {
+		
+		RobberRole role = existingRobberRoles.get(person);
+		if(role == null) {//they have not been to bank and need a customer role
+			role = new RobberRole(person, bank);
+			RobberGui rg = new RobberGui(role);
+			role.setGui(rg);
+			bankGui.getAnimationPanel().addGui(rg);
+			role.setLocation(bank);
+			existingRobberRoles.put(person, role);
 			person.addRole(role);
 		}
 		else {

@@ -10,6 +10,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
 import bank.gui.LoanManagerGui;
+import bank.gui.RobberGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -28,18 +29,15 @@ public class RobberRole extends Role implements Robber {
 	SecurityGuard sg;
 	AccountManager am;
 	
+	RobberGui robberGui;
+	
 	enum State {enteredBank, stopped, robbing, leaving, done};
 	
 	State state;
 	
-	public RobberRole(Person person) {
-		super(person);
+	public RobberRole(Person person, CityLocation bank) {
+		super(person, bank);
 
-		
-
-
-		
-//		this.name = name;
 		
 	}
 	
@@ -47,6 +45,12 @@ public class RobberRole extends Role implements Robber {
 		return name;
 	}
 	// Messages
+	
+	public void msgGoToSecurityGuard(SecurityGuard s) {
+		sg = s;
+		state = State.enteredBank;
+		stateChanged();
+	}
 	
 	public void msgAttemptToStop(AccountManager am, boolean isSuccessful){
 		if(isSuccessful){
@@ -90,17 +94,26 @@ public class RobberRole extends Role implements Robber {
 	}
 	// Actions
 	private void approachGuard() {
-		//dogotoguard
+		robberGui.DoGoToSecurityGuard();
+		acquireSemaphore(active);
+		
 		sg.msgIAmRobbingTheBank(this);
 	}
 	private void robBank(){
+		robberGui.DoGoToAccountManager();
+		acquireSemaphore(active);
+		
 		//gotosg, push, gotoam
 		am.msgGiveMeTheMoney(this, 300.0);//TODO determine way to calculate real amount
 	}
 	private void leaveBank(){
-		//gotobankexit
+		robberGui.DoLeaveBank();
+		acquireSemaphore(active);
+		
 		sg.msgRobberLeavingBank(this);
 		state = State.done;
+		
+		this.deactivate();
 	}
 	
 	/*
@@ -129,9 +142,9 @@ public class RobberRole extends Role implements Robber {
 //		loanManagerGui.DoEndWorkDay();
 //	}
 //	
-//	public void setGui(LoanManagerGui lmg) {
-//		loanManagerGui = lmg;
-//	}
+	public void setGui(RobberGui rg) {
+		robberGui = rg;
+	}
 	
 	
 	

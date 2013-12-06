@@ -30,7 +30,12 @@ public interface Person {
 	public void addRole(Role r);
 	
 	/**
-	 * Returns true if the person scheduler has a task awaiting it.
+	 * Removes the given Role from the Person's list. 
+	 */
+	public void removeRole(Role r);
+	
+	/**
+	 * @see Wallet
 	 */
 	public boolean hasSomethingToDo();
 	

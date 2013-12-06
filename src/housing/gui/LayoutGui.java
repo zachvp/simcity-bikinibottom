@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.gui.Gui;
 
@@ -21,6 +22,7 @@ import agent.gui.Gui;
  */
 public class LayoutGui implements Gui {
 	/* --- Layout Item Positions --- */
+	
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
@@ -49,9 +51,9 @@ public class LayoutGui implements Gui {
 	// timer for gary
 	ScheduleTask move = ScheduleTask.getInstance(); 
 	
-	public LayoutGui(int dwellingWidth, int dwellingHeight, int index) {
-		ROOM_WIDTH = dwellingWidth / 3;
-		ROOM_HEIGHT = dwellingHeight / 3;
+	public LayoutGui(int index) {
+		ROOM_WIDTH = Constants.ANIMATION_PANEL_WIDTH / 3;
+		ROOM_HEIGHT = Constants.ANIMATION_PANEL_HEIGHT / 3;
 		
 		// place all of the residential items
 		STOVE_POSITION = new Dimension(ROOM_WIDTH - 50, ROOM_HEIGHT / 2 - 10);

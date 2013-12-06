@@ -2,7 +2,6 @@ package housing.gui;
 
 import housing.backend.ResidentialBuilding;
 
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -17,7 +16,7 @@ public class TestFile extends JFrame {
 	public TestFile() {
 		this.setLayout(new GridLayout(2, 1));
 		
-		this.add(building.getComplex());
+		this.add(building.getAnimationPanel());
 		this.add(panel);
 		
 		this.setBounds(50, 50, 600, 600);

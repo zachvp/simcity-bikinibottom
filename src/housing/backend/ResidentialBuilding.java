@@ -20,6 +20,7 @@ import housing.gui.HousingInfoPanel;
  * @author Zach VP
  */
 
+@SuppressWarnings("serial")
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
 	
@@ -51,7 +52,6 @@ public class ResidentialBuilding extends Building {
 
 		// set up the housing complex containing the building roles and GUI
 		this.complex = new HousingComplex(this);
-		
 		
 		this.housingInfoPanel = new HousingInfoPanel(getPopulation());
 	}
@@ -87,7 +87,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return complex;
+		return complex.getGui();
 	}
 
 	@Override

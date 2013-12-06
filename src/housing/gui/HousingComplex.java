@@ -5,17 +5,13 @@ import housing.backend.PayRecipientRole;
 import housing.backend.ResidentRole;
 import housing.backend.ResidentialBuilding;
 
-import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
 import agent.Role;
-import agent.gui.Gui;
 import agent.interfaces.Person;
 
 /**
@@ -25,11 +21,12 @@ import agent.interfaces.Person;
  * @author Zach VP
  */
 
-@SuppressWarnings("serial")
-public class HousingComplex extends JPanel {
+public class HousingComplex {
 	/* --- Data --- */
 	
 	CityLocation building;
+	
+	HousingComplexGui gui;
 	
 	// the "boss" or greeter for this building and the on-call Mr. Fix-it
 	private PayRecipientRole landlord;
@@ -38,21 +35,13 @@ public class HousingComplex extends JPanel {
 	// used for producing jobs and residential roads in the complex
 	public Map<Person, Role> population = new HashMap<Person, Role>();
 	
-	// some configuration constants
-	private final int UNIT_COUNT = 1;
-	private final int ROWS = 1;
-	private final int COLUMNS = 1;
-	private final int SPACING = 0;
-	
-	// layout manager
-	private GridLayout complexLayout;
-
-	// stores all of the housing units in the complex
-	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
-	
 	public HousingComplex(ResidentialBuilding building) {
 		
+		// set up pointer to the building the complex is in
 		this.building = building;
+		
+		// instantiate the gui class for the complex
+		this.gui = new HousingComplexGui(this);
 		
 		// worker for this building
 		this.worker = new MaintenanceWorkerRole(null, building);
@@ -65,23 +54,6 @@ public class HousingComplex extends JPanel {
 		// put the constant roles in the building map
 		this.population.put(null, landlord);
 		this.population.put(null, worker);
-		
-		
-		/** Handle GUI stuff */
-		// create layout and set the layout manager
-		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
-		this.setLayout(complexLayout);
-		
-		/**
-		 * Add as many units as specified to the complex. Units will
-		 * be partitioned according to the GridLayout.
-		 */
-		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, building, this);
-			this.add(gui);
-			housingUnits.add(gui);
-		}
-
 	}
 	
 	/* --- Utility functions --- */
@@ -107,22 +79,15 @@ public class HousingComplex extends JPanel {
 		return landlord;
 	}
 	
-	/** Gui utilities */
-	// this is to get a maintenance worker in the right building
-	public void addGuiToDwelling(Gui gui, int unitNumber) {
-		for(HousingGui unit : housingUnits) {
-			if(unit.getIndex() == unitNumber) {
-				unit.addGui(gui);
-			}
-		}
+	public JPanel getGui() {
+		return gui;
 	}
-	
-	// take the gui out once it's done visiting/fixing
-	public void removeGuiFromDwelling(Gui gui, int unitNumber) {
-		for(HousingGui unit : housingUnits) {
-			if(unit.getIndex() == unitNumber) {
-				unit.removeGui(gui);
-			}
-		}
+
+	public void removeGuiFromDwelling(MaintenanceWorkerRoleGui worker, int unit) {
+		gui.removeGuiFromDwelling(worker, unit);
+	}
+
+	public void addGuiToDwelling(MaintenanceWorkerRoleGui worker, int unit) {
+		gui.addGuiToDwelling(worker, unit);
 	}
 }

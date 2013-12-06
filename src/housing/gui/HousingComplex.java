@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -43,17 +44,19 @@ public class HousingComplex {
 		// instantiate the gui class for the complex
 		this.gui = new HousingComplexGui(this);
 		
-		// worker for this building
-		this.worker = new MaintenanceWorkerRole(null, building);
-		
-		// manager for this building 
-		this.landlord = new PayRecipientRole(null, building);
-		
-		this.worker.setComplex(this);
-		
-		// put the constant roles in the building map
-		this.population.put(null, landlord);
-		this.population.put(null, worker);
+		if(!Constants.DEBUG) {
+			// worker for this building
+			this.worker = new MaintenanceWorkerRole(null, building);
+			
+			// manager for this building 
+			this.landlord = new PayRecipientRole(null, building);
+			
+			this.worker.setComplex(this);
+			
+			// put the constant roles in the building map
+			this.population.put(null, landlord);
+			this.population.put(null, worker);
+		}
 	}
 	
 	/* --- Utility functions --- */

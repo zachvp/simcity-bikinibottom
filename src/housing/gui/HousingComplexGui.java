@@ -24,10 +24,10 @@ public class HousingComplexGui extends JPanel {
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
 	// some configuration constants
-	private final int UNIT_COUNT = 1;
-	private final int ROWS = 1;
-	private final int COLUMNS = 1;
-	private final int SPACING = 0;
+	private final int UNIT_COUNT = 9;
+	private final int ROWS = 3;
+	private final int COLUMNS = 3;
+	private final int SPACING = 5;
 	
 	public HousingComplexGui(HousingComplex complex) {
 		
@@ -57,7 +57,11 @@ public class HousingComplexGui extends JPanel {
 				}
 			}
 			else {
-				
+				try {
+					dwelling.addRole("resident");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 			HousingGui gui = new HousingGui(i, dwelling);

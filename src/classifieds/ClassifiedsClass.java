@@ -68,7 +68,7 @@ public class ClassifiedsClass implements Classifieds {
 		
 		for (Dwelling dwelling : dwellings) {
 			ResidentRole role = (ResidentRole) (dwelling.getResident());
-			if (role.getPerson() != null
+			if (role != null && role.getPerson() != null
 					&& returnOnlyOpenRooms) {
 				continue;
 			}

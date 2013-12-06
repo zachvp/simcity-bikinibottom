@@ -5,7 +5,6 @@ import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
-import housing.gui.HousingComplex;
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;

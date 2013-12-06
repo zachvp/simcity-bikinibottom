@@ -8,7 +8,6 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
-import housing.gui.HousingComplex;
 import housing.gui.HousingInfoPanel;
 
 /**

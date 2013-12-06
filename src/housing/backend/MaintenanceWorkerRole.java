@@ -1,7 +1,6 @@
 package housing.backend;
 
 import gui.trace.AlertTag;
-import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;

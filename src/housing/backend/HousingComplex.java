@@ -1,9 +1,7 @@
-package housing.gui;
+package housing.backend;
 
-import housing.backend.MaintenanceWorkerRole;
-import housing.backend.PayRecipientRole;
-import housing.backend.ResidentRole;
-import housing.backend.ResidentialBuilding;
+import housing.gui.HousingComplexGui;
+import housing.gui.MaintenanceWorkerRoleGui;
 
 import java.util.HashMap;
 import java.util.Map;

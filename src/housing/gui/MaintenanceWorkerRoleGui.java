@@ -1,5 +1,6 @@
 package housing.gui;
 
+import housing.backend.HousingComplex;
 import housing.backend.MaintenanceWorkerRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;

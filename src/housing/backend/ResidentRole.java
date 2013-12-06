@@ -1,4 +1,4 @@
-package housing.roles;
+package housing.backend;
 
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;

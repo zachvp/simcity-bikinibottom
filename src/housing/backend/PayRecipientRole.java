@@ -1,4 +1,4 @@
-package housing.roles;
+package housing.backend;
 
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;

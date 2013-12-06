@@ -1,7 +1,7 @@
 package gui;
 
+import housing.backend.ResidentialBuilding;
 import housing.gui.HousingInfoPanel;
-import housing.roles.ResidentialBuilding;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

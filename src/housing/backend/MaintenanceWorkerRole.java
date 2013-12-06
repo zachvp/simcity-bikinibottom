@@ -1,4 +1,4 @@
-package housing.roles;
+package housing.backend;
 
 import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;
@@ -61,8 +61,8 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		}
 	}
 	
-	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence) {
-		super(agent, residence);
+	public MaintenanceWorkerRole(PersonAgent agent, CityLocation building) {
+		super(agent, building);
 		this.gui = new MaintenanceWorkerRoleGui(this);
 	}
 	

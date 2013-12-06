@@ -2,7 +2,7 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
-import housing.roles.ResidentRole;
+import housing.backend.ResidentRole;
 
 import java.util.Collections;
 import java.util.HashMap;

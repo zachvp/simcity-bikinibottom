@@ -1,8 +1,8 @@
 package classifieds;
 
 import gui.Building;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
-import housing.roles.ResidentRole;
 
 import java.util.ArrayList;
 import java.util.Collections;

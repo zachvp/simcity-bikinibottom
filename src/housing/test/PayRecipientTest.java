@@ -2,9 +2,9 @@ package housing.test;
 
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import housing.roles.PayRecipientRole;
-import housing.roles.ResidentialBuilding;
-import housing.roles.PayRecipientRole.MyResident;
+import housing.backend.PayRecipientRole;
+import housing.backend.ResidentialBuilding;
+import housing.backend.PayRecipientRole.MyResident;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockResident;
 import junit.framework.TestCase;

@@ -2,11 +2,11 @@ package housing.test.mock;
 
 import mock.EventLog;
 import CommonSimpleClasses.Constants.Condition;
+import housing.backend.PayRecipientRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
-import housing.roles.PayRecipientRole;
 
 public class MockDwelling implements Dwelling {
 	EventLog log = new EventLog();

@@ -1,8 +1,8 @@
 package housing.gui;
 
 import gui.AnimationPanel;
-import housing.roles.ResidentDwelling;
-import housing.roles.ResidentialBuilding;
+import housing.backend.ResidentDwelling;
+import housing.backend.ResidentialBuilding;
 
 import java.awt.Color;
 import java.awt.Component;

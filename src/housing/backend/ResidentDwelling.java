@@ -1,4 +1,4 @@
-package housing.roles;
+package housing.backend;
 
 import agent.PersonAgent;
 import agent.gui.Gui;
@@ -25,7 +25,9 @@ public class ResidentDwelling implements Dwelling {
 	public EventLog log = new EventLog();
 	
 	// building the dwelling belongs to
-	private ResidentialBuilding building;
+//	private ResidentialBuilding building;
+	private HousingComplex complex;
+	
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	/* --- Housing slots --- */
@@ -58,11 +60,11 @@ public class ResidentDwelling implements Dwelling {
 		super();
 		
 		// TODO actual code below
-		this.building = building;
+		this.complex = complex;
 		
 		if(!Constants.DEBUG){
-			this.payRecipient = building.getPayRecipient();
-			this.worker = building.getWorker();
+			this.payRecipient = complex.getPayRecipient();
+			this.worker = complex.getWorker();
 			this.resident = new ResidentRole(null, building, this, gui);
 		}
 		// end actual code
@@ -91,7 +93,7 @@ public class ResidentDwelling implements Dwelling {
 		}
 		// ---- end test hacks
 		
-		this.building.addResident(resident);
+		this.complex.addResident(resident);
 		
 		this.condition = startCondition;
 		
@@ -153,7 +155,7 @@ public class ResidentDwelling implements Dwelling {
 	}
 	
 	public String toString() {
-		return "Room at " + building;
+		return "Room in building " + complex.getBuilding();
 	}
 
 	public void setResident(ResidentRole resident) {

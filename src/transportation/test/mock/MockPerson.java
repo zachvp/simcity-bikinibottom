@@ -5,7 +5,7 @@ import java.util.Map;
 import market.Item;
 import mock.EventLog;
 import mock.Mock;
-import housing.roles.ResidentRole;
+import housing.backend.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;

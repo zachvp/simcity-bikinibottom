@@ -1,5 +1,7 @@
 package gui;
 
+import gui.trace.TracePanel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +19,8 @@ public class LogDisplay extends JPanel implements ActionListener{
 	Dimension d;
 	JPanel logPanel, buttonsPanel;
 	JButton passenger, transportation, restaurant, bank, market, housing;
+	TracePanel tracePanel = new TracePanel();
+	
 	public LogDisplay() {
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, Constants.INFO_PANEL_HEIGHT);
 		setLayout(new BorderLayout());
@@ -26,6 +30,8 @@ public class LogDisplay extends JPanel implements ActionListener{
 		logPanel.setPreferredSize(logDim);
 		logPanel.setMaximumSize(logDim);
 		logPanel.setMinimumSize(logDim);
+		tracePanel.setPreferredSize(logDim);
+		logPanel.add(tracePanel);
 		
 		Dimension buttonDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.20), Constants.INFO_PANEL_HEIGHT);
 		buttonsPanel = new JPanel();

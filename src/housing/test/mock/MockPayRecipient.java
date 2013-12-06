@@ -2,7 +2,7 @@ package housing.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
-import housing.MaintenanceWorkerRole;
+import housing.backend.MaintenanceWorkerRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;

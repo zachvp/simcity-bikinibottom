@@ -2,8 +2,8 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
+import housing.backend.ResidentRole;
 import gui.trace.AlertTag;
-import housing.ResidentRole;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package gui;
 
-import housing.ResidentialBuilding;
+import housing.backend.ResidentialBuilding;
 import housing.gui.HousingInfoPanel;
 
 import java.awt.BorderLayout;

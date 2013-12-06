@@ -71,9 +71,11 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	}
 
 	@Override
-	// from market
-	public void msgHereIsBill(double bill, Market market) {
-		bills.add(new MyBill(bill, market));
+	// from market cashier
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		// TODO Auto-generated method stub
+		bills.add(new MyBill(total, cashier));
 		stateChanged();
 	}
 	
@@ -156,15 +158,16 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	
 	private void payBill(MyBill bill) {
 		if (money >= bill.amount) {
-			Do("Paying $" + df.format(bill.amount) + " to " + bill.market.getName());
-			bill.market.msgHereIsPayment(bill.amount);
+			Do("Paying $" + df.format(bill.amount) + " to "
+					+ bill.cashier.getName());
+			bill.cashier.msgHereIsPayment(bill.amount, this);
 			money -= bill.amount;
 			bills.remove(bill);
 			
 		} else {
 			// extra credit
 			Do("Cannot pay the market in full. Paying as much as I can...");
-			bill.market.msgHereIsPayment(money);
+			bill.cashier.msgHereIsPayment(money, this);
 			money = 0.00;
 			bill.amount -= money;
 		}
@@ -251,17 +254,17 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	
 	public class MyBill {
 		private double amount;
-		private Market market;
+		private market.interfaces.Cashier cashier;
 		
-		public MyBill(double amount, Market market) {
+		public MyBill(double amount, market.interfaces.Cashier cashier) {
 			this.amount = amount;
-			this.market = market;
+			this.cashier = cashier;
 		}
 		
 		public double getAmount() { return amount; }
 		public void setAmount(double amount) { this.amount = amount; }
 		
-		public Market getMarket() { return market; }
+		public market.interfaces.Cashier getCashier() { return cashier; }
 	}
 	
 	@Override
@@ -273,13 +276,6 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	public boolean isOnBreak() {
 		// TODO maybe cashiers can go on breaks in v3
 		return false;
-	}
-
-	@Override
-	public void msgHereIsYourTotal(double total,
-			market.interfaces.Cashier cashier) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

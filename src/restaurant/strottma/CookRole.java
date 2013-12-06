@@ -133,6 +133,20 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 		}
 	}
 	
+	@Override
+	// from market delivery guy
+	public void msgNoItem() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	// from market delivery guy
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void msgAtDestination() { // from gui
 		multiStepAction.release();
 	}
@@ -419,16 +433,6 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	public boolean isOnBreak() {
 		// TODO maybe cooks can go on breaks in v3
 		return false;
-	}
-	@Override
-	public void msgNoItem() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void msgHereIsYourItems(List<Item> DeliverList) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

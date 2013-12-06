@@ -1,5 +1,6 @@
 package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
@@ -63,6 +64,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// food data
 	// Constructor: String type, int amount, int low, int capacity, int cookTime
+	@SuppressWarnings("serial")
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));
@@ -316,6 +318,12 @@ public class ResidentRole extends Role implements Resident {
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();
+	}
+	
+	/* --- Overriden from Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
 	}
 	
 	/* --- Animation Routines --- */

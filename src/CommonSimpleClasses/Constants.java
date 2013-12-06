@@ -40,7 +40,7 @@ public interface Constants {
 	 * True only for development versions of this program.
 	 */
 	// TODO disable DEBUG constant before final release
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 	/**
 	 * Whether EventLog should log events.
@@ -181,6 +181,16 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
+	
+	/**
+	 * Number of units per housing structure
+	 */
+	public final int HOUSING_UNIT_COUNT = 9;
+	
+	/**
+	 * Spacing between units in a ChousingComplex
+	 */
+	public final int HOUSING_UNIT_SPACING = 5;
 	
 	/**
 	 * Conditions for Dwellings

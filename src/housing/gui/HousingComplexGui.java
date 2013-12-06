@@ -23,25 +23,22 @@ public class HousingComplexGui extends JPanel {
 	// stores all of the housing units in the complex
 	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
 	
-	// some configuration constants
-	private final int UNIT_COUNT = 9;
-	private final int ROWS = 3;
-	private final int COLUMNS = 3;
-	private final int SPACING = 5;
+	// how many units will be in a row or column within a complex
+	private final int SUBDIVISIONS = (int) Math.sqrt(Constants.HOUSING_UNIT_COUNT);
 	
 	public HousingComplexGui(HousingComplex complex) {
 		
 		this.complex = complex;
 		
 		// create layout and set the layout manager
-		complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
+		complexLayout = new GridLayout(SUBDIVISIONS, SUBDIVISIONS, Constants.HOUSING_UNIT_SPACING, Constants.HOUSING_UNIT_SPACING);
 		this.setLayout(complexLayout);
 		
 		/**
 		 * Add as many units as specified to the complex. Units will
 		 * be partitioned according to the GridLayout.
 		 */
-		for(int i = 0; i < UNIT_COUNT; i++){
+		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++){
 			ResidentDwelling dwelling = new ResidentDwelling(i, Condition.GOOD, complex);
 
 			// for testing only

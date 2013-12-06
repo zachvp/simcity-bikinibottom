@@ -49,9 +49,6 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
  */
 public class MainFrame extends JFrame implements ActionListener {
 
-
-	//TODO  write down steps to test GUI manually 
-
 	private int WINDOWX = 1200;
 	private int WINDOWY = 700;
 
@@ -122,15 +119,21 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.add(map);
 
 		//Information Panel 720x210
+		JTabbedPane tabbedInfoPane = new JTabbedPane();
+		tabbedInfoPane.setOpaque(false);
+		
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
 		infoPanelSlot.setPreferredSize(infoDim);
 		infoPanelSlot.setMaximumSize(infoDim);
 		infoPanelSlot.setMinimumSize(infoDim);
-		infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
+		//infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
-		infoPanel = new InfoPanel(infoDim.width, infoDim.height);        
-		infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
+		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
+		tabbedInfoPane.addTab("Info", infoPanel);
+		tabbedInfoPane.addTab("Log", new LogDisplay()); //TODO Create log panel
+		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
+		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -142,8 +145,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		//Lists displaying People and Buildings in the city
 		//Dimension tabDim = new Dimension(listDim.width-60, listDim.height-47);
-		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.setOpaque(false);
+		JTabbedPane tabbedListPane = new JTabbedPane();
+		tabbedListPane.setOpaque(false);
 		//tabbedPane.setPreferredSize(tabDim);
 		buildingList = new InfoList(listDim.width, listDim.height);
 		personList = new InfoList(listDim.width, listDim.height);
@@ -156,9 +159,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		buildingList.setBuildingList(map.getBuildings());
 		citizenRecords.setInfoPanel(infoPanel);
 		buildingList.setBuildingView(buildingViewPanel);
-		tabbedPane.addTab("Buildings", buildingList);
-		tabbedPane.addTab("People", personList);
-		InfoListSlot.add(tabbedPane);//, BorderLayout.CENTER);
+		tabbedListPane.addTab("Buildings", buildingList);
+		tabbedListPane.addTab("People", personList);
+		InfoListSlot.add(tabbedListPane);//, BorderLayout.CENTER);
 		map.setInfoPanel(infoPanel);
 
 		//JPanel to hold infoPanelSlot and buildingListSlot
@@ -228,7 +231,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				//add building details
 			}
 			
-			// TODO Instantiate apartments?
 
 			if(type == LocationTypeEnum.Apartment){
 				/*
@@ -260,7 +262,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(market);
 			}
 			if(type == LocationTypeEnum.Hospital){
-				//TODO
 				hospital = new HospitalBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				hospital.setRecords(citizenRecords);				
 				hospital.setName(buildingName);

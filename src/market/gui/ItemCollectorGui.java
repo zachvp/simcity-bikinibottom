@@ -31,12 +31,15 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     private  int CollectItemX = 220;
     private  int CollectItemY = 260;
     
+    private static final int ExitX1 = 130;
+    private static final int ExitY1 = 150;
+    
     private static final int ExitX = 130;
     private static final int ExitY = -30;
 
     private MarketInfoPanel panel;
     
-    private enum Command {noCommand, GoHome, CollectItem, GoToExit, NotAtWork};
+    private enum Command {noCommand, GoHome, CollectItem, GoToExit, NotAtWork, GoToExit1, GoToWork1};
 	private Command command=Command.NotAtWork;
     
     public ItemCollectorGui(ItemCollector ic) {

@@ -54,5 +54,7 @@ public interface Corner extends CityLocation {
 
 	public void msgIAmCrossing();
 
+	void msgChangeDir();
+
 	
 }

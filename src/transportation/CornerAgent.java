@@ -10,10 +10,12 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import kelp.Kelp;
 import kelp.KelpClass;
+import transportation.gui.interfaces.CornerGui;
 import transportation.interfaces.AdjCornerRequester;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.BusstopRequester;
 import transportation.interfaces.Corner;
+import transportation.interfaces.Passenger;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
@@ -51,6 +53,12 @@ public class CornerAgent extends Agent implements Corner {
 	private Queue<IntersectionAction> waitingToCross =
 			new ConcurrentLinkedQueue<IntersectionAction>();
 	
+	// TODO Update DD
+	/*List of Passengers waiting to walk through the intersection.
+	 */
+	private Queue<Passenger> waitingToWalk =
+			new ConcurrentLinkedQueue<Passenger>();
+	
 	//List of entities waiting to get a copy of busstopList.
 	private Queue<BusstopRequester> waitingForBusstops =
 			new ConcurrentLinkedQueue<BusstopRequester>();
@@ -64,9 +72,24 @@ public class CornerAgent extends Agent implements Corner {
 
 	private String name;
 	
+	// TODO Update DD
+	CornerDirectionEnum cornerDir;
+	enum CornerDirectionEnum {
+		horizontal,
+		transitioningToVertical,
+		vertical,
+		transitioningToHorizontal
+	}
+
+	private CornerGui gui;
+
+	private boolean changingDir;
+	
 	public CornerAgent(String name, XYPos pos) {
 		this.pos = pos;
 		this.name = name;
+		
+		// TODO Obsolete try catch?
 		try {
 			kelp = KelpClass.getKelpInstance();
 		} catch (Exception e) {
@@ -75,6 +98,8 @@ public class CornerAgent extends Agent implements Corner {
 					+ " buses will misbehave and NullPointerExceptions"
 					+ " will be thrown.");
 		}
+		
+		//this.gui = new CornerGuiClass(this);
 		
 	}
 	
@@ -109,7 +134,8 @@ public class CornerAgent extends Agent implements Corner {
 		waitingForCorners.add(c);
 		stateChanged();
 	}
-
+	
+	// TODO Update DD
 	@Override
 	public void msgDoneCrossing() {
 		synchronized (synchingTheCounter) {
@@ -117,19 +143,27 @@ public class CornerAgent extends Agent implements Corner {
 		}
 		stateChanged();
 	}
-
+	
+	// TODO Update DD
 	@Override
 	public void msgIAmCrossing() {
 		synchronized (synchingTheCounter) {
 			crossroadBusy--;
 		}
 		stateChanged();
-		
+	}
+	
+	// TODO Update DD
+	@Override
+	public void msgChangeDir(){
+		incrementDirEnum();
+		changingDir = !changingDir;
+		stateChanged();
 	}
 
 	@Override
 	public boolean pickAndExecuteAnAction() { // TODO Update DD
-		
+		if(!changingDir) {
 			if (!waitingForBusstops.isEmpty()) {
 				sendBusstopInfo();
 				return true;
@@ -142,6 +176,7 @@ public class CornerAgent extends Agent implements Corner {
 					return true;
 				}
 			}
+		}
 		return false;
 	}
 
@@ -162,6 +197,12 @@ public class CornerAgent extends Agent implements Corner {
 		crossroadBusy--;
 		IntersectionAction iA = waitingToCross.remove();
 		iA.v.msgDriveNow();
+	}
+
+	private void incrementDirEnum() {
+		cornerDir = CornerDirectionEnum
+				.values()[(cornerDir.ordinal()+1)
+				%CornerDirectionEnum.values().length];
 	}
 
 	@Override

@@ -56,6 +56,8 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	private DirectionEnum currentDirection = DirectionEnum.West;
 	
 	Timer timer = SingletonTimer.getInstance();
+
+	private boolean turning;
 	
 	
 	public VehicleAgent(Corner currentCorner, boolean isBus) {
@@ -147,6 +149,13 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		
 		for (MyCorner myCorner : adjCorners) {
 			if (myCorner.c == currentPath.get(0)) {
+				boolean currDirIsVertical = 
+						(currentDirection == DirectionEnum.North 
+						|| currentDirection == DirectionEnum.South);
+				boolean nextDirIsVertical = 
+						(myCorner.d == DirectionEnum.North 
+						|| myCorner.d == DirectionEnum.South);
+				turning = (currDirIsVertical != nextDirIsVertical);
 				currentDirection = myCorner.d;
 				return;
 			}
@@ -161,7 +170,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	//Requests permission to cross from `currentCorner`.
 	private void askPermissionToCross() {
 		IntersectionAction a = new IntersectionAction
-				(currentPath.get(0), this);
+				(currentPath.get(0), this, turning);
 		
 		currentCorner.msgIWantToDriveTo(a);
 		

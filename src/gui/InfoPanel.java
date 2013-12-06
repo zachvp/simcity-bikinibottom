@@ -133,7 +133,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		controls.setPreferredSize(controlDim);
 		controls.setVisible(false);
 		
-		//TODO Robber button
+		//Robber button
 		robberButton = new JButton("Rob a Bank");
 		robberButton.addActionListener(this);
 		

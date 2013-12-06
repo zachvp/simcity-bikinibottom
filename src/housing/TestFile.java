@@ -14,13 +14,12 @@ import CommonSimpleClasses.Constants;
 public class TestFile extends JFrame {
 	
 	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
-	HousingInfoPanel panel = new HousingInfoPanel(building);
 	
 	public TestFile() {
 		this.setLayout(new GridLayout(1, 2));
 		
 		this.add(building.getAnimationPanel());
-		this.add(panel);
+		this.add(building.getInfoPanel());
 		
 		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH * 2,
 				Constants.ANIMATION_PANEL_HEIGHT));

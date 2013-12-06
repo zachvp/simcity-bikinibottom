@@ -86,26 +86,36 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		super(payRecipientPerson, residence);
 		
 		// ask everyone for rent
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				synchronized(residents) {
-					for(MyResident mr : residents) {
-						mr.state = PaymentState.PAYMENT_DUE;
-						stateChanged();
-					}
-				}
-			}
-		};
-		
-		// every day at noon
-		int hour = 9;
-		int minute = 0;
-		
-		schedule.scheduleDailyTask(command, hour, minute);
+		// TODO should the final version have a timed charge?
+//		Runnable command = new Runnable() {
+//			@Override
+//			public void run() {
+//				synchronized(residents) {
+//					for(MyResident mr : residents) {
+//						mr.state = PaymentState.PAYMENT_DUE;
+//						stateChanged();
+//					}
+//				}
+//			}
+//		};
+//		
+//		// every day at noon
+//		int hour = 9;
+//		int minute = 0;
+//		
+//		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	/* ----- Messages ----- */
+	public void msgChargeRent() {
+		synchronized(residents) {
+			for(MyResident mr : residents) {
+				mr.state = PaymentState.PAYMENT_DUE;
+				stateChanged();
+			}
+		}
+	}
+	
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
 		if(mr == null) { return; }

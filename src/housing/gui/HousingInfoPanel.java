@@ -1,6 +1,8 @@
 package housing.gui;
 
 
+import housing.backend.PayRecipientRole;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,16 +24,22 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	JButton chargeRent = new JButton("Charge Rent");
 	JButton breakHouse = new JButton("Break House");
 	
-	public HousingInfoPanel(CityLocation building) {
+	public HousingInfoPanel(CityLocation building, Map<Person, Role> people) {
+		
+		this.people = people;
 		
 		this.setLayout(new GridLayout(2, 1));
 		
 		JPanel panel = new JPanel(new GridLayout(2,0));
 		
+		// landlord input
 		panel.add(new JLabel("Ask every resident for rent."));
+		chargeRent.addActionListener(this);
 		panel.add(chargeRent);
 		
+		// maintenance input
 		panel.add(new JLabel("Summon a maintenance worker."));
+		breakHouse.addActionListener(this);
 		panel.add(breakHouse);
 		
 		add(new JLabel("Unit numbers read left-to-right, top-to-bottom."));
@@ -41,7 +49,13 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
-			System.out.println("Charging rent");
+			for(Map.Entry<Person, Role> entry : people.entrySet()) {
+				if(entry.getValue() instanceof PayRecipientRole) {
+					System.out.println("Charging rent");
+					PayRecipientRole role = (PayRecipientRole) entry.getValue();
+					role.msgChargeRent();
+				}
+			}
 		}
 	}
 	

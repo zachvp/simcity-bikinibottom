@@ -55,7 +55,7 @@ public class ResidentRole extends Role implements Resident {
 	private ResidentGui gui;
 	
 	// TODO: this will be set true by the person
-	private boolean hungry = true;
+	private boolean hungry = false;
 	
 	// rent data
 	private double oweMoney = 0;

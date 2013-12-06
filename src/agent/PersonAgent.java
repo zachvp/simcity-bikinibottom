@@ -105,7 +105,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print(AlertTag.PERSON, this.getName(), "we're here captain");
+		print(AlertTag.PASSENGER, this.getName(), "we're here captain");
 	}
 	
 	/* -------- Scheduler -------- */
@@ -685,8 +685,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void printMsg(String msg) {
-		// AlertTag tag, String name, String msg
-		print(AlertTag.PERSON, this.getName(), msg);
+		print(AlertTag.PASSENGER, this.getName(), msg);
 	}
 	
 	@Override
@@ -696,7 +695,12 @@ public class PersonAgent extends Agent implements Person {
 
 	@Override
 	public void agentDo(AlertTag tag, String name, String msg) {
-		Do(AlertTag.PERSON, this.getName(), msg);
+		Do(tag, this.getName(), msg);
+	}
+	
+	@Override
+	public void agentDo(String msg) {
+		Do(msg);
 	}
 
 	public void instantiateCar() {

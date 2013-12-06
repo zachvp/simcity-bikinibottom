@@ -178,7 +178,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public void msgGotToTeller() {
-		Do(AlertTag.BANK_CUSTOMER, "msggottoteller");
+		Do(AlertTag.BANK, "msggottoteller");
 //		Do("HI");
 		event = Event.gotToTeller;
 		stateChanged();
@@ -270,7 +270,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	// Actions
 	private void goToSecurityGuard(){
-		Do(AlertTag.BANK_CUSTOMER, "going to guard");
+		Do(AlertTag.BANK, "going to guard");
 		doGoToSecurityGuard();
 		acquireSemaphore(active);
 		state = State.waitingAtGuard;
@@ -287,11 +287,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	private void speakToTeller() {
-		Do(AlertTag.BANK_CUSTOMER, "speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+		Do(AlertTag.BANK, "speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 
 		
 		if(accountId == -1) {//have not been assigned accountID yet
-			Do(AlertTag.BANK_CUSTOMER, "need to open account");
+			Do(AlertTag.BANK, "need to open account");
 			double initialDepositAmount = 10;//this.getPerson().getWallet().getCashOnHand() * .2;
 			
 			if(this.getPerson().getWallet().getCashOnHand() < initialDepositAmount) {//is too poor/worthless to afford initialdeposit
@@ -307,7 +307,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		}
 		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount > this.getPerson().getWallet().getMoneyNeeded()) { //if i need money and have enough in my account, i will withdraw it
 			double moneyNeeded = this.getPerson().getWallet().getMoneyNeeded();
-			Do(AlertTag.BANK_CUSTOMER, "I'm withdrawing needed money");
+			Do(AlertTag.BANK, "I'm withdrawing needed money");
 			teller.msgWithdrawMoney(this, accountId, moneyNeeded);//TODO for testing
 			state= State.withdrawing;
 			return;
@@ -318,14 +318,14 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount > ((myTooLittle() + myTooMuch())/2)){
-			Do(AlertTag.BANK_CUSTOMER, "I'm withdrawing");
+			Do(AlertTag.BANK, "I'm withdrawing");
 			double withdrawAmount = (myTooLittle() + myTooMuch())/2;
 			teller.msgWithdrawMoney(this, accountId, withdrawAmount);
 			state= State.withdrawing;
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() > myTooMuch()) {
-			Do(AlertTag.BANK_CUSTOMER, "Im depositing");
+			Do(AlertTag.BANK, "Im depositing");
 			double depositAmount = myCash() - ((myTooMuch() + myTooLittle())/2);
 			teller.msgDepositMoney(this, accountId, depositAmount); 
 			state = State.depositing;
@@ -337,13 +337,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			state= State.gettingLoan;
 			return;
 		}
-		Do(AlertTag.BANK_CUSTOMER, "ERROR, no condtion met");//not good
+		Do(AlertTag.BANK, "ERROR, no condtion met");//not good
 	}
 	
 
 	
 	private void askForLoan() {//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
-		Do(AlertTag.BANK_CUSTOMER, "asking for loan");
+		Do(AlertTag.BANK, "asking for loan");
 		doGoToLoanManager(loanManagerXPos);
 		acquireSemaphore(active);
 		if(this.getPerson().getWallet().getMoneyNeeded() == 0) {
@@ -358,7 +358,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	private void leaveBank() {
-		Do(AlertTag.BANK_CUSTOMER, "leaving bank " + accountId);
+		Do(AlertTag.BANK, "leaving bank " + accountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(loanAmount);

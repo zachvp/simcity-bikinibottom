@@ -182,8 +182,11 @@ public interface Person {
     /** Return Person name for messages.*/
 	public String getName();
 	
-    /** The simulated action code */
+    /** The simulated action code for log display */
 	public void agentDo(AlertTag tag, String name, String msg);
+	
+	/** The simulated action code for just the console */
+	public void agentDo(String msg);
 	
 	/** Print message */
 	public void printMsg(String msg);

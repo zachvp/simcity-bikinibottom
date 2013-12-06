@@ -267,7 +267,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void openNewAccount(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "opening account");
+		Do(AlertTag.BANK, "opening account");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgOpenNewAccount(this, mc.getBankCustomer(), mc.getDeposit());
@@ -275,7 +275,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void accountOpened(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "account has been opened");
+		Do(AlertTag.BANK, "account has been opened");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgAccountOpened(mc.accountId);
@@ -284,7 +284,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void deposit(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "deposit");
+		Do(AlertTag.BANK, "deposit");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgDepositMoney(this, mc.getBankCustomer(), mc.accountId, mc.getDeposit());
@@ -292,7 +292,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void depositCompleted(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "deposit verified");
+		Do(AlertTag.BANK, "deposit verified");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgDepositSuccessful(mc.getDeposit());
@@ -301,7 +301,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void withdraw(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "withdraw");
+		Do(AlertTag.BANK, "withdraw");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgWithdrawMoney(this, mc.getBankCustomer(), mc.accountId, mc.withdrawal);
@@ -309,7 +309,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void withdrawCompleted(MyCustomer mc) {
-		Do(AlertTag.BANK_TELLER, "withdraw verified");
+		Do(AlertTag.BANK, "withdraw verified");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgWithdrawSuccessful(mc.withdrawal);
@@ -318,7 +318,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void sendToLoanManager(MyCustomer mc) {
-	   Do(AlertTag.BANK_TELLER, "sending to loan manager");
+	   Do(AlertTag.BANK, "sending to loan manager");
 	   mc.getBankCustomer().msgSpeakToLoanManager(loanManager, loanManagerXPos);
 	   doGoToLoanManager();
 	   acquireSemaphore(active);

@@ -52,12 +52,20 @@ public abstract class Agent {
     }
 
     /**
-     * The simulated action code
+     * The simulated action code for the log display
      */
     // AlertTag tag, String name, String log
     protected void Do(AlertTag tag, String name, String msg) {
         // print(msg, null);
         log.add(tag, name, msg);
+    }
+    
+    /**
+     * The simulated action code for just the console 
+     */
+    protected void Do(String msg) {
+        // print(msg, null);
+        log.add(msg);
     }
 
     /**

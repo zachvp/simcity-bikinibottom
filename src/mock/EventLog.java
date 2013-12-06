@@ -23,13 +23,25 @@ public class EventLog {
 	private LinkedList<LoggedEvent> events = new LinkedList<LoggedEvent>();
 
 	/**
-	 * Add a new event to the log.
+	 * Add a new event to the log for log display.
 	 *
 	 * @param log
 	 */
 	public void add(AlertTag tag, String name, String log){
-		AlertLog.getInstance().logMessage(AlertTag.PERSON, name, "I am in the RED ZONE!");
+		AlertLog.getInstance().logMessage(tag, name, log);
 		
+		if (Constants.LOG) {
+			events.add(new LoggedEvent(log));
+		}
+		if (Constants.PRINT) {
+			System.out.println(log);
+		}
+	}
+	
+	/**
+	 * Add a new event to the log for simply text
+	 * */
+	public void add(String log){
 		if (Constants.LOG) {
 			events.add(new LoggedEvent(log));
 		}

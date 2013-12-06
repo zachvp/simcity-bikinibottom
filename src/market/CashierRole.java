@@ -416,7 +416,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		MC.itemCollector = IC;
 		MC.state = Customerstate.OrderPlaced;
 		MC.itemCollector.msgGetTheseItem(MC.OrderList);
-		
+		 
 		cashierGui.GoToFrontDesk();
 		try {
 			atFrontDesk.acquire();

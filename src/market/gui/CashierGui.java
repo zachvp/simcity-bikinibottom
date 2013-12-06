@@ -122,7 +122,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	command=Command.GoToBench;
 
     }
-    
+     
     /* (non-Javadoc)
 	 * @see market.gui.MockCashierGui#OffWork()
 	 */

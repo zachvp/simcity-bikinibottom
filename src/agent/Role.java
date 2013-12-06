@@ -1,5 +1,6 @@
 package agent;
 
+import gui.trace.AlertTag;
 import housing.interfaces.ResidentGui;
 
 import java.util.concurrent.Executors;
@@ -197,9 +198,9 @@ public abstract class Role {
     /**
      * The simulated action code
      */
-    protected void Do(String msg) {
+    protected void Do(AlertTag tag, String msg) {
     	if (person != null) {
-    		person.agentDo(msg);
+    		person.agentDo(tag, this.getName(), msg);
     	} else {
     		// well i guess we can't do anything
     	}

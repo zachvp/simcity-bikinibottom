@@ -135,9 +135,12 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			GoToWork();
 			return true;
 		}
-		if (Available == false){
-			GoDeliver();
+		if (CurrentOrder != null){
+			//if (CurrentOrder.Building.isOpen())
+			if (Available == false){
+				GoDeliver();
 				return true;
+			}
 		}
 		if (Available == true && getState() == DeliveryGuystate.OffWork){
 			OffWork();

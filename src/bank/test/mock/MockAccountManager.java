@@ -3,6 +3,7 @@ package bank.test.mock;
 
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.Teller;
 
 
@@ -46,6 +47,12 @@ public class MockAccountManager extends Mock implements AccountManager {
 
 		@Override
 		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void msgGiveMeTheMoney(Robber r, double amount) {
 			// TODO Auto-generated method stub
 			
 		}

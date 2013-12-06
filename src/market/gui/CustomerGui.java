@@ -17,6 +17,9 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 	private boolean isPresent = false;
 	private boolean isBuying = false;
 	
+	private String currentTask;
+	private double currentMoney = -1;
+	
 	MarketGui gui;
 
 	private int xPos, yPos;
@@ -54,10 +57,13 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 
 		
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToCashier) 
+			if (command==Command.GoToCashier) {
 				agent.msgAnimationFinishedGoToCashier();
+				currentTask = "AtFrontDesk";
+			}
 			else if (command==Command.LeaveMarket) {
 				agent.msgAnimationFinishedLeaveMarket();
+				currentTask = "AtExit";
 				isBuying = false;
 			}
 			
@@ -74,6 +80,22 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 	public void draw(Graphics2D g) {
 		g.setColor(Color.YELLOW);
 		g.fillRect(xPos, yPos, CustomerWidth, CustomerHeight);
+		
+		g.drawString(currentTask, xPos, yPos);
+		g.drawString("Cash on hand: " + currentMoney, xPos + 15, yPos + 10);
+		
+		for (int i=0;i<agent.getShoppingList().size();i++){
+			if (currentTask != "Leaving Market" && currentTask != "AtExit"){
+			//g.drawString("Inventory has : " + agent.getShoppingList().get(i).name + "  " + agent.getPerson().getInventory().get(agent.getShoppingList().get(i).name), xPos + 15, yPos + 20 + i*10);
+			g.drawString("Going To Buy : " + agent.getShoppingList().get(i).name + "  " + agent.getShoppingList().get(i).amount, xPos + 15, yPos + 20 + i*10);
+			}
+		}
+		
+		for (int i=0;i<agent.getPerson().getInventory().size();i++){
+			if (currentTask == "Leaving Market" && currentTask != "AtExit" ){
+				g.drawString("Inventory has : " + agent.getShoppingList().get(i).name + "  " + agent.getPerson().getInventory().get(agent.getShoppingList().get(i).name), xPos + 15, yPos + 20 + i*10);
+			}
+		}
 
 	}
 
@@ -95,6 +117,7 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 		isBuying = true;
 		agent.goingToBuy();
 		setPresent(true);
+		
 	}
 	
 	
@@ -122,6 +145,8 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 		xDestination = xFrontDesk;
         yDestination = yFrontDesk;
 		command = Command.GoToCashier;
+		currentTask = "GoingToFrontDesk";
+		currentMoney = agent.getCash();
 	}
 	
 	
@@ -133,5 +158,7 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 		xDestination = 220;
 		yDestination = -20;
 		command = Command.LeaveMarket;
+		currentTask = "Leaving Market";
+		currentMoney = agent.getCash();
 	}
 }

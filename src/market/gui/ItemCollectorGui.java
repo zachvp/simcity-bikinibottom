@@ -25,6 +25,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     private static final int ItemCollectorWidth = 10;
     private static final int ItemCollectorHeight = 10;
     
+    private String currentTask = "??";
+    
     private  int HomePosX = 195;
     private  int HomePosY = 200;
     
@@ -93,10 +95,12 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
         	
         	else if (command==Command.GoHome) {
 				agent.Ready();
+				currentTask = "AtBench";
         	}
         	
 			else if (command==Command.CollectItem) {
 				agent.AtCollectStation();
+				currentTask = "AtCollectStation";
 			}
 			else if (command==Command.GoToExit1){
 				ContinueToExit();
@@ -105,6 +109,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 			else if (command==Command.GoToExit){
 				command= Command.NotAtWork;
 				agent.AtExit();
+				currentTask = "AtExit";
 				return;
 			}
         	
@@ -133,6 +138,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command=Command.GoHome;
+    	currentTask = "Going To Ready Station";
     	UpdateInventoryLevel();
     }
     
@@ -140,6 +146,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = Command.GoToWork1;
+    	currentTask = "Going To Work";
     }
     
     /* (non-Javadoc)
@@ -150,12 +157,14 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	xDestination = CollectItemX;
     	yDestination = CollectItemY;
     	command=Command.CollectItem;
+    	currentTask = "Going To Collect Items";
     }
     
     public void ContinueToExit(){
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = Command.GoToExit;
+    	currentTask = "Going To Exit";
     }
     
     /* (non-Javadoc)
@@ -166,6 +175,7 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command=Command.GoToExit1;
+    	currentTask = "Going To Exit";
     }
     
     /* (non-Javadoc)
@@ -180,6 +190,8 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
 	public void draw(Graphics2D g) {
         g.setColor(Color.PINK);
         g.fillRect(xPos, yPos, ItemCollectorWidth, ItemCollectorHeight);
+        
+        g.drawString(currentTask, xPos, yPos);
     }
 
     /* (non-Javadoc)

@@ -3,6 +3,7 @@ package agent;
 import gui.Building;
 import gui.HospitalBuilding;
 import housing.backend.ResidentRole;
+import gui.trace.AlertTag;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -104,7 +105,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print("we're here captain");
+		print(AlertTag.PASSENGER, this.getName(), "we're here captain");
 	}
 	
 	/* -------- Scheduler -------- */
@@ -684,7 +685,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void printMsg(String msg) {
-		print(msg);
+		print(AlertTag.PASSENGER, this.getName(), msg);
 	}
 	
 	@Override
@@ -692,6 +693,11 @@ public class PersonAgent extends Agent implements Person {
 		print(msg, e);
 	}
 
+	@Override
+	public void agentDo(AlertTag tag, String name, String msg) {
+		Do(tag, this.getName(), msg);
+	}
+	
 	@Override
 	public void agentDo(String msg) {
 		Do(msg);

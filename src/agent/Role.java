@@ -1,5 +1,6 @@
 package agent;
 
+import gui.trace.AlertTag;
 import housing.interfaces.ResidentGui;
 
 import java.util.concurrent.Executors;
@@ -195,7 +196,21 @@ public abstract class Role {
     }
     
     /**
-     * The simulated action code
+     * The simulated action code for the log display
+     * @param tag labels the source of the message
+     * @param message is the message itself
+     */
+    protected void Do(AlertTag tag, String msg) {
+    	if (person != null) {
+    		person.agentDo(tag, this.getName(), msg);
+    	} else {
+    		// well i guess we can't do anything
+    	}
+    }
+    
+    
+    /**
+     * The simulated action code for simple printing 
      */
     protected void Do(String msg) {
     	if (person != null) {

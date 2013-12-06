@@ -78,6 +78,11 @@ public class MockItemCollectorGui extends Mock implements ItemCollectorGuiInterf
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	@Override
+	public void GoToWork() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

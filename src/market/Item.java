@@ -22,5 +22,5 @@ public class Item{
 	
 	public void ItemEqual (int i){
 		amount = i;
-	}
+	} 
 }

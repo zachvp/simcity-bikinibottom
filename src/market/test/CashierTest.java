@@ -19,7 +19,7 @@ import market.test.mock.EventLog;
 import market.test.mock.MockCashierGui;
 import market.test.mock.MockItemCollector;
 import market.test.mock.MockCustomer;
-
+ 
 public class CashierTest extends TestCase
 {
 	public EventLog log = new EventLog();

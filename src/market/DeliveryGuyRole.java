@@ -99,7 +99,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 				deliveryguyGui.BackReadyStation();
 			}
 		}
-		
+		 
 	//Animations
 		/**
 		 * Animation!

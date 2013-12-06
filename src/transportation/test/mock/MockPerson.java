@@ -5,6 +5,7 @@ import java.util.Map;
 import market.Item;
 import mock.EventLog;
 import mock.Mock;
+import gui.trace.AlertTag;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -140,6 +141,12 @@ public class MockPerson extends Mock implements Person{
 	public Map<String, Integer> getShoppingList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void agentDo(AlertTag tag, String name, String msg) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

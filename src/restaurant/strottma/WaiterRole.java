@@ -14,6 +14,7 @@ import restaurant.strottma.interfaces.Cook.GrillOrPlate;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -32,7 +33,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	private CookRole cook;
 	private Cashier cashier;
 
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	private int breakDelay = 15 * 1000;
 	DecimalFormat df = new DecimalFormat("#.##");
 	

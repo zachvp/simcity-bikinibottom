@@ -38,6 +38,7 @@ import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 
@@ -73,7 +74,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
 	private Semaphore semaphore = new Semaphore(0);
-	private Timer timer = new Timer();
+	private Timer timer = SingletonTimer.getInstance();
 
 	public MainFrame(){
 

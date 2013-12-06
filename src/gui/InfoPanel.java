@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.TimeManager;
 import agent.PersonAgent;
 
@@ -146,7 +147,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		card.add(personText, "person");
 
 		//Display current game time
-		timer = new java.util.Timer();
+		timer = SingletonTimer.getInstance();
     	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
 		time = new JLabel();
 		timePanel.add(time);

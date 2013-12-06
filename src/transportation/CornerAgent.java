@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.interfaces.AdjCornerRequester;
@@ -31,6 +33,8 @@ public class CornerAgent extends Agent implements Corner {
 	// TODO update DD
 	//True when a Vehicle is crossing through the intersection.
 	private Integer crossroadBusy = 1;
+	
+	private Object synchingTheCounter = new Object();
 	
 	//List of corners adjacent to this one.
 	private List<MyCorner> adjacentCorners = new ArrayList<MyCorner>();
@@ -108,7 +112,7 @@ public class CornerAgent extends Agent implements Corner {
 
 	@Override
 	public void msgDoneCrossing() {
-		synchronized (crossroadBusy) {
+		synchronized (synchingTheCounter) {
 			crossroadBusy++;
 		}
 		stateChanged();
@@ -116,7 +120,7 @@ public class CornerAgent extends Agent implements Corner {
 
 	@Override
 	public void msgIAmCrossing() {
-		synchronized (crossroadBusy) {
+		synchronized (synchingTheCounter) {
 			crossroadBusy--;
 		}
 		stateChanged();
@@ -132,7 +136,7 @@ public class CornerAgent extends Agent implements Corner {
 			} else if (!waitingForCorners.isEmpty()) {
 				sendAdjCornerInfo();
 				return true;
-			} else synchronized (crossroadBusy) { 
+			} else synchronized (synchingTheCounter) { 
 				if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
 					letSomeoneThrough();
 					return true;

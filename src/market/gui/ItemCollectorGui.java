@@ -31,12 +31,15 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     private  int CollectItemX = 220;
     private  int CollectItemY = 260;
     
+    private static final int ExitX1 = 130;
+    private static final int ExitY1 = 150;
+    
     private static final int ExitX = 130;
     private static final int ExitY = -30;
 
     private MarketInfoPanel panel;
     
-    private enum Command {noCommand, GoHome, CollectItem, GoToExit, NotAtWork};
+    private enum Command {noCommand, GoHome, CollectItem, GoToExit, NotAtWork, GoToExit1, GoToWork1};
 	private Command command=Command.NotAtWork;
     
     public ItemCollectorGui(ItemCollector ic) {
@@ -83,11 +86,21 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
         
         if (xPos == xDestination && yPos == yDestination) {
 
-        	if (command==Command.GoHome) {
+        	if (command==Command.GoToWork1){
+        		BackReadyStation();
+        		return;
+        	}
+        	
+        	else if (command==Command.GoHome) {
 				agent.Ready();
         	}
+        	
 			else if (command==Command.CollectItem) {
 				agent.AtCollectStation();
+			}
+			else if (command==Command.GoToExit1){
+				ContinueToExit();
+				return;
 			}
 			else if (command==Command.GoToExit){
 				command= Command.NotAtWork;
@@ -123,6 +136,12 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	UpdateInventoryLevel();
     }
     
+    public void GoToWork(){
+    	xDestination = ExitX1;
+    	yDestination = ExitY1;
+    	command = Command.GoToWork1;
+    }
+    
     /* (non-Javadoc)
 	 * @see market.gui.ItemCollectorGuiInterfaces#CollectItems()
 	 */
@@ -133,14 +152,20 @@ public class ItemCollectorGui implements Gui, ItemCollectorGuiInterfaces {
     	command=Command.CollectItem;
     }
     
+    public void ContinueToExit(){
+    	xDestination = ExitX;
+    	yDestination = ExitY;
+    	command = Command.GoToExit;
+    }
+    
     /* (non-Javadoc)
 	 * @see market.gui.ItemCollectorGuiInterfaces#OffWork()
 	 */
     @Override
 	public void OffWork(){
-    	xDestination = ExitX;
-    	yDestination = ExitY;
-    	command=Command.GoToExit;
+    	xDestination = ExitX1;
+    	yDestination = ExitY1;
+    	command=Command.GoToExit1;
     }
     
     /* (non-Javadoc)

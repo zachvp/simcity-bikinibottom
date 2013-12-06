@@ -3,6 +3,7 @@ package bank.test.mock;
 import agent.WorkRole;
 import bank.gui.SecurityGuardGui;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.SecurityGuardGuiInterface;
 import bank.interfaces.Teller;
@@ -65,6 +66,18 @@ public class MockSecurityGuard extends Mock implements SecurityGuard {
 	public int getTellerPositionsSize() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void msgIAmRobbingTheBank(Robber r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgRobberLeavingBank(Robber r) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

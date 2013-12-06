@@ -159,7 +159,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	//Actions
 	private void GoToWork(){
 		state = ItemCollectorstate.GoingToWork;
-		itemcollectorGui.BackReadyStation();
+		itemcollectorGui.GoToWork();
 		try {
 			atHome.acquire();
 		} catch (InterruptedException e) {

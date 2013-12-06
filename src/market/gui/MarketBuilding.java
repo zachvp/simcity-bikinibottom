@@ -47,7 +47,9 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		instanceCount++;
 		
 		records = new MarketRecords(animationPanel, this);
-		info = new MarketInfoPanel(getRecords());
+		MarketInfoPanel infoPanel = new MarketInfoPanel(getRecords());
+		info = infoPanel;
+		records.SetCashierMarketInfoPanel(infoPanel);
 	}
 
 	@Override

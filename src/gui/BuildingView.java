@@ -29,9 +29,10 @@ public class BuildingView extends JPanel implements ActionListener{
 
 	public BuildingView(int w, int h){
 		d = new Dimension(w, h);//(w-15, h-70);
-		setSize(d);
+		setPreferredSize(d);
 		setLayout(new CardLayout());
-		setBackground(Color.white);
+		//setBackground(Color.white);
+		setOpaque(false);
 		try {
 			image = ImageIO.read(getClass().getResource("test//welcomeCard.png"));
 		} catch (IOException e) {
@@ -41,9 +42,9 @@ public class BuildingView extends JPanel implements ActionListener{
 
 		//TODO change to welcome card?
 		JPanel welcomeCard = new JPanel();
-		welcomeCard.setPreferredSize(d);
-		welcomeCard.setMaximumSize(d);
-		welcomeCard.setMinimumSize(d);
+		//welcomeCard.setPreferredSize(d);
+		//welcomeCard.setMaximumSize(d);
+		//welcomeCard.setMinimumSize(d);
 		welcomeCard.setLayout(new BorderLayout());
 		JLabel imageLabel = new JLabel(new ImageIcon(image));
 		welcomeCard.add(imageLabel, BorderLayout.CENTER);

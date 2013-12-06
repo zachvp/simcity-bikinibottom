@@ -3,7 +3,7 @@ package housing.test;
 import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;

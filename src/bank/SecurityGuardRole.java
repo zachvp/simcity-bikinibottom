@@ -1,7 +1,11 @@
 package bank;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
+
 import bank.gui.BankBuilding;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -138,7 +142,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	 * @see bank.interfaces.SecurityGuard#msgCustomerArrived(bank.interfaces.BankCustomer)
 	 */
 	public void msgCustomerArrived(BankCustomer bc) {
-		Do("customer arrived in bank");
+		Do(AlertTag.BANK, "customer arrived in bank");
 		waitingCustomers.add(new WaitingCustomer(bc, customerState.waiting));
 		stateChanged();
 	}
@@ -158,7 +162,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 
 	public void msgTellerOpen(Teller t) {
-		Do("teller is open");
+		Do(AlertTag.BANK, "teller is open");
 		for(TellerPosition tp: tellerPositions) {
 			if(tp.t == t) {
 				tp.occupied = false;
@@ -257,7 +261,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	}
 	
 	private void sendToTeller(WaitingCustomer wc, TellerPosition tp) {
-		Do("sending customer to teller" + tellerPositions.size());
+		Do(AlertTag.BANK, "sending customer to teller" + tellerPositions.size());
 		wc.bc.msgGoToTeller(tp.xPos, tp.t);
 		wc.state = customerState.inBank;
 		tp.occupied = true;

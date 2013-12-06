@@ -1,4 +1,4 @@
-package housing;
+package housing.backend;
 
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -109,10 +109,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		int minute = 0;
 		
 		schedule.scheduleDailyTask(command, hour, minute);
-	}
-	
-	public PayRecipientRole(PersonAgent payRecipientPerson) {
-		super(payRecipientPerson);
 	}
 
 	/* ----- Messages ----- */

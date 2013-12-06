@@ -16,6 +16,7 @@ import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -50,7 +51,7 @@ public class CookRole extends WorkRole implements Cook {
 	public CookRole(Person person, CityLocation location) {
 		super(person, location);
 		
-		this.timer = new Timer();
+		this.timer = SingletonTimer.getInstance();
 
 		this.foods = new HashMap<String, Food>();
 		this.markets = new ArrayList<Market>();

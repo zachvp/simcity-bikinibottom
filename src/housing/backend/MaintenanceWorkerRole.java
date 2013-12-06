@@ -1,4 +1,4 @@
-package housing;
+package housing.backend;
 
 import housing.gui.HousingComplex;
 import housing.gui.MaintenanceWorkerRoleGui;
@@ -61,21 +61,13 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		}
 	}
 	
-	public MaintenanceWorkerRole(PersonAgent agent, CityLocation residence) {
-		super(agent, residence);
+	public MaintenanceWorkerRole(PersonAgent agent, CityLocation building) {
+		super(agent, building);
 		this.gui = new MaintenanceWorkerRoleGui(this);
 	}
 	
 	public void setComplex(HousingComplex complex) {
 		gui.setComplex(complex);
-	}
-
-//	public MaintenanceWorkerRole(PersonAgent person) {
-//		super(person);
-//	}
-
-	public MaintenanceWorkerRole(PersonAgent person) {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* --- Messages --- */

@@ -22,6 +22,8 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
     private static final int DeliverExitX = -10;
     private static final int DeliverExitY = -10;
     
+    private String currentTask = "??";
+    
     private static final int ExitX = 130;
     private static final int ExitY = -50;
 
@@ -51,13 +53,17 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
             yPos--;
         
         if (xPos == xDestination && yPos == yDestination){
-        	if (command==Command.GoHome) 
+        	if (command==Command.GoHome){ 
 				agent.Ready();
+				currentTask = "AtReadyStation";
+        	}
 			else if (command==Command.GoDeliver) {
 				agent.AtDeliverExit();
+				currentTask = "AtDeliverExit";
 			}
 			else if (command==Command.GoToExit){
 				agent.AtExit();
+				currentTask = "AtExit";
 			}
         	command=Command.noCommand;
         }
@@ -73,6 +79,7 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
     	xDestination = HomePosX;
     	yDestination = HomePosY;
     	command = command.GoHome;
+    	currentTask = "Going To ReadyStation";
     }
     
     /* (non-Javadoc)
@@ -83,6 +90,7 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
     	xDestination = DeliverExitX;
     	yDestination = DeliverExitY;
     	command = command.GoDeliver;
+    	currentTask = "Going To Deliver";
     }
     
     /* (non-Javadoc)
@@ -93,6 +101,7 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = command.GoToExit;
+    	currentTask = "Going To offWork";
     }
 
     /* (non-Javadoc)
@@ -102,6 +111,9 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
 	public void draw(Graphics2D g) {
         g.setColor(Color.ORANGE);
         g.fillRect(xPos, yPos, DeliveryGuyWidth, DeliveryGuyHeight);
+        
+        g.drawString(currentTask, xPos, yPos);
+        
     }
 
     /* (non-Javadoc)

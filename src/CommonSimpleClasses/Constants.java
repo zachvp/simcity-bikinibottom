@@ -50,7 +50,7 @@ public interface Constants {
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = false;
+	public static final boolean PRINT = true;
 	
     /**
      * The number of milliseconds in a second
@@ -123,6 +123,16 @@ public interface Constants {
 	 * The height of the info panel on the main GUI window.
 	 */
 	public static final int INFO_PANEL_HEIGHT = 169;
+	
+	/**
+	 * The width of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_WIDTH = 600;
+	
+	/**
+	 * The HEIGHT of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_HEIGHT= 490;
 	
 	/**
 	 * The initial amount of money in the market

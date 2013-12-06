@@ -29,6 +29,11 @@ public interface Person {
 	 */
 	public void addRole(Role r);
 	
+	/**
+	 * Returns true if the person scheduler has a task awaiting it.
+	 */
+	public boolean hasSomethingToDo();
+	
 	public Wallet getWallet();
 	
 	public Car getCar();

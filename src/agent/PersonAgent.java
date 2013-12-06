@@ -259,6 +259,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public boolean hasSomethingToDo() {
+		return workStartsSoon() || isHungry()  || needToGoToBank();
+	}
+	
 	/**
 	 * Activates the current location's Role. Won't activate a WorkRole
 	 * unless forWork is true; won't activate a PassengerRole ever.

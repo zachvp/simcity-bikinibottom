@@ -1,6 +1,8 @@
 package market;
 
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,10 +108,12 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * @param inList The InventoryList of the Market
 	 */
     public CashierRole(Person person, MarketBuilding cL, Map<String,Integer> inList){
+    	
     	super(person, cL);
 		setCash(Constants.MarketInitialMoney);
 		PriceList = Constants.MarketPriceList;
 		InventoryList = inList;
+		//Do(AlertTag.MARKET, "Creating new CashierRole");
 		Runnable command = new Runnable(){
 			@Override
 			public void run() {
@@ -138,7 +142,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	public void msgPhoneOrder(List<Item>ShoppingList, PhonePayer payingPerson, DeliveryReceiver receivingPerson, CommonSimpleClasses.CityLocation building)	
 	{				//The Customer will be the phone calling guy
 		//print ("Received Phone Order");
-		
+		//Do(AlertTag.MARKET, "Recived Phone Order");
 		MyCustomer MC = new MyCustomer();
 		MC.c = null;
 		MC.state = Customerstate.Ordered;
@@ -157,6 +161,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 */
 	public void msgIWantItem(List<Item> ShoppingList, Customer C) //[Customer to Cashier]
 	{
+		//Do(AlertTag.MARKET, "Recived Customer's Order");
 		//print ("Received Msg from Customer");
 		MyCustomer MC = new MyCustomer();
 		MC.c = C;
@@ -177,6 +182,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 */
 	public void msgHereAreItems(List<Item> Items, List<Item> MissingItems)
 	{
+		//Do(AlertTag.MARKET, "Recived Items from Itemcollectors");
 		//print ("Received Items from ItemCollector");
 		
 			//When there is no item in the shoppinglist can be satisified
@@ -210,6 +216,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 */
 	public void msgHereIsPayment(double payment, Customer c)
 	{
+		//Do(AlertTag.MARKET, "Recived Payment from Customer (In the Market)");
 		//print ("Receive payment from Customer ");
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if(getMyCustomerList().get(i).c != null){
@@ -230,6 +237,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 */
 	public void msgHereIsPayment(double payment, PhonePayer pP)
 	{
+		//Do(AlertTag.MARKET, "Recived payment from Customer (PhoneOrder)");
 		//print ("Receive payment from Customer ");
 		for (int i=0;i<getMyCustomerList().size();i++){
 			if (getMyCustomerList().get(i).phoneOrder!=null)
@@ -247,6 +255,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * getting the semaphore release
 	 */
 	public void msgLeaveWork(){
+		//Do(AlertTag.MARKET, "Msg Leaving Work");
 		setState(Cashierstate.OffWork);
 		stateChanged();
 	}
@@ -256,6 +265,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * getting the semaphore release
 	 */
 	public void AtFrontDesk(){
+		//Do(AlertTag.MARKET, "At Front Desk");
 		//System.out.println("AtFrontDesk");
 		atFrontDesk.release();
 		setState(Cashierstate.Working);
@@ -267,6 +277,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * getting the semaphore release
 	 */
 	public void AtBench(){
+		//Do(AlertTag.MARKET, "At Bench");
 		atBench.release();
 		//stateChanged();
 	}
@@ -276,6 +287,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * getting the semaphore release
 	 */
 	public void AtExit(){
+		//Do(AlertTag.MARKET, "At Exit");
 		atExit.release();
 	}
 
@@ -387,6 +399,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	
 	//Actions
 	private void GoToWork(){
+		//Do(AlertTag.MARKET, "Go To Work");
 		state = Cashierstate.GoingToWork;
 		cashierGui.GoToWork();
 		try {
@@ -404,6 +417,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * @param IC the selected ItemCollector to do this job
 	 */
 	private void GoGetItems(MyCustomer MC, ItemCollector IC){
+		//Do(AlertTag.MARKET, "Going to ask ItemCollector( " + IC.getName() + ") To Get Items for customer : " + MC.c.getName());
 		//print ("Going to ask ItemCollector to get Items");
 		cashierGui.GoToBench();
 		try {
@@ -434,6 +448,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * @param MC The customer that totally has no order can be satisfied
 	 */
 	private void TellCustomerEpicFail(MyCustomer MC){
+		//Do(AlertTag.MARKET, "Going To tell Customer Epic Fail for customer : " + MC.c.getName());
 		//print ("Going to tell customers that none of the item on the shoppinglist can be fulfilled");
 		MC.state = Customerstate.Paid;
 		if (MC.c != null){
@@ -451,6 +466,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * @param MC The current Customer that is going to receive the invoice
 	 */
 	private void CalculatePayment(MyCustomer MC){
+		//Do(AlertTag.MARKET, "Going To Calculate Payment for customer : " + MC.c.getName());
 		//print ("Calculating the total for the customer");
 		double total = 0;
 		for (int i=0;i<MC.getDeliveryList().size();i++){
@@ -471,6 +487,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * @param MC The current Customer that is being handled
 	 */
 	private void GiveItems (MyCustomer MC){
+		//Do(AlertTag.MARKET, "Going To Give Items to customer : " + MC.c.getName());
 		//print ("Going to Give/Deliver Item");
 		MC.state = Customerstate.GivenItems;
 		if (MC.c != null){
@@ -497,6 +514,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 * calling offwork (including himself)
 	 */
 	private void OffWork(){
+		//Do(AlertTag.MARKET, "Going To Call off all the workers in the market (including himself)");
 		DomsgAllWorkersToOffWork();
 		cashierGui.OffWork();
 		try {

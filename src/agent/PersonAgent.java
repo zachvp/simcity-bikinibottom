@@ -2,6 +2,7 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
+import gui.trace.AlertTag;
 import housing.ResidentRole;
 
 import java.util.Collections;
@@ -104,7 +105,7 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print("we're here captain");
+		print(AlertTag.PERSON, this.getName(), "we're here captain");
 	}
 	
 	/* -------- Scheduler -------- */
@@ -684,7 +685,8 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void printMsg(String msg) {
-		print(msg);
+		// AlertTag tag, String name, String msg
+		print(AlertTag.PERSON, this.getName(), msg);
 	}
 	
 	@Override
@@ -693,8 +695,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 	@Override
-	public void agentDo(String msg) {
-		Do(msg);
+	public void agentDo(AlertTag tag, String name, String msg) {
+		Do(AlertTag.PERSON, this.getName(), msg);
 	}
 
 	public void instantiateCar() {

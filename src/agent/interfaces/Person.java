@@ -3,6 +3,7 @@ package agent.interfaces;
 import java.util.Map;
 
 import market.Item;
+import gui.trace.AlertTag;
 import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
@@ -182,7 +183,7 @@ public interface Person {
 	public String getName();
 	
     /** The simulated action code */
-	public void agentDo(String msg);
+	public void agentDo(AlertTag tag, String name, String msg);
 	
 	/** Print message */
 	public void printMsg(String msg);

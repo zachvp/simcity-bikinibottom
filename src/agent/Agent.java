@@ -1,5 +1,7 @@
 package agent;
 
+import gui.trace.AlertTag;
+
 import java.util.concurrent.Semaphore;
 
 import mock.EventLog;
@@ -52,17 +54,18 @@ public abstract class Agent {
     /**
      * The simulated action code
      */
-    protected void Do(String msg) {
+    // AlertTag tag, String name, String log
+    protected void Do(AlertTag tag, String name, String msg) {
         // print(msg, null);
-        log.add(msg);
+        log.add(tag, name, msg);
     }
 
     /**
      * Print message
      */
-    protected void print(String msg) {
+    protected void print(AlertTag tag, String name, String msg) {
         // print(msg, null);
-    	log.add(msg);
+    	log.add(tag, name, msg);
     }
 
     /**

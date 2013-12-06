@@ -1,5 +1,7 @@
 package bank;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -198,7 +200,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void verifyNewAccount(Task t) {
-		Do("verifying new account");
+		Do(AlertTag.BANK, "verifying new account");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
@@ -211,7 +213,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void deposit(Task t) {
-		Do("deposit");
+		Do(AlertTag.BANK, "deposit");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
@@ -223,7 +225,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 
 	private void withdraw(Task t) {
-		Do("withdraw");
+		Do(AlertTag.BANK, "withdraw");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();

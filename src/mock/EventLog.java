@@ -2,6 +2,8 @@ package mock;
 
 import java.util.LinkedList;
 
+import gui.trace.AlertLog;
+import gui.trace.AlertTag;
 import CommonSimpleClasses.Constants;
 
 /**
@@ -25,7 +27,9 @@ public class EventLog {
 	 *
 	 * @param log
 	 */
-	public void add(String log){
+	public void add(AlertTag tag, String name, String log){
+		AlertLog.getInstance().logMessage(AlertTag.PERSON, name, "I am in the RED ZONE!");
+		
 		if (Constants.LOG) {
 			events.add(new LoggedEvent(log));
 		}

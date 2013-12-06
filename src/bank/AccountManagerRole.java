@@ -25,7 +25,7 @@ import bank.interfaces.Teller;
 //Build should not be problem
 public class AccountManagerRole extends WorkRole implements AccountManager {
 	private String name;
-	static int currentIdNum = 1000; //starts at 1000 and increments TODO make this and accountmap static
+	static int currentIdNum = 1000; //starts at 1000 and increments 
 	List<Teller> tellers = new ArrayList<Teller>();
 	List<Task> tasks = new ArrayList<Task>();
 	
@@ -107,20 +107,15 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	public void msgOpenNewAccount(Teller t, BankCustomer bc, double initialDeposit) {
-		
 		tasks.add(new Task(t, bc, TaskState.newAccount, 0, initialDeposit, 0));
 		stateChanged();
 	}
 
-
-	
 	public void msgDepositMoney(Teller t, BankCustomer bc, int accountId, double amount) {
 		tasks.add(new Task(t, bc, TaskState.pendingDeposit, accountId, amount, 0));
 		stateChanged();
 	}
 
-
-	
 	public void msgWithdrawMoney(Teller t, BankCustomer bc, int accountId, double amount) {
 		tasks.add(new Task(t, bc, TaskState.pendingWithdraw, accountId, 0, amount));
 		stateChanged();
@@ -136,7 +131,6 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	 */
 	public boolean pickAndExecuteAnAction() {
 //		
-//		System.out.println("HIYA");
 		for(MyRobber m : robbers) {
 			if(m.state == robberState.asking){
 				giveMoneyToRobber(m);
@@ -193,6 +187,10 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void giveMoneyToRobber(MyRobber mr) {
+		doGoToComputer();
+		acquireSemaphore(active);
+		doGoToDesk();
+		acquireSemaphore(active);
 		mr.r.msgGiveMoneyToRobber(mr.stealAmount);
 		mr.state = robberState.done;
 	}

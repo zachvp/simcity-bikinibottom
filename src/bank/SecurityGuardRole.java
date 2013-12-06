@@ -243,7 +243,6 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private void tryToStopRobber(MyRobber mr) {
 		mr.r.msgAttemptToStop(accountManager, false); //TODO, make success of stop attemp random
 		mr.state = robberState.robbing;
-		
 	}
 	
 	private void removeRobber(MyRobber mr) {

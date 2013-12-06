@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bank.RobberRole;
+import bank.gui.BankBuilding;
+
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.CarAgent;
@@ -64,6 +67,8 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Car car;
 	private boolean clearFoodAtHome = false;
+	
+	private boolean timeToRobABank = false;
 	
 	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
 		super();
@@ -142,6 +147,7 @@ public class PersonAgent extends Agent implements Person {
 		// if at least one role's scheduler returned true, return true
 		if (roleExecuted) { return true; }
 		if (roleActive) { return false; }
+
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
@@ -153,6 +159,13 @@ public class PersonAgent extends Agent implements Person {
 		
 
 		// If you didn't just arrive somewhere, decide what to do next.
+		if (timeToRobABank) {
+			CityLocation bank = chooseBank();
+			if(bank!= null) {
+				goToBank(bank);
+				return true;
+			}
+		}
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
@@ -259,6 +272,17 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
+	 * Removes given role from PersonAgent's list.
+	 * Primarily used for removing robber, because
+	 * it is created for a one-time robbery by InfoPanel
+	 */
+	@Override
+	public void removeRole(Role r) {
+		roles.remove(r);
+		stateChanged();
+	}
+	
+	/**
 	 * Activates the current location's Role. Won't activate a WorkRole
 	 * unless forWork is true; won't activate a PassengerRole ever.
 	 * 
@@ -269,10 +293,19 @@ public class PersonAgent extends Agent implements Person {
 		
 		synchronized (roles) {
 			for (Role r : roles) {
+				if(timeToRobABank && loc.equals(r.getLocation()) && loc instanceof BankBuilding)
+					if(r instanceof RobberRole)
+					{
+						timeToRobABank = false;
+						r.activate();
+						return;
+					}
+					else{
+						continue;
+					}
 				if (loc.equals(r.getLocation())
 						&& (forWork == (r instanceof WorkRole))
 						&& !(r instanceof PassengerRole)) {
-
 					r.activate();
 					return;
 				}
@@ -640,6 +673,10 @@ public class PersonAgent extends Agent implements Person {
 		}
 		// No foods in inventory
 		return false;
+	}
+	
+	public void setTimeToRobABank(){
+		timeToRobABank = true;
 	}
 	
 	public boolean needToGoToBank() {

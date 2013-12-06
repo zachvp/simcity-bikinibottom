@@ -20,12 +20,12 @@ public class OptionFrame extends JFrame implements ActionListener {
 	
 	OptionFrame() {
 		this.setLayout(optionGridLayout);
-        this.add(addCustomerButton);
-        this.add(text1);
-        this.add(addTellerButton);
-        this.add(text2);
-        this.add(endWorkDayButton);
-        this.add(resumeWorkButton);
+//        this.add(addCustomerButton);
+//        this.add(text1);
+//        this.add(addTellerButton);
+//        this.add(text2);
+//        this.add(endWorkDayButton);
+//        this.add(resumeWorkButton);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

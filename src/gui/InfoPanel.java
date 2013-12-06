@@ -25,7 +25,14 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import bank.gui.BankBuilding;
+
+import kelp.Kelp;
+import kelp.KelpClass;
+
 import market.gui.MarketBuilding;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.TimeManager;
 import agent.PersonAgent;
@@ -242,7 +249,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == robberButton){
-			//TODO make currentPerson a robber
+			for (CityLocation loc : KelpClass.getKelpInstance().placesNearMe(currentPerson.getPassengerRole().getLocation(), LocationTypeEnum.Bank)){
+				if(loc instanceof BankBuilding && ((BankBuilding) loc).isOpen()){
+					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
+					currentPerson.setTimeToRobABank();
+				}
+			}
 		}
 	}
 	

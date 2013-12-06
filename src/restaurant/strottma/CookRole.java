@@ -1,17 +1,23 @@
 package restaurant.strottma;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
+
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.CookGui;
 import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
-
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -19,11 +25,12 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CookRole extends Role implements Cook {
+public class CookRole extends WorkRole implements Cook {
 
 	// private CookGui cookGui = null;
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private Timer timer;
+	private boolean offWork = false;
 	
 	private Map<String, Food> foods;
 	private List<Market> markets;
@@ -40,11 +47,11 @@ public class CookRole extends Role implements Cook {
 	public void setGui(CookGui cookGui) {
 		this.gui = cookGui;
 	}
-
-	public CookRole(Person person) {
-		super(person);
+	
+	public CookRole(Person person, CityLocation location) {
+		super(person, location);
 		
-		this.timer = new Timer();
+		this.timer = SingletonTimer.getInstance();
 
 		this.foods = new HashMap<String, Food>();
 		this.markets = new ArrayList<Market>();
@@ -59,18 +66,24 @@ public class CookRole extends Role implements Cook {
 		
 		// create grills
 		for (int i = 0; i < 5; i++) {
-			grills.add(new GrillOrPlate(850, 14 + 30*i));
+			grills.add(new GrillOrPlate(850-400, 114 + 30*i));
 		}
 		
 		// create plating areas
 		for (int i = 0; i < 5; i++) {
-			plateAreas.add(new GrillOrPlate(750, 14 + 30*i));
+			plateAreas.add(new GrillOrPlate(750-400, 114 + 30*i));
 		}
 		
 		this.foods.put(st.name, st);
 		this.foods.put(ck.name, ck);
 		this.foods.put(sa.name, sa);
 		this.foods.put(pz.name, pz);
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 	
 	public void addMarket(Market m) {
@@ -123,6 +136,11 @@ public class CookRole extends Role implements Cook {
 		multiStepAction.release();
 	}
 	
+	@Override
+	public void msgLeaveWork() {
+		offWork = true;
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -162,6 +180,8 @@ public class CookRole extends Role implements Cook {
 		}
 		
 		DoGoHome(); // return to default position if nothing to do
+		
+		if (offWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -387,6 +407,17 @@ public class CookRole extends Role implements Cook {
 		public synchronized void showOrder() { showOrder = true; }
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
+	}
+	
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe cooks can go on breaks in v3
+		return false;
 	}
 	
 }

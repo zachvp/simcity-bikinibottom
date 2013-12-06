@@ -1,12 +1,14 @@
 package agent;
 
+import gui.trace.AlertTag;
+import housing.interfaces.ResidentGui;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
-import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
+import agent.interfaces.Person;
 
 /**
  * Base class for simple roles
@@ -28,8 +30,8 @@ public abstract class Role {
      * @see #getLocation()
      */
     protected Role(Person person, CityLocation location) {
-    	setPerson(person);
-    	setLocation(location);
+    	this.person = person;
+    	this.location = location;
     	
 		this.executor = Executors.newSingleThreadScheduledExecutor();
     }
@@ -94,7 +96,9 @@ public abstract class Role {
      * the agent to do something.
      */
     protected void stateChanged() {
-        person.agentStateChanged();
+    	if (person != null) {
+    		person.agentStateChanged();
+    	}
     }
 
     /**
@@ -179,86 +183,63 @@ public abstract class Role {
      * Return role name for messages.  Default is to return agent name.
      */
     public String getName() {
-        return person.getName();
+    	if (person != null) {
+    		return person.getName();
+    	} else {
+    		return "Nobody";
+    	}
     }
     
     @Override
     public String toString() {
-    	return person.getName() + "'s " + getClass().getSimpleName();
+    	return getClass().getSimpleName() + " at " + getLocation();
     }
     
     /**
-     * The simulated action code
+     * The simulated action code for the log display
+     * @param tag labels the source of the message
+     * @param message is the message itself
+     */
+    protected void Do(AlertTag tag, String msg) {
+    	if (person != null) {
+    		person.agentDo(tag, this.getName(), msg);
+    	} else {
+    		// well i guess we can't do anything
+    	}
+    }
+    
+    
+    /**
+     * The simulated action code for simple printing 
      */
     protected void Do(String msg) {
-        person.agentDo(msg);
+    	if (person != null) {
+    		person.agentDo(msg);
+    	} else {
+    		// well i guess we can't do anything
+    	}
     }
 
     /**
      * Print message
      */
     protected void print(String msg) {
-        person.printMsg(msg);
+    	if (person != null) {
+    		person.printMsg(msg);
+    	} else {
+    		// well i guess we can't print anything
+    	}
     }
 
     /**
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        person.printMsg(msg);
+    	if (person != null) {
+    		person.printMsg(msg, e);
+    	} else {
+    		// well i guess we can't print anything
+    	}
     }
-    
-	// ---- Schedule tasks
-    /**
-     * Executes the command every day at hour:minute.
-     */
-	public void scheduleDailyTask(Runnable command, int hour, int minute) {
-		TimeManager tm = TimeManager.getInstance();		
-		long initialDelay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
-				/TimeManager.CONVERSION_RATE;
-		long delay = (int) Constants.DAY/TimeManager.CONVERSION_RATE;
-		TimeUnit unit = TimeUnit.MILLISECONDS;
-		executor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
-		
-		if (Constants.DEBUG) {
-			Do("next occurrence of " + hour + ":" + minute + " is in " +
-					initialDelay/1000 + " seconds");
-		}
-	}
-	
-	/**
-	 * Executes the command one time, at the next occurrence of hour:minute.
-	 */
-	public void scheduleTaskAtTime(Runnable command, int hour, int minute) {
-		TimeManager tm = TimeManager.getInstance();		
-		long delay = (int) tm.timeUntil(tm.nextSuchTime(hour, minute))
-				/TimeManager.CONVERSION_RATE;
-		TimeUnit unit = TimeUnit.MILLISECONDS;
-		executor.schedule(command, delay, unit);
-		
-		if (Constants.DEBUG) {
-			Do("next occurrence of " + hour + ":" + minute + " is in " +
-					delay/1000 + " seconds");
-		}
-	}
-	
-	/**
-	 * Executes the command one time with the given delay.
-	 * 
-	 * @param command
-	 * @param delay IMPORTANT: this is game time delay, not real time delay.
-	 * 				To make the task execute in 1 minute of game time (half a
-	 * 				second real time), delay should be 60000.
-	 */
-	public void scheduleTaskWithDelay(Runnable command, long delay) {
-		long convDelay = (int) delay/TimeManager.CONVERSION_RATE;
-		TimeUnit unit = TimeUnit.MILLISECONDS;
-		executor.schedule(command, convDelay, unit);
-		
-		if (Constants.DEBUG) {
-			Do("executing in " + convDelay / 1000 + " seconds");
-		}
-	}
-	
 }
 

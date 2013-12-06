@@ -1,10 +1,9 @@
 package bank.test.mock;
 
 
-import java.util.Map;
-
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.Teller;
 
 
@@ -16,9 +15,6 @@ import bank.interfaces.Teller;
  */
 public class MockAccountManager extends Mock implements AccountManager {
 
-        /**
-         * Reference to the Cashier under test that can be set by the unit test.
-         */
 	
 	public EventLog log = new EventLog();
 	
@@ -47,6 +43,18 @@ public class MockAccountManager extends Mock implements AccountManager {
 				double amount) {
 			log.add("withdraw" + amount);
 					
+		}
+
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void msgGiveMeTheMoney(Robber r, double amount) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		

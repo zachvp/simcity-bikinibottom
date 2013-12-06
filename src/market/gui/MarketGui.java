@@ -2,6 +2,7 @@ package market.gui;
 
 import market.CustomerRole;
 import market.interfaces.Customer;
+import gui.AnimationPanel;
 
 import javax.swing.*;
 
@@ -24,14 +25,9 @@ public class MarketGui extends JFrame implements ActionListener {
      *    in RestaurantPanel()
      * 2) the infoPanel about the clicked Customer (created just below)
      */    
-	private JButton UpdateButton = null;
-    private MarketPanel marketPanel = new MarketPanel(this);
-    
-    /* infoPanel holds information about the clicked customer, if there is one*/
-     
-
-
-
+	private MarketBuilding marketBuilding = new MarketBuilding(1,1,1,1);
+	private MarketRecords marketRecords = new MarketRecords(animationPanel, marketBuilding);
+    private MarketInfoPanel marketPanel = new MarketInfoPanel(marketRecords);
     
 
     /**
@@ -54,15 +50,6 @@ public class MarketGui extends JFrame implements ActionListener {
         marketPanel.setMinimumSize(restDim);
         marketPanel.setMaximumSize(restDim);
         BigPanel.add(marketPanel);
-        
-        JPanel UpdatePanel = new JPanel();
-        UpdatePanel.setLayout(new GridLayout(1,0));
-        UpdatePanel.add(new JLabel("Market Name : " + "Market1" + "              "));
-        UpdateButton = new JButton("Update");
-        UpdateButton.addActionListener(this);
-        UpdatePanel.add(UpdateButton);
-        BigPanel.add(UpdatePanel);
-        BigPanel.add(new JLabel("All non-Integers input will be ignored"));
         
         add(BigPanel);
         add(animationPanel);
@@ -120,13 +107,7 @@ public class MarketGui extends JFrame implements ActionListener {
      */
     
     public void actionPerformed(ActionEvent e) {
-
-        
-        if (e.getSource() == UpdateButton) {
-        	marketPanel.UpdateInventoryLevelWithButton();
-        }
-        
-        
+ 
     }
     
 

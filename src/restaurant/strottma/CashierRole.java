@@ -1,16 +1,18 @@
 package restaurant.strottma;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
+
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import restaurant.strottma.test.mock.EventLog;
-
-import java.text.DecimalFormat;
-import java.util.*;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -18,7 +20,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CashierRole extends Role implements Cashier {
+public class CashierRole extends WorkRole implements Cashier {
 
 	public EventLog log = new EventLog();
 
@@ -27,12 +29,21 @@ public class CashierRole extends Role implements Cashier {
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	DecimalFormat df = new DecimalFormat("#.##");
 	private double money;
+	private boolean leaveWork = false;
 	
-	public CashierRole(Person person) {
-		super(person);
-
+	public CashierRole(Person person, CityLocation location) {
+		super(person, location);
+		
+		
+		// TODO Is this timer doing anything at all? -Diego
 		new Timer();
 		this.money = 200.00; // default
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		leaveWork = false;
 	}
 
 	/* Messages */
@@ -67,6 +78,11 @@ public class CashierRole extends Role implements Cashier {
 		stateChanged();
 	}
 	
+	@Override
+	public void msgLeaveWork() {
+		leaveWork = true;
+	}
+	
 	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -99,6 +115,8 @@ public class CashierRole extends Role implements Cashier {
 				}
 			}
 		}
+		
+		if (leaveWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -245,6 +263,17 @@ public class CashierRole extends Role implements Cashier {
 		public void setAmount(double amount) { this.amount = amount; }
 		
 		public Market getMarket() { return market; }
+	}
+	
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe cashiers can go on breaks in v3
+		return false;
 	}
 	
 }

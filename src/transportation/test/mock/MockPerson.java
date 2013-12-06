@@ -2,16 +2,16 @@ package transportation.test.mock;
 
 import java.util.Map;
 
-import market.Item;
-import housing.ResidentRole;
+import mock.EventLog;
+import mock.Mock;
+import housing.backend.ResidentRole;
+import gui.trace.AlertTag;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
-import agent.mock.EventLog;
-import agent.mock.Mock;
 
 public class MockPerson extends Mock implements Person{
 	
@@ -126,6 +126,24 @@ public class MockPerson extends Mock implements Person{
 
 	@Override
 	public void removeItemsFromInventory(String name, int amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printMsg(String msg, Throwable e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Map<String, Integer> getShoppingList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void agentDo(AlertTag tag, String name, String msg) {
 		// TODO Auto-generated method stub
 		
 	}

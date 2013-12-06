@@ -1,16 +1,22 @@
 package bank;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
+import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import bank.gui.AccountManagerGui;
+import bank.gui.BankBuilding;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.Robber;
 import bank.interfaces.Teller;
 
 
@@ -21,7 +27,7 @@ import bank.interfaces.Teller;
 //Build should not be problem
 public class AccountManagerRole extends WorkRole implements AccountManager {
 	private String name;
-	int currentIdNum = 1000; //starts at 1000 and increments
+	static int currentIdNum = 1000; //starts at 1000 and increments TODO make this and accountmap static
 	List<Teller> tellers = new ArrayList<Teller>();
 	List<Task> tasks = new ArrayList<Task>();
 	
@@ -29,6 +35,10 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	private Semaphore active = new Semaphore(0, true);
 	private AccountManagerGui accountManagerGui;
+	
+	private boolean atWork;
+	
+	double paycheckAmount = 300;
 	
 	enum TaskState {newAccount, pendingDeposit, pendingWithdraw};
 	class Task {
@@ -56,28 +66,44 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		BankCustomer bc;
 		double amount;
 	}
-	Map<Integer, Account> accountMap = new HashMap<Integer, Account>();
+	static Map<Integer, Account> accountMap = Collections.synchronizedMap(new HashMap<Integer, Account>());//make STATIC
 	
+	enum robberState {asking, done};
+	class MyRobber {
+		MyRobber(Robber r, double stealAmount, robberState s){
+			this.r = r;
+			this.stealAmount = stealAmount;
+			this.state = s;
+		}
+		Robber r;
+		double stealAmount;
+		robberState state;
+	}
+	List<MyRobber> robbers = new ArrayList<MyRobber>();
+	
+	int startHour;
+	int startMinute;
+	int endHour ;
+	int endMinute ;
 //	////////
 	
-	public AccountManagerRole(PersonAgent person){
-		super(person);
-//		this.name = name;
+	public AccountManagerRole(Person person, CityLocation bank) {
+		super(person, bank);
+		atWork = false;
 		
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
 	}
-		
-
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-
-
+	
 	public String getCustomerName() {
 		return name;
 	}
 	// Messages
 	
-	public void msgLeaveWork() {
+	public void msgLeaveWork() {//Called by securityguard to send all employees out once all customers have been served
 		endWorkShift = true;
 		stateChanged();
 	}
@@ -102,12 +128,29 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		stateChanged();
 	}
 	
+	public void msgGiveMeTheMoney(Robber r, double amount) {
+		robbers .add(new MyRobber(r, amount, robberState.asking));
+		stateChanged();
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
 //		
 //		System.out.println("HIYA");
+		for(MyRobber m : robbers) {
+			if(m.state == robberState.asking){
+				giveMoneyToRobber(m);
+				return true;
+			}
+		}
+		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		for(Task t: tasks) {
 			if(t.state == TaskState.newAccount){
 				verifyNewAccount(t);
@@ -137,6 +180,12 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		return false;
 	}
 	// Actions
+	public void goToWork() {
+		doGoToDesk();
+		acquireSemaphore(active);
+		atWork = true;
+	}
+	
 	public void hackAddAccount(BankCustomer bc, double deposit, int testAccountId) {
         Account newAccount = new Account(bc, deposit);
         accountMap.put(testAccountId, newAccount);
@@ -145,8 +194,13 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
         //currentIdNum++; 
 	}
 	
+	private void giveMoneyToRobber(MyRobber mr) {
+		mr.r.msgGiveMoneyToRobber(mr.stealAmount);
+		mr.state = robberState.done;
+	}
+	
 	private void verifyNewAccount(Task t) {
-		Do("verifying new account");
+		Do(AlertTag.BANK, "verifying new account");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
@@ -159,7 +213,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void deposit(Task t) {
-		Do("deposit");
+		Do(AlertTag.BANK, "deposit");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
@@ -171,7 +225,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 
 	private void withdraw(Task t) {
-		Do("withdraw");
+		Do(AlertTag.BANK, "withdraw");
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
@@ -183,9 +237,19 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void goOffWork() {
-			doEndWorkDay();
-			acquireSemaphore(active);
-			this.deactivate();
+		addPaycheckToWallet();
+		doEndWorkDay();
+		acquireSemaphore(active);
+		this.deactivate();
+		atWork = false;
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
 	//ANIMATION
@@ -211,7 +275,6 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		try {
 			s.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -222,6 +285,10 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	// Accessors, etc.
+	
+//	public String getName() {
+//		return this.getPerson().getName();
+//	}
 
 	
 //	private MyCustomer findCustomer(BankCustomer b) {
@@ -233,44 +300,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		return null;
 //	}
 
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
-
-	@Override
-	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-	@Override
-	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 

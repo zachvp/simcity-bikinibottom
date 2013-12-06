@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import agent.Constants;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import parser.BuildingDef;
@@ -408,7 +408,7 @@ public class KelpTest {
 	@Test
 	public void testFourRouteFromAToBAllowBusButRouteTooShort() {
 		List<CityLocation> currentRoute = kelp.routeFromAToB(
-				locations.get(7), locations.get(10), true);
+				locations.get(7), locations.get(14), true);
 		
 		//Correct start corner
 		assertTrue(currentRoute.get(0) == corners.get(0)
@@ -448,7 +448,7 @@ public class KelpTest {
 		}
 		
 		//Assert that the last location in the route is the destination
-		assertEquals(locations.get(10), currentRoute.get(currentRoute.size()-1));
+		assertEquals(locations.get(14), currentRoute.get(currentRoute.size()-1));
 		
 	}
 	

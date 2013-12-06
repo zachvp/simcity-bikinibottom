@@ -1,16 +1,34 @@
 package gui;
 
+import housing.backend.ResidentialBuilding;
+import housing.gui.HousingInfoPanel;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import market.gui.MarketBuilding;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
+import CommonSimpleClasses.TimeManager;
 import agent.PersonAgent;
 
 /**
@@ -23,48 +41,132 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	private Dimension d;
 	private JLabel info;
-	private JPanel textPanel; //info display
-	private JPanel controlPanel; //gui controls
-
+	JPanel card = new JPanel();
+	JPanel timePanel = new JPanel();
+	JLabel time;
+	int hour, min, sec;
+	String hourStr, minStr, secStr;
+	
+	TimeManager timeManager = TimeManager.getInstance();
+	private Timer timer;
+	
+	JLabel name, currLoc, job, residence, money, hunger, 
+		   nameL, currLocL, jobL, residenceL, moneyL, hungerL;
+	JPanel controls;
+	JButton robberButton;
+	PersonAgent currentPerson;
+	
 	public InfoPanel(int w, int h){
-		d = new Dimension(w-20, h-25);
+		d = new Dimension(Constants.INFO_PANEL_WIDTH, h); //700 X 190
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
 		setLayout(new BorderLayout());
 		
+		Dimension cardDim = new Dimension(Constants.INFO_PANEL_WIDTH, h-46); //700 X 145
+		card.setPreferredSize(cardDim);
+		card.setMaximumSize(cardDim);
+		card.setMinimumSize(cardDim);
+		card.setLayout(new CardLayout());
 		
-		textPanel = new JPanel();
-		Dimension textDim = new Dimension((int)(d.width*0.4), d.height);
-		textPanel.setPreferredSize(textDim);
-		textPanel.setMaximumSize(textDim);
-		textPanel.setMinimumSize(textDim);
+		//overall person panel
+		JPanel personText = new JPanel();
+		personText.setPreferredSize(d);
+		personText.setMaximumSize(d);
+		personText.setMinimumSize(d);
+		personText.setLayout(new BorderLayout());
 		
-		info = new JLabel("");
-		//Test text
-		/*info.setText("<html><div>&nbsp;</div><div> "
-				+ "Name: "+ "Spongebob Squarepants" +"</div><div>&nbsp;</div>"
-				+ "<div> Job: "+"Chef" +"</div><div>&nbsp;</div>"
-				+ "<div> Residence: "+ "Pineapple" + "</div><div>&nbsp;</div>"
-				+ "<div> Money: $"+ "500" +"</div><div>&nbsp;</div>"
-				+ "<div> Hunger Level: "+"2" +"</div></html>"
-		);*/
-		textPanel.add(info);
+		//display labels
+		JPanel textWest = new JPanel();
+		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.17), cardDim.height);
+		textWest.setPreferredSize(textWDim);
+		textWest.setMaximumSize(textWDim);
+		textWest.setMinimumSize(textWDim);
+		textWest.setLayout(new GridLayout(6, 1, 1, 1));
 		
-		controlPanel = new JPanel();
-		Dimension controlDim = new Dimension((int)(d.width*0.6), d.height);
-		controlPanel.setPreferredSize(controlDim);
-		controlPanel.setMaximumSize(controlDim);
-		controlPanel.setMinimumSize(controlDim);
-		controlPanel.setLayout(new CardLayout());
+		nameL = new JLabel("", JLabel.RIGHT);
+		currLocL = new JLabel("", JLabel.RIGHT);
+		jobL = new JLabel("", JLabel.RIGHT);
+		residenceL = new JLabel("", JLabel.RIGHT);
+		moneyL = new JLabel("", JLabel.RIGHT);
+		hungerL = new JLabel("", JLabel.RIGHT);
 		
+		//padding
+		Border empty = new EmptyBorder(0, 0, 0, 7);
+		nameL.setBorder(empty);
+		currLocL.setBorder(empty);
+		jobL.setBorder(empty);
+		residenceL.setBorder(empty);
+		moneyL.setBorder(empty);
+		hungerL.setBorder(empty);
 		
-		JPanel blank = new JPanel();
-		blank.setPreferredSize(controlDim);
-		addControlPanel(blank, "blank");
+		textWest.add(nameL);
+		textWest.add(currLocL);
+		textWest.add(jobL);
+		textWest.add(residenceL);
+		textWest.add(moneyL);
+		textWest.add(hungerL);
 		
-		add(textPanel, BorderLayout.WEST);
-		add(controlPanel, BorderLayout.EAST);
+		JPanel textEast = new JPanel();
+		Dimension textEDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.25), cardDim.height);
+		textEast.setPreferredSize(textEDim);
+		textEast.setMaximumSize(textEDim);
+		textEast.setMinimumSize(textEDim);
+		textEast.setLayout(new GridLayout(6, 1, 1, 1));
+		
+		name = new JLabel("");
+		currLoc = new JLabel("");
+		job = new JLabel("");
+		residence = new JLabel("");
+		money = new JLabel("");
+		hunger = new JLabel("");
+		
+		textEast.add(name);
+		textEast.add(currLoc);
+		textEast.add(job);
+		textEast.add(residence);
+		textEast.add(money);
+		textEast.add(hunger);
+		
+		//Person controls
+		controls = new JPanel();
+		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.58), cardDim.height);
+		controls.setPreferredSize(controlDim);
+		controls.setVisible(false);
+		
+		//Robber button
+		robberButton = new JButton("Rob a Bank");
+		robberButton.addActionListener(this);
+		
+		controls.add(robberButton);
+		
+		personText.add(textWest, BorderLayout.WEST);
+		personText.add(textEast, BorderLayout.CENTER);
+		personText.add(controls, BorderLayout.EAST);
+
+		card.add(personText, "person");
+
+		//Display current game time
+		timer = SingletonTimer.getInstance();
+    	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
+		time = new JLabel();
+		timePanel.add(time);
+		//timePanel.setBorder(BorderFactory.createEtchedBorder());
+		//card.setBorder(BorderFactory.createEtchedBorder());
+		
+		add(card, BorderLayout.SOUTH);
+		add(timePanel, BorderLayout.NORTH);
+	}
+	
+	
+	
+	private void getTimeDisplay(){
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timeManager.currentSimTime());
+		
+		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm");
+		time.setText(format.format(cal.getTime()) + " in Encino, CA");
+		
 	}
 
 	/**
@@ -72,14 +174,34 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * @param p Person name
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
+		CardLayout cl = (CardLayout)(card.getLayout());
+		cl.show(card, "person");
 		//System.out.println("update info with "+person.getName());
-		info.setText("<html><div>&nbsp;</div><div> "
+		/*info.setText("<html><div>&nbsp;</div><div> "
 						+ "Name: "+ person.getName() +"</div><div>&nbsp;</div>"
-						//+ "<div> Job: "+ person.getJob() +"</div><div>&nbsp;</div>"
-						//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
-						//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
-						//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
-				);
+						+ "<div> Job: "+ (person.getWorkRole() == null ? "none" : person.getWorkRole().getShortName()) + "</div><div>&nbsp;</div>"
+						+ "<div> Residence: "+ (person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()) + "</div><div>&nbsp;</div>"
+						+ "<div> Money: $"+ person.getWallet().getCashOnHand() +"</div><div>&nbsp;</div>"
+						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
+				);*/
+		
+		currentPerson = person;
+		controls.setVisible(true);
+		
+		nameL.setText("Name:  ");
+		currLocL.setText("Current Location:  ");
+		jobL.setText("Job:  ");
+		residenceL.setText("Residence:  ");
+		moneyL.setText("Money:  ");
+		hungerL.setText("Hunger Level:  ");
+		
+		
+		name.setText(person.getName());
+		currLoc.setText(""+(person.getPassengerRole().getLocation()));
+		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().toString()));
+		residence.setText(""+(person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()));
+		money.setText("$"+person.getWallet().getCashOnHand());
+		hunger.setText(""+person.getHungerLevel());		
 		validate();
 	}
 	
@@ -89,36 +211,46 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void updateBuildingInfoPanel(Building b){
 		//Building building = b;
-		System.out.println(b.getName()+ " update info panel");
-
-		info.setText("<html><div>&nbsp;</div><div> "
-				+ "Building: "+ b.getName() +"</div><div>&nbsp;</div>"
-				+ "<div> Building Type: "+ b.getType() +"</div><div>&nbsp;</div>"
-				//+ "<div> Residence: "+ person.getResidence + "</div><div>&nbsp;</div>"
-				//+ "<div> Money: $"+ person.getMoney() +"</div><div>&nbsp;</div>"
-				//+ "<div> Hunger Level: "+ person.getHungerLevel +"</div></html>"
-				);
+		//System.out.println(b.getName()+ " update info panel");
+		if (b instanceof MarketBuilding){
+			((MarketBuilding) b).UpdateInfoPanel();
+		}
+		//if(b instanceof ResidentialBuilding){
+		//	 ((HousingInfoPanel)(b.getInfoPanel())).updatePanel();
+		//}
 		
-		CardLayout cl = (CardLayout)(controlPanel.getLayout());
-		if(b.getType() == LocationTypeEnum.Market){
-			cl.show(controlPanel, b.getName());
+		CardLayout cl = (CardLayout)(card.getLayout());
+		if(b.getInfoPanel() == null){
+			cl.show(card, "blank");
 		}
 		else
 		{
-			cl.show(controlPanel, "blank");
+			cl.show(card, b.getName());
 		}
 		
 		validate();
 
 	}
 	
-	public void addControlPanel(JPanel control, String name){
-		//control.setSize(controlPanel.getSize());
-		controlPanel.add(control, name);
+	/**
+	 * Adds the Building's control panel to the cardlayout
+	 * @param panel Building's info panel
+	 * @param name Building's name
+	 */
+	public void addBuildingInfoPanel(JPanel panel, String name){
+		card.add(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource() == robberButton){
+			//TODO make currentPerson a robber
+		}
+	}
+	
+	class PrintTask extends TimerTask {
+        public void run() {
+        	getTimeDisplay();
+        }
 	}
 
 }

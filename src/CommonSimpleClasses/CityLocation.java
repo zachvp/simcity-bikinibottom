@@ -2,7 +2,6 @@ package CommonSimpleClasses;
 
 public interface CityLocation {
 	
-	//TODO update DD
 	public enum LocationTypeEnum {
 		Restaurant,
 		Bank,

@@ -8,6 +8,8 @@ import restaurant.strottma.HostRole.Table;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class CookGui implements Gui {
 
     private CookRole role = null;
@@ -25,12 +27,12 @@ public class CookGui implements Gui {
     private int yDestination = yPos;
         
     // default location
-    private static final int DEFAULT_X = 650;
-    private static final int DEFAULT_Y = 80;
+    private static final int DEFAULT_X = 650-400;
+    private static final int DEFAULT_Y = 180;
         
     // refrigerator location
-    private static final int FRIDGE_X = 950;
-    private static final int FRIDGE_Y = 74;
+    private static final int FRIDGE_X = 950-400;
+    private static final int FRIDGE_Y = 174;
         
     private boolean shouldMsg; // should we message the gui?
     private String orderText = null; // used to display the customer's food
@@ -59,32 +61,6 @@ public class CookGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-    	// draw the grills
-    	for (GrillOrPlate grill : role.getGrills()) {
-    		g.setColor(Color.DARK_GRAY);
-    		g.drawRect(grill.getX(), grill.getY(), 30, 30);
-    		if (grill.orderVisible() && grill.getOrder() != null) {
-    			g.setColor(Color.BLACK);
-    			g.drawString(grill.getOrder().getChoice().substring(0, 2),
-    					grill.getX()+10, grill.getY()+20);
-    		}
-    	}
-    	
-    	// draw the plating areas
-    	for (GrillOrPlate plateArea : role.getPlateAreas()) {
-    		g.setColor(Color.LIGHT_GRAY);
-    		g.drawRect(plateArea.getX(), plateArea.getY(), 30, 30);
-    		if (plateArea.orderVisible()) {
-    			g.setColor(Color.BLACK);
-    			g.drawString(plateArea.getOrder().getChoice().substring(0, 2),
-    					plateArea.getX()+10, plateArea.getY()+20);
-    		}
-    	}
-    	
-    	// draw the fridge
-    	g.setColor(Color.BLACK);
-    	g.fillRect(FRIDGE_X, FRIDGE_Y, 30, 30);
-    	
     	// draw the agent
     	g.setColor(Color.BLUE);
         g.fillRect(xPos, yPos, WIDTH, HEIGHT);

@@ -2,18 +2,27 @@ package transportation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import kelp.Kelp;
 import kelp.KelpClass;
 import transportation.PassengerRole.PassengerStateEnum;
+import transportation.gui.PassengerGuiClass;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
+import transportation.interfaces.PassengerRequester;
 import transportation.interfaces.Vehicle;
+import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.DirectionEnum;
+import agent.Role;
+import agent.RoleFactory;
 import agent.interfaces.Person;
 
 public class RealPassengerRole extends PassengerRole {
@@ -21,43 +30,79 @@ public class RealPassengerRole extends PassengerRole {
 	//CityLocation the Passenger is ultimately trying to get to.
 	private CityLocation destination;
 
-	//Path to follow to get to destination. TODO add to DD
+	//Path to follow to get to destination.
 	private List<CityLocation> path = new ArrayList<CityLocation>();
 
-	//Pointer to GUI TODO Add to DD
+	//Pointer to GUI
 	PassengerGui gui;
 
-	//Pointer to Kelp TODO Add to DD
+	//Pointer to Kelp
 	Kelp kelp = KelpClass.getKelpInstance();
 
-	//TODO update DD
 	//Stores what the Passenger is doing.
 	private PassengerStateEnum state = PassengerStateEnum.Initial;
 
+	//`Vehicle` the `Passenger` is currently on.
 	Vehicle currentVehicle = null;
 
-	//TODO implement passing down from person
+	//True if `Passenger` has a `Car`.
 	boolean hasCar = false;
+	
+	//True if `Passenger` is willing to take the bus.
 	boolean useBus = false;
 
+	//Role that requested the movement, if any.
+	private PassengerRequester requesterRole = null;
+
+	private Timer timer = SingletonTimer.getInstance();
+	
+	class CornerNotifier extends TimerTask {
+		private Corner corner;
+
+		public CornerNotifier(Corner corner) {
+			this.corner = corner;
+		}
+
+		@Override
+		public void run() {
+			corner.msgDoneCrossing();
+			stateChanged();
+		}
+	}
+
+	public RealPassengerRole(Person person, CityLocation location) {
+		super(person, location);
+		this.gui = new PassengerGuiClass(this, location);
+	}
+	
+	//CONSTRUCTOR FOR TESTING ONLY!
 	public RealPassengerRole(Person person, CityLocation location,
-			PassengerGui gui) {
+			MockPassengerGui gui) {
 		super(person, location);
 		this.gui = gui;
-		gui.setPassenger(this, location);
 	}
 
 	//TODO add input for if has car, if want bus, etc
 	@Override
-	public void msgGoToLocation(CityLocation loc) {
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus) {
 		destination = loc;
 		state = PassengerStateEnum.DecisionTime;
+		useBus = willingToUseBus;
+		hasCar = (getPerson().getCar() != null);
+		gui.startShowing();
 		stateChanged();
 
+	}
+	
+	public void msgGoToLocation(CityLocation loc, boolean willingToUseBus,
+			PassengerRequester requesterRole) {
+		this.requesterRole  = requesterRole;
+		msgGoToLocation(loc, willingToUseBus);
 	}
 
 	@Override
 	public void msgWelcomeToBus(Bus b, double fare) {
+		currentVehicle = b;
 		state = PassengerStateEnum.InBus;
 		gui.doGetInBus(b);
 		// TODO pay fare?
@@ -98,30 +143,39 @@ public class RealPassengerRole extends PassengerRole {
 	}
 
 
-	//TODO add car handling
 	private void decide() {
+		
+		//If passenger needs to start moving
 		if (path.isEmpty() && location != destination){
-			// TODO maybe some other priority
 			boolean useBusNow = useBus && !hasCar;
 			path = kelp.routeFromAToB(location, destination, useBusNow);
 			return;
+		//If passenger got to destination
 		} else if (path.isEmpty()) {
 			state = PassengerStateEnum.Initial;
+			gui.hide();
 			deactivate();
-			((Person) getPerson()).msgArrivedAtDestination();
+			if (requesterRole == null) ((Person) getPerson())
+										.msgArrivedAtDestination();
+			else {
+				requesterRole.msgArrivedAtDestination();
+				requesterRole = null;
+			}
+			
 			return;
 		}
-
+		
+		//If passenger got to intermediate path location
 		if (path.get(0) == location) {
 			path.remove(0);
 			if(currentVehicle != null && currentVehicle instanceof Bus) {
 				Bus bus = (Bus) currentVehicle;
 				bus.msgExiting(this);
-				gui.doExitVehicle();
+				gui.doExitBus((Corner)location,bus.orientation());
 				currentVehicle = null;
 			} else if (currentVehicle != null && currentVehicle instanceof Car) {
 				currentVehicle = null;
-				gui.doExitVehicle();
+				gui.doExitVehicle(location);
 			}
 			return;
 		} else {
@@ -130,22 +184,30 @@ public class RealPassengerRole extends PassengerRole {
 				return;
 			}
 		}
-
-
-
+		
+		//If passenger arrived to a busstop
 		if (location.type() == LocationTypeEnum.Busstop) {
 			Busstop busstop = (Busstop)location;
 			busstop.msgIAmHere(this);
 			state = PassengerStateEnum.WaitingForBus;
 			return;
+			
+		//If passenger needs to initiate movement
 		} else {
 			if (!hasCar || path.get(0).type() != LocationTypeEnum.Corner) {
 				gui.doWalkTo(path.get(0));
+				
+				if (location.type() == LocationTypeEnum.Corner) {
+					Corner currCorner = (Corner)location;
+					timer.schedule(new CornerNotifier(currCorner), 1600);
+					currCorner.msgIAmCrossing();
+				}
+				
 				state = PassengerStateEnum.Walking;
 				return;
 			} else {
-				gui.bringOutCar();
 				state = PassengerStateEnum.GettingInCar;
+				gui.doBringOutCar();
 			}
 		}
 	}
@@ -165,7 +227,12 @@ public class RealPassengerRole extends PassengerRole {
 		for (int j = 0; j < i-1; j++) {
 			path.remove(0);
 		}
-		car.msgTakeMeHere(carPath,this);
+		car.msgTakeMeHere(carPath,this,gui.getPos());
+		if (car instanceof CarAgent) {
+			CarAgent carAgent = (CarAgent) car;
+			carAgent.startThread();
+		}
+		car.startVehicle();
 	}
 
 	/**
@@ -187,6 +254,24 @@ public class RealPassengerRole extends PassengerRole {
 	 */
 	public PassengerStateEnum state() {
 		return state;
+	}
+
+	@Override
+	public DirectionEnum currentDirection() {
+		if (location.type() != LocationTypeEnum.Corner
+			|| path.get(0).type() != LocationTypeEnum.Corner
+			|| location == path.get(0)) {
+			return DirectionEnum.None;
+		} else {
+			try {
+				return ((Corner)location).getDirForCorner((Corner) path.get(0));
+			} catch (Exception e) {
+				System.out.println("Couldn't find currentDirection for "
+						+ "Passenger.");
+				e.printStackTrace();
+				return DirectionEnum.None;
+			}
+		}
 	}
 
 

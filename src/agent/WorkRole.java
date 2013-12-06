@@ -1,7 +1,13 @@
 package agent;
 
+import classifieds.ClassifiedsClass;
+import gui.Building;
+import housing.interfaces.Dwelling;
 import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.TimeManager;
 
 /**
  * Common interface for jobs that people can work at. Provides a couple of
@@ -15,36 +21,91 @@ public abstract class WorkRole extends Role {
 	
 	public WorkRole() {
 		super();
+		initShift();
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person) {
 		super(person);
+		initShift();
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
 	public WorkRole(Person person, CityLocation loc) {
 		super(person, loc);
+		initShift();
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
 	}
 	
+	public WorkRole(CityLocation loc) {
+		super(null, loc);
+		initShift();
+		ClassifiedsClass.getClassifiedsInstance().addWorkRole(this);
+	}
+	
+	public String getShortName() {
+		return getClass().getSimpleName();
+	}
+	
+	public void setPerson(Person person) {
+		super.setPerson(person);
+	}
+	
+	public void initShift() {
+		int initHour = (getShiftStartHour() - getWorkStartThresholdHours());
+		int initMin = (getShiftStartMinute() - getWorkStartThresholdMinutes());
+		
+		ScheduleTask task = ScheduleTask.getInstance();
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				stateChanged();
+			}
+			
+		};
+		
+		
+		task.scheduleDailyTask(command, initHour, initMin);
+		//get start time substract thresh hours times const.hour and thresh minute * const.minute 
+		//create a daily task with new time i have with a delay of Constants.DAY / (llok at how other scheds are done)
+	}
+	
+	public int getWorkStartThresholdHours() {
+		return 2;
+	}
+	
+	public int getWorkStartThresholdMinutes() {
+		return 0;
+	}
 	/**
 	 * The hour of day this person's work shift starts, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftStartHour();
+	public int getShiftStartHour(){
+		return ( ((Building) this.location).getOpeningHour());
+	}
 	/**
 	 * The minute of the hour this person's work shift starts.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftStartMinute();
+	public int getShiftStartMinute(){
+		return ( ((Building) this.location).getOpeningMinute());
+	}
 	/**
 	 * The hour of day this person's work shift ends, in 24-hour time.
 	 * @return an integer in the range [0,23]
 	 */
-	public abstract int getShiftEndHour();
+	public int getShiftEndHour(){
+		return ( ((Building) this.location).getClosingHour());
+	}
 	/**
 	 * The minute of the hour this person's work shift ends.
 	 * @return an integer in the range [0,59]
 	 */
-	public abstract int getShiftEndMinute();
+	public int getShiftEndMinute(){
+		return ( ((Building) this.location).getClosingMinute());
+	}
 	
 	/**
 	 * Whether this person's shift starts before midnight and ends after

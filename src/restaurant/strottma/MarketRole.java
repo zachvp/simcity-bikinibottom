@@ -1,14 +1,21 @@
 package restaurant.strottma;
 
-import agent.Agent;
-import agent.PersonAgent;
-import agent.Role;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Market;
-
-import java.text.DecimalFormat;
-import java.util.*;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
+import agent.PersonAgent;
+import agent.Role;
 
 /**
  * Restaurant Market Agent
@@ -28,10 +35,10 @@ public class MarketRole extends Role implements Market {
 	private Cook cook;
 	private Cashier cashier;
 
-	public MarketRole(PersonAgent person) {
-		super(person);
+	public MarketRole(PersonAgent person, CityLocation location) {
+		super(person, location);
 
-		this.timer = new Timer();
+		this.timer = SingletonTimer.getInstance();
 		
 		inventory.put("Steak", 5);
 		inventory.put("Chicken", 3);

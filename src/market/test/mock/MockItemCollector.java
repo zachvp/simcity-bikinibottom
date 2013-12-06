@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import agent.PersonAgent;
+import agent.interfaces.Person;
+import CommonSimpleClasses.Constants;
 import market.test.mock.LoggedEvent;
 import market.test.mock.EventLog;
 import market.Item;
+import market.ItemCollectorRole.ItemCollectorstate;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
 import market.interfaces.ItemCollector;
+import market.interfaces.ItemCollectorGuiInterfaces;
 
 public class MockItemCollector extends Mock implements ItemCollector {
 
 	public EventLog log = new EventLog();
 	public Cashier Cashier;
+	Map<String, Integer> tempInventoryList = null;
 	
 	public MockItemCollector(String name) {
 		super(name);
@@ -23,20 +29,22 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	}
 
 	@Override
-	public void msgGetTheseItem(List<Item> ItemList, Customer c) {
+	public void msgGetTheseItem(List<Item> ItemList) {
 		// TODO Auto-generated method stub
 		log.add(new LoggedEvent("ItemCollector : Received message msgGetTheseItem"));
 		
-		List<Item> tempInventoryList = new ArrayList<Item>();
-		{
-			tempInventoryList.add(new Item("CheapCar", 1));
-			tempInventoryList.add(new Item("ExpensiveCar", 0));
-			tempInventoryList.add(new Item("Pizza", 1));
-			tempInventoryList.add(new Item("Sandwich", 0));
-			tempInventoryList.add(new Item("Chicken", 0));
+		/*
+		List<Item> ShoppingList = new ArrayList<Item>();
+		for (int i = 0 ; i < Constants.CARS.size(); i ++){
+			ShoppingList.add(new Item(Constants.CARS.get(i),tempInventoryList.get(Constants.CARS.get(i))));
 		}
+		for (int i = 0 ; i < Constants.FOODS.size(); i ++){
+			ShoppingList.add(new Item(Constants.FOODS.get(i),tempInventoryList.get(Constants.FOODS.get(i))));
+		}
+		*/
 		
-			Cashier.msgHereAreItems(tempInventoryList, new ArrayList<Item>(), c);
+		
+			Cashier.msgHereAreItems(ItemList, new ArrayList<Item>());
 		
 	}
 
@@ -54,12 +62,6 @@ public class MockItemCollector extends Mock implements ItemCollector {
 
 	@Override
 	public void setCashier(Cashier ca) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setInventoryList(Map<String, Item> inventoryList) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -86,6 +88,30 @@ public class MockItemCollector extends Mock implements ItemCollector {
 	public void AtExit() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setInventoryList(Map<String, Integer> inventoryList) {
+		tempInventoryList = inventoryList;
+		
+	}
+
+	@Override
+	public void setGui(ItemCollectorGuiInterfaces itemCollectorGui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setState(ItemCollectorstate s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Person getPerson() {
+		// TODO Auto-generated method stub
+		return new PersonAgent("name");
 	}
 	
 }

@@ -23,4 +23,6 @@ public interface BankCustomer {
         public abstract void msgSpeakToLoanManager(LoanManager lm, int XPos);
 
         public abstract void msgGoToSecurityGuard(SecurityGuard sg);
+
+		public abstract void msgAtDestination();
 }

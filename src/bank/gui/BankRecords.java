@@ -1,19 +1,23 @@
 package bank.gui;
 
+import gui.AnimationPanel;
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import agent.PersonAgent;
 import agent.Role;
-import gui.BuildingRecords;
 
 
-public class BankRecords implements BuildingRecords {
+public class BankRecords {
 
-	@Override
+	AnimationPanel animationPanel;//TODO
+	BankBuilding bankBuilding;
+	
+	private static final CityBuilding cityBuilding = null;
 	public LocationTypeEnum getType() {
 		
 		return LocationTypeEnum.Bank;
 	}
 
-	@Override
 	public Role addPerson(String role, String name) {
 		
 		return null;

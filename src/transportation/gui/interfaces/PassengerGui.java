@@ -1,6 +1,7 @@
 package transportation.gui.interfaces;
 
 import transportation.interfaces.Bus;
+import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
@@ -12,10 +13,18 @@ public interface PassengerGui extends Gui {
 
 	void doGetInBus(Bus b);
 
-	void doExitVehicle();
+	void doExitVehicle(CityLocation loc);
 
-	void bringOutCar();
+	void doBringOutCar();
 
-	void setPassenger(Passenger passenger, CityLocation currentLocation);
+	void doSetLocation(CityLocation loc);
+
+	XYPos getPos();
+
+	void doExitBus(Corner location, boolean orientation);
+
+	void startShowing();
+
+	void hide();
 
 }

@@ -4,6 +4,8 @@ package market.test.mock;
 import java.util.List;
 
 
+
+import agent.interfaces.Person;
 import market.Item;
 import market.interfaces.Cashier;
 import market.interfaces.Customer;
@@ -75,6 +77,24 @@ public class MockCustomer extends Mock implements Customer {
 	public void msgAnimationFinishedLeaveMarket() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public double getCash() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Item> getShoppingList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Person getPerson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

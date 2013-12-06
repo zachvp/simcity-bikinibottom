@@ -11,7 +11,7 @@ import transportation.IntersectionAction;
  * necessary interactions when people or vehicles reach 
  * a corner.
  */
-// TODO Update DD!!!
+
 public interface Corner extends CityLocation {
 	
 	/* Message a vehicle sends to a corner 
@@ -49,6 +49,10 @@ public interface Corner extends CityLocation {
 	public void startThreads();
 
 	List<MyCorner> getAdjacentCorners();
+
+	public DirectionEnum getDirForCorner(Corner corner) throws Exception;
+
+	public void msgIAmCrossing();
 
 	
 }

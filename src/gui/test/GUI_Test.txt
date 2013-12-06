@@ -1,0 +1,43 @@
+Graphical User Interface Test File
+
+Initial Start-up
+Upon the launch of the frame:
+	The buses should be running, performing its route around the city. 
+	The Kelp sign is in the Building View Panel.
+
+Creating a Person
+Click on the Hospital either in the map or on the list to pull up the Person Creation Panel.
+In the Person Creation Panel, there should be 1 text field, 8 combo boxes and 2 buttons.
+The text field is for a name, and the combo boxes provide options for customizing the
+details in a new Person. 
+
+	Make sure to fill out all inputs correctly and click the "Create" button.
+	There should be a message that displays "[Person name] was created."
+	Information about that Person should be displayed in the Information Panel.
+	A new person should be added to the People list.
+	A new Person should walk out of the Hospital Building and begin his life in the City.
+	
+	Leave the text field input blank.
+	There should be a message that displays "Please complete all inputs"
+	
+	Select an option in combo box "Workplace"
+	Click on "Populate selected workplace"
+	A predetermined amount of Persons should be created and filling the WorkRoles specified
+	
+	
+Looking inside a Building
+Click on either a building on the map or a building name on the list:
+	Should pull up the interior view of that building.
+	Should pull up the Information Panel for that Building.
+
+If a MockBuilding is available:
+	Click on a MockBuilding (SnailPo sign) and the Kelp sign appears.
+	
+Lists
+Click on a tab and the panel should switch to that list.
+Click on a name in the People list should bring up that person's information in the
+InformationPanel.
+Click on a building name in the building list and that building's animation panel
+should appear in the building view and its information should appear in the InformationPanel.
+
+	

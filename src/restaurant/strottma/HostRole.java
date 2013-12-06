@@ -1,15 +1,16 @@
 package restaurant.strottma;
 
-import agent.Agent;
-import agent.PersonAgent;
-import agent.Role;
-import agent.interfaces.Person;
-import restaurant.strottma.gui.HostGui;
-import restaurant.strottma.gui.WaiterGui;
-import restaurant.strottma.interfaces.Customer;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Semaphore;
+
+import restaurant.strottma.gui.HostGui;
+import restaurant.strottma.interfaces.Customer;
+import CommonSimpleClasses.CityLocation;
+import agent.WorkRole;
+import agent.interfaces.Person;
 
 /**
  * Restaurant Host Role
@@ -20,11 +21,11 @@ import java.util.concurrent.Semaphore;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostRole extends Role {
+public class HostRole extends WorkRole {
 	static final int NTABLES = 4; // a global for the number of tables.
 	static final int TABLE_SPACING = 80;
-	static final int TABLE_X_OFFSET = 440; // how far right and down to bump all tables
-	static final int TABLE_Y_OFFSET = 30;
+	static final int TABLE_X_OFFSET = 440-400; // how far right and down to bump all tables
+	static final int TABLE_Y_OFFSET = 130;
 	static final int TABLES_PER_COLUMN = 2;
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
@@ -35,12 +36,14 @@ public class HostRole extends Role {
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	
+	private boolean offWork = false;
+	
 	private HostGui hostGui = null;
 	
 	private Semaphore atTable = new Semaphore(0,true);
-
-	public HostRole(Person person) {
-		super(person);
+	
+	public HostRole(Person person, CityLocation location) {
+		super(person, location);
 		
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<Table>(NTABLES));
@@ -49,6 +52,12 @@ public class HostRole extends Role {
 			int y = (ix % TABLES_PER_COLUMN) * TABLE_SPACING + TABLE_Y_OFFSET;
 			tables.add(new Table(ix, x, y));//how you add to a collections
 		}
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 
 	public List<Customer> getWaitingCustomers() {
@@ -82,6 +91,11 @@ public class HostRole extends Role {
 	public void msgOffBreak(WaiterRole w) { // from waiter
 		MyWaiter mw = findWaiter(w);
 		mw.state = WState.NORMAL;
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		offWork = true;
 	}
 	
 	/**
@@ -133,6 +147,8 @@ public class HostRole extends Role {
 				}
 			}
 		}
+		
+		if (offWork) { deactivate(); }
 		
 		return false;
 		//we have tried all our rules and found
@@ -217,7 +233,7 @@ public class HostRole extends Role {
 		Do("Added " + w);
 		
 		// assign a wait position
-		w.setWaitY(14 + 30*this.waiters.size());
+		w.setWaitY(130 + 30*this.waiters.size());
 		
 		this.waiters.add(new MyWaiter(w));
 		stateChanged();
@@ -273,6 +289,17 @@ public class HostRole extends Role {
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+	
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO maybe hosts can go on breaks in v3
+		return false;
 	}
 	
 }

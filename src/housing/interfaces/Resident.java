@@ -1,7 +1,5 @@
 package housing.interfaces;
 
-import java.util.Map;
-
 public interface Resident {
 	/* ----- Normative Messages  ----- */
 	/** From payment collector
@@ -9,5 +7,9 @@ public interface Resident {
 	 */
 	public void msgPaymentDue(double amount);
 
-	public void msgAtDest();
+	public void msgAtDestination();
+
+	public void msgDwellingFixed();
+
+	void msgDwellingDegraded();
 }

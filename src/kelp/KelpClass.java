@@ -14,9 +14,9 @@ import CommonSimpleClasses.XYPos;
 public class KelpClass implements Kelp {
 	
 	// TODO SET CORRECT CONSTANTS
-	private static final double AVG_BUS_WAIT = 15;
-	private static final double BUS_SPEED = 80; 
-	private static final double WALKING_SPEED = 30;
+	private static final double AVG_BUS_WAIT = 5;
+	private static final double BUS_SPEED = 30; 
+	private static final double WALKING_SPEED = 10;
 	private static final int DISTANCE_THRESHOLD_FOR_SAME_COORDINATE = 8;
 	
 	List<CityLocation> locations;
@@ -121,7 +121,9 @@ public class KelpClass implements Kelp {
 	public List<CityLocation> routeFromAToB(CityLocation A, 
 			CityLocation B, Boolean tryBus){
 		XYPos posA = getAbsoluteEntrancePosition(A);
-		return routeFromAToB(posA, B, tryBus);
+		List<CityLocation> response = routeFromAToB(posA, B, tryBus);
+		//response.add(0, A);
+		return response;
 	}
 
 	private List<CityLocation> returnFastestPath(
@@ -213,21 +215,28 @@ public class KelpClass implements Kelp {
 	private List<CityLocation> routeWithoutBus(XYPos posA, XYPos posB) {
 		List<CityLocation> nearCorners = placesNearMe(posA, 
 				LocationTypeEnum.Corner);
+		Corner startCorner, endCorner;
 		
+		/*
 		//Getting the 2 corners closest to A
 		List<Corner> cornersInit = new ArrayList<Corner>();
 		cornersInit.add((Corner)nearCorners.get(0));
 		cornersInit.add((Corner)nearCorners.get(1));
+		*/
 		
+		startCorner = (Corner)nearCorners.get(0);
 		//Getting the 2 corners closest to B
 		nearCorners = placesNearMe(posB, LocationTypeEnum.Corner);
+		/*
 		List<Corner> cornersEnd = new ArrayList<Corner>();
 		cornersEnd.add((Corner)nearCorners.get(0));
 		cornersEnd.add((Corner)nearCorners.get(1));
+		*/
+		endCorner = (Corner)nearCorners.get(0);
 		
 		
 		//Determining shortest path
-		Corner startCorner, endCorner;
+		/*
 		startCorner = endCorner = null;
 		int minDistance = 2147483647;
 		
@@ -246,7 +255,7 @@ public class KelpClass implements Kelp {
 				minDistance = distance;
 			}
 		}
-		
+		*/
 		//Determining in what direction to move;
 		DirectionEnum horizontalDir, verticalDir;
 		

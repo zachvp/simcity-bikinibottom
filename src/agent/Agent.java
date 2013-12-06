@@ -1,6 +1,12 @@
 package agent;
 
-import java.util.concurrent.*;
+import gui.trace.AlertTag;
+
+import java.util.concurrent.Semaphore;
+
+import mock.EventLog;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.StringUtil;
 
 /**
  * Base class for simple agents
@@ -8,6 +14,7 @@ import java.util.concurrent.*;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
+    private EventLog log = new EventLog();
     
     private boolean pause = false;
     
@@ -45,24 +52,37 @@ public abstract class Agent {
     }
 
     /**
-     * The simulated action code
+     * The simulated action code for the log display
+     */
+    // AlertTag tag, String name, String log
+    protected void Do(AlertTag tag, String name, String msg) {
+        // print(msg, null);
+        log.add(tag, name, msg);
+    }
+    
+    /**
+     * The simulated action code for just the console 
      */
     protected void Do(String msg) {
-        print(msg, null);
+        // print(msg, null);
+        log.add(msg);
     }
 
     /**
      * Print message
      */
-    protected void print(String msg) {
-        print(msg, null);
+    protected void print(AlertTag tag, String name, String msg) {
+        // print(msg, null);
+    	log.add(tag, name, msg);
     }
 
     /**
      * Print message with exception stack trace
      */
     protected void print(String msg, Throwable e) {
-        StringBuffer sb = new StringBuffer();
+        if (!Constants.PRINT) { return; }
+    	
+    	StringBuffer sb = new StringBuffer();
         sb.append(getName());
         sb.append(": ");
         sb.append(msg);
@@ -78,7 +98,7 @@ public abstract class Agent {
      */
     public synchronized void startThread() {
         if (agentThread == null) {
-            agentThread = new AgentThread(getName());
+            agentThread = new AgentThread(getName(), this);
             agentThread.start(); // causes the run method to execute in the AgentThread below
         } else {
             agentThread.interrupt();//don't worry about this for now
@@ -120,9 +140,12 @@ public abstract class Agent {
      */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
+        //Pointer for debugging purposes
+		private Agent agent;
 
-        private AgentThread(String name) {
+        private AgentThread(String name, Agent agent) {
             super(name);
+            this.agent = agent;
         }
 
         public void run() {
@@ -143,8 +166,6 @@ public abstract class Agent {
                     
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
-                } catch (Exception e) {
-                    print("Unexpected exception caught in Agent thread:", e);
                 }
             }
         }

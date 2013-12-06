@@ -1,87 +1,96 @@
 package housing.gui;
 
-import housing.PayRecipientRole;
+import housing.backend.MaintenanceWorkerRole;
+import housing.backend.PayRecipientRole;
+import housing.backend.ResidentRole;
+import housing.backend.ResidentialBuilding;
 
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import agent.PersonAgent;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import agent.Role;
-import CommonSimpleClasses.CityBuilding;
-import CommonSimpleClasses.XYPos;
+import agent.interfaces.Person;
 
 /**
- * HousingComplex is the equivalent of one building unit. It has 4 subdivisions
- * that each contain a smaller residential unit. 
+ * HousingComplex is slotted into a ResidentialBuilding. It is the equivalent of
+ * one building unit. It has UNIT_COUNT subdivisions that each contain a smaller residential unit.
+ *  
  * @author Zach VP
- *
  */
-public class HousingComplex extends JPanel implements CityBuilding {
+
+public class HousingComplex {
 	/* --- Data --- */
-	// some configuration constants
-	private final int UNIT_COUNT = 4;
-	private final int ROWS = 2;
-	private final int COLUMNS = 2;
-	private final int SPACING = 10;
 	
-	// layout manager
-	GridLayout complexLayout = new GridLayout(ROWS, COLUMNS, SPACING, SPACING);
-
-	// payRecipient who manages the complex 
- 	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
- 	PayRecipientRole payRecipientRole = new PayRecipientRole(payRecipientPerson);
+	CityLocation building;
 	
-	private List<HousingGui> housingUnits = new ArrayList<HousingGui>();
+	HousingComplexGui gui;
 	
-	public HousingComplex() {
-		// set the layout manager
-		this.setLayout(complexLayout);
+	// the "boss" or greeter for this building and the on-call Mr. Fix-it
+	private PayRecipientRole landlord;
+	private MaintenanceWorkerRole worker;
+	
+	// used for producing jobs and residential roads in the complex
+	public Map<Person, Role> population = new HashMap<Person, Role>();
+	
+	public HousingComplex(ResidentialBuilding building) {
 		
-		/**
-		 * Add as many units as specified to the complex. Units will
-		 * be partitioned according to the GridLayout.
-		 */
-		for(int i = 0; i < UNIT_COUNT; i++){
-			HousingGui gui = new HousingGui(i, payRecipientRole);
-			this.add(gui);
-			housingUnits.add(gui);
+		// set up pointer to the building the complex is in
+		this.building = building;
+		
+		// instantiate the gui class for the complex
+		this.gui = new HousingComplexGui(this);
+		
+		if(!Constants.DEBUG) {
+			// worker for this building
+			this.worker = new MaintenanceWorkerRole(null, building);
+			
+			// manager for this building 
+			this.landlord = new PayRecipientRole(null, building);
+			
+			this.worker.setComplex(this);
+			
+			// put the constant roles in the building map
+			this.population.put(null, landlord);
+			this.population.put(null, worker);
 		}
-		
-		// activate complex manager
-		startAndActivate(payRecipientPerson, payRecipientRole);
 	}
 	
-	private void startAndActivate(PersonAgent agent, Role role) {
-		agent.startThread();
-		agent.addRole(role);
-		role.activate();
+	/* --- Utility functions --- */
+	
+	public void addResident(ResidentRole resident){
+		this.population.put(null, resident);
 	}
 	
-	@Override
-	public LocationTypeEnum type() {
-		return LocationTypeEnum.Apartment;
+	/* --- Getters --- */
+	public CityLocation getBuilding() {
+		return building;
+	}
+	
+	public Map<Person, Role> getPopulation() {
+		return population;
+	}
+	
+	public MaintenanceWorkerRole getWorker() {
+		return worker;
 	}
 
-	@Override
-	public XYPos position() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XYPos entrancePos() {
-		// TODO Auto-generated method stub
-		return null;
+	public PayRecipientRole getPayRecipient() {
+		return landlord;
 	}
 	
-	@Override
-	public Role getGreeter() {
-		return payRecipientRole;
+	public JPanel getGui() {
+		return gui;
+	}
+
+	public void removeGuiFromDwelling(MaintenanceWorkerRoleGui worker, int unit) {
+		gui.removeGuiFromDwelling(worker, unit);
+	}
+
+	public void addGuiToDwelling(MaintenanceWorkerRoleGui worker, int unit) {
+		gui.addGuiToDwelling(worker, unit);
 	}
 }

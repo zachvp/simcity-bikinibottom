@@ -12,11 +12,12 @@ import transportation.interfaces.Passenger;
 //TODO will instantly get and remove passengers, should fix?
 public class BusAgent extends VehicleAgent implements Bus {
 
+
 	//List of Passengers in the bus.
 	List<Passenger> passengerList = new ArrayList<Passenger>(); 
 	
-	//List of Passengers waiting in the current Busstop TODO add to DD
-	List<Passenger> waitingPassengerList; 
+	//List of `Passenger`s waiting in the `currentBusstop`.
+	List<Passenger> waitingPassengerList = new ArrayList<Passenger>(); 
 
 	//Route the bus must load.
 	List<Corner> busRoute; 
@@ -24,12 +25,14 @@ public class BusAgent extends VehicleAgent implements Bus {
 	//Busstop the Bus is currently in.
 	Busstop currentBusstop;
 		
+	/* Specifies if the bus is following the route forwards 
+	 * (`true`) or backwards (`false`).
+	 */
+	boolean orientation;
+	
 	//State the bus is in.
 	BusStateEnum busState = BusStateEnum.Moving; 
-	
-	boolean direction;
-	
-	enum BusStateEnum { // TODO Update DD
+	enum BusStateEnum {
 		Moving,
 		RequestingBusstop,
 		LettingPassengersExit,
@@ -39,7 +42,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		
 	//Event the bus did.
 	BusEventEnum busEvent = BusEventEnum.Initial;
-	enum BusEventEnum { // TODO Update DD
+	enum BusEventEnum {
 		Initial,
 		ReceivedBusstop,
 		PassengersLeft,
@@ -47,29 +50,39 @@ public class BusAgent extends VehicleAgent implements Bus {
 		PassengersOnBus
 	};
 	
+	public BusAgent(Corner currentCorner, boolean orientation,
+			List<Corner> busRoute) {
+		super(currentCorner, true);
+		this.orientation = orientation;
+		this.busRoute = busRoute;
+	}
+	
 	@Override
 	public void msgMyBusStop(List<Busstop> bsList) {
-		DirectionEnum myDir;
-		try {
-			myDir = myDirection();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception: Failed to find bus "
-					+ "direction, will skip a busstop.");
-			busEvent = BusEventEnum.PassengersOnBus;
-			busState = BusStateEnum.CallingPassengers;
-			return;
-		} 
-		for (Busstop bs : bsList) {
-			if (bs.direction() == myDir) {
-				currentBusstop = bs;
-				busEvent = BusEventEnum.ReceivedBusstop;
-				stateChanged();
+		if (bsList.size() > 0) {
+			DirectionEnum myDir;
+			try {
+				myDir = myDirection();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception: Failed to find bus "
+						+ "direction, will skip a busstop.");
+				busEvent = BusEventEnum.PassengersOnBus;
+				busState = BusStateEnum.CallingPassengers;
 				return;
+			} 
+			for (Busstop bs : bsList) {
+				if (bs.direction() == myDir) {
+					currentBusstop = bs;
+					break;
+				}
 			}
+			busEvent = BusEventEnum.ReceivedBusstop;
+		} else {
+			busState = BusStateEnum.Moving;
+			busEvent = BusEventEnum.Initial;
 		}
-		busState = BusStateEnum.RequestingBusstop;
-		busEvent = BusEventEnum.ReceivedBusstop;
+		event = VehicleEventEnum.ReceivedAdjCornersAndBusS;
 		stateChanged();
 		return;
 
@@ -104,19 +117,23 @@ public class BusAgent extends VehicleAgent implements Bus {
 		stateChanged();
 	}
 
-	// TODO this does nothing cause we're not synchronizing the exiting of passengers.
+	// TODO this does nothing cause we're not synchronizing
+	// the exiting of passengers.
 	@Override
 	public void msgExiting(Passenger p) {
-		passengerList.remove(p);
+		synchronized (passengerList) {
+			passengerList.remove(p);
+		}
+		
 		/* TODO add counting mechanism if going to make 
 		 * passengers exit in order
 		 */
 	}
 	
 	@Override
-	protected boolean pickAndExecuteAnAction() { // TODO Update scheduler in DD
-		if (state == VehicleStateEnum.OnStreet
-				&& event == VehicleEventEnum.ArrivedAtCorner
+	protected boolean pickAndExecuteAnAction() {
+		if (state == VehicleStateEnum.Requesting
+				&& event == VehicleEventEnum.ReceivedAdjCorners
 				&& !currentPath.isEmpty()
 				&& busState == BusStateEnum.Moving) {
 			busState = BusStateEnum.RequestingBusstop;
@@ -125,7 +142,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		} else if (busState == BusStateEnum.RequestingBusstop &&
 				busEvent == BusEventEnum.ReceivedBusstop) {
 			busState = BusStateEnum.LettingPassengersExit;
-			letPassengersExit(); //TODO update action name in DD
+			letPassengersExit();
 			return true;
 		} else if (busState == BusStateEnum.LettingPassengersExit
 				&& busEvent == BusEventEnum.PassengersLeft){
@@ -135,7 +152,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 		} else if (busState == BusStateEnum.RequestingPassengers
 				&& busEvent == BusEventEnum.PassengersReceived) {
 			busState = BusStateEnum.CallingPassengers;
-			letPassengersIn(); //TODO update action name in DD
+			letPassengersIn();
 			return true;
 		} else if (busState == BusStateEnum.CallingPassengers &&
 				busEvent == BusEventEnum.PassengersOnBus) {
@@ -146,21 +163,29 @@ public class BusAgent extends VehicleAgent implements Bus {
 		else return false;
 		
 	}
-
+	
+	/* Messages all the passengers in the bus and lets them know
+	 *  what `Corner` we are on so that they can decide to leave.
+	 */
 	private void letPassengersExit() {
-		for (Passenger passenger : passengerList) {
-			try {
-				passenger.msgWeHaveArrived(currentCorner);
-			} catch (Exception e) {
-				System.out.println("THIS SHOULDN'T HAPPEN!");
-				e.printStackTrace();
+		synchronized (passengerList) {
+			for (Passenger passenger : passengerList) {
+				try {
+					passenger.msgWeHaveArrived(currentCorner);
+				} catch (Exception e) {
+					System.out.println("THIS SHOULDN'T HAPPEN!");
+					e.printStackTrace();
+				}
 			}
 		}
-		
+
 		//TODO here we're not waiting for passengers to exit
 		busEvent = BusEventEnum.PassengersLeft;
 	}
 	
+	/* Messages all the passengers waiting for the bus, and waits
+	 *  for them to come in.
+	 */
 	private void letPassengersIn() {
 		for (Passenger passenger : waitingPassengerList) {
 			passenger.msgWelcomeToBus(this, 0); //TODO give fare?
@@ -173,9 +198,14 @@ public class BusAgent extends VehicleAgent implements Bus {
 	@Override
 	void endTravel() {
 		currentPath = new ArrayList<Corner> (busRoute);
-		if (!direction) { 
+		if (!orientation) { 
 			java.util.Collections.reverse(currentPath);
 		}
+	}
+
+	@Override
+	public boolean orientation() {
+		return orientation;
 	}
 
 }

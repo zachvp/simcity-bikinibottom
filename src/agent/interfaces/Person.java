@@ -3,7 +3,8 @@ package agent.interfaces;
 import java.util.Map;
 
 import market.Item;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
+import gui.trace.AlertTag;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
@@ -112,8 +113,8 @@ public interface Person {
 					this.moneyNeeded = 0;
 					break;
 				case RICH:
-					this.cashOnHand = 100;
-					this.tooMuch = 300;
+					this.cashOnHand = 300;
+					this.tooMuch = 100;
 					this.tooLittle = 50;
 					this.moneyNeeded = 0;
 					break;
@@ -133,9 +134,6 @@ public interface Person {
 		 * 
 		 * @see #Wallet(IncomeLevel)
 		 */
-		public Wallet() {
-			this(IncomeLevel.MEDIUM);
-		}
 		
 		public IncomeLevel getIncomeLevel() {
 			return this.incomeLevel;
@@ -178,11 +176,17 @@ public interface Person {
     /** Return Person name for messages.*/
 	public String getName();
 	
-    /** The simulated action code */
+    /** The simulated action code for log display */
+	public void agentDo(AlertTag tag, String name, String msg);
+	
+	/** The simulated action code for just the console */
 	public void agentDo(String msg);
-
-    /** Print message */
+	
+	/** Print message */
 	public void printMsg(String msg);
+	
+    /** Print message with error */
+	public void printMsg(String msg, Throwable e);
 
 	public void setHungerLevel(HungerLevel hungry);
 	
@@ -197,5 +201,9 @@ public interface Person {
 	 * there aren't that many, remove all.
 	 */
 	void removeItemsFromInventory(String name, int amount);
+
+	/** Return the singular shopping list so it can be accessed by
+	 * all roles. */
+	Map<String, Integer> getShoppingList();
 	
 }

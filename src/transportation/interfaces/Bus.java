@@ -13,5 +13,7 @@ public interface Bus extends Vehicle, BusstopRequester {
 	
 	//Message from Passenger when exiting the bus.
 	public void msgExiting(Passenger p);
+
+	public boolean orientation();
 	
 }

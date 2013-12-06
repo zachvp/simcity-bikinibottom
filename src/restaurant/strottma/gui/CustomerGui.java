@@ -5,10 +5,12 @@ import restaurant.strottma.HostRole;
 
 import java.awt.*;
 
+import agent.gui.Gui;
+
 public class CustomerGui implements Gui{
 
 	private CustomerRole role = null;
-	private boolean isPresent = false;
+	private boolean isPresent = true;
 	private boolean isHungry = false;
 	
 	private String text = null; // the text to display
@@ -57,7 +59,7 @@ public class CustomerGui implements Gui{
 				role.msgAnimationFinishedLeaveRestaurant();
 				System.out.println("about to call gui.setCustomerEnabled(agent);");
 				isHungry = false;
-				gui.setRoleEnabled(role);
+				//gui.setRoleEnabled(role);
 			}
 			command=Command.noCommand;
 		}

@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.RoleFactory;
 
@@ -27,7 +28,14 @@ public abstract class Building extends Rectangle2D.Double
 	String name;
 	JPanel animationPanel;	
 	LocationTypeEnum type;
-	JPanel controls;
+	JPanel info;
+	
+	protected static final int defaultStartHour = 8;
+	protected static final int defaultStartMinute = 0;
+	protected static final int defaultEndHour = 22;
+	protected static final int defaultEndMinute = 0;
+	
+	protected int timeOffset;
 	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
@@ -41,11 +49,45 @@ public abstract class Building extends Rectangle2D.Double
 		return name;
 	}
 	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
 	public XYPos position() {
 		return new XYPos((int)getX(), (int)getY());
 	}
 	
+	//Return your animation panel here
 	public abstract JPanel getAnimationPanel();
 	
+	//Return your control panel here (null if you don't have one)
+	public abstract JPanel getInfoPanel();
+	
+	/** Whether the building is open right now. */
+	public boolean isOpen() {
+		return TimeManager.getInstance().isNowBetween(getOpeningHour(),
+				getOpeningMinute(), getClosingHour(), getClosingMinute());
+	}
+	
+	/** The hour of day this building opens. */
+	public int getOpeningHour() {
+		return (defaultStartHour + timeOffset) % 24;
+	}
+	
+	/** The minute of day this building opens. */
+	public int getOpeningMinute() {
+		return defaultStartMinute;
+	}
+	
+	/** The hour of day this building closes. */
+	public int getClosingHour() {
+		return (defaultEndHour + timeOffset) % 24;
+	}
+	
+	/** The minute of day this building closes. */
+	public int getClosingMinute() {
+		return defaultEndMinute;
+	}	
 	
 }

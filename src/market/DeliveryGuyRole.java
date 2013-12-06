@@ -1,82 +1,148 @@
 package market;
 
 
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.ItemCollectorRole.ItemCollectorstate;
 import market.gui.DeliveryGuyGui;
-import market.gui.Gui;
+import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
-import market.interfaces.CityBuilding;
 import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
+import market.interfaces.DeliveryGuyGuiInterfaces;
+import market.interfaces.DeliveryReceiver;
+import market.test.mock.EventLog;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.TimeManager;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
-import agent.Constants;
 import agent.PersonAgent;
 import agent.Role;
-import agent.TimeManager;
 import agent.WorkRole;
+import agent.gui.Gui;
+import agent.interfaces.Person;
 
+/**
+ * The role in the market to deliver items
+ * @author AnThOnY
+ *
+ */
 public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
-	private DeliveryGuyGui deliveryguyGui = null;
+	public EventLog log = new EventLog();
+	
+	private DeliveryGuyGuiInterfaces deliveryguyGui;
 	private String name;
 	private boolean Available = true;
 	private Cashier cashier;
-	private CityBuilding Market;
-	private Order CurrentOrder;
+	private CommonSimpleClasses.CityBuilding Market;
+	private Order CurrentOrder = null;
 	
+	private Semaphore atDeliver = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 	
-	public enum DeliveryGuystate {GoingToWork, Idle, OffWork, Delivering};
-	DeliveryGuystate state = DeliveryGuystate.GoingToWork;
+	public enum DeliveryGuystate {NotAtWork, GoingToWork, Idle, OffWork, Delivering};
+	private DeliveryGuystate state = DeliveryGuystate.NotAtWork;
 
-	public DeliveryGuyRole(String NA, CityBuilding MA, PersonAgent person){
-		super(person);
-		name = NA;
-		Market = MA;
+
+		
+		/**
+		 * The one and only one constructor for the DeliveryGuyRole
+		 * @param NA name of the person
+		 * @param person person himself
+		 * @param Market the Market that the deliveryGuy is working in
+		 */
+	public DeliveryGuyRole(Person person, MarketBuilding Market){
+		super(person, Market);
 
 	}
 	
 	//Messages
+	/**
+	 * It will return whether the DeliveryGuy is on a mission or not
+	 */
 		public boolean msgAreYouAvailable() {
 			return Available;
 		}
 
 		
-		@Override
+		/**
+		 * The msg for calling the DeliveryGuy to leave work
+		 */
 		public void msgLeaveWork(){
-			state = DeliveryGuystate.OffWork;
+			setState(DeliveryGuystate.OffWork);
 			stateChanged();
 		}
 
-		
-		public void msgDeliverIt(List<Item> DeliveryList , Customer OrderPerson , CityBuilding building) {
-			CurrentOrder = new Order(DeliveryList, OrderPerson, building);
+		/**
+		 * The message from Cashier to go deliver item to the building (restaurant)
+		 */
+		public void msgDeliverIt(List<Item> DeliveryList , DeliveryReceiver deliveryReceiver , CommonSimpleClasses.CityLocation building) {
+			setCurrentOrder(new Order(DeliveryList, deliveryReceiver, building));
 			 Available = false;
 			 stateChanged();
 		}
 		
+		/**
+		 * a msg from outside world that notifying the role has arrived a location (either Restaurant or Market)
+		 */
+		public void msgArrivedDestination(){
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
+			{
+				getCurrentOrder().getDeliveryReceiver().msgHereIsYourItems(getCurrentOrder().getDeliveryList());
+				person.getPassengerRole().msgGoToLocation(super.person.getWorkRole().getLocation(), false);
+				person.getPassengerRole().activate();
+			}
+			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)
+			{
+				deliveryguyGui.BackReadyStation();
+			}
+		}
+		
 	//Animations
+		/**
+		 * Animation!
+		 */
 		public void Ready(){
 			Available = true;
 		}
 		
+		/**
+		 * Animation!
+		 */
+		public void AtDeliverExit(){
+			atDeliver.release();
+		}
+		
+		/**
+		 * Animation!
+		 */
 		public void AtExit(){
 			atExit.release();
 		}
+		
 	
 	//Scheduler
-	protected boolean pickAndExecuteAnAction() {
+		/**
+		 * DeliveryGuy's PaEaA
+		 * he is either available or not
+		 * AND offWork thats it
+		 */
+	public boolean pickAndExecuteAnAction() {
 		// TODO Auto-generated method stub
-		if (Available == false){
-			GoDeliver();
-				return true;
+		if (getState() == DeliveryGuystate.NotAtWork){
+			GoToWork();
+			return true;
 		}
-		if (Available == true && state == DeliveryGuystate.OffWork){
+		if (CurrentOrder != null){
+			//if (CurrentOrder.Building.isOpen())
+			if (Available == false){
+				GoDeliver();
+				return true;
+			}
+		}
+		if (Available == true && getState() == DeliveryGuystate.OffWork){
 			OffWork();
 				return true;
 		}
@@ -84,23 +150,36 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	}
 
 	//Action
+	private void GoToWork(){
+		setState(DeliveryGuystate.GoingToWork);
+		deliveryguyGui.BackReadyStation();
+	}
+	/**
+	 * Action to go deliver items!
+	 */
 	private void GoDeliver(){
 		
 		// animation to go to the location (Building)
 		deliveryguyGui.GoDeliver();
 		try {
-			atExit.acquire();
+			atDeliver.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CurrentOrder.OrderPerson.msgHereisYourItem(CurrentOrder.DeliveryList);
+		person.getPassengerRole().activate();
+		person.getPassengerRole().msgGoToLocation(getCurrentOrder().getBuilding(), false);
+		//stateChanged()?
+		
 		
 		// animation go back to the market
 		
 		//Available = true;
 	}
 	
+	/**
+	 * call off work
+	 */
 	private void OffWork(){
 		deliveryguyGui.OffWork();
 		try {
@@ -110,11 +189,12 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			e.printStackTrace();
 		}
 		this.deactivate();
+		setState(DeliveryGuystate.NotAtWork);
 	}
 	
 	
 	//Utilities
-	public void setGui (DeliveryGuyGui dgGui){
+	public void setGui (DeliveryGuyGuiInterfaces dgGui){
 		deliveryguyGui = dgGui;
 	}
 	public Gui getGui (){
@@ -132,19 +212,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	public void setCashier(Cashier ca){
 		cashier = ca;
 	}
-	//Shifts
-		public int getShiftStartHour(){
-			return 8;
-		}
-		public int getShiftStartMinute(){
-			return 29;
-		}
-		public int getShiftEndHour(){
-			return 18;
-		}
-		public int getShiftEndMinute(){
-			return 0;
-		}
+
 		public boolean isAtWork(){
 			if (this.isActive())
 				return true;
@@ -155,15 +223,59 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			return false;
 		}
 
-	private class Order{
-		List<Item> DeliveryList;
-		Customer OrderPerson;
-		CityBuilding Building;
+	public Order getCurrentOrder() {
+			return CurrentOrder;
+		}
+
+		public void setCurrentOrder(Order currentOrder) {
+			CurrentOrder = currentOrder;
+		}
+
+	public Cashier getCashier() {
+			return cashier;
+		}
+
+	public DeliveryGuystate getState() {
+		return state;
+	}
+
+	public void setState(DeliveryGuystate state) {
+		this.state = state;
+	}
+
+	public class Order{
+		private List<Item> DeliveryList;
+		private DeliveryReceiver deliveryReceiver;
+		private CommonSimpleClasses.CityLocation Building;
 		
-		Order(List<Item> DList, Customer OP, CityBuilding CB){
-			DeliveryList = DList;
-			OrderPerson = OP;
-			Building = CB;
+		Order(List<Item> DList, DeliveryReceiver dR, CommonSimpleClasses.CityLocation CB){
+			setDeliveryList(DList);
+			setDeliveryReceiver(dR);
+			setBuilding(CB);
+		}
+
+		public List<Item> getDeliveryList() {
+			return DeliveryList;
+		}
+
+		public void setDeliveryList(List<Item> deliveryList) {
+			DeliveryList = deliveryList;
+		}
+
+		public DeliveryReceiver getDeliveryReceiver() {
+			return deliveryReceiver;
+		}
+
+		public void setDeliveryReceiver(DeliveryReceiver deliveryReceiver) {
+			this.deliveryReceiver = deliveryReceiver;
+		}
+
+		public CommonSimpleClasses.CityLocation getBuilding() {
+			return Building;
+		}
+
+		public void setBuilding(CommonSimpleClasses.CityLocation building) {
+			Building = building;
 		}
 	}
 

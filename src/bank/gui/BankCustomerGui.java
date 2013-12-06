@@ -1,14 +1,16 @@
 package bank.gui;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.concurrent.Semaphore;
 
-import bank.gui.Gui;
+import agent.gui.Gui;
 import bank.BankCustomerRole;
+import bank.interfaces.BankCustomerGuiInterface;
 
 
-public class BankCustomerGui implements Gui{
+public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 
 	private BankCustomerRole agent = null;
 	private boolean isPresent = true;
@@ -34,8 +36,8 @@ public class BankCustomerGui implements Gui{
 	double money = -1;
 	double cashInAccount = -1;
 	
-	int entranceX = 275;
-	int entranceY = 320;
+	int entranceX = 300;
+	int entranceY = 500;
 	
 	int guardX =322;
 	int guardY = 360;
@@ -49,7 +51,7 @@ public class BankCustomerGui implements Gui{
 		yPos = entranceY;
 		xDestination = entranceX;
 		yDestination = entranceY;
-		c.msgGotToTeller();
+//		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);
 		//maitreD = m;

@@ -2,19 +2,24 @@ package bank;
 
 
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
+import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.gui.TellerGui;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
+import bank.interfaces.TellerGuiInterface;
 
 /**
  * Restaurant customer agent.
@@ -24,14 +29,19 @@ import bank.interfaces.Teller;
 public class TellerRole extends WorkRole implements Teller {
 	private String name;
 	
+	//need to instantiate the Task Scheduler now. Edited by Zach
+	ScheduleTask task = ScheduleTask.getInstance();
+	
 	Semaphore active = new Semaphore(0, true);
-	TellerGui tellerGui;
+	TellerGuiInterface tellerGui;
 	int myDeskPosition;
 	
-	int startHour = 8;
-	int startMinute = 0;
-	int endHour = 6;
-	int endMinute = 0;
+	int startHour;
+	int startMinute;
+	int endHour;
+	int endMinute;
+	
+	double paycheckAmount = 200;
 	
 	
 
@@ -77,26 +87,37 @@ public class TellerRole extends WorkRole implements Teller {
 	private List<MyCustomer> myCustomers= new ArrayList<MyCustomer>();
 	LoanManager loanManager;
 	boolean endWorkShift = false;
+	boolean atWork;
 	
-	public TellerRole(PersonAgent person) {
-		super(person);
+	public TellerRole(Person person, CityLocation bank) {
+		super(person, bank);
 		
+		initShift();
+		
+		atWork = false;
 		// ask everyone for rent
-//		Runnable command = new Runnable(){
-//			@Override
-//			public void run() {
-//				//do stuff
-//				
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				//do stuff
+				
 //				msgLeaveWork();
-//				}
-//			
-//		};
-//		
-//		// every day at TIME
-//		int hour = 17;
-//		int minute = 0;
-//		
-//		scheduleDailyTask(command, hour, minute);
+				}
+			
+		};
+		
+		// every day at noon
+		int hour = 17;
+		int minute = 0;
+		
+		//sets start and end times for person scheduler
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
+		
+//		task.scheduleDailyTask(command, hour, minute);
 	}
 	
 //	public TellerRole(PersonAgent person, AccountManager am, LoanManager lm, int deskPosition){
@@ -176,6 +197,10 @@ public class TellerRole extends WorkRole implements Teller {
 	 */
 	public boolean pickAndExecuteAnAction() {
 //		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
 		for(MyCustomer mc : getMyCustomers()) {
 			if(mc.state == CustomerState.openingAccount) {
 				openNewAccount(mc);
@@ -229,12 +254,20 @@ public class TellerRole extends WorkRole implements Teller {
 			goOffWork();
 			return true;
 		}
+
 		return false;
 	}
 	// Actions
 	
+	private void goToWork() {
+		atWork = true;
+		doGoToDesk();
+		acquireSemaphore(active);
+		
+	}
+	
 	private void openNewAccount(MyCustomer mc) {
-		Do("opening account");
+		Do(AlertTag.BANK, "opening account");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgOpenNewAccount(this, mc.getBankCustomer(), mc.getDeposit());
@@ -242,7 +275,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void accountOpened(MyCustomer mc) {
-		Do("account has been opened");
+		Do(AlertTag.BANK, "account has been opened");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgAccountOpened(mc.accountId);
@@ -251,7 +284,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void deposit(MyCustomer mc) {
-		Do("deposit");
+		Do(AlertTag.BANK, "deposit");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgDepositMoney(this, mc.getBankCustomer(), mc.accountId, mc.getDeposit());
@@ -259,7 +292,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void depositCompleted(MyCustomer mc) {
-		Do("deposit verified");
+		Do(AlertTag.BANK, "deposit verified");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgDepositSuccessful(mc.getDeposit());
@@ -268,7 +301,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void withdraw(MyCustomer mc) {
-		Do("withdraw");
+		Do(AlertTag.BANK, "withdraw");
 		doGoToAccountManager();
 		acquireSemaphore(active);
 		accountManager.msgWithdrawMoney(this, mc.getBankCustomer(), mc.accountId, mc.withdrawal);
@@ -276,7 +309,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void withdrawCompleted(MyCustomer mc) {
-		Do("withdraw verified");
+		Do(AlertTag.BANK, "withdraw verified");
 		doGoToDesk();
 		acquireSemaphore(active);
 		mc.getBankCustomer().msgWithdrawSuccessful(mc.withdrawal);
@@ -285,7 +318,7 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 	
 	private void sendToLoanManager(MyCustomer mc) {
-	   Do("sending to loan manager");
+	   Do(AlertTag.BANK, "sending to loan manager");
 	   mc.getBankCustomer().msgSpeakToLoanManager(loanManager, loanManagerXPos);
 	   doGoToLoanManager();
 	   acquireSemaphore(active);
@@ -295,11 +328,18 @@ public class TellerRole extends WorkRole implements Teller {
 	   securityGuard.msgTellerOpen(this);
 	}
 	private void goOffWork() {
+		addPaycheckToWallet();
 		doEndWorkDay();
 		acquireSemaphore(active);
-		
 		this.deactivate();
-		
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 
 	//ANIMATION
@@ -327,7 +367,7 @@ public class TellerRole extends WorkRole implements Teller {
 		}
 	}
 	
-	public void setGui(TellerGui g) {
+	public void setGui(TellerGuiInterface g) {
 		tellerGui = g;
 	}
 	
@@ -354,11 +394,6 @@ public class TellerRole extends WorkRole implements Teller {
 	public void setLoanManager(LoanManager lm) {
 		loanManager = lm;
 	}
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
 
 	public List<MyCustomer> getMyCustomers() {
 		return myCustomers;
@@ -370,32 +405,9 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 
 	@Override
-	public int getShiftStartHour() {
-		return startHour;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		
-		return startMinute;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		
-		return endHour;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		
-		return endMinute;
-	}
-
-	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

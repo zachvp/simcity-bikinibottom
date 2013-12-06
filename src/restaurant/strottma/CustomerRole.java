@@ -1,11 +1,5 @@
 package restaurant.strottma;
 
-import restaurant.strottma.WaiterRole.Menu;
-import restaurant.strottma.gui.CustomerGui;
-import restaurant.strottma.interfaces.Cashier;
-import restaurant.strottma.interfaces.Customer;
-import restaurant.strottma.interfaces.Waiter;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +7,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
+import restaurant.strottma.WaiterRole.Menu;
+import restaurant.strottma.gui.CustomerGui;
+import restaurant.strottma.interfaces.Cashier;
+import restaurant.strottma.interfaces.Customer;
+import restaurant.strottma.interfaces.Waiter;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.interfaces.Person;
@@ -28,15 +28,15 @@ public class CustomerRole extends Role implements Customer {
 	private int hungerLevel = 10; // determines length of meal in seconds
 	private int decideOrderDelay = 2; // how long it takes to decide an order, in seconds
 	private int sayOrderDelay = 1; // how long it takes to order, in seconds
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	private CustomerGui customerGui;
 	DecimalFormat df = new DecimalFormat("#.##");
 	
 	Semaphore multiStepAction = new Semaphore(0, true);
 	
 	public static int WS_COUNT = 5;
-	public static int WS_X_OFFSET = 100; // how far the whole area is offset
-	public static int WS_Y_OFFSET = 14;
+	public static int WS_X_OFFSET = 100-100; // how far the whole area is offset
+	public static int WS_Y_OFFSET = 114;
 	public static int WS_X_SPACING = 10; // how far each spot is separated from the last
 	public static int WS_Y_SPACING = 10;
 	public static int WS_WIDTH = 20;
@@ -93,8 +93,8 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(Person person){
-		super(person);
+	public CustomerRole(Person person, CityLocation location){
+		super(person, location);
 		System.out.println("Created CustomerRole for " + person.getName());
 		
 		person.getWallet().setCashOnHand(20);
@@ -102,6 +102,15 @@ public class CustomerRole extends Role implements Customer {
 		if (getName().equals(C_NAME_FLAKE)) { person.getWallet().setCashOnHand(0); }
 		if (getName().equals(C_NAME_CHEAP)) { person.getWallet().setCashOnHand(6); }
 		this.bill = 0;
+	}
+	
+	/**
+	 * Activate the CustomerRole, then get hungry.
+	 */
+	@Override
+	public void activate() {
+		super.activate();
+		gotHungry();
 	}
 
 	/**
@@ -116,7 +125,7 @@ public class CustomerRole extends Role implements Customer {
 	public void gotHungry() { // from gui
 		print("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
-		person.setHungerLevel(HungerLevel.HUNGRY);
+		// person.setHungerLevel(HungerLevel.HUNGRY);
 		stateChanged();
 	}
 
@@ -258,6 +267,7 @@ public class CustomerRole extends Role implements Customer {
 		}
 		if (state == CustomerState.LEAVING && event == CustomerEvent.DONE_LEAVING){
 			state = CustomerState.DOING_NOTHING;
+			deactivate();
 			//no action
 			return true;
 		}

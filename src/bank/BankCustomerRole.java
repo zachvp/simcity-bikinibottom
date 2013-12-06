@@ -1,15 +1,15 @@
 package bank;
 
+import gui.trace.AlertTag;
+
 import java.util.concurrent.Semaphore;
 
-import transportation.FakePassengerRole;
-import transportation.PassengerRole;
-
-import agent.PersonAgent;
+import CommonSimpleClasses.CityLocation;
 import agent.Role;
-import agent.WorkRole;
-import bank.gui.BankCustomerGui;
+import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.interfaces.BankCustomer;
+import bank.interfaces.BankCustomerGuiInterface;
 import bank.interfaces.LoanManager;
 import bank.interfaces.SecurityGuard;
 import bank.interfaces.Teller;
@@ -18,8 +18,10 @@ import bank.interfaces.Teller;
  * Restaurant customer agent.
  */
 
+
+
 //Build should not be problem
-public class BankCustomerRole extends WorkRole implements BankCustomer {
+public class BankCustomerRole extends Role implements BankCustomer {
 	private String name;
 	
 	double cashInAccount;
@@ -31,7 +33,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	private int loanManagerXPos;
 	
-	BankCustomerGui bankCustomerGui;
+	BankCustomerGuiInterface bankCustomerGui;
 	/**
 	 * Constructor for CustomerAgent class
 	 *
@@ -39,26 +41,36 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
 //	PassengerRole passengerRole;
+
 	
-	
-	public BankCustomerRole(PersonAgent person){
-		super(person);
-//		passengerRole = new FakePassengerRole();
+	public BankCustomerRole(Person person, CityLocation bank){
+		super(person, bank);
+		
+//		passengerRole = new FakePassengerRole(fakeCityLoc);
 //		this.getPerson().addRole(passengerRole);
 //		this.name = name;
-		state = State.enteredBank;
-		this.getPerson().getWallet().setCashOnHand(10);
+		state = State.enteredBank;//TODO update, if role reused, maybe change leaving to enteredBank?
+//		this.getPerson().getWallet().setCashOnHand(9001);
 //		person.getWallet().setCashOnHand(10);//TODO fix this, only done for testing
 //		myCash.amount = 10;
 //		myCash.amount = initialMoney;
 //		myCash.capacity = initialMoney + 20;
 //		this.getPerson().getWallet().getTooLittle() = initialMoney -20;
 		
-
+		// Set the security guard if necessary
+		if (securityGuard == null && bank instanceof BankBuilding) {
+			if (bank instanceof BankBuilding) {
+				BankBuilding bankBuilding = (BankBuilding) bank;
+				securityGuard = (SecurityGuard) bankBuilding.getGreeter();
+				// hopefully this works...
+			} else {
+				print("Error: Bank is not a BankBuilding.");
+			}
+		}
 	}
 	
-	public BankCustomerRole(PersonAgent person, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
-		super(person);
+	public BankCustomerRole(Person person, CityLocation bank, int accountId, String name) { //CONSTRUCTOR USED FOR TESTING
+		super(person, bank);
 		state = State.enteredBank;
 		this.accountId = accountId;
 		if(name.equals("withdraw")){
@@ -137,6 +149,12 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	public String getCustomerName() {
 		return name;
 	}
+	
+	public void activate() {
+		super.activate();
+		msgGoToSecurityGuard( ((BankBuilding) getLocation()).getSecurity() );
+	}
+	
 	// Messages
 
 	
@@ -146,7 +164,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 //		stateChanged();
 	}
 	public void msgGoToSecurityGuard(SecurityGuard sg){
-		
+//		System.out.println("WOW SUCH SECURITY. WOW");
 		securityGuard = sg;
 		event = Event.goingToSecurityGuard;
 		stateChanged();
@@ -160,8 +178,8 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	}
 	
 	public void msgGotToTeller() {
-		Do("msggottoteller");
-//		System.out.println("HI");
+		Do(AlertTag.BANK, "msggottoteller");
+//		Do("HI");
 		event = Event.gotToTeller;
 		stateChanged();
 	}
@@ -199,7 +217,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	}
 	
 	public void msgAtDestination() {
-		System.out.println("Made it");
+//		Do("Made it");
 		active.release();
 	}
 	
@@ -208,8 +226,8 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		Do("Entered scheduler");
-//		System.out.println("entered scheduler");
+//		Do("Entered scheduler");
+//		Do("entered scheduler");
 		if(state == State.enteredBank && event == Event.goingToSecurityGuard) {
 			goToSecurityGuard();
 			return true;
@@ -219,9 +237,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			return true;
 		}
 		if(state == State.waiting && event == Event.gotToTeller) {
-//			Do("sup");
 			speakToTeller();
-			
 			return true;
 		}
 		if(state == State.openingAccount && event == Event.accountOpened) {
@@ -249,13 +265,12 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			return true;
 		}
 
-		
 		return false;
 	}
 
 	// Actions
 	private void goToSecurityGuard(){
-		Do("going to guard");
+		Do(AlertTag.BANK, "going to guard");
 		doGoToSecurityGuard();
 		acquireSemaphore(active);
 		state = State.waitingAtGuard;
@@ -265,44 +280,85 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	private void goToTeller(int xLoc) {
 		doGoToTeller(xLoc);
 		acquireSemaphore(active);
-//		System.out.println("YO");
-		state = State.waiting;
-		msgGotToTeller();//TODO HACK
+//		Do("YO");
+//		state = State.waiting;
+//		msgGotToTeller();
+		speakToTeller();
 	}
 	
 	private void speakToTeller() {
-		Do("speaking to teller");
+		Do(AlertTag.BANK, "speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+
+		
 		if(accountId == -1) {//have not been assigned accountID yet
-			Do("need to open account");
-			teller.msgIWantToOpenAccount(this, this.getPerson().getWallet().getCashOnHand() * .2);
+			Do(AlertTag.BANK, "need to open account");
+			double initialDepositAmount = 10;//this.getPerson().getWallet().getCashOnHand() * .2;
+			
+			if(this.getPerson().getWallet().getCashOnHand() < initialDepositAmount) {//is too poor/worthless to afford initialdeposit
+				teller.msgINeedALoan(this);
+				state= State.gettingLoan;
+				return;
+			}
+			teller.msgIWantToOpenAccount(this, initialDepositAmount);//TODO does this work or constant?
 			state = State.openingAccount;
-			setCashAdjustAmount(-10);//TODO for testing
+			setCashAdjustAmount(-initialDepositAmount);//TODO for testing
 //			Do("made it here");
 			return;
 		}
-		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount > this.getPerson().getWallet().getTooLittle()){
-			System.out.println("I'm withdrawing");
-			teller.msgWithdrawMoney(this, accountId, this.getPerson().getWallet().getTooLittle());//TODO for testing
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount > this.getPerson().getWallet().getMoneyNeeded()) { //if i need money and have enough in my account, i will withdraw it
+			double moneyNeeded = this.getPerson().getWallet().getMoneyNeeded();
+			Do(AlertTag.BANK, "I'm withdrawing needed money");
+			teller.msgWithdrawMoney(this, accountId, moneyNeeded);//TODO for testing
 			state= State.withdrawing;
 			return;
 		}
-		if(this.getPerson().getWallet().getCashOnHand() > this.getPerson().getWallet().getTooMuch()) {
-			System.out.println("Im depositing");
-			teller.msgDepositMoney(this, accountId, this.getPerson().getWallet().getTooLittle()); //TODO for testing
-			state = State.depositing;
-			return;
-		}
-		if(this.getPerson().getWallet().getCashOnHand() < this.getPerson().getWallet().getTooLittle() && cashInAccount<this.getPerson().getWallet().getTooLittle()) {
-//			System.out.println("Im getting Loan");
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0 && cashInAccount < this.getPerson().getWallet().getMoneyNeeded()) {//if i need money and dont have enough in account, i will take a loan for ALL OF IT (NOTE: possibly make it possible to withdraw some and get rest in loan?
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
 			return;
 		}
-		Do("ERROR, no condtion met");//not good
+		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount > ((myTooLittle() + myTooMuch())/2)){
+			Do(AlertTag.BANK, "I'm withdrawing");
+			double withdrawAmount = (myTooLittle() + myTooMuch())/2;
+			teller.msgWithdrawMoney(this, accountId, withdrawAmount);
+			state= State.withdrawing;
+			return;
+		}
+		if(this.getPerson().getWallet().getCashOnHand() > myTooMuch()) {
+			Do(AlertTag.BANK, "Im depositing");
+			double depositAmount = myCash() - ((myTooMuch() + myTooLittle())/2);
+			teller.msgDepositMoney(this, accountId, depositAmount); 
+			state = State.depositing;
+			return;
+		}
+		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount< ((myTooLittle() + myTooMuch())/2)) {
+//			Do("Im getting Loan");
+			teller.msgINeedALoan(this);
+			state= State.gettingLoan;
+			return;
+		}
+		Do(AlertTag.BANK, "ERROR, no condtion met");//not good
+	}
+	
+
+	
+	private void askForLoan() {//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+		Do(AlertTag.BANK, "asking for loan");
+		doGoToLoanManager(loanManagerXPos);
+		acquireSemaphore(active);
+		if(this.getPerson().getWallet().getMoneyNeeded() == 0) {
+			getLoanManager().msgINeedALoan(this, ((myTooLittle() + myTooMuch())/2)); //gets loan to get them in safe money range for them
+		}
+		if(this.getPerson().getWallet().getMoneyNeeded() > 0) {//has money needed for something
+			
+			getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getMoneyNeeded());
+			this.getPerson().getWallet().setMoneyNeeded(0);//TODO check
+		}
+		state = State.atLoanManager;
 	}
 	
 	private void leaveBank() {
-		Do("leaving bank " + accountId);
+		Do(AlertTag.BANK, "leaving bank " + accountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(loanAmount);
@@ -315,21 +371,15 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 		securityGuard.msgLeavingBank(this);
 		doLeaveBank();
 		acquireSemaphore(active);
-	}
-	
-	private void askForLoan() {
-		Do("asking for loan");
-//		System.out.println("asking for loan from loanmanager");
-		doGoToLoanManager(loanManagerXPos);
-		acquireSemaphore(active);
-		getLoanManager().msgINeedALoan(this, this.getPerson().getWallet().getTooLittle());
-		state = State.atLoanManager;
+		
+		state = State.enteredBank;
+		this.deactivate();
 	}
 	
 	private void goOffWork() {
-		doEndWorkDay();
-		acquireSemaphore(active);
-		this.deactivate();
+//		doEndWorkDay();
+//		acquireSemaphore(active);
+//		this.deactivate();
 		
 	}
 
@@ -353,12 +403,31 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	
 	// Accessors, etc.
 
+	public double getStrangeAmount() {
+		 return (myTooLittle() + myTooMuch())/2;
+	}
+	
 	public void addTeller(TellerRole t) {
 		teller = t;
 	}
 	
+	private double myCash() {
+		return this.getPerson().getWallet().getCashOnHand();
+	}
 	
-	public void setGui(BankCustomerGui b) {
+	private double myTooLittle() {
+		return this.getPerson().getWallet().getTooLittle();
+	}
+	
+	private double myTooMuch() {
+		return this.getPerson().getWallet().getTooMuch();
+	}
+	
+	private double myMoneyNeeded() {
+		return this.getPerson().getWallet().getMoneyNeeded();
+	}
+	
+	public void setGui(BankCustomerGuiInterface b) {
 		bankCustomerGui = b;
 	}
 	
@@ -398,11 +467,7 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 	public State getState() {
 		return state;
 	}
-
-	public String toString() {
-		return "customer " + getName();
-	}
-
+	
 	public int getAccountId() {
 		return accountId;
 	}
@@ -435,43 +500,6 @@ public class BankCustomerRole extends WorkRole implements BankCustomer {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 
 
 

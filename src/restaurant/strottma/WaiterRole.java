@@ -1,18 +1,21 @@
 package restaurant.strottma;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.Semaphore;
+
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.WaiterGui;
 import restaurant.strottma.interfaces.Cashier;
+import restaurant.strottma.interfaces.Cook.GrillOrPlate;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
-import restaurant.strottma.interfaces.Cook.GrillOrPlate;
-
-import java.text.DecimalFormat;
-import java.util.*;
-import java.util.concurrent.Semaphore;
-
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
+import agent.WorkRole;
 import agent.interfaces.Person;
 
 /**
@@ -20,7 +23,8 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class WaiterRole extends Role implements Waiter {
+public class WaiterRole extends WorkRole implements Waiter {
+	
 	
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
 	
@@ -29,7 +33,7 @@ public class WaiterRole extends Role implements Waiter {
 	private CookRole cook;
 	private Cashier cashier;
 
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	private int breakDelay = 15 * 1000;
 	DecimalFormat df = new DecimalFormat("#.##");
 	
@@ -44,22 +48,25 @@ public class WaiterRole extends Role implements Waiter {
 			BREAK_DENIED, ON_BREAK, BREAK_DONE};
 
 	private BreakState bState;
-
-	public WaiterRole(Person person) {
-		super(person);
+	
+	private boolean offWork = false;
+	
+	public WaiterRole(Person person, CityLocation location) {
+		super(person, location);
 
 		this.bState = BreakState.NORMAL;
 	}
 	
-	public void setOthers(HostRole host, CookRole cook, Cashier cashier) {
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
+	}
+	
+	public void setOtherRoles(HostRole host, CookRole cook, Cashier cashier) {
 		this.host = host;
 		this.cook = cook;
 		this.cashier = cashier;
-	}
-	
-	@Override
-	public String toString() {
-		return "waiter " + getName();
 	}
 	
 	public HostRole getHost() {
@@ -152,6 +159,11 @@ public class WaiterRole extends Role implements Waiter {
 		multiStepAction.release();
 	}
 	
+	@Override
+	public void msgLeaveWork() {
+		offWork = true;
+	}
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
@@ -232,6 +244,8 @@ public class WaiterRole extends Role implements Waiter {
 		}
 		
 		DoLeaveCustomer();
+		
+		if (offWork) { deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.
@@ -539,6 +553,11 @@ public class WaiterRole extends Role implements Waiter {
 			}
 		}
 		
+	}
+	
+	@Override
+	public boolean isAtWork() {
+		return isActive() && !isOnBreak();
 	}
 	
 }

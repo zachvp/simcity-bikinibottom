@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import agent.PersonAgent;
-import agent.Role;
+import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
+import agent.interfaces.Person;
+import bank.gui.BankBuilding;
 import bank.gui.LoanManagerGui;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
@@ -21,6 +22,10 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
 	
+	double paycheckAmount = 300;
+	
+	
+	boolean atWork;
 	private boolean endWorkShift = false;
 	
 	class LoanTask {
@@ -34,8 +39,22 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	
 	List<LoanTask> loanTasks = new ArrayList<LoanTask>();
 	
-	public LoanManagerRole(PersonAgent person) {
-		super(person);
+	int startHour;
+	int startMinute;
+	int endHour;
+	int endMinute;
+	
+	public LoanManagerRole(Person person, CityLocation bank) {
+		super(person, bank);
+		atWork = false;
+		
+
+		startHour = ((BankBuilding) bank).getOpeningHour();
+		startMinute = ((BankBuilding) bank).getOpeningMinute();
+		endHour = ((BankBuilding) bank).getClosingHour();
+		endMinute =((BankBuilding) bank).getClosingMinute();
+
+		
 //		this.name = name;
 		
 	}
@@ -58,7 +77,10 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction() {
-		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
 		if(!loanTasks.isEmpty()) {
 			processLoan(loanTasks.get(0));
 			return true;
@@ -72,6 +94,12 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		return false;
 	}
 	// Actions
+	private void goToWork() {
+		atWork = true;
+		doGoToDesk();
+		acquireSemaphore(active);
+		
+	}
 	
 	private void processLoan(LoanTask lt) {
 		doGoToComputer();
@@ -82,11 +110,20 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		loanTasks.remove(lt);
 	}
 	private void goOffWork() {
+		addPaycheckToWallet();
 		doEndWorkDay();
 		acquireSemaphore(active);
-		
+		atWork = false;
 		this.deactivate();
 		
+	}
+	
+	/*
+	 * Called at end of work day
+	 * adds to persons wallet
+	 */
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
 	//ANIMATION #####################
@@ -111,6 +148,8 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		loanManagerGui = lmg;
 	}
 	
+	
+	
 
 	// Accessors, etc.
 
@@ -123,40 +162,10 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		}
 	}
 	
-
-	
-	public String toString() {
-		return "customer " + getName();
-	}
-
-	@Override
-	public int getShiftStartHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftStartMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndHour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getShiftEndMinute() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

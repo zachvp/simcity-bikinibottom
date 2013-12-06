@@ -3,19 +3,21 @@ package transportation;
 import java.util.ArrayList;
 import java.util.List;
 
+import transportation.gui.BusstopGuiClass;
+import transportation.gui.interfaces.BusstopGui;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.DirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
-import agent.Constants;
 
 public class BusstopAgent extends Agent implements Busstop {
 	
 	//List of Passengers waiting for the bus.
-	List<Passenger> peopleWaiting = new ArrayList<Passenger>();
+	private List<Passenger> peopleWaiting = new ArrayList<Passenger>();
 	
 	//Pointer to the Corner where this bus stop is.
 	Corner corner;
@@ -28,12 +30,16 @@ public class BusstopAgent extends Agent implements Busstop {
 	
 	//Bus currently in the Busstop.
 	Bus currentBus = null;
+
+	private BusstopGui gui;
 	
 	public BusstopAgent(Corner corner, DirectionEnum direction,
 			boolean directionInRoute) {
 		this.corner = corner;
 		this.direction = direction;
 		this.directionInRoute = directionInRoute;
+		
+		this.gui = new BusstopGuiClass(this);
 	}
 
 	@Override
@@ -78,7 +84,9 @@ public class BusstopAgent extends Agent implements Busstop {
 
 	@Override
 	public void msgIAmHere(Passenger p) {
-		peopleWaiting.add(p);
+		synchronized (peopleWaiting) {
+			peopleWaiting.add(p);
+		}
 	}
 
 	@Override
@@ -88,14 +96,20 @@ public class BusstopAgent extends Agent implements Busstop {
 	}
 
 	@Override
-	protected boolean pickAndExecuteAnAction() {
+	public boolean pickAndExecuteAnAction() {
 		if (currentBus != null) {
-			currentBus.msgHereArePeople(peopleWaiting);
-			peopleWaiting.clear();
-			currentBus = null;
+			givePassengers();
 			return true;
 		}
 		return false;
+	}
+	//Gives the passenger list to the bus and clears it.
+	public void givePassengers() {
+		synchronized (peopleWaiting) {
+			currentBus.msgHereArePeople(peopleWaiting);
+			peopleWaiting.clear();
+		}
+		currentBus = null;
 	}
 
 	@Override
@@ -103,4 +117,10 @@ public class BusstopAgent extends Agent implements Busstop {
 		return corner;
 	}
 
+	/**
+	 * @return the peopleWaiting
+	 */
+	public List<Passenger> getPeopleWaiting() {
+		return peopleWaiting;
+	}
 }

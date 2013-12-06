@@ -1,18 +1,24 @@
 package bank.gui;
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
-import bank.gui.Gui;
+import javax.imageio.ImageIO;
+
+import agent.gui.Gui;
 import bank.AccountManagerRole;
-import bank.BankCustomerRole;
-import bank.TellerRole;
+import bank.interfaces.AccountManager;
 
 
 public class AccountManagerGui implements Gui{
 
-	private AccountManagerRole agent = null;
+	private AccountManager agent = null;
 	private boolean isPresent = true;
 
 
@@ -30,24 +36,36 @@ public class AccountManagerGui implements Gui{
 
 	public static final int xTable = 200;
 	public static final int yTable = 250;
-	public static final int agentDim = 20;
+	public static final int agentDimW = 25;
+	public static final int agentDimH = 27;
+	
+	private int entranceX = 300;
+	private int entranceY = 500;
 	
 	int deskXPos = 300;
 	int deskYPos = 40;
 	
 	boolean canRelease = false;
+	BufferedImage image;
 
 	public AccountManagerGui(AccountManagerRole c){ //HostAgent m) {
 		agent = c;
-		xPos = deskXPos;
-		yPos = deskYPos;
-		xDestination = deskXPos;
-		yDestination = deskYPos;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 //		c.msgGotToTeller();
 	
 //		DoGoToTeller(200);
 		//maitreD = m;
 //		this.gui = gui;
+		
+
+		try {
+			image = ImageIO.read(getClass().getResource("account_manager.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updatePosition() {
@@ -73,16 +91,23 @@ public class AccountManagerGui implements Gui{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.BLACK);
-		g.fillRect(xPos, yPos, agentDim, agentDim);
-				
+		//g.setColor(Color.GREEN);
+		//g.fillRect(xPos, yPos, agentDim, agentDim);
+		Rectangle2D r = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);
+		Rectangle2D tr = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);
+		TexturePaint tp = new TexturePaint(image, tr);
+		g.setPaint(tp);
+		g.fill(r);
+		
+		drawInfo(g, agent.getName(), "Account Manager");		
 
 	}
 	
 	
-	public void drawLetter(Graphics2D g, String letter) {
+	public void drawInfo(Graphics2D g, String name, String occupation) {
 		g.setColor(Color.black);
-		g.drawString(letter, xPos+10, yPos+10);
+		g.drawString(name, xPos, yPos-10);
+		g.drawString(occupation, xPos, yPos);
 		
 	}
 

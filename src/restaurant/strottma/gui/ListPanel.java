@@ -29,7 +29,6 @@ public class ListPanel extends JPanel implements ActionListener {
     private static final int TEXT_DIM_WIDTH = Integer.MAX_VALUE;
     private JButton addPersonB = new JButton("Add");
 
-    private RestaurantPanel restPanel;
     private String type;
 
     /**
@@ -38,8 +37,7 @@ public class ListPanel extends JPanel implements ActionListener {
      * @param rp   reference to the restaurant panel
      * @param type indicates if this is for customers or waiters
      */
-    public ListPanel(RestaurantPanel rp, String type) {
-        restPanel = rp;
+    public ListPanel(String type) {
         this.type = type;
 
         setLayout(new BoxLayout((Container) this, BoxLayout.Y_AXIS));
@@ -74,7 +72,8 @@ public class ListPanel extends JPanel implements ActionListener {
         if (e.getSource() == addPersonB) {
         	// Chapter 2.19 describes showInputDialog()
         	
-        	ListRowPanel row = addPerson(restPanel.addPerson(type, addPersonT.getText()));
+        	//TODO
+        	/*ListRowPanel row = addPerson(restPanel.addPerson(type, addPersonT.getText()));
         	if (addPersonT.getText().equals("Hungry") && type.equals("Customers")) {
         		row.checkbox.setEnabled(false);
         		row.checkbox.setSelected(true);

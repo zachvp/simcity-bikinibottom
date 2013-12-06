@@ -35,7 +35,7 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 		}
 		
 		public void msgGoToTeller(int xLoc, Teller t){
-			
+			log.add("received"+t);
 		}
 
 		@Override
@@ -64,11 +64,17 @@ public class MockBankCustomer extends Mock implements BankCustomer {
 
 		@Override
 		public void msgSpeakToLoanManager(LoanManager lm, int xLoc) {
-			log.add("sent to loanmanager");
+			log.add("sent to loanmanager" + lm);
 			
 		}
 		
 		public void msgGoToSecurityGuard(SecurityGuard sg) {
+			
+		}
+
+		@Override
+		public void msgAtDestination() {
+			// TODO Auto-generated method stub
 			
 		}
 

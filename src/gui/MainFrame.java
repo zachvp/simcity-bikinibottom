@@ -131,7 +131,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setLayout(new BorderLayout());
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
-		tabbedInfoPane.addTab("Log", new JPanel()); //TODO Create log panel
+		tabbedInfoPane.addTab("Log", new LogDisplay()); //TODO Create log panel
 		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
 

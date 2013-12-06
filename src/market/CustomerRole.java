@@ -292,9 +292,17 @@ public class CustomerRole extends Role implements Customer{
 	public String getName(){
 		return name;
 	}
+	
+	public Person getPerson(){
+		return person;
+	}
 
 	public void setShoppingList(List<Item> SL) {
 		ShoppingList = SL;
+	}
+	
+	public List<Item> getShoppingList(){
+		return ShoppingList;
 	}
 	
 	public void setPriceList (Map<String,Double> PL){

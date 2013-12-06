@@ -16,6 +16,8 @@ import agent.gui.Gui;
 public class CashierGui implements Gui, CashierGuiInterfaces {
 
     private Cashier agent = null;
+    
+    private String currentTask = "??";
 
     private int xPos = 130, yPos = -50;//default cashier position
     private int xDestination = ExitX, yDestination = ExitY;//default start position
@@ -76,16 +78,18 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
         	}
         	else if (command==Command.GoToCashier) {
 				agent.AtFrontDesk();
-				
+				currentTask = "AtFrontDesk";
 			}
 			else if (command==Command.GoToBench) {
 				agent.AtBench();
+				currentTask = "AtBench";
 			}
 			else if (command==Command.GoToExit1){
 				ContinueOffWork();
 			}
 			else if (command == Command.GoToExit){
 				agent.AtExit();
+				currentTask = "AtExit";
 				command = Command.NotAtWork;
 				return;
 			}
@@ -102,12 +106,14 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command=Command.GoToWork1;
+    	currentTask = "GoingToWork";
     }
     
 	public void GoToFrontDesk(){
     	xDestination = FrontDeskX;
     	yDestination = FrontDeskY;
     	command=Command.GoToCashier;
+    	currentTask = "GoingToFrontDesk";
     }
     
     
@@ -120,6 +126,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	xDestination = BenchX;
     	yDestination = BenchY;
     	command=Command.GoToBench;
+    	currentTask = "GoingToBench";
 
     }
     
@@ -131,6 +138,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	xDestination = ExitX1;
     	yDestination = ExitY1;
     	command = command.GoToExit1;
+    	currentTask = "GoingToExit";
     }
     
     /* (non-Javadoc)
@@ -141,6 +149,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	xDestination = ExitX;
     	yDestination = ExitY;
     	command = command.GoToExit;
+    	currentTask = "GoingToExit";
 
     }
 
@@ -161,6 +170,9 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	public void draw(Graphics2D g) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, CashierWidth, CashierHeight);
+        
+        g.drawString(currentTask, xPos, yPos);
+        
     }
 
     /* (non-Javadoc)

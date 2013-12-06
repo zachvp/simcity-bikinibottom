@@ -1,10 +1,14 @@
 package market.interfaces;
 
+import java.awt.Component;
 import java.util.List;
 
 
 
 
+
+
+import agent.interfaces.Person;
 import market.Item;
 
 public interface Customer {
@@ -23,10 +27,21 @@ public interface Customer {
 	public abstract String getName();
 	public abstract void setCashier(Cashier ca);
 	public abstract void setShoppingList(List<Item>SL);
+	public abstract double getCash();
+	public abstract List<Item> getShoppingList();
+	public abstract Person getPerson();
 
 	//Animations
 	public abstract void msgAnimationFinishedGoToCashier();
 	public abstract void msgAnimationFinishedLeaveMarket();
+
+	
+
+	
+
+
+
+	
 
 	
 }

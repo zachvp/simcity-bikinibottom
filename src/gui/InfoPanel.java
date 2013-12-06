@@ -45,7 +45,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	TimeManager timeManager = TimeManager.getInstance();
 	private Timer timer;
 	
-	JLabel name, job, residence, money, hunger, nameL, jobL, residenceL, moneyL, hungerL;
+	JLabel name, currLoc, job, residence, money, hunger, 
+		   nameL, currLocL, jobL, residenceL, moneyL, hungerL;
 	
 	public InfoPanel(int w, int h){
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, h); //700 X 190
@@ -71,15 +72,17 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textWest.setPreferredSize(textWDim);
 		textWest.setMaximumSize(textWDim);
 		textWest.setMinimumSize(textWDim);
-		textWest.setLayout(new GridLayout(5, 1, 5, 2));
+		textWest.setLayout(new GridLayout(6, 1, 5, 2));
 		
 		nameL = new JLabel("");
+		currLocL = new JLabel("");
 		jobL = new JLabel("");
 		residenceL = new JLabel("");
 		moneyL = new JLabel("");
 		hungerL = new JLabel("");
 		
 		textWest.add(nameL);
+		textWest.add(currLocL);
 		textWest.add(jobL);
 		textWest.add(residenceL);
 		textWest.add(moneyL);
@@ -90,15 +93,17 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textEast.setPreferredSize(textEDim);
 		textEast.setMaximumSize(textEDim);
 		textEast.setMinimumSize(textEDim);
-		textEast.setLayout(new GridLayout(5, 1, 5, 2));
+		textEast.setLayout(new GridLayout(6, 1, 5, 2));
 		
 		name = new JLabel("");
+		currLoc = new JLabel("");
 		job = new JLabel("");
 		residence = new JLabel("");
 		money = new JLabel("");
 		hunger = new JLabel("");
 		
 		textEast.add(name);
+		textEast.add(currLoc);
 		textEast.add(job);
 		textEast.add(residence);
 		textEast.add(money);
@@ -167,14 +172,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
 				);*/
 		
-		nameL.setText("Name & Loc.: ");
+		nameL.setText("Name: ");
+		currLocL.setText("Current Location: ");
 		jobL.setText("Job: ");
 		residenceL.setText("Residence: ");
 		moneyL.setText("Money: ");
 		hungerL.setText("Hunger Level: ");
 		
 		
-		name.setText(person.getName() + " @ " + person.getPassengerRole().getLocation());
+		name.setText(person.getName());
+		currLoc.setText(""+(person.getPassengerRole().getLocation()));
 		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().toString()));
 		residence.setText(""+(person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()));
 		money.setText("$"+person.getWallet().getCashOnHand());

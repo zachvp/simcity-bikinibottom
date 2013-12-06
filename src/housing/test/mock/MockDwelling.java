@@ -2,7 +2,6 @@ package housing.test.mock;
 
 import mock.EventLog;
 import CommonSimpleClasses.Constants.Condition;
-import housing.backend.PayRecipientRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
@@ -33,6 +32,7 @@ public class MockDwelling implements Dwelling {
 			case FAIR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.75; break;
 			case POOR : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
 			case BROKEN : this.monthlyPaymentAmount = MAX_MONTHLY_PAYMENT * 0.5; break;
+			default: log.add("Improper Dwelling condition."); break;
 		}
 	}
 

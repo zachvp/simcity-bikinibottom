@@ -18,8 +18,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
@@ -45,7 +49,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 	TimeManager timeManager = TimeManager.getInstance();
 	private Timer timer;
 	
-	JLabel name, job, residence, money, hunger, nameL, jobL, residenceL, moneyL, hungerL;
+	JLabel name, currLoc, job, residence, money, hunger, 
+		   nameL, currLocL, jobL, residenceL, moneyL, hungerL;
+	JPanel controls;
+	JButton robberButton;
+	PersonAgent currentPerson;
 	
 	public InfoPanel(int w, int h){
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, h); //700 X 190
@@ -60,60 +68,85 @@ public class InfoPanel extends JPanel implements ActionListener{
 		card.setMinimumSize(cardDim);
 		card.setLayout(new CardLayout());
 		
+		//overall person panel
 		JPanel personText = new JPanel();
 		personText.setPreferredSize(d);
 		personText.setMaximumSize(d);
 		personText.setMinimumSize(d);
 		personText.setLayout(new BorderLayout());
 		
+		//display labels
 		JPanel textWest = new JPanel();
-		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.2), cardDim.height);
+		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.17), cardDim.height);
 		textWest.setPreferredSize(textWDim);
 		textWest.setMaximumSize(textWDim);
 		textWest.setMinimumSize(textWDim);
-		textWest.setLayout(new GridLayout(5, 1, 5, 2));
+		textWest.setLayout(new GridLayout(6, 1, 1, 1));
 		
-		nameL = new JLabel("");
-		jobL = new JLabel("");
-		residenceL = new JLabel("");
-		moneyL = new JLabel("");
-		hungerL = new JLabel("");
+		nameL = new JLabel("", JLabel.RIGHT);
+		currLocL = new JLabel("", JLabel.RIGHT);
+		jobL = new JLabel("", JLabel.RIGHT);
+		residenceL = new JLabel("", JLabel.RIGHT);
+		moneyL = new JLabel("", JLabel.RIGHT);
+		hungerL = new JLabel("", JLabel.RIGHT);
+		
+		//padding
+		Border empty = new EmptyBorder(0, 0, 0, 7);
+		nameL.setBorder(empty);
+		currLocL.setBorder(empty);
+		jobL.setBorder(empty);
+		residenceL.setBorder(empty);
+		moneyL.setBorder(empty);
+		hungerL.setBorder(empty);
 		
 		textWest.add(nameL);
+		textWest.add(currLocL);
 		textWest.add(jobL);
 		textWest.add(residenceL);
 		textWest.add(moneyL);
 		textWest.add(hungerL);
 		
 		JPanel textEast = new JPanel();
-		Dimension textEDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.8), cardDim.height);
+		Dimension textEDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.25), cardDim.height);
 		textEast.setPreferredSize(textEDim);
 		textEast.setMaximumSize(textEDim);
 		textEast.setMinimumSize(textEDim);
-		textEast.setLayout(new GridLayout(5, 1, 5, 2));
+		textEast.setLayout(new GridLayout(6, 1, 1, 1));
 		
 		name = new JLabel("");
+		currLoc = new JLabel("");
 		job = new JLabel("");
 		residence = new JLabel("");
 		money = new JLabel("");
 		hunger = new JLabel("");
 		
 		textEast.add(name);
+		textEast.add(currLoc);
 		textEast.add(job);
 		textEast.add(residence);
 		textEast.add(money);
 		textEast.add(hunger);
 		
+		//Person controls
+		controls = new JPanel();
+		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.58), cardDim.height);
+		controls.setPreferredSize(controlDim);
+		controls.setVisible(false);
+		
+		//Robber button
+		robberButton = new JButton("Rob a Bank");
+		robberButton.addActionListener(this);
+		
+		controls.add(robberButton);
+		
 		personText.add(textWest, BorderLayout.WEST);
-		personText.add(textEast, BorderLayout.EAST);
+		personText.add(textEast, BorderLayout.CENTER);
+		personText.add(controls, BorderLayout.EAST);
 
 		card.add(personText, "person");
 
-		//info = new JLabel("");
-		//personText.add(info);
-		
+		//Display current game time
 		timer = new java.util.Timer();
-
     	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
 		time = new JLabel();
 		timePanel.add(time);
@@ -129,22 +162,6 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private void getTimeDisplay(){
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timeManager.currentSimTime());
-//		Date date = cal.getTime();
-//		hour = date.getHours();
-//		min = date.getMinutes();
-//		sec = date.getSeconds();
-//		hourStr = "" + hour;
-//		minStr = "" + min;
-//		secStr = ""+ sec;
-//		if(hour<10){
-//			hourStr = "0" + hour;
-//		}
-//		if(min<10){
-//			minStr = "0" + min;
-//		}
-//		if(sec<10){
-//			secStr = "0" + sec;
-//		}
 		
 		SimpleDateFormat format = new SimpleDateFormat("E, MM-dd-yyyy, HH:mm");
 		time.setText(format.format(cal.getTime()) + " in Encino, CA");
@@ -167,14 +184,19 @@ public class InfoPanel extends JPanel implements ActionListener{
 						+ "<div> Hunger Level: "+ person.getHungerLevel() +"</div></html>"
 				);*/
 		
-		nameL.setText("Name & Loc.: ");
-		jobL.setText("Job: ");
-		residenceL.setText("Residence: ");
-		moneyL.setText("Money: ");
-		hungerL.setText("Hunger Level: ");
+		currentPerson = person;
+		controls.setVisible(true);
+		
+		nameL.setText("Name:  ");
+		currLocL.setText("Current Location:  ");
+		jobL.setText("Job:  ");
+		residenceL.setText("Residence:  ");
+		moneyL.setText("Money:  ");
+		hungerL.setText("Hunger Level:  ");
 		
 		
-		name.setText(person.getName() + " @ " + person.getPassengerRole().getLocation());
+		name.setText(person.getName());
+		currLoc.setText(""+(person.getPassengerRole().getLocation()));
 		job .setText((person.getWorkRole() == null ? "none" : person.getWorkRole().toString()));
 		residence.setText(""+(person.getResidentRole() == null ? "none" : person.getResidentRole().getDwelling()));
 		money.setText("$"+person.getWallet().getCashOnHand());
@@ -219,7 +241,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource() == robberButton){
+			//TODO make currentPerson a robber
+		}
 	}
 	
 	class PrintTask extends TimerTask {

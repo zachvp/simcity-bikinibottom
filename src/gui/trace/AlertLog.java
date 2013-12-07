@@ -6,6 +6,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import CommonSimpleClasses.Constants;
+
 /**
  * This is a class designed to make it easier to send alerts and control them in
  * a specific way without everyone climbing over each other to get print
@@ -129,7 +131,7 @@ public class AlertLog {
 		if (this.printedAlertLevels.contains(level)) {
 			if (level == AlertLevel.ERROR) {
 				System.err.println(alert);
-			} else {
+			} else if (Constants.PRINT) {
 				System.out.println(alert);
 			}
 		}

@@ -273,6 +273,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	public void setTabDisplay(TabbedInfoDisplay tabbedInfoPane) {
 		tabDisplay = tabbedInfoPane;
 		tabDisplay.addTab("Staff", staffCard);
+		tabDisplay.hideBuildingTabs();
 	}
 
 }

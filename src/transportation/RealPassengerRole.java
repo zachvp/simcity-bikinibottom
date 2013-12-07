@@ -18,6 +18,7 @@ import transportation.interfaces.PassengerRequester;
 import transportation.interfaces.Vehicle;
 import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.DirectionEnum;
 import agent.Role;
@@ -53,7 +54,7 @@ public class RealPassengerRole extends PassengerRole {
 	//Role that requested the movement, if any.
 	private PassengerRequester requesterRole = null;
 
-	private Timer timer = new Timer();
+	private Timer timer = SingletonTimer.getInstance();
 	
 	class CornerNotifier extends TimerTask {
 		private Corner corner;

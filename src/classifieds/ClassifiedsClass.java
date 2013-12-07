@@ -1,7 +1,7 @@
 package classifieds;
 
 import gui.Building;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class ClassifiedsClass implements Classifieds {
 		
 		for (Dwelling dwelling : dwellings) {
 			ResidentRole role = (ResidentRole) (dwelling.getResident());
-			if (role.getPerson() != null
+			if (role != null && role.getPerson() != null
 					&& returnOnlyOpenRooms) {
 				continue;
 			}

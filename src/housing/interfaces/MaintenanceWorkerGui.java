@@ -1,6 +1,6 @@
 package housing.interfaces;
 
-import housing.gui.HousingComplex;
+import housing.backend.HousingComplex;
 
 public interface MaintenanceWorkerGui {
 	public void setTool(boolean b);

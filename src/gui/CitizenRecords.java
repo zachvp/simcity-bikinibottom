@@ -1,6 +1,6 @@
 package gui;
 
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;

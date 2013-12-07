@@ -1,5 +1,6 @@
-package housing;
+package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
@@ -54,15 +55,16 @@ public class ResidentRole extends Role implements Resident {
 	private ResidentGui gui;
 	
 	// TODO: this will be set true by the person
-	private boolean hungry = true;
+	private boolean hungry = false;
 	
 	// rent data
 	private double oweMoney = 0;
-	private PayRecipient payee;
+	private PayRecipient payRecipient;
 	private Dwelling dwelling;
 	
 	// food data
 	// Constructor: String type, int amount, int low, int capacity, int cookTime
+	@SuppressWarnings("serial")
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));
@@ -77,7 +79,7 @@ public class ResidentRole extends Role implements Resident {
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
-	private final int EAT_TIME = 5; 
+	private final int EAT_TIME = 3; 
 	private final int IMPATIENCE_TIME = 7;
 	
 	/* ----- Class Data ----- */
@@ -111,7 +113,8 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Messages ----- */
 	@Override
-	public void msgPaymentDue(double amount) {
+	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
+		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
 		DoShowSpeech("I owe rent!");
@@ -142,7 +145,6 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(!timerSet){
 			gui.setPresent(true);
-			return true;
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
@@ -173,7 +175,7 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		
+
 		// idle behavior
 		DoJazzercise();
 		DoMoveGary();
@@ -209,13 +211,13 @@ public class ResidentRole extends Role implements Resident {
 		double cash = person.getWallet().getCashOnHand();
 		
 		if(cash >= oweMoney) {
-			payee.msgHereIsPayment(oweMoney, this);
+			payRecipient.msgHereIsPayment(oweMoney, this);
 			cash -= oweMoney;
 			person.getWallet().setCashOnHand(cash);
 			oweMoney = 0;
 		}
 		else if(cash > 0) {
-			payee.msgHereIsPayment(cash, this);
+			payRecipient.msgHereIsPayment(cash, this);
 			oweMoney -= cash;
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
@@ -319,6 +321,12 @@ public class ResidentRole extends Role implements Resident {
 		DoMoveGary();
 	}
 	
+	/* --- Overriden from Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
+	
 	/* --- Animation Routines --- */
 	private void DoShowSpeech(String speech) {
 		gui.DoShowSpeech(speech);
@@ -377,11 +385,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public PayRecipient getPayee() {
-		return payee;
+		return payRecipient;
 	}
 
 	public void setPayee(PayRecipient payee) {
-		this.payee = payee;
+		this.payRecipient = payee;
 	}
 
 	public double getMoneyOwed() {

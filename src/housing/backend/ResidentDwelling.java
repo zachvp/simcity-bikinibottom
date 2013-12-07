@@ -1,11 +1,10 @@
-package housing;
+package housing.backend;
 
+import agent.PersonAgent;
 import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.ScheduleTask;
-import housing.gui.HousingComplex;
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -23,11 +22,10 @@ public class ResidentDwelling implements Dwelling {
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	
-	// building the dwelling belongs to
-	private ResidentialBuilding building;
-	private ScheduleTask schedule = ScheduleTask.getInstance();
+	private HousingComplex complex;
 	
 	/* --- Housing slots --- */
+	
 	// roles
 	private ResidentRole resident;
 	private MaintenanceWorkerRole worker;
@@ -44,43 +42,23 @@ public class ResidentDwelling implements Dwelling {
 	// cost constant depending on housing condition
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
-	// TODO just a test person
-//	PersonAgent person = new PersonAgent("Spongebob");
-//	PersonAgent workPerson = new PersonAgent("Maintenence Worker");
-//	PersonAgent payPerson = new PersonAgent("Landlord");
+	// gui slots
+	LayoutGui gui;
+	
+	// TODO just test people
+	PersonAgent person;
+	PersonAgent workPerson;
+	PersonAgent payPerson;
 	// end test
 	
 	/* --- Constructor --- */
 	public ResidentDwelling(int ID, Constants.Condition startCondition,
-			ResidentialBuilding building, LayoutGui gui, HousingComplex complex) {
+			HousingComplex complex) {
 		super();
-
-		this.building = building;
 		
-		this.payRecipient = building.getPayRecipient();
-		// TODO uncomment next 2 lines
-		this.worker = building.getWorker();
-		this.resident = new ResidentRole(null, building, this, gui);
-		
-		// TODO implemented test hacks
-//		this.resident = new ResidentRole(person, building, this, gui);
-//		person.addRole(resident);
-//		person.startThread();
-//		resident.activate();
-//		
-//		this.worker = new MaintenanceWorkerRole(workPerson, building, complex);
-//		workPerson.addRole(worker);
-//		workPerson.startThread();
-//		worker.activate();
-//		
-//		this.payRecipient = new PayRecipientRole(payPerson);
-//		payPerson.addRole(payRecipient);
-//		payPerson.startThread();
-//		payRecipient.activate();
-		
-		// ---- end test hacks
-		
-		this.building.addResident(resident);
+		// TODO actual code below
+		this.complex = complex;
+		this.gui = new LayoutGui(ID);
 		
 		this.condition = startCondition;
 		
@@ -95,26 +73,24 @@ public class ResidentDwelling implements Dwelling {
 		
 		// Adding to classifieds!
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
-		
-		// degrade condition of dwelling each day
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				// TODO make the dwelling degrade gradually
-				condition = Constants.Condition.POOR;
-				resident.msgDwellingDegraded();
-			}
-		};
-		// TODO test 
-		condition = Constants.Condition.POOR;
-		resident.msgDwellingDegraded();
-		
-		
-		// degrade condition every day
-		int hour = 16;
-		int minute = 0;
-		
-		schedule.scheduleDailyTask(command, hour, minute);
+	}
+	
+	public void addResident() throws Exception {
+		if(Constants.DEBUG){
+			PersonAgent person = new PersonAgent("Resident");
+			
+			resident = new ResidentRole(person, complex.getBuilding(), this, gui);
+			person.addRole(resident);
+			resident.activate();
+			this.complex.addResident(resident);
+			
+			person.startThread();
+		} else {
+			this.payRecipient = complex.getPayRecipient();
+			this.worker = complex.getWorker();
+			this.resident = new ResidentRole(null, complex.getBuilding(), this, gui);
+			this.complex.addResident(resident);
+		}
 	}
 
 	public void setCondition(Constants.Condition condition){
@@ -141,8 +117,12 @@ public class ResidentDwelling implements Dwelling {
 		return resident.getGui();
 	}
 	
+	public Gui getLayoutGui() {
+		return gui;
+	}
+	
 	public String toString() {
-		return "Room at " + building;
+		return "Room in building " + complex.getBuilding();
 	}
 
 	public void setResident(ResidentRole resident) {
@@ -167,6 +147,12 @@ public class ResidentDwelling implements Dwelling {
 
 	public MaintenanceWorker getWorker() {
 		return worker;
+	}
+	
+	public void degradeHousing() {
+		// TODO test 
+		condition = Constants.Condition.POOR;
+		resident.msgDwellingDegraded();
 	}
 
 	public void setWorker(MaintenanceWorkerRole worker) {

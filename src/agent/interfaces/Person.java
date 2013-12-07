@@ -3,8 +3,8 @@ package agent.interfaces;
 import java.util.Map;
 
 import market.Item;
+import housing.backend.ResidentRole;
 import gui.trace.AlertTag;
-import housing.ResidentRole;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
@@ -24,6 +24,11 @@ public interface Person {
 	 * the Role's scheduler if the Role is inactive.
 	 */
 	public void addRole(Role r);
+	
+	/**
+	 * Removes the given Role from the Person's list. 
+	 */
+	public void removeRole(Role r);
 	
 	/**
 	 * @see Wallet

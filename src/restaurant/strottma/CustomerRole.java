@@ -13,6 +13,7 @@ import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.interfaces.Person;
@@ -27,7 +28,7 @@ public class CustomerRole extends Role implements Customer {
 	private int hungerLevel = 10; // determines length of meal in seconds
 	private int decideOrderDelay = 2; // how long it takes to decide an order, in seconds
 	private int sayOrderDelay = 1; // how long it takes to order, in seconds
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	private CustomerGui customerGui;
 	DecimalFormat df = new DecimalFormat("#.##");
 	

@@ -13,6 +13,7 @@ import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
 import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;
 
 public abstract class VehicleAgent extends Agent implements Vehicle {
@@ -54,7 +55,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	//Direction the `Vehicle` is currently moving towards.
 	private DirectionEnum currentDirection = DirectionEnum.West;
 	
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	
 	
 	public VehicleAgent(Corner currentCorner, boolean isBus) {

@@ -2,6 +2,7 @@ package housing.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
+import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import agent.PersonAgent;
 
@@ -16,7 +17,7 @@ public class MockResident extends Mock implements Resident {
 	}
 
 	/* ----- Messages ----- */
-	public void msgPaymentDue(double amount) {
+	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
 		this.oweMoney = amount;
 		log.add("Received message 'payment due' amount is " + amount);
 	}

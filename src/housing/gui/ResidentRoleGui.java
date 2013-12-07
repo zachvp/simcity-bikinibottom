@@ -1,6 +1,6 @@
 package housing.gui;
 
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -58,7 +57,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private int xPos = 130; 
 	private int yPos = 15;
 	
-	private int xDestination, yDestination;//default start position
+	private int xDestination = xPos, yDestination = yPos;//default start position
 	
 	// prime location for Jazzercising
 	private final int JAZZER_SPOT_X = 130;

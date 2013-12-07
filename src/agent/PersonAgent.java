@@ -110,7 +110,8 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print(AlertTag.PASSENGER, this.getName(), "we're here captain");
+		print(AlertTag.PASSENGER, this.getName(),
+				"Arrived at " + getPassengerRole().getLocation());
 	}
 	
 	/* -------- Scheduler -------- */

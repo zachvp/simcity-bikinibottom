@@ -54,12 +54,9 @@ public class ResidentialBuilding extends Building {
 		this.housingInfoPanel = new HousingInfoPanel(this, getPopulation());
 	}
 	
-	public Map<Person, Role> getPopulation(){
+	// needed to pass to info to panel
+	public Map<Person, Role> getPopulation() {
 		return complex.getPopulation();
-	}
-	
-	public HousingComplex getComplex(){
-		return complex;
 	}
 	
 	/* --- Interface Methods --- */

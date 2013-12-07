@@ -51,7 +51,6 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		if(evt.getSource() == chargeRent) {
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof PayRecipientRole) {
-					System.out.println("Charging rent");
 					PayRecipientRole role = (PayRecipientRole) entry.getValue();
 					role.msgChargeRent();
 				}

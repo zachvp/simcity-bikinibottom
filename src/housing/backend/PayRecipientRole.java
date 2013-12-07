@@ -110,6 +110,8 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	public void msgChargeRent() {
 		synchronized(residents) {
 			for(MyResident mr : residents) {
+				System.out.println("Charging rent");
+				Do("Charging rent");
 				mr.state = PaymentState.PAYMENT_DUE;
 				stateChanged();
 			}
@@ -228,7 +230,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		
-		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
+		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount(), this);
 		Do("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
 	

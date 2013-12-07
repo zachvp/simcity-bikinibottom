@@ -40,7 +40,7 @@ public interface Constants {
 	 * True only for development versions of this program.
 	 */
 	// TODO disable DEBUG constant before final release
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	
 	/**
 	 * Whether EventLog should log events.
@@ -50,7 +50,7 @@ public interface Constants {
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = true;
+	public static final boolean PRINT = false;
 	
     /**
      * The number of milliseconds in a second
@@ -190,10 +190,10 @@ public interface Constants {
 	/**
 	 * Number of units per housing structure
 	 */
-	public final int HOUSING_UNIT_COUNT = 1;
+	public final int HOUSING_UNIT_COUNT = 9;
 	
 	/**
-	 * Spacing between units in a ChousingComplex
+	 * Spacing between units in a HousingComplex
 	 */
 	public final int HOUSING_UNIT_SPACING = 0;
 	

@@ -3,7 +3,8 @@ package transportation.interfaces;
 import java.util.List;
 
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
+import transportation.CornerAgent.CornerDirectionEnum;
 import transportation.CornerAgent.MyCorner;
 import transportation.IntersectionAction;
 
@@ -36,13 +37,13 @@ public interface Corner extends CityLocation {
 	
 	/* Return the corner that sits at the given direction
 	 */
-	public Corner getCornerForDir(DirectionEnum dir) throws Exception;
+	public Corner getCornerForDir(CardinalDirectionEnum dir) throws Exception;
 
 	public List<Busstop> getBusstops();
 
 	public Busstop getBusstopWithDirection(boolean busDirection) throws Exception;
 
-	void addAdjacentCorner(Corner c, DirectionEnum d);
+	void addAdjacentCorner(Corner c, CardinalDirectionEnum d);
 
 	void addBusstop(Busstop b);
 
@@ -50,9 +51,13 @@ public interface Corner extends CityLocation {
 
 	List<MyCorner> getAdjacentCorners();
 
-	public DirectionEnum getDirForCorner(Corner corner) throws Exception;
+	public CardinalDirectionEnum getDirForCorner(Corner corner) throws Exception;
 
 	public void msgIAmCrossing();
+
+	void msgChangeDir();
+
+	public CornerDirectionEnum getCurrDir();
 
 	
 }

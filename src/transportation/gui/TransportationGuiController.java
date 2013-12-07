@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import transportation.gui.interfaces.BusstopGui;
+import transportation.gui.interfaces.CornerGui;
 import transportation.gui.interfaces.PassengerGui;
 import transportation.gui.interfaces.VehicleGui;
 import agent.gui.Gui;
@@ -25,6 +26,9 @@ public class TransportationGuiController implements Gui {
 
 	private List<BusstopGui> busstopGuis =
 			Collections.synchronizedList(new ArrayList<BusstopGui>());
+
+	private List<CornerGui> cornerGuis = 
+			Collections.synchronizedList(new ArrayList<CornerGui>());;
 	
 	private TransportationGuiController() {}
 	
@@ -37,6 +41,12 @@ public class TransportationGuiController implements Gui {
 
 	@Override
 	public void updatePosition() {
+		
+		synchronized (cornerGuis) {
+			for (Gui gui : cornerGuis) {
+				gui.updatePosition();
+			}
+		}
 		
 		synchronized (busstopGuis) {
 			for (Gui gui : busstopGuis) {
@@ -81,6 +91,12 @@ public class TransportationGuiController implements Gui {
 					gui.draw(g);
 			}
 		}
+		synchronized (cornerGuis) {
+			for (Gui gui : cornerGuis) {
+				if (gui.isPresent())
+					gui.draw(g);
+			}
+		}
 		synchronized (guis) {
 			for (Gui gui : guis) {
 				gui.draw(g);
@@ -106,7 +122,12 @@ public class TransportationGuiController implements Gui {
 	}
 
 	public void addBusstopGUI(BusstopGui busstopGui) {
-		busstopGuis .add(busstopGui);
+		busstopGuis.add(busstopGui);
+	}
+
+	public void addCornerGUI(CornerGui cornerGui) {
+		cornerGuis.add(cornerGui);
+		
 	}
 
 }

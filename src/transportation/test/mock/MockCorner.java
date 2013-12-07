@@ -9,7 +9,7 @@ import transportation.interfaces.AdjCornerRequester;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.BusstopRequester;
 import transportation.interfaces.Corner;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 
 public class MockCorner extends Mock implements Corner {
@@ -56,7 +56,7 @@ public class MockCorner extends Mock implements Corner {
 	}
 
 	@Override
-	public Corner getCornerForDir(DirectionEnum dir) throws Exception {
+	public Corner getCornerForDir(CardinalDirectionEnum dir) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -75,7 +75,7 @@ public class MockCorner extends Mock implements Corner {
 	}
 
 	@Override
-	public void addAdjacentCorner(Corner c, DirectionEnum d) {
+	public void addAdjacentCorner(Corner c, CardinalDirectionEnum d) {
 		// TODO Auto-generated method stub
 
 	}
@@ -99,7 +99,7 @@ public class MockCorner extends Mock implements Corner {
 	}
 
 	@Override
-	public DirectionEnum getDirForCorner(Corner corner) throws Exception {
+	public CardinalDirectionEnum getDirForCorner(Corner corner) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

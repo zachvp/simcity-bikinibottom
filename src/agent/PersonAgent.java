@@ -273,6 +273,14 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
+	 * Returns true if the person scheduler has a task awaiting it.
+	 */
+	public boolean hasSomethingToDo() {
+		return workStartsSoon() || isHungry()  || needToGoToBank()
+				|| timeToRobABank;
+	}
+	
+	/**
 	 * Removes given role from PersonAgent's list.
 	 * Primarily used for removing robber, because
 	 * it is created for a one-time robbery by InfoPanel
@@ -294,24 +302,17 @@ public class PersonAgent extends Agent implements Person {
 		
 		synchronized (roles) {
 			for (Role r : roles) {
-				if(timeToRobABank && loc.equals(r.getLocation()) && loc instanceof BankBuilding)
-					if(r instanceof RobberRole)
-					{
-						timeToRobABank = false;
-						r.activate();
-						return;
-					}
-					else{
-						continue;
-					}
-				if (loc.equals(r.getLocation())
+				if ((timeToRobABank == (r instanceof RobberRole))
 						&& (forWork == (r instanceof WorkRole))
 						&& !(r instanceof PassengerRole)) {
+					
+					timeToRobABank = false;
 					r.activate();
 					return;
 				}
 			}
 		}
+		
 		if (forWork) {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
@@ -625,6 +626,7 @@ public class PersonAgent extends Agent implements Person {
 		return hungerLevel == HungerLevel.STARVING;
 	}
 	
+	@Override
 	public boolean isHungry() {
 		return hungerLevel == HungerLevel.STARVING ||
 				hungerLevel == HungerLevel.HUNGRY; 

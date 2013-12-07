@@ -11,6 +11,10 @@ import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 
+/**
+ * A Person. Probably a human being, but let's not get speciesist.
+ * @author Erik Strottmann
+ */
 public interface Person {
 	/* -------- Messages -------- */
 	
@@ -33,16 +37,11 @@ public interface Person {
 	/**
 	 * @see Wallet
 	 */
+	public boolean hasSomethingToDo();
+	
 	public Wallet getWallet();
 	
-	/**
-	 * @see Car
-	 */
 	public Car getCar();
-	
-	/**
-	 * @see Car
-	 */
 	public void setCar(Car car);
 	
 	

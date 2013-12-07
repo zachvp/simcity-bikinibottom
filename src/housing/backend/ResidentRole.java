@@ -1,5 +1,6 @@
-package housing;
+package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
@@ -18,6 +19,7 @@ import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
+import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.gui.Gui;
 
@@ -47,18 +49,15 @@ public class ResidentRole extends Role implements Resident {
 //	enum TaskState { FIRST_TASK, NONE, DOING_TASK, READY_TO_LEAVE }
 //	TaskState task = TaskState.FIRST_TASK;
 	
-	// checks to see if a timer is currently scheduled
+	/** checks to see if a timer is currently scheduled */
 	private boolean timerSet = false;
 	
 	// graphics
 	private ResidentGui gui;
-	
-	// TODO: this will be set true by the person
-	private boolean hungry = true;
-	
+		
 	// rent data
 	private double oweMoney = 0;
-	private PayRecipient payee;
+	private PayRecipient payRecipient;
 	private Dwelling dwelling;
 	
 	// food data
@@ -77,7 +76,7 @@ public class ResidentRole extends Role implements Resident {
 	private Food food = null;// the food the resident is currently eating
 	
 	// constants
-	private final int EAT_TIME = 5; 
+	private final int EAT_TIME = 3; 
 	private final int IMPATIENCE_TIME = 7;
 	
 	/* ----- Class Data ----- */
@@ -111,7 +110,8 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Messages ----- */
 	@Override
-	public void msgPaymentDue(double amount) {
+	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
+		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
 		DoShowSpeech("I owe rent!");
@@ -142,7 +142,6 @@ public class ResidentRole extends Role implements Resident {
 		
 		if(!timerSet){
 			gui.setPresent(true);
-			return true;
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
@@ -161,8 +160,8 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		//TODO: The conditions for the below event need to be modified
-		if(hungry) {
+		// TODO ERIK FIXED THIS TO USE PERSON HUNGER
+		if(isHungry()) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();
@@ -173,14 +172,14 @@ public class ResidentRole extends Role implements Resident {
 				}
 			}
 		}
-		
+
 		// idle behavior
 		DoJazzercise();
 		DoMoveGary();
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		if(!timerSet){
+		if(!timerSet && person.hasSomethingToDo()){
 			Runnable command = new Runnable() {
 				public void run(){
 					gui.setPresent(false);
@@ -209,13 +208,13 @@ public class ResidentRole extends Role implements Resident {
 		double cash = person.getWallet().getCashOnHand();
 		
 		if(cash >= oweMoney) {
-			payee.msgHereIsPayment(oweMoney, this);
+			payRecipient.msgHereIsPayment(oweMoney, this);
 			cash -= oweMoney;
 			person.getWallet().setCashOnHand(cash);
 			oweMoney = 0;
 		}
 		else if(cash > 0) {
-			payee.msgHereIsPayment(cash, this);
+			payRecipient.msgHereIsPayment(cash, this);
 			oweMoney -= cash;
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
@@ -231,7 +230,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void eatFood() {
-		hungry = false;
+		setHungry(false);
 		Do("Eating food " + food.type);
 		DoShowSpeech("Eating food.");
 		
@@ -319,6 +318,12 @@ public class ResidentRole extends Role implements Resident {
 		DoMoveGary();
 	}
 	
+	/* --- Overriden from Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
+	
 	/* --- Animation Routines --- */
 	private void DoShowSpeech(String speech) {
 		gui.DoShowSpeech(speech);
@@ -377,11 +382,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public PayRecipient getPayee() {
-		return payee;
+		return payRecipient;
 	}
 
 	public void setPayee(PayRecipient payee) {
-		this.payee = payee;
+		this.payRecipient = payee;
 	}
 
 	public double getMoneyOwed() {
@@ -397,11 +402,15 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public boolean isHungry() {
-		return hungry;
+		return person.isHungry();
 	}
 
 	public void setHungry(boolean hungry) {
-		this.hungry = hungry;
+		if (hungry) {
+			person.setHungerLevel(HungerLevel.HUNGRY);
+		} else {
+			person.setHungerLevel(HungerLevel.FULL);
+		}
 	}
 
 	public Food getFood() {

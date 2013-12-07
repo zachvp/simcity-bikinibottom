@@ -1,5 +1,7 @@
 package market;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,7 @@ public class CustomerRole extends Role implements Customer{
 		setCash(money);
 		name = NA;
 		ShoppingList = SL;
+		//Do(AlertTag.MARKET, "Creaing the customer role");
 		
 		//workingBuilding = Market;
 	}
@@ -64,6 +67,7 @@ public class CustomerRole extends Role implements Customer{
 	 * This is the function to call that actually wakes The CustomerRole that it is going to buy stuff in the market
 	 */
 	public void goingToBuy(){
+		//Do(AlertTag.MARKET, "Going To buy things in Market");
 		if (person.getWorkRole()!= null && person.getWorkRole().isAtWork()){
 			atBuilding = false;
 			setState(Customerstate.GoingToOrder);
@@ -91,6 +95,7 @@ public class CustomerRole extends Role implements Customer{
 		 * if MissingItems!=Empty()?
 		 * 		Leave or Continue to Buy
 		 */
+		//Do(AlertTag.MARKET, "Receive the total due amount for the items :" + cost);
 		setActualCost(cost);
 		setEvent(Customerevent.Paying);
 		stateChanged();
@@ -102,6 +107,7 @@ public class CustomerRole extends Role implements Customer{
 	 * @param Items The DeliveryList
 	 */
 	public void msgHereisYourItem(List<Item> Items) {
+		//Do(AlertTag.MARKET, "Receive items from cashier");
 		//print ("Receive items from Cashier");
 		
 		for (int i=0;i<Items.size();i++){
@@ -138,6 +144,7 @@ public class CustomerRole extends Role implements Customer{
 	 * When the cashier said that no item can be satisfied at all
 	 */
 	public void msgNoItem(){
+		//Do(AlertTag.MARKET, "Receive msg that nothing can be satisfied along the shoppinglist");
 		setState(Customerstate.Paid);
 		setEvent(Customerevent.Leaving);
 		stateChanged();
@@ -148,6 +155,7 @@ public class CustomerRole extends Role implements Customer{
 	 * getting the semaphore release
 	 */
 	public void msgAnimationFinishedGoToCashier(){
+		//Do(AlertTag.MARKET, "At front Desk now");
 		//print ("At FrontDesk now");
 		atFrontDesk.release();
 		setState(Customerstate.GoingToOrder);
@@ -160,6 +168,7 @@ public class CustomerRole extends Role implements Customer{
 	 * getting the semaphore release
 	 */
 	public void msgAnimationFinishedLeaveMarket(){
+		//Do(AlertTag.MARKET, "At market exit");
 		atExit.release();
 		setState(Customerstate.NotAtMarket);
 		setEvent(Customerevent.doneLeaving);
@@ -217,6 +226,7 @@ public class CustomerRole extends Role implements Customer{
 	 * @param ShoppingList The list of items that are going to buy
 	 */
 	private void OrderItems(List<Item> ShoppingList){
+		//Do(AlertTag.MARKET, "Going To order Items");
 		//print ("Order Items");
 		cashier.msgIWantItem(ShoppingList, this);
 		ExpectedCost = 0;
@@ -232,6 +242,7 @@ public class CustomerRole extends Role implements Customer{
 	 * @param cost The invoice
 	 */
 	private void PayItems(double cost){
+		//Do(AlertTag.MARKET, "Going To Pay for the items : " + cost);
 		//print ("Pay Items");
 		setState(Customerstate.Paid);
 		if (cost == ExpectedCost){
@@ -264,6 +275,7 @@ public class CustomerRole extends Role implements Customer{
 	 * The animation to leave the market and deactivate the role
 	 */
 	private void Leaving() {
+		//Do(AlertTag.MARKET, "Leaving Market");
 		//print ("Leaving Market");
 		customerGui.DoExitMarket();
 		try {

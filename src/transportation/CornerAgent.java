@@ -1,20 +1,28 @@
 package transportation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import kelp.Kelp;
 import kelp.KelpClass;
+import transportation.gui.CornerGuiClass;
+import transportation.gui.interfaces.CornerGui;
 import transportation.interfaces.AdjCornerRequester;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.BusstopRequester;
 import transportation.interfaces.Corner;
-import CommonSimpleClasses.DirectionEnum;
+import transportation.interfaces.Passenger;
+import transportation.interfaces.Vehicle;
+import CommonSimpleClasses.CardinalDirectionEnum;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
 
@@ -22,13 +30,17 @@ public class CornerAgent extends Agent implements Corner {
 	public class MyCorner {
 		public Corner c;
 		//Direction in which the Corner is.
-		public DirectionEnum d;
+		public CardinalDirectionEnum d;
 		
-		public MyCorner(Corner c, DirectionEnum d) {
+		public MyCorner(Corner c, CardinalDirectionEnum d) {
 			this.c = c;
 			this.d = d;
 		}
 	}
+
+	private static final long YELLOW_LIGHT_LENGTH_MS = 700;
+
+	private static final long GREEN_LIGHT_LENGTH_MS = 2000;
 	
 	// TODO update DD
 	//True when a Vehicle is crossing through the intersection.
@@ -48,8 +60,14 @@ public class CornerAgent extends Agent implements Corner {
 	/*List of Vehicles waiting to cross and the Corners they 
 	 * want to drive to.
 	 */
-	private Queue<IntersectionAction> waitingToCross =
-			new ConcurrentLinkedQueue<IntersectionAction>();
+	private List<IntersectionAction> waitingToCross =
+			Collections.synchronizedList(new ArrayList<IntersectionAction>());
+	
+	// TODO Update DD
+	/*List of Passengers waiting to walk through the intersection.
+	 */
+	private Queue<Passenger> waitingToWalk =
+			new ConcurrentLinkedQueue<Passenger>();
 	
 	//List of entities waiting to get a copy of busstopList.
 	private Queue<BusstopRequester> waitingForBusstops =
@@ -64,9 +82,25 @@ public class CornerAgent extends Agent implements Corner {
 
 	private String name;
 	
+	// TODO Update DD
+	CornerDirectionEnum cornerDir = CornerDirectionEnum.horizontal;
+	public enum CornerDirectionEnum {
+		horizontal,
+		transitioningToVertical,
+		vertical,
+		transitioningToHorizontal
+	}
+
+	private CornerGui gui;
+	private Timer timer = SingletonTimer.getInstance(); 
+
+	private boolean changingDir;
+	
 	public CornerAgent(String name, XYPos pos) {
 		this.pos = pos;
 		this.name = name;
+		
+		// TODO Obsolete try catch?
 		try {
 			kelp = KelpClass.getKelpInstance();
 		} catch (Exception e) {
@@ -76,6 +110,24 @@ public class CornerAgent extends Agent implements Corner {
 					+ " will be thrown.");
 		}
 		
+		timer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				msgChangeDir();
+			}
+		}, 0, GREEN_LIGHT_LENGTH_MS);
+		
+		timer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				msgChangeDir();
+			}
+		}, YELLOW_LIGHT_LENGTH_MS, GREEN_LIGHT_LENGTH_MS);
+		
+		this.gui = new CornerGuiClass(this);
+		
 	}
 	
 	public String toString() {
@@ -83,7 +135,7 @@ public class CornerAgent extends Agent implements Corner {
 		
 	}
 	
-	public void addAdjacentCorner(Corner c, DirectionEnum d) {
+	public void addAdjacentCorner(Corner c, CardinalDirectionEnum d) {
 		adjacentCorners.add(new MyCorner(c, d));
 	}
 	
@@ -109,7 +161,8 @@ public class CornerAgent extends Agent implements Corner {
 		waitingForCorners.add(c);
 		stateChanged();
 	}
-
+	
+	// TODO Update DD
 	@Override
 	public void msgDoneCrossing() {
 		synchronized (synchingTheCounter) {
@@ -117,31 +170,64 @@ public class CornerAgent extends Agent implements Corner {
 		}
 		stateChanged();
 	}
-
+	
+	// TODO Update DD
 	@Override
 	public void msgIAmCrossing() {
 		synchronized (synchingTheCounter) {
 			crossroadBusy--;
 		}
 		stateChanged();
-		
+	}
+	
+	// TODO Update DD
+	@Override
+	public void msgChangeDir(){
+		incrementDirEnum();
+		changingDir = !changingDir;
+		stateChanged();
 	}
 
 	@Override
 	public boolean pickAndExecuteAnAction() { // TODO Update DD
-		
-			if (!waitingForBusstops.isEmpty()) {
-				sendBusstopInfo();
-				return true;
-			} else if (!waitingForCorners.isEmpty()) {
-				sendAdjCornerInfo();
-				return true;
-			} else synchronized (synchingTheCounter) { 
-				if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
-					letSomeoneThrough();
-					return true;
+
+		if (!waitingForBusstops.isEmpty()) {
+			sendBusstopInfo();
+			return true;
+		} else if (!waitingForCorners.isEmpty()) {
+			sendAdjCornerInfo();
+			return true;
+		} else synchronized (synchingTheCounter) {
+			if (!waitingToCross.isEmpty() && crossroadBusy > 0) {
+				synchronized (waitingToCross) {
+					for (IntersectionAction iA : waitingToCross){
+						if (shouldCross(iA)) {
+							letSomeoneThrough(iA.v);
+							waitingToCross.remove(iA);
+							return true;
+						}
+					}
 				}
 			}
+		}
+
+		return false;
+	}
+
+	private boolean shouldCross(IntersectionAction iA) {
+		boolean verticalMov = 
+				(iA.v.currentDirection() 
+						== CardinalDirectionEnum.North
+						|| iA.v.currentDirection() 
+						== CardinalDirectionEnum.South);
+		if (iA.turning) { if (cornerDir == CornerDirectionEnum.transitioningToHorizontal
+				|| cornerDir == CornerDirectionEnum.transitioningToVertical) {
+			return true;
+		}} else if ((verticalMov && cornerDir == CornerDirectionEnum.vertical)
+				|| (!verticalMov && cornerDir == CornerDirectionEnum.horizontal) ){
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -158,10 +244,15 @@ public class CornerAgent extends Agent implements Corner {
 	}
 
 	// Lets a waiting `Vehicle` cross the intersection.
-	private void letSomeoneThrough() {
-		crossroadBusy--;
-		IntersectionAction iA = waitingToCross.remove();
-		iA.v.msgDriveNow();
+	private void letSomeoneThrough(Vehicle v) {
+		//crossroadBusy--;
+		v.msgDriveNow();
+	}
+
+	private void incrementDirEnum() {
+		cornerDir = CornerDirectionEnum
+				.values()[(cornerDir.ordinal()+1)
+				%CornerDirectionEnum.values().length];
 	}
 
 	@Override
@@ -175,7 +266,7 @@ public class CornerAgent extends Agent implements Corner {
 	}
 
 	@Override
-	public Corner getCornerForDir(DirectionEnum dir) throws Exception {
+	public Corner getCornerForDir(CardinalDirectionEnum dir) throws Exception {
 
 		for (MyCorner corner : adjacentCorners) {
 			if (corner.d == dir) {
@@ -228,7 +319,7 @@ public class CornerAgent extends Agent implements Corner {
 		if (currIndex == adjacentCorners.size()) throw new Exception
 			("Couldn't find nextCorner in adjCorners.");
 		
-		DirectionEnum directionToGo = adjacentCorners.get(currIndex).d;
+		CardinalDirectionEnum directionToGo = adjacentCorners.get(currIndex).d;
 		
 		for (currIndex = 0; currIndex < busstopList.size();
 				currIndex++){
@@ -261,7 +352,7 @@ public class CornerAgent extends Agent implements Corner {
 	}
 
 	@Override
-	public DirectionEnum getDirForCorner(Corner corner) throws Exception {
+	public CardinalDirectionEnum getDirForCorner(Corner corner) throws Exception {
 		for (MyCorner adjCorner : adjacentCorners) {
 			if (corner == adjCorner.c) {
 				return adjCorner.d;
@@ -294,8 +385,13 @@ public class CornerAgent extends Agent implements Corner {
 	/**
 	 * @return the waitingToCross
 	 */
-	public Queue<IntersectionAction> getWaitingToCross() {
+	public List<IntersectionAction> getWaitingToCross() {
 		return waitingToCross;
+	}
+
+	@Override
+	public CornerDirectionEnum getCurrDir() {
+		return cornerDir;
 	}
 
 

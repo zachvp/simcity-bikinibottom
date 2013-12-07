@@ -1,6 +1,8 @@
 package market;
 
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -65,6 +67,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 */
 	public ItemCollectorRole(Person person, MarketBuilding cL){
 		super(person, cL);
+		//Do(AlertTag.MARKET, "Creating ItemCollector Role");
 	}
 	
 	//Messages	
@@ -74,6 +77,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 		 * @param c the customer
 		 */
 	public void msgGetTheseItem(List<Item> ItemList){
+		//Do(AlertTag.MARKET, "Receive msg from Cashier to collect following items in the Item List");
 		//print ("Received msg to get items");
 		Order o = new Order();
 		o.OrderList = ItemList;
@@ -87,6 +91,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * The current size of the orderlist
 	 */
 	public int msgHowManyOrdersYouHave(){
+		//Do(AlertTag.MARKET, "Receive the msg from the cashier asking how many orders i currently have");
 		return getOrders().size();
 	}
 	
@@ -94,6 +99,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * the message to call off work
 	 */
 	public void msgLeaveWork(){
+		//Do(AlertTag.MARKET, "Receive msg to Off Work");
 		state = ItemCollectorstate.OffWork;
 		stateChanged();
 	}
@@ -103,6 +109,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * Animation!
 	 */
 	public void AtCollectStation(){
+		//Do(AlertTag.MARKET, "At Collection Station");
 		atStation.release();
 	}
 	
@@ -110,6 +117,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * Animation!
 	 */
 	public void Ready(){
+		//Do(AlertTag.MARKET, "At Bench ReadyStation");
 		state = ItemCollectorstate.Idle;
 		atHome.release();
 	}
@@ -118,6 +126,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * Animation!
 	 */
 	public void AtExit(){
+		//Do(AlertTag.MARKET, "At Market Exit");
 		atExit.release();
 	}
 	
@@ -158,6 +167,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	
 	//Actions
 	private void GoToWork(){
+		//Do(AlertTag.MARKET, "Going To Work");
 		state = ItemCollectorstate.GoingToWork;
 		itemcollectorGui.GoToWork();
 		try {
@@ -173,6 +183,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * @param o CurrentOrder
 	 */
 	private void GoGetItems(Order o){
+		//Do(AlertTag.MARKET, "Going To Get items in the CollectStation");
 		//print("Going to get items");
 		itemcollectorGui.CollectItems();
 		try {
@@ -213,6 +224,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	}
 	
 	private void GoGiveItems(Order o){
+		//Do(AlertTag.MARKET, "Going To Give items to the cashier");
 		o.state = Orderstate.PlacedAtBench;
 		itemcollectorGui.BackReadyStation();
 		try {
@@ -238,6 +250,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 	 * the action to offwork
 	 */
 	private void OffWork(){
+		
 		itemcollectorGui.OffWork();
 		try {
 			atExit.acquire();

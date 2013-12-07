@@ -13,6 +13,7 @@ import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Market;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
 import agent.PersonAgent;
 import agent.Role;
 
@@ -37,7 +38,7 @@ public class MarketRole extends Role implements Market {
 	public MarketRole(PersonAgent person, CityLocation location) {
 		super(person, location);
 
-		this.timer = new Timer();
+		this.timer = SingletonTimer.getInstance();
 		
 		inventory.put("Steak", 5);
 		inventory.put("Chicken", 3);

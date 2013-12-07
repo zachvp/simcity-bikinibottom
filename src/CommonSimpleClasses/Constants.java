@@ -125,6 +125,16 @@ public interface Constants {
 	public static final int INFO_PANEL_HEIGHT = 169;
 	
 	/**
+	 * The width of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_WIDTH = 600;
+	
+	/**
+	 * The HEIGHT of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_HEIGHT= 490;
+	
+	/**
 	 * The initial amount of money in the market
 	 */
 	public static final int MarketInitialMoney = 100;
@@ -178,6 +188,16 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
+	
+	/**
+	 * Number of units per housing structure
+	 */
+	public final int HOUSING_UNIT_COUNT = 9;
+	
+	/**
+	 * Spacing between units in a HousingComplex
+	 */
+	public final int HOUSING_UNIT_SPACING = 0;
 	
 	/**
 	 * Conditions for Dwellings

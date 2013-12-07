@@ -1,6 +1,6 @@
 package transportation.test.mock;
 
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 import mock.Mock;
 import transportation.interfaces.Bus;
@@ -26,7 +26,7 @@ public class MockBusstop extends Mock implements Busstop {
 	}
 
 	@Override
-	public DirectionEnum direction() {
+	public CardinalDirectionEnum direction() {
 		// TODO Auto-generated method stub
 		return null;
 	}

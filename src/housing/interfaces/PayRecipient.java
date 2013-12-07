@@ -1,6 +1,6 @@
 package housing.interfaces;
 
-import housing.MaintenanceWorkerRole;
+import housing.backend.MaintenanceWorkerRole;
 
 public interface PayRecipient {
 	Object myRes = null;

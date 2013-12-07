@@ -10,4 +10,6 @@ public interface DeliveryReceiver {
 	
 	public abstract void msgHereIsYourItems(List<Item> DeliverList);
 	
+	public abstract void msgHereIsSomeItems(List<Item> DeliverList, List<Item> MissingItemList);
+	
 }

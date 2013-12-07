@@ -1,6 +1,8 @@
 package market;
 
 
+import gui.trace.AlertTag;
+
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -46,6 +48,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 	public DeliveryGuyRole(Person person, MarketBuilding Market){
 		super(person, Market);
+		//Do(AlertTag.MARKET, "Creating DeliveryGuyRole");
 
 	}
 	
@@ -54,6 +57,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	 * It will return whether the DeliveryGuy is on a mission or not
 	 */
 		public boolean msgAreYouAvailable() {
+			//Do(AlertTag.MARKET, "Receive message asking if the DeliveryGuy is available");
 			return Available;
 		}
 
@@ -62,6 +66,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * The msg for calling the DeliveryGuy to leave work
 		 */
 		public void msgLeaveWork(){
+			//Do(AlertTag.MARKET, ",message Leave Work");
 			setState(DeliveryGuystate.OffWork);
 			stateChanged();
 		}
@@ -70,6 +75,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * The message from Cashier to go deliver item to the building (restaurant)
 		 */
 		public void msgDeliverIt(List<Item> DeliveryList , DeliveryReceiver deliveryReceiver , CommonSimpleClasses.CityLocation building) {
+			//Do(AlertTag.MARKET, "Receive msg from Cashier to Deliver Item to Restaurant");
 			setCurrentOrder(new Order(DeliveryList, deliveryReceiver, building));
 			 Available = false;
 			 stateChanged();
@@ -79,6 +85,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * a msg from outside world that notifying the role has arrived a location (either Restaurant or Market)
 		 */
 		public void msgArrivedDestination(){
+			//Do(AlertTag.MARKET, "Receive msg delivery Guy has arrived Destination");
 			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
 			{
 				getCurrentOrder().getDeliveryReceiver().msgHereIsYourItems(getCurrentOrder().getDeliveryList());
@@ -90,12 +97,13 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 				deliveryguyGui.BackReadyStation();
 			}
 		}
-		
+		 
 	//Animations
 		/**
 		 * Animation!
 		 */
 		public void Ready(){
+			//Do(AlertTag.MARKET, "Ready!");
 			Available = true;
 		}
 		
@@ -103,6 +111,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * Animation!
 		 */
 		public void AtDeliverExit(){
+			//Do(AlertTag.MARKET, "At Deliver Exit");
 			atDeliver.release();
 		}
 		
@@ -110,6 +119,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 * Animation!
 		 */
 		public void AtExit(){
+			//Do(AlertTag.MARKET, "At Market Exit");
 			atExit.release();
 		}
 		
@@ -142,6 +152,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 
 	//Action
 	private void GoToWork(){
+		//Do(AlertTag.MARKET, "Going To Work");
 		setState(DeliveryGuystate.GoingToWork);
 		deliveryguyGui.BackReadyStation();
 	}
@@ -149,7 +160,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	 * Action to go deliver items!
 	 */
 	private void GoDeliver(){
-		
+		//Do(AlertTag.MARKET, "Going To Deliver");
 		// animation to go to the location (Building)
 		deliveryguyGui.GoDeliver();
 		try {
@@ -172,6 +183,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	 * call off work
 	 */
 	private void OffWork(){
+		//Do(AlertTag.MARKET, "Going to OffWork");
 		deliveryguyGui.OffWork();
 		try {
 			atExit.acquire();

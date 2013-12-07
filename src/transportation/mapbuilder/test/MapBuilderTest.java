@@ -17,7 +17,7 @@ import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 
 
@@ -80,7 +80,7 @@ public class MapBuilderTest {
 		//Checking neighbors
 		try {
 			assertEquals(corners.get(10),
-					corners.get(5).getCornerForDir(DirectionEnum.South));
+					corners.get(5).getCornerForDir(CardinalDirectionEnum.South));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.toString());
@@ -88,14 +88,14 @@ public class MapBuilderTest {
 		
 		try {
 			assertEquals(corners.get(13),
-					corners.get(14).getCornerForDir(DirectionEnum.West));
+					corners.get(14).getCornerForDir(CardinalDirectionEnum.West));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.toString());
 		}
 		
 		try {
-			corners.get(5).getCornerForDir(DirectionEnum.West);
+			corners.get(5).getCornerForDir(CardinalDirectionEnum.West);
 			fail("Should have thrown exception but didn't");
 		} catch (Exception e) {}
 		
@@ -117,8 +117,8 @@ public class MapBuilderTest {
 		List <Busstop> currBusstops = corners.get(1).getBusstops();
 		
 		for (Busstop busstop : currBusstops) {
-			if (busstop.direction() == DirectionEnum.West
-				|| busstop.direction() == DirectionEnum.East) {
+			if (busstop.direction() == CardinalDirectionEnum.West
+				|| busstop.direction() == CardinalDirectionEnum.East) {
 			} else {
 				fail("Busstop with wrong direction");
 			}
@@ -127,8 +127,8 @@ public class MapBuilderTest {
 		currBusstops = corners.get(23).getBusstops();
 		
 		for (Busstop busstop : currBusstops) {
-			if (busstop.direction() == DirectionEnum.West
-				|| busstop.direction() == DirectionEnum.East) {
+			if (busstop.direction() == CardinalDirectionEnum.West
+				|| busstop.direction() == CardinalDirectionEnum.East) {
 			} else {
 				fail("Busstop with wrong direction");
 			}
@@ -137,8 +137,8 @@ public class MapBuilderTest {
 		currBusstops = corners.get(5).getBusstops();
 		
 		for (Busstop busstop : currBusstops) {
-			if (busstop.direction() == DirectionEnum.West
-				|| busstop.direction() == DirectionEnum.East) {
+			if (busstop.direction() == CardinalDirectionEnum.West
+				|| busstop.direction() == CardinalDirectionEnum.East) {
 				fail("Busstop with wrong direction");
 			} else {}
 		}
@@ -146,8 +146,8 @@ public class MapBuilderTest {
 		currBusstops = corners.get(9).getBusstops();
 		
 		for (Busstop busstop : currBusstops) {
-			if (busstop.direction() == DirectionEnum.West
-				|| busstop.direction() == DirectionEnum.East) {
+			if (busstop.direction() == CardinalDirectionEnum.West
+				|| busstop.direction() == CardinalDirectionEnum.East) {
 				fail("Busstop with wrong direction");
 			} else {}
 		}

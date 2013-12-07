@@ -26,6 +26,11 @@ public interface Person {
 	public void addRole(Role r);
 	
 	/**
+	 * Removes the given Role from the Person's list. 
+	 */
+	public void removeRole(Role r);
+	
+	/**
 	 * @see Wallet
 	 */
 	public Wallet getWallet();

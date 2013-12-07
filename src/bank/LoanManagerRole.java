@@ -97,7 +97,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private void goToWork() {
 		atWork = true;
 		doGoToDesk();
-		acquireSemaphore(active);
+//		acquireSemaphore(active);
 		
 	}
 	

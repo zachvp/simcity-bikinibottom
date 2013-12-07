@@ -56,6 +56,9 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
+		else if(evt.getSource() == breakHouse) {
+			System.out.println("Breaking House...");
+		}
 	}
 	
 	public void updatePanel(){

@@ -455,7 +455,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 			MC.c.msgNoItem();
 		}
 		else{
-			MC.phoneOrder.personReceivingDelivery.msgNoItem();
+			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(new ArrayList<Item>());
 		}
 					MyCustomerList.remove(0);
 		
@@ -479,6 +479,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		}
 		else {
 			MC.phoneOrder.personPayingDelivery.msgHereIsYourTotal(total, this);
+			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(MC.MissingItemList);
 		}
 	}
 

@@ -35,8 +35,8 @@ public class MarketRecords {
 	CashierGui cashierGui;
 
 	//List of ItemCollectors and DeliveryGuys
-    List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
-    List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
+    List<ItemCollectorRole> ItemCollectors = new Vector<ItemCollectorRole>();
+    List<DeliveryGuyRole> DeliveryGuys = new Vector<DeliveryGuyRole>();
     
     //private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
     //private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");

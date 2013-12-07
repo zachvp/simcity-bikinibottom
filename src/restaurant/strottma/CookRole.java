@@ -10,6 +10,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import market.Item;
+import market.gui.MarketBuilding;
 import market.interfaces.DeliveryReceiver;
 import restaurant.strottma.HostRole.Table;
 import restaurant.strottma.gui.CookGui;
@@ -423,6 +424,21 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 		public synchronized void showOrder() { showOrder = true; }
 		public synchronized void hideOrder() { showOrder = false; }
 		public synchronized boolean orderVisible() { return showOrder; }
+	}
+	
+	private class MyDelivery {
+		Map<String, Integer> items;
+		List<market.interfaces.Cashier> cashiers;
+		
+		MyDelivery(Map<String, Integer> items) {
+			this.items = new HashMap<String, Integer>(items);
+			this.cashiers = new ArrayList<market.interfaces.Cashier>();
+		}
+		
+		MyDelivery() {
+			this.items = new HashMap<String, Integer>();
+			this.cashiers = new ArrayList<market.interfaces.Cashier>();
+		}
 	}
 	
 	@Override

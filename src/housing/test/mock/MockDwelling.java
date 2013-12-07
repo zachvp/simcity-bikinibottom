@@ -80,4 +80,9 @@ public class MockDwelling implements Dwelling {
 		return payRecipient;
 	}
 
+	@Override
+	public void degradeCondition() {
+		log.add("Condition Degraded");
+	}
+
 }

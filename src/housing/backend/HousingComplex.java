@@ -42,13 +42,13 @@ public class HousingComplex {
 		this.building = building;
 		
 		// instantiate the gui class for the complex
-		this.gui = new HousingComplexGui(this);
 		
 		
 		if(Constants.TEST_POPULATE_HOUSING) {
 			try {
 				addRole("payrecipient");
 				addRole("worker");
+				this.gui = new HousingComplexGui(this);
 				
 				for(Dwelling d : gui.getDwellings()) {
 					payRecipient.addResident(d);
@@ -81,7 +81,8 @@ public class HousingComplex {
 	
 		switch(roleType) {
 			case "worker" : {
-				worker = new MaintenanceWorkerRole(person, building);
+				this.worker = new MaintenanceWorkerRole(person, building);
+				this.worker.setComplex(this);
 				this.population.put(person, worker);
 				person.addRole(worker);
 				worker.activate();

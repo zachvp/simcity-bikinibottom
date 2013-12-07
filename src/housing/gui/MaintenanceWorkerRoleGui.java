@@ -27,6 +27,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
 	private MaintenanceWorker worker;
 	
+	// needs to know the complex so gui can enter and exit buildings
 	private HousingComplex complex;
 	
 	// this prevents excessive releases from occurring
@@ -149,7 +150,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 		waiting = false;
 		xDestination = 60;
 		yDestination = 50;
-		canRelease = true;
+		canRelease = false;
 	}
 
 	@Override

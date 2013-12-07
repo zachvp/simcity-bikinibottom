@@ -72,7 +72,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 3; 
-	private final int IMPATIENCE_TIME = 7;
+	private final int IMPATIENCE_TIME = 20;
 	
 	/* ----- Class Data ----- */
 	/**
@@ -136,7 +136,6 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		
 		if(!timerSet){
 			gui.setPresent(true);
 		}
@@ -310,6 +309,7 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
 		DoShowSpeech("Calling maintenance worker!");
+		
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();

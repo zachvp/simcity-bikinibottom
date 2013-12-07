@@ -149,7 +149,7 @@ public class ResidentDwelling implements Dwelling {
 		return worker;
 	}
 	
-	public void degradeHousing() {
+	public void degradeCondition() {
 		// TODO test 
 		condition = Constants.Condition.POOR;
 		resident.msgDwellingDegraded();

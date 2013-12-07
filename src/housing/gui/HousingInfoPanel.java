@@ -2,6 +2,7 @@ package housing.gui;
 
 
 import housing.backend.PayRecipientRole;
+import housing.backend.ResidentRole;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -53,6 +54,14 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 				if(entry.getValue() instanceof PayRecipientRole) {
 					PayRecipientRole role = (PayRecipientRole) entry.getValue();
 					role.msgChargeRent();
+				}
+			}
+		}
+		else if(evt.getSource() == breakHouse) {
+			for(Map.Entry<Person, Role> entry : people.entrySet()) {
+				if(entry.getValue() instanceof ResidentRole) {
+					ResidentRole role = (ResidentRole) entry.getValue();
+					role.getDwelling().degradeCondition();
 				}
 			}
 		}

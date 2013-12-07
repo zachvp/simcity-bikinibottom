@@ -42,14 +42,7 @@ public class ResidentRole extends Role implements Resident {
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	/** 
-	 * State for tasks. The Role will deactivate if it is not performing any tasks.
-	 * used to determine when the role should terminate and transition to a city role
-	*/
-//	enum TaskState { FIRST_TASK, NONE, DOING_TASK, READY_TO_LEAVE }
-//	TaskState task = TaskState.FIRST_TASK;
-	
-	/** checks to see if a timer is currently scheduled */
+	// checks to see if a timer is currently scheduled
 	private boolean timerSet = false;
 	
 	// graphics
@@ -63,7 +56,7 @@ public class ResidentRole extends Role implements Resident {
 	// food data
 	// Constructor: String type, int amount, int low, int capacity, int cookTime
 	@SuppressWarnings("serial")
-	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
+	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>() {
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));
 		}
@@ -112,6 +105,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
+		Do("Payment due =/");
 		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
@@ -166,7 +160,7 @@ public class ResidentRole extends Role implements Resident {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();
-					if(f.amount > 0){
+					if(f.amount > 0 && food == null){
 						cookFood(f);
 						return true;
 					}

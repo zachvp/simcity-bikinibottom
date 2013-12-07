@@ -20,7 +20,7 @@ import transportation.test.mock.MockPassengerGui;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import agent.Role;
 import agent.RoleFactory;
 import agent.interfaces.Person;
@@ -257,11 +257,11 @@ public class RealPassengerRole extends PassengerRole {
 	}
 
 	@Override
-	public DirectionEnum currentDirection() {
+	public CardinalDirectionEnum currentDirection() {
 		if (location.type() != LocationTypeEnum.Corner
 			|| path.get(0).type() != LocationTypeEnum.Corner
 			|| location == path.get(0)) {
-			return DirectionEnum.None;
+			return CardinalDirectionEnum.None;
 		} else {
 			try {
 				return ((Corner)location).getDirForCorner((Corner) path.get(0));
@@ -269,7 +269,7 @@ public class RealPassengerRole extends PassengerRole {
 				System.out.println("Couldn't find currentDirection for "
 						+ "Passenger.");
 				e.printStackTrace();
-				return DirectionEnum.None;
+				return CardinalDirectionEnum.None;
 			}
 		}
 	}

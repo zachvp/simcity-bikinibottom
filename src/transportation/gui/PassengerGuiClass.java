@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import transportation.gui.interfaces.PassengerGui;

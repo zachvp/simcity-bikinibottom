@@ -41,6 +41,12 @@ public class LoanManagerGui implements Gui{
 	int deskXPos = 30;
 	int deskYPos = 170;
 	
+	private int frontDeskFrontY =170;
+	private int frontDeskRightX = 450;
+	
+	private int deskGoToX = 70;
+	private int deskGoToY = 110;
+	
 	int entranceX = 300;
 	int entranceY = 500;
 	
@@ -131,6 +137,21 @@ public class LoanManagerGui implements Gui{
 		xDestination = deskXPos;
 		yDestination = deskYPos;
 	}
+	
+	public void DoGoToDeskRight() {
+		canRelease = true;
+		xDestination = deskGoToX;
+		yDestination = deskGoToY;
+	}
+	
+	public void DoGoToDeskLeft() {
+		canRelease = true;
+		xDestination = deskGoToX - 40;
+		yDestination = deskGoToY;
+	}
+	
+
+	
 	
 	public void DoGoToComputer() {
 		canRelease = true;

@@ -1,16 +1,10 @@
 package CommonSimpleClasses.sound;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Sound {
-
-	private ScheduledExecutorService executor
-		= Executors.newSingleThreadScheduledExecutor();
 
 	private static Sound instance;
 

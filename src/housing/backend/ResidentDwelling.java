@@ -76,7 +76,7 @@ public class ResidentDwelling implements Dwelling {
 	}
 	
 	public void addResident() throws Exception {
-		if(Constants.DEBUG){
+		if(Constants.TEST_POPULATE_HOUSING){
 			PersonAgent person = new PersonAgent("Resident");
 			
 			resident = new ResidentRole(person, complex.getBuilding(), this, gui);

@@ -3,6 +3,7 @@ package agent;
 import gui.Building;
 import gui.HospitalBuilding;
 import housing.backend.ResidentRole;
+import housing.backend.ResidentialBuilding;
 import gui.trace.AlertTag;
 
 import java.util.Collections;
@@ -321,7 +322,8 @@ public class PersonAgent extends Agent implements Person {
 		}
 		
 		// There is no role for this location! Get a new one.
-		if (loc instanceof Building && !(loc instanceof HospitalBuilding)) {
+		if (loc instanceof Building && !(loc instanceof HospitalBuilding) && 
+				!(loc instanceof ResidentialBuilding)) {
 			Building building = (Building) loc;
 			Role role = building.getCustomerRole(this);
 			role.activate();
@@ -363,18 +365,22 @@ public class PersonAgent extends Agent implements Person {
 	private void doUpdateHungerLevel() {
 		if(this.hungerLevel == HungerLevel.FULL) {
 			this.hungerLevel = HungerLevel.SATISFIED;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.SATISFIED) {
 			this.hungerLevel = HungerLevel.NEUTRAL;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.NEUTRAL) {
 			this.hungerLevel = HungerLevel.HUNGRY;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.HUNGRY) {
 			this.hungerLevel = HungerLevel.STARVING;
+			stateChanged();
 			return;
 		}
 		
@@ -428,6 +434,7 @@ public class PersonAgent extends Agent implements Person {
 			this.lastTimeEatingOut = timeManager.currentSimTime();
 		}
 		this.hungerLevel = newHungerLevel;
+		stateChanged();
 	}
 	
 	/**
@@ -453,6 +460,7 @@ public class PersonAgent extends Agent implements Person {
 		setHungerLevel(HungerLevel.FULL, eatingOut);
 	}
 	
+	
 	/**
 	 * Sets the hunger level to full, without modifying lastTimeEatingOut.
 	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
@@ -462,6 +470,14 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setHungerToFull() {
 		setHungerToFull(false);
+	}
+	
+	/**
+	 * Used by infopanel's button to set person to being
+	 * very hungry
+	 */
+	public void setHungerToStarving() {
+		setHungerLevel(HungerLevel.STARVING);
 	}
 	
 	// ---- Work starting soon

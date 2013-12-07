@@ -1,6 +1,6 @@
 package gui;
 
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import transportation.CornerAgent.MyCorner;
 import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;

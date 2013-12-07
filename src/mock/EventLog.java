@@ -2,6 +2,8 @@ package mock;
 
 import java.util.LinkedList;
 
+import gui.trace.AlertLog;
+import gui.trace.AlertTag;
 import CommonSimpleClasses.Constants;
 
 /**
@@ -21,10 +23,21 @@ public class EventLog {
 	private LinkedList<LoggedEvent> events = new LinkedList<LoggedEvent>();
 
 	/**
-	 * Add a new event to the log.
+	 * Add a new event to the log for log display.
 	 *
 	 * @param log
 	 */
+	public void add(AlertTag tag, String name, String log){
+		AlertLog.getInstance().logMessage(tag, name, log);
+		
+		if (Constants.LOG) {
+			events.add(new LoggedEvent(log));
+		}
+	}
+	
+	/**
+	 * Add a new event to the log for simply text
+	 * */
 	public void add(String log){
 		if (Constants.LOG) {
 			events.add(new LoggedEvent(log));

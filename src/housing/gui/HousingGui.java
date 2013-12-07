@@ -1,55 +1,41 @@
 package housing.gui;
 
 import gui.AnimationPanel;
-import housing.ResidentDwelling;
-import housing.ResidentialBuilding;
+import housing.backend.ResidentDwelling;
 
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.Constants;
 import agent.gui.Gui;
-import CommonSimpleClasses.Constants.Condition;
 
 /**
  * HousingGui displays individual housing units. It pulls together all of the
  * GUI and animation elements including the AnimationPanel, role graphics, and
  * layout graphics. 
  * @author Zach VP
- *
  */
 
+@SuppressWarnings("serial")
 public class HousingGui extends JPanel {
 	/* --- Data --- */
 
 	/** Index is the slot in the complex the gui lies in.  */
 	int index;
 	
-	// constants
-	private final int ROOM_WIDTH = 600;
-	private final int ROOM_HEIGHT= 490;
-	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
 	LayoutGui layoutGui;
 
-	// back-end housing containers that contains the resident, payRecipient, and worker
-	ResidentDwelling dwelling;
-
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);
 	
-	public HousingGui(int index, ResidentialBuilding building, HousingComplex complex) {
+	public HousingGui(int index, ResidentDwelling dwelling) {
 		this.index = index;
 		
-		// initialize the graphical layout of the dwelling
-		layoutGui = new LayoutGui(ROOM_WIDTH, ROOM_HEIGHT, index);
-		
-		// initialize the dwelling
-		this.dwelling = new ResidentDwelling(index, Condition.GOOD, building, layoutGui, complex);
-
 		this.index %= 4;
 		switch(this.index){
 			case 0: housingAnimationPanel.setBackground(Color.YELLOW); break;
@@ -59,11 +45,15 @@ public class HousingGui extends JPanel {
 			default: housingAnimationPanel.setBackground(Color.BLACK); break;
 		}
 		
-		// add to animation panel
 		this.setLayout(layout);
-		housingAnimationPanel.addGui(layoutGui);
-		housingAnimationPanel.addGui(dwelling.getResidentGui());
+		
+		this.housingAnimationPanel.addGui(dwelling.getLayoutGui());
+		this.housingAnimationPanel.addGui(dwelling.getResidentGui());
+		
 		this.add(housingAnimationPanel);
+		
+		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH / 3,
+				Constants.ANIMATION_PANEL_HEIGHT / 3));
 	}
 	
 	/* --- Utilities --- */

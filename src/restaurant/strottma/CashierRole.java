@@ -34,7 +34,9 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	
 	public CashierRole(Person person, CityLocation location) {
 		super(person, location);
-
+		
+		
+		// TODO Is this timer doing anything at all? -Diego
 		new Timer();
 		this.money = 200.00; // default
 	}

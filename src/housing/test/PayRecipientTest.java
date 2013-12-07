@@ -2,8 +2,9 @@ package housing.test;
 
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import housing.PayRecipientRole;
-import housing.PayRecipientRole.MyResident;
+import housing.backend.PayRecipientRole;
+import housing.backend.ResidentialBuilding;
+import housing.backend.PayRecipientRole.MyResident;
 import housing.test.mock.MockDwelling;
 import housing.test.mock.MockResident;
 import junit.framework.TestCase;
@@ -11,12 +12,15 @@ import junit.framework.TestCase;
 public class PayRecipientTest extends TestCase {
 	/* --- Testing Roles and Agents --- */
 	
+	// set up mock units
+	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
+	MockResident resident = new MockResident("Mock Resident");
+	
 	// set up test person/role
 	PersonAgent payRecipientPerson = new PersonAgent("Pay Recipient");
-	PayRecipientRole payRecipient = new PayRecipientRole(payRecipientPerson);
+	PayRecipientRole payRecipient = new PayRecipientRole(payRecipientPerson, building);
 	
-	// set up mock units
-	MockResident resident = new MockResident("Mock Resident");
+	// living space
 	MockDwelling dwelling = new MockDwelling(resident, payRecipient, Condition.GOOD);
 	
 	protected void setUp() throws Exception {
@@ -52,7 +56,7 @@ public class PayRecipientTest extends TestCase {
 				dwelling.monthlyPaymentAmount, mr.getOwes());
 		
 		// send the message to the resident
-		dwelling.getResident().msgPaymentDue(mr.getOwes());
+		dwelling.getResident().msgPaymentDue(mr.getOwes(), payRecipient);
 		
 		// simulate message reception from resident
 		payRecipient.msgHereIsPayment(resident.oweMoney, resident);

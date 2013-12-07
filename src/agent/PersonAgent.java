@@ -2,7 +2,8 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
+import gui.trace.AlertTag;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +11,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import bank.RobberRole;
+import bank.gui.BankBuilding;
 
 import kelp.Kelp;
 import kelp.KelpClass;
@@ -65,6 +69,8 @@ public class PersonAgent extends Agent implements Person {
 	private Car car;
 	private boolean clearFoodAtHome = false;
 	
+	private boolean timeToRobABank = false;
+	
 	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
 		super();
 		updateHungerLevel();
@@ -104,7 +110,8 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print("we're here captain");
+		print(AlertTag.PASSENGER, this.getName(),
+				"Arrived at " + getPassengerRole().getLocation());
 	}
 	
 	/* -------- Scheduler -------- */
@@ -142,6 +149,7 @@ public class PersonAgent extends Agent implements Person {
 		// if at least one role's scheduler returned true, return true
 		if (roleExecuted) { return true; }
 		if (roleActive) { return false; }
+
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
@@ -153,6 +161,13 @@ public class PersonAgent extends Agent implements Person {
 		
 
 		// If you didn't just arrive somewhere, decide what to do next.
+		if (timeToRobABank) {
+			CityLocation bank = chooseBank();
+			if(bank!= null) {
+				goToBank(bank);
+				return true;
+			}
+		}
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
@@ -259,6 +274,25 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
+	 * Returns true if the person scheduler has a task awaiting it.
+	 */
+	public boolean hasSomethingToDo() {
+		return workStartsSoon() || isHungry()  || needToGoToBank()
+				|| timeToRobABank;
+	}
+	
+	/**
+	 * Removes given role from PersonAgent's list.
+	 * Primarily used for removing robber, because
+	 * it is created for a one-time robbery by InfoPanel
+	 */
+	@Override
+	public void removeRole(Role r) {
+		roles.remove(r);
+		stateChanged();
+	}
+	
+	/**
 	 * Activates the current location's Role. Won't activate a WorkRole
 	 * unless forWork is true; won't activate a PassengerRole ever.
 	 * 
@@ -270,14 +304,17 @@ public class PersonAgent extends Agent implements Person {
 		synchronized (roles) {
 			for (Role r : roles) {
 				if (loc.equals(r.getLocation())
+						&& (timeToRobABank == (r instanceof RobberRole))
 						&& (forWork == (r instanceof WorkRole))
 						&& !(r instanceof PassengerRole)) {
-
+					
+					timeToRobABank = false;
 					r.activate();
 					return;
 				}
 			}
 		}
+		
 		if (forWork) {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
@@ -449,7 +486,7 @@ public class PersonAgent extends Agent implements Person {
 	// ---- Methods for finding special roles
 	
 	@Override
-	public PassengerRole getPassengerRole() {
+	public synchronized PassengerRole getPassengerRole() {
 		synchronized (roles) {
 			// Get the PassengerRole if there is one.
 			for (Role r : roles) {
@@ -591,6 +628,7 @@ public class PersonAgent extends Agent implements Person {
 		return hungerLevel == HungerLevel.STARVING;
 	}
 	
+	@Override
 	public boolean isHungry() {
 		return hungerLevel == HungerLevel.STARVING ||
 				hungerLevel == HungerLevel.HUNGRY; 
@@ -642,6 +680,11 @@ public class PersonAgent extends Agent implements Person {
 		return false;
 	}
 	
+	public void setTimeToRobABank(){
+		timeToRobABank = true;
+		stateChanged();
+	}
+	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
 				|| wallet.needsMoney();
@@ -684,7 +727,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void printMsg(String msg) {
-		print(msg);
+		print(AlertTag.PASSENGER, this.getName(), msg);
 	}
 	
 	@Override
@@ -692,6 +735,11 @@ public class PersonAgent extends Agent implements Person {
 		print(msg, e);
 	}
 
+	@Override
+	public void agentDo(AlertTag tag, String name, String msg) {
+		Do(tag, this.getName(), msg);
+	}
+	
 	@Override
 	public void agentDo(String msg) {
 		Do(msg);

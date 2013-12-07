@@ -29,4 +29,6 @@ public interface ItemCollectorGuiInterfaces extends Gui{
 
 	public abstract int getYPos();
 
+	public abstract void GoToWork();
+
 }

@@ -3,13 +3,18 @@ package agent.interfaces;
 import java.util.Map;
 
 import market.Item;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
+import gui.trace.AlertTag;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 
+/**
+ * A Person. Probably a human being, but let's not get speciesist.
+ * @author Erik Strottmann
+ */
 public interface Person {
 	/* -------- Messages -------- */
 	
@@ -25,18 +30,18 @@ public interface Person {
 	public void addRole(Role r);
 	
 	/**
+	 * Removes the given Role from the Person's list. 
+	 */
+	public void removeRole(Role r);
+	
+	/**
 	 * @see Wallet
 	 */
+	public boolean hasSomethingToDo();
+	
 	public Wallet getWallet();
 	
-	/**
-	 * @see Car
-	 */
 	public Car getCar();
-	
-	/**
-	 * @see Car
-	 */
 	public void setCar(Car car);
 	
 	
@@ -181,7 +186,10 @@ public interface Person {
     /** Return Person name for messages.*/
 	public String getName();
 	
-    /** The simulated action code */
+    /** The simulated action code for log display */
+	public void agentDo(AlertTag tag, String name, String msg);
+	
+	/** The simulated action code for just the console */
 	public void agentDo(String msg);
 	
 	/** Print message */

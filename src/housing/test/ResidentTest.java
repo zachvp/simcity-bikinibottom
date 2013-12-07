@@ -3,7 +3,7 @@ package housing.test;
 import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
@@ -52,7 +52,7 @@ public class ResidentTest extends TestCase {
 				+ resident.log.toString(), 0, resident.log.size());
 		
 		/* --- Run Scenario --- */
-		resident.msgPaymentDue(PAYMENT_AMOUNT);
+		resident.msgPaymentDue(PAYMENT_AMOUNT, mockPayRecipient);
 		assertEquals("Resident should now owe " + PAYMENT_AMOUNT + ".",
 				PAYMENT_AMOUNT, resident.getMoneyOwed());
 		

@@ -1,8 +1,6 @@
-package housing;
+package housing.backend;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -10,19 +8,19 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
-import housing.gui.HousingComplex;
 import housing.gui.HousingInfoPanel;
 
 /**
  * ResidentialBuilding is the class that will be slotted into the city map itself.
- * It will then display in the overview city map. Upon clicking on it, the view within
- * the ResidentialBuilding with the detailed housing animations will pop up. 
+ * It is the wrapper for the {@link HousingComplx} that interfaces with the city GUI.
+ * Upon clicking in the corresponding ResidentialBuilding area, the view within
+ * the {@link HousingComplex} with the detailed housing animations will pop up. 
  * @author Zach VP
  */
 
+@SuppressWarnings("serial")
 public class ResidentialBuilding extends Building {
 	// ResidentialBuilding is a CityLocation that will be added to kelp
-//	private CityLocation residence;
 	
 	// location for the "door" to the building
 	private XYPos entrancePos;
@@ -30,14 +28,8 @@ public class ResidentialBuilding extends Building {
 	// this displays after clicking on the ResidentialBuilding
 	private HousingComplex complex;
 	
+	// prevents the repeated retrieval of the building name
 	private boolean name = false;
-	
-	// the "boss" or greeter for this building and the on-call Mr. Fix-it
-	private PayRecipientRole landlord;
-	private MaintenanceWorkerRole worker;
-	
-	// used for producing jobs and residential roads in the complex
-	public Map<Person, Role> population = new HashMap<Person, Role>();
 	
 	private HousingInfoPanel housingInfoPanel;
 	
@@ -53,44 +45,18 @@ public class ResidentialBuilding extends Building {
 		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
+		// set the position of where the door of the complex will be
 		this.entrancePos = new XYPos(width/2, height);
-		
-		// worker for this building
-		worker = new MaintenanceWorkerRole(null, this);
-		
-		// manager for this building 
-		landlord = new PayRecipientRole(null, this);
-		
-		// set up complex
+
+		// set up the housing complex containing the building roles and GUI
 		this.complex = new HousingComplex(this);
 		
-		worker.setComplex(this.complex);
-		
-		// put the constant roles in the building map
-		this.population.put(null, landlord);
-		this.population.put(null, worker);
-		
-		housingInfoPanel = new HousingInfoPanel(population);
+		this.housingInfoPanel = new HousingInfoPanel(this, getPopulation());
 	}
 	
-	public Map<Person, Role> getPopulation(){
-		return population;
-	}
-	
-	public void addResident(ResidentRole resident){
-		this.population.put(null, resident);
-	}
-	
-	public MaintenanceWorkerRole getWorker(){
-		return worker;
-	}
-
-	public PayRecipientRole getPayRecipient(){
-		return landlord;
-	}
-	
-	public HousingComplex getComplex(){
-		return complex;
+	// needed to pass to info to panel
+	public Map<Person, Role> getPopulation() {
+		return complex.getPopulation();
 	}
 	
 	/* --- Interface Methods --- */
@@ -101,7 +67,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getGreeter() {
-		return landlord;
+		return complex.getPayRecipient();
 	}
 
 	@Override
@@ -116,7 +82,7 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getAnimationPanel() {
-		return complex;
+		return complex.getGui();
 	}
 
 	@Override

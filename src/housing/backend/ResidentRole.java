@@ -1,5 +1,6 @@
 package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
@@ -56,7 +57,7 @@ public class ResidentRole extends Role implements Resident {
 		
 	// rent data
 	private double oweMoney = 0;
-	private PayRecipient payee;
+	private PayRecipient payRecipient;
 	private Dwelling dwelling;
 	
 	// food data
@@ -109,7 +110,8 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Messages ----- */
 	@Override
-	public void msgPaymentDue(double amount) {
+	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
+		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
 		DoShowSpeech("I owe rent!");
@@ -206,13 +208,13 @@ public class ResidentRole extends Role implements Resident {
 		double cash = person.getWallet().getCashOnHand();
 		
 		if(cash >= oweMoney) {
-			payee.msgHereIsPayment(oweMoney, this);
+			payRecipient.msgHereIsPayment(oweMoney, this);
 			cash -= oweMoney;
 			person.getWallet().setCashOnHand(cash);
 			oweMoney = 0;
 		}
 		else if(cash > 0) {
-			payee.msgHereIsPayment(cash, this);
+			payRecipient.msgHereIsPayment(cash, this);
 			oweMoney -= cash;
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
@@ -316,6 +318,12 @@ public class ResidentRole extends Role implements Resident {
 		DoMoveGary();
 	}
 	
+	/* --- Overriden from Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
+	
 	/* --- Animation Routines --- */
 	private void DoShowSpeech(String speech) {
 		gui.DoShowSpeech(speech);
@@ -374,11 +382,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public PayRecipient getPayee() {
-		return payee;
+		return payRecipient;
 	}
 
 	public void setPayee(PayRecipient payee) {
-		this.payee = payee;
+		this.payRecipient = payee;
 	}
 
 	public double getMoneyOwed() {

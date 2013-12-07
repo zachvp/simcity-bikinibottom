@@ -1,6 +1,5 @@
 package housing.backend;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -9,7 +8,6 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
-import housing.gui.HousingComplex;
 import housing.gui.HousingInfoPanel;
 
 /**
@@ -53,15 +51,12 @@ public class ResidentialBuilding extends Building {
 		// set up the housing complex containing the building roles and GUI
 		this.complex = new HousingComplex(this);
 		
-		this.housingInfoPanel = new HousingInfoPanel(getPopulation());
+		this.housingInfoPanel = new HousingInfoPanel(this, getPopulation());
 	}
 	
-	public Map<Person, Role> getPopulation(){
+	// needed to pass to info to panel
+	public Map<Person, Role> getPopulation() {
 		return complex.getPopulation();
-	}
-	
-	public HousingComplex getComplex(){
-		return complex;
 	}
 	
 	/* --- Interface Methods --- */

@@ -2,11 +2,14 @@ package housing.gui;
 
 import gui.AnimationPanel;
 import housing.backend.ResidentDwelling;
+
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import CommonSimpleClasses.Constants;
 import agent.gui.Gui;
 
 /**
@@ -42,11 +45,15 @@ public class HousingGui extends JPanel {
 			default: housingAnimationPanel.setBackground(Color.BLACK); break;
 		}
 		
-		// add to animation panel
 		this.setLayout(layout);
+		
 		this.housingAnimationPanel.addGui(dwelling.getLayoutGui());
 		this.housingAnimationPanel.addGui(dwelling.getResidentGui());
+		
 		this.add(housingAnimationPanel);
+		
+		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH / 3,
+				Constants.ANIMATION_PANEL_HEIGHT / 3));
 	}
 	
 	/* --- Utilities --- */

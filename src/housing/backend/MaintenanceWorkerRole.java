@@ -1,6 +1,6 @@
 package housing.backend;
 
-import housing.gui.HousingComplex;
+import gui.trace.AlertTag;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -39,10 +39,6 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	
 	
 	/* --- Constants --- */
-	private final int SHIFT_START_HOUR = 6;
-	private final int SHIFT_START_MINUTE = 0;
-	private final int SHIFT_END_HOUR = 12;
-	private final int SHIFT_END_MINUTE = 0;
 	
 	// time it takes before deactivating
 	private final int IMPATIENCE_TIME = 7;
@@ -173,7 +169,14 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		gui.DoReturnHome(unit);
 		deactivate();
 	}
+	
+	/* --- From Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
 
+	/* --- Overridden from WorkRole --- */
 	@Override
 	public boolean isAtWork() {
 		return isActive();

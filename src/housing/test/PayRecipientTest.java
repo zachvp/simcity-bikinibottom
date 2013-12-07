@@ -56,7 +56,7 @@ public class PayRecipientTest extends TestCase {
 				dwelling.monthlyPaymentAmount, mr.getOwes());
 		
 		// send the message to the resident
-		dwelling.getResident().msgPaymentDue(mr.getOwes());
+		dwelling.getResident().msgPaymentDue(mr.getOwes(), payRecipient);
 		
 		// simulate message reception from resident
 		payRecipient.msgHereIsPayment(resident.oweMoney, resident);

@@ -189,12 +189,14 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	private void giveMoneyToRobber(MyRobber mr) {
+		Do(AlertTag.BANK, "getting robbed");
+		mr.state = robberState.done;
 		doGoToComputer();
 		acquireSemaphore(active);
 		doGoToDesk();
 		acquireSemaphore(active);
 		mr.r.msgGiveMoneyToRobber(mr.stealAmount);
-		mr.state = robberState.done;
+		
 	}
 	
 	private void verifyNewAccount(Task t) {
@@ -298,7 +300,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		return null;
 //	}
 
-
+	@Override
+	public void Do(String str) {
+		Do(AlertTag.BANK, str);
+	}
+	
 	@Override
 	public boolean isAtWork() {
 		// TODO Auto-generated method stub

@@ -25,7 +25,7 @@ import transportation.interfaces.Vehicle;
 public class VehicleGuiClass implements VehicleGui {
 	
 	private static final int VEHICLEW = 8;
-	private static final int VEHICLEH = 8;
+	public static final int VEHICLEH = 8;
 	private int xPos, yPos;
 	private Corner destination;
 	private Corner startLocation;

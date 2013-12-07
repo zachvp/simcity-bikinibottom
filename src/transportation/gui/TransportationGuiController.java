@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.TimerTask;
 
 import transportation.gui.interfaces.BusstopGui;
 import transportation.gui.interfaces.CornerGui;
@@ -13,6 +14,7 @@ import transportation.gui.interfaces.PassengerGui;
 import transportation.gui.interfaces.VehicleGui;
 import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import agent.gui.Gui;
 
 public class TransportationGuiController implements Gui {
@@ -35,7 +37,16 @@ public class TransportationGuiController implements Gui {
 	private List<CornerGui> cornerGuis = 
 			Collections.synchronizedList(new ArrayList<CornerGui>());;
 	
-	private TransportationGuiController() {}
+	private TransportationGuiController() {
+		SingletonTimer.getInstance().schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				startCrashSequence();
+				
+			}
+		}, 7000);
+	}
 	
 	public static TransportationGuiController getInstance(){
 		if (instance == null) {
@@ -155,6 +166,10 @@ public class TransportationGuiController implements Gui {
 	public void addCornerGUI(CornerGui cornerGui) {
 		cornerGuis.add(cornerGui);
 		
+	}
+	
+	public void startCrashSequence() {
+		guis.add(new CarCrashSequence());
 	}
 
 }

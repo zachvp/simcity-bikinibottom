@@ -62,6 +62,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// food data
 	// Constructor: String type, int amount, int low, int capacity, int cookTime
+	@SuppressWarnings("serial")
 	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));

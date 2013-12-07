@@ -7,8 +7,14 @@ import housing.backend.ResidentRole;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,6 +53,19 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		add(panel);
 	}
 	
+	public void playSound() {
+	    try {
+	    	// ImageIO.read(getClass().getResource("apartment_background.png"));
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream((getClass().getResource("hitsound.wav")));
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
@@ -58,6 +77,7 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 			}
 		}
 		else if(evt.getSource() == breakHouse) {
+			playSound();
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof ResidentRole) {
 					ResidentRole role = (ResidentRole) entry.getValue();

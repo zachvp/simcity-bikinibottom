@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 
 import com.sun.swing.internal.plaf.basic.resources.basic;
 
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
@@ -178,6 +179,45 @@ public class VehicleGuiClass implements VehicleGui {
 	public void setLocation(XYPos startingPos) {
 		xPos = startingPos.x;
 		yPos = startingPos.y;
+	}
+
+	@Override
+	public CardinalDirectionEnum currentDirection() {
+		return vehicle.currentDirection();
+	}
+
+	@Override
+	public int front() {
+		int response = xPos;
+		if (currentDirection() == CardinalDirectionEnum.North
+			|| currentDirection() == CardinalDirectionEnum.South) {
+			response = yPos;
+		}
+		
+		if (currentDirection() == CardinalDirectionEnum.East
+			|| currentDirection() == CardinalDirectionEnum.South) {
+			response += VEHICLEH;
+		}
+		return response;
+	}
+
+	@Override
+	public int back() {
+		int response = front();
+		if (currentDirection() == CardinalDirectionEnum.East
+				|| currentDirection() == CardinalDirectionEnum.South) {
+				response -= VEHICLEH;
+		} else response += VEHICLEH;
+		
+		return response;
+	}
+
+	@Override
+	public int getCoordinatePerpendicularToMovement() {
+		if (currentDirection() == CardinalDirectionEnum.North
+				|| currentDirection() == CardinalDirectionEnum.South) {
+				return xPos;
+		} else return yPos;
 	}
 
 }

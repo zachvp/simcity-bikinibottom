@@ -107,10 +107,10 @@ public class RobberRole extends Role implements Robber {
 		am.msgGiveMeTheMoney(this, 300.0);//TODO determine way to calculate real amount
 	}
 	private void leaveBank(){
+		sg.msgRobberLeavingBank(this);
 		robberGui.DoLeaveBank();
 		acquireSemaphore(active);
 		
-		sg.msgRobberLeavingBank(this);
 		state = State.done;
 		
 		this.deactivate();

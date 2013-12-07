@@ -678,6 +678,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	public void setTimeToRobABank(){
 		timeToRobABank = true;
+		stateChanged();
 	}
 	
 	public boolean needToGoToBank() {

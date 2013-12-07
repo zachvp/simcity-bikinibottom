@@ -7,29 +7,26 @@ import housing.backend.ResidentRole;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.print.attribute.standard.Media;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.sound.Sound;
 import agent.Role;
 import agent.interfaces.Person;
 
 @SuppressWarnings("serial")
 public class HousingInfoPanel extends JPanel implements ActionListener {
 	
-	Map<Person, Role> people;
+	private Map<Person, Role> people;
 	
-	JButton chargeRent = new JButton("Charge Rent");
-	JButton breakHouse = new JButton("Break House");
+	private JButton chargeRent = new JButton("Charge Rent");
+	private JButton breakHouse = new JButton("Break House");
+	
+	private Sound myLeg = Sound.getInstance();
 	
 	public HousingInfoPanel(CityLocation building, Map<Person, Role> people) {
 		
@@ -53,19 +50,6 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		add(panel);
 	}
 	
-	public void playSound() {
-	    try {
-	    	// ImageIO.read(getClass().getResource("apartment_background.png"));
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream((getClass().getResource("hitsound.wav")));
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } catch(Exception ex) {
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-	}
-	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
@@ -77,7 +61,7 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 			}
 		}
 		else if(evt.getSource() == breakHouse) {
-			playSound();
+			myLeg.playSound("hitsound.wav");
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof ResidentRole) {
 					ResidentRole role = (ResidentRole) entry.getValue();

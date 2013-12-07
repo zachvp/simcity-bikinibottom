@@ -39,13 +39,14 @@ public class TransportationGuiController implements Gui {
 	
 	private TransportationGuiController() {
 		SingletonTimer.getInstance().schedule(new TimerTask() {
-			
+
 			@Override
 			public void run() {
 				startCrashSequence();
-				
+
 			}
 		}, 7000);
+		
 	}
 	
 	public static TransportationGuiController getInstance(){
@@ -170,6 +171,10 @@ public class TransportationGuiController implements Gui {
 	
 	public void startCrashSequence() {
 		guis.add(new CarCrashSequence());
+	}
+
+	public void removeGui(Gui gui) {
+		guis.remove(gui);
 	}
 
 }

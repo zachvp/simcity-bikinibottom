@@ -1,5 +1,6 @@
 package transportation.gui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
@@ -7,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +16,7 @@ import transportation.interfaces.Corner;
 import kelp.Kelp;
 import kelp.KelpClass;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.XYPos;
 import agent.gui.Gui;
 
@@ -27,6 +30,22 @@ public class CarCrashSequence implements Gui {
 	int aniCount = 0;
 	
 	List<BufferedImage> explosionList = new ArrayList<BufferedImage>();
+	
+	class RemovalTask extends TimerTask {
+		
+		CarCrashSequence carCrashSequence;
+		
+		public RemovalTask(CarCrashSequence carCrashSequence) {
+			this.carCrashSequence = carCrashSequence;
+		}
+		
+		@Override
+		public void run() {
+			TransportationGuiController.getInstance()
+				.removeGui(carCrashSequence);
+		}
+		
+	}
 	
 	public CarCrashSequence() {
 		Kelp kelp = KelpClass.getKelpInstance();
@@ -64,11 +83,12 @@ public class CarCrashSequence implements Gui {
 	@Override
 	public void draw(Graphics2D g) {
 		if (!explosion) {
+			g.setColor(Color.RED);
 			g.fillRect(posX1, posY1,
 				VehicleGuiClass.VEHICLEH, VehicleGuiClass.VEHICLEH);
 			g.fillRect(posX2, posY2,
 				VehicleGuiClass.VEHICLEH, VehicleGuiClass.VEHICLEH);
-		} else {
+		} else if (aniCount<16) {
 			Rectangle2D r = new Rectangle2D.Double(posX1, posY1,
 					30, 30);
 			Rectangle2D tr = new Rectangle2D.Double(posX1, posY1,
@@ -76,6 +96,10 @@ public class CarCrashSequence implements Gui {
 			TexturePaint tp = new TexturePaint(explosionList.get(aniCount), tr);
 			g.setPaint(tp);
 			g.fill(r);
+		} else if (aniCount < 17) {
+			aniCount++;
+			SingletonTimer.getInstance().schedule
+				(new RemovalTask(this), 0);
 		}
 	}
 

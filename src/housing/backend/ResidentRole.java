@@ -157,7 +157,7 @@ public class ResidentRole extends Role implements Resident {
 		}
 		
 		// TODO START_HUNGRY is for testing only
-		if(isHungry() && START_HUNGRY) {
+		if(isHungry()) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();

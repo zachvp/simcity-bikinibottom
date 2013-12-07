@@ -53,8 +53,8 @@ public class HospitalBuilding extends Building{
 	@Override
 	public JPanel getAnimationPanel() {
 		//TODO change back to
-		//return panel;
-		return personPanel;
+		return panel;
+		//return personPanel;
 	}
 
 	@Override

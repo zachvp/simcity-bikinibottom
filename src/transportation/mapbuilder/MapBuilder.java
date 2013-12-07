@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 import transportation.BusstopAgent;
 import transportation.CornerAgent;
@@ -101,28 +101,28 @@ public class MapBuilder {
 				if (j != 0) {
 					currentCorner.addAdjacentCorner
 						(getCorner2D(i, j-1),
-							DirectionEnum.North);
+							CardinalDirectionEnum.North);
 				}
 				
 				//Adding south corner
 				if (j != numCornerRows-1) {
 					currentCorner.addAdjacentCorner
 						(getCorner2D(i, j+1),
-						DirectionEnum.South);
+						CardinalDirectionEnum.South);
 				}
 				
 				//Adding west corner
 				if (i != 0) {
 					currentCorner.addAdjacentCorner
 						(getCorner2D(i-1, j),
-						DirectionEnum.West);
+						CardinalDirectionEnum.West);
 				}
 				
 				//Adding east corner
 				if (i != numCornerCols-1) {
 					currentCorner.addAdjacentCorner
 						(getCorner2D(i+1, j),
-						DirectionEnum.East);
+						CardinalDirectionEnum.East);
 				}
 			}
 		}
@@ -182,7 +182,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(;j < numCornerRows; j++) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, DirectionEnum.South);
+				addBusstopsToCorner(i, j, CardinalDirectionEnum.South);
 		}
 		
 		
@@ -210,7 +210,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(;i < numCornerCols; i++) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, DirectionEnum.East);
+				addBusstopsToCorner(i, j, CardinalDirectionEnum.East);
 		}
 		
 		
@@ -237,7 +237,7 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(; j >= 0; j--) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, DirectionEnum.North);
+				addBusstopsToCorner(i, j, CardinalDirectionEnum.North);
 		}
 		
 		
@@ -263,30 +263,30 @@ public class MapBuilder {
 		//Adding busstops to corner
 		for(; i >= 0; i--) {
 			if(cornersWithBusstops.contains(getIndex2D(i, j)))
-				addBusstopsToCorner(i, j, DirectionEnum.West);
+				addBusstopsToCorner(i, j, CardinalDirectionEnum.West);
 		}
 
 	}
 
 	private static void addBusstopsToCorner(int i, int j,
-			DirectionEnum positiveDir) throws Exception {
+			CardinalDirectionEnum positiveDir) throws Exception {
 		
 		cornersWithBusstopsGrid.add(new XYPos(i,j));
 		
-		DirectionEnum negativeDir;
+		CardinalDirectionEnum negativeDir;
 		
 		switch (positiveDir) {
 		case North:
-			negativeDir = DirectionEnum.South;
+			negativeDir = CardinalDirectionEnum.South;
 			break;
 		case South:
-			negativeDir = DirectionEnum.North;
+			negativeDir = CardinalDirectionEnum.North;
 			break;
 		case West:
-			negativeDir = DirectionEnum.East;
+			negativeDir = CardinalDirectionEnum.East;
 			break;
 		case East:
-			negativeDir = DirectionEnum.West;
+			negativeDir = CardinalDirectionEnum.West;
 			break;
 		default:
 			throw new Exception("Passed down a null direction");

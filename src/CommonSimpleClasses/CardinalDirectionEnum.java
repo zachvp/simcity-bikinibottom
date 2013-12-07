@@ -1,6 +1,6 @@
 package CommonSimpleClasses;
 
-public enum DirectionEnum {
+public enum CardinalDirectionEnum {
 	North,
 	South,
 	East,

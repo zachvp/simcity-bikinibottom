@@ -10,7 +10,7 @@ import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
 
@@ -23,7 +23,7 @@ public class BusstopAgent extends Agent implements Busstop {
 	Corner corner;
 
 	//Direction the bus is going when it reaches this stop.
-	DirectionEnum direction;
+	CardinalDirectionEnum direction;
 	
 	//Direction in route
 	boolean directionInRoute;
@@ -33,7 +33,7 @@ public class BusstopAgent extends Agent implements Busstop {
 
 	private BusstopGui gui;
 	
-	public BusstopAgent(Corner corner, DirectionEnum direction,
+	public BusstopAgent(Corner corner, CardinalDirectionEnum direction,
 			boolean directionInRoute) {
 		this.corner = corner;
 		this.direction = direction;
@@ -78,7 +78,7 @@ public class BusstopAgent extends Agent implements Busstop {
 	}
 
 	@Override
-	public DirectionEnum direction() {
+	public CardinalDirectionEnum direction() {
 		return direction;
 	}
 

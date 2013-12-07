@@ -12,6 +12,7 @@ public class IntersectionAction {
 			boolean turning) {
 		this.destination = destination;
 		this.v = v;
+		this.turning = turning;
 	}
 	
 	//Corner the Vehicle wants to drive to.
@@ -19,5 +20,7 @@ public class IntersectionAction {
 	
 	//Vehicle that wants to do the action.
 	Vehicle v;
+	
+	boolean turning;
 	
 }

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import transportation.BusstopAgent;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
@@ -36,11 +36,11 @@ public class BusstopAgentTest {
 	@Test
 	public void testOneTwoPassengers() {
 		BusstopAgent busstopAgent = new BusstopAgent
-				(corner, DirectionEnum.North, true);
+				(corner, CardinalDirectionEnum.North, true);
 		
 		assertEquals(corner, busstopAgent.corner());
 		assertEquals(0, busstopAgent.getPeopleWaiting().size());
-		assertEquals(DirectionEnum.North, busstopAgent.direction());
+		assertEquals(CardinalDirectionEnum.North, busstopAgent.direction());
 		
 		busstopAgent.msgIAmHere(mockPassenger1);
 		

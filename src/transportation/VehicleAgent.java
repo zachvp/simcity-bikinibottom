@@ -12,7 +12,7 @@ import transportation.gui.VehicleGuiClass;
 import transportation.gui.interfaces.VehicleGui;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Vehicle;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;
 
@@ -53,7 +53,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	protected List<MyCorner> adjCorners = new ArrayList<MyCorner>();
 	
 	//Direction the `Vehicle` is currently moving towards.
-	private DirectionEnum currentDirection = DirectionEnum.West;
+	private CardinalDirectionEnum currentDirection = CardinalDirectionEnum.West;
 	
 	Timer timer = SingletonTimer.getInstance();
 
@@ -83,6 +83,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	
 	public void msgDriveNow() {
 		event = VehicleEventEnum.AuthorizedToCross;
+		/*
 		timer.schedule(new TimerTask() {
 			
 			@Override
@@ -90,7 +91,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 				currentCorner.msgDoneCrossing();
 				stateChanged();
 			}
-		}, 400);
+		}, 400); */
 		
 		stateChanged();
 	}
@@ -150,11 +151,11 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 		for (MyCorner myCorner : adjCorners) {
 			if (myCorner.c == currentPath.get(0)) {
 				boolean currDirIsVertical = 
-						(currentDirection == DirectionEnum.North 
-						|| currentDirection == DirectionEnum.South);
+						(currentDirection == CardinalDirectionEnum.North 
+						|| currentDirection == CardinalDirectionEnum.South);
 				boolean nextDirIsVertical = 
-						(myCorner.d == DirectionEnum.North 
-						|| myCorner.d == DirectionEnum.South);
+						(myCorner.d == CardinalDirectionEnum.North 
+						|| myCorner.d == CardinalDirectionEnum.South);
 				turning = (currDirIsVertical != nextDirIsVertical);
 				currentDirection = myCorner.d;
 				return;
@@ -197,7 +198,7 @@ public abstract class VehicleAgent extends Agent implements Vehicle {
 	/**
 	 * @return the currentDirection
 	 */
-	public DirectionEnum currentDirection() {
+	public CardinalDirectionEnum currentDirection() {
 		return currentDirection;
 	}
 

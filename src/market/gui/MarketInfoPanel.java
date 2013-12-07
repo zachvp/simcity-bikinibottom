@@ -267,18 +267,20 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		}
 		
 		
+		
+		//Make the temp person so things can be tracked easily
 		Person tempcashierPerson = marketRecords.cashier.getPerson();
 		Person tempitemCollectorPerson = marketRecords.ItemCollectors.get(0).getPerson();
 		
-		
+		//Remove The WorkRole from the person
 		tempcashierPerson.removeRole(marketRecords.cashier);
 		tempitemCollectorPerson.removeRole(marketRecords.ItemCollectors.get(0));
 		
-		
+		//Add the new WorkRole to the person 
 		tempcashierPerson.addRole(marketRecords.ItemCollectors.get(0));
 		tempitemCollectorPerson.addRole(marketRecords.cashier);
 		
-		
+		//Setting the Person pointer in the WorkRole
 		marketRecords.ItemCollectors.get(0).setPerson(tempcashierPerson);
 		marketRecords.cashier.setPerson(tempitemCollectorPerson);
 		

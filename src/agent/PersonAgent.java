@@ -303,7 +303,8 @@ public class PersonAgent extends Agent implements Person {
 		
 		synchronized (roles) {
 			for (Role r : roles) {
-				if ((timeToRobABank == (r instanceof RobberRole))
+				if (loc.equals(r.getLocation())
+						&& (timeToRobABank == (r instanceof RobberRole))
 						&& (forWork == (r instanceof WorkRole))
 						&& !(r instanceof PassengerRole)) {
 					

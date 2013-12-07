@@ -31,7 +31,7 @@ public class RobberRole extends Role implements Robber {
 	
 	RobberGui robberGui;
 	
-	enum State {enteredBank, stopped, robbing, leaving, done};
+	enum State {enteredBank, stopped, robbing, leaving, done, waitingForAcoountManager};
 	
 	State state;
 	
@@ -92,6 +92,7 @@ public class RobberRole extends Role implements Robber {
 		}
 		return false;
 	}
+	
 	// Actions
 	private void approachGuard() {
 		robberGui.DoGoToSecurityGuard();
@@ -103,6 +104,7 @@ public class RobberRole extends Role implements Robber {
 		robberGui.DoGoToAccountManager();
 		acquireSemaphore(active);
 		
+		state = State.waitingForAcoountManager;
 		//gotosg, push, gotoam
 		am.msgGiveMeTheMoney(this, 300.0);//TODO determine way to calculate real amount
 	}
@@ -112,7 +114,6 @@ public class RobberRole extends Role implements Robber {
 		acquireSemaphore(active);
 		
 		state = State.done;
-		
 		this.deactivate();
 	}
 	

@@ -24,6 +24,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 
 import market.gui.MarketBuilding;
 import bank.gui.BankBuilding;
@@ -127,13 +130,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setPreferredSize(infoDim);
 		infoPanelSlot.setMaximumSize(infoDim);
 		infoPanelSlot.setMinimumSize(infoDim);
-		//infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
-		tabbedInfoPane.addTab("Log", new LogDisplay()); //TODO Create log panel
-		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
+		tabbedInfoPane.addTab("Log", new LogDisplay());
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
@@ -268,9 +269,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				hospital.setName(buildingName);
 				construct(hospital);
 			}
-			
-			
-			
 			if(type == LocationTypeEnum.None){
 				MockBuilding mock = new MockBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				mock.setName(buildingName);

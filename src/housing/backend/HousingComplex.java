@@ -45,7 +45,7 @@ public class HousingComplex {
 		this.gui = new HousingComplexGui(this);
 		
 		
-		if(Constants.DEBUG) {
+		if(Constants.TEST_POPULATE_HOUSING) {
 			try {
 				addRole("payrecipient");
 				addRole("worker");

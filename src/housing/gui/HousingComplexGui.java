@@ -43,24 +43,11 @@ public class HousingComplexGui extends JPanel {
 		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++){
 			ResidentDwelling dwelling = new ResidentDwelling(i, Condition.GOOD, complex);
 
-			// for testing only
-			if(Constants.DEBUG) {
-				// initialize the dwelling
-				
-				try {
-					dwelling.addRole("resident");
-					dwelling.addRole("worker");
-					dwelling.addRole("payrecipient");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			else {
-				try {
-					dwelling.addRole("resident");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			// add the resident using the factory
+			try {
+				dwelling.addResident();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			
 			HousingGui gui = new HousingGui(i, dwelling);

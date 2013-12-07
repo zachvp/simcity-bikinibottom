@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -55,6 +56,40 @@ public class HousingComplex {
 			this.population.put(null, landlord);
 			this.population.put(null, worker);
 		}
+		else {
+			try {
+				addRole("payrecipient");
+				addRole("worker");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/* --- Test functions --- */
+	public void addRole(String roleType) throws Exception {
+		PersonAgent person = new PersonAgent(roleType);
+		
+		roleType.toLowerCase();
+	
+		switch(roleType) {
+			case "worker" : {
+				worker = new MaintenanceWorkerRole(person, building);
+				person.addRole(worker);
+				worker.activate();
+				break;
+			}
+			case "payrecipient" : {
+				landlord = new PayRecipientRole(person, building);
+				person.addRole(landlord);
+				landlord.activate();
+				break;
+			}
+			default : {
+				throw new Exception("Improper role type passed in parameter.");
+			}
+		}
+		person.startThread();
 	}
 	
 	/* --- Utility functions --- */

@@ -20,16 +20,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.sound.Sound;
 import agent.Role;
 import agent.interfaces.Person;
 
 @SuppressWarnings("serial")
 public class HousingInfoPanel extends JPanel implements ActionListener {
 	
-	Map<Person, Role> people;
+	private Map<Person, Role> people;
 	
-	JButton chargeRent = new JButton("Charge Rent");
-	JButton breakHouse = new JButton("Break House");
+	private JButton chargeRent = new JButton("Charge Rent");
+	private JButton breakHouse = new JButton("Break House");
+	
+	private Sound myLeg = Sound.getInstance();
 	
 	public HousingInfoPanel(CityLocation building, Map<Person, Role> people) {
 		
@@ -53,18 +56,18 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		add(panel);
 	}
 	
-	public void playSound() {
-	    try {
-	    	// ImageIO.read(getClass().getResource("apartment_background.png"));
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream((getClass().getResource("hitsound.wav")));
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } catch(Exception ex) {
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-	}
+//	public void playSound() {
+//	    try {
+//	    	// ImageIO.read(getClass().getResource("apartment_background.png"));
+//	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream((getClass().getResource("hitsound.wav")));
+//	        Clip clip = AudioSystem.getClip();
+//	        clip.open(audioInputStream);
+//	        clip.start();
+//	    } catch(Exception ex) {
+//	        System.out.println("Error with playing sound.");
+//	        ex.printStackTrace();
+//	    }
+//	}
 	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
@@ -77,7 +80,7 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 			}
 		}
 		else if(evt.getSource() == breakHouse) {
-			playSound();
+			myLeg.playSound("hitsound.wav");
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof ResidentRole) {
 					ResidentRole role = (ResidentRole) entry.getValue();

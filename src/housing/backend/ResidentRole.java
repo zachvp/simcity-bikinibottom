@@ -178,6 +178,7 @@ public class ResidentRole extends Role implements Resident {
 		if(!timerSet && person.hasSomethingToDo()){
 			Runnable command = new Runnable() {
 				public void run(){
+					Do("Nothing to do. Deactivating!");
 					gui.setPresent(false);
 					timerSet = false;
 					deactivate();

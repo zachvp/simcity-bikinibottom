@@ -2,7 +2,7 @@ package transportation.interfaces;
 
 import agent.Role;
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 
 /* Role a person takes when he needs to move between 
  * two places in the city.
@@ -35,7 +35,7 @@ public interface Passenger {
 	//Message received from the `PersonGui` when he gets in his car.
 	void msgGotInCar();
 
-	DirectionEnum currentDirection();
+	CardinalDirectionEnum currentDirection();
 
 	void setLocation(CityLocation startLocation);
 

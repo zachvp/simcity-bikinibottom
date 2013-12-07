@@ -1,7 +1,7 @@
 package transportation.test.mock;
 
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Passenger;
 import transportation.interfaces.PassengerRequester;
@@ -46,7 +46,7 @@ public class MockPassenger implements Passenger {
 	}
 
 	@Override
-	public DirectionEnum currentDirection() {
+	public CardinalDirectionEnum currentDirection() {
 		// TODO Auto-generated method stub
 		return null;
 	}

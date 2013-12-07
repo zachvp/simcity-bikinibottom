@@ -2,7 +2,7 @@ package transportation.test.mock;
 
 import java.util.List;
 
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import mock.EventLog;
 import mock.Mock;
 import transportation.CornerAgent.MyCorner;
@@ -36,7 +36,7 @@ public class MockVehicle extends Mock implements Vehicle {
 	}
 
 	@Override
-	public DirectionEnum currentDirection() {
+	public CardinalDirectionEnum currentDirection() {
 		// TODO Auto-generated method stub
 		return null;
 	}

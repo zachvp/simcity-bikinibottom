@@ -175,8 +175,8 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	// Actions
 	public void goToWork() {
-		doGoToDesk();
-		acquireSemaphore(active);
+		doGoToWork();
+//		acquireSemaphore(active);
 		atWork = true;
 	}
 	
@@ -239,7 +239,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	private void goOffWork() {
 		addPaycheckToWallet();
 		doEndWorkDay();
-		acquireSemaphore(active);
+//		acquireSemaphore(active);
 		this.deactivate();
 		atWork = false;
 	}
@@ -253,9 +253,27 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	//ANIMATION
+	private void doGoToWork() {
+		accountManagerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToDesk();
+		acquireSemaphore(active);
+	}
 	
-	private void doEndWorkDay() {
-		accountManagerGui.DoEndWorkDay();
+	private void doEndWorkDay() {//TODO check this
+		accountManagerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoLeaveBank();
+		acquireSemaphore(active);
+		
 	}
 	
 	public void msgAtDestination() {

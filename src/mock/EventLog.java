@@ -33,9 +33,6 @@ public class EventLog {
 		if (Constants.LOG) {
 			events.add(new LoggedEvent(log));
 		}
-		if (Constants.PRINT) {
-			System.out.println(log);
-		}
 	}
 	
 	/**

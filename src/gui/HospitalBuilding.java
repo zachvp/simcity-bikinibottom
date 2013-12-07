@@ -1,11 +1,13 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 import CommonSimpleClasses.XYPos;
 import agent.Role;
@@ -17,14 +19,17 @@ public class HospitalBuilding extends Building{
 	ArrayList<Building> buildings;
 	JPanel panel = new JPanel();
 	PersonCreationPanel personPanel = new PersonCreationPanel();
-	JPanel scenarioPanel = new JPanel();
+	ScenarioPanel scenarioPanel = new ScenarioPanel();
 
 	public HospitalBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		
+		//UIManager.put("TabbedPane.selected", Color.white);
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.setOpaque(false);
 		tabbedPane.addTab("Create a Person", personPanel);
 		tabbedPane.addTab("Scenarios", scenarioPanel);
+		
 		panel.setOpaque(false);
 		panel.setLayout(new BorderLayout());
 		panel.add(tabbedPane, BorderLayout.CENTER);
@@ -52,9 +57,7 @@ public class HospitalBuilding extends Building{
 
 	@Override
 	public JPanel getAnimationPanel() {
-		//TODO change back to
-		//return panel;
-		return personPanel;
+		return panel;
 	}
 
 	@Override

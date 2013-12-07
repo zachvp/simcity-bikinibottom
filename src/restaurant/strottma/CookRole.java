@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import kelp.KelpClass;
 import market.Item;
 import market.gui.MarketBuilding;
 import market.interfaces.DeliveryReceiver;
@@ -36,7 +37,7 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	private boolean offWork = false;
 	
 	private Map<String, Food> foods;
-	private List<Market> markets;
+	private List<List<Item>> failedDeliveries;
 	private List<GrillOrPlate> grills;
 	private List<GrillOrPlate> plateAreas;
 	
@@ -46,6 +47,8 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	private Semaphore multiStepAction = new Semaphore(0, true);
 	
 	private CookGui gui;
+	
+	private Kelp kelp = KelpClass.getKelpInstance();
 	
 	public void setGui(CookGui cookGui) {
 		this.gui = cookGui;
@@ -57,7 +60,7 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 		this.timer = SingletonTimer.getInstance();
 
 		this.foods = new HashMap<String, Food>();
-		this.markets = new ArrayList<Market>();
+		this.failedDeliveries = new ArrayList<List<Item>>();
 		this.grills = new ArrayList<GrillOrPlate>();
 		this.plateAreas = new ArrayList<GrillOrPlate>();
 		
@@ -87,10 +90,6 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	public void activate() {
 		super.activate();
 		offWork = false;
-	}
-	
-	public void addMarket(Market m) {
-		markets.add(m);
 	}
 	
 	// Messages
@@ -134,19 +133,26 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 			}
 		}
 	}
-	
-	@Override
-	// from market delivery guy
-	public void msgNoItem() {
-		// TODO Auto-generated method stub
 		
-	}
-	
 	@Override
 	// from market delivery guy
 	public void msgHereIsYourItems(List<Item> DeliverList) {
-		// TODO Auto-generated method stub
-		
+		for (Item item : DeliverList) {
+			Food f = foods.get(item.name);
+			if (f != null && item.amount > 0) {
+				Do("Received delivery of " + item.amount + " " + item.name);
+				f.quantity += item.amount;
+			}
+		}
+	}
+	
+	@Override
+	// from market cashier
+	public void msgHereIsMissingItems(List<Item> MissingItemList) {
+		if (!MissingItemList.isEmpty()) {
+			failedDeliveries.add(MissingItemList);
+			stateChanged();
+		}
 	}
 	
 	public void msgAtDestination() { // from gui
@@ -169,6 +175,10 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 					restockFood();
 					return true;
 				}
+			}
+			if (!failedDeliveries.isEmpty()) {
+				restockFood();
+				return true;
 			}
 		}
 		
@@ -293,6 +303,15 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	}
 	
 	void restockFood() {
+		List<Item> request;
+		market.interfaces.Cashier cashier;
+		if (!failedDeliveries.isEmpty()) {
+			// Try another time for any failed deliveries.
+			request = failedDeliveries.get(0);
+			failedDeliveries.remove(0);
+			
+			
+		}
 		Map<String, Integer> delivery = new HashMap<String, Integer>();
 		synchronized (foods) {
 			for (Map.Entry<String, Food> entry : foods.entrySet()) {
@@ -427,16 +446,16 @@ public class CookRole extends WorkRole implements Cook, DeliveryReceiver {
 	}
 	
 	private class MyDelivery {
-		Map<String, Integer> items;
+		List<Item> items;
 		List<market.interfaces.Cashier> cashiers;
 		
-		MyDelivery(Map<String, Integer> items) {
-			this.items = new HashMap<String, Integer>(items);
+		MyDelivery(List<Item> items) {
+			this.items = new ArrayList<Item>(items);
 			this.cashiers = new ArrayList<market.interfaces.Cashier>();
 		}
 		
 		MyDelivery() {
-			this.items = new HashMap<String, Integer>();
+			this.items = new ArrayList<Item>();
 			this.cashiers = new ArrayList<market.interfaces.Cashier>();
 		}
 	}

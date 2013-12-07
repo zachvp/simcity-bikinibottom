@@ -1,8 +1,6 @@
 package market;
 
 
-import gui.trace.AlertTag;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -38,6 +38,7 @@ public class ResidentRole extends Role implements Resident {
 	// test data
 	public EventLog log = new EventLog();
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	private boolean START_HUNGRY = false;
 	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
@@ -97,6 +98,7 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
 		super(agent, residence);
+		
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
@@ -105,7 +107,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
-		Do("Payment due =/");
+		Do("Payment due");
 		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
@@ -155,8 +157,8 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		// TODO ERIK FIXED THIS TO USE PERSON HUNGER
-		if(isHungry()) {
+		// TODO START_HUNGRY is for testing only
+		if(isHungry() && START_HUNGRY) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();

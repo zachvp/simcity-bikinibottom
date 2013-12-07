@@ -183,6 +183,21 @@ public interface Constants {
 	};
 	
 	/**
+	 * Set to true to test housing independent from MainFrame
+	 */
+	public boolean TEST_POPULATE_HOUSING = false;
+	
+	/**
+	 * Number of units per housing structure
+	 */
+	public final int HOUSING_UNIT_COUNT = 9;
+	
+	/**
+	 * Spacing between units in a HousingComplex
+	 */
+	public final int HOUSING_UNIT_SPACING = 5;
+	
+	/**
 	 * Conditions for Dwellings
 	 */
 	enum Condition { GOOD, FAIR, POOR, BROKEN, BEING_FIXED }

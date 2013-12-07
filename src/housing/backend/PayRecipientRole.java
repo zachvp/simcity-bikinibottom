@@ -1,7 +1,7 @@
 package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.interfaces.Dwelling;
-import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 
@@ -14,7 +14,6 @@ import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
-import agent.PersonAgent;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -36,11 +35,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	
 	/* --- Constants --- */
 	// TODO when should shift end?
-	private final int SHIFT_START_HOUR = 6;
-	private final int SHIFT_START_MINUTE = 0;
-	private final int SHIFT_END_HOUR = 12;
-	private final int SHIFT_END_MINUTE = 0;
-	
 	
 	// how long role waits before deactivating
 	private final int IMPATIENCE_TIME = 7;
@@ -92,26 +86,38 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		super(payRecipientPerson, residence);
 		
 		// ask everyone for rent
-		Runnable command = new Runnable() {
-			@Override
-			public void run() {
-				synchronized(residents) {
-					for(MyResident mr : residents) {
-						mr.state = PaymentState.PAYMENT_DUE;
-						stateChanged();
-					}
-				}
-			}
-		};
-		
-		// every day at noon
-		int hour = 9;
-		int minute = 0;
-		
-		schedule.scheduleDailyTask(command, hour, minute);
+		// TODO should the final version have a timed charge?
+//		Runnable command = new Runnable() {
+//			@Override
+//			public void run() {
+//				synchronized(residents) {
+//					for(MyResident mr : residents) {
+//						mr.state = PaymentState.PAYMENT_DUE;
+//						stateChanged();
+//					}
+//				}
+//			}
+//		};
+//		
+//		// every day at noon
+//		int hour = 9;
+//		int minute = 0;
+//		
+//		schedule.scheduleDailyTask(command, hour, minute);
 	}
 
 	/* ----- Messages ----- */
+	public void msgChargeRent() {
+		synchronized(residents) {
+			for(MyResident mr : residents) {
+				System.out.println("Charging rent");
+				Do("Charging rent");
+				mr.state = PaymentState.PAYMENT_DUE;
+				stateChanged();
+			}
+		}
+	}
+	
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
 		if(mr == null) { return; }
@@ -224,7 +230,7 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		mr.state = PaymentState.PAYMENT_PENDING;
 		mr.owes += mr.dwelling.getMonthlyPaymentAmount();
 		
-		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount());
+		mr.dwelling.getResident().msgPaymentDue(mr.dwelling.getMonthlyPaymentAmount(), this);
 		Do("Charged resident in unit #" + mr.dwelling.getIDNumber());
 	}
 	
@@ -254,8 +260,14 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 		this.residents = residents;
 	}
 
-
-
+	/* --- From Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
+	
+	/* --- Inherited from WorkRole --- */
+	
 	@Override
 	public boolean isAtWork() {
 		return isActive();

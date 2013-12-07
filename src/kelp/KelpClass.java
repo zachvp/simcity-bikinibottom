@@ -7,7 +7,7 @@ import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 
@@ -257,14 +257,14 @@ public class KelpClass implements Kelp {
 		}
 		*/
 		//Determining in what direction to move;
-		DirectionEnum horizontalDir, verticalDir;
+		CardinalDirectionEnum horizontalDir, verticalDir;
 		
 		if (endCorner.position().x > startCorner.position().x) {
-			horizontalDir = DirectionEnum.East;
-		} else horizontalDir = DirectionEnum.West;
+			horizontalDir = CardinalDirectionEnum.East;
+		} else horizontalDir = CardinalDirectionEnum.West;
 		if (endCorner.position().y > startCorner.position().y) {
-			verticalDir = DirectionEnum.South;
-		} else verticalDir = DirectionEnum.North;
+			verticalDir = CardinalDirectionEnum.South;
+		} else verticalDir = CardinalDirectionEnum.North;
 		
 		//Building path
 		List<CityLocation> path = new ArrayList<CityLocation>();

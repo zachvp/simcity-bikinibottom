@@ -85,7 +85,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		//display labels
 		JPanel textWest = new JPanel();
-		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.17), cardDim.height);
+		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.20), cardDim.height);
 		textWest.setPreferredSize(textWDim);
 		textWest.setMaximumSize(textWDim);
 		textWest.setMinimumSize(textWDim);
@@ -137,7 +137,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		//Person controls
 		controls = new JPanel();
-		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.58), cardDim.height);
+		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.55), cardDim.height);
 		controls.setPreferredSize(controlDim);
 		controls.setVisible(false);
 		

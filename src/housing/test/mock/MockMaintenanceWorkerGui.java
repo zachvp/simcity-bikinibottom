@@ -1,7 +1,7 @@
 package housing.test.mock;
 
 import mock.EventLog;
-import housing.gui.HousingComplex;
+import housing.backend.HousingComplex;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
 

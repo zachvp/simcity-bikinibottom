@@ -98,8 +98,8 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 		// draw the worker image
 		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
 	    	
-		g.setColor(Color.WHITE);
-		g.fillRect(xPos, yPos, 20, 20);
+//		g.setColor(Color.WHITE);
+//		g.fillRect(xPos, yPos, 20, 20);
 		
 //		g.drawString(eatingFood, xPos+5, yPos+15);
 		if(showTool == true){
@@ -148,6 +148,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	@Override
 	public void DoFixProblem() {
 		waiting = false;
+		showTool = true;		
 		xDestination = 60;
 		yDestination = 50;
 		canRelease = false;
@@ -155,6 +156,9 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
 	@Override
 	public void DoReturnHome(int unit) {
+		showTool = false;
+		
+		
 		this.complex.removeGuiFromDwelling(this, unit);
 //		this.complex.addGuiToDwelling(this, this.unit);
 	}

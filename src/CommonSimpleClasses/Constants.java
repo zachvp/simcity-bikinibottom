@@ -50,7 +50,7 @@ public interface Constants {
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = false;
+	public static final boolean PRINT = true;
 	
     /**
      * The number of milliseconds in a second
@@ -195,7 +195,7 @@ public interface Constants {
 	/**
 	 * Spacing between units in a HousingComplex
 	 */
-	public final int HOUSING_UNIT_SPACING = 0;
+	public final int HOUSING_UNIT_SPACING = 5;
 	
 	/**
 	 * Conditions for Dwellings

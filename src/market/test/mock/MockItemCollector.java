@@ -113,5 +113,11 @@ public class MockItemCollector extends Mock implements ItemCollector {
 		// TODO Auto-generated method stub
 		return new PersonAgent("name");
 	}
+
+	@Override
+	public void setPerson(Person person) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

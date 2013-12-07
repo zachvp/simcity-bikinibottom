@@ -23,6 +23,7 @@ public interface ItemCollector {
 		public abstract void setGui(ItemCollectorGuiInterfaces itemCollectorGui);
 		public abstract void setInventoryList(Map<String, Integer> inventoryList);
 		public abstract void setState(ItemCollectorstate s);
+		public abstract void setPerson(Person person);
 
 
 	//Animations
@@ -31,6 +32,8 @@ public interface ItemCollector {
 		public abstract void AtExit();
 
 		public abstract Person getPerson();
+
+		
 
 		
 

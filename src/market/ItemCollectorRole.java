@@ -30,7 +30,7 @@ import agent.interfaces.Person;
  *
  */
 public class ItemCollectorRole extends WorkRole implements ItemCollector{
-
+ 
 	private ItemCollectorGuiInterfaces itemcollectorGui = null;
 	private String name;
 	private Cashier cashier;

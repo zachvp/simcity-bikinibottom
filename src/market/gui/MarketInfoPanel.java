@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.Constants;
 import market.Item;
 
@@ -264,6 +265,13 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 
 			MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
+		
+		Person tempPerson = marketRecords.ItemCollectors.get(0).getPerson();
+		marketRecords.ItemCollectors.get(0).setPerson(marketRecords.cashier.getPerson());
+		marketRecords.cashier.setPerson(tempPerson);
+		
+		
+		
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){

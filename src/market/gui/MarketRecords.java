@@ -35,8 +35,8 @@ public class MarketRecords {
 	CashierGui cashierGui;
 
 	//List of ItemCollectors and DeliveryGuys
-    private List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
-    private List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
+    List<ItemCollector> ItemCollectors = new Vector<ItemCollector>();
+    List<DeliveryGuy> DeliveryGuys = new Vector<DeliveryGuy>();
     
     //private PersonAgent ItemCollectorPerson = new PersonAgent("ItemCollector1");
     //private PersonAgent ItemCollectorPerson1 = new PersonAgent("ItemCollector2");
@@ -188,6 +188,11 @@ public class MarketRecords {
     	cashier.getDGList().add(deliveryGuy2);
     	cashier.getDGList().add(deliveryGuy3);
     	
+    	//Put ItemCollectors and DeliveryGuys roles into the respective lists
+    	ItemCollectors.add(itemCollector1);
+    	DeliveryGuys.add(deliveryGuy1);
+    	DeliveryGuys.add(deliveryGuy2);
+    	DeliveryGuys.add(deliveryGuy3);
     }
 
 	public LocationTypeEnum getType() {
@@ -306,6 +311,7 @@ public Map<String,Double> getPriceList() {
 public void setPriceList(Map<String,Double> priceList) {
 	PriceList = priceList;
 }
+
 
 
 

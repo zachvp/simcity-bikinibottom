@@ -9,6 +9,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
 import bank.gui.LoanManagerGui;
+import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
 
@@ -21,6 +22,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
+	AccountManager accountManager;
 	
 	double paycheckAmount = 300;
 	
@@ -107,7 +109,9 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		doGoToDesk();
 		acquireSemaphore(active);
 		lt.bc.msgLoanApproved(lt.loanAmount);
+		accountManager.msgUpdateMoney(lt.loanAmount);
 		loanTasks.remove(lt);
+
 	}
 	private void goOffWork() {
 		addPaycheckToWallet();
@@ -124,6 +128,10 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	 */
 	private void addPaycheckToWallet() {
 		this.getPerson().getWallet().addCash(paycheckAmount);
+	}
+	
+	public void setAccountManager(AccountManager a){
+		accountManager = a;
 	}
 	
 	//ANIMATION #####################

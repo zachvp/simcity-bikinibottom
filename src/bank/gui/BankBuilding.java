@@ -132,6 +132,7 @@ public class BankBuilding extends Building {
 		getSecurity().setGui(sgGui);
 		account.setGui(accountGui);
 		loan.setGui(loanGui);
+		loan.setAccountManager(account);
 		tell1.setGui(tGui1);
 		tell2.setGui(tGui2);
 		tell3.setGui(tGui3);

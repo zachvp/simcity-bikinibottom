@@ -42,6 +42,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	private AccountManagerGui accountManagerGui;
 	
 	private boolean atWork;
+	private boolean needToUpdateBankMoney;
 	
 	double moneyInBank = 100000;
 	double paycheckAmount = 300;
@@ -87,6 +88,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	List<MyRobber> robbers = new ArrayList<MyRobber>();
 	
+	List<Double> loanAmounts = new ArrayList<Double>();
 	int startHour;
 	int startMinute;
 	int endHour ;
@@ -96,6 +98,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	public AccountManagerRole(Person person, CityLocation bank) {
 		super(person, bank);
 		atWork = false;
+		needToUpdateBankMoney = false;
 		
 		
 		startHour = ((BankBuilding) bank).getOpeningHour();
@@ -132,6 +135,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	public void msgGiveMeTheMoney(Robber r, double amount) {
 		robbers .add(new MyRobber(r, amount, robberState.asking));
+		stateChanged();
+	}
+	
+	public void msgUpdateMoney(double amount) {//sent from loan manager
+		loanAmounts.add(amount);
 		stateChanged();
 	}
 	
@@ -173,10 +181,16 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 			}
 		}
 		
+		if(!loanAmounts.isEmpty()) {
+			updateBankMoney(loanAmounts.get(0));
+			return true;
+		}
+		
 		if(endWorkShift) {
 			goOffWork();
 			return true;
 		}
+		
 		
 		return false;
 	}
@@ -261,6 +275,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		acquireSemaphore(active);
 		this.deactivate();
 		atWork = false;
+	}
+	
+	private void updateBankMoney(double amount) {
+		moneyInBank -= amount;
+		loanAmounts.remove(0);
 	}
 	
 	/*

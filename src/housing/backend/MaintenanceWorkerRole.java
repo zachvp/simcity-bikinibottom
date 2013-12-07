@@ -1,6 +1,6 @@
 package housing.backend;
 
-import housing.gui.HousingComplex;
+import gui.trace.AlertTag;
 import housing.gui.MaintenanceWorkerRoleGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -30,27 +30,19 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	// prevents the role from being deactivated prematurely
-	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
-	TaskState task = TaskState.FIRST_TASK;
-	
 	// graphics
 	MaintenanceWorkerGui gui;
 	
 	
 	/* --- Constants --- */
-	private final int SHIFT_START_HOUR = 6;
-	private final int SHIFT_START_MINUTE = 0;
-	private final int SHIFT_END_HOUR = 12;
-	private final int SHIFT_END_MINUTE = 0;
 	
 	// time it takes before deactivating
-	private final int IMPATIENCE_TIME = 7;
+	private final int FIX_TIME = 15;
 	
 	// price for fixing a dwelling
 	private final double SERVICE_CHARGE = 16;
 	
-	enum WorkOrderState {FILED, FIXED}
+	enum WorkOrderState {FILED, FIXED, FIXING}
 	private class WorkOrder {
 		Dwelling dwelling;
 		WorkOrderState state;
@@ -73,11 +65,11 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	/* --- Messages --- */
 	public void msgFileWorkOrder(Dwelling dwelling) {
 		if(dwelling == null) {
-			log.add("Can't fulfill work order. Dwelling does not exits.");
+			Do("Can't fulfill work order. Dwelling does not exits.");
 		}
 		
 		// add a new work order
-		log.add("Adding Work Order");
+		Do("Adding Work Order");
 		workOrders.add(new WorkOrder(dwelling));
 		stateChanged();
 	}
@@ -103,29 +95,15 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 			}
 		}
 		
-		
-		// check for idleness
-		if(task == TaskState.NONE){
-			Runnable command = new Runnable() {
-				public void run(){
-					Do("Deactivating role");
-					task = TaskState.FIRST_TASK;
-					deactivate();
-				}
-			};
-			// schedule a delay for food consumption
-			listener.taskFinished(schedule);
-			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
-		}
-		
 		return false;
 	}
 	
 	private void fixProblem(WorkOrder wo) {
 //		TODO animation details
-		task = TaskState.DOING_TASK;
-		log.add("Fixing problem.");
+		wo.state = WorkOrderState.FIXING;
+		
 		DoGoToDwelling(wo.dwelling.getIDNumber());
+		
 		waitForInput();
 		
 		DoFixProblem();
@@ -141,11 +119,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		
 		workOrders.remove(wo);
 		
-		log.add("Fixed problem.");
+		Do("Fixed problem.");
 		
 		DoReturnHome(wo.dwelling.getIDNumber());
 		waitForInput();
-		task = TaskState.NONE;
 	}
 	
 	/* -- Animation Routines --- */
@@ -157,15 +134,16 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	private void DoFixProblem(){
 		Do("Fixing problem.");
 		gui.DoFixProblem();
+		
 		Runnable command = new Runnable() {
 			public void run(){
 				Do("Done fixing problems.");
 				doneWaitingForInput();
 			}
 		};
-		// schedule a delay for food consumption
+		// schedule a delay for fixing the problem
 		listener.taskFinished(schedule);
-		schedule.scheduleTaskWithDelay(command, 4 * Constants.MINUTE);
+		schedule.scheduleTaskWithDelay(command, FIX_TIME * Constants.MINUTE);
 	}
 	
 	private void DoReturnHome(int unit){
@@ -173,7 +151,14 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 		gui.DoReturnHome(unit);
 		deactivate();
 	}
+	
+	/* --- From Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
+	}
 
+	/* --- Overridden from WorkRole --- */
 	@Override
 	public boolean isAtWork() {
 		return isActive();

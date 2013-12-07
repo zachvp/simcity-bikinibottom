@@ -25,7 +25,14 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import bank.gui.BankBuilding;
+
+import kelp.Kelp;
+import kelp.KelpClass;
+
 import market.gui.MarketBuilding;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.TimeManager;
@@ -50,10 +57,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 	TimeManager timeManager = TimeManager.getInstance();
 	private Timer timer;
 	
+	GridLayout controlLayout;
 	JLabel name, currLoc, job, residence, money, hunger, 
 		   nameL, currLocL, jobL, residenceL, moneyL, hungerL;
 	JPanel controls;
 	JButton robberButton;
+	JButton makeHungryButton;
 	PersonAgent currentPerson;
 	
 	public InfoPanel(int w, int h){
@@ -78,7 +87,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		//display labels
 		JPanel textWest = new JPanel();
-		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.17), cardDim.height);
+		Dimension textWDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.20), cardDim.height);
 		textWest.setPreferredSize(textWDim);
 		textWest.setMaximumSize(textWDim);
 		textWest.setMinimumSize(textWDim);
@@ -128,9 +137,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textEast.add(money);
 		textEast.add(hunger);
 		
+		
 		//Person controls
+		controlLayout = new GridLayout(0,1);
 		controls = new JPanel();
-		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.58), cardDim.height);
+		controls.setLayout(controlLayout);
+		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.55), cardDim.height);
 		controls.setPreferredSize(controlDim);
 		controls.setVisible(false);
 		
@@ -139,6 +151,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 		robberButton.addActionListener(this);
 		
 		controls.add(robberButton);
+		
+		//MakeHungryButton
+		makeHungryButton = new JButton("Make Hungry");
+		makeHungryButton.addActionListener(this);
+		
+		controls.add(makeHungryButton);
 		
 		personText.add(textWest, BorderLayout.WEST);
 		personText.add(textEast, BorderLayout.CENTER);
@@ -243,7 +261,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == robberButton){
-			//TODO make currentPerson a robber
+			for (CityLocation loc : KelpClass.getKelpInstance().placesNearMe(currentPerson.getPassengerRole().getLocation(), LocationTypeEnum.Bank)){
+				if(loc instanceof BankBuilding && ((BankBuilding) loc).isOpen()){
+					currentPerson.setTimeToRobABank();
+					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
+				}
+			}
+		}
+		if (e.getSource() == makeHungryButton) {
+			currentPerson.setHungerToStarving();
 		}
 	}
 	

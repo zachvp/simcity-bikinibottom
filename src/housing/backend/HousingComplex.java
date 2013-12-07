@@ -1,9 +1,8 @@
-package housing.gui;
+package housing.backend;
 
-import housing.backend.MaintenanceWorkerRole;
-import housing.backend.PayRecipientRole;
-import housing.backend.ResidentRole;
-import housing.backend.ResidentialBuilding;
+import housing.gui.HousingComplexGui;
+import housing.gui.MaintenanceWorkerRoleGui;
+import housing.interfaces.Dwelling;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +11,7 @@ import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import agent.PersonAgent;
 import agent.Role;
 import agent.interfaces.Person;
 
@@ -30,7 +30,7 @@ public class HousingComplex {
 	HousingComplexGui gui;
 	
 	// the "boss" or greeter for this building and the on-call Mr. Fix-it
-	private PayRecipientRole landlord;
+	private PayRecipientRole payRecipient;
 	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
@@ -42,21 +42,66 @@ public class HousingComplex {
 		this.building = building;
 		
 		// instantiate the gui class for the complex
-		this.gui = new HousingComplexGui(this);
 		
-		if(!Constants.DEBUG) {
+		
+		if(Constants.TEST_POPULATE_HOUSING) {
+			try {
+				addRole("payrecipient");
+				addRole("worker");
+				this.gui = new HousingComplexGui(this);
+				
+				for(Dwelling d : gui.getDwellings()) {
+					payRecipient.addResident(d);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
 			// worker for this building
 			this.worker = new MaintenanceWorkerRole(null, building);
 			
 			// manager for this building 
-			this.landlord = new PayRecipientRole(null, building);
+			this.payRecipient = new PayRecipientRole(null, building);
 			
+			// make sure the worker knows the building he's working in
 			this.worker.setComplex(this);
 			
 			// put the constant roles in the building map
-			this.population.put(null, landlord);
+			this.population.put(null, payRecipient);
 			this.population.put(null, worker);
+			
+			this.gui = new HousingComplexGui(this);
 		}
+	}
+	
+	/* --- Test functions --- */
+	public void addRole(String roleType) throws Exception {
+		PersonAgent person = new PersonAgent(roleType);
+		
+		roleType.toLowerCase();
+	
+		switch(roleType) {
+			case "worker" : {
+				this.worker = new MaintenanceWorkerRole(person, building);
+				this.worker.setComplex(this);
+				this.population.put(person, worker);
+				person.addRole(worker);
+				worker.activate();
+				break;
+			}
+			case "payrecipient" : {
+				payRecipient = new PayRecipientRole(person, building);
+				this.population.put(person, payRecipient);
+				person.addRole(payRecipient);
+				payRecipient.activate();
+				break;
+			}
+			default : {
+				throw new Exception("Improper role type passed in parameter.");
+			}
+		}
+		person.startThread();
 	}
 	
 	/* --- Utility functions --- */
@@ -79,7 +124,7 @@ public class HousingComplex {
 	}
 
 	public PayRecipientRole getPayRecipient() {
-		return landlord;
+		return payRecipient;
 	}
 	
 	public JPanel getGui() {

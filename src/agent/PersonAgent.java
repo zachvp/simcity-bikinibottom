@@ -3,6 +3,7 @@ package agent;
 import gui.Building;
 import gui.HospitalBuilding;
 import housing.backend.ResidentRole;
+import housing.backend.ResidentialBuilding;
 import gui.trace.AlertTag;
 
 import java.util.Collections;
@@ -11,6 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import bank.RobberRole;
+import bank.gui.BankBuilding;
 
 import kelp.Kelp;
 import kelp.KelpClass;
@@ -66,6 +70,8 @@ public class PersonAgent extends Agent implements Person {
 	private Car car;
 	private boolean clearFoodAtHome = false;
 	
+	private boolean timeToRobABank = false;
+	
 	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
 		super();
 		updateHungerLevel();
@@ -105,7 +111,8 @@ public class PersonAgent extends Agent implements Person {
 	public void msgArrivedAtDestination() {
 		event = PersonEvent.ARRIVED_AT_LOCATION;
 		stateChanged();
-		print(AlertTag.PASSENGER, this.getName(), "we're here captain");
+		print(AlertTag.PASSENGER, this.getName(),
+				"Arrived at " + getPassengerRole().getLocation());
 	}
 	
 	/* -------- Scheduler -------- */
@@ -143,6 +150,7 @@ public class PersonAgent extends Agent implements Person {
 		// if at least one role's scheduler returned true, return true
 		if (roleExecuted) { return true; }
 		if (roleActive) { return false; }
+
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
@@ -154,6 +162,13 @@ public class PersonAgent extends Agent implements Person {
 		
 
 		// If you didn't just arrive somewhere, decide what to do next.
+		if (timeToRobABank) {
+			CityLocation bank = chooseBank();
+			if(bank!= null) {
+				goToBank(bank);
+				return true;
+			}
+		}
 		if (workStartsSoon()) {
 			goToWork();
 			return true;
@@ -260,6 +275,25 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
+	 * Returns true if the person scheduler has a task awaiting it.
+	 */
+	public boolean hasSomethingToDo() {
+		return workStartsSoon() || isHungry()  || needToGoToBank()
+				|| timeToRobABank;
+	}
+	
+	/**
+	 * Removes given role from PersonAgent's list.
+	 * Primarily used for removing robber, because
+	 * it is created for a one-time robbery by InfoPanel
+	 */
+	@Override
+	public void removeRole(Role r) {
+		roles.remove(r);
+		stateChanged();
+	}
+	
+	/**
 	 * Activates the current location's Role. Won't activate a WorkRole
 	 * unless forWork is true; won't activate a PassengerRole ever.
 	 * 
@@ -271,21 +305,25 @@ public class PersonAgent extends Agent implements Person {
 		synchronized (roles) {
 			for (Role r : roles) {
 				if (loc.equals(r.getLocation())
+						&& (timeToRobABank == (r instanceof RobberRole))
 						&& (forWork == (r instanceof WorkRole))
 						&& !(r instanceof PassengerRole)) {
-
+					
+					timeToRobABank = false;
 					r.activate();
 					return;
 				}
 			}
 		}
+		
 		if (forWork) {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
 		}
 		
 		// There is no role for this location! Get a new one.
-		if (loc instanceof Building && !(loc instanceof HospitalBuilding)) {
+		if (loc instanceof Building && !(loc instanceof HospitalBuilding) && 
+				!(loc instanceof ResidentialBuilding)) {
 			Building building = (Building) loc;
 			Role role = building.getCustomerRole(this);
 			role.activate();
@@ -327,18 +365,22 @@ public class PersonAgent extends Agent implements Person {
 	private void doUpdateHungerLevel() {
 		if(this.hungerLevel == HungerLevel.FULL) {
 			this.hungerLevel = HungerLevel.SATISFIED;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.SATISFIED) {
 			this.hungerLevel = HungerLevel.NEUTRAL;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.NEUTRAL) {
 			this.hungerLevel = HungerLevel.HUNGRY;
+			stateChanged();
 			return;
 		}
 		else if(this.hungerLevel == HungerLevel.HUNGRY) {
 			this.hungerLevel = HungerLevel.STARVING;
+			stateChanged();
 			return;
 		}
 		
@@ -392,6 +434,7 @@ public class PersonAgent extends Agent implements Person {
 			this.lastTimeEatingOut = timeManager.currentSimTime();
 		}
 		this.hungerLevel = newHungerLevel;
+		stateChanged();
 	}
 	
 	/**
@@ -417,6 +460,7 @@ public class PersonAgent extends Agent implements Person {
 		setHungerLevel(HungerLevel.FULL, eatingOut);
 	}
 	
+	
 	/**
 	 * Sets the hunger level to full, without modifying lastTimeEatingOut.
 	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
@@ -426,6 +470,14 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setHungerToFull() {
 		setHungerToFull(false);
+	}
+	
+	/**
+	 * Used by infopanel's button to set person to being
+	 * very hungry
+	 */
+	public void setHungerToStarving() {
+		setHungerLevel(HungerLevel.STARVING);
 	}
 	
 	// ---- Work starting soon
@@ -592,6 +644,7 @@ public class PersonAgent extends Agent implements Person {
 		return hungerLevel == HungerLevel.STARVING;
 	}
 	
+	@Override
 	public boolean isHungry() {
 		return hungerLevel == HungerLevel.STARVING ||
 				hungerLevel == HungerLevel.HUNGRY; 
@@ -641,6 +694,11 @@ public class PersonAgent extends Agent implements Person {
 		}
 		// No foods in inventory
 		return false;
+	}
+	
+	public void setTimeToRobABank(){
+		timeToRobABank = true;
+		stateChanged();
 	}
 	
 	public boolean needToGoToBank() {

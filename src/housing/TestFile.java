@@ -1,25 +1,28 @@
-package housing.gui;
+package housing;
 
 import housing.backend.ResidentialBuilding;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
+import CommonSimpleClasses.Constants;
 
 @SuppressWarnings("serial")
 public class TestFile extends JFrame {
 	
 	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
-	HousingInfoPanel panel = new HousingInfoPanel(building.getPopulation());
 	
 	public TestFile() {
-		this.setLayout(new GridLayout(2, 1));
+		this.setLayout(new GridLayout(1, 2));
 		
 		this.add(building.getAnimationPanel());
-		this.add(panel);
+		this.add(building.getInfoPanel());
 		
-		this.setBounds(50, 50, 600, 600);
+		this.setPreferredSize(new Dimension(Constants.ANIMATION_PANEL_WIDTH * 2,
+				Constants.ANIMATION_PANEL_HEIGHT));
+		this.pack();
 	}
 	
 	// TODO this is simply a test main() method

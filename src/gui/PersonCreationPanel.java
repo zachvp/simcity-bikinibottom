@@ -45,6 +45,8 @@ import classifieds.ClassifiedsClass;
 public class PersonCreationPanel extends JPanel implements ActionListener,
 ClassifiedsChangedListener{
 	
+	int nameIndex=0;
+	
 	class MyComboBoxItem {
 		public Object object;
 		private String blankString;
@@ -163,7 +165,11 @@ ClassifiedsChangedListener{
 		});
 		
 		// default values for person creation
-		nameTextF.setText("mr balloon hands");
+		if(nameIndex> Constants.NAMES.size()){
+			nameIndex = 0;
+		}
+		nameTextF.setText(Constants.NAMES.get(nameIndex));
+		nameIndex++;
 		buildingsCB.setSelectedIndex(0);
 		occupationsCB.setSelectedIndex(0);
 		residencesCB.setSelectedIndex(0);
@@ -297,7 +303,13 @@ ClassifiedsChangedListener{
 					msg.setText(name + " was created.");
 
 					// default values for person creation
-					nameTextF.setText("mr balloon hands");
+					if(nameIndex>= Constants.NAMES.size()){
+						nameIndex = 0;
+					}
+					nameTextF.setText(Constants.NAMES.get(nameIndex));
+					nameIndex++;
+
+					
 					occupationsCB.setSelectedIndex(0);
 					residencesCB.setSelectedIndex(0);
 					wealthCB.setSelectedIndex(0);

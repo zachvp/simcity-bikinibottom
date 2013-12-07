@@ -5,7 +5,6 @@ import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
-import housing.gui.HousingComplex;
 import housing.gui.LayoutGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
@@ -23,8 +22,6 @@ public class ResidentDwelling implements Dwelling {
 	/* --- Data --- */
 	public EventLog log = new EventLog();
 	
-	// building the dwelling belongs to
-//	private ResidentialBuilding building;
 	private HousingComplex complex;
 	
 	/* --- Housing slots --- */
@@ -78,39 +75,17 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
-	public void addRole(String roleType) throws Exception {
-		if(Constants.DEBUG){
-			PersonAgent person = new PersonAgent("roleType");
+	public void addResident() throws Exception {
+		if(Constants.TEST_POPULATE_HOUSING){
+			PersonAgent person = new PersonAgent("Resident");
 			
-			roleType.toLowerCase();
+			resident = new ResidentRole(person, complex.getBuilding(), this, gui);
+			person.addRole(resident);
+			resident.activate();
+			this.complex.addResident(resident);
 			
-			switch(roleType) {
-				case "resident" : { 
-					resident = new ResidentRole(person, complex.getBuilding(), this, gui);
-					person.addRole(resident);
-					resident.activate();
-					this.complex.addResident(resident);
-					break;
-				}
-				case "worker" : {
-					worker = new MaintenanceWorkerRole(person, complex.getBuilding());
-					person.addRole(worker);
-					worker.activate();
-					break;
-				}
-				case "payrecipient" : {
-					payRecipient = new PayRecipientRole(person, complex.getBuilding());
-					person.addRole(payRecipient);
-					payRecipient.activate();
-					break;
-				}
-				default : {
-					throw new Exception("Improper role type passed in parameter.");
-				}
-			}
 			person.startThread();
-		}
-		else {
+		} else {
 			this.payRecipient = complex.getPayRecipient();
 			this.worker = complex.getWorker();
 			this.resident = new ResidentRole(null, complex.getBuilding(), this, gui);
@@ -174,7 +149,7 @@ public class ResidentDwelling implements Dwelling {
 		return worker;
 	}
 	
-	public void degradeHousing() {
+	public void degradeCondition() {
 		// TODO test 
 		condition = Constants.Condition.POOR;
 		resident.msgDwellingDegraded();

@@ -1,5 +1,6 @@
 package housing.backend;
 
+import gui.trace.AlertTag;
 import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
@@ -18,6 +19,7 @@ import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
+import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.gui.Gui;
 
@@ -36,34 +38,26 @@ public class ResidentRole extends Role implements Resident {
 	// test data
 	public EventLog log = new EventLog();
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	private boolean START_HUNGRY = false;
 	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
-	
-	/** 
-	 * State for tasks. The Role will deactivate if it is not performing any tasks.
-	 * used to determine when the role should terminate and transition to a city role
-	*/
-//	enum TaskState { FIRST_TASK, NONE, DOING_TASK, READY_TO_LEAVE }
-//	TaskState task = TaskState.FIRST_TASK;
 	
 	// checks to see if a timer is currently scheduled
 	private boolean timerSet = false;
 	
 	// graphics
 	private ResidentGui gui;
-	
-	// TODO: this will be set true by the person
-	private boolean hungry = true;
-	
+		
 	// rent data
 	private double oweMoney = 0;
-	private PayRecipient payee;
+	private PayRecipient payRecipient;
 	private Dwelling dwelling;
 	
 	// food data
 	// Constructor: String type, int amount, int low, int capacity, int cookTime
-	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>(){
+	@SuppressWarnings("serial")
+	private Map<String, Food> refrigerator = Collections.synchronizedMap(new HashMap<String, Food>() {
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 0, 4, 10));
 		}
@@ -78,7 +72,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 3; 
-	private final int IMPATIENCE_TIME = 7;
+	private final int IMPATIENCE_TIME = 20;
 	
 	/* ----- Class Data ----- */
 	/**
@@ -104,6 +98,7 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
 		super(agent, residence);
+		
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
@@ -111,7 +106,9 @@ public class ResidentRole extends Role implements Resident {
 	
 	/* ----- Messages ----- */
 	@Override
-	public void msgPaymentDue(double amount) {
+	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
+		Do("Payment due");
+		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
 		DoShowSpeech("I owe rent!");
@@ -139,7 +136,6 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		
 		if(!timerSet){
 			gui.setPresent(true);
 		}
@@ -160,12 +156,12 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		//TODO: The conditions for the below event need to be modified
-		if(hungry) {
+		// TODO START_HUNGRY is for testing only
+		if(isHungry()) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
 					Food f = entry.getValue();
-					if(f.amount > 0){
+					if(f.amount > 0 && food == null){
 						cookFood(f);
 						return true;
 					}
@@ -179,9 +175,10 @@ public class ResidentRole extends Role implements Resident {
 		
 		// set a delay. If the timer expires, then the resident has taken care of business
 		// at home and is free to roam the streets
-		if(!timerSet){
+		if(!timerSet && person.hasSomethingToDo()){
 			Runnable command = new Runnable() {
 				public void run(){
+					Do("Nothing to do. Deactivating!");
 					gui.setPresent(false);
 					timerSet = false;
 					deactivate();
@@ -208,13 +205,13 @@ public class ResidentRole extends Role implements Resident {
 		double cash = person.getWallet().getCashOnHand();
 		
 		if(cash >= oweMoney) {
-			payee.msgHereIsPayment(oweMoney, this);
+			payRecipient.msgHereIsPayment(oweMoney, this);
 			cash -= oweMoney;
 			person.getWallet().setCashOnHand(cash);
 			oweMoney = 0;
 		}
 		else if(cash > 0) {
-			payee.msgHereIsPayment(cash, this);
+			payRecipient.msgHereIsPayment(cash, this);
 			oweMoney -= cash;
 			cash = 0;
 			person.getWallet().setCashOnHand(cash);
@@ -230,7 +227,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	private void eatFood() {
-		hungry = false;
+		setHungry(false);
 		Do("Eating food " + food.type);
 		DoShowSpeech("Eating food.");
 		
@@ -313,9 +310,16 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
 		DoShowSpeech("Calling maintenance worker!");
+		
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();
+	}
+	
+	/* --- Overriden from Role --- */
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.HOUSING, msg);
 	}
 	
 	/* --- Animation Routines --- */
@@ -376,11 +380,11 @@ public class ResidentRole extends Role implements Resident {
 	}
 	
 	public PayRecipient getPayee() {
-		return payee;
+		return payRecipient;
 	}
 
 	public void setPayee(PayRecipient payee) {
-		this.payee = payee;
+		this.payRecipient = payee;
 	}
 
 	public double getMoneyOwed() {
@@ -396,11 +400,15 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	public boolean isHungry() {
-		return hungry;
+		return person.isHungry();
 	}
 
 	public void setHungry(boolean hungry) {
-		this.hungry = hungry;
+		if (hungry) {
+			person.setHungerLevel(HungerLevel.HUNGRY);
+		} else {
+			person.setHungerLevel(HungerLevel.FULL);
+		}
 	}
 
 	public Food getFood() {

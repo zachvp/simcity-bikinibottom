@@ -11,6 +11,10 @@ import agent.PersonAgent.HungerLevel;
 import agent.Role;
 import agent.WorkRole;
 
+/**
+ * A Person. Probably a human being, but let's not get speciesist.
+ * @author Erik Strottmann
+ */
 public interface Person {
 	/* -------- Messages -------- */
 	
@@ -26,18 +30,18 @@ public interface Person {
 	public void addRole(Role r);
 	
 	/**
+	 * Removes the given Role from the Person's list. 
+	 */
+	public void removeRole(Role r);
+	
+	/**
 	 * @see Wallet
 	 */
+	public boolean hasSomethingToDo();
+	
 	public Wallet getWallet();
 	
-	/**
-	 * @see Car
-	 */
 	public Car getCar();
-	
-	/**
-	 * @see Car
-	 */
 	public void setCar(Car car);
 	
 	

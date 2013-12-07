@@ -277,6 +277,10 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		public void setBuilding(CommonSimpleClasses.CityLocation building) {
 			Building = building;
 		}
+		
+		public Person getPerson(){
+			return person;
+		}
 	}
 
 }

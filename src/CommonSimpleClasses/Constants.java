@@ -130,6 +130,13 @@ public interface Constants {
 	public static final int MarketInitialMoney = 100;
 	
 	/**
+	 * The payroll of each WorkRole in the Market
+	 */
+	public static final double MarketCashierPayRoll = 120;
+	public static final double MarketItemCollectorPayRoll = 100;
+	public static final double MarketDeliveryGuyPayRoll = 70;
+	
+	/**
 	 * The initial amount of Inventory levels of all the items
 	 */
 	public static final int LamboFinnyInitialAmount  = 100;

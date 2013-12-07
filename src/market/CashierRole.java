@@ -498,6 +498,12 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	 */
 	private void OffWork(){
 		DomsgAllWorkersToOffWork();
+		
+		double employeeCash = person.getWallet().getCashOnHand();
+		employeeCash += Constants.MarketCashierPayRoll;
+		person.getWallet().setCashOnHand(employeeCash);
+		
+		
 		cashierGui.OffWork();
 		try {
 			atExit.acquire();
@@ -517,12 +523,18 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		synchronized(getICList()){
 			for (int i=0; i<ICList.size();i++){
 				ICList.get(i).msgLeaveWork();
+				double employeeCash = ICList.get(i).getPerson().getWallet().getCashOnHand();
+				employeeCash += Constants.MarketItemCollectorPayRoll;
+				ICList.get(i).getPerson().getWallet().setCashOnHand(employeeCash);
 			}
 		}
 		
 		synchronized(getDGList()){
 			for (int i=0; i<DGList.size();i++){
 				DGList.get(i).msgLeaveWork();
+				double employeeCash = DGList.get(i).getPerson().getWallet().getCashOnHand(); 
+				employeeCash += Constants.MarketDeliveryGuyPayRoll;
+				DGList.get(i).getPerson().getWallet().setCashOnHand(employeeCash);
 			}
 		}
 		

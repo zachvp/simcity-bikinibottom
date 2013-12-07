@@ -252,8 +252,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 		if (e.getSource() == robberButton){
 			for (CityLocation loc : KelpClass.getKelpInstance().placesNearMe(currentPerson.getPassengerRole().getLocation(), LocationTypeEnum.Bank)){
 				if(loc instanceof BankBuilding && ((BankBuilding) loc).isOpen()){
-					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
 					currentPerson.setTimeToRobABank();
+					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
+					
 				}
 			}
 		}

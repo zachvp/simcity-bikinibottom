@@ -229,7 +229,7 @@ public void SetCashierMarketInfoPanel(MarketInfoPanel p){
 	return;
 }
 
- 
+  
     /**
      * Adds a customer or waiter to the appropriate list
      *

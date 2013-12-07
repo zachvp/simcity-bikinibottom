@@ -129,7 +129,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
     	currentTask = "GoingToBench";
 
     }
-    
+     
     /* (non-Javadoc)
 	 * @see market.gui.MockCashierGui#OffWork()
 	 */

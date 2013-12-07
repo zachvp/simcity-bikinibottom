@@ -64,6 +64,7 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 					role.getDwelling().degradeCondition();
 				}
 			}
+
 		}
 	}
 	

@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import agent.Role;
 import agent.interfaces.Person;
 import CommonSimpleClasses.Constants;
 import market.Item;
@@ -266,7 +267,9 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 			MarketLabel.setText("Today's Staff :    " + marketRecords.cashier.getName() + "                     " + "Market's Current Cash :   " + marketRecords.cashier.getCash());
 		}
 		
+		FirePerson(marketRecords.ItemCollectors.get(0));
 		
+		/*
 		
 		//Make the temp person so things can be tracked easily
 		Person tempcashierPerson = marketRecords.cashier.getPerson();
@@ -284,8 +287,42 @@ public class MarketInfoPanel extends JPanel implements ActionListener{
 		marketRecords.ItemCollectors.get(0).setPerson(tempcashierPerson);
 		marketRecords.cashier.setPerson(tempitemCollectorPerson);
 		
+		*/
 		
 		
+	}
+	
+	public void HirePerson(Role r, Person prospectivePerson){
+		
+		prospectivePerson.addRole(r);
+		r.setPerson(prospectivePerson);
+		
+	}
+	
+	public void FirePerson(Role r){
+		
+	//GUI to move the person offscreen (Exit)
+		
+		Person currentFiringPerson = r.getPerson();
+		currentFiringPerson.removeRole(r);
+		r.setPerson(null);
+		
+
+	}
+	
+	
+	public void SwitchRole(Role r, Person prospectivePerson){
+		
+		Person currentFiringPerson = r.getPerson();
+		
+		//Remove the role in the firing person's list of role
+		currentFiringPerson.removeRole(r);
+		
+		//Add the role in the hiring person's list of role
+		prospectivePerson.addRole(r);
+		
+		//set the role's person to be the prospectivePerson (new hiring person)
+		r.setPerson(prospectivePerson);
 	}
 
 	public void UpdateInventoryLevelWithoutButton(){

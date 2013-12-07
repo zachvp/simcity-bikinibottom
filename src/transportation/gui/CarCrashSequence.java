@@ -89,9 +89,9 @@ public class CarCrashSequence implements Gui {
 			g.fillRect(posX2, posY2,
 				VehicleGuiClass.VEHICLEH, VehicleGuiClass.VEHICLEH);
 		} else if (aniCount<16) {
-			Rectangle2D r = new Rectangle2D.Double(posX1, posY1,
+			Rectangle2D r = new Rectangle2D.Double(posX1-15, posY1-15,
 					30, 30);
-			Rectangle2D tr = new Rectangle2D.Double(posX1, posY1,
+			Rectangle2D tr = new Rectangle2D.Double(posX1-15, posY1-15,
 					30, 30);
 			TexturePaint tp = new TexturePaint(explosionList.get(aniCount), tr);
 			g.setPaint(tp);

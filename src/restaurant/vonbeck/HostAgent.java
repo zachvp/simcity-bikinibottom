@@ -26,8 +26,8 @@ public class HostAgent extends Agent {
 	private String name;
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
-	private List<CustomerAgent> waitingCustomers
-	= Collections.synchronizedList(new ArrayList<CustomerAgent>());
+	private List<CustomerRole> waitingCustomers
+	= Collections.synchronizedList(new ArrayList<CustomerRole>());
 	private List<WaiterAgent> waiters = Collections.synchronizedList(new ArrayList<WaiterAgent>());
 	private CookAgent cook;
 	private Collection<Table> tables;
@@ -55,7 +55,7 @@ public class HostAgent extends Agent {
 	
 	//Messages
 
-	public void msgIWantFood(CustomerAgent cust) {
+	public void msgIWantFood(CustomerRole cust) {
 		synchronized (waitingCustomers) {
 			waitingCustomers.add(cust);
 		}
@@ -66,7 +66,7 @@ public class HostAgent extends Agent {
 		stateChanged();
 	}
 
-	public void msgImTiredOfWaitingByeYourRestaurantSucks(CustomerAgent c) {
+	public void msgImTiredOfWaitingByeYourRestaurantSucks(CustomerRole c) {
 		synchronized (waitingCustomers) {
 			waitingCustomers.remove(c);
 		}
@@ -172,11 +172,11 @@ public class HostAgent extends Agent {
 		return name;
 	}
 
-	public List<CustomerAgent> getWaitingCustomers() {
-		List<CustomerAgent> response;
+	public List<CustomerRole> getWaitingCustomers() {
+		List<CustomerRole> response;
 		
 		synchronized (waitingCustomers) {
-			response = new ArrayList<CustomerAgent>(waitingCustomers);
+			response = new ArrayList<CustomerRole>(waitingCustomers);
 		}
 		
 		return waitingCustomers;

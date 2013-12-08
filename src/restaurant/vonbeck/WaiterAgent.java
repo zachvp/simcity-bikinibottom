@@ -67,7 +67,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	
 	//Messages
 	
-	public void msgHeWantsFood(CustomerAgent c, Table t) {
+	public void msgHeWantsFood(CustomerRole c, Table t) {
 		customerCount++;
 		WaiterAction action = new WaiterAction() {
 			public void run(){
@@ -96,7 +96,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	
 	
 
-	public void msgIWantToOrder(CustomerAgent c) {
+	public void msgIWantToOrder(CustomerRole c) {
 		WaiterAction action = new WaiterAction() {
 			public void run(){
 				// TODO is this illegal messaging?
@@ -150,7 +150,7 @@ public class WaiterAgent extends Agent implements Waiter {
 		stateChanged();
 	}
 
-	public void msgReadyToPay(CustomerAgent c, String food) {
+	public void msgReadyToPay(CustomerRole c, String food) {
 		WaiterAction action = new WaiterAction() {
 			public void run(){
 				waiter = (WaiterAgent) order.waiter;
@@ -194,7 +194,7 @@ public class WaiterAgent extends Agent implements Waiter {
 
 
 
-	public void msgImLeaving(CustomerAgent c) {
+	public void msgImLeaving(CustomerRole c) {
 		customerCount--;
 		
 		WaiterAction action = new WaiterAction() {

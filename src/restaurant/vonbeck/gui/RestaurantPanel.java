@@ -8,10 +8,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import agent.PersonAgent;
+import agent.interfaces.Person;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.vonbeck.CashierAgent;
 import restaurant.vonbeck.CookAgent;
-import restaurant.vonbeck.CustomerAgent;
+import restaurant.vonbeck.CustomerRole;
 import restaurant.vonbeck.HostAgent;
 import restaurant.vonbeck.WaiterAgent;
 
@@ -22,7 +24,7 @@ import restaurant.vonbeck.WaiterAgent;
 @SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
 	
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private Vector<CustomerRole> customers = new Vector<CustomerRole>();
     private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
     
     private JPanel restLabel = new JPanel();
@@ -88,7 +90,7 @@ public class RestaurantPanel extends JPanel {
         if (type.equals("Customers")) {
 
             for (int i = 0; i < customers.size(); i++) {
-                CustomerAgent temp = customers.get(i);
+                CustomerRole temp = customers.get(i);
                 if (temp.getName() == name)
                     gui.updateInfoPanel(temp);
             }
@@ -110,14 +112,18 @@ public class RestaurantPanel extends JPanel {
     public void addPerson(String type, String name, boolean hungry) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = new CustomerAgent(name);	
+    		CustomerRole c = new CustomerRole(name);	
     		CustomerGui g = new CustomerGui(c, gui);
-    		
+    		PersonAgent person = new PersonAgent(name);
+    		person.addRole(c);
+    		c.setPerson(person);
+    		c.activate();
     		gui.getAnimationPanel().addGui(g);// dw
     		c.setHost(host);
     		c.setGui(g);
     		customers.add(c);
-    		c.startThread();
+    		
+    		person.startThread();
     		if (hungry) c.getGui().setHungry();
     	} else if (type.equals("Waiters")) {
 

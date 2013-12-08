@@ -3,12 +3,12 @@ package restaurant.vonbeck.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import restaurant.vonbeck.CustomerAgent;
+import restaurant.vonbeck.CustomerRole;
 import agent.gui.Gui;
 
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private CustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
@@ -16,7 +16,7 @@ public class CustomerGui implements Gui{
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-	private enum Command {noCommand, GoToSeat, GoToCashier, LeaveRestaurant};
+	private enum Command {noCommand, GoToSeat, GoToCashier, LeaveRestaurant, GoToWaitZone};
 	private Command command=Command.noCommand;
 
 	private static final int xTable = 200;
@@ -32,7 +32,7 @@ public class CustomerGui implements Gui{
 	
 	private String foodLabel = "";
 	
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ 
+	public CustomerGui(CustomerRole c, RestaurantGui gui){ 
 		agent = c;
 		setxPos(CUSTOMER_INIT_POS_X);
 		setyPos(CUSTOMER_INIT_POS_Y);
@@ -61,7 +61,7 @@ public class CustomerGui implements Gui{
 				gui.setCustomerEnabled(agent);
 			} else if (command==Command.GoToCashier) {
 				agent.msgAnimationFinishedGoToCashier();
-			}
+			} 
 			command=Command.noCommand;
 		}
 	}
@@ -106,6 +106,7 @@ public class CustomerGui implements Gui{
 	public void DoGoToWaitZone() {
 		xDestination = (int) (HOME_POS_X + Math.random()*70);
 		yDestination = (int) (HOME_POS_Y + Math.random()*70);
+		//command = Command.GoToWaitZone;
 	}
 
 	public void DoExitRestaurant() {

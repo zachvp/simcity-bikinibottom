@@ -1,6 +1,6 @@
 package restaurant.vonbeck.interfaces;
 
-import restaurant.vonbeck.CustomerAgent;
+import restaurant.vonbeck.CustomerRole;
 import restaurant.vonbeck.Table;
 import restaurant.vonbeck.gui.WaiterGui;
 
@@ -24,17 +24,17 @@ public interface Waiter {
 	
 	//Messages
 	
-	public void msgHeWantsFood(CustomerAgent c, Table t);
+	public void msgHeWantsFood(CustomerRole c, Table t);
 
-	public void msgIWantToOrder(CustomerAgent c);
+	public void msgIWantToOrder(CustomerRole c);
 
 	public void msgOrderReady(Order o);
 
-	public void msgReadyToPay(CustomerAgent c, String food);
+	public void msgReadyToPay(CustomerRole c, String food);
 
 	public void msgBill(int price, Customer c);
 
-	public void msgImLeaving(CustomerAgent c);
+	public void msgImLeaving(CustomerRole c);
 
 	public void msgOutOfThis(Order o);
 

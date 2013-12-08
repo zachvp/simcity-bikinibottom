@@ -10,11 +10,12 @@ import restaurant.vonbeck.gui.CustomerGui;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import agent.Agent;
+import agent.Role;
 
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Agent implements Customer {
+public class CustomerRole extends Role implements Customer {
 	private static final long CHOICE_DELAY_MS = 6000;
 	private static final int EAT_DELAY_MS = 5000;
 	private static final int LEAVE_DELAY_MS = 5000;
@@ -49,7 +50,7 @@ public class CustomerAgent extends Agent implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerAgent(String name){
+	public CustomerRole(String name){
 		super();
 		this.name = name;
 	}
@@ -271,17 +272,6 @@ public class CustomerAgent extends Agent implements Customer {
 
 	private void goToRestaurant() {
 		Do("Going to restaurant");
-		// TODO WARNING: this solution for leaving the restaurant is not thread-safe 
-		timer.schedule(new TimerTask() {
-			public void run() {
-				if (state == AgentState.WaitingInRestaurant && (Math.random() < 0.5)) {
-					Do("Restaurant is full :c");
-					leaveTable();
-					stateChanged();
-				}
-			}
-		},
-		LEAVE_DELAY_MS);
 		
 		if (debt > 0) {
 			Do("Hey I'm back to pay my debt, only because it is required of me by the assignment table left by the prophets.");

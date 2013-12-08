@@ -1,14 +1,14 @@
 package restaurant.vonbeck;
 
 public class Table {
-	CustomerAgent occupiedBy;
+	CustomerRole occupiedBy;
 	public int tableNumber;
 
 	public Table(int tableNumber) {
 		this.tableNumber = tableNumber;
 	}
 
-	public void setOccupant(CustomerAgent cust) {
+	public void setOccupant(CustomerRole cust) {
 		occupiedBy = cust;
 	}
 
@@ -16,7 +16,7 @@ public class Table {
 		occupiedBy = null;
 	}
 
-	public CustomerAgent getOccupant() {
+	public CustomerRole getOccupant() {
 		return occupiedBy;
 	}
 

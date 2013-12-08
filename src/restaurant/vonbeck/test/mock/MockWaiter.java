@@ -1,7 +1,7 @@
 package restaurant.vonbeck.test.mock;
 
 import restaurant.vonbeck.CashierAgent;
-import restaurant.vonbeck.CustomerAgent;
+import restaurant.vonbeck.CustomerRole;
 import restaurant.vonbeck.Table;
 import restaurant.vonbeck.gui.WaiterGui;
 import restaurant.vonbeck.interfaces.Customer;
@@ -17,13 +17,13 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void msgHeWantsFood(CustomerAgent c, Table t) {
+	public void msgHeWantsFood(CustomerRole c, Table t) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgIWantToOrder(CustomerAgent c) {
+	public void msgIWantToOrder(CustomerRole c) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -35,7 +35,7 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void msgReadyToPay(CustomerAgent c, String food) {
+	public void msgReadyToPay(CustomerRole c, String food) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -47,7 +47,7 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void msgImLeaving(CustomerAgent c) {
+	public void msgImLeaving(CustomerRole c) {
 		// TODO Auto-generated method stub
 		
 	}

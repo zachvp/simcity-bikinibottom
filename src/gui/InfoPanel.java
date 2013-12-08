@@ -94,6 +94,13 @@ public class InfoPanel extends JPanel implements ActionListener{
 		//timePanel.setBorder(BorderFactory.createEtchedBorder());
 		//card.setBorder(BorderFactory.createEtchedBorder());
 		
+		//Staff Card
+		Dimension staffCardDim = new Dimension(Constants.INFO_PANEL_WIDTH, d.height-46); //700 X 145
+		staffCard.setPreferredSize(staffCardDim);
+		staffCard.setMaximumSize(staffCardDim);
+		staffCard.setMinimumSize(staffCardDim);
+		staffCard.setLayout(new CardLayout());
+		
 		add(card, BorderLayout.SOUTH);
 		add(timePanel, BorderLayout.NORTH);
 	}
@@ -182,9 +189,6 @@ public class InfoPanel extends JPanel implements ActionListener{
 		personText.add(controls, BorderLayout.EAST);
 	}
 	
-	private void makeStaffCard(){
-		
-	}
 	
 	private void getTimeDisplay(){
 		Calendar cal = Calendar.getInstance();
@@ -201,7 +205,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
 		CardLayout cl = (CardLayout)(card.getLayout());
-		tabDisplay.hideBuildingTabs();
+		if(tabDisplay.getTabCount() == 3){
+			tabDisplay.hideBuildingTabs();
+		}
 		cl.show(card, "person");
 		//System.out.println("update info with "+person.getName());
 		/*info.setText("<html><div>&nbsp;</div><div> "
@@ -247,10 +253,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 		}
 		else
 		{
+			if(b instanceof HospitalBuilding && tabDisplay.getTabCount() == 3){
+				tabDisplay.hideBuildingTabs();
+			}
+			if(!(b instanceof HospitalBuilding) && tabDisplay.getTabCount() == 2){
+				tabDisplay.showStaffTab();
+			}
+
 			cl.show(card, b.getName());
-			tabDisplay.showStaffTab();
 		}
-		
+
 		validate();
 
 	}
@@ -262,6 +274,10 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void addBuildingInfoPanel(JPanel panel, String name){
 		card.add(panel, name);
+	}
+	
+	public void addStaffInfoPanel(JPanel panel, String name){
+		staffCard.add(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -286,8 +302,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 	public void setTabDisplay(TabbedInfoDisplay tabbedInfoPane) {
 		tabDisplay = tabbedInfoPane;
-		tabDisplay.addTab("Staff", staffCard);
-		tabDisplay.hideBuildingTabs();
+		tabDisplay.setStaffCard(staffCard);
 	}
 
 }

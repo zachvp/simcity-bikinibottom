@@ -1,5 +1,7 @@
 package housing.gui;
 
+import housing.interfaces.DwellingLayoutGui;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -18,7 +20,7 @@ import agent.gui.Gui;
  * LayoutGui stores all the positional information about housing items
  * (furniture, appliances, etc) and displays them.
  */
-public class LayoutGui implements Gui {
+public class LayoutGui implements Gui, DwellingLayoutGui {
 	/* --- Layout Item Positions --- */
 	
 	//window size = 550x400
@@ -101,6 +103,7 @@ public class LayoutGui implements Gui {
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
 	}
 	
+	@Override
 	public void DoMoveGary(){
 		Random generator = new Random(); 
 		int position = generator.nextInt(4);

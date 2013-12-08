@@ -28,7 +28,7 @@ public class ResidentDwelling implements Dwelling {
 	
 	// roles
 	private ResidentRole resident;
-	private MaintenanceWorkerRole worker;
+	private MaintenanceWorker worker;
 	private PayRecipientRole payRecipient;
 	
 	private double monthlyPaymentAmount;
@@ -155,7 +155,8 @@ public class ResidentDwelling implements Dwelling {
 		resident.msgDwellingDegraded();
 	}
 
-	public void setWorker(MaintenanceWorkerRole worker) {
+	@Override
+	public void setWorker(MaintenanceWorker worker) {
 		this.worker = worker;
 	}
 }

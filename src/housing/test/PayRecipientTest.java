@@ -33,6 +33,7 @@ public class PayRecipientTest extends TestCase {
 	 * and the resident will have enough money to pay it.
 	*/
 	public void testNormativeResidentPaysDues(){
+		
 		/* --- Check Precondtions --- */
 		
 		// list and log should be empty to start

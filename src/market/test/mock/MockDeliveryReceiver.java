@@ -29,16 +29,17 @@ public class MockDeliveryReceiver extends Mock implements DeliveryReceiver {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void msgNoItem() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgHereIsYourItems(List<Item> DeliverList) {
 		// TODO Auto-generated method stub
 		
+		
+	}
+
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList) {
+		// TODO Auto-generated method stub
 		
 	}
 

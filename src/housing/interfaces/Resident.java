@@ -12,4 +12,6 @@ public interface Resident {
 	public void msgDwellingFixed();
 
 	void msgDwellingDegraded();
+	
+	public enum FoodState { RAW, COOKED, COOKING };
 }

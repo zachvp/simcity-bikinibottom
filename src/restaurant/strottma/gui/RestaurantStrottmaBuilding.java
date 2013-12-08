@@ -150,6 +150,11 @@ public class RestaurantStrottmaBuilding extends Building {
 	}
 	
 	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
+	
+	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
 				waiterOnDuty();

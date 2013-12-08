@@ -14,5 +14,10 @@ public interface TellerGuiInterface {
 	
 	public void DoLeaveBank();
 	
+	public void DoGoToFrontDesk();
+	
+	public void DoGoToBackDesk();
+	
+	public void DoGoToRightOfFrontDesk();
 	
 }

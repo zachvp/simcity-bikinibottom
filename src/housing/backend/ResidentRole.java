@@ -1,9 +1,9 @@
 package housing.backend;
 
 import gui.trace.AlertTag;
-import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -38,7 +38,6 @@ public class ResidentRole extends Role implements Resident {
 	// test data
 	public EventLog log = new EventLog();
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
-	private boolean START_HUNGRY = false;
 	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
@@ -79,8 +78,7 @@ public class ResidentRole extends Role implements Resident {
 	 * Food is kept in the refrigerator and encapsulates all
 	 * the relevant data needed for inventory management.
 	 */
-	enum FoodState { RAW, COOKED, COOKING };
-	private class Food{
+	public class Food{
 		String type;
 		FoodState state;
 		int amount, cookTime, low, capacity;
@@ -93,10 +91,12 @@ public class ResidentRole extends Role implements Resident {
 			this.cookTime = cookTime;
 			state = FoodState.RAW;
 		}
+		
+		public void setState(FoodState state) { food.state = state; }
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
+	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, DwellingLayoutGui gui) {
 		super(agent, residence);
 		
 		this.dwelling = dwelling;
@@ -119,6 +119,7 @@ public class ResidentRole extends Role implements Resident {
 	public void msgDwellingFixed() {
 		Do("Received message 'dwelling fixed'");
 		DoShowSpeech("My apartment is fixed!");
+		this.dwelling.setCondition(Condition.GOOD);
 	}
 	
 	@Override

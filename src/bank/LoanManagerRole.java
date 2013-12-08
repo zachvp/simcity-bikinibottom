@@ -98,7 +98,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	// Actions
 	private void goToWork() {
 		atWork = true;
-		doGoToDesk();
+		doGoToWork();
 //		acquireSemaphore(active);
 		
 	}
@@ -116,7 +116,6 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private void goOffWork() {
 		addPaycheckToWallet();
 		doEndWorkDay();
-		acquireSemaphore(active);
 		atWork = false;
 		this.deactivate();
 		
@@ -135,6 +134,15 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	}
 	
 	//ANIMATION #####################
+	
+	public void doGoToWork() {
+		loanManagerGui.DoGoToDeskRight();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDeskLeft();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDesk();
+		acquireSemaphore(active);
+	}
 	public void msgAtDestination() {
 		active.release();
 	}
@@ -149,7 +157,12 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	}
 	
 	private void doEndWorkDay() {
-		loanManagerGui.DoEndWorkDay();
+		loanManagerGui.DoGoToDeskLeft();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDeskRight();
+		acquireSemaphore(active);
+		loanManagerGui.DoLeaveBank();
+		acquireSemaphore(active);
 	}
 	
 	public void setGui(LoanManagerGui lmg) {

@@ -1,6 +1,6 @@
 package restaurant.vegaperk;
 
-import agent.Agent;
+import agent.Role;
 
 import java.awt.Dimension;
 import java.util.*;
@@ -14,7 +14,7 @@ import mock.EventLog;
 /**
  * Cook Agent
  */
-public class CookAgent extends Agent implements Cook {
+public class CookAgent extends Role implements Cook {
 	private String name;
 	private CookGui cookGui;
 	public EventLog log = new EventLog();
@@ -33,7 +33,9 @@ public class CookAgent extends Agent implements Cook {
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	
 	private Timer timer = new Timer();
-//	create an anonymous Map class to initialize the foods and cook times
+	
+	// create an anonymous Map class to initialize the foods and cook times
+	@SuppressWarnings("serial")
 	private static final Map<String, Integer> cookTimes =
 			Collections.synchronizedMap(new HashMap<String, Integer>(){
 		{
@@ -44,9 +46,10 @@ public class CookAgent extends Agent implements Cook {
 		}
 	});
 	
-	private List<MarketAgent> markets = Collections.synchronizedList(new ArrayList());
+	private List<MarketAgent> markets = Collections.synchronizedList(new ArrayList<MarketAgent>());
 	private int orderFromMarket = 0;
 	
+	@SuppressWarnings("serial")
 	Map<String, Food> inventory = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
 			put("Krabby Patty", new Food("Krabby Patty", 2, 1000, 1, 3));
@@ -263,27 +266,11 @@ public class CookAgent extends Agent implements Cook {
 	public void addMarket(MarketAgent m){
 		markets.add(m);
 	}
-	private PlateZone findPlateZoneOrder(Order o){
-		for(PlateZone pz : plateZones){
-			if(pz.order == o){
-				return pz;
-			}
-		}
-		Do("Can't find plate zone!");
-		return null;
-	}
+
 	public void setGui(CookGui gui){
 		cookGui = gui;
 	}
-	private Grill findGrillOrder(Order o){
-		for(Grill g : grills){
-			if(g.order == o){
-				return g;
-			}
-		}
-		Do("Can't find grill!");
-		return null;
-	}
+	
 	private void acquire(Semaphore sem){
 		try {
 			sem.acquire();
@@ -323,16 +310,11 @@ public class CookAgent extends Agent implements Cook {
 	}
 	
 	private class Grill{
-		Order order;
 		int x, y;
 		
 		Grill(int dx, int dy){
-			order = null;
 			x = dx;
 			y = dy;
-		}
-		private void setOrder(Order o){
-			order = o;
 		}
 	}
 	

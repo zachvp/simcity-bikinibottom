@@ -1,6 +1,6 @@
 package restaurant.vegaperk;
 
-import agent.Agent;
+import agent.Role;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -14,7 +14,7 @@ import mock.EventLog;
 /**
  * Cook Agent
  */
-public class CashierAgent extends Agent implements Cashier {
+public class CashierAgent extends Role implements Cashier {
 	String name;
 	private double money = 500.00;
 	

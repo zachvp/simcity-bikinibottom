@@ -6,7 +6,7 @@ import restaurant.vegaperk.gui.CustomerGui.OrderState;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
-import agent.Agent;
+import agent.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Agent implements Customer {
+public class CustomerAgent extends Role implements Customer {
 	private String name;
 	private String choice;
 	private int hungerLevel = 6;// determines length of meal
@@ -53,13 +53,36 @@ public class CustomerAgent extends Agent implements Customer {
 	private Menu menu;
 
 	//State and event enumerations
-	private enum CustomerState
-	{DOING_NOTHING, WAITING_IN_RESTAURANT, BEING_SEATED,
-		SEATED, READY_TO_ORDER, ORDERING, ORDERED, EATING, DONE_EATING,
-		WAITING_FOR_BILL, PAYING, LEAVING};
-	private enum CustomerEvent
-	{NONE, GOT_HUNGRY, FOLLOW_WAITER, SEATED, ASKED_FOR_ORDER, EAT, DONE_EATING,
-		RECEIVED_BILL, RECEIVED_CHANGE, DONE_LEAVING, CHOOSE_FOOD, OUT_OF_FOOD, NO_ROOM};
+	private enum CustomerState{ 
+		DOING_NOTHING,
+		WAITING_IN_RESTAURANT,
+		BEING_SEATED,
+		SEATED,
+		READY_TO_ORDER,
+		ORDERING,
+		ORDERED,
+		EATING,
+		DONE_EATING,
+		WAITING_FOR_BILL,
+		PAYING,
+		LEAVING
+	};
+	
+	private enum CustomerEvent {
+		NONE,
+		GOT_HUNGRY,
+		FOLLOW_WAITER,
+		SEATED,
+		ASKED_FOR_ORDER,
+		EAT,
+		DONE_EATING,
+		RECEIVED_BILL,
+		RECEIVED_CHANGE,
+		DONE_LEAVING,
+		CHOOSE_FOOD,
+		OUT_OF_FOOD,
+		NO_ROOM
+	};
 	
 	CustomerEvent event = CustomerEvent.NONE;
 	private CustomerState state = CustomerState.DOING_NOTHING;//The start state

@@ -1,6 +1,6 @@
 package restaurant.vegaperk;
 
-import agent.Agent;
+import agent.Role;
 
 import java.awt.Dimension;
 import java.util.*;
@@ -11,11 +11,8 @@ import restaurant.vegaperk.interfaces.Waiter;
 /**
  * Restaurant Host Agent
  */
-//We only have 2 types of agents in this prototype. A customer and an agent that
-//does all the rest. Rather than calling the other agent a waiter, we called him
-//the HostAgent. A Host is the manager of a restaurant who sees that all
-//is proceeded as he wishes.
-public class HostAgent extends Agent {
+
+public class HostAgent extends Role {
 	static final int NTABLES = 4;//a global for the number of tables.
 	private static final int TABLECOLNUM = 2;
 	private static final int TABLEROWNUM = 2;
@@ -29,11 +26,13 @@ public class HostAgent extends Agent {
 			Collections.synchronizedList(new ArrayList<Customer>());
 	private List<MyWaiter> waiters =
 			Collections.synchronizedList(new ArrayList<MyWaiter>());
+	
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
 	private Collection<Table> tables =
 			Collections.synchronizedList(new ArrayList<Table>(NTABLES));
 	//map stores an index and a dimension containing x & y coordinates
+	
 	public Map<Integer, Dimension> tableMap =
 			Collections.synchronizedMap(new HashMap<Integer, Dimension>());
 

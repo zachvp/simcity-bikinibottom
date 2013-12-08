@@ -30,7 +30,6 @@ package CommonSimpleClasses;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Constants of general use
@@ -153,6 +152,7 @@ public interface Constants {
 	/**
 	 * The PriceList of the market
 	 */
+	@SuppressWarnings("serial")
 	public static HashMap<String, Double> MarketPriceList = new HashMap<String,Double>(){
 		{
 		double Toyoda = 100;
@@ -173,6 +173,7 @@ public interface Constants {
 	/**
 	 * Types of food in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> FOODS = new ArrayList<String>() {
 		{
 			add("Krabby Patty");
@@ -181,6 +182,11 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
+	
+	/**
+	 * Set to true to test restaurant independent from MainFrame
+	 */
+	public final boolean TEST_POPULATE_RESTAURANT = true;
 	
 	/**
 	 * Set to true to test housing independent from MainFrame
@@ -205,6 +211,7 @@ public interface Constants {
 	/**
 	 * Types of Car in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> CARS = new ArrayList<String>() {
 		{
 			add("LamboFinny");
@@ -212,6 +219,7 @@ public interface Constants {
 		}
 	};
 	
+	@SuppressWarnings("serial")
 	public static final List<String> NAMES = new ArrayList<String>() {
 		{
 			add("Spongebob");

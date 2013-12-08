@@ -7,10 +7,13 @@ import gui.AnimationPanel;
 import javax.swing.*;
 
 import java.awt.*;
+
 /**
  * Main GUI class.
  * Contains the main frame and subsequent panels
  */
+
+@SuppressWarnings("serial")
 public class RestaurantGui extends JFrame{// implements ActionListener {
     /* The GUI has one frame with two components: the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)

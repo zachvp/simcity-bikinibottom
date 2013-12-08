@@ -1,6 +1,6 @@
 package restaurant.vegaperk;
 
-import agent.Agent;
+import agent.Role;
 import restaurant.vegaperk.gui.WaiterGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -12,7 +12,7 @@ import java.util.concurrent.Semaphore;
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
-public class WaiterAgent extends Agent implements Waiter {
+public class WaiterAgent extends Role implements Waiter {
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };

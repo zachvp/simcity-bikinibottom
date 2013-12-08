@@ -9,7 +9,9 @@ import restaurant.vegaperk.WaiterAgent;
 
 import javax.swing.*;
 
-import agent.Agent;
+import CommonSimpleClasses.Constants;
+import agent.PersonAgent;
+import agent.Role;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,18 +25,24 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
-	private ArrayList<Agent> agentList = new ArrayList<Agent>();
+	private ArrayList<Role> agentList = new ArrayList<Role>();
+    
+    private PersonAgent hostPerson;
     private HostAgent host = new HostAgent("Mr. Krabs");
+    
+    // TODO the table map should be stored in the table gui
     private TableGui tableGui = new TableGui(host.getTableMap());
     
+    private PersonAgent cookPerson;
     private CookAgent cook = new CookAgent("Cook");
+    
+    private PersonAgent cashierPerson;
+    private CashierAgent cashier = new CashierAgent("Squidward");
     
     private MarketAgent m1 = new MarketAgent("Market 1");
     private MarketAgent m2 = new MarketAgent("Market 2");
     private MarketAgent m3 = new MarketAgent("Market 3");
     
-    private CashierAgent cashier = new CashierAgent("Squidward");
-
     private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
 
     private JPanel restLabel = new JPanel();
@@ -51,9 +59,9 @@ public class RestaurantPanel extends JPanel {
     	agentList.add(cook);
     	agentList.add(host);
     	agentList.add(cashier);
-    	agentList.add(m1);
-    	agentList.add(m2);
-    	agentList.add(m3);
+//    	agentList.add(m1);
+//    	agentList.add(m2);
+//    	agentList.add(m3);
     	
         this.gui = gui;
         gui.animationPanel.addGui(tableGui);
@@ -79,10 +87,30 @@ public class RestaurantPanel extends JPanel {
         m1.startThread();
         m2.startThread();
         m3.startThread();
-        cook.startThread();
-        cashier.startThread();
-        host.startThread();
-
+        
+        if(Constants.TEST_POPULATE_RESTAURANT){
+        	// set up the host
+        	hostPerson = new PersonAgent("Host");
+        	hostPerson.addRole(host);
+        	host.setPerson(hostPerson);
+        	host.activate();
+        	hostPerson.startThread();
+        	
+        	// set up cook
+        	cookPerson = new PersonAgent("Cook");
+        	cookPerson.addRole(cook);
+        	cook.setPerson(cookPerson);
+        	cook.activate();
+        	cookPerson.startThread();
+        	
+        	// set up the cashier
+        	cashierPerson = new PersonAgent("Cashier");
+        	cashierPerson.addRole(cashier);
+        	cashier.setPerson(cashierPerson);
+        	cashier.activate();
+        	cashierPerson.startThread();
+        }
+        
         setLayout(new GridLayout(1, 2, 20, 20));
         group.setLayout(new GridLayout(1, 2, 10, 10));
 
@@ -128,30 +156,46 @@ public class RestaurantPanel extends JPanel {
     public CustomerGui addCustomer(String type, String name) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = new CustomerAgent(name);	
+    		// new role and person stuff
+    		PersonAgent person = new PersonAgent("Customer");
+    		
+    		CustomerAgent c = new CustomerAgent(name);
     		CustomerGui g = new CustomerGui(c, gui);
+    		
+    		person.addRole(c);
+    		c.setPerson(person);
+    		c.activate();
+    		// add the role to the list
     		agentList.add(c);
 
     		gui.animationPanel.addGui(g);// dw
     		c.setHost(host);
     		c.setGui(g);
     		customers.add(c);
-    		c.startThread();
+    		person.startThread();
     		return g;
     	}
     return null;
     }
     public WaiterGui addWaiter(String type, String name){
     	if(type.equals("Waiters")){
+    		// new person/role stuff
+    		PersonAgent person = new PersonAgent("Waiter");
+    		
     		WaiterAgent w = new WaiterAgent(name, cashier);
     		WaiterGui wg = new WaiterGui(w, gui);
+    		
+    		person.addRole(w);
+    		w.setPerson(person);
+    		w.activate();
+    		person.startThread();
+    		
     		agentList.add(w);
     		w.setHost(host);
     		w.setCook(cook);
     		
     		gui.animationPanel.addGui(wg);
     		w.setGui(wg);
-    		w.startThread();
     		host.addWaiter(w);
     		return wg;
     	}

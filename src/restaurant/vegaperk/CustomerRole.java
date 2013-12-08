@@ -6,13 +6,13 @@ import restaurant.vegaperk.gui.CustomerGui.OrderState;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
@@ -22,8 +22,10 @@ import java.util.concurrent.Semaphore;
 public class CustomerRole extends Role implements Customer {
 	private String name;
 	private String choice;
-	private int hungerLevel = 6;// determines length of meal
-	Timer timer = new Timer();
+	private int HUNGER_LEVEL = 6;// determines length of meal
+	
+	// sets time delays
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	private CustomerGui customerGui;
 	
@@ -290,13 +292,15 @@ public class CustomerRole extends Role implements Customer {
 	private void chooseFood(){
 		customerGui.setChoice("");
 		customerGui.orderState = OrderState.NONE;
-		timer.schedule(new TimerTask() {
-			public void run() {
+		Runnable command = new Runnable() {
+			public void run(){
 				event = CustomerEvent.ASKED_FOR_ORDER;
 				stateChanged();
 			}
-		},
-		getHungerLevel() * 500);//how long to wait before running task
+		};
+		
+		// resident role will deactivate after the delay below
+		schedule.scheduleTaskWithDelay(command, HUNGER_LEVEL * Constants.MINUTE);
 	}
 
 	private void readyToOrder(){
@@ -339,22 +343,16 @@ public class CustomerRole extends Role implements Customer {
 	}
 	private void EatFood() {
 		Do("Eating Food");
-		//This next complicated line creates and starts a timer thread.
-		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
-		//When that time elapses, it will call back to the run routine
-		//located in the anonymous class created right there inline:
-		//TimerTask is an interface that we implement right there inline.
-		//Since Java does not all us to pass functions, only objects.
-		//So, we use Java syntactic mechanism to create an
-		//anonymous inner class that has the public method run() in it.
-		timer.schedule(new TimerTask() {
-			public void run() {
+		
+		Runnable command = new Runnable() {
+			public void run(){
 				event = CustomerEvent.DONE_EATING;
-				//isHungry = false;
 				stateChanged();
 			}
-		},
-		getHungerLevel() * 1000);//how long to wait before running task
+		};
+		
+		// resident role will deactivate after the delay below
+		schedule.scheduleTaskWithDelay(command, HUNGER_LEVEL * Constants.MINUTE);
 	}
 	private void readyToPay(){
 		waiter.msgIAmDoneEating(this);
@@ -410,11 +408,11 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	public int getHungerLevel() {
-		return hungerLevel;
+		return HUNGER_LEVEL;
 	}
 
 	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
+		this.HUNGER_LEVEL = hungerLevel;
 	}
 
 	public String toString() {

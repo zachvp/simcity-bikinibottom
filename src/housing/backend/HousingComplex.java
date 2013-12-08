@@ -70,6 +70,8 @@ public class HousingComplex {
 			// put the constant roles in the building map
 			this.population.put(null, payRecipient);
 			this.population.put(null, worker);
+			
+			this.gui = new HousingComplexGui(this);
 		}
 	}
 	

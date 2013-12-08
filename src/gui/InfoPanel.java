@@ -57,10 +57,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 	TimeManager timeManager = TimeManager.getInstance();
 	private Timer timer;
 	
+	GridLayout controlLayout;
 	JLabel name, currLoc, job, residence, money, hunger, 
 		   nameL, currLocL, jobL, residenceL, moneyL, hungerL;
 	JPanel controls;
 	JButton robberButton;
+	JButton makeHungryButton;
 	PersonAgent currentPerson;
 	
 	public InfoPanel(int w, int h){
@@ -135,8 +137,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 		textEast.add(money);
 		textEast.add(hunger);
 		
+		
 		//Person controls
+		controlLayout = new GridLayout(0,1);
 		controls = new JPanel();
+		controls.setLayout(controlLayout);
 		Dimension controlDim = new Dimension((int)(Constants.INFO_PANEL_WIDTH*0.55), cardDim.height);
 		controls.setPreferredSize(controlDim);
 		controls.setVisible(false);
@@ -146,6 +151,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 		robberButton.addActionListener(this);
 		
 		controls.add(robberButton);
+		
+		//MakeHungryButton
+		makeHungryButton = new JButton("Make Hungry");
+		makeHungryButton.addActionListener(this);
+		
+		controls.add(makeHungryButton);
 		
 		personText.add(textWest, BorderLayout.WEST);
 		personText.add(textEast, BorderLayout.CENTER);
@@ -254,9 +265,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 				if(loc instanceof BankBuilding && ((BankBuilding) loc).isOpen()){
 					currentPerson.setTimeToRobABank();
 					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
-					
 				}
 			}
+		}
+		if (e.getSource() == makeHungryButton) {
+			currentPerson.setHungerToStarving();
 		}
 	}
 	

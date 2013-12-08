@@ -44,6 +44,9 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 	int entranceX = 300;
 	int entranceY = 500;
 	
+	private int frontDeskFrontY =170;
+	private int frontDeskRightX = 450;
+	
 	boolean canRelease = false;
 	BufferedImage image;
 
@@ -145,6 +148,26 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
     	xDestination = deskXPos + (xFactor * 50);
     	yDestination = deskYPos;
     }
+    
+	public void DoGoToFrontDesk() {
+		canRelease = true;
+		xDestination = deskXPos;
+		yDestination = frontDeskFrontY;
+	}
+	
+	public void DoGoToRightOfFrontDesk() {
+		canRelease = true;
+		xDestination = frontDeskRightX;
+		yDestination = frontDeskFrontY;
+	}
+	
+	public void DoGoToBackDesk() {
+		canRelease = true;
+		xDestination = frontDeskRightX;
+		yDestination = frontDeskFrontY - 40;
+	}
+	
+
     
     public void DoEndWorkDay(){
     	canRelease = true;

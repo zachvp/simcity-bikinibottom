@@ -39,10 +39,10 @@ public class CookAgent extends Role implements Cook {
 	private static final Map<String, Integer> cookTimes =
 			Collections.synchronizedMap(new HashMap<String, Integer>(){
 		{
-			put("Krabby Patty",1000);
-			put("Kelp Rings", 700);
-			put("Coral Bits", 500);
-			put("Kelp Shake", 200);
+			put("Krabby Patty", 10);
+			put("Kelp Rings", 7);
+			put("Coral Bits", 5);
+			put("Kelp Shake", 2);
 		}
 	});
 	
@@ -52,10 +52,10 @@ public class CookAgent extends Role implements Cook {
 	@SuppressWarnings("serial")
 	Map<String, Food> inventory = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 2, 1000, 1, 3));
-			put("Kelp Rings", new Food("Kelp Rings", 2, 700, 1, 3));
-			put("Coral Bits", new Food("Coral Bits", 2, 500, 1, 3));
-			put("Kelp Shake", new Food("Kelp Shake", 10, 200, 1, 3));
+			put("Krabby Patty", new Food("Krabby Patty", 2, 10, 1, 3));
+			put("Kelp Rings", new Food("Kelp Rings", 2, 7, 1, 3));
+			put("Coral Bits", new Food("Coral Bits", 2, 5, 1, 3));
+			put("Kelp Shake", new Food("Kelp Shake", 10, 2, 1, 3));
 		}
 	});
 

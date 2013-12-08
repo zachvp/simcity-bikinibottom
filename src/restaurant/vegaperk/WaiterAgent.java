@@ -22,10 +22,6 @@ public class WaiterAgent extends Role implements Waiter {
 	CookAgent cook = null;
 	CashierAgent cashier = null;
 	
-	private String name;
-	//this will pause the waiter whenever he is waiting for a response, and resume upon receiving a response 
-	private Semaphore performingTasks = new Semaphore(0,true);
-
 	public WaiterGui waiterGui = null;
 	public Menu menu = new Menu();
 	private int homePosition = -1;
@@ -34,13 +30,12 @@ public class WaiterAgent extends Role implements Waiter {
 
 	public WaiterAgent(String name, CashierAgent c) {
 		super();
-		this.name = name;
 		this.cashier = c;
 	}
 
 	/** Accessors and setters */
 	public String getName() {
-		return name;
+		return super.getName();
 	}
 
 	public int getWaitingCustomers() {
@@ -92,7 +87,7 @@ public class WaiterAgent extends Role implements Waiter {
 	
 	/** Messages from WaiterGui */
 	public void msgAtDest() {//from animation
-		performingTasks.release();
+		doneWaitingForInput();
 		stateChanged();
 	}
 	
@@ -103,10 +98,12 @@ public class WaiterAgent extends Role implements Waiter {
 		stateChanged();
 	}
 	public void msgHereIsMyOrder(Customer c, String choice){
-		waiterGui.setOrderName(choice);
-		performingTasks.release();
+		doneWaitingForInput();
+		
 		MyCustomer mc = findCustomer(c);
 		mc.choice = choice;
+		
+		waiterGui.setOrderName(choice);
 		stateChanged();
 	}
 	public void msgCustomerLeavingTable(Customer c) {
@@ -115,7 +112,7 @@ public class WaiterAgent extends Role implements Waiter {
 		stateChanged();
 	}
 	public void msgCannotPay(Customer c){
-		performingTasks.release();
+		doneWaitingForInput();
 		stateChanged();
 	}
 	public void msgIAmDoneEating(Customer c){
@@ -127,7 +124,7 @@ public class WaiterAgent extends Role implements Waiter {
 		Do("Got check.");
 		MyCustomer mc = findCustomer(c);
 		mc.bill = check;
-		performingTasks.release();
+		doneWaitingForInput();
 		stateChanged();
 	}
 	
@@ -156,7 +153,7 @@ public class WaiterAgent extends Role implements Waiter {
 	}
 	
 	public void msgOffBreak(){
-		performingTasks.release();
+		doneWaitingForInput();
 		breakState = BreakState.OFF_BREAK;
 		stateChanged();
 	}
@@ -244,21 +241,21 @@ public class WaiterAgent extends Role implements Waiter {
 	/** Actions called in the Scheduler */
 	private void seatCustomer(MyCustomer customer, int table) {
 		DoGoToHost();
-		acquire(performingTasks);
+		waitForInput();
 		
 		customer.c.msgSitAtTable(this, new Menu(),
 				host.getTableMap().get(table).width, host.getTableMap().get(table).height);
 		DoGoToTable(table);
-		acquire(performingTasks);
+		waitForInput();
 		stateChanged();
 	}
 	
 	private void takeOrder(MyCustomer c){
-//		DoTakeOrder(); animation with speech bubble
 		DoGoToTable(c.table);
-		acquire(performingTasks);
+		waitForInput();
+		
 		c.c.msgWhatWouldYouLike();
-		acquire(performingTasks);
+		waitForInput();
 		
 		if(c.state == MyCustomerState.LEAVING){
 			return;
@@ -266,7 +263,8 @@ public class WaiterAgent extends Role implements Waiter {
 		
 		waiterGui.toggleHoldingOrder();
 		DoGoToCook();
-		acquire(performingTasks);
+		waitForInput();
+		
 		Do("choice "+c.choice);
 		cook.msgHereIsOrder(this, c.choice, c.table);
 		waiterGui.toggleHoldingOrder();
@@ -277,36 +275,41 @@ public class WaiterAgent extends Role implements Waiter {
 		if(c.state == MyCustomerState.LEAVING){
 			return;
 		}
+		
 		DoGoToCook();
-		acquire(performingTasks);
+		waitForInput();
 		
 		cook.msgGotFood(c.table);
+		
 		waiterGui.setOrderName(c.choice);
 		waiterGui.toggleHoldingOrder();
+		
 		DoGoToTable(c.table);
-		acquire(performingTasks);
+		waitForInput();
 		
 		c.c.msgHereIsYourFood();
 		waiterGui.toggleHoldingOrder();
 	}
 	
 	private void getCheck(MyCustomer c){
-		DoGoToCashier();
 		Do("Going to cashier");
-		acquire(performingTasks);
+		
+		DoGoToCashier();
+		waitForInput();
 		
 		double bill = menu.m.get(c.choice);
+		
 		cashier.msgDoneEating(c.c, bill, this);
-		acquire(performingTasks);
+		Do("Going to cashier");
 		
 		DoGoToTable(c.table);
-		acquire(performingTasks);
+		waitForInput();
 		c.c.msgHereIsCheck(c.bill, cashier);
 	}
 	
 	private void tellCustomerOutOfFood(MyCustomer c){
 		DoGoToTable(c.table);
-		acquire(performingTasks);
+		waitForInput();
 		c.c.msgOutOfChoice(c.choice);
 	}
 	
@@ -317,7 +320,7 @@ public class WaiterAgent extends Role implements Waiter {
 	private void goOnBreak(){
 		Do("Go On Break");
 		DoGoOnBreak();
-		acquire(performingTasks);
+		waitForInput();
 	}
 	
 	private void goOffBreak(){
@@ -391,13 +394,7 @@ public class WaiterAgent extends Role implements Waiter {
 		}
 		return null;
 	}
-	private void acquire(Semaphore sem){
-		try {
-			sem.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	public int getCustomerCount(){
 		return customers.size();
 	}

@@ -26,12 +26,13 @@ public class RobberRole extends Role implements Robber {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	
+	double stealAmount = 1000;
 	SecurityGuard sg;
 	AccountManager am;
 	
 	RobberGui robberGui;
 	
-	enum State {enteredBank, stopped, robbing, leaving, done};
+	enum State {enteredBank, stopped, robbing, leaving, done, waitingForAcoountManager};
 	
 	State state;
 	
@@ -92,6 +93,7 @@ public class RobberRole extends Role implements Robber {
 		}
 		return false;
 	}
+	
 	// Actions
 	private void approachGuard() {
 		robberGui.DoGoToSecurityGuard();
@@ -103,16 +105,17 @@ public class RobberRole extends Role implements Robber {
 		robberGui.DoGoToAccountManager();
 		acquireSemaphore(active);
 		
+		state = State.waitingForAcoountManager;
 		//gotosg, push, gotoam
-		am.msgGiveMeTheMoney(this, 300.0);//TODO determine way to calculate real amount
+		am.msgGiveMeTheMoney(this, stealAmount);//TODO determine way to calculate real amount
 	}
 	private void leaveBank(){
 		sg.msgRobberLeavingBank(this);
 		robberGui.DoLeaveBank();
 		acquireSemaphore(active);
 		
+		this.getPerson().getWallet().setTooMuch(this.getPerson().getWallet().getTooMuch() + stealAmount);
 		state = State.done;
-		
 		this.deactivate();
 	}
 	

@@ -5,7 +5,6 @@ import housing.backend.MaintenanceWorkerRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,6 +26,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
 	private MaintenanceWorker worker;
 	
+	// needs to know the complex so gui can enter and exit buildings
 	private HousingComplex complex;
 	
 	// this prevents excessive releases from occurring
@@ -97,8 +97,8 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 		// draw the worker image
 		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
 	    	
-		g.setColor(Color.WHITE);
-		g.fillRect(xPos, yPos, 20, 20);
+//		g.setColor(Color.WHITE);
+//		g.fillRect(xPos, yPos, 20, 20);
 		
 //		g.drawString(eatingFood, xPos+5, yPos+15);
 		if(showTool == true){
@@ -147,13 +147,17 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	@Override
 	public void DoFixProblem() {
 		waiting = false;
+		showTool = true;		
 		xDestination = 60;
 		yDestination = 50;
-		canRelease = true;
+		canRelease = false;
 	}
 
 	@Override
 	public void DoReturnHome(int unit) {
+		showTool = false;
+		
+		
 		this.complex.removeGuiFromDwelling(this, unit);
 //		this.complex.addGuiToDwelling(this, this.unit);
 	}

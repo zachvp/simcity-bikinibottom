@@ -20,4 +20,6 @@ public interface Dwelling {
 	
 	public PayRecipient getPayRecipient();
 
+	public void degradeCondition();
+
 }

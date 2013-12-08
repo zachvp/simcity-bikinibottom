@@ -38,6 +38,7 @@ public class ResidentRole extends Role implements Resident {
 	// test data
 	public EventLog log = new EventLog();
 	MockScheduleTaskListener listener = new MockScheduleTaskListener();
+	private boolean START_HUNGRY = false;
 	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
@@ -71,7 +72,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 3; 
-	private final int IMPATIENCE_TIME = 7;
+	private final int IMPATIENCE_TIME = 20;
 	
 	/* ----- Class Data ----- */
 	/**
@@ -97,6 +98,7 @@ public class ResidentRole extends Role implements Resident {
 	/* --- Constructor --- */
 	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
 		super(agent, residence);
+		
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
@@ -105,7 +107,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
-		Do("Payment due =/");
+		Do("Payment due");
 		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
@@ -134,7 +136,6 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		
 		if(!timerSet){
 			gui.setPresent(true);
 		}
@@ -155,7 +156,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		// TODO ERIK FIXED THIS TO USE PERSON HUNGER
+		// TODO START_HUNGRY is for testing only
 		if(isHungry()) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
@@ -177,6 +178,7 @@ public class ResidentRole extends Role implements Resident {
 		if(!timerSet && person.hasSomethingToDo()){
 			Runnable command = new Runnable() {
 				public void run(){
+					Do("Nothing to do. Deactivating!");
 					gui.setPresent(false);
 					timerSet = false;
 					deactivate();
@@ -308,6 +310,7 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
 		DoShowSpeech("Calling maintenance worker!");
+		
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();

@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.JPanel;
+
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.AccountManagerGui;
 import bank.gui.BankBuilding;
+import bank.gui.InfoPanel;
 import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.Robber;
@@ -33,11 +36,15 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	private boolean endWorkShift = false;
 	
+	InfoPanel infoPanel;
+	
 	private Semaphore active = new Semaphore(0, true);
 	private AccountManagerGui accountManagerGui;
 	
 	private boolean atWork;
+	private boolean needToUpdateBankMoney;
 	
+	double moneyInBank = 100000;
 	double paycheckAmount = 300;
 	
 	enum TaskState {newAccount, pendingDeposit, pendingWithdraw};
@@ -81,6 +88,7 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	List<MyRobber> robbers = new ArrayList<MyRobber>();
 	
+	List<Double> loanAmounts = new ArrayList<Double>();
 	int startHour;
 	int startMinute;
 	int endHour ;
@@ -90,6 +98,8 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	public AccountManagerRole(Person person, CityLocation bank) {
 		super(person, bank);
 		atWork = false;
+		needToUpdateBankMoney = false;
+		
 		
 		startHour = ((BankBuilding) bank).getOpeningHour();
 		startMinute = ((BankBuilding) bank).getOpeningMinute();
@@ -125,6 +135,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	
 	public void msgGiveMeTheMoney(Robber r, double amount) {
 		robbers .add(new MyRobber(r, amount, robberState.asking));
+		stateChanged();
+	}
+	
+	public void msgUpdateMoney(double amount) {//sent from loan manager
+		loanAmounts.add(amount);
 		stateChanged();
 	}
 	
@@ -166,17 +181,23 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 			}
 		}
 		
+		if(!loanAmounts.isEmpty()) {
+			updateBankMoney(loanAmounts.get(0));
+			return true;
+		}
+		
 		if(endWorkShift) {
 			goOffWork();
 			return true;
 		}
 		
+		
 		return false;
 	}
 	// Actions
 	public void goToWork() {
-		doGoToDesk();
-		acquireSemaphore(active);
+		doGoToWork();
+//		acquireSemaphore(active);
 		atWork = true;
 	}
 	
@@ -196,6 +217,9 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		doGoToDesk();
 		acquireSemaphore(active);
 		mr.r.msgGiveMoneyToRobber(mr.stealAmount);
+		moneyInBank -= mr.stealAmount;
+		
+		infoPanel.updateInfoPanel();
 		
 	}
 	
@@ -206,10 +230,13 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		doGoToDesk();
 		acquireSemaphore(active);
         Account newAccount = new Account(t.bc, t.deposit);
+        moneyInBank += t.deposit;
         accountMap.put(currentIdNum, newAccount);
         t.t.msgNewAccountVerified(t.bc, currentIdNum);
         tasks.remove(t);
         currentIdNum++;  
+        
+        infoPanel.updateInfoPanel();
 	}
 	
 	private void deposit(Task t) {
@@ -220,8 +247,11 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		acquireSemaphore(active);
 		Account temp = accountMap.get(t.accountId);
 		temp.amount += t.deposit;
+		moneyInBank += t.deposit;
 		t.t.msgDepositSuccessful(t.bc, t.accountId, t.deposit);
 		tasks.remove(t);
+		
+		infoPanel.updateInfoPanel();
 	}
 
 	private void withdraw(Task t) {
@@ -232,16 +262,24 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 		acquireSemaphore(active);
 		Account temp = accountMap.get(t.accountId);
 		temp.amount -= t.withdrawal;
+		moneyInBank -= t.withdrawal;
 		t.t.msgWithdrawSuccessful(t.bc, t.accountId, t.withdrawal);
 		tasks.remove(t);
+		
+		infoPanel.updateInfoPanel();
 	}
 	
 	private void goOffWork() {
 		addPaycheckToWallet();
 		doEndWorkDay();
-		acquireSemaphore(active);
+//		acquireSemaphore(active);
 		this.deactivate();
 		atWork = false;
+	}
+	
+	private void updateBankMoney(double amount) {
+		moneyInBank -= amount;
+		loanAmounts.remove(0);
 	}
 	
 	/*
@@ -253,9 +291,27 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 	}
 	
 	//ANIMATION
+	private void doGoToWork() {
+		accountManagerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToDesk();
+		acquireSemaphore(active);
+	}
 	
-	private void doEndWorkDay() {
-		accountManagerGui.DoEndWorkDay();
+	private void doEndWorkDay() {//TODO check this
+		accountManagerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
+		accountManagerGui.DoLeaveBank();
+		acquireSemaphore(active);
+		
 	}
 	
 	public void msgAtDestination() {
@@ -300,6 +356,14 @@ public class AccountManagerRole extends WorkRole implements AccountManager {
 //		return null;
 //	}
 
+	public double getMoneyInBank() {
+		return moneyInBank;
+	}
+	
+	public void setInfoPanel(InfoPanel i) {
+		infoPanel = i;
+	}
+	
 	@Override
 	public void Do(String str) {
 		Do(AlertTag.BANK, str);

@@ -2,6 +2,7 @@ package housing.gui;
 
 
 import housing.backend.PayRecipientRole;
+import housing.backend.ResidentRole;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,16 +14,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.sound.Sound;
 import agent.Role;
 import agent.interfaces.Person;
 
 @SuppressWarnings("serial")
 public class HousingInfoPanel extends JPanel implements ActionListener {
 	
-	Map<Person, Role> people;
+	private Map<Person, Role> people;
 	
-	JButton chargeRent = new JButton("Charge Rent");
-	JButton breakHouse = new JButton("Break House");
+	private JButton chargeRent = new JButton("Charge Rent");
+	private JButton breakHouse = new JButton("Break House");
+	
+	private Sound myLeg = Sound.getInstance();
 	
 	public HousingInfoPanel(CityLocation building, Map<Person, Role> people) {
 		
@@ -57,7 +61,14 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 			}
 		}
 		else if(evt.getSource() == breakHouse) {
-			System.out.println("Breaking House...");
+			myLeg.playSound("hitsound.wav");
+			for(Map.Entry<Person, Role> entry : people.entrySet()) {
+				if(entry.getValue() instanceof ResidentRole) {
+					ResidentRole role = (ResidentRole) entry.getValue();
+					role.getDwelling().degradeCondition();
+				}
+			}
+
 		}
 	}
 	

@@ -110,7 +110,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	public void msgChargeRent() {
 		synchronized(residents) {
 			for(MyResident mr : residents) {
-				System.out.println("Charging rent");
 				Do("Charging rent");
 				mr.state = PaymentState.PAYMENT_DUE;
 				stateChanged();

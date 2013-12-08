@@ -4,6 +4,7 @@ import agent.Role;
 import restaurant.vegaperk.gui.WaiterGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
+import gui.trace.AlertTag;
 
 import java.util.*;
 
@@ -396,5 +397,10 @@ public class WaiterAgent extends Role implements Waiter {
 	
 	public int getCustomerCount(){
 		return customers.size();
+	}
+	
+	@Override
+	public void Do(String msg) {
+		Do(AlertTag.RESTAURANT, msg);
 	}
 }

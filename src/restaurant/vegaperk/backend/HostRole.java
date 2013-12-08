@@ -1,6 +1,7 @@
 package restaurant.vegaperk.backend;
 
 import agent.Role;
+import gui.trace.AlertTag;
 
 import java.awt.Dimension;
 import java.util.*;
@@ -247,6 +248,11 @@ public class HostRole extends Role {
 		public int getY(){
 			return tableY;
 		}
+	}
+	
+	@Override
+	public void Do(String msg) {
+		Do(AlertTag.RESTAURANT, msg);
 	}
 }
 

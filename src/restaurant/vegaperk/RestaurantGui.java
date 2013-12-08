@@ -7,6 +7,8 @@ import gui.AnimationPanel;
 
 import javax.swing.*;
 
+import CommonSimpleClasses.Constants;
+
 import java.awt.*;
 
 /**
@@ -35,8 +37,8 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
      * Sets up all the gui components.
      */
     public RestaurantGui() {    	
-        int WINDOWX = 1100;
-        int WINDOWY = 500;
+        int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
+        int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
 
         setBounds(50, 50, WINDOWX, WINDOWY);
 

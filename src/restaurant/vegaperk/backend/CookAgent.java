@@ -3,6 +3,7 @@ package restaurant.vegaperk.backend;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
+import gui.trace.AlertTag;
 
 import java.awt.Dimension;
 import java.util.*;
@@ -331,5 +332,10 @@ public class CookAgent extends Role implements Cook {
 		private void setOrder(Order o){
 			order = o;
 		}
+	}
+	
+	@Override
+	public void Do(String msg) {
+		Do(AlertTag.RESTAURANT, msg);
 	}
 }

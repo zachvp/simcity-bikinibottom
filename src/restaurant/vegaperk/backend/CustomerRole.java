@@ -9,6 +9,7 @@ import restaurant.vegaperk.interfaces.Waiter;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
+import gui.trace.AlertTag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -432,5 +433,10 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	public void setHost(HostRole host) {
 		this.host = host;
+	}
+	
+	@Override
+	public void Do(String msg) {
+		Do(AlertTag.RESTAURANT, msg);
 	}
 }

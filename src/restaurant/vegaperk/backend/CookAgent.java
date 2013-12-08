@@ -1,4 +1,4 @@
-package restaurant.vegaperk;
+package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
@@ -16,9 +16,10 @@ import mock.EventLog;
  * Cook Agent
  */
 public class CookAgent extends Role implements Cook {
+	public EventLog log = new EventLog();
+	
 	private String name;
 	private CookGui cookGui;
-	public EventLog log = new EventLog();
 	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
@@ -27,6 +28,7 @@ public class CookAgent extends Role implements Cook {
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
+	
 	private List<Dimension> grillPositions = Collections.synchronizedList(new ArrayList<Dimension>());
 	private List<Dimension> platePositions = Collections.synchronizedList(new ArrayList<Dimension>());
 	

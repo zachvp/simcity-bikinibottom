@@ -1,11 +1,12 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CashierAgent;
-import restaurant.vegaperk.CookAgent;
-import restaurant.vegaperk.CustomerRole;
-import restaurant.vegaperk.HostRole;
-import restaurant.vegaperk.MarketAgent;
-import restaurant.vegaperk.WaiterAgent;
+import restaurant.vegaperk.RestaurantGui;
+import restaurant.vegaperk.backend.CashierAgent;
+import restaurant.vegaperk.backend.CookAgent;
+import restaurant.vegaperk.backend.CustomerRole;
+import restaurant.vegaperk.backend.HostRole;
+import restaurant.vegaperk.backend.MarketAgent;
+import restaurant.vegaperk.backend.WaiterAgent;
 
 import javax.swing.*;
 
@@ -65,8 +66,8 @@ public class RestaurantPanel extends JPanel {
 //    	agentList.add(m3);
     	
         this.gui = gui;
-        gui.animationPanel.addGui(tableGui);
-        gui.animationPanel.addGui(cookGui);
+        gui.getAnimationPanel().addGui(tableGui);
+        gui.getAnimationPanel().addGui(cookGui);
 
         cook.setGui(cookGui);
         cook.addMarket(m1);
@@ -169,7 +170,7 @@ public class RestaurantPanel extends JPanel {
     		// add the role to the list
     		agentList.add(c);
 
-    		gui.animationPanel.addGui(g);// dw
+    		gui.getAnimationPanel().addGui(g);// dw
     		c.setHost(host);
     		c.setGui(g);
     		customers.add(c);
@@ -195,7 +196,7 @@ public class RestaurantPanel extends JPanel {
     		w.setHost(host);
     		w.setCook(cook);
     		
-    		gui.animationPanel.addGui(wg);
+    		gui.getAnimationPanel().addGui(wg);
     		w.setGui(wg);
     		host.addWaiter(w);
     		return wg;

@@ -1,7 +1,8 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.WaiterAgent;
+import restaurant.vegaperk.RestaurantGui;
+import restaurant.vegaperk.backend.WaiterAgent;
 
 import java.awt.*;
 import java.net.URL;

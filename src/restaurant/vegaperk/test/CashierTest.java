@@ -1,7 +1,7 @@
 package restaurant.vegaperk.test;
 
-import restaurant.vegaperk.CashierAgent;
-import restaurant.vegaperk.CashierAgent.CustomerState;
+import restaurant.vegaperk.backend.CashierAgent;
+import restaurant.vegaperk.backend.CashierAgent.CustomerState;
 import restaurant.vegaperk.test.mock.MockCustomer;
 import restaurant.vegaperk.test.mock.MockMarket;
 import restaurant.vegaperk.test.mock.MockWaiter;

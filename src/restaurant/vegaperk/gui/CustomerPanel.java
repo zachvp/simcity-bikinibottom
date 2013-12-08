@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CustomerRole;
-import restaurant.vegaperk.HostRole;
+import restaurant.vegaperk.backend.CustomerRole;
+import restaurant.vegaperk.backend.HostRole;
 
 import javax.swing.*;
 

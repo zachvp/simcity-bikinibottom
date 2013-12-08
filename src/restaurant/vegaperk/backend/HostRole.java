@@ -1,4 +1,4 @@
-package restaurant.vegaperk;
+package restaurant.vegaperk.backend;
 
 import agent.Role;
 

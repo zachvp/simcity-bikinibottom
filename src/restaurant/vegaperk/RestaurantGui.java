@@ -1,7 +1,8 @@
-package restaurant.vegaperk.gui;
+package restaurant.vegaperk;
 
-import restaurant.vegaperk.CustomerRole;
-import restaurant.vegaperk.WaiterAgent;
+import restaurant.vegaperk.backend.CustomerRole;
+import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.gui.RestaurantPanel;
 import gui.AnimationPanel;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
     /* The GUI has one frame with two components: the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
-	AnimationPanel animationPanel = new AnimationPanel();
+	private AnimationPanel animationPanel = new AnimationPanel();
 	
     /* restPanel holds...
      * the staff listing, menu, and lists of current customers all constructed
@@ -106,4 +107,12 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
         gui.setResizable(false);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+	public AnimationPanel getAnimationPanel() {
+		return animationPanel;
+	}
+
+	public void setAnimationPanel(AnimationPanel animationPanel) {
+		this.animationPanel = animationPanel;
+	}
 }

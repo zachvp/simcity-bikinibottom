@@ -1,6 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CookAgent;
+import restaurant.vegaperk.RestaurantGui;
+import restaurant.vegaperk.backend.CookAgent;
 
 import java.awt.*;
 import java.util.Collections;

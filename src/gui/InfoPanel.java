@@ -246,8 +246,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 		if (b instanceof MarketBuilding){
 			((MarketBuilding) b).UpdateInfoPanel();
-		}		
+		}	
+		
 		CardLayout cl = (CardLayout)(card.getLayout());
+		CardLayout c2 = (CardLayout)(staffCard.getLayout());
+		
 		if(b.getInfoPanel() == null){
 			cl.show(card, "blank");
 		}
@@ -258,8 +261,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 			}
 			if(!(b instanceof HospitalBuilding) && tabDisplay.getTabCount() == 2){
 				tabDisplay.showStaffTab();
+				
 			}
-
+			c2.show(staffCard, b.getName());
 			cl.show(card, b.getName());
 		}
 

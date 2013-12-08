@@ -91,4 +91,9 @@ public class ResidentialBuilding extends Building {
 		return housingInfoPanel;
 	}
 	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
+	
 }

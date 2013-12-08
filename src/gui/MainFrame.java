@@ -293,6 +293,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buildingList.addToList(building.getName());
 		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
+		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);
 	}
 

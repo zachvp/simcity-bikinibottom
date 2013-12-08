@@ -8,6 +8,8 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+import agent.gui.Gui;
+
 public class WaiterGui implements Gui {
 
     private WaiterAgent agent = null;

@@ -3,6 +3,8 @@ package restaurant.vegaperk.gui;
 import java.awt.*;
 import java.util.Map;
 
+import agent.gui.Gui;
+
 public class TableGui implements Gui{
 	public Map<Integer, Dimension> tableMap;
 	

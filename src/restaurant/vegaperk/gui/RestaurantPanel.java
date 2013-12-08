@@ -56,8 +56,8 @@ public class RestaurantPanel extends JPanel {
     	agentList.add(m3);
     	
         this.gui = gui;
-        gui.animationPanel.addTables(tableGui);
-        gui.animationPanel.addCook(cookGui);
+        gui.animationPanel.addGui(tableGui);
+        gui.animationPanel.addGui(cookGui);
 
         cook.setGui(cookGui);
         cook.addMarket(m1);

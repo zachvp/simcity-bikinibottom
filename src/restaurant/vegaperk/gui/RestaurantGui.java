@@ -2,6 +2,7 @@ package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.CustomerAgent;
 import restaurant.vegaperk.WaiterAgent;
+import gui.AnimationPanel;
 
 import javax.swing.*;
 

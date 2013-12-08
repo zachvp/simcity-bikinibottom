@@ -1,11 +1,14 @@
 package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.CustomerAgent;
+
 import java.awt.*;
 
 import javax.swing.ImageIcon;
 
-public class CustomerGui implements Gui{
+import agent.gui.Gui;
+
+public class CustomerGui implements Gui {
 
 	private CustomerAgent agent = null;
 	private boolean isPresent = false;

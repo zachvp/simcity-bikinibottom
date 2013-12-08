@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import agent.gui.Gui;
+
 public class CookGui implements Gui{
 
 	private CookAgent agent = null;

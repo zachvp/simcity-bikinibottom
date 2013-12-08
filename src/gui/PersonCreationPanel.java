@@ -85,7 +85,8 @@ ClassifiedsChangedListener{
 	private BufferedImage image;
 
 	public PersonCreationPanel(){
-		Dimension d = new Dimension(600, 490);
+		Dimension d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
+
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);

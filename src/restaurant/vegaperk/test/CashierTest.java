@@ -1,10 +1,10 @@
 package restaurant.vegaperk.test;
 
-import restaurant.CashierAgent;
-import restaurant.CashierAgent.CustomerState;
-import restaurant.test.mock.MockCustomer;
-import restaurant.test.mock.MockMarket;
-import restaurant.test.mock.MockWaiter;
+import restaurant.vegaperk.CashierAgent;
+import restaurant.vegaperk.CashierAgent.CustomerState;
+import restaurant.vegaperk.test.mock.MockCustomer;
+import restaurant.vegaperk.test.mock.MockMarket;
+import restaurant.vegaperk.test.mock.MockWaiter;
 import junit.framework.*;
 
 /**

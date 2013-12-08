@@ -3,8 +3,10 @@ package restaurant.vegaperk.test.mock;
 
 import java.util.Map;
 
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Market;
+import mock.EventLog;
+import mock.Mock;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Market;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.

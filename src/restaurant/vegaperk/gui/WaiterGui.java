@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.WaiterAgent;
+import restaurant.vegaperk.WaiterAgent;
 
 import java.awt.*;
 import java.net.URL;
@@ -150,9 +150,5 @@ public class WaiterGui implements Gui {
 
     public int getYPos() {
         return yPos;
-    }
-    
-    public void pause(){
-    	agent.pause();
     }
 }

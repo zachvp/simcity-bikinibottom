@@ -4,10 +4,10 @@ import agent.Agent;
 
 import java.util.*;
 
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Market;
-import restaurant.test.mock.EventLog;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Cook;
+import restaurant.vegaperk.interfaces.Market;
+import mock.EventLog;
 
 /**
  * Market Agent

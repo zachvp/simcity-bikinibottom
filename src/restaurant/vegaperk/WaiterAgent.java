@@ -1,9 +1,9 @@
 package restaurant.vegaperk;
 
 import agent.Agent;
-import restaurant.gui.WaiterGui;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.vegaperk.gui.WaiterGui;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Waiter;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;

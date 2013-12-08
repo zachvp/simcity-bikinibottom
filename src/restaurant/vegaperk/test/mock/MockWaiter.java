@@ -1,10 +1,11 @@
 package restaurant.vegaperk.test.mock;
 
 
-import restaurant.WaiterAgent.Menu;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import mock.EventLog;
+import mock.Mock;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Waiter;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -100,6 +101,11 @@ public class MockWaiter extends Mock implements Waiter {
 	public void msgHomePosition(int position) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
 	}
 
 }

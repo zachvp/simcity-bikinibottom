@@ -1,8 +1,5 @@
 package restaurant.vegaperk.interfaces;
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-
 /**
  * A sample Customer interface built to unit test a CashierAgent.
  *

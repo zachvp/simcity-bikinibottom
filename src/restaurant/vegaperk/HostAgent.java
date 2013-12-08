@@ -5,8 +5,8 @@ import agent.Agent;
 import java.awt.Dimension;
 import java.util.*;
 
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Waiter;
 
 /**
  * Restaurant Host Agent
@@ -81,20 +81,20 @@ public class HostAgent extends Agent {
 		for(Table table : tables){
 			if(table.getTableID() == t){
 				table.setUnoccupied();
-				print("Set table unoccupied");
+				Do("Set table unoccupied");
 			}
 		}
 		stateChanged();
 	}
 	public void msgIWantBreak(Waiter w){
 		MyWaiter mw = findWaiter(w);
-		print("wants break");
+		Do("wants break");
 		mw.state = WaiterState.REQUESTED_BREAK;
 		stateChanged();
 	}
 	public void msgOffBreak(Waiter w){
 		MyWaiter mw = findWaiter(w);
-		print("off break");
+		Do("off break");
 		mw.state = WaiterState.NONE;
 		stateChanged();
 	}
@@ -129,7 +129,7 @@ public class HostAgent extends Agent {
 		synchronized(waiters){
 			for(MyWaiter waiter : waiters){
 				if(waiter.state == WaiterState.REQUESTED_BREAK){
-					print("schedule break");
+					Do("schedule break");
 					tryToPutOnBreak(waiter);
 					return true;
 				}
@@ -145,7 +145,7 @@ public class HostAgent extends Agent {
 	/** Actions. Implement the methods called in the scheduler. */
 	private void seatCustomer(Customer customer, Table table) {
 		findLeastBusyWaiter().Waiter.msgPleaseSeatCustomer(customer, table.getTableID());
-		print("seat at table " + table.getTableID());
+		Do("seat at table " + table.getTableID());
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
 		stateChanged();
@@ -159,7 +159,7 @@ public class HostAgent extends Agent {
 	}
 	
 	private void tryToPutOnBreak(MyWaiter w){
-		print("trying to put on break");
+		Do("trying to put on break");
 		for(MyWaiter mw : waiters){
 			if(mw.state == WaiterState.NONE){
 				w.state = WaiterState.ON_BREAK;

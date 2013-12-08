@@ -1,10 +1,12 @@
 package restaurant.vegaperk.test.mock;
 
 
-import restaurant.WaiterAgent.Menu;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import mock.EventLog;
+import mock.Mock;
+import restaurant.vegaperk.WaiterAgent.Menu;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Waiter;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -29,43 +31,43 @@ public class MockCustomer extends Mock implements Customer {
 	@Override
 	/** Messages From Cashier */
 	public void msgHereIsCheck(double check, Cashier cash){
-		log.add(new LoggedEvent("Received Check from Cashier " + check));
+		log.add("Received Check from Cashier " + check);
 		System.out.println("Received check from Cashier");
 		cashier = cash;
 		bill = check;
 	}
 	public void msgHereIsChange(double change){
-		log.add(new LoggedEvent("Received Change from Cashier " + change));
+		log.add("Received Change from Cashier " + change);
 		money += change;
 	}
 
 	@Override
 	public void msgSitAtTable(Waiter w, Menu m, int x, int y) {
-		// TODO Auto-generated method stub
-		log.add(new LoggedEvent("Received sit at table"));
+		log.add("Received sit at table");
 	}
 
 	@Override
 	public void msgWhatWouldYouLike() {
-		// TODO Auto-generated method stub
 		log.add("Receievd what would you like");
 	}
 
 	@Override
 	public void msgHereIsYourFood() {
-		// TODO Auto-generated method stub
 		log.add("Receieved what would you like");
 	}
 
 	@Override
 	public void msgOutOfChoice(String c) {
-		// TODO Auto-generated method stub
 		log.add("Receieved out of choice");
 	}
 
 	@Override
 	public void msgTablesAreFull() {
-		// TODO Auto-generated method stub
 		log.add("Receieved tables are full");
+	}
+
+	@Override
+	public String getName() {
+		return super.getName();
 	}
 }

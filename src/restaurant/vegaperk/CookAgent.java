@@ -6,10 +6,10 @@ import java.awt.Dimension;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-import restaurant.gui.CookGui;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Waiter;
-import restaurant.test.mock.EventLog;
+import restaurant.vegaperk.gui.CookGui;
+import restaurant.vegaperk.interfaces.Cook;
+import restaurant.vegaperk.interfaces.Waiter;
+import mock.EventLog;
 
 /**
  * Cook Agent
@@ -162,7 +162,7 @@ public class CookAgent extends Agent implements Cook {
 		o.state = OrderState.COOKING;
 		Food f = inventory.get(o.choice);
 		if(f.amount <= 0){
-			print("Out of food");
+			Do("Out of food");
 			o.waiter.msgOutOfChoice(o.choice, o.table);
 			orders.remove(o);
 			return;
@@ -205,7 +205,7 @@ public class CookAgent extends Agent implements Cook {
 	
 	private void plateIt(Order o){
 		o.state = OrderState.FINISHED;
-		print("Order Plated");
+		Do("Order Plated");
 		o.waiter.msgOrderDone(o.choice, o.table);
 		Do("Order done " + o.choice);
 		plateZones.get(o.table).setOrder(o);

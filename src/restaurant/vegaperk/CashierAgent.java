@@ -5,11 +5,11 @@ import agent.Agent;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
-import restaurant.interfaces.Waiter;
-import restaurant.test.mock.EventLog;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Market;
+import restaurant.vegaperk.interfaces.Waiter;
+import mock.EventLog;
 
 /**
  * Cook Agent

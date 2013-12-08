@@ -1,18 +1,17 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.CashierAgent;
-import restaurant.CookAgent;
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
-import restaurant.MarketAgent;
-import restaurant.WaiterAgent;
+import restaurant.vegaperk.CashierAgent;
+import restaurant.vegaperk.CookAgent;
+import restaurant.vegaperk.CustomerAgent;
+import restaurant.vegaperk.HostAgent;
+import restaurant.vegaperk.MarketAgent;
+import restaurant.vegaperk.WaiterAgent;
 
 import javax.swing.*;
 
 import agent.Agent;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -20,6 +19,7 @@ import java.util.Vector;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
+@SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
 
     //Host, cook, waiters and customers
@@ -167,18 +167,4 @@ public class RestaurantPanel extends JPanel {
     public HostAgent getHost(){
     	return host;
     }
-    
-	public void pauseAnimation(){
-		for(Agent a : agentList){
-		a.pause();
-		}
-		gui.pauseAnimationPanel();
-	}
-	
-	public void resumeAnimation(){
-		for(Agent a : agentList){
-			a.restart();
-		}
-		gui.resumeAnimationPanel();
-	}
 }

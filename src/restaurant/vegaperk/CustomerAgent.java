@@ -1,11 +1,11 @@
 package restaurant.vegaperk;
 
-import restaurant.WaiterAgent.Menu;
-import restaurant.gui.CustomerGui;
-import restaurant.gui.CustomerGui.OrderState;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.vegaperk.WaiterAgent.Menu;
+import restaurant.vegaperk.gui.CustomerGui;
+import restaurant.vegaperk.gui.CustomerGui.OrderState;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.interfaces.Waiter;
 import agent.Agent;
 
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ public class CustomerAgent extends Agent implements Customer {
 	
 	private CustomerGui customerGui;
 	
+	@SuppressWarnings("serial")
 	private static List<WaitZone> waitZones = new ArrayList<WaitZone>(){
 		{
 			for(int i = 0; i < 14; i++){
@@ -92,7 +93,7 @@ public class CustomerAgent extends Agent implements Customer {
 	/** Messages from other agents */
 	/** from HostAgent */
 	public void gotHungry() {//from animation
-		print(getCustomerName());
+		Do(getCustomerName());
 		Do("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
 		stateChanged();

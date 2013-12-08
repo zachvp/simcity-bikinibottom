@@ -1,6 +1,6 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.CustomerAgent;
+import restaurant.vegaperk.CustomerAgent;
 import java.awt.*;
 
 import javax.swing.ImageIcon;

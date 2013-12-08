@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
+import restaurant.vegaperk.CustomerAgent;
+import restaurant.vegaperk.HostAgent;
 
 import javax.swing.*;
 
@@ -97,16 +97,6 @@ public class CustomerPanel extends JPanel implements ActionListener {
         	// Chapter 2.19 describes showInputDialog()
         	addPerson(nameField.getText());//adds a customer to the list
         	nameField.setText("");
-        }
-        else if(e.getSource() == pauseButton){
-        	if(pauseButton.getText().equals("Pause!")){
-        	restPanel.pauseAnimation();
-        	pauseButton.setText("Resume!");
-        	}
-        	else if(pauseButton.getText().equals("Resume!")){
-        		restPanel.resumeAnimation();
-        		pauseButton.setText("Pause!");
-        	}
         }
     }
 

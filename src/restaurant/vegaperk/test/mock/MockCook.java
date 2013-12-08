@@ -3,11 +3,11 @@ package restaurant.vegaperk.test.mock;
 
 import java.util.Map;
 
-import restaurant.WaiterAgent.Menu;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import mock.EventLog;
+import mock.Mock;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Cook;
+import restaurant.vegaperk.interfaces.Waiter;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -29,27 +29,23 @@ public class MockCook extends Mock implements Cook {
 
 	@Override
 	public void msgHereIsOrder(Waiter w, String c, int t) {
-		// TODO Auto-generated method stub
-		
+		log.add("Received message here is order");
 	}
 
 	@Override
 	public void msgCannotDeliver(Map<String, Integer> cannotDeliver) {
-		// TODO Auto-generated method stub
-		
+		log.add("Received message connot deliever");
 	}
 
 
 	@Override
 	public void msgCanDeliver(Map<String, Integer> canDeliver) {
-		// TODO Auto-generated method stub
-		
+		log.add("Received message can deliever");
 	}
 
 
 	@Override
 	public void msgHereIsDelivery() {
-		// TODO Auto-generated method stub
-		
+		log.add("Received message here is delivery");
 	}
 }

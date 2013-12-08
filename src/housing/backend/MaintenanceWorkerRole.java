@@ -191,4 +191,10 @@ public class MaintenanceWorkerRole extends WorkRole implements MaintenanceWorker
 	public void msgHereIsPayment(double bill) {
 		person.getWallet().addCash(bill);
 	}
+
+	@Override
+	public void setDwelling(Dwelling dwelling) {
+		// This is only relevant for the mock worker
+		
+	}
 }

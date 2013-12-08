@@ -1,6 +1,5 @@
 package housing.test;
 
-import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
 import housing.backend.ResidentRole;
@@ -11,7 +10,7 @@ import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident.FoodState;
 import housing.interfaces.ResidentGui;
 import housing.test.mock.MockDwelling;
-import housing.test.mock.MockLayoutGui;
+import housing.test.mock.MockDwellingGui;
 import housing.test.mock.MockMaintenanceWorker;
 import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResidentGui;
@@ -28,7 +27,7 @@ public class ResidentTest extends TestCase {
 	Dwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
 	MaintenanceWorker worker = new MockMaintenanceWorker("Worker", dwelling);
 	
-	DwellingLayoutGui mockLayoutGui = new MockLayoutGui();
+	DwellingLayoutGui mockLayoutGui = new MockDwellingGui();
 	
 	// constants
 	private final double PAYMENT_AMOUNT = 64;

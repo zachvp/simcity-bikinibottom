@@ -5,10 +5,10 @@ import java.awt.Dimension;
 import housing.interfaces.DwellingLayoutGui;
 import mock.EventLog;
 
-public class MockLayoutGui implements DwellingLayoutGui {
+public class MockDwellingGui implements DwellingLayoutGui {
 	EventLog log = new EventLog();
 
-	public MockLayoutGui() { }
+	public MockDwellingGui() { }
 
 	@Override
 	public void DoMoveGary() {

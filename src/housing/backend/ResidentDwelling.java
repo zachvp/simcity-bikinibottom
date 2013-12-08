@@ -5,7 +5,7 @@ import agent.gui.Gui;
 import mock.EventLog;
 import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.Constants;
-import housing.gui.LayoutGui;
+import housing.gui.DwellingGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.Resident;
@@ -43,7 +43,7 @@ public class ResidentDwelling implements Dwelling {
 	private final int MAX_MONTHLY_PAYMENT = 64;
 	
 	// gui slots
-	LayoutGui gui;
+	DwellingGui gui;
 	
 	// TODO just test people
 	PersonAgent person;
@@ -58,7 +58,7 @@ public class ResidentDwelling implements Dwelling {
 		
 		// TODO actual code below
 		this.complex = complex;
-		this.gui = new LayoutGui(ID);
+		this.gui = new DwellingGui(ID);
 		
 		this.condition = startCondition;
 		

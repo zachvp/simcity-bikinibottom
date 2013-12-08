@@ -14,7 +14,7 @@ public class MockResident extends Mock implements Resident {
 	public double oweMoney = 0;
 	
 	// mock
-	DwellingLayoutGui layoutGui = new MockLayoutGui();
+	DwellingLayoutGui layoutGui = new MockDwellingGui();
 	
 	public MockResident(String name) {
 		super(name);

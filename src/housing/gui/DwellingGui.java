@@ -20,7 +20,7 @@ import agent.gui.Gui;
  * LayoutGui stores all the positional information about housing items
  * (furniture, appliances, etc) and displays them.
  */
-public class LayoutGui implements Gui, DwellingLayoutGui {
+public class DwellingGui implements Gui, DwellingLayoutGui {
 	/* --- Layout Item Positions --- */
 	
 	//window size = 550x400
@@ -51,7 +51,7 @@ public class LayoutGui implements Gui, DwellingLayoutGui {
 	// timer for gary
 	ScheduleTask move = ScheduleTask.getInstance(); 
 	
-	public LayoutGui(int index) {
+	public DwellingGui(int index) {
 		ROOM_WIDTH = Constants.ANIMATION_PANEL_WIDTH / 3;
 		ROOM_HEIGHT = Constants.ANIMATION_PANEL_HEIGHT / 3;
 		

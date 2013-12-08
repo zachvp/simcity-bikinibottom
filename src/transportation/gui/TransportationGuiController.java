@@ -42,7 +42,7 @@ public class TransportationGuiController implements Gui {
 
 			@Override
 			public void run() {
-				startCrashSequence();
+				startPedestrianCrashSequence();
 
 			}
 		}, 7000);
@@ -169,8 +169,12 @@ public class TransportationGuiController implements Gui {
 		
 	}
 	
-	public void startCrashSequence() {
+	public void startCarCrashSequence() {
 		guis.add(new CarCrashSequence());
+	}
+	
+	public void startPedestrianCrashSequence() {
+		guis.add(new PedestrianCrashSequence());
 	}
 
 	public void removeGui(Gui gui) {

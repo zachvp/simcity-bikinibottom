@@ -9,6 +9,7 @@ import restaurant.vegaperk.interfaces.Waiter;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
+import agent.gui.Gui;
 import gui.trace.AlertTag;
 
 import java.util.ArrayList;
@@ -424,7 +425,7 @@ public class CustomerRole extends Role implements Customer {
 		customerGui = g;
 	}
 
-	public CustomerGui getGui() {
+	public Gui getGui() {
 		return customerGui;
 	}
 	

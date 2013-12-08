@@ -31,6 +31,7 @@ public class ResidentialBuilding extends Building {
 	// prevents the repeated retrieval of the building name
 	private boolean name = false;
 	
+	// control scenarios and view housing info here
 	private HousingInfoPanel housingInfoPanel;
 	
 	// Constants for staggering opening/closing time

@@ -1,8 +1,10 @@
 package restaurant.vegaperk;
 
+import java.awt.GridLayout;
+
 import javax.swing.JFrame;
 
-import restaurant.vegaperk.gui.RestaurantGui;
+import restaurant.vegaperk.backend.RestaurantBuilding;
 import CommonSimpleClasses.Constants;
 
 /**
@@ -13,14 +15,16 @@ import CommonSimpleClasses.Constants;
 
 @SuppressWarnings("serial")
 public class Test extends JFrame {
-    int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
-    int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
+    private int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
+    private int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
 
-	RestaurantGui gui;
+	private RestaurantBuilding building = new RestaurantBuilding(0, 0, 0, 0);
 	
 	public Test() {
-		gui = new RestaurantGui();
-		this.add(gui);
+		this.setLayout(new GridLayout(1, 2));
+		
+		this.add(building.getAnimationPanel());
+		this.add(building.getInfoPanel());
 		
 		this.setBounds(50, 50, WINDOWX, WINDOWY);
 	}

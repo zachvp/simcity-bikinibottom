@@ -6,17 +6,19 @@ import gui.AnimationPanel;
 
 import javax.swing.*;
 
+import agent.Role;
 import CommonSimpleClasses.Constants;
 
 import java.awt.*;
 
 /**
- * Main GUI class.
+ * Restaurant GUI class.
  * Contains the main frame and subsequent panels
  */
 
 @SuppressWarnings("serial")
-public class RestaurantGui extends JPanel{// implements ActionListener {
+public class RestaurantGui extends JPanel{
+	
     /* The GUI has one frame with two components: the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
@@ -39,10 +41,8 @@ public class RestaurantGui extends JPanel{// implements ActionListener {
         int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
         int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
 
-        setBounds(50, 50, WINDOWX, WINDOWY);
-
-        setLayout(new BoxLayout(this, 
-        		BoxLayout.X_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        
         JPanel restInterface = new JPanel();
         restInterface.setPreferredSize(new Dimension(WINDOWX/2, WINDOWY));
         restInterface.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -99,6 +99,14 @@ public class RestaurantGui extends JPanel{// implements ActionListener {
     
 	public AnimationPanel getAnimationPanel() {
 		return animationPanel;
+	}
+	
+	public RestaurantPanel getInfoPanel() {
+		return restPanel;
+	}
+	
+	public Role getHost() {
+		return restPanel.getHost();
 	}
 
 	public void setAnimationPanel(AnimationPanel animationPanel) {

@@ -21,6 +21,7 @@ import java.util.Vector;
  * Panel in frame that contains all the restaurant information,
  * including host, cook, waiters, and customers.
  */
+
 @SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
 

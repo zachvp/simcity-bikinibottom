@@ -1,5 +1,7 @@
 package restaurant.vegaperk;
 
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 
 import java.awt.Dimension;
@@ -18,6 +20,9 @@ public class CookAgent extends Role implements Cook {
 	private CookGui cookGui;
 	public EventLog log = new EventLog();
 	
+	// used to create time delays and schedule events
+	private ScheduleTask schedule = ScheduleTask.getInstance();
+	
 	private boolean onOpening = true;
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
@@ -28,8 +33,6 @@ public class CookAgent extends Role implements Cook {
 	private List<PlateZone> plateZones = Collections.synchronizedList(new ArrayList<PlateZone>());
 	
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
-	
-	private Timer timer = new Timer();
 	
 	// create an anonymous Map class to initialize the foods and cook times
 	@SuppressWarnings("serial")
@@ -191,16 +194,23 @@ public class CookAgent extends Role implements Cook {
 			}
 		}
 	}
-	
-	private void timeFood(final int i){//timer takes in a final int to circumvent timer restrictions
-		timer.schedule(new TimerTask() {
-			public void run() {
+
+	/**
+	 * Delay the food cook time
+	 * @param i circumvents timer restrictions
+	 */
+	private void timeFood(final int i){
+		Runnable command = new Runnable() {
+			public void run(){
+				Do(orders.get(i).choice + " done.");
 				orders.get(i).state = OrderState.COOKED;
 				stateChanged();
 			}
-		},
-		//Retrieve from the map how long the food takes to cook
-		3 * cookTimes.get(orders.get(i).choice));
+		};
+		
+		// resident role will deactivate after the delay below
+		schedule.scheduleTaskWithDelay(command,
+				cookTimes.get(orders.get(i).choice) * Constants.MINUTE);
 	}
 	
 	private void plateIt(Order o){

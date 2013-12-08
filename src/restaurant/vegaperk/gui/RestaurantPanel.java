@@ -2,8 +2,8 @@ package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.CashierAgent;
 import restaurant.vegaperk.CookAgent;
-import restaurant.vegaperk.CustomerAgent;
-import restaurant.vegaperk.HostAgent;
+import restaurant.vegaperk.CustomerRole;
+import restaurant.vegaperk.HostRole;
 import restaurant.vegaperk.MarketAgent;
 import restaurant.vegaperk.WaiterAgent;
 
@@ -28,7 +28,7 @@ public class RestaurantPanel extends JPanel {
 	private ArrayList<Role> agentList = new ArrayList<Role>();
     
     private PersonAgent hostPerson;
-    private HostAgent host = new HostAgent("Mr. Krabs");
+    private HostRole host = new HostRole("Mr. Krabs");
     
     // TODO the table map should be stored in the table gui
     private TableGui tableGui = new TableGui(host.getTableMap());
@@ -43,7 +43,7 @@ public class RestaurantPanel extends JPanel {
     private MarketAgent m2 = new MarketAgent("Market 2");
     private MarketAgent m3 = new MarketAgent("Market 3");
     
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
+    private Vector<CustomerRole> customers = new Vector<CustomerRole>();
 
     private JPanel restLabel = new JPanel();
     private CustomerPanel customerPanel = new CustomerPanel(this, "Customers");
@@ -159,7 +159,7 @@ public class RestaurantPanel extends JPanel {
     		// new role and person stuff
     		PersonAgent person = new PersonAgent("Customer");
     		
-    		CustomerAgent c = new CustomerAgent(name);
+    		CustomerRole c = new CustomerRole(name);
     		CustomerGui g = new CustomerGui(c, gui);
     		
     		person.addRole(c);
@@ -201,14 +201,14 @@ public class RestaurantPanel extends JPanel {
     	}
    		return null;    		
     }
-    public void setCustomerEnabled(CustomerAgent c){
+    public void setCustomerEnabled(CustomerRole c){
     	customerPanel.setCustomerEnabled(c);
     }
     public void denyBreak(WaiterAgent w){
     	waiterPanel.denyBreak(w);
     }
     
-    public HostAgent getHost(){
+    public HostRole getHost(){
     	return host;
     }
 }

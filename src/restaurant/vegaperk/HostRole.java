@@ -12,7 +12,8 @@ import restaurant.vegaperk.interfaces.Waiter;
  * Restaurant Host Agent
  */
 
-public class HostAgent extends Role {
+public class HostRole extends Role {
+	/* --- Constants --- */
 	static final int NTABLES = 4;//a global for the number of tables.
 	private static final int TABLECOLNUM = 2;
 	private static final int TABLEROWNUM = 2;
@@ -20,15 +21,11 @@ public class HostAgent extends Role {
 	
 	int chooseWaiter = -1;//cycles through the list of waiters
 	
-	//Notice that we implement waitingCustomers using ArrayList, but type it
-	//with List semantics.
 	public List<Customer> waitingCustomers =
 			Collections.synchronizedList(new ArrayList<Customer>());
 	private List<MyWaiter> waiters =
 			Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
 	private Collection<Table> tables =
 			Collections.synchronizedList(new ArrayList<Table>(NTABLES));
 	//map stores an index and a dimension containing x & y coordinates
@@ -38,7 +35,7 @@ public class HostAgent extends Role {
 
 	private String name;
 
-	public HostAgent(String name) {
+	public HostRole(String name) {
 		super();
 		
 		this.name = name;
@@ -54,23 +51,6 @@ public class HostAgent extends Role {
 		}
 	}
 
-	/** Retrievers and setters */
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public List<Customer> getWaitingCustomers() {
-		return waitingCustomers;
-	}
-
-	public Map<Integer, Dimension> getTableMap() {
-		return tableMap;
-	}
-	
 	/** Messages from other agents */
 	public void msgIWantFood(Customer c) {
 		waitingCustomers.add(c);
@@ -204,6 +184,23 @@ public class HostAgent extends Role {
 			Waiter = w;
 			state = WaiterState.NONE;
 		}
+	}
+	
+	/* --- Retrievers and setters --- */
+	public String getMaitreDName() {
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public List<Customer> getWaitingCustomers() {
+		return waitingCustomers;
+	}
+
+	public Map<Integer, Dimension> getTableMap() {
+		return tableMap;
 	}
 
 	private class Table {

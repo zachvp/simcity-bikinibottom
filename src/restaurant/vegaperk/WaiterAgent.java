@@ -26,7 +26,7 @@ public class WaiterAgent extends Role implements Waiter {
 	public Menu menu = new Menu();
 	private int homePosition = -1;
 	
-	private HostAgent host;
+	private HostRole host;
 
 	public WaiterAgent(String name, CashierAgent c) {
 		super();
@@ -50,7 +50,7 @@ public class WaiterAgent extends Role implements Waiter {
 		return waiterGui;
 	}
 	
-	public void setHost(HostAgent h){
+	public void setHost(HostRole h){
 		host = h;
 	}
 	

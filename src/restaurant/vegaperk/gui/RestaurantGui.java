@@ -1,6 +1,6 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CustomerAgent;
+import restaurant.vegaperk.CustomerRole;
 import restaurant.vegaperk.WaiterAgent;
 import gui.AnimationPanel;
 
@@ -88,7 +88,7 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
     	animationPanel.resumeTimer();
     }
     
-    public void setCustomerEnabled(CustomerAgent c) {
+    public void setCustomerEnabled(CustomerRole c) {
     	restPanel.setCustomerEnabled(c);
     }
     

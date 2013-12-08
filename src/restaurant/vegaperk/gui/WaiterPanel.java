@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CustomerAgent;
-import restaurant.vegaperk.HostAgent;
+import restaurant.vegaperk.CustomerRole;
+import restaurant.vegaperk.HostRole;
 import restaurant.vegaperk.WaiterAgent;
 
 import javax.swing.*;

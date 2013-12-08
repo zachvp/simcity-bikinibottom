@@ -4,7 +4,6 @@ import agent.Role;
 
 import java.awt.Dimension;
 import java.util.*;
-import java.util.concurrent.Semaphore;
 
 import restaurant.vegaperk.gui.CookGui;
 import restaurant.vegaperk.interfaces.Cook;
@@ -27,8 +26,6 @@ public class CookAgent extends Role implements Cook {
 	private List<Dimension> platePositions = Collections.synchronizedList(new ArrayList<Dimension>());
 	
 	private List<PlateZone> plateZones = Collections.synchronizedList(new ArrayList<PlateZone>());
-	
-	private Semaphore performingTasks = new Semaphore(0, true);
 	
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	
@@ -128,7 +125,7 @@ public class CookAgent extends Role implements Cook {
 	
 	/** From the Cook Gui */
 	public void msgAtDestination(){
-		performingTasks.release();
+		doneWaitingForInput();
 		stateChanged();
 	}
 
@@ -176,17 +173,17 @@ public class CookAgent extends Role implements Cook {
 		}
 		
 		DoGoToFridge();
-		acquire(performingTasks);
+		waitForInput();
 		
 		DoToggleHolding(o.choice);
 		DoGoToGrill(o.table);
-		acquire(performingTasks);
+		waitForInput();
 		
 		DoPlaceFood(o.table, o.choice);
 		
 		DoToggleHolding(null);
 		DoGoHome();
-		acquire(performingTasks);
+		waitForInput();
 //		must iterate through by integer instead of pointers because of the timer below
 		for(int i = 0; i < orders.size(); i++){
 			if(orders.get(i) == o){
@@ -214,7 +211,7 @@ public class CookAgent extends Role implements Cook {
 		plateZones.get(o.table).setOrder(o);
 		
 		DoPlateFood(o.table, o.choice);
-		acquire(performingTasks);
+		waitForInput();
 	}
 	
 	private void openStore(){
@@ -269,14 +266,6 @@ public class CookAgent extends Role implements Cook {
 
 	public void setGui(CookGui gui){
 		cookGui = gui;
-	}
-	
-	private void acquire(Semaphore sem){
-		try {
-			sem.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/** Classes */

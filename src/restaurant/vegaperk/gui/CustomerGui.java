@@ -1,6 +1,6 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CustomerAgent;
+import restaurant.vegaperk.CustomerRole;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ import agent.gui.Gui;
 
 public class CustomerGui implements Gui {
 
-	private CustomerAgent agent = null;
+	private CustomerRole agent = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 	
@@ -34,7 +34,7 @@ public class CustomerGui implements Gui {
 	private static final int outRestaurantX = -40;
 	private static final int outRestaurantY = -40;
 	
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CustomerGui(CustomerRole c, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
@@ -121,7 +121,7 @@ public class CustomerGui implements Gui {
 		orderState = OrderState.NONE;
 		command = Command.LeaveRestaurant;
 	}
-	public CustomerAgent getAgent(){
+	public CustomerRole getAgent(){
 		return agent;
 	}
 }

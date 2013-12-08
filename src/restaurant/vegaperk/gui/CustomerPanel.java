@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.CustomerAgent;
-import restaurant.vegaperk.HostAgent;
+import restaurant.vegaperk.CustomerRole;
+import restaurant.vegaperk.HostRole;
 
 import javax.swing.*;
 
@@ -115,7 +115,7 @@ public class CustomerPanel extends JPanel implements ActionListener {
             validate();
         }
     }
-    public void setCustomerEnabled(CustomerAgent c){
+    public void setCustomerEnabled(CustomerRole c){
     	for(CustomerListItem temp:cList){
     		if(temp.cGui != null && temp.cGui.getAgent() == c){
     			temp.isHungry.setSelected(false);

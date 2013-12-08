@@ -19,7 +19,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant customer agent.
  */
-public class CustomerAgent extends Role implements Customer {
+public class CustomerRole extends Role implements Customer {
 	private String name;
 	private String choice;
 	private int hungerLevel = 6;// determines length of meal
@@ -35,12 +35,13 @@ public class CustomerAgent extends Role implements Customer {
 			}
 		}
 	};
+	
 	//so the customer knows where to go
 	private int tableX;
 	private int tableY;
 
 	// agent correspondents
-	private HostAgent host;
+	private HostRole host;
 	private Waiter waiter;
 	private Cashier cashier;
 	private WaitZone myWaitZone;
@@ -93,7 +94,7 @@ public class CustomerAgent extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerAgent(String name){
+	public CustomerRole(String name){
 		super();
 		this.name = name;
 		
@@ -113,8 +114,8 @@ public class CustomerAgent extends Role implements Customer {
 		}
 	}
 
-	/** Messages from other agents */
-	/** from HostAgent */
+	/* --- Messages from other agents --- */
+	// from host
 	public void gotHungry() {//from animation
 		Do(getCustomerName());
 		Do("I'm hungry");
@@ -127,7 +128,7 @@ public class CustomerAgent extends Role implements Customer {
 		stateChanged();
 	}
 	
-	/** From WaiterAgent */
+	// from waiter
 	@Override
 	public void msgSitAtTable(Waiter w, Menu m, int x, int y) {
 		waiter = w;
@@ -137,28 +138,33 @@ public class CustomerAgent extends Role implements Customer {
 		event = CustomerEvent.FOLLOW_WAITER;
 		stateChanged();
 	}
+	
 	public void msgWhatWouldYouLike(){
 		event = CustomerEvent.CHOOSE_FOOD;
 		stateChanged();
 	}
+	
 	public void msgHereIsYourFood(){
 		event = CustomerEvent.EAT;
 		customerGui.orderState = OrderState.SERVED;
 		stateChanged();
 	}
+	
 	public void msgOutOfChoice(String c){
 		menu.m.remove(c);
 		event = CustomerEvent.OUT_OF_FOOD;
 		Do("can't get "+c);
 		stateChanged();
 	}
-	/** Messages From Cashier */
+	
+	// from Cashier
 	public void msgHereIsCheck(double check, Cashier cash){
 		cashier = cash;
 		event = CustomerEvent.RECEIVED_BILL;
 		bill += check;
 		stateChanged();
 	}
+	
 	public void msgHereIsChange(double change){
 		if(change > 0){
 			money += change;
@@ -169,21 +175,20 @@ public class CustomerAgent extends Role implements Customer {
 		stateChanged();
 	}
 	
-	/** from CustomerGui */
+	// from customer gui
 	public void msgAnimationFinishedGoToSeat() {
 		//from animation
 		event = CustomerEvent.SEATED;
 		stateChanged();
 	}
-	/** From animation */
+	
+	// from animation 
 	public void msgAnimationFinishedLeaveRestaurant() {
 		event = CustomerEvent.DONE_LEAVING;
 		stateChanged();
 	}
 
-	/**
-	 * Scheduler.  Determine what action is called for, and do it.
-	 */
+	/* --- Scheduler --- */
 	protected boolean pickAndExecuteAnAction() {
 		//	CustomerAgent is a finite state machine
 		if (state == CustomerState.DOING_NOTHING && event == CustomerEvent.GOT_HUNGRY ){
@@ -191,11 +196,13 @@ public class CustomerAgent extends Role implements Customer {
 			goToRestaurant();
 			return true;
 		}
+		
 		if (state == CustomerState.WAITING_IN_RESTAURANT && event == CustomerEvent.FOLLOW_WAITER ){
 			state = CustomerState.BEING_SEATED;
 			sitDown();
 			return true;
 		}
+		
 		if(state == CustomerState.WAITING_IN_RESTAURANT && event == CustomerEvent.NO_ROOM){
 			state = CustomerState.LEAVING;
 			leaveTable();
@@ -236,21 +243,25 @@ public class CustomerAgent extends Role implements Customer {
 			pay();
 			return true;
 		}
+		
 		if (state == CustomerState.PAYING && event == CustomerEvent.RECEIVED_CHANGE){
 			state = CustomerState.LEAVING;
 			leaveTable();
 			return true;
 		}
+		
 		if(state == CustomerState.ORDERED && event == CustomerEvent.OUT_OF_FOOD){
 			state = CustomerState.SEATED;
 			readyToOrder();
 			return true;
 		}
+		
 		if (state == CustomerState.LEAVING && event == CustomerEvent.DONE_LEAVING){
 			state = CustomerState.DOING_NOTHING;
 			//no action
 			return true;
 		}
+		
 		return false;
 	}
 
@@ -421,7 +432,7 @@ public class CustomerAgent extends Role implements Customer {
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(HostAgent host) {
+	public void setHost(HostRole host) {
 		this.host = host;
 	}
 }

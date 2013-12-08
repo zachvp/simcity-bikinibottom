@@ -28,7 +28,7 @@ public class HousingGui extends JPanel {
 	
 	// set up animation and graphics elements
 	AnimationPanel housingAnimationPanel = new AnimationPanel();
-	LayoutGui layoutGui;
+	DwellingGui layoutGui;
 
 	// layout for housingAnimationPanel
 	GridLayout layout = new GridLayout(1,1);

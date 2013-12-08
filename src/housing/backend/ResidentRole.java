@@ -1,9 +1,9 @@
 package housing.backend;
 
 import gui.trace.AlertTag;
-import housing.gui.LayoutGui;
 import housing.gui.ResidentRoleGui;
 import housing.interfaces.Dwelling;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
@@ -71,15 +71,14 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 3; 
-	private final int IMPATIENCE_TIME = 7;
+	private final int IMPATIENCE_TIME = 20;
 	
 	/* ----- Class Data ----- */
 	/**
 	 * Food is kept in the refrigerator and encapsulates all
 	 * the relevant data needed for inventory management.
 	 */
-	enum FoodState { RAW, COOKED, COOKING };
-	private class Food{
+	public class Food{
 		String type;
 		FoodState state;
 		int amount, cookTime, low, capacity;
@@ -92,11 +91,14 @@ public class ResidentRole extends Role implements Resident {
 			this.cookTime = cookTime;
 			state = FoodState.RAW;
 		}
+		
+		public void setState(FoodState state) { food.state = state; }
 	}
 	
 	/* --- Constructor --- */
-	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, LayoutGui gui) {
+	public ResidentRole(PersonAgent agent, CityLocation residence, Dwelling dwelling, DwellingLayoutGui gui) {
 		super(agent, residence);
+		
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
@@ -105,7 +107,7 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Messages ----- */
 	@Override
 	public void msgPaymentDue(double amount, PayRecipient payRecipient) {
-		Do("Payment due =/");
+		Do("Payment due");
 		this.payRecipient = payRecipient;
 		this.oweMoney = amount;
 		Do("Received message 'payment due' amount is " + amount);
@@ -117,6 +119,7 @@ public class ResidentRole extends Role implements Resident {
 	public void msgDwellingFixed() {
 		Do("Received message 'dwelling fixed'");
 		DoShowSpeech("My apartment is fixed!");
+		this.dwelling.setCondition(Condition.GOOD);
 	}
 	
 	@Override
@@ -134,7 +137,6 @@ public class ResidentRole extends Role implements Resident {
 	/* ----- Scheduler ----- */
 	@Override
 	public boolean pickAndExecuteAnAction() {
-		
 		if(!timerSet){
 			gui.setPresent(true);
 		}
@@ -155,7 +157,7 @@ public class ResidentRole extends Role implements Resident {
 			return true;
 		}
 		
-		// TODO ERIK FIXED THIS TO USE PERSON HUNGER
+		// TODO START_HUNGRY is for testing only
 		if(isHungry()) {
 			synchronized(refrigerator) {
 				for(Map.Entry<String, Food> entry : refrigerator.entrySet()) {
@@ -177,6 +179,7 @@ public class ResidentRole extends Role implements Resident {
 		if(!timerSet && person.hasSomethingToDo()){
 			Runnable command = new Runnable() {
 				public void run(){
+					Do("Nothing to do. Deactivating!");
 					gui.setPresent(false);
 					timerSet = false;
 					deactivate();
@@ -308,6 +311,7 @@ public class ResidentRole extends Role implements Resident {
 	private void callMaintenenceWorker(){
 		Do("This house needs fixing! Calling a maintenance worker.");
 		DoShowSpeech("Calling maintenance worker!");
+		
 		dwelling.getWorker().msgFileWorkOrder(dwelling);
 		dwelling.setCondition(Condition.BEING_FIXED);
 		DoMoveGary();

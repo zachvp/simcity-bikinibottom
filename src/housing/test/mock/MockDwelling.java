@@ -2,6 +2,7 @@ package housing.test.mock;
 
 import mock.EventLog;
 import CommonSimpleClasses.Constants.Condition;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
@@ -13,6 +14,7 @@ public class MockDwelling implements Dwelling {
 	// role info
 	public Resident resident;
 	public PayRecipient payRecipient;
+	public MaintenanceWorker worker;
 	
 	// hard dwelling data
 	public double monthlyPaymentAmount;
@@ -67,7 +69,7 @@ public class MockDwelling implements Dwelling {
 
 	@Override
 	public MaintenanceWorker getWorker() {
-		return null;
+		return worker;
 	}
 
 	@Override
@@ -78,6 +80,21 @@ public class MockDwelling implements Dwelling {
 	@Override
 	public PayRecipient getPayRecipient() {
 		return payRecipient;
+	}
+
+	@Override
+	public void degradeCondition() {
+		log.add("Condition Degraded");
+	}
+
+	@Override
+	public void setWorker(MaintenanceWorker worker) {
+		this.worker = worker;
+	}
+
+	@Override
+	public void setResident(ResidentRole resident) {
+		this.resident = resident;
 	}
 
 }

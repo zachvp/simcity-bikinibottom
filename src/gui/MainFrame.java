@@ -123,7 +123,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.add(map);
 
 		//Information Panel 720x210
-		JTabbedPane tabbedInfoPane = new JTabbedPane();
+		TabbedInfoDisplay tabbedInfoPane = new TabbedInfoDisplay();
 		tabbedInfoPane.setOpaque(false);
 		
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
@@ -132,10 +132,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setMinimumSize(infoDim);
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
+		//InfoPanel is now a JTabbedPane
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
 		tabbedInfoPane.addTab("Log", new LogDisplay());
+		infoPanel.setTabDisplay(tabbedInfoPane);
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
+		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -290,6 +293,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buildingList.addToList(building.getName());
 		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
+		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);
 	}
 

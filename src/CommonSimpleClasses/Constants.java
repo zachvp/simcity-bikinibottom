@@ -84,6 +84,11 @@ public interface Constants {
     public static String DEFAULT_ENCODING = "ISO-8859-1";
     
     /**
+     * Refresh rate for SWING timers in miliseconds.
+     */
+    public static final int REFRESH_RATE_MS = 30;
+    
+    /**
      * Dimensions of a building on a map
      */
     public static final int BUILDING_WIDTH = 56;
@@ -192,7 +197,7 @@ public interface Constants {
 	/**
 	 * Set to true to test housing independent from MainFrame
 	 */
-	public boolean TEST_POPULATE_HOUSING = false;
+	public final boolean TEST_POPULATE_HOUSING = false;
 	
 	/**
 	 * Number of units per housing structure

@@ -71,6 +71,11 @@ public class MockBuilding extends Building{
 		// TODO Auto-generated method stub
 		return new JPanel();
 	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
 
 	@Override
 	public int getOpeningHour() {

@@ -1,8 +1,7 @@
-package restaurant.vegaperk;
+package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.WaiterAgent;
-import restaurant.vegaperk.gui.RestaurantPanel;
 import gui.AnimationPanel;
 
 import javax.swing.*;
@@ -17,7 +16,7 @@ import java.awt.*;
  */
 
 @SuppressWarnings("serial")
-public class RestaurantGui extends JFrame{// implements ActionListener {
+public class RestaurantGui extends JPanel{// implements ActionListener {
     /* The GUI has one frame with two components: the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
@@ -42,7 +41,7 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
 
         setBounds(50, 50, WINDOWX, WINDOWY);
 
-        setLayout(new BoxLayout((Container) getContentPane(), 
+        setLayout(new BoxLayout(this, 
         		BoxLayout.X_AXIS));
         JPanel restInterface = new JPanel();
         restInterface.setPreferredSize(new Dimension(WINDOWX/2, WINDOWY));
@@ -50,7 +49,7 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
         restInterface.setAlignmentY(Component.TOP_ALIGNMENT);
         restInterface.setLayout(new BoxLayout(restInterface, BoxLayout.Y_AXIS));
         
-        //set up the image  jpanel
+        //set up the image panel
         Dimension imageDim = new Dimension(WINDOWX/2, (int) (WINDOWY* .4));
         imagePanel = new JPanel();
         imagePanel.setPreferredSize(imageDim);
@@ -80,7 +79,6 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
         animContainer.add(animationPanel);
         add(restInterface);
         add(animContainer);
-        setLocationRelativeTo(null);
     }
     
     public void pauseAnimationPanel(){
@@ -99,17 +97,6 @@ public class RestaurantGui extends JFrame{// implements ActionListener {
     	restPanel.denyBreak(w);
     }
     
-    /**
-     * Main routine to get gui started
-     */
-    public static void main(String[] args) {
-        RestaurantGui gui = new RestaurantGui();
-        gui.setTitle("Krusty Krab");
-        gui.setVisible(true);
-        gui.setResizable(false);
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
 	public AnimationPanel getAnimationPanel() {
 		return animationPanel;
 	}

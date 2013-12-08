@@ -1,6 +1,5 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.RestaurantGui;
 import restaurant.vegaperk.backend.CashierAgent;
 import restaurant.vegaperk.backend.CookAgent;
 import restaurant.vegaperk.backend.CustomerRole;

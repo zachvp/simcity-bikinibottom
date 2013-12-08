@@ -1,7 +1,6 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.RestaurantGui;
 import restaurant.vegaperk.backend.WaiterAgent;
 
 import java.awt.*;

@@ -179,51 +179,68 @@ public class RestaurantPanel extends JPanel {
     public CustomerGui addCustomer(String type, String name) {
 
     	if (type.equals("Customers")) {
+    		CustomerRole c;
+    		
     		// new role and person stuff
-    		PersonAgent person = new PersonAgent("Customer");
+    		if(Constants.TEST_POPULATE_RESTAURANT){
+    			PersonAgent person = new PersonAgent("Customer");
+    			c = new CustomerRole(person, building);
+    			
+        		person.addRole(c);
+        		c.setPerson(person);
+        		person.startThread();
+    		}
+    		else {
+    			c = new CustomerRole(null, building);
+    		}
     		
-    		CustomerRole c = new CustomerRole(person, building);
-    		CustomerGui g = new CustomerGui(c, gui);
-    		
-    		person.addRole(c);
-    		c.setPerson(person);
-    		c.activate();
-    		
-    		// add the role to the list
-    		agentList.add(c);
-
-    		gui.getAnimationPanel().addGui(g);
     		c.setHost(host);
+    		c.activate();
+    		CustomerGui g = new CustomerGui(c, gui);
     		c.setGui(g);
+    		
     		customers.add(c);
-    		person.startThread();
+    		agentList.add(c);
+    		gui.getAnimationPanel().addGui(g);
     		return g;
     	}
-    return null;
+    	return null;
     }
     public WaiterGui addWaiter(String type, String name){
+    	WaiterRole w;
+    	
     	if(type.equals("Waiters")){
-    		// new person/role stuff
-    		PersonAgent person = new PersonAgent("Waiter");
+    		if(Constants.TEST_POPULATE_RESTAURANT) {
+	    		PersonAgent person = new PersonAgent("Waiter");
+	    		
+	    		w = new WaiterRole(person, building);
+	    		w.setCashier(cashier);
+	    		
+	    		person.addRole(w);
+	    		w.setPerson(person);
+	    		person.startThread();
+    		}
+	    	else {
+	    		w = new WaiterRole(null, building);
+	    	}
     		
-    		WaiterRole w = new WaiterRole(person, building);
-    		w.setCashier(cashier);
-    		WaiterGui wg = new WaiterGui(w, gui);
-    		
-    		person.addRole(w);
-    		w.setPerson(person);
-    		w.activate();
-    		person.startThread();
-    		
-    		agentList.add(w);
-    		w.setHost(host);
-    		w.setCook(cook);
-    		
-    		gui.getAnimationPanel().addGui(wg);
-    		w.setGui(wg);
-    		host.addWaiter(w);
-    		return wg;
+	    	agentList.add(w);
+	    	w.setHost(host);
+	    	w.setCook(cook);
+	    	
+	    	WaiterGui wg = new WaiterGui(w, gui);
+	    	agentList.add(w);
+			w.setHost(host);
+			w.setCook(cook);
+			
+			w.activate();
+			
+			gui.getAnimationPanel().addGui(wg);
+			w.setGui(wg);
+			host.addWaiter(w);
+			return wg;
     	}
+    	
    		return null;    		
     }
     public void setCustomerEnabled(CustomerRole c){

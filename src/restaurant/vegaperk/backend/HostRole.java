@@ -63,6 +63,7 @@ public class HostRole extends WorkRole {
 		waitingCustomers.add(c);
 		stateChanged();
 	}
+	
 	public void msgTableIsFree(int t){
 		for(Table table : tables){
 			if(table.getTableID() == t){
@@ -72,6 +73,7 @@ public class HostRole extends WorkRole {
 		}
 		stateChanged();
 	}
+	
 	public void msgIWantBreak(Waiter w){
 		MyWaiter mw = findWaiter(w);
 		Do("wants break");

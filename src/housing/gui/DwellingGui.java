@@ -110,7 +110,7 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
 		
-		// draw surveillance cam
+		// draw surveillance cam info
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("default", Font.BOLD, 13));
 		g.drawString("CAM " + ID + ": " + residentName, 5, 12);

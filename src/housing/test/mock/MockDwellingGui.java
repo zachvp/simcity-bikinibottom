@@ -39,4 +39,10 @@ public class MockDwellingGui implements DwellingLayoutGui {
 		return 0;
 	}
 
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

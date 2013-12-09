@@ -1,13 +1,10 @@
 package restaurant.vdea.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-import restaurant.HostAgent;
-import restaurant.CookAgent;
-import restaurant.CashierAgent;
-import restaurant.MarketAgent;
-
 import javax.swing.*;
+
+import restaurant.vdea.*;
+import restaurant.vdea.HostRole;
+import restaurant.vdea.WaiterRole;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -20,24 +17,25 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel {
 
     //Waiter, cook, waiters and customers
-    //private WaiterAgent waiter = new WaiterAgent("Sam");
+    //private WaiterRole waiter = new WaiterRole("Sam");
    // private WaiterGui waiterGui = new WaiterGui(waiter);
-    
-    private HostAgent host = new HostAgent("Sarah");
+   
+	
+    private HostRole host = new HostRole("Sarah");
     private HostGui hostGui = new HostGui(host);
-    private CashierAgent cashier = new CashierAgent("Steve");
-    private CookAgent cook = new CookAgent("Bob");
+    private CashierRole cashier = new CashierRole("Steve");
+    private CookRole cook = new CookRole("Bob");
     private CookGui cookGui = new CookGui(cook);
-    private MarketAgent marketA = new MarketAgent("Super Market");
-  	private MarketAgent marketB = new MarketAgent("Marketplace");
-  	private MarketAgent marketC = new MarketAgent("Food Mart");
-    
+   /* private MarketRole marketA = new MarketRole("Super Market");
+  	private MarketRole marketB = new MarketRole("Marketplace");
+  	private MarketRole marketC = new MarketRole("Food Mart");
+   */ 
     //private CookGui cookGui = new CookGui(cook);
     
     
 
-    private Vector<CustomerAgent> customers = new Vector<CustomerAgent>();
-    private Vector<WaiterAgent> waiters = new Vector<WaiterAgent>();
+    private Vector<CustomerRole> customers = new Vector<CustomerRole>();
+    private Vector<WaiterRole> waiters = new Vector<WaiterRole>();
 
     private JPanel restLabel = new JPanel();
     private ListPanel customerPanel = new ListPanel(this, "Customers");
@@ -55,10 +53,10 @@ public class RestaurantPanel extends JPanel {
        host.setGui(hostGui);
        cook.setGui(cookGui);
         
-       cook.addMarket(marketA);
+       /*cook.addMarket(marketA);
        cook.addMarket(marketB);
        cook.addMarket(marketC);
-
+        */
        cook.setCashier(cashier);
 
        // marketA.setCashier(cashier);
@@ -156,7 +154,7 @@ public class RestaurantPanel extends JPanel {
         if (type.equals("Customers")) {
 
             for (int i = 0; i < customers.size(); i++) {
-                CustomerAgent temp = customers.get(i);
+                CustomerRole temp = customers.get(i);
                 if (temp.getName() == name)
                     gui.updateInfoPanel(temp);
             }
@@ -165,7 +163,7 @@ public class RestaurantPanel extends JPanel {
         if (type.equals("Waiters")) {
 
             for (int i = 0; i < waiters.size(); i++) {
-                WaiterAgent temp = waiters.get(i);
+                WaiterRole temp = waiters.get(i);
                 if (temp.getName() == name)
                     gui.updateInfoPanel(temp);
             }
@@ -185,7 +183,7 @@ public class RestaurantPanel extends JPanel {
     public void addPerson(String type, String name) {
 
     	if (type.equals("Customers")) {
-    		CustomerAgent c = new CustomerAgent(name);	
+    		CustomerRole c = new CustomerRole(name);	
     		CustomerGui g = new CustomerGui(c, gui);
 
     		gui.animationPanel.addGui(g);
@@ -200,7 +198,7 @@ public class RestaurantPanel extends JPanel {
     	if (type.equals("Waiters")) {
     		int pos = waiters.size();
     		
-    		WaiterAgent w = new WaiterAgent(name);	
+    		WaiterRole w = new WaiterRole(name);	
     		WaiterGui g = new WaiterGui(w, gui, pos+1);
 
     		gui.animationPanel.addGui(g);
@@ -218,11 +216,11 @@ public class RestaurantPanel extends JPanel {
     	gui.makeHungry(hungry);
     }
     
-    public HostAgent getHost(){
+    public HostRole getHost(){
     	return host;
     }
     
-    public void pauseAgents(){
+    public void pauseRoles(){
     	//waiter.pause();
     	host.pause();
     	cook.pause();
@@ -230,17 +228,17 @@ public class RestaurantPanel extends JPanel {
     	marketA.pause();
     	marketB.pause();
     	marketC.pause();
-    	for (WaiterAgent w : waiters){
+    	for (WaiterRole w : waiters){
     		w.pause();
     	}
-    	for (CustomerAgent c : customers){
+    	for (CustomerRole c : customers){
     		c.pause();
     	}
     	//add a way to pause calling updatePosition to stop gui==============
     	System.out.println("Paused");
     }
     
-    public void restartAgents(){
+    public void restartRoles(){
     	//waiter.restart();
     	host.restart();
     	cook.restart();
@@ -248,10 +246,10 @@ public class RestaurantPanel extends JPanel {
     	marketA.restart();
     	marketB.restart();
     	marketC.restart();
-    	for (CustomerAgent c : customers){
+    	for (CustomerRole c : customers){
     		c.restart();
     	}
-    	for (WaiterAgent w : waiters){
+    	for (WaiterRole w : waiters){
     		w.restart();
     	}
     	System.out.println("Restart");

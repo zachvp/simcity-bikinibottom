@@ -2,6 +2,7 @@ package restaurant.vdea.gui;
 
 import java.awt.*;
 
+import agent.gui.Gui;
 import restaurant.vdea.CustomerRole;
 import restaurant.vdea.HostRole;
 

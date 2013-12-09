@@ -2,6 +2,8 @@ package restaurant.vdea.gui;
 
 import javax.swing.*;
 
+import agent.gui.Gui;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

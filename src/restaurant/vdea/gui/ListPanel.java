@@ -1,8 +1,5 @@
 package restaurant.vdea.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-
 import javax.swing.*;
 
 import java.awt.*;

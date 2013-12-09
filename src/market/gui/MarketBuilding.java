@@ -1,6 +1,7 @@
 package market.gui;
 
 import gui.AnimationPanel;
+import gui.StaffDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	AnimationPanel animationPanel = new AnimationPanel();	
 	private MarketRecords records;
 	JPanel info;
+	StaffDisplay staff;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, market.CustomerRole> MarketCustomerMap = new HashMap<Person, market.CustomerRole>();
@@ -50,6 +52,8 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		MarketInfoPanel infoPanel = new MarketInfoPanel(getRecords());
 		info = infoPanel;
 		records.SetCashierMarketInfoPanel(infoPanel);
+		
+		staff = new StaffDisplay();
 	}
 
 	@Override
@@ -150,7 +154,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	
 	@Override
 	public JPanel getStaffPanel() {
-		return new JPanel();
+		return staff;
 	}
 	
 	public void UpdateInfoPanel(){

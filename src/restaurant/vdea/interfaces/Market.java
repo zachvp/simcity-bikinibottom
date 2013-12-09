@@ -2,8 +2,8 @@ package restaurant.vdea.interfaces;
 
 import java.util.List;
 
-import restaurant.CookAgent;
-import restaurant.Food;
+import restaurant.vdea.Food;
+
 
 /**
  * Market interface built to unit test a MarketAgent.
@@ -20,7 +20,7 @@ public interface Market {
 	 * 
 	 * Sent by the cook to restock inventory
 	 */
-	public abstract void msgOrderRequest(CookAgent c, List<Food> food, Cashier cash);
+	public abstract void msgOrderRequest(Cook c, List<Food> food, Cashier cash);
 
 	/**
 	 * @param check the amount to pay the bill

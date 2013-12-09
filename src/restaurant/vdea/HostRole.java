@@ -28,7 +28,8 @@ public class HostRole extends WorkRole{
 
 	public HostRole(Person person, CityBuilding building) {
 		super(person, building);
-
+		this.name = super.getName();
+		
 		// make some tables
 		tables = new ArrayList<Table>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {

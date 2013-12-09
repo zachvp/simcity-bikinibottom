@@ -117,6 +117,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 * @param name Name of person
 	 */
 	public void addToStaffList(String role, String name) {
+		System.out.println(role + " - "+ name);
 		if (name == null ||name.equals("Nobody")) {
 			StaffButton button = new StaffButton("", role);
 			button.setAvailable();
@@ -136,9 +137,12 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 */
 	public void addAllWorkRolesToStaffList(){
 		List<WorkRole> currentBuildingWorkRoles = ClassifiedsClass.getClassifiedsInstance().getJobsForBuilding(building, false);
-		//System.out.println(currentBuildingWorkRoles.size());
-		for (int i=0;i<currentBuildingWorkRoles.size();i++){
-		addToStaffList(currentBuildingWorkRoles.get(i).getShortName(),currentBuildingWorkRoles.get(i).getName());
+		for (WorkRole r: currentBuildingWorkRoles){
+			if(r.getPerson()!=null){
+				addToStaffList(r.getShortName(), r.getPerson().getName());
+			}else{
+				addToStaffList(r.getShortName(), null);
+			}
 		}
 	}
 	
@@ -160,6 +164,12 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			unemployedView.add(button);
 		}
 		validate();		
+	}
+	
+	public void updateStaffDisplay(){
+		staffView.removeAll();
+		staffList.clear();
+		addAllWorkRolesToStaffList();
 	}
 
 	@Override

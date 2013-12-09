@@ -53,8 +53,9 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		info = infoPanel;
 		records.SetCashierMarketInfoPanel(infoPanel);
 		
-		staff = new StaffDisplay();
-		staff.setBuilding(this);
+		//staff = new StaffDisplay();
+		//staff.setBuilding(this);
+		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
 	}
 
@@ -155,7 +156,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 	}
 	
 	@Override
-	public JPanel getStaffPanel() {
+	public StaffDisplay getStaffPanel() {
 		return staff;
 	}
 	

@@ -29,7 +29,7 @@ public abstract class Building extends Rectangle2D.Double
 	JPanel animationPanel;	
 	LocationTypeEnum type;
 	JPanel info;
-	JPanel staff;
+	StaffDisplay staff = new StaffDisplay();
 	
 	protected static final int defaultStartHour = 8;
 	protected static final int defaultStartMinute = 0;
@@ -40,6 +40,7 @@ public abstract class Building extends Rectangle2D.Double
 	
 	public Building(int x, int y, int width, int height) {
 		super( x, y, width, height );
+		staff.setBuilding(this);
 	}
 	
 	public void setName(String n){
@@ -66,7 +67,9 @@ public abstract class Building extends Rectangle2D.Double
 	public abstract JPanel getInfoPanel();
 	
 	//Return panel listing staff
-	public abstract JPanel getStaffPanel();
+	public StaffDisplay getStaffPanel(){
+		return staff;
+	}
 	
 	/** Whether the building is open right now. */
 	public boolean isOpen() {

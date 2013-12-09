@@ -22,6 +22,8 @@ public class HostRole extends WorkRole {
 	private static final int TABLEROWNUM = 2;
 	private static final int TABLESPACING = 100;
 	
+	private boolean shouldLeaveWork = false;
+	
 	int chooseWaiter = -1;//cycles through the list of waiters
 	
 	public List<Customer> waitingCustomers =
@@ -90,6 +92,15 @@ public class HostRole extends WorkRole {
             If so seat him at the table.
 		 */
 		synchronized(tables){
+			if(shouldLeaveWork && waitingCustomers.isEmpty() && !tablesOccupied()) {
+				synchronized(waiters) {
+					for(MyWaiter mw : waiters) {
+						tellWaiterToGetOffWork(mw);
+					}
+				}
+				return true;
+			}
+			
 			for (Table table : tables) {
 				if (!waitingCustomers.isEmpty() && !table.isOccupied() && !waiters.isEmpty()) {
 					seatCustomer(waitingCustomers.get(0), table);//the action
@@ -151,6 +162,11 @@ public class HostRole extends WorkRole {
 		w.state = WaiterState.NONE;
 		w.waiter.msgDenyBreak();
 	}
+	
+	private void tellWaiterToGetOffWork(MyWaiter mw) {
+		((WorkRole) mw.waiter).msgLeaveWork();
+		this.deactivate();
+	}
 
 	/** Utility functions */
 	public void addWaiter(Waiter w){
@@ -159,13 +175,16 @@ public class HostRole extends WorkRole {
 		w.msgHomePosition(waiters.size());
 		stateChanged();
 	}
+	
 	private MyWaiter findLeastBusyWaiter(){
 		chooseWaiter++;
 		while(waiters.get(chooseWaiter%waiters.size()).state == WaiterState.ON_BREAK){
 			chooseWaiter++;
 		}
+		
 		return waiters.get(chooseWaiter%waiters.size());
 	}
+	
 	private MyWaiter findWaiter(Waiter w){
 		synchronized(waiters){
 			for(MyWaiter temp : waiters){
@@ -205,6 +224,13 @@ public class HostRole extends WorkRole {
 		return tableMap;
 	}
 
+	private boolean tablesOccupied() {
+		for(Table t : tables) {
+			if(t.isOccupied()) return false;
+		}
+		return true;
+	}
+	
 	private class Table {
 		Customer occupiedBy;
 		int tableID;
@@ -268,13 +294,7 @@ public class HostRole extends WorkRole {
 
 	@Override
 	public void msgLeaveWork() {
-		if(waitingCustomers.isEmpty() && tables.isEmpty()) {
-			for(MyWaiter mw : waiters) {
-				((WorkRole) mw.waiter).msgLeaveWork();
-			}
-			
-			this.deactivate();
-		}
+		shouldLeaveWork = true;
+		stateChanged();
 	}
 }
-

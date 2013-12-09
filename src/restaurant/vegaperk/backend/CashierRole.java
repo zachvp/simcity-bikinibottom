@@ -2,12 +2,14 @@ package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
 import agent.WorkRole;
+import agent.gui.Gui;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
+import restaurant.vegaperk.gui.CashierGui;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Market;
@@ -24,6 +26,8 @@ public class CashierRole extends WorkRole implements Cashier {
 	public EventLog log = new EventLog();
 	
 	private DecimalFormat df = new DecimalFormat("#.##");
+	
+	private CashierGui gui;
 	
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>());
@@ -42,7 +46,6 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	/** Messages from other agents */
-	
 	
 	/** From WaiterAgent */
 	public void msgDoneEating(Customer c, double b, Waiter w){
@@ -244,6 +247,17 @@ public class CashierRole extends WorkRole implements Cashier {
 		}
 	}
 	
+	/* --- Animation Routines --- */
+	private void DoLeaveWork() {
+		gui.DoLeaveWork();
+		waitForInput();
+	}
+	
+	private void DoGoHome() {
+		gui.DoGoHome();
+		waitForInput();
+	}
+	
 	@Override
 	protected void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
@@ -251,18 +265,34 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return true;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override
 	public void msgLeaveWork() {
+		DoLeaveWork();
 		this.deactivate();
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		DoGoHome();
+		stateChanged();
+	}
+
+	@Override
+	public void msgAtDestination() {
+		doneWaitingForInput();
+		stateChanged();
+	}
+	
+	public void setGui(CashierGui gui) {
+		this.gui = gui;
 	}
 }

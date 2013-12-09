@@ -56,6 +56,7 @@ public class RestaurantPanel extends JPanel {
     private RestaurantGui gui; //reference to main gui
     
     private CookGui cookGui;
+    private CashierGui cashierGui;
 
     public RestaurantPanel(RestaurantGui gui, Building building) {
     	this.building = building;
@@ -67,6 +68,8 @@ public class RestaurantPanel extends JPanel {
     	this.cookGui = new CookGui(cook, gui);
     	
     	this.cashier = new CashierRole(cashierPerson, building);
+    	this.cashierGui = new CashierGui(cashier, gui);
+    	this.cashier.setGui(cashierGui);
     	
     	this.tableGui = new TableGui(host.getTableMap());
     	
@@ -81,6 +84,7 @@ public class RestaurantPanel extends JPanel {
         this.gui = gui;
         gui.getAnimationPanel().addGui(tableGui);
         gui.getAnimationPanel().addGui(cookGui);
+        gui.getAnimationPanel().addGui(cashierGui);
 
         cook.setGui(cookGui);
         cook.addMarket(m1);
@@ -198,7 +202,8 @@ public class RestaurantPanel extends JPanel {
     		// new person/role stuff
     		PersonAgent person = new PersonAgent("Waiter");
     		
-    		WaiterRole w = new WaiterRole(name, cashier);
+    		WaiterRole w = new WaiterRole(person, building);
+    		w.setCashier(cashier);
     		WaiterGui wg = new WaiterGui(w, gui);
     		
     		person.addRole(w);

@@ -1,7 +1,9 @@
 package restaurant.vegaperk.backend;
 
+import CommonSimpleClasses.CityBuilding;
 import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import restaurant.vegaperk.gui.WaiterGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -29,9 +31,8 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	private HostRole host;
 
-	public WaiterRole(String name, CashierRole c) {
-		super();
-		this.cashier = c;
+	public WaiterRole(Person person, CityBuilding building) {
+		super(person, building);
 	}
 
 	/** Accessors and setters */
@@ -421,5 +422,10 @@ public class WaiterRole extends WorkRole implements Waiter {
 		waitForInput();
 		
 		this.deactivate();
+	}
+
+	@Override
+	public void setCashier(CashierRole cashier) {
+		this.cashier = cashier;
 	}
 }

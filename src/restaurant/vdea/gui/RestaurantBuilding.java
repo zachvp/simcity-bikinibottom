@@ -27,6 +27,15 @@ public class RestaurantBuilding extends Building{
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width/2, height);
+		
+		host = new HostRole(null, this);
+		cashier = new CashierRole(null, this);
+		cook = new CookRole(null, this);
+		HostGui hostGui = new HostGui(host);
+		CookGui cookGui = new CookGui(cook);
+		
+		host.setGui(hostGui);
+		cook.setGui(cookGui);
 	}
 
 	@Override
@@ -36,8 +45,7 @@ public class RestaurantBuilding extends Building{
 
 	@Override
 	public Role getGreeter() {
-		// TODO Auto-generated method stub
-		return null;
+		return host;
 	}
 
 	@Override
@@ -47,8 +55,25 @@ public class RestaurantBuilding extends Building{
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		// TODO Auto-generated method stub
-		return null;
+		CustomerRole role = existingCustomers.get(person);
+		if (role == null) {
+			// Create a new role if none exists
+			role = new CustomerRole(person, this);
+			role.setLocation(this);
+			role.setHost(host);
+			
+			CustomerGui custGui = new CustomerGui(role, restaurantGui);
+			role.setGui(custGui);
+			restaurantGui.getAnimationPanel().addGui(custGui);
+			
+		} else {
+			// Otherwise use the existing role
+			role.setPerson(person);
+		}
+		
+		// Add the role to the person, and return it.
+		person.addRole(role);
+		return role;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 import CommonSimpleClasses.CityBuilding;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import restaurant.vdea.gui.HostGui;
 import restaurant.vdea.interfaces.*;
 
 public class HostRole extends WorkRole{
@@ -20,6 +21,7 @@ public class HostRole extends WorkRole{
 	public boolean sen = false;
 	private String name;
 	private Semaphore atDest = new Semaphore(0, true);
+	private HostGui gui = null;
 
 	public enum AgentState
 	{none, tablesFull, assigningCustomer, leave, leaveLine}
@@ -303,5 +305,9 @@ public class HostRole extends WorkRole{
 		public String toString() {
 			return "table " + tableNumber;
 		}
+	}
+
+	public void setGui(HostGui hostGui) {
+		gui = hostGui;
 	}
 }

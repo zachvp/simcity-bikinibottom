@@ -125,7 +125,7 @@ public class HostRole extends WorkRole {
 
 	/** Actions. Implement the methods called in the scheduler. */
 	private void seatCustomer(Customer customer, Table table) {
-		findLeastBusyWaiter().Waiter.msgPleaseSeatCustomer(customer, table.getTableID());
+		findLeastBusyWaiter().waiter.msgPleaseSeatCustomer(customer, table.getTableID());
 		Do("seat at table " + table.getTableID());
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
@@ -144,12 +144,12 @@ public class HostRole extends WorkRole {
 		for(MyWaiter mw : waiters){
 			if(mw.state == WaiterState.NONE){
 				w.state = WaiterState.ON_BREAK;
-				w.Waiter.msgCanGoOnBreak();
+				w.waiter.msgCanGoOnBreak();
 				return;
 			}
 		}
 		w.state = WaiterState.NONE;
-		w.Waiter.msgDenyBreak();
+		w.waiter.msgDenyBreak();
 	}
 
 	/** Utility functions */
@@ -169,7 +169,7 @@ public class HostRole extends WorkRole {
 	private MyWaiter findWaiter(Waiter w){
 		synchronized(waiters){
 			for(MyWaiter temp : waiters){
-				if(temp.Waiter == w){
+				if(temp.waiter == w){
 					return temp;
 				}
 			}
@@ -179,11 +179,11 @@ public class HostRole extends WorkRole {
 	
 	private enum WaiterState {NONE, REQUESTED_BREAK, ON_BREAK};
 	private class MyWaiter{
-		Waiter Waiter;
+		Waiter waiter;
 		WaiterState state;
 		
 		MyWaiter(String n, Waiter w){
-			Waiter = w;
+			waiter = w;
 			state = WaiterState.NONE;
 		}
 	}
@@ -258,18 +258,23 @@ public class HostRole extends WorkRole {
 
 	@Override
 	public boolean isAtWork() {
-		return true;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override
 	public void msgLeaveWork() {
-		this.deactivate();
+		if(waitingCustomers.isEmpty() && tables.isEmpty()) {
+			for(MyWaiter mw : waiters) {
+				((WorkRole) mw.waiter).msgLeaveWork();
+			}
+			
+			this.deactivate();
+		}
 	}
 }
 

@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.backend.WaiterRole;
 
 import java.awt.*;
 import java.net.URL;
@@ -12,7 +12,7 @@ import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private WaiterRole agent = null;
     private boolean canRelease = false;//this prevents excessive releases from occurring
     private boolean waiting = false;//checks if waiter is going to waiting zone
     
@@ -39,7 +39,7 @@ public class WaiterGui implements Gui {
     
     private RestaurantGui gui;
     
-    public WaiterGui(WaiterAgent agent, RestaurantGui g) {
+    public WaiterGui(WaiterRole agent, RestaurantGui g) {
         this.agent = agent;
         this.gui = g;
     }
@@ -89,7 +89,7 @@ public class WaiterGui implements Gui {
     	gui.setWaiterEnabled(agent);
     }
     
-    public WaiterAgent getAgent(){
+    public WaiterRole getAgent(){
     	return agent;
     }
 

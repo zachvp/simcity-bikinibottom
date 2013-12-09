@@ -73,12 +73,19 @@ public class CookGui implements Gui{
     	g.fillRect(xPos, yPos, width, height);
     	/** Draw the grills and plate positions */
     	g.setColor(Color.BLACK);
-	    for(Dimension d : grillPositions){
-	    	g.drawRect(d.width, d.height, width, height);
-	    }
-	    for(Dimension p : platePositions){
-    		g.fillRect(p.width, p.height, width, height);
-	    }
+    	
+    	if(grillPositions != null){
+		    for(Dimension d : grillPositions){
+		    	g.drawRect(d.width, d.height, width, height);
+		    }
+    	}
+	    
+    	if(platePositions != null){
+		    for(Dimension p : platePositions){
+	    		g.fillRect(p.width, p.height, width, height);
+		    }
+    	}
+	    
 	    /** Draw the food items on the grills and plate positions */
 	    int i = 0;
 	    g.setColor(Color.RED);

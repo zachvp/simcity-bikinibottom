@@ -5,7 +5,7 @@ import restaurant.vegaperk.backend.CookRole;
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
-import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.backend.WaiterRole;
 import gui.Building;
 
 import javax.swing.*;
@@ -198,7 +198,7 @@ public class RestaurantPanel extends JPanel {
     		// new person/role stuff
     		PersonAgent person = new PersonAgent("Waiter");
     		
-    		WaiterAgent w = new WaiterAgent(name, cashier);
+    		WaiterRole w = new WaiterRole(name, cashier);
     		WaiterGui wg = new WaiterGui(w, gui);
     		
     		person.addRole(w);
@@ -220,7 +220,7 @@ public class RestaurantPanel extends JPanel {
     public void setCustomerEnabled(CustomerRole c){
     	customerPanel.setCustomerEnabled(c);
     }
-    public void denyBreak(WaiterAgent w){
+    public void denyBreak(WaiterRole w){
     	waiterPanel.denyBreak(w);
     }
     

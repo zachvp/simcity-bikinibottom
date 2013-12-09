@@ -1,6 +1,7 @@
 package restaurant.vegaperk.backend;
 
 import agent.Role;
+import agent.WorkRole;
 import restaurant.vegaperk.gui.WaiterGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -12,7 +13,7 @@ import java.util.*;
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
-public class WaiterAgent extends Role implements Waiter {
+public class WaiterRole extends WorkRole implements Waiter {
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };
@@ -28,7 +29,7 @@ public class WaiterAgent extends Role implements Waiter {
 	
 	private HostRole host;
 
-	public WaiterAgent(String name, CashierRole c) {
+	public WaiterRole(String name, CashierRole c) {
 		super();
 		this.cashier = c;
 	}
@@ -402,5 +403,23 @@ public class WaiterAgent extends Role implements Waiter {
 	@Override
 	public void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		return isActive();
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		DoGoToHost();
+		waitForInput();
+		
+		this.deactivate();
 	}
 }

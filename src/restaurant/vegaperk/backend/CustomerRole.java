@@ -1,6 +1,6 @@
 package restaurant.vegaperk.backend;
 
-import restaurant.vegaperk.backend.WaiterAgent.Menu;
+import restaurant.vegaperk.backend.WaiterRole.Menu;
 import restaurant.vegaperk.gui.CustomerGui;
 import restaurant.vegaperk.gui.CustomerGui.OrderState;
 import restaurant.vegaperk.interfaces.Cashier;
@@ -17,7 +17,6 @@ import gui.trace.AlertTag;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Collections;
 import java.util.concurrent.Semaphore;
 

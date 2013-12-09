@@ -82,6 +82,7 @@ public class CookRole extends WorkRole implements Cook {
 			PlateZone pz = plateZones.get(i);
 			pz = null;
 		}
+		
 	}
 
 	/** Accessor and setter methods */
@@ -231,8 +232,10 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private void openStore(){
 		onOpening = false;
+		
 		DoDrawGrillAndPlates();
 		Do("Opening restaurant");
+		
 		for(Map.Entry<String, Food> entry : inventory.entrySet()){
 			Food f = entry.getValue();
 			if(f.amount <= f.low){

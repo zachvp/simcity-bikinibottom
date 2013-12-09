@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.backend.CustomerRole;
-import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.backend.WaiterRole;
 import gui.AnimationPanel;
 import gui.Building;
 
@@ -96,7 +96,7 @@ public class RestaurantGui extends JPanel{
     	restPanel.setCustomerEnabled(c);
     }
     
-    public void setWaiterEnabled(WaiterAgent w){
+    public void setWaiterEnabled(WaiterRole w){
     	restPanel.denyBreak(w);
     }
     

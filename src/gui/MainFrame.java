@@ -43,6 +43,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 
 
 /** 
@@ -59,6 +60,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private BufferedInputStream stream;
 	private List<BuildingDef> needToBuild;
 
+	private Sound openingMusic = Sound.getInstance();
 	//Panel Slots
 	private JPanel cityViewSlot = new JPanel();
 	private JPanel buildingViewSlot = new JPanel();
@@ -186,6 +188,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		//Constructs buildings from config file
 		constructCity(needToBuild);
+		openingMusic.playSound("OpeningSceneSound.wav");
 	}
 
 	/**

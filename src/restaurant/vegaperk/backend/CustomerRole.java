@@ -6,12 +6,12 @@ import restaurant.vegaperk.gui.CustomerGui.OrderState;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
-import gui.Building;
 import gui.trace.AlertTag;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class CustomerRole extends WorkRole implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(Person person, Building building){
+	public CustomerRole(Person person, CityBuilding building){
 		super(person, building);
 		this.name = super.getName();
 		

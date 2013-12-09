@@ -1,7 +1,10 @@
 package restaurant.vegaperk.test;
 
+import CommonSimpleClasses.CityBuilding;
+import agent.PersonAgent;
 import restaurant.vegaperk.backend.CashierRole;
 import restaurant.vegaperk.backend.CashierRole.CustomerState;
+import restaurant.vegaperk.backend.RestaurantBuilding;
 import restaurant.vegaperk.test.mock.MockCustomer;
 import restaurant.vegaperk.test.mock.MockMarket;
 import restaurant.vegaperk.test.mock.MockWaiter;
@@ -17,7 +20,10 @@ import junit.framework.*;
  */
 public class CashierTest extends TestCase
 {
-	//these are instantiated for each test separately via the setUp() method.
+	CityBuilding building = new RestaurantBuilding(0, 0, 0, 0);
+	PersonAgent person = new PersonAgent("Cashier");
+	
+	// these are instantiated for each test separately via the setUp() method.
 	CashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
@@ -29,7 +35,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierRole("cashier");		
+		cashier = new CashierRole(person, building);		
 		customer = new MockCustomer("mockcustomer");		
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");

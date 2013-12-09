@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,7 +28,13 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	private Map<Person, Role> people;
 	
 	private JButton chargeRent = new JButton("Charge Rent");
-	private JComboBox unitNumber = new JComboBox();
+	
+	// allows for user to choose a specific unit
+	private JComboBox<Integer> chargeUnitNumberOptions;
+	private JComboBox<Integer> breakUnitNumberOptions;
+	
+	// fills the combo boxes
+	private Vector<Integer> unitNumbers = new Vector<Integer>(); 
 	
 	private JButton breakHouse = new JButton("Break House");
 	
@@ -39,28 +46,32 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		
 		this.setLayout(new FlowLayout());
 		
-		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++) {
-			this.unitNumber.add(new JLabel("5"));
-		}
+		// populate the vector and add numbers to combo box
+		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++) { this.unitNumbers.add(i); }
+		this.chargeUnitNumberOptions = new JComboBox<Integer>(unitNumbers);
+		this.breakUnitNumberOptions = new JComboBox<Integer>(unitNumbers);
 		
+		// instructions for GUI use
 		add(new JLabel("Unit numbers read left-to-right, top-to-bottom."));
 		
-		JPanel panel = new JPanel(new GridLayout(0, 2));
+		// for the scenario GUI
+		JPanel panel = new JPanel(new GridLayout(0, 3, 5, 5));
 		
 		// landlord input label
 		panel.add(new JLabel("Ask every resident for rent."));
-				
-		// maintenance input label
-		panel.add(new JLabel("Summon a maintenance worker."));
 		
 		// landlord input button
 		chargeRent.addActionListener(this);
 		panel.add(chargeRent);
-		panel.add(unitNumber);
+		panel.add(chargeUnitNumberOptions);
+
+		// maintenance input label
+		panel.add(new JLabel("Summon a maintenance worker."));
 		
 		// worker button
 		breakHouse.addActionListener(this);
 		panel.add(breakHouse);
+		panel.add(breakUnitNumberOptions);
 		
 		add(panel);
 	}

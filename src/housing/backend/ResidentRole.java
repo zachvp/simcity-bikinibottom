@@ -102,7 +102,6 @@ public class ResidentRole extends Role implements Resident {
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
-		this.gui.setName(agent.getName());
 	}
 	
 	/* ----- Messages ----- */
@@ -140,6 +139,7 @@ public class ResidentRole extends Role implements Resident {
 	public boolean pickAndExecuteAnAction() {
 		if(!timerSet){
 			gui.setPresent(true);
+			this.gui.setName(person.getName());
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {

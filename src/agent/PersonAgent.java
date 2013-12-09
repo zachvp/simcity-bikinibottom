@@ -2,8 +2,8 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
-import housing.backend.ResidentRole;
 import gui.trace.AlertTag;
+import housing.backend.ResidentRole;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import bank.RobberRole;
-import bank.gui.BankBuilding;
-
 import kelp.Kelp;
 import kelp.KelpClass;
+import market.DeliveryGuyRole;
+import market.interfaces.DeliveryGuy;
 import transportation.CarAgent;
 import transportation.PassengerRole;
 import transportation.RealPassengerRole;
@@ -30,6 +29,7 @@ import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 import agent.interfaces.Person.Wallet.IncomeLevel;
+import bank.RobberRole;
 
 /**
  * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
@@ -153,8 +153,25 @@ public class PersonAgent extends Agent implements Person {
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			activateRoleForLoc(getPassengerRole().getLocation(),
-					atLocationForWork());
+			PassengerRole pass = getPassengerRole();
+			if (getWorkRole() instanceof DeliveryGuyRole) {
+				DeliveryGuyRole dg = (DeliveryGuyRole) getWorkRole();
+				if (!dg.msgAreYouAvailable()) {
+					// if the delivery guy is on a delivery
+					if (pass.getLocation().equals(dg.getCurrentOrder().getBuilding())) {
+						Do(AlertTag.MARKET, name,
+								"Arrived at delivery location.");
+						dg.msgArrivedDestination();
+						return true;
+					} else if (pass.getLocation().equals(dg.getLocation())) {
+						Do(AlertTag.MARKET, name, "Returning to work.");
+						dg.msgArrivedDestination();
+						dg.activate();
+						return true;
+					}
+				}
+			}
+			activateRoleForLoc(pass.getLocation(), atLocationForWork());
 			event = PersonEvent.NONE;
 			return true;
 		}

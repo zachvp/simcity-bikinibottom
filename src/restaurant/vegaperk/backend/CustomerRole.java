@@ -11,7 +11,6 @@ import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent.HungerLevel;
 import agent.Role;
-import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;

@@ -9,6 +9,7 @@ import restaurant.vegaperk.interfaces.Waiter;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import agent.PersonAgent.HungerLevel;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -54,8 +55,6 @@ public class CustomerRole extends WorkRole implements Customer {
 	
 	private double money;
 	private double bill;
-	
-	private boolean firstTime = true;
 	
 	private Menu menu;
 
@@ -105,19 +104,7 @@ public class CustomerRole extends WorkRole implements Customer {
 		this.name = super.getName();
 		
 		bill = 0.00;
-		if(name.equals("poor")){
-			money = 0.50;
-		}
-		else if(name.equals("Krabby Patty")){
-			money = 1.25;
-		}
-		else if(name.contains("flake")){
-			Do("I'm a jerk!");
-			money = 0.50;
-		}
-		else{
-			money = 5.00;
-		}
+		money = person.getWallet().getCashOnHand();
 	}
 
 	/* --- Messages from other agents --- */
@@ -312,33 +299,12 @@ public class CustomerRole extends WorkRole implements Customer {
 		Do("Ready to order");
 		waiter.msgReadyToOrder(this);
 	}
+	
 	private void hereIsMyOrder(){
-		if(!name.equals("flake")){
-			boolean cannotPay = true;
-			for(Map.Entry<String, Double> entry : menu.m.entrySet()){
-				if(money >= entry.getValue()){
-					cannotPay = false;
-				}
-			}
-			if(cannotPay == true){
-				Do("I don't have enough money!");
-				state = CustomerState.LEAVING;
-				leaveTable();
-				waiter.msgCannotPay(this);
-				return;
-			}
-		}
-		
-		if(menu.m.get(name) != null){
-			choice = name;
-			Do("Choice " + choice);
-		}
-		else{
-			List<String> keys = new ArrayList<String>(menu.m.keySet());
-			Collections.shuffle(keys);
-			choice = keys.get(0).toString();
-			Do("Don't have food name. Ordered " + choice);
-		}
+		List<String> keys = new ArrayList<String>(menu.m.keySet());
+		Collections.shuffle(keys);
+		choice = keys.get(0).toString();
+		Do("Ordered " + choice);
 		
 		gui.orderState = OrderState.DECIDED;
 		gui.setChoice(choice);
@@ -362,9 +328,6 @@ public class CustomerRole extends WorkRole implements Customer {
 		waiter.msgIAmDoneEating(this);
 	}
 	private void pay(){
-		if(firstTime == false && name.equals("flake")){
-			money = bill;
-		}
 		cashier.msgHereIsPayment(this, money);
 		money -= bill;
 		if(money < 0){
@@ -374,11 +337,17 @@ public class CustomerRole extends WorkRole implements Customer {
 
 	private void leaveTable() {
 		Do("Leaving.");
-		firstTime = false;
+
 		if(waiter != null){
 			waiter.msgCustomerLeavingTable(this);
 		}
+		
 		gui.DoExitRestaurant();
+		
+		person.getWallet().setCashOnHand(money);
+		person.setHungerLevel(HungerLevel.FULL);
+		
+		deactivate();
 	}
 
 	/** Utilities */

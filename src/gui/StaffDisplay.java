@@ -39,7 +39,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	private JPanel staffView, unemployedView;
 	private List<JButton> unemployedList;
 	private List<StaffButton> staffList;
-	private JButton fireButton, hireButton;
+	private JButton fireButton, hireButton, replaceButton;
 	private JLabel msg;
 	
 	public StaffDisplay() {
@@ -57,12 +57,15 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		JPanel buttons = new JPanel();
 		buttons.setPreferredSize(new Dimension((int)(d.width*0.3), d.height));
 		fireButton = new JButton("Fire");
+		replaceButton = new JButton("Replace");
 		hireButton = new JButton("Hire");
 		fireButton.addActionListener(this);
 		hireButton.addActionListener(this);
+		replaceButton.addActionListener(this);
 		msg = new JLabel("");
 		buttons.add(fireButton);
 		buttons.add(hireButton);
+		buttons.add(replaceButton);
 		buttons.add(msg);
 		
 		add(staffPanel);
@@ -192,7 +195,6 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		//Fire
 		if (e.getSource() == fireButton){
 			boolean hasStaffSelection = false;
-			boolean hasUnempSelection = false;
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
@@ -203,31 +205,80 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				msg.setText("Please select a person to fire");
 				return;
 			}
-			for (JButton b: unemployedList){
-				if(b.getBackground() == Color.LIGHT_GRAY){
-					hasUnempSelection = true;
-					//TODO hire b.getName();
-				}
-			}
 			//TODO check if staff is important role, then need to select person to hire
-			/*if(!hasUnempSelection){
-				msg.setText("Please select a person to hire");
+			/*if(important){
+				msg.setText("Please select a replacement for this position");
 				return;
 			}*/
-			
-			if(hasStaffSelection && hasUnempSelection){
-				//TODO msg.setText()
-			}
-			
 			return;
 		}
 		
 		//Hire
 		if (e.getSource() == hireButton){
+			boolean hasUnempSelection = false;
+			boolean hasStaffSelection = false;
+			boolean posOpen = false;
+			for (StaffButton staff: staffList){
+				if(staff.selected){
+					hasStaffSelection = true;
+				}
+				if(staff.available){
+					posOpen = true;
+				}
+			}
+			if(!hasStaffSelection ||!posOpen){
+				msg.setText("Please select an available position");
+				return;
+			}
+			
+			for (JButton b: unemployedList){
+				if(b.getBackground() == Color.LIGHT_GRAY){
+					hasUnempSelection = true;
+					if(hasStaffSelection && posOpen){
+						//TODO hire b.getName();
+						return;
+					}
+				}
+			}
+			
+			if(!hasUnempSelection){
+				msg.setText("Please select a person to hire");
+				return;
+			}			
+			return;
+		}
+		
+		//Replace
+		if (e.getSource() == replaceButton){
+			boolean hasStaffSelection = false;
+			boolean hasUnempSelection = false;
+			for (StaffButton staff: staffList){
+				if(staff.selected && !staff.available){
+					hasStaffSelection = true;
+				}
+			}
+			if(!hasStaffSelection){
+				msg.setText("Please select a person to fire");
+				return;
+			}
+			for (JButton b: unemployedList){
+				if(b.getBackground() == Color.LIGHT_GRAY){
+					hasUnempSelection = true;
+				}
+			}
+			if(!hasUnempSelection){
+				msg.setText("Please select a person to hire");
+				return;
+			}
+			if(hasStaffSelection && hasUnempSelection){
+				//TODO fire staff.getPersonName()
+				//TODO hire b.getName();
+			}
 			
 			return;
 		}
 		
+		//Button selection
 		for (JButton b: unemployedList){
 			if(e.getSource() == b){
 				if(b.getBackground() == Color.white){
@@ -241,6 +292,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				b.setBackground(Color.white);
 			}
 		}
+		
 		
 	}
 	

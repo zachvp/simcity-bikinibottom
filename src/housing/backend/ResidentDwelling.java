@@ -1,15 +1,15 @@
 package housing.backend;
 
-import agent.PersonAgent;
-import agent.gui.Gui;
-import mock.EventLog;
-import classifieds.ClassifiedsClass;
-import CommonSimpleClasses.Constants;
 import housing.gui.DwellingGui;
 import housing.interfaces.Dwelling;
 import housing.interfaces.MaintenanceWorker;
-import housing.interfaces.Resident;
 import housing.interfaces.PayRecipient;
+import housing.interfaces.Resident;
+import mock.EventLog;
+import CommonSimpleClasses.Constants;
+import agent.PersonAgent;
+import agent.gui.Gui;
+import classifieds.ClassifiedsClass;
 
 /**
  * Dwelling is a housing unit that can be slotted into an apartment complex
@@ -56,8 +56,13 @@ public class ResidentDwelling implements Dwelling {
 			HousingComplex complex) {
 		super();
 		
-		// TODO actual code below
+		// so the dwelling knows what housing complex it's in
 		this.complex = complex;
+		
+		// set the position index of this dwelling
+		this.IDNumber = ID;
+		
+		// create instance of the internal dwelling layout graphics
 		this.gui = new DwellingGui(ID);
 		
 		this.condition = startCondition;
@@ -75,7 +80,7 @@ public class ResidentDwelling implements Dwelling {
 		ClassifiedsClass.getClassifiedsInstance().addDwelling(this);
 	}
 	
-	public void addResident() throws Exception {
+	public void addResident() {
 		if(Constants.TEST_POPULATE_HOUSING){
 			PersonAgent person = new PersonAgent("Resident");
 			
@@ -85,11 +90,15 @@ public class ResidentDwelling implements Dwelling {
 			this.complex.addResident(resident);
 			
 			person.startThread();
+			
+			complex.addRoleToUnit(IDNumber, resident);
 		} else {
 			this.payRecipient = complex.getPayRecipient();
 			this.worker = complex.getWorker();
 			this.resident = new ResidentRole(null, complex.getBuilding(), this, gui);
+			
 			this.complex.addResident(resident);
+			complex.addRoleToUnit(IDNumber, resident);
 		}
 	}
 

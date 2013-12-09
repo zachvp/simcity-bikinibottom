@@ -104,14 +104,25 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	/* ----- Messages ----- */
 	
 	// from the info panel or a timed event
-	public void msgChargeRent() {
+	public void msgChargeRent(int unit) {
+		MyResident mr = findResident(unit);
+		if(mr == null) {
+			Do("No resident with that unit number!");
+			return;
+		}
+		mr.state = PaymentState.PAYMENT_DUE;
+		stateChanged();
+	}
+	
+	public MyResident findResident(int unit) {
 		synchronized(residents) {
 			for(MyResident mr : residents) {
-				Do("Charging rent");
-				mr.state = PaymentState.PAYMENT_DUE;
-				stateChanged();
+				if(mr.dwelling.getIDNumber() == unit) {
+					return mr;
+				}
 			}
 		}
+		return null;
 	}
 	
 	// from a resident

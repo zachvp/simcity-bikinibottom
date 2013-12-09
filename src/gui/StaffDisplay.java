@@ -62,19 +62,19 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		add(buttons);
 		
 		//test
-		addToStaffList("jsaljdsk", "anjdg");
+		/*addToStaffList("jsaljdsk", "anjdg");
 		addToStaffList("ajsdkgads", "afdjl");
 		staffList.get(0).setAvailable();
 		
 		addToUnemployedList("agsd");
-		addToUnemployedList("gajsldgjlskdmv,");
+		addToUnemployedList("gajsldgjlskdmv,");*/
 	}
 
 	private void makeStaffPanel() {
 		staffPanel = new JPanel();
 		staffPanel.setPreferredSize(panelDim);
 		
-		staffLabel = new JLabel("Current Staff");
+		staffLabel = new JLabel("Current Positions");
 		//staffLabel.setPreferredSize(new Dimension(panelDim.width, (int)(panelDim.height*0.20)));
 		
 		staffView = new JPanel();

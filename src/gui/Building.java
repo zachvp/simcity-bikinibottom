@@ -95,6 +95,10 @@ public abstract class Building extends Rectangle2D.Double
 	/** The minute of day this building closes. */
 	public int getClosingMinute() {
 		return defaultEndMinute;
+	}
+
+	public void setCitizenRecords(CitizenRecords citizenRecords) {
+		staff.setCitizenRecords(citizenRecords);		
 	}	
 	
 }

@@ -292,7 +292,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		map.addBuildingToMap(building);
 		if(building.type() != LocationTypeEnum.None){
 			buildingList.addToList(building.getName());
-		}		
+		}	
+		building.setCitizenRecords(citizenRecords);
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);

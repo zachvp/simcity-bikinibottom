@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import agent.PersonAgent;
 import agent.WorkRole;
 import classifieds.ClassifiedsClass;
 import market.gui.MarketBuilding;
@@ -29,6 +30,7 @@ import CommonSimpleClasses.Constants;
 public class StaffDisplay extends JPanel implements ActionListener{
 	
 	Building building;
+	CitizenRecords citizenRecords;
 
 	private Dimension d, panelDim;
 	private JLabel staffLabel, unemployedLabel;
@@ -145,6 +147,12 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		}
 	}
 	
+	public void updateStaffDisplay(){
+		staffView.removeAll();
+		staffList.clear();
+		addAllWorkRolesToStaffList();
+	}
+	
 	/**
 	 * Adds people to unemployed list
 	 * @param name
@@ -165,11 +173,17 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		validate();		
 	}
 	
-	public void updateStaffDisplay(){
-		staffView.removeAll();
-		staffList.clear();
-		addAllWorkRolesToStaffList();
+	public void updateUnemployedList(){
+		unemployedList.clear();
+		unemployedView.removeAll();
+		List<PersonAgent> people = citizenRecords.getCitizenList();
+		for (PersonAgent p: people){
+			if(p.getWorkRole() == null){
+				addToUnemployedList(p.getName());
+			}
+		}
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -232,6 +246,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	
 	public void setBuilding(Building b){
 		building = b;
+	}
+	public void setCitizenRecords(CitizenRecords rec){
+		citizenRecords = rec;
 	}
 	
 	class StaffButton extends JPanel implements MouseListener{

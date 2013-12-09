@@ -129,6 +129,9 @@ public class CitizenRecords {
 
 		infoPanel.updatePersonInfoPanel(newPerson);
 
+		for (Building b: buildings){
+			b.staff.updateUnemployedList();
+		}
 	}
 	
 	

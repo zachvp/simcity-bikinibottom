@@ -20,11 +20,11 @@ public class CookGui implements Gui {
     
     // cook position - default to home location
     private int xPos = DEFAULT_X;
-    private int yPos = DEFAULT_Y;
+    private int yPos = 0;
     
     // destination
     private int xDestination = xPos;
-    private int yDestination = yPos;
+    private int yDestination = -HEIGHT;
         
     // default location
     private static final int DEFAULT_X = 650-400;
@@ -77,6 +77,13 @@ public class CookGui implements Gui {
     	yDestination = DEFAULT_Y;
     	shouldMsg = false;
     	this.orderText = null;
+    }
+    
+    public void DoLeaveWork() {
+    	xDestination = DEFAULT_X;
+    	yDestination = 0;
+    	shouldMsg = false;
+    	orderText = null;
     }
     
     public void DoCook(int x, int y, String orderText) {

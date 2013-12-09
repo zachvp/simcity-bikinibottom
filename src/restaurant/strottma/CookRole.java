@@ -96,6 +96,7 @@ public class CookRole extends WorkRole implements Cook {
 	public void activate() {
 		super.activate();
 		offWork = false;
+		DoGoHome();
 	}
 	
 	public Cashier getCashier() {
@@ -233,7 +234,7 @@ public class CookRole extends WorkRole implements Cook {
 		
 		DoGoHome(); // return to default position if nothing to do
 		
-		if (offWork) { deactivate(); }
+		if (offWork) { gui.DoLeaveWork(); deactivate(); }
 		
 		// We have tried all our rules and found nothing to do. So return false
 		// to main loop of abstract Role and wait.

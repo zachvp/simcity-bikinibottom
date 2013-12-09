@@ -75,7 +75,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 
 		addMouseListener(this);
 		
-		javax.swing.Timer timer = new javax.swing.Timer(10, this); //call update every 1/10 sec
+		javax.swing.Timer timer = new javax.swing.Timer(Constants.REFRESH_RATE_MS, this);
     	timer.start();
     	
     	utilTimer = SingletonTimer.getInstance();

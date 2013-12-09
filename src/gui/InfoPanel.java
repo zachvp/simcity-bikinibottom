@@ -22,14 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import bank.gui.BankBuilding;
-
 import kelp.Kelp;
 import kelp.KelpClass;
-
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
@@ -46,10 +45,13 @@ import agent.PersonAgent;
  */
 public class InfoPanel extends JPanel implements ActionListener{
 	
-	private Dimension d;
+	private Dimension d, cardDim;
 	private JLabel info;
+	TabbedInfoDisplay tabDisplay;
 	JPanel card = new JPanel();
+	JPanel staffCard = new JPanel();
 	JPanel timePanel = new JPanel();
+	JPanel personText;
 	JLabel time;
 	int hour, min, sec;
 	String hourStr, minStr, secStr;
@@ -72,14 +74,38 @@ public class InfoPanel extends JPanel implements ActionListener{
 		setMinimumSize(d);
 		setLayout(new BorderLayout());
 		
-		Dimension cardDim = new Dimension(Constants.INFO_PANEL_WIDTH, h-46); //700 X 145
+		cardDim = new Dimension(Constants.INFO_PANEL_WIDTH, h-46); //700 X 145
 		card.setPreferredSize(cardDim);
 		card.setMaximumSize(cardDim);
 		card.setMinimumSize(cardDim);
 		card.setLayout(new CardLayout());
 		
 		//overall person panel
-		JPanel personText = new JPanel();
+		personText = new JPanel();
+		makePersonPanel();
+
+		card.add(personText, "person");
+
+		//Display current game time
+		timer = SingletonTimer.getInstance();
+    	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
+		time = new JLabel();
+		timePanel.add(time);
+		//timePanel.setBorder(BorderFactory.createEtchedBorder());
+		//card.setBorder(BorderFactory.createEtchedBorder());
+		
+		//Staff Card
+		Dimension staffCardDim = new Dimension(Constants.INFO_PANEL_WIDTH, d.height-46); //700 X 145
+		staffCard.setPreferredSize(staffCardDim);
+		staffCard.setMaximumSize(staffCardDim);
+		staffCard.setMinimumSize(staffCardDim);
+		staffCard.setLayout(new CardLayout());
+		
+		add(card, BorderLayout.SOUTH);
+		add(timePanel, BorderLayout.NORTH);
+	}
+	
+	private void makePersonPanel(){
 		personText.setPreferredSize(d);
 		personText.setMaximumSize(d);
 		personText.setMinimumSize(d);
@@ -161,21 +187,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		personText.add(textWest, BorderLayout.WEST);
 		personText.add(textEast, BorderLayout.CENTER);
 		personText.add(controls, BorderLayout.EAST);
-
-		card.add(personText, "person");
-
-		//Display current game time
-		timer = SingletonTimer.getInstance();
-    	// timer.scheduleAtFixedRate(new PrintTask(), 0, 500);
-		time = new JLabel();
-		timePanel.add(time);
-		//timePanel.setBorder(BorderFactory.createEtchedBorder());
-		//card.setBorder(BorderFactory.createEtchedBorder());
-		
-		add(card, BorderLayout.SOUTH);
-		add(timePanel, BorderLayout.NORTH);
 	}
-	
 	
 	
 	private void getTimeDisplay(){
@@ -193,6 +205,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void updatePersonInfoPanel(PersonAgent person){
 		CardLayout cl = (CardLayout)(card.getLayout());
+		if(tabDisplay.getTabCount() == 3){
+			tabDisplay.hideBuildingTabs();
+		}
 		cl.show(card, "person");
 		//System.out.println("update info with "+person.getName());
 		/*info.setText("<html><div>&nbsp;</div><div> "
@@ -228,24 +243,30 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * @param b Building name
 	 */
 	public void updateBuildingInfoPanel(Building b){
-		//Building building = b;
-		//System.out.println(b.getName()+ " update info panel");
+	
 		if (b instanceof MarketBuilding){
 			((MarketBuilding) b).UpdateInfoPanel();
-		}
-		//if(b instanceof ResidentialBuilding){
-		//	 ((HousingInfoPanel)(b.getInfoPanel())).updatePanel();
-		//}
+		}	
 		
 		CardLayout cl = (CardLayout)(card.getLayout());
+		CardLayout c2 = (CardLayout)(staffCard.getLayout());
+		
 		if(b.getInfoPanel() == null){
 			cl.show(card, "blank");
 		}
 		else
 		{
+			if(b instanceof HospitalBuilding && tabDisplay.getTabCount() == 3){
+				tabDisplay.hideBuildingTabs();
+			}
+			if(!(b instanceof HospitalBuilding) && tabDisplay.getTabCount() == 2){
+				tabDisplay.showStaffTab();
+				
+			}
+			c2.show(staffCard, b.getName());
 			cl.show(card, b.getName());
 		}
-		
+
 		validate();
 
 	}
@@ -257,6 +278,10 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 */
 	public void addBuildingInfoPanel(JPanel panel, String name){
 		card.add(panel, name);
+	}
+	
+	public void addStaffInfoPanel(JPanel panel, String name){
+		staffCard.add(panel, name);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -277,6 +302,11 @@ public class InfoPanel extends JPanel implements ActionListener{
         public void run() {
         	getTimeDisplay();
         }
+	}
+
+	public void setTabDisplay(TabbedInfoDisplay tabbedInfoPane) {
+		tabDisplay = tabbedInfoPane;
+		tabDisplay.setStaffCard(staffCard);
 	}
 
 }

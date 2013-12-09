@@ -93,6 +93,11 @@ public class HospitalBuilding extends Building{
 	public int getClosingMinute() {
 		return 59;
 	}
+
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
 	
 
 }

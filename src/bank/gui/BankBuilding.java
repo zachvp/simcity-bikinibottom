@@ -227,6 +227,11 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		return infoPanel;
 	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
 
 	public SecurityGuardRole getSecurity() {
 		return security;

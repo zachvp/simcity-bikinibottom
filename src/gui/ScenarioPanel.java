@@ -33,11 +33,13 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 
 	
 	//populate panel components
+	ArrayList<MyComboBoxItem> buildList = new ArrayList<MyComboBoxItem>();
+	MyComboBoxItem[] buildingArray;
 	JComboBox<MyComboBoxItem> workplaceCB;
 	JButton populateButton;
 	
 	//normative panel components
-	JRadioButton scenarioA, scenarioB, scenarioC;
+	JRadioButton scenarioA, scenarioB, scenarioC; //TODO Add more scenarios here
 	JButton runScenarioButton;
 	
 	public ScenarioPanel() {

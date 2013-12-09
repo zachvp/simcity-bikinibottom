@@ -49,7 +49,6 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	
 	private Map<String,Integer> InventoryList ;
 	
-
 	
 	/**
 	 * PriceList in the market

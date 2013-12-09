@@ -1,6 +1,6 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.backend.CookAgent;
+import restaurant.vegaperk.backend.CookRole;
 
 import java.awt.*;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import agent.gui.Gui;
 
 public class CookGui implements Gui{
 
-	private CookAgent agent = null;
+	private CookRole agent = null;
 	private boolean isPresent = true;
 	private String holding = null;
 	
@@ -39,7 +39,7 @@ public class CookGui implements Gui{
 	
 	private static final int fridgeY = 200;	
 	
-	public CookGui(CookAgent c, RestaurantGui gui){ //HostAgent m) {
+	public CookGui(CookRole c, RestaurantGui gui){ //HostAgent m) {
 		agent = c;
 		xPos = homeX;
 		yPos = homeY;
@@ -161,7 +161,7 @@ public class CookGui implements Gui{
 		grillPositions = grills;
 		platePositions = plates;
 	}
-	public CookAgent getAgent(){
+	public CookRole getAgent(){
 		return agent;
 	}
 }

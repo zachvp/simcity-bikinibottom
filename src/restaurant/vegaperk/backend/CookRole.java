@@ -3,6 +3,7 @@ package restaurant.vegaperk.backend;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
+import agent.WorkRole;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
@@ -16,7 +17,7 @@ import mock.EventLog;
 /**
  * Cook Agent
  */
-public class CookAgent extends Role implements Cook {
+public class CookRole extends WorkRole implements Cook {
 	public EventLog log = new EventLog();
 	
 	private String name;
@@ -62,7 +63,7 @@ public class CookAgent extends Role implements Cook {
 		}
 	});
 
-	public CookAgent(String name) {
+	public CookRole(String name) {
 		super();
 		this.name = name;
 		
@@ -337,5 +338,21 @@ public class CookAgent extends Role implements Cook {
 	@Override
 	public void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return true;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		this.deactivate();
 	}
 }

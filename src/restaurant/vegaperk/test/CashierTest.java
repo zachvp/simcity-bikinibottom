@@ -1,7 +1,7 @@
 package restaurant.vegaperk.test;
 
-import restaurant.vegaperk.backend.CashierAgent;
-import restaurant.vegaperk.backend.CashierAgent.CustomerState;
+import restaurant.vegaperk.backend.CashierRole;
+import restaurant.vegaperk.backend.CashierRole.CustomerState;
 import restaurant.vegaperk.test.mock.MockCustomer;
 import restaurant.vegaperk.test.mock.MockMarket;
 import restaurant.vegaperk.test.mock.MockWaiter;
@@ -18,7 +18,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	CashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockMarket market;
@@ -29,7 +29,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent("cashier");		
+		cashier = new CashierRole("cashier");		
 		customer = new MockCustomer("mockcustomer");		
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");

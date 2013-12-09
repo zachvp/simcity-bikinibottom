@@ -1,6 +1,5 @@
 package restaurant.vegaperk.backend;
 
-import agent.Role;
 import agent.WorkRole;
 import gui.trace.AlertTag;
 
@@ -16,7 +15,7 @@ import mock.EventLog;
 /**
  * Cook Agent
  */
-public class CashierAgent extends WorkRole implements Cashier {
+public class CashierRole extends WorkRole implements Cashier {
 	String name;
 	private double money = 500.00;
 	
@@ -29,7 +28,7 @@ public class CashierAgent extends WorkRole implements Cashier {
 	
 	// create an anonymous Map class to initialize the foods and cook times
 
-	public CashierAgent(String name) {
+	public CashierRole(String name) {
 		super();
 		this.name = name;
 		

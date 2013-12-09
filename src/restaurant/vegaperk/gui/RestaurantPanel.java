@@ -1,7 +1,7 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.backend.CashierAgent;
-import restaurant.vegaperk.backend.CookAgent;
+import restaurant.vegaperk.backend.CashierRole;
+import restaurant.vegaperk.backend.CookRole;
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
@@ -35,10 +35,10 @@ public class RestaurantPanel extends JPanel {
     private TableGui tableGui = new TableGui(host.getTableMap());
     
     private PersonAgent cookPerson;
-    private CookAgent cook = new CookAgent("Cook");
+    private CookRole cook = new CookRole("Cook");
     
     private PersonAgent cashierPerson;
-    private CashierAgent cashier = new CashierAgent("Squidward");
+    private CashierRole cashier = new CashierRole("Squidward");
     
     private MarketAgent m1 = new MarketAgent("Market 1");
     private MarketAgent m2 = new MarketAgent("Market 2");

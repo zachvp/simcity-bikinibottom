@@ -19,8 +19,8 @@ public class WaiterAgent extends Role implements Waiter {
 	BreakState breakState = BreakState.NONE;
 	
 	//agent members
-	CookAgent cook = null;
-	CashierAgent cashier = null;
+	CookRole cook = null;
+	CashierRole cashier = null;
 	
 	public WaiterGui waiterGui = null;
 	public Menu menu = new Menu();
@@ -28,7 +28,7 @@ public class WaiterAgent extends Role implements Waiter {
 	
 	private HostRole host;
 
-	public WaiterAgent(String name, CashierAgent c) {
+	public WaiterAgent(String name, CashierRole c) {
 		super();
 		this.cashier = c;
 	}
@@ -54,7 +54,7 @@ public class WaiterAgent extends Role implements Waiter {
 		host = h;
 	}
 	
-	public void setCook(CookAgent c){
+	public void setCook(CookRole c){
 		cook = c;
 	}
 	

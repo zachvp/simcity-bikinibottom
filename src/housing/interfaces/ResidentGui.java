@@ -17,5 +17,5 @@ public interface ResidentGui {
 
 	public void DoShowSpeech(String speech);
 
-	public void setName(String name);
+	public DwellingLayoutGui getLayoutGui();
 }

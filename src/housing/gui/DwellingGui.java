@@ -4,6 +4,7 @@ import housing.interfaces.DwellingLayoutGui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -26,11 +27,13 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 	// position index of unit
 	private int ID = -1;
 	
+	String residentName = "default";
+	
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
 	
-	// used to draw shapes of furniture/appliances 
+	// draws shapes of furniture/appliances 
 	private final int BASE_SIZE = 20;
 	
 	// constants for appliance positions
@@ -106,6 +109,11 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 		g.drawString("Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height + BASE_SIZE);
 		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
+		
+		// draw surveillance cam
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("default", Font.BOLD, 13));
+		g.drawString("CAM " + ID + ": " + residentName, 5, 12);
 	}
 	
 	@Override
@@ -142,6 +150,10 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 	@Override
 	public int getID() {
 		return this.ID;
+	}
+
+	public void setName(String name) {
+		this.residentName = name;
 	}
 
 }

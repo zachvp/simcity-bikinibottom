@@ -102,6 +102,7 @@ public class ResidentRole extends Role implements Resident {
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
+		this.gui.setName(agent.getName());
 	}
 	
 	/* ----- Messages ----- */

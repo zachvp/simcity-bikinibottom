@@ -191,7 +191,7 @@ public interface Constants {
 	/**
 	 * Set to true to test restaurant independent from MainFrame
 	 */
-	public final boolean TEST_POPULATE_RESTAURANT = true;
+	public final boolean TEST_POPULATE_RESTAURANT = false;
 	
 	/**
 	 * Set to true to test housing independent from MainFrame

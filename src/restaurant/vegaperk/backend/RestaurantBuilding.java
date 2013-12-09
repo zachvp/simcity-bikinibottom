@@ -66,4 +66,10 @@ public class RestaurantBuilding extends Building {
 		return gui.getInfoPanel();
 	}
 
+	@Override
+	public JPanel getStaffPanel() {
+		// TODO Auto-generDSDated method stub
+		return gui.getInfoPanel();
+	}
+
 }

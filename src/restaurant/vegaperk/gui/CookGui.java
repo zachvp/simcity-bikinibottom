@@ -1,6 +1,7 @@
 package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.backend.CookRole;
+import restaurant.vegaperk.interfaces.Cook;
 
 import java.awt.*;
 import java.util.Collections;
@@ -12,7 +13,7 @@ import agent.gui.Gui;
 
 public class CookGui implements Gui{
 
-	private CookRole agent = null;
+	private Cook agent = null;
 	private boolean isPresent = true;
 	private String holding = null;
 	
@@ -39,14 +40,14 @@ public class CookGui implements Gui{
 	
 	private static final int fridgeY = 200;	
 	
-	public CookGui(CookRole c, RestaurantGui gui){ //HostAgent m) {
+	public CookGui(Cook c, RestaurantGui gui){ //HostAgent m) {
 		this.agent = c;
 		this.gui = gui;
 		
-		xPos = homeX;
-		yPos = homeY;
-		xDestination = xPos;
-		yDestination = yPos;
+		xPos = 0;
+		yPos = 0;
+		xDestination = homeX;
+		yDestination = homeY;
 	}
 
 	public void updatePosition() {
@@ -73,12 +74,19 @@ public class CookGui implements Gui{
     	g.fillRect(xPos, yPos, width, height);
     	/** Draw the grills and plate positions */
     	g.setColor(Color.BLACK);
-	    for(Dimension d : grillPositions){
-	    	g.drawRect(d.width, d.height, width, height);
-	    }
-	    for(Dimension p : platePositions){
-    		g.fillRect(p.width, p.height, width, height);
-	    }
+    	
+    	if(grillPositions != null){
+		    for(Dimension d : grillPositions){
+		    	g.drawRect(d.width, d.height, width, height);
+		    }
+    	}
+	    
+    	if(platePositions != null){
+		    for(Dimension p : platePositions){
+	    		g.fillRect(p.width, p.height, width, height);
+		    }
+    	}
+	    
 	    /** Draw the food items on the grills and plate positions */
 	    int i = 0;
 	    g.setColor(Color.RED);
@@ -162,7 +170,7 @@ public class CookGui implements Gui{
 		grillPositions = grills;
 		platePositions = plates;
 	}
-	public CookRole getAgent(){
+	public Cook getAgent(){
 		return agent;
 	}
 }

@@ -1,5 +1,6 @@
 package restaurant.vegaperk.interfaces;
 
+import restaurant.vegaperk.backend.CashierRole;
 import restaurant.vegaperk.interfaces.Customer;
 
 /**
@@ -39,4 +40,6 @@ public interface Waiter {
 	public int getCustomerCount();
 
 	public void msgHomePosition(int position);
+
+	void setCashier(CashierRole cashier);
 }

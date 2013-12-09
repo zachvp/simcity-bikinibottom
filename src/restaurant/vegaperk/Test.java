@@ -4,7 +4,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
-import restaurant.vegaperk.backend.RestaurantBuilding;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import CommonSimpleClasses.Constants;
 
 /**
@@ -18,7 +18,7 @@ public class Test extends JFrame {
     private int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
     private int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
 
-	private RestaurantBuilding building = new RestaurantBuilding(0, 0, 0, 0);
+	private RestaurantVegaPerkBuilding building = new RestaurantVegaPerkBuilding(0, 0, 0, 0);
 	
 	public Test() {
 		this.setLayout(new GridLayout(1, 2));

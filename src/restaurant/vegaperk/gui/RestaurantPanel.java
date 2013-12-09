@@ -11,8 +11,10 @@ import gui.Building;
 import javax.swing.*;
 
 import CommonSimpleClasses.Constants;
+import agent.Agent;
 import agent.PersonAgent;
 import agent.Role;
+import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -133,6 +135,11 @@ public class RestaurantPanel extends JPanel {
         	cashier.activate();
         	cashierPerson.startThread();
         }
+        else {
+        	for(int i = 0; i < 4; i++) {
+        		addWaiter("Waiters", "flinja");
+        	}
+        }
         
         setLayout(new GridLayout(1, 2, 20, 20));
         group.setLayout(new GridLayout(1, 2, 10, 10));
@@ -176,23 +183,25 @@ public class RestaurantPanel extends JPanel {
      * @param type indicates whether the person is a customer or waiter (later)
      * @param name name of person
      */
-    public CustomerGui addCustomer(String type, String name) {
+    public CustomerRole addCustomer(String type, String name, Person person) {
 
     	if (type.equals("Customers")) {
     		CustomerRole c;
     		
     		// new role and person stuff
     		if(Constants.TEST_POPULATE_RESTAURANT){
-    			PersonAgent person = new PersonAgent("Customer");
+    			person = new PersonAgent("Customer");
     			c = new CustomerRole(person, building);
     			
         		person.addRole(c);
         		c.setPerson(person);
-        		person.startThread();
+        		((Agent) person).startThread();
     		}
     		else {
-    			c = new CustomerRole(null, building);
+    			c = new CustomerRole(person, building);
+    			c.gotHungry();
     		}
+    		c.setLocation(building);
     		
     		c.setHost(host);
     		c.activate();
@@ -202,7 +211,7 @@ public class RestaurantPanel extends JPanel {
     		customers.add(c);
     		agentList.add(c);
     		gui.getAnimationPanel().addGui(g);
-    		return g;
+    		return c;
     	}
     	return null;
     }
@@ -214,7 +223,6 @@ public class RestaurantPanel extends JPanel {
 	    		PersonAgent person = new PersonAgent("Waiter");
 	    		
 	    		w = new WaiterRole(person, building);
-	    		w.setCashier(cashier);
 	    		
 	    		person.addRole(w);
 	    		w.setPerson(person);
@@ -223,6 +231,8 @@ public class RestaurantPanel extends JPanel {
 	    	else {
 	    		w = new WaiterRole(null, building);
 	    	}
+    		
+    		w.setCashier(cashier);
     		
 	    	agentList.add(w);
 	    	w.setHost(host);
@@ -243,9 +253,11 @@ public class RestaurantPanel extends JPanel {
     	
    		return null;    		
     }
+    
     public void setCustomerEnabled(CustomerRole c){
     	customerPanel.setCustomerEnabled(c);
     }
+    
     public void denyBreak(WaiterRole w){
     	waiterPanel.denyBreak(w);
     }

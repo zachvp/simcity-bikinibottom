@@ -10,6 +10,7 @@ import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.PersonAgent.HungerLevel;
+import agent.Role;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -23,7 +24,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant customer agent.
  */
-public class CustomerRole extends WorkRole implements Customer {
+public class CustomerRole extends Role implements Customer {
 	private String name;
 	private String choice;
 	private int HUNGER_LEVEL = 6;// determines length of meal
@@ -103,13 +104,14 @@ public class CustomerRole extends WorkRole implements Customer {
 		this.name = super.getName();
 		
 		bill = 0.00;
-		money = person.getWallet().getCashOnHand();
 	}
 
 	/* --- Messages from other agents --- */
 	// from host
 	public void gotHungry() {//from animation
 		Do(getCustomerName());
+		money = person.getWallet().getCashOnHand();
+		
 		Do("I'm hungry");
 		event = CustomerEvent.GOT_HUNGRY;
 		stateChanged();
@@ -409,21 +411,5 @@ public class CustomerRole extends WorkRole implements Customer {
 	@Override
 	public void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
-	}
-
-	@Override
-	public boolean isAtWork() {
-		return true;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		this.deactivate();
 	}
 }

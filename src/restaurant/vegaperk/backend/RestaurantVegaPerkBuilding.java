@@ -10,6 +10,7 @@ import agent.interfaces.Person;
 import gui.Building;
 import CommonSimpleClasses.XYPos;
 import restaurant.vegaperk.gui.RestaurantGui;
+import restaurant.vegaperk.gui.RestaurantPanel;
 
 @SuppressWarnings("serial")
 public class RestaurantVegaPerkBuilding extends Building {
@@ -47,12 +48,13 @@ public class RestaurantVegaPerkBuilding extends Building {
 		
 		// TODO implement person, building constructor for customer
 		if(role == null) {
-			role = new CustomerRole(person, this);
-			gui.getAnimationPanel().addGui(role.getGui());
-			existingCustomerRoles.put(person, role);
-			person.addRole(role);
+			role = ((RestaurantPanel) getInfoPanel()).addCustomer("Customers", person.getName(), person);
+		}
+		else {
+			role.setPerson(person);
 		}
 		
+		person.addRole(role);
 		return role;
 	}
 

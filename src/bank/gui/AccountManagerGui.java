@@ -42,6 +42,9 @@ public class AccountManagerGui implements Gui{
 	private int entranceX = 300;
 	private int entranceY = 500;
 	
+	private int frontDeskFrontY =170;
+	private int frontDeskRightX = 450;
+	
 	int deskXPos = 300;
 	int deskYPos = 40;
 	
@@ -126,6 +129,23 @@ public class AccountManagerGui implements Gui{
 		canRelease = true;
 		xDestination = deskXPos;
 		yDestination = deskYPos;
+	}
+	
+	public void DoGoToFrontDesk() {
+		canRelease = true;
+		xDestination = deskXPos;
+		yDestination = frontDeskFrontY;
+	}
+	public void DoGoToBackDesk() {
+		canRelease = true;
+		xDestination = frontDeskRightX;
+		yDestination = frontDeskFrontY - 40;
+	}
+	
+	public void DoGoToRightOfFrontDesk() {
+		canRelease = true;
+		xDestination = frontDeskRightX;
+		yDestination = frontDeskFrontY;
 	}
 	
 	public void DoGoToComputer() {

@@ -8,9 +8,11 @@ import transportation.interfaces.Vehicle;
  */
 public class IntersectionAction {
 	
-	public IntersectionAction(Corner destination, Vehicle v) {
+	public IntersectionAction(Corner destination, Vehicle v, 
+			boolean turning) {
 		this.destination = destination;
 		this.v = v;
+		this.turning = turning;
 	}
 	
 	//Corner the Vehicle wants to drive to.
@@ -18,5 +20,7 @@ public class IntersectionAction {
 	
 	//Vehicle that wants to do the action.
 	Vehicle v;
+	
+	boolean turning;
 	
 }

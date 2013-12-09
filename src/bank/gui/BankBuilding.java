@@ -18,6 +18,7 @@ import agent.interfaces.Person;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
 import bank.LoanManagerRole;
+import bank.RobberRole;
 import bank.SecurityGuardRole;
 import bank.TellerRole;
 import bank.interfaces.SecurityGuard;
@@ -34,6 +35,7 @@ public class BankBuilding extends Building {
 	InfoPanel infoPanel;
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
+	Map<Person, RobberRole> existingRobberRoles = new HashMap<Person, RobberRole>();
 	private CityLocation bank;
 
 	// Constants for staggering opening/closing time
@@ -64,6 +66,7 @@ public class BankBuilding extends Building {
 		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
+		infoPanel = new InfoPanel(this);
 		initRoles();
 		
 		openHour = this.getOpeningHour();
@@ -129,6 +132,7 @@ public class BankBuilding extends Building {
 		getSecurity().setGui(sgGui);
 		account.setGui(accountGui);
 		loan.setGui(loanGui);
+		loan.setAccountManager(account);
 		tell1.setGui(tGui1);
 		tell2.setGui(tGui2);
 		tell3.setGui(tGui3);
@@ -140,6 +144,9 @@ public class BankBuilding extends Building {
 		bankGui.getAnimationPanel().addGui(tGui1);
 		bankGui.getAnimationPanel().addGui(tGui2);
 		bankGui.getAnimationPanel().addGui(tGui3);
+		
+		//add infopanel to account manager to update
+		account.setInfoPanel(infoPanel);
 
 	}
 
@@ -178,6 +185,31 @@ public class BankBuilding extends Building {
 
 		return role;
 	}
+	/**
+	 * Gives person a robber role when they
+	 * are told to rob bank in infoPanel
+	 * @param person
+	 * @return
+	 */
+	public Role getRobberRole(Person person) {
+		
+		RobberRole role = existingRobberRoles.get(person);
+		if(role == null) {//they have not been to bank and need a customer role
+			role = new RobberRole(person, bank);
+			RobberGui rg = new RobberGui(role);
+			role.setGui(rg);
+			bankGui.getAnimationPanel().addGui(rg);
+			role.setLocation(bank);
+			existingRobberRoles.put(person, role);
+			person.addRole(role);
+		}
+		else {
+//			role.setPerson(person);
+		}
+		role.msgGoToSecurityGuard(getSecurity());
+
+		return role;
+	}
 	/*
 	 * method to set open sign on bank counter to TRUE when open or FALSE when closed
 	 * called by SecurityGuard
@@ -193,8 +225,12 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		infoPanel = new InfoPanel(this);
 		return infoPanel;
+	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
 	}
 
 	public SecurityGuardRole getSecurity() {
@@ -221,6 +257,10 @@ public class BankBuilding extends Building {
 	
 	public boolean loanManagerOnDuty() {
 		return loan != null && loan.isAtWork();
+	}
+	
+	public double getMoneyInBank() {
+		return account.getMoneyInBank();
 	}
 	
 	public boolean tellerOnDuty() {

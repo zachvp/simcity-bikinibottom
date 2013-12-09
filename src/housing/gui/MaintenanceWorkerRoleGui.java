@@ -1,12 +1,14 @@
 package housing.gui;
 
-import housing.MaintenanceWorkerRole;
+import housing.backend.HousingComplex;
+import housing.backend.MaintenanceWorkerRole;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.MaintenanceWorkerGui;
-import java.awt.Color;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -24,6 +26,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 
 	private MaintenanceWorker worker;
 	
+	// needs to know the complex so gui can enter and exit buildings
 	private HousingComplex complex;
 	
 	// this prevents excessive releases from occurring
@@ -39,7 +42,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	private BufferedImage workerImage;
 	private ImageIcon workerIcon;
 	
-	// image for krabby patty
+	// image for tool
 	private BufferedImage tool;
 	private ImageIcon toolIcon;
 
@@ -53,10 +56,6 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	private int yPos = 15;
 	
 	private int xDestination, yDestination;//default start position
-	
-	// prime location for Jazzercising
-	private final int JAZZER_SPOT_X = xPos;
-	private final int JAZZER_SPOT_Y = yPos;
 	
 	int unit;
 	
@@ -96,10 +95,10 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	/* --- Draw the Resident Graphics --- */
 	public void draw(Graphics2D g) {
 		// draw the worker image
-//		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
+		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
 	    	
-		g.setColor(Color.WHITE);
-		g.fillRect(xPos, yPos, 20, 20);
+//		g.setColor(Color.WHITE);
+//		g.fillRect(xPos, yPos, 20, 20);
 		
 //		g.drawString(eatingFood, xPos+5, yPos+15);
 		if(showTool == true){
@@ -148,13 +147,17 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	@Override
 	public void DoFixProblem() {
 		waiting = false;
+		showTool = true;		
 		xDestination = 60;
 		yDestination = 50;
-		canRelease = true;
+		canRelease = false;
 	}
 
 	@Override
 	public void DoReturnHome(int unit) {
+		showTool = false;
+		
+		
 		this.complex.removeGuiFromDwelling(this, unit);
 //		this.complex.addGuiToDwelling(this, this.unit);
 	}

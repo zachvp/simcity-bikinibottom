@@ -25,6 +25,7 @@ import javax.swing.Timer;
 import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.SingletonTimer;
 import agent.gui.Gui;
 
 /**
@@ -74,10 +75,10 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 
 		addMouseListener(this);
 		
-		javax.swing.Timer timer = new javax.swing.Timer(10, this); //call update every 1/10 sec
+		javax.swing.Timer timer = new javax.swing.Timer(Constants.REFRESH_RATE_MS, this);
     	timer.start();
     	
-    	utilTimer = new java.util.Timer();
+    	utilTimer = SingletonTimer.getInstance();
 
     	utilTimer.scheduleAtFixedRate(new TimerTask() {
     		public void run() {

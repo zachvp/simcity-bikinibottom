@@ -9,6 +9,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.gui.BankBuilding;
 import bank.gui.LoanManagerGui;
+import bank.interfaces.AccountManager;
 import bank.interfaces.BankCustomer;
 import bank.interfaces.LoanManager;
 
@@ -21,6 +22,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	LoanManagerGui loanManagerGui;
+	AccountManager accountManager;
 	
 	double paycheckAmount = 300;
 	
@@ -96,8 +98,8 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	// Actions
 	private void goToWork() {
 		atWork = true;
-		doGoToDesk();
-		acquireSemaphore(active);
+		doGoToWork();
+//		acquireSemaphore(active);
 		
 	}
 	
@@ -107,12 +109,13 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		doGoToDesk();
 		acquireSemaphore(active);
 		lt.bc.msgLoanApproved(lt.loanAmount);
+		accountManager.msgUpdateMoney(lt.loanAmount);
 		loanTasks.remove(lt);
+
 	}
 	private void goOffWork() {
 		addPaycheckToWallet();
 		doEndWorkDay();
-		acquireSemaphore(active);
 		atWork = false;
 		this.deactivate();
 		
@@ -126,7 +129,20 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		this.getPerson().getWallet().addCash(paycheckAmount);
 	}
 	
+	public void setAccountManager(AccountManager a){
+		accountManager = a;
+	}
+	
 	//ANIMATION #####################
+	
+	public void doGoToWork() {
+		loanManagerGui.DoGoToDeskRight();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDeskLeft();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDesk();
+		acquireSemaphore(active);
+	}
 	public void msgAtDestination() {
 		active.release();
 	}
@@ -141,7 +157,12 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	}
 	
 	private void doEndWorkDay() {
-		loanManagerGui.DoEndWorkDay();
+		loanManagerGui.DoGoToDeskLeft();
+		acquireSemaphore(active);
+		loanManagerGui.DoGoToDeskRight();
+		acquireSemaphore(active);
+		loanManagerGui.DoLeaveBank();
+		acquireSemaphore(active);
 	}
 	
 	public void setGui(LoanManagerGui lmg) {

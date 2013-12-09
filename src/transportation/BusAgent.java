@@ -3,7 +3,7 @@ package transportation;
 import java.util.ArrayList;
 import java.util.List;
 
-import CommonSimpleClasses.DirectionEnum;
+import CommonSimpleClasses.CardinalDirectionEnum;
 import transportation.interfaces.Bus;
 import transportation.interfaces.Busstop;
 import transportation.interfaces.Corner;
@@ -60,7 +60,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 	@Override
 	public void msgMyBusStop(List<Busstop> bsList) {
 		if (bsList.size() > 0) {
-			DirectionEnum myDir;
+			CardinalDirectionEnum myDir;
 			try {
 				myDir = myDirection();
 			} catch (Exception e) {
@@ -88,7 +88,7 @@ public class BusAgent extends VehicleAgent implements Bus {
 
 	}
 
-	private DirectionEnum myDirection() throws Exception {
+	private CardinalDirectionEnum myDirection() throws Exception {
 		Corner nextCorner = currentPath.get(0);
 		int i;
 		for (i = 0; i < adjCorners.size(); i++) {

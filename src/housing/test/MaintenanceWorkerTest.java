@@ -1,6 +1,7 @@
 package housing.test;
 
-import housing.MaintenanceWorkerRole;
+import housing.backend.MaintenanceWorkerRole;
+import housing.backend.ResidentialBuilding;
 import housing.interfaces.Dwelling;
 import housing.interfaces.PayRecipient;
 import housing.interfaces.Resident;
@@ -13,20 +14,21 @@ import agent.PersonAgent;
 import junit.framework.TestCase;
 
 public class MaintenanceWorkerTest extends TestCase {
-	// testing Roles and Agents
-	PersonAgent person = new PersonAgent("Maintenance Worker");
-	MaintenanceWorkerRole worker = new MaintenanceWorkerRole(person);
-	MockMaintenanceWorkerGui gui = new MockMaintenanceWorkerGui(worker); 
-		
 	// mock roles
+	ResidentialBuilding building = new ResidentialBuilding(0, 0, 0, 0);
 	Resident resident = new MockResident("Resident");
 	Dwelling dwelling = new MockDwelling(resident, Condition.GOOD);
 	PayRecipient payRecipient = new MockPayRecipient("Pay Recipient");
+	
+	// testing Roles and Agents
+	PersonAgent person = new PersonAgent("Maintenance Worker");
+	MaintenanceWorkerRole worker = new MaintenanceWorkerRole(person, building);
+	MockMaintenanceWorkerGui gui = new MockMaintenanceWorkerGui(worker);
 
 	protected void setUp() throws Exception {
 		super.setUp();
-		worker.setGui(gui);
 		
+		worker.setGui(gui);
 		dwelling.setPayRecipient(payRecipient);
 	}
 	

@@ -1,14 +1,16 @@
 package housing.test;
 
-import mock.MockScheduleTaskListener;
 import CommonSimpleClasses.Constants.Condition;
 import agent.PersonAgent;
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.MaintenanceWorker;
 import housing.interfaces.PayRecipient;
+import housing.interfaces.Resident.FoodState;
 import housing.interfaces.ResidentGui;
 import housing.test.mock.MockDwelling;
+import housing.test.mock.MockDwellingGui;
 import housing.test.mock.MockMaintenanceWorker;
 import housing.test.mock.MockPayRecipient;
 import housing.test.mock.MockResidentGui;
@@ -18,12 +20,14 @@ public class ResidentTest extends TestCase {
 	// testing Roles and Agents
 	PersonAgent residentPerson = new PersonAgent("Resident");
 	ResidentRole resident;
-	ResidentGui gui = new MockResidentGui(resident);
+	ResidentGui gui;
 	
 	// mock roles
 	PayRecipient mockPayRecipient = new MockPayRecipient("Mock Pay Recipient");
 	Dwelling dwelling = new MockDwelling(resident, mockPayRecipient, Condition.GOOD);
-	MaintenanceWorker worker = new MockMaintenanceWorker("Worker");
+	MaintenanceWorker worker = new MockMaintenanceWorker("Worker", dwelling);
+	
+	DwellingLayoutGui mockLayoutGui = new MockDwellingGui();
 	
 	// constants
 	private final double PAYMENT_AMOUNT = 64;
@@ -31,8 +35,13 @@ public class ResidentTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		dwelling.setCondition(Condition.GOOD);
+		dwelling.setWorker(worker);
 		
-		resident = new ResidentRole(residentPerson, null, dwelling, null);
+		resident = new ResidentRole(residentPerson, null, dwelling, mockLayoutGui);
+		gui = new MockResidentGui(resident);
+		dwelling.setResident(resident);
+		
+		worker.setDwelling(dwelling);
 	}
 	
 	/**
@@ -52,7 +61,7 @@ public class ResidentTest extends TestCase {
 				+ resident.log.toString(), 0, resident.log.size());
 		
 		/* --- Run Scenario --- */
-		resident.msgPaymentDue(PAYMENT_AMOUNT);
+		resident.msgPaymentDue(PAYMENT_AMOUNT, mockPayRecipient);
 		assertEquals("Resident should now owe " + PAYMENT_AMOUNT + ".",
 				PAYMENT_AMOUNT, resident.getMoneyOwed());
 		
@@ -70,11 +79,11 @@ public class ResidentTest extends TestCase {
 	 * time to cook.
 	 * */
 	public void testNormativeCookAndEat() throws InterruptedException {
+		// set preliminary variables
+		resident.setHungry(false);
+		
 		// set the resident gui to the mock gui
 		resident.setGui(gui);
-		
-		// listens for the taskScheduler to finish. Use for routine that have a time delay
-		MockScheduleTaskListener mockRequestListener = new MockScheduleTaskListener();
 		
 		/* --- Test Preconditions --- */
 		// check money owed
@@ -100,19 +109,12 @@ public class ResidentTest extends TestCase {
 		assertTrue("Scheduler should return true after resident is hungry "
 				+ "and there are items in the fridge.", resident.pickAndExecuteAnAction());
 		
-		// handle the delay from the food cooking
-		synchronized(mockRequestListener){
-			mockRequestListener.wait(5000);
-		}
-
+		// simulate cooking the food
+		resident.getFood().setState(FoodState.COOKED);
+		
 		// resident eats food after food has finished cooking
 		assertTrue("Scheduler should return true after resident puts food on stove.",
 				resident.pickAndExecuteAnAction());
-		
-		// handle delay for eating food
-		synchronized(mockRequestListener){
-			mockRequestListener.wait(7000);
-		}
 		
 		// resident's hunger is now satisfied
 		assertFalse("Hungry should be false", resident.isHungry());
@@ -121,14 +123,14 @@ public class ResidentTest extends TestCase {
 	
 	public void testCallMaintenanceWorker(){
 		/* --- Test Preconditions --- */
-		assertEquals("Resident should have an empty event log before the message is called. Instead, the Resident's event log reads: "
-				+ resident.log.toString(), 0, resident.log.size());
+		assertEquals("Resident should have an empty event log before the message is called."
+				+ "Instead, the Resident's event log reads: " + resident.log.toString(), 0, resident.log.size());
 		assertEquals("Dwelling should have a starting condition of GOOD.",
 				Condition.GOOD, resident.getDwelling().getCondition());
 		
 		/* --- Run the Scenario --- */
 		
-		//  set the dwelling to a poor state
+		//  set the dwelling to a poor state, initializing the scenario
 		resident.getDwelling().setCondition(Condition.POOR);
 		
 		// call the scheduler. Resident should notify the maintenance worker

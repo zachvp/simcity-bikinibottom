@@ -1,6 +1,6 @@
 package housing.gui;
 
-import gui.AnimationPanel;
+import housing.interfaces.DwellingLayoutGui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.gui.Gui;
 
@@ -19,8 +20,9 @@ import agent.gui.Gui;
  * LayoutGui stores all the positional information about housing items
  * (furniture, appliances, etc) and displays them.
  */
-public class LayoutGui implements Gui {
+public class DwellingGui implements Gui, DwellingLayoutGui {
 	/* --- Layout Item Positions --- */
+	
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
@@ -49,9 +51,9 @@ public class LayoutGui implements Gui {
 	// timer for gary
 	ScheduleTask move = ScheduleTask.getInstance(); 
 	
-	public LayoutGui(int dwellingWidth, int dwellingHeight, int index) {
-		ROOM_WIDTH = dwellingWidth / 3;
-		ROOM_HEIGHT = dwellingHeight / 3;
+	public DwellingGui(int index) {
+		ROOM_WIDTH = Constants.ANIMATION_PANEL_WIDTH / 3;
+		ROOM_HEIGHT = Constants.ANIMATION_PANEL_HEIGHT / 3;
 		
 		// place all of the residential items
 		STOVE_POSITION = new Dimension(ROOM_WIDTH - 50, ROOM_HEIGHT / 2 - 10);
@@ -101,6 +103,7 @@ public class LayoutGui implements Gui {
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
 	}
 	
+	@Override
 	public void DoMoveGary(){
 		Random generator = new Random(); 
 		int position = generator.nextInt(4);

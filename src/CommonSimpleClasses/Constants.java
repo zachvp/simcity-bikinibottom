@@ -50,7 +50,7 @@ public interface Constants {
 	/**
 	 * Whether print statements should execute.
 	 */
-	public static final boolean PRINT = false;
+	public static final boolean PRINT = true;
 	
     /**
      * The number of milliseconds in a second
@@ -82,6 +82,11 @@ public interface Constants {
      * The default encoding used when none is detected
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
+    
+    /**
+     * Refresh rate for SWING timers in miliseconds.
+     */
+    public static final int REFRESH_RATE_MS = 30;
     
     /**
      * Dimensions of a building on a map
@@ -123,6 +128,16 @@ public interface Constants {
 	 * The height of the info panel on the main GUI window.
 	 */
 	public static final int INFO_PANEL_HEIGHT = 169;
+	
+	/**
+	 * The width of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_WIDTH = 600;
+	
+	/**
+	 * The HEIGHT of the animation panel showing activity in the building 
+	 */
+	public final int ANIMATION_PANEL_HEIGHT= 490;
 	
 	/**
 	 * The initial amount of money in the market
@@ -180,6 +195,21 @@ public interface Constants {
 	};
 	
 	/**
+	 * Set to true to test housing independent from MainFrame
+	 */
+	public final boolean TEST_POPULATE_HOUSING = false;
+	
+	/**
+	 * Number of units per housing structure
+	 */
+	public final int HOUSING_UNIT_COUNT = 9;
+	
+	/**
+	 * Spacing between units in a HousingComplex
+	 */
+	public final int HOUSING_UNIT_SPACING = 5;
+	
+	/**
 	 * Conditions for Dwellings
 	 */
 	enum Condition { GOOD, FAIR, POOR, BROKEN, BEING_FIXED }
@@ -192,5 +222,74 @@ public interface Constants {
 			add("LamboFinny");
 			add("Toyoda");
 		}
+	};
+	
+	public static final List<String> NAMES = new ArrayList<String>() {
+		{
+			add("Spongebob");
+			add("Fred Rechid");
+			add("Squidward");
+			add("Patrick");
+			add("Sandy");
+			add("Octavius Rex");
+			add("Mr. Krabs");
+			add("Smitty Werben Jagerman Jensen");
+			add("Pearl");
+			add("King Neptune");
+			add("Bubble Bass");
+			add("Goofy Goober");
+			add("Wendy");
+			add("Gary");
+			add("Larry");
+			add("Mr. Lawrence");
+			add("Hasselhoff");
+			add("Plankton");
+			add("Karen");
+			add("Mrs. Puff");
+			add("Mermaid Man");
+			add("Barnacle Boy");
+			add("Flying Dutchman");
+			add("Patchy the Pirate");
+			add("Potty the Parrot");
+			add("Nancy");
+			add("John");
+			add("Dr. Forrest");
+			add("Elaine");
+			add("Perch Perkins");
+			add("Harold");
+			add("Squilliam Fancyson");
+			add("Betsy");
+			add("Manray");
+			add("Old Man Jenkins");
+			add("Nat Peterson");
+			add("Harold Reginald");
+			add("Scooter Rechid");
+			add("Sadie Rechid");
+			add("Tom Smith");
+			add("Nancy Suzy Fish");
+			add("Tine Fran");
+			add("Mary Jenkins");
+			add("Charlie");
+			add("Frankie Bully");
+			add("Miss Shell");
+			add("DoodleBob");
+			add("Realistic Fish Head Johnny");
+			add("Kevin C. Cucumber");
+			add("Torpedo Belly");
+			add("Iron Eye");
+			add("Angry Jack");
+			add("Billy Fishkins");
+			add("Spongegar");
+			add("Patar");
+			add("Squog");
+			add("Erik");
+			add("Zach");
+			add("Victoria");
+			add("Anthony");
+			add("Diego");
+			add("Jack");
+			add("Wilcyzn");
+		}
+		
 	};
 }

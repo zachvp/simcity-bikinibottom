@@ -7,4 +7,6 @@ public interface MaintenanceWorker {
 	
 	public void msgHereIsPayment(double payment);
 
+	public void setDwelling(Dwelling dwelling);
+
 }

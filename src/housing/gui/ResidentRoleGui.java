@@ -1,6 +1,7 @@
 package housing.gui;
 
-import housing.ResidentRole;
+import housing.backend.ResidentRole;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -8,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -39,7 +39,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private String speech = "";
 	
 	// used as reference for furniture and appliance positions
-	LayoutGui layoutGui;
+	DwellingLayoutGui layoutGui;
 	
 	// image for Resident
 	private BufferedImage resImage;
@@ -58,14 +58,14 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private int xPos = 130; 
 	private int yPos = 15;
 	
-	private int xDestination, yDestination;//default start position
+	private int xDestination = xPos, yDestination = yPos;//default start position
 	
 	// prime location for Jazzercising
 	private final int JAZZER_SPOT_X = 130;
 	private final int JAZZER_SPOT_Y = 15;
 	
 	/* --- Constructor --- */
-	public ResidentRoleGui(ResidentRole role, LayoutGui gui) {
+	public ResidentRoleGui(ResidentRole role, DwellingLayoutGui gui) {
 		this.resident = role;
 		this.layoutGui = gui;
 		

@@ -2,7 +2,7 @@ package gui;
 
 
 import gui.test.MockBuilding;
-import housing.ResidentialBuilding;
+import housing.backend.ResidentialBuilding;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,6 +24,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 
 import market.gui.MarketBuilding;
 import bank.gui.BankBuilding;
@@ -38,6 +41,7 @@ import transportation.interfaces.*;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 
@@ -73,7 +77,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
 	private Semaphore semaphore = new Semaphore(0);
-	private Timer timer = new Timer();
+	private Timer timer = SingletonTimer.getInstance();
 
 	public MainFrame(){
 
@@ -119,21 +123,22 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.add(map);
 
 		//Information Panel 720x210
-		JTabbedPane tabbedInfoPane = new JTabbedPane();
+		TabbedInfoDisplay tabbedInfoPane = new TabbedInfoDisplay();
 		tabbedInfoPane.setOpaque(false);
 		
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
 		infoPanelSlot.setPreferredSize(infoDim);
 		infoPanelSlot.setMaximumSize(infoDim);
 		infoPanelSlot.setMinimumSize(infoDim);
-		//infoPanelSlot.setBorder(BorderFactory.createTitledBorder("Information Panel"));
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
+		//InfoPanel is now a JTabbedPane
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
-		tabbedInfoPane.addTab("Log", new LogDisplay()); //TODO Create log panel
-		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
+		tabbedInfoPane.addTab("Log", new LogDisplay());
+		infoPanel.setTabDisplay(tabbedInfoPane);
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
+		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -267,9 +272,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				hospital.setName(buildingName);
 				construct(hospital);
 			}
-			
-			
-			
 			if(type == LocationTypeEnum.None){
 				MockBuilding mock = new MockBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				mock.setName(buildingName);
@@ -291,6 +293,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buildingList.addToList(building.getName());
 		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
+		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);
 	}
 

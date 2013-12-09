@@ -1,6 +1,6 @@
 package restaurant.vegaperk.interfaces;
 
-import restaurant.vegaperk.backend.WaiterRole.Menu;
+import restaurant.vegaperk.backend.WaiterRoleBase.Menu;
 import restaurant.vegaperk.interfaces.Cashier;
 
 /**
@@ -15,7 +15,7 @@ public interface Customer {
 	public void msgHereIsChange(double change);
 	
 	/** From WaiterAgent */
-	public void msgSitAtTable(Waiter w, Menu m, int x, int y);
+	public void msgSitAtTable(Waiter w, Menu menu, int x, int y);
 	public void msgWhatWouldYouLike();
 	public void msgHereIsYourFood();
 	public void msgOutOfChoice(String c);

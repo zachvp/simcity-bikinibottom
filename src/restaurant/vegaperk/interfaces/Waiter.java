@@ -24,10 +24,6 @@ public interface Waiter {
 	/** Messages from the Cashier */
 	public void msgHereIsCheck(Customer c, double check);
 
-	public void msgOutOfChoice(String choice, int table);
-
-	public void msgOrderDone(String choice, int table);
-
 	/** Messages from the Host */
 	public void msgPleaseSeatCustomer(Customer customer, int tableID);
 

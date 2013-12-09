@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import agent.WorkRole;
+import classifieds.ClassifiedsClass;
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
 
@@ -45,6 +47,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		setMinimumSize(d);
 
 		panelDim = new Dimension((int)(d.width*0.35), d.height);
+		
 		makeStaffPanel();
 		makeUnemployedPanel();
 		
@@ -114,12 +117,29 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 * @param name Name of person
 	 */
 	public void addToStaffList(String role, String name) {
-		if (name != null) {
+		if (name == null ||name.equals("Nobody")) {
+			StaffButton button = new StaffButton("", role);
+			button.setAvailable();
+			staffList.add(button);
+			staffView.add(button);
+		}
+		else {
 			StaffButton button = new StaffButton(name, role);
 			staffList.add(button);
 			staffView.add(button);
 		}
 		validate();		
+	}
+	
+	/**
+	 *  Automatically add all the workroles to the staff list
+	 */
+	public void addAllWorkRolesToStaffList(){
+		List<WorkRole> currentBuildingWorkRoles = ClassifiedsClass.getClassifiedsInstance().getJobsForBuilding(building, false);
+		//System.out.println(currentBuildingWorkRoles.size());
+		for (int i=0;i<currentBuildingWorkRoles.size();i++){
+		addToStaffList(currentBuildingWorkRoles.get(i).getShortName(),currentBuildingWorkRoles.get(i).getName());
+		}
 	}
 	
 	/**

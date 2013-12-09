@@ -55,6 +55,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		
 		staff = new StaffDisplay();
 		staff.setBuilding(this);
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override

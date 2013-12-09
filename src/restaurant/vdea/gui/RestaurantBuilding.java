@@ -10,6 +10,7 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.StaffDisplay;
 
 public class RestaurantBuilding extends Building{
 
@@ -22,6 +23,7 @@ public class RestaurantBuilding extends Building{
 	//private InfoPanel infoPanel = new InfoPanel();
 	RestaurantGui restaurantGui = new RestaurantGui();
 	private XYPos entrancePos;
+	StaffDisplay staff;
 	
 	public RestaurantBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -31,11 +33,14 @@ public class RestaurantBuilding extends Building{
 		host = new HostRole(null, this);
 		cashier = new CashierRole(null, this);
 		cook = new CookRole(null, this);
+		
 		HostGui hostGui = new HostGui(host);
 		CookGui cookGui = new CookGui(cook);
-		
 		host.setGui(hostGui);
 		cook.setGui(cookGui);
+		
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override
@@ -88,9 +93,8 @@ public class RestaurantBuilding extends Building{
 	}
 
 	@Override
-	public JPanel getStaffPanel() {
-		// TODO Auto-generated method stub
-		return new JPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
 	}
 
 }

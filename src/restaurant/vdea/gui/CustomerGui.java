@@ -74,7 +74,7 @@ public class CustomerGui implements Gui{
 				role.msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(Role);");
 				isHungry = false;
-				gui.setCustomerEnabled(role);
+				//gui.setCustomerEnabled(role); //enables CB?
 			}
 			command=Command.noCommand;
 		}

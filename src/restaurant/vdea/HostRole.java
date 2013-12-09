@@ -12,7 +12,7 @@ import agent.interfaces.Person;
 import restaurant.vdea.gui.HostGui;
 import restaurant.vdea.interfaces.*;
 
-public class HostRole extends WorkRole{
+public class HostRole extends WorkRole implements Host{
 	static final int NTABLES = 4;
 	public List<Customer> waitingCustomers	= Collections.synchronizedList(new ArrayList<Customer>());
 	public List<Waiter> waiters = new ArrayList<Waiter>();		

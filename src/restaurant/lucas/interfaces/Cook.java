@@ -19,4 +19,7 @@ public interface Cook {
 	public abstract void msgIDontHave(List<String> foodList, List<Integer> amountList);
 	
 	public abstract void msgFoodDelivered(List<String> foodList, List<Integer> amountList);
+
+	public abstract void msgNullifyPlateArea(int height);
+	
 }

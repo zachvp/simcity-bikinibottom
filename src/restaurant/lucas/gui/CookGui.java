@@ -5,6 +5,8 @@ import java.awt.*;
 import java.util.concurrent.Semaphore;
 
 import restaurant.lucas.CookRole;
+import restaurant.lucas.CookRole.Grill;
+import restaurant.lucas.CookRole.PlateArea;
 
 import agent.gui.Gui;
 

@@ -37,7 +37,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	BankBuilding bankBuilding;
 	
-	ScheduleTask task = ScheduleTask.getInstance();
+	ScheduleTask closeTask = ScheduleTask.getInstance();
 	
 	boolean endWorkShift = false;
 	boolean atWork;
@@ -110,11 +110,11 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		};
 		
 		// every day at TIME to end
-		int hour = ((BankBuilding) bank).getClosingHour();
-		int minute = ((BankBuilding) bank).getClosingMinute();
+		int closeHour = ((BankBuilding) bank).getClosingHour();
+		int closeMinute = ((BankBuilding) bank).getClosingMinute();
 		
 		bankBuilding . changeOpenSign(false, startHour, endHour);
-		task.scheduleDailyTask(command, hour, minute);
+		closeTask.scheduleDailyTask(command, closeHour, closeMinute);
 		
 		startHour = ((BankBuilding) bank).getOpeningHour();
 		startMinute = ((BankBuilding) bank).getOpeningMinute();

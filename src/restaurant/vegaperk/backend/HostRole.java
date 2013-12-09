@@ -8,6 +8,7 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
+import restaurant.vegaperk.gui.HostGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
 
@@ -21,6 +22,8 @@ public class HostRole extends WorkRole {
 	private static final int TABLECOLNUM = 2;
 	private static final int TABLEROWNUM = 2;
 	private static final int TABLESPACING = 100;
+	
+	HostGui gui;
 	
 	private boolean shouldLeaveWork = false;
 	
@@ -296,5 +299,14 @@ public class HostRole extends WorkRole {
 	public void msgLeaveWork() {
 		shouldLeaveWork = true;
 		stateChanged();
+	}
+
+	public void msgAtDestination() {
+		doneWaitingForInput();
+		stateChanged();
+	}
+	
+	public void setGui(HostGui gui) {
+		this.gui = gui;
 	}
 }

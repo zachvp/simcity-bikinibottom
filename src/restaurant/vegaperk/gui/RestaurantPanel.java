@@ -57,12 +57,15 @@ public class RestaurantPanel extends JPanel {
     
     private CookGui cookGui;
     private CashierGui cashierGui;
+    private HostGui hostGui;
 
     public RestaurantPanel(RestaurantGui gui, Building building) {
     	this.building = building;
     	
     	// make the new roles for the building
     	this.host = new HostRole(hostPerson, building);
+    	this.hostGui = new HostGui(host, gui);
+    	this.host.setGui(hostGui);
     	
     	this.cook = new CookRole(cookPerson, building);
     	this.cookGui = new CookGui(cook, gui);
@@ -85,6 +88,7 @@ public class RestaurantPanel extends JPanel {
         gui.getAnimationPanel().addGui(tableGui);
         gui.getAnimationPanel().addGui(cookGui);
         gui.getAnimationPanel().addGui(cashierGui);
+        gui.getAnimationPanel().addGui(hostGui);
 
         cook.setGui(cookGui);
         cook.addMarket(m1);

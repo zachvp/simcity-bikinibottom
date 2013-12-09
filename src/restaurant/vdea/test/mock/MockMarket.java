@@ -1,11 +1,9 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
 import java.util.List;
+import restaurant.vdea.interfaces.*;
+import restaurant.vdea.Food;
 
-import restaurant.CookAgent;
-import restaurant.Food;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Market;
 
 /**
  * A MockMarket class for testing the CashierAgent
@@ -22,7 +20,7 @@ public class MockMarket extends Mock implements Market{
 		super(name);
 	}
 
-	public void msgOrderRequest(CookAgent c, List<Food> food, Cashier cash) {
+	public void msgOrderRequest(Cook c, List<Food> food, Cashier cash) {
 		log.add(new LoggedEvent("Received order request from cook"));
 		System.out.println(getName() + ":New order received from cook");
 		double bill = 100;

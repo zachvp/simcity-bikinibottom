@@ -1,4 +1,4 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
 
 /**

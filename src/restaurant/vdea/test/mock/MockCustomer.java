@@ -1,10 +1,7 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
-
-import restaurant.Menu;
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Waiter;
+import restaurant.vdea.Menu;
+import restaurant.vdea.interfaces.*;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.

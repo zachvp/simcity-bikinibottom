@@ -1,6 +1,7 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
-import restaurant.interfaces.*;
+import restaurant.vdea.interfaces.*;
+
 
 public class MockWaiter extends Mock implements Waiter {
 

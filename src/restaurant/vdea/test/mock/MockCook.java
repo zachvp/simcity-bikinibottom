@@ -1,11 +1,9 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
 import java.util.List;
 
-import agent.Agent;
-import restaurant.Food;
-import restaurant.interfaces.Cook;
-import restaurant.interfaces.Waiter;
+import restaurant.vdea.Food;
+import restaurant.vdea.interfaces.*;
 
 public class MockCook extends Mock implements Cook {
 	

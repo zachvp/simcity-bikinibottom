@@ -1,7 +1,8 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
-import restaurant.HostAgent.Table;
-import restaurant.interfaces.*;
+import restaurant.vdea.HostRole.Table;
+import restaurant.vdea.interfaces.*;
+
 
 public class MockHost extends Mock implements Host{
 	

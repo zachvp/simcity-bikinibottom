@@ -1,8 +1,6 @@
 package restaurant.vdea.interfaces;
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-import restaurant.HostAgent.Table;
+import restaurant.vdea.HostRole.Table;
 
 /**
  * Host interface

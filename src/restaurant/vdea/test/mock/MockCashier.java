@@ -1,9 +1,6 @@
-package restaurant.test.mock;
+package restaurant.vdea.test.mock;
 
-import restaurant.interfaces.Cashier;
-import restaurant.interfaces.Customer;
-import restaurant.interfaces.Market;
-import restaurant.interfaces.Waiter;
+import restaurant.vdea.interfaces.*;
 
 public class MockCashier extends Mock implements Cashier {
 	

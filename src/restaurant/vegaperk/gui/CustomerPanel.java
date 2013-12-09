@@ -5,6 +5,8 @@ import restaurant.vegaperk.backend.HostRole;
 
 import javax.swing.*;
 
+import agent.PersonAgent;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -32,11 +34,12 @@ public class CustomerPanel extends JPanel implements ActionListener {
     private RestaurantPanel restPanel;
     private String type;
 
-    private class CustomerListItem extends JPanel implements ActionListener{
+    @SuppressWarnings("serial")
+	private class CustomerListItem extends JPanel implements ActionListener{
     	private JButton nameButton;
     	private String name;
     	private	JCheckBox isHungry;
-    	private CustomerGui cGui;
+    	private CustomerRole role;
     	
 	    CustomerListItem(String n){
 	    	setLayout(new FlowLayout());
@@ -47,12 +50,13 @@ public class CustomerPanel extends JPanel implements ActionListener {
 	    	add(isHungry);
 	    	add(nameButton);
 	    	
-	    	cGui = restPanel.addCustomer(type, name);
+	    	role = restPanel.addCustomer(type, name, new PersonAgent("Customer"));
 	    }
 	    
 	    public void actionPerformed(ActionEvent e){
 	    	if(isHungry.isEnabled()){
-	    		cGui.setHungry();
+	    		((CustomerGui) role.getGui()).setHungry();
+	    		role.activate();
 	    		isHungry.setEnabled(false);
 	    	}
 	    } 
@@ -117,7 +121,7 @@ public class CustomerPanel extends JPanel implements ActionListener {
     }
     public void setCustomerEnabled(CustomerRole c){
     	for(CustomerListItem temp:cList){
-    		if(temp.cGui != null && temp.cGui.getAgent() == c){
+    		if(temp.role != null && temp.role == c){
     			temp.isHungry.setSelected(false);
     			temp.isHungry.setEnabled(true);
     		}

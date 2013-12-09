@@ -70,8 +70,8 @@ public class CookRole extends WorkRole implements Cook {
 		for(int i = 0; i < 4; i++){
 			int startY = 50;
 			
-			int grillX = 370;
-			int plateX = 430;
+			int grillX = 470;
+			int plateX = 530;
 			
 			grillPositions.add(new Dimension(grillX, startY + 50*i));
 			platePositions.add(new Dimension(plateX, startY + 50*i));

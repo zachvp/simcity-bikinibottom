@@ -296,6 +296,9 @@ public class WaiterRole extends WorkRole implements Waiter {
 	private void getCheck(MyCustomer c){
 		Do("Going to cashier");
 		
+		DoGoToCenter();
+		waitForInput();
+		
 		DoGoToCashier();
 		waitForInput();
 		
@@ -350,6 +353,9 @@ public class WaiterRole extends WorkRole implements Waiter {
 	}
 	private void DoGoOnBreak(){
 		waiterGui.DoGoOnBreak();
+	}
+	private void DoGoToCenter(){
+		waiterGui.DoGoToCenter();
 	}
 	private void DoGoToCashier(){
 		waiterGui.DoGoToCashier();

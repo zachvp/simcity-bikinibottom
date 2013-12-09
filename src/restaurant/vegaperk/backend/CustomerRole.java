@@ -108,10 +108,9 @@ public class CustomerRole extends Role implements Customer {
 	/* --- Messages from other agents --- */
 	// from host
 	public void gotHungry() {//from animation
-		Do(getCustomerName());
-		money = person.getWallet().getCashOnHand();
-		
 		Do("I'm hungry");
+		
+		money = person.getWallet().getCashOnHand();
 		event = CustomerEvent.GOT_HUNGRY;
 		stateChanged();
 	}
@@ -317,6 +316,8 @@ public class CustomerRole extends Role implements Customer {
 		Runnable command = new Runnable() {
 			public void run(){
 				event = CustomerEvent.DONE_EATING;
+				person.getWallet().setCashOnHand(money);
+				person.setHungerLevel(HungerLevel.FULL);
 				stateChanged();
 			}
 		};
@@ -343,9 +344,6 @@ public class CustomerRole extends Role implements Customer {
 		}
 		
 		gui.DoExitRestaurant();
-		
-		person.getWallet().setCashOnHand(money);
-		person.setHungerLevel(HungerLevel.FULL);
 		
 		deactivate();
 	}
@@ -393,7 +391,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	public void setGui(CustomerGui g) {
-		gui = g;
+		this.gui = g;
 	}
 
 	public Gui getGui() {

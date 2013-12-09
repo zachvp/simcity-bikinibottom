@@ -19,8 +19,8 @@ import restaurant.vegaperk.interfaces.Waiter;
 public class HostRole extends WorkRole {
 	/* --- Constants --- */
 	static final int NTABLES = 4;//a global for the number of tables.
-	private static final int TABLECOLNUM = 2;
-	private static final int TABLEROWNUM = 2;
+	private static final int TABLECOLNUM = 4;
+	private static final int TABLEROWNUM = 1;
 	private static final int TABLESPACING = 100;
 	
 	HostGui gui;
@@ -49,10 +49,10 @@ public class HostRole extends WorkRole {
 		// make some tables
 		synchronized(tables){
 			for (int ix = 0; ix < NTABLES; ix++) {
-				int x = (ix%TABLECOLNUM+1)*TABLESPACING;
+				int x = (ix%TABLECOLNUM+1)*TABLESPACING - 25;
 				int y = (ix/TABLEROWNUM+1)*TABLESPACING;
-				tables.add(new Table(ix, x, y));//how you add to a collections
-				Dimension tableCoords = new Dimension(x,y);
+				tables.add(new Table(ix, x, TABLESPACING + 200));//how you add to a collections
+				Dimension tableCoords = new Dimension(x, TABLESPACING + 200);
 				tableMap.put(ix, tableCoords);
 			}
 		}

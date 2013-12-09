@@ -27,6 +27,8 @@ import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
+	private final int WAITER_COUNT = 4;
+	
 	Building building;
 	
     //Host, cook, waiters and customers
@@ -136,7 +138,7 @@ public class RestaurantPanel extends JPanel {
         	cashierPerson.startThread();
         }
         else {
-        	for(int i = 0; i < 4; i++) {
+        	for(int i = 0; i < WAITER_COUNT; i++) {
         		addWaiter("Waiters", "flinja");
         	}
         }
@@ -190,7 +192,6 @@ public class RestaurantPanel extends JPanel {
     		
     		// new role and person stuff
     		if(Constants.TEST_POPULATE_RESTAURANT){
-    			person = new PersonAgent("Customer");
     			c = new CustomerRole(person, building);
     			
         		person.addRole(c);
@@ -199,12 +200,12 @@ public class RestaurantPanel extends JPanel {
     		}
     		else {
     			c = new CustomerRole(person, building);
+    			c.activate();
     			c.gotHungry();
     		}
     		c.setLocation(building);
     		
     		c.setHost(host);
-    		c.activate();
     		CustomerGui g = new CustomerGui(c, gui);
     		c.setGui(g);
     		

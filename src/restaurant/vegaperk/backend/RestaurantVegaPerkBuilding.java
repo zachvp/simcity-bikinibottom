@@ -24,7 +24,6 @@ public class RestaurantVegaPerkBuilding extends Building {
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width / 2, height);
-		
 	}
 
 	@Override
@@ -72,6 +71,10 @@ public class RestaurantVegaPerkBuilding extends Building {
 	public JPanel getStaffPanel() {
 		// TODO Auto-generated method stub
 		return gui.getInfoPanel();
+	}
+	
+	@Override public boolean isOpen() {
+		return true;
 	}
 
 }

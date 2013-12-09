@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.trace.AlertTag;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +23,7 @@ import agent.interfaces.Person;
  * 
  * @author Erik Strottmann
  */
-public class CashierRole extends WorkRole implements Cashier, PhonePayer {
+public class CashierRole extends WorkRole implements Cashier {
 
 	public EventLog log = new EventLog();
 
@@ -50,7 +52,7 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	/* Messages */
 	// from Waiter
 	public void msgDoneEating(Customer c, Waiter w, double bill) {
-		Do("Received msg that " + c + " is done eating.");
+		Do(AlertTag.RESTAURANT, "Received msg that " + c + " is done eating.");
 		MyCustomer mc = findCustomer(c);
 		if (mc == null) {
 			mc = new MyCustomer(c, w, bill, CState.DONE_EATING);
@@ -77,6 +79,7 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	public void msgHereIsYourTotal(double total,
 			market.interfaces.Cashier cashier) {
 		// TODO Auto-generated method stub
+		Do(AlertTag.RESTAURANT, "Received a bill from " + cashier);
 		bills.add(new MyBill(total, cashier));
 		stateChanged();
 	}
@@ -128,7 +131,8 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 
 	/* Actions */
 	private void billCustomer(MyCustomer mc) {
-		Do("Customer " + mc.customer.getName() + " owes $" + df.format(mc.bill));
+		Do(AlertTag.RESTAURANT, "Customer " + mc.customer.getName() +
+				" owes $" + df.format(mc.bill));
 		mc.waiter.msgHereIsBill(mc.customer, mc.bill);
 		mc.setState(CState.BILLED);
 	}
@@ -137,20 +141,23 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 		// DoGiveChange(mc.customer) // animation -disabled (hopefully forever)
 		if (mc.payment > mc.bill) {
 			double change = mc.payment - mc.bill;
-			Do("Customer " + mc.customer + "'s change is $" + df.format(change));
+			Do(AlertTag.RESTAURANT, "Customer " + mc.customer
+					+ "'s change is $" + df.format(change));
 			mc.customer.msgHereIsChange(change);
 			money += mc.bill;
 			mc.bill = 0.00;
 			
 		} else if (mc.payment < mc.bill) {
 			double debt = mc.bill - mc.payment;
-			Do("Customer " + mc.customer + " still owes $" + df.format(debt));
+			Do(AlertTag.RESTAURANT, "Customer " + mc.customer +
+					" still owes $" + df.format(debt));
 			mc.customer.msgHereIsChange(0.00);
 			mc.bill = debt;
 			money += mc.payment;
 			
 		} else {
-			Do("Customer " + mc.customer + " paid with exact change.");
+			Do(AlertTag.RESTAURANT, "Customer " + mc.customer +
+					" paid with exact change.");
 			mc.customer.msgHereIsChange(0.00);
 			mc.bill = 0.00;
 			money += mc.payment;
@@ -160,15 +167,16 @@ public class CashierRole extends WorkRole implements Cashier, PhonePayer {
 	
 	private void payBill(MyBill bill) {
 		if (money >= bill.amount) {
-			Do("Paying $" + df.format(bill.amount) + " to "
-					+ bill.cashier.getName());
+			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
+					" to " + bill.cashier.getName());
 			bill.cashier.msgHereIsPayment(bill.amount, this);
 			money -= bill.amount;
 			bills.remove(bill);
 			
 		} else {
 			// extra credit
-			Do("Cannot pay the market in full. Paying as much as I can...");
+			Do(AlertTag.RESTAURANT, "Cannot pay the market in full. "
+					+ "Paying as much as I can...");
 			bill.cashier.msgHereIsPayment(money, this);
 			money = 0.00;
 			bill.amount -= money;

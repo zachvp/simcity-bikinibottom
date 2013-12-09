@@ -157,10 +157,10 @@ public interface Constants {
 		{
 		double Toyoda = 100;
 		double LamboFinny = 300;
-		double KrabbyPatty = 20;
-		double KelpShake = 10;
-		double CoralBits = 15;
-		double KelpRings = 5;
+		double KrabbyPatty = .75;	// $1.25
+		double KelpShake = 1.5;		// $2
+		double CoralBits = 1;		// $1.50
+		double KelpRings = 1.5;		// $2
 		put("Krabby Patty", KrabbyPatty);
 		put("Kelp Shake", KelpShake);
 		put("Coral Bits", CoralBits);

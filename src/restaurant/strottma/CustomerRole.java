@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.trace.AlertTag;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -211,8 +213,6 @@ public class CustomerRole extends Role implements Customer {
 	protected boolean pickAndExecuteAnAction() {
 		//	CustomerRole is a finite state machine
 		
-		Do("Scheduler called!");
-
 		if (state == CustomerState.DOING_NOTHING && event == CustomerEvent.GOT_HUNGRY ){
 			state = CustomerState.WAITING_IN_RESTAURANT;
 			goToRestaurant();
@@ -276,7 +276,7 @@ public class CustomerRole extends Role implements Customer {
 	// Actions
 
 	private void goToRestaurant() {
-		Do("Going to restaurant");
+		Do(AlertTag.RESTAURANT, "Going to restaurant");
 		for (WaitSpot ws : waitSpots) {
 			if (ws.tryAcquire()) {
 				// There's a spot to wait at, so go there.
@@ -292,7 +292,7 @@ public class CustomerRole extends Role implements Customer {
 	
 	private void leaveBecauseNoRoom() {
 		customerGui.DoExitRestaurant(); // animation
-		Do("This restaurant is packed! I'm out of here.");
+		Do(AlertTag.RESTAURANT, "This restaurant is packed! I'm out of here.");
 	}
 
 	private void sitDown() {
@@ -303,7 +303,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	private void decideOrder() {
-		Do("Deciding what to order...");
+		Do(AlertTag.RESTAURANT, "Deciding what to order...");
 		customerGui.DoDecideOrder(); // animation - disabled (for now?)
 		
 		// Wait a few seconds "before" deciding
@@ -327,7 +327,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	private void callWaiter() {
-		Do("Ready to order");
+		Do(AlertTag.RESTAURANT, "Ready to order");
 		customerGui.DoCallWaiter(); // animation - disabled for now
 		waiter.msgIAmReadyToOrder(this);
 	}
@@ -351,12 +351,12 @@ public class CustomerRole extends Role implements Customer {
 			e.printStackTrace();
 		}
 		
-		Do("Ordered " + choice);
+		Do(AlertTag.RESTAURANT, "Ordered " + choice);
 		waiter.msgHereIsMyChoice(this, choice);
 	}
 
 	private void eatFood() {
-		Do("Eating " + choice);
+		Do(AlertTag.RESTAURANT, "Eating " + choice);
 		customerGui.DoEatFood(choiceShort);
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
@@ -375,7 +375,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	private void readyToPay() {
-		Do("Done eating. Ready to pay.");
+		Do(AlertTag.RESTAURANT, "Done eating. Ready to pay.");
 		customerGui.DoCallWaiter(); // animation
 		waiter.msgDoneEating(this);
 	}
@@ -385,14 +385,14 @@ public class CustomerRole extends Role implements Customer {
 		Wallet wallet = person.getWallet();
 		if (person.getWallet().getCashOnHand() >= bill) {
 			// TODO: fix this hack
-			Do("Paying $" + df.format(bill));
+			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill));
 			
 			// pay: no exact change, use full bills
 			wallet.setCashOnHand(wallet.getCashOnHand() - Math.ceil(bill));
 			 
 			cashier.msgHereIsPayment(this, Math.ceil(bill));
 		} else {
-			Do("I can't afford this meal...");
+			Do(AlertTag.RESTAURANT, "I can't afford this meal...");
 			cashier.msgHereIsPayment(this, wallet.getCashOnHand());
 			wallet.setCashOnHand(0);
 		}
@@ -400,7 +400,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	private void leaveTable() {
-		Do("Leaving.");
+		Do(AlertTag.RESTAURANT, "Leaving.");
 		waiter.msgLeaving(this);
 		customerGui.DoExitRestaurant();
 		
@@ -429,14 +429,16 @@ public class CustomerRole extends Role implements Customer {
 	
 	private void chooseFood() {
 		if (menu.choices.size() == 0) {
-			Do("This restaurant has no food. I'm out of here!");
+			Do(AlertTag.RESTAURANT,
+					"This restaurant has no food. I'm out of here!");
 			this.state = CustomerState.LEAVING;
 			this.leaveTable();
 			return;
 		}
 		
 		if (getName().equals(C_NAME_POOR)) {
-			Do("This restaurant is too expensive... I'm out of here!");
+			Do(AlertTag.RESTAURANT,
+					"This restaurant is too expensive... I'm out of here!");
 			this.state = CustomerState.LEAVING;
 			this.leaveTable();
 			return;
@@ -450,7 +452,8 @@ public class CustomerRole extends Role implements Customer {
 					return;
 				}
 			}
-			Do("I can't afford anything but Salad... I'm out of here!");
+			Do(AlertTag.RESTAURANT,
+					"I can't afford anything but Salad... I'm out of here!");
 			this.state = CustomerState.LEAVING;
 			this.leaveTable();
 			return;

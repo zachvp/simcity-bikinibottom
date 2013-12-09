@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -77,7 +79,7 @@ public class HostRole extends WorkRole {
 	}
 
 	public void msgTableIsFree(Table t) { // from waiter
-		Do("Table " + t.tableNumber + " is free");
+		Do(AlertTag.RESTAURANT, "Table " + t.tableNumber + " is free");
 		t.setOccupant(null);
 		stateChanged();
 	}
@@ -230,7 +232,7 @@ public class HostRole extends WorkRole {
 		return leastBusy;
 	}
 	public void addWaiter(WaiterRole w) {
-		Do("Added " + w);
+		Do(AlertTag.RESTAURANT, "Added " + w);
 		
 		// assign a wait position
 		w.setWaitY(130 + 30*this.waiters.size());

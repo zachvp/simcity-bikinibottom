@@ -196,7 +196,7 @@ public interface Constants {
 	/**
 	 * Set to true to test housing independent from MainFrame
 	 */
-	public final boolean TEST_POPULATE_HOUSING = true;
+	public final boolean TEST_POPULATE_HOUSING = false;
 	
 	/**
 	 * Number of units per housing structure

@@ -1,10 +1,8 @@
 package restaurant.lucas;
 
 import java.awt.Dimension;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,26 +10,22 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-
 import restaurant.lucas.gui.WaiterGui;
-import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
-import restaurant.lucas.interfaces.Host;
 import restaurant.lucas.interfaces.Waiter;
-
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
+//import restaurant.HostAgent.Table;
 
 /**
- * Restaurant Waiter Role
- * 
- * @author Jack Lucas
+ * Restaurant Host Agent
  */
+//We only have 2 types of agents in this prototype. A customer and an agent that
+//does all the rest. Rather than calling the other agent a waiter, we called him
+//the HostAgent. A Host is the manager of a restaurant who sees that all
+//is proceeded as he wishes.
 public class WaiterRole extends WorkRole implements Waiter {
-
-	WaiterGui waiterGui;
-	
 	static final int NTABLES = 3;//a global for the number of tables.
 
 
@@ -45,8 +39,9 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	Map<Integer, Dimension> tableMap = new HashMap<Integer, Dimension>();
 
-	private Host host;
-	private Cook cook;
+	public WaiterGui waiterGui = null;
+	private HostRole host;
+	private CookRole cook;
 	
 	Timer BreakTimer;
 	List<String> menu = new ArrayList<String>();
@@ -78,42 +73,113 @@ public class WaiterRole extends WorkRole implements Waiter {
 	List<MyCustomer> myCustomers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	CookRole MyCook;
 	
-	@Override
-	public void msgAtDestination() {
+	boolean atWork;
+	///private static enum waiterState {doingNothing, seatingCustomer, aboutToTakeOrder, takingOrder, bringingOrderToCook, pickingUpOrder, deliveringOrder};
+	//private static enum Event {seatCustomer, seatedCustomer, aboutToTakeOrder, arrivedAtTable, orderPlaced, orderBroughtToCook, orderIsReady, orderPickedUp, orderDelivered, customerExited};
+	///private waiterState state;
+	
+	public WaiterRole(String name, HostRole h, CookRole c, CashierRole cashier, int idle) {
+		super();
+		host = h;
+		cook = c;
+		this.cashier = cashier;
+		this.name = name;
+		idleFactor = idle;
+	
+		
+		this.BreakTimer= new Timer();
+		
+		tableMap = h.getTableMap();
+		menuMap.put("Tofu",  15.99);
+		menuMap.put("Rice", 10.99);
+		menuMap.put("Sushi",  5.99);
+		menuMap.put("Noodles",  8.99);
+		
+		menu.add("Tofu");
+		menu.add("Rice");
+		menu.add("Sushi");
+		menu.add("Noodles");
+//		// make some tables
+//		tables = new ArrayList<Table>(NTABLES);
+//		for (int ix = 0; ix <= NTABLES; ix++) {
+//			tables.add(new Table(ix, (ix%4 + 1) * 100, (ix/4 + 1) * 100  ));//how you add to a collections
+//		}
+	}
+	
+	public WaiterRole(Person p, CityLocation c) {
+		super(p, c);
+		
+		atWork = false;
+		this.BreakTimer= new Timer();
+		
+		Dimension t1 = new Dimension(100, 100);
+		Dimension t2 = new Dimension(200, 100);
+		Dimension t3 = new Dimension(300, 100);
+		Dimension t4 = new Dimension(400, 100);
+		tableMap.put(0, t1);
+		tableMap.put(1, t2);
+		tableMap.put(2, t3);
+		tableMap.put(3, t4);
+		
+		menuMap.put("Tofu",  15.99);
+		menuMap.put("Rice", 10.99);
+		menuMap.put("Sushi",  5.99);
+		menuMap.put("Noodles",  8.99);
+		
+		menu.add("Tofu");
+		menu.add("Rice");
+		menu.add("Sushi");
+		menu.add("Noodles");
+	}
+
+	public String getMaitreDName() {
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	// Messages ////////////////////#################################################################
+	//#########################################################################################
+	public void msgAtDestination()//from gui, when at destination
+	{
+//		Do("before release");
 		active.release();
+//		Do("released Waiter");
+		//MyCustomers.add(new MyCustomer(c, t, waiting));
+		//stateChanged();
 	}
-
-	@Override
-	public void msgSitAtTable(Customer c, int table) {
+	
+	public void msgSitAtTable(Customer c, int table){
 		myCustomers.add(new MyCustomer(c, table, customerState.waiting)); //start c in waiting
-//		if(name.equals("lazy"))
-//			wantToGoOnBreak = true;
+		if(name.equals("lazy"))
+			wantToGoOnBreak = true;
 		stateChanged();	
-	}
-
-	@Override
-	public void msgSetBreakBit() {
-		wantToGoOnBreak = true;
 		
 	}
-
-	@Override
-	public void msgImReadyToOrder(Customer c) {
+	
+	public void msgSetBreakBit() {
+		wantToGoOnBreak = true;
+	}
+	
+	public void msgImReadyToOrder(Customer c){
+//		active.release();
+		
+		
 		MyCustomer mc = findCustomer(c);
 		mc.state = customerState.readyToOrder;
-		stateChanged();//change cust state		
-	}
+		stateChanged();//change cust state
 
-	@Override
-	public void msgHereIsMyChoice(Customer c, String choice) {
-		MyCustomer mc = findCustomer(c);
+	}
+	
+	public void msgHereIsMyChoice(Customer cust, String choice) {
+		MyCustomer mc = findCustomer(cust);
 		mc.choice = choice;
 		doDisplayChoice(choice + "");
 		active.release();
-		
 	}
-
-	@Override
+	
 	public void msgOutOfFood(int tableNum, String choice) {
 		for(MyCustomer mc : myCustomers) {//locate customer through their table number
 			if(mc.table == tableNum) {
@@ -124,65 +190,57 @@ public class WaiterRole extends WorkRole implements Waiter {
 				
 			}
 		}
-		stateChanged();		
+		stateChanged();
 	}
-
-	@Override
-	public void msgOrderIsReady(Customer c, String choic, int table, Dimension p) {
+	
+	public void msgOrderIsReady(Customer c, String choice, int table, Dimension plateDim) {
 		MyCustomer mc = findCustomer(c);
 		mc.state = customerState.orderIsReady; 
-		plateAreaLocs.add(p);
+		plateAreaLocs.add(plateDim);
 //		plateAreas.add(p);//TODO
-		stateChanged();		
+		stateChanged();
 	}
 
-	@Override
+	
 	public void msgReadyToPay(Customer c) {
 		MyCustomer mc = findCustomer(c);
 		mc.state = customerState.doneEating;
-		stateChanged();		
+		stateChanged();
+		//stub for v2.1
 	}
-
-	@Override
+	
+	
 	public void msgHereIsCheck(Customer c, double check) {
+	
 		MyCustomer mc = findCustomer(c);
 		mc.bill = check;
-		active.release();		
-	}
-
-	@Override
-	public void msgLeavingTable(Customer c) {
-		MyCustomer mc = findCustomer(c);
-		mc.state = customerState.leaving;
-		stateChanged();		
-	}
-
-	@Override
-	public void msgGoOnBreak() {
-		doGoOnBreak();
-	}
-
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
+		active.release();
+		
 		
 	}
+	
+	public void msgLeavingTable(Customer cust) {
+		MyCustomer mc = findCustomer(cust);
+		mc.state = customerState.leaving;
+		stateChanged();
 
-	@Override
+	}
+	
+	public void msgGoOnBreak() {
+		doGoOnBreak();//INVOKING ACTION OUTSIDE OF MESSAGE BAD
+	}
+
+
+	/**
+	 * Scheduler.  Determine what action is called for, and do it.
+	 */
 	protected boolean pickAndExecuteAnAction() {
 
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		synchronized(myCustomers) {
 			for(MyCustomer c : myCustomers) {
 				if(c.state == customerState.waiting) {
@@ -251,14 +309,16 @@ public class WaiterRole extends WorkRole implements Waiter {
 
 
 		return false;
-	}
-	
-	public void setGui(WaiterGui w) {
-		waiterGui = w;
-	}
-	
-	//action
 
+	}
+
+	// Actions ///////////////////////////##################################################
+
+	private void goToWork() {
+		doGoToWork();
+		atWork = true; 
+	}
+	
 	public void seatCustomer(Customer customer, int table) {
 		Dimension dim = tableMap.get(table);
 		
@@ -314,7 +374,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 		
 		cook.msgNullifyPlateArea(plateAreaLocs.get(0).height);
 		plateAreaLocs.remove(0);
-//		plateAreas.get(0).o = null;
+//		plateAreas.get(0).o = null;//TODO
 //		plateAreas.remove(0);
 		
 		
@@ -347,40 +407,66 @@ public class WaiterRole extends WorkRole implements Waiter {
 			host.msgNoCustomers(this);
 	}
 	
+
+	
+	// The animation DoXYZ() routines
+	private void doGoToWork() {
+		waiterGui.DoGoAway(idleFactor);
+	}
+	
+	private void doGoToTable(Customer customer, int table) {
+		//Notice how we print "customer" directly. It's toString method will do it.
+		//Same with "table"
+		
+		//print("Seating " + customer + " at " + table);
+		Dimension dim = tableMap.get(table);
+		
+		waiterGui.DoBringToTable(dim.width, dim.height); 
+
+	}
+	
+	private void doGoToCook(int x, int y) {
+		//Notice how we print "customer" directly. It's toString method will do it.
+		//Same with "table"
+		
+//		print("Going To Cook");
+		waiterGui.DoGoToCook(x, y); 
+
+	}
+	
+	private void doGoToCashier() {
+		waiterGui.DoGoToCashier();
+		
+	}
+	
 	private void requestBreak() {
 		Do("I want to go on break");
 		host.msgIdLikeToGoOnBreak(this);
 		wantToGoOnBreak = false;
 	}
+	
+	private void doGoOnBreak() {
+		Do("Im taking a break");
+		waiterGui.DoGoOnBreak();
+		BreakTimer.schedule(new TimerTask() {
+			
+			public void run() {
+				returningToWork();
+			}
+		}, 10000);
+	}
 
+	//utilities
 	
-	
-	//animation
-	
-	public void doGoToHost() {
-		waiterGui.DoGoToHost();
+	public void returningToWork() {
+		doGoAway();
+		host.msgReturningToWork(this);
 	}
 	
-	public void doGoAway() {
-		waiterGui.DoGoAway(idleFactor);
+	public boolean getWantToGoOnBreak() {
+		return wantToGoOnBreak;
 	}
-	
-	public void doGoToCashier() {
-		waiterGui.DoGoToCashier();
-	}
-	
-	public void doGoToCook(int x, int y) {
-		waiterGui.DoGoToCook(x, y);
-	}
-	
-	private void doGoToTable(Customer c, int tableNum) {
-		Dimension dim = tableMap.get(tableNum);
-		
-		waiterGui.DoBringToTable(dim.width, dim.height);
-	}
-	
-	//accessors, utilities
-	
+
 	public void doDisplayChoice(String choice) {
 		waiterGui.displayChoice(choice);
 	}
@@ -394,30 +480,94 @@ public class WaiterRole extends WorkRole implements Waiter {
 		 return null;
 	}
 	
-	private void doGoOnBreak() {
-		Do("Im taking a break");
-		waiterGui.DoGoOnBreak();
-		BreakTimer.schedule(new TimerTask() {
-			
-			public void run() {
-				returningToWork();
-			}
-		}, 10000);
-	}
-	
-	public void returningToWork() {
-		doGoAway();
-		host.msgReturningToWork(this);
-	}
-	
-	private void acquireSemaphore(Semaphore s) {
+	public void acquireSemaphore(Semaphore sem) {
 		try {
-			s.acquire();
+//			Do("acquired waiter");
+			sem.acquire();
+			
 		} catch (InterruptedException e) {
+			// 
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public void doGoToHost() {
+		waiterGui.DoGoToHost();
+	}
+	
+	public void setIdlePosition(int factor) {
+		idleFactor = factor;
+	}
+	
+	public void doGoAway() {
+//		Do("Idle");
+		waiterGui.DoGoAway(idleFactor);
 	}
 	
 	
+	
+	public void setGui(WaiterGui gui) {
+		waiterGui = gui;
+		waiterGui.DoGoAway(idleFactor);
+	}
+
+	public WaiterGui getGui() {
+		return waiterGui;
+	}
+	
+	public void pauseAllCustomers() { //called from restaraunt panel
+		for(MyCustomer mc : myCustomers) {
+//			mc.customer.pause();//TODO fix pause for interfaces ASKKK
+		}
+	}
+	
+	public void restartAllCustomers() {//called from restaraunt panel
+		for(MyCustomer mc : myCustomers) {
+//			mc.customer.restart();
+		}
+	}
+	
+	
+
+//
+	
+	private class Menu {
+		
+	}
+
+
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setOtherRoles(HostRole host, CookRole cook,
+			CashierRole cashier) {
+		this.host = host;
+		this.cook = cook;
+		this.cashier = cashier;
+	}
+
+
+
+
+
+
+
+	
 }
+

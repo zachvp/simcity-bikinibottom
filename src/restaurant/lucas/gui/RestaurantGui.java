@@ -37,15 +37,15 @@ public class RestaurantGui extends JPanel implements ActionListener {
     }
 	
 	public void populateWorkRoles() {
-		System.out.println("WOOT");
-		waiterPerson = new PersonAgent("waiter1");
-		waiterPerson.startThread();
-		WaiterRole waiterRole = new WaiterRole();
-		WaiterGui waiterGui = new WaiterGui(waiterRole);
-		waiterRole.setGui(waiterGui);
-		animationPanel.addGui(waiterGui);
-		waiterPerson.addRole(waiterRole);
-		waiterRole.activate();
+//		System.out.println("WOOT");
+//		waiterPerson = new PersonAgent("waiter1");
+//		waiterPerson.startThread();
+//		WaiterRole waiterRole = new WaiterRole();
+//		WaiterGui waiterGui = new WaiterGui(waiterRole);
+//		waiterRole.setGui(waiterGui);
+//		animationPanel.addGui(waiterGui);
+//		waiterPerson.addRole(waiterRole);
+//		waiterRole.activate();
 		
 	}
 	

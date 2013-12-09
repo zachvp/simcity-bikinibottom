@@ -25,10 +25,14 @@ public class LayoutGui implements Gui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		g.setColor(Color.lightGray);
+		g.fillRect(0, 0, WINDOWX, WINDOWY);
 		
+		g.setColor(Color.BLUE);
+		g.fillRect(520, 145, 30, 20);
 		Graphics2D g2 = (Graphics2D)g;
 
-		g2.fillRect(0, 0, WINDOWX, WINDOWY);
+//		g2.fillRect(0, 0, WINDOWX, WINDOWY);
 
 		Graphics2D t1 = (Graphics2D)g;
 		Graphics2D t2 = (Graphics2D)g;

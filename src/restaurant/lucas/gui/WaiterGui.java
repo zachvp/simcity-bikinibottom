@@ -14,6 +14,8 @@ import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
+	
+
     private WaiterRole agent = null;
 
 
@@ -29,18 +31,20 @@ public class WaiterGui implements Gui {
   //  Image waiterImg;// = new ImageIcon("/jacklucas/restaurant_johnluca/src/restaurant/Resources/waiter.png").getImage();
     
     boolean canRelease = false;
+    private RestaurantGui gui;
 
     private int entranceX = 0;
     private int entranceY = 0;
     private int idleX;
     private int idleY;
     
-    public WaiterGui(WaiterRole agent) {
+    public WaiterGui(WaiterRole agent, RestaurantGui gui) {
         this.agent = agent;
+        this.gui = gui;
         xPos = entranceX;
         yPos = entranceY;
-        xDestination = 200;
-        yDestination = 200;
+        xDestination = entranceX;
+        yDestination = entranceY;
         
         //waiterImg = Resources.getResource(/agents/src/images/waiter.png);
     }

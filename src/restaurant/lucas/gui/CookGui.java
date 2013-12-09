@@ -40,13 +40,20 @@ public class CookGui implements Gui{
 	public static final int agentDim = 20;
 	
 	boolean canRelease = false;
+	
+	private int entranceX = 0;
+	private int entranceY = 0;
+	
+	private int deskX = 0;
+	private int deskY = 0;
+	
 
 	public CookGui(CookRole c){ //HostAgent m) {
 		agent = c;
-		xPos = 530;
-		yPos = 100;
-		xDestination = 530;
-		yDestination = 100;
+		xPos = entranceX;
+		yPos = entranceY;
+		xDestination = entranceX;
+		yDestination = entranceY;
 		//maitreD = m;
 //		this.gui = gui;
 	}
@@ -74,25 +81,24 @@ public class CookGui implements Gui{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.BLUE);
-		g.fillRect(520, 145, 30, 20);
-		for(Grill gr : agent.getGrills()) {
-			g.setColor(Color.BLACK);
-			g.fillRect(gr.x, gr.y, 20, 20);
-			if(gr.o!=null) {
-				g.setColor(Color.RED);
-				g.drawString(gr.o.Choice, gr.x, gr.y);
-			}
-		}
-		
-		for(PlateArea p : agent.getPlateAreas()) {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(p.x, p.y, 20, 20);
-			if(p.o!=null) {
-				g.setColor(Color.RED);
-				g.drawString(p.o.Choice, p.x, p.y);
-			}
-		}
+
+//		for(Grill gr : agent.getGrills()) {
+//			g.setColor(Color.BLACK);
+//			g.fillRect(gr.x, gr.y, 20, 20);
+//			if(gr.o!=null) {
+//				g.setColor(Color.RED);
+//				g.drawString(gr.o.Choice, gr.x, gr.y);
+//			}
+//		}
+//		
+//		for(PlateArea p : agent.getPlateAreas()) {
+//			g.setColor(Color.DARK_GRAY);
+//			g.fillRect(p.x, p.y, 20, 20);
+//			if(p.o!=null) {
+//				g.setColor(Color.RED);
+//				g.drawString(p.o.Choice, p.x, p.y);
+//			}
+//		}
 		g.setColor(Color.CYAN);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
 		

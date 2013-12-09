@@ -10,34 +10,44 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
-import restaurant.lucas.interfaces.Market;
 import restaurant.lucas.interfaces.Waiter;
-
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
+//import restaurant.HostAgent.Table;
 import agent.interfaces.Person;
 
 /**
- * Restaurant Cook Role
- * 
- * @author Jack Lucas
+ * Restaurant Host Agent
  */
-
-
+//We only have 2 types of agents in this prototype. A customer and an agent that
+//does all the rest. Rather than calling the other agent a waiter, we called him
+//the HostAgent. A Host is the manager of a restaurant who sees that all
+//is proceeded as he wishes.
 public class CookRole extends WorkRole implements Cook {
-
+	//static final int NTABLES = 3;//a global for the number of tables.
+	//Notice that we implement waitingCustomers using ArrayList, but type it
+	//with List semantics.
+	//public List<CustomerAgent> waitingCustomers
+	//= new ArrayList<CustomerAgent>();
+	//public Collection<Table> tables;
+	//private boolean isAtDesk = true;
+	//note that tables is typed with Collection semantics.
+	//Later we will see how it is implemented
 
 	private String name;
-	public CookGui cookGui;
+
+	public CookGui cookGui = null;
+	
 	private Semaphore active = new Semaphore(0, true);
+	
 
 
 
-	public enum state {none, received, cooking, cooked, givenToWaiter};
-	public class Order
+	public static class Order
 	{
 		Order(String choice, int table, Customer customer, Waiter w, state s) {
 			Choice = choice;
@@ -50,12 +60,12 @@ public class CookRole extends WorkRole implements Cook {
 		int table;
 		public String Choice;
 		Waiter waiter;
-
+		public enum state {none, received, cooking, cooked, givenToWaiter};
 		private state orderState;
-
+		
 	};
-
-	public class Grill {
+	
+	public static class Grill {
 		Grill(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -63,10 +73,10 @@ public class CookRole extends WorkRole implements Cook {
 		public Order o = null;
 		public int x;
 		public int y;
-
+		
 	}
-
-	public class PlateArea {
+	
+	public static class PlateArea {
 		PlateArea(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -75,10 +85,10 @@ public class CookRole extends WorkRole implements Cook {
 		public int x;
 		public int y;
 	}
-
+	
 	List<Grill> grills = new ArrayList<Grill>();
 	List<PlateArea> plateAreas = new ArrayList<PlateArea>();
-
+	
 	public static class Food
 	{
 		Food(String type, int cookingTime, int amount, int threshold, int capacity, boolean enroute) {
@@ -88,9 +98,9 @@ public class CookRole extends WorkRole implements Cook {
 			this.threshold = threshold;
 			this.capacity = capacity;
 			this.enroute = enroute;
-
+			
 		}
-
+		
 		String type;
 		int cookingTime;
 		int amount;
@@ -101,39 +111,83 @@ public class CookRole extends WorkRole implements Cook {
 
 	private Map<String, Integer> cookingTimes;
 	private Map<String, Food> foods = new HashMap<String, Food>();
-
+	
 	private List<String> deliveredFoods = new ArrayList<String>();
 	private List<Integer> deliveredAmounts = new ArrayList<Integer>();//used to transfer from message to updating foods action
-
+	
 	int previousMarket = 0;
-
+	
 	List<Order> Orders = Collections.synchronizedList(new ArrayList<Order>());
 	Timer CookTimer;
+	
+	private List<MarketRole> markets = new ArrayList<MarketRole>();
+//	map<String, int> cookTimes; 
+	
+	public CookRole(Person p, CityLocation c) {
+		super(p, c);
 
-	private List<Market> markets = new ArrayList<Market>();
-	//map<String, int> cookTimes; 
-
-
-
-	@Override
-	public void msgHereIsAnOrder(String choice, int tableNum,
-			Customer customer, Waiter w) {
-		Do("I have received order");
-		Orders.add(new Order(choice, tableNum, customer, w, state.received));
-		//		w.doDisplayChoice("none");//TODO too much sharing
-		stateChanged();
-
+		this.CookTimer = new Timer();
+		this.cookingTimes = new HashMap<String, Integer>();
+		
+		Food tofu = new Food("Tofu", 5*1000, 4, 2, 4, false);
+		foods.put("Tofu", tofu);
+		Food rice = new Food("Rice", 7*1000, 3, 4, 6, false);
+		foods.put("Rice", rice);
+		Food sushi = new Food("Sushi", 9*1000, 6, 2, 7, false);
+		foods.put("Sushi", sushi);
+		Food noodles = new Food("Noodles", 11*1000, 6, 3, 8, false);
+		foods.put("Noodles", noodles);
+		
+		cookingTimes.put("Tofu", 5*1000);
+		cookingTimes.put("Rice", 7*1000);//introduce food to map menu
+		cookingTimes.put("Sushi", 9*1000);
+		cookingTimes.put("Noodles", 11*1000);
+		
+		grills.add(new Grill(550, 50));
+		grills.add(new Grill(550, 75));
+		grills.add(new Grill(550, 100));
+		grills.add(new Grill(550, 125));
+		
+		plateAreas.add(new PlateArea(500, 50));
+		plateAreas.add(new PlateArea(500, 75));
+		plateAreas.add(new PlateArea(500, 100));
+		plateAreas.add(new PlateArea(500, 125));
+		
+		
+		
+		
+//		inventoryMap.put("Tofu", 5);
 	}
 
-	@Override
+
+	public String getMaitreDName() {
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+
+	// Messages ################################################
+	
+	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {
+		Do("I have received order");
+		Orders.add(new Order(choice, tableNum, customer, w, state.received));
+//		w.doDisplayChoice("none");//TODO too much sharing
+		stateChanged();
+		
+	}
+
 	public void msgOrderCooked(int orderNum) {
 		Order o = Orders.get(orderNum);
 		o.orderState = state.cooked;
-		stateChanged();		
+		stateChanged();
+		
 	}
-
-	@Override
-	public void msgIDontHave(List<String> foodList, List<Integer> amountList) {
+	
+	public void msgIDontHave(List<String> foodList, List<Integer> amountList) {//for Market implementation NOTE CHANGE TO MSGIDONTHAVE
+		//stub for now
 		if(foodList.size() == 0) {
 			Do("Order from market has everything");
 			return;
@@ -141,46 +195,70 @@ public class CookRole extends WorkRole implements Cook {
 		else {
 			markets.get(++previousMarket%markets.size()).msgLowOnFood(foodList, amountList, this);//hack, need way to pick next market
 		}
-		stateChanged();		
+		stateChanged();
 	}
-
-	@Override
-	public void msgFoodDelivered(List<String> foodList, List<Integer> amountList) {
-		deliveredFoods = foodList;
-		//		Do(deliveredFoods.get(0));
-		deliveredAmounts = amountList;
-		stateChanged();		
-	}
-
-	@Override
+	
 	public void msgNullifyPlateArea(int yPos) {
 		for(PlateArea p : plateAreas) {
 			if (p.y == yPos) {
 				p.o = null;
 			}
-		}		
+		}
+	}
+		
+//		for(int i = 0; i<foodList.size(); i++) {
+//				if(foods.get("Tofu").amount < foods.get("Tofu").threshold) {
+//					for(String str: foodList) {
+//						if(str.equals("Tofu")) {
+//							
+//						}
+//					}
+//					foods.get("Tofu").amount = foods.get("Tofu").capacity;
+//				}
+//				if(foods.get("Rice").amount < foods.get("Rice").threshold) {
+//					foods.get("Rice").amount = foods.get("Rice").capacity;
+//				}
+//				if(foods.get("Sushi").amount < foods.get("Sushi").threshold) {
+//					foods.get("Sushi").amount = foods.get("Sushi").capacity;
+//				}
+//				if(foods.get("Noodles").amount < foods.get("Noodles").threshold) {
+//					foods.get("Noodles").amount = foods.get("Noodles").capacity;
+//				}
+			
+//			if(amountList.get(i) >= foods.get(foodList.get(i)).capacity - foods.get(foodList.get(i)).amount) {//if delivery would completely fulfill order requested
+//				foods.get(foodList.get(i)).enroute = true;//update flag that this FOOD is BEINGFULFILLED
+//			}
+		
+
+	
+	public void msgFoodDelivered(List<String> foodList, List<Integer> amountList) {//for Market implementation
+		
+		
+		deliveredFoods = foodList;
+//		Do(deliveredFoods.get(0));
+		deliveredAmounts = amountList;
+		stateChanged();
 	}
 
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+	/**
+	 * Scheduler.  Determine what action is called for, and do it.
+	 */
 	protected boolean pickAndExecuteAnAction() {
+		/* Think of this next rule as:
+            Does there exist a table and customer,
+            so that table is unoccupied and customer is waiting.
+            If so seat him at the table.
+		 */
+		
+//		for(Order o : Orders) {
+//			if(o.orderState == state.received) {
+//				CookOrder(o);
+//				o.orderState = state.cooking;
+//				return true;
+//			}
+//		}
+//		
+//		Do("Entered sched");
 
 		synchronized(Orders) {
 			for(int i = 0; i < Orders.size(); i++) {
@@ -202,22 +280,24 @@ public class CookRole extends WorkRole implements Cook {
 				}
 			}
 		}
-
+		
 		if(!deliveredFoods.isEmpty()) {
 			Do("CONDITON MeT");
 			updateInventory(deliveredFoods, deliveredAmounts);
 			return true;
 		}
+		
 
-
+		
 
 
 		return false;
+
 	}
 
-	
+	// Actions ///////////////////
 	private void CookOrder(Order o, final int orderNum) {
-		
+	
 		Food f = foods.get(o.Choice);
 		if(f.amount < f.threshold) { //need to order more from market
 //			Do("TRYING to orDEr");
@@ -253,7 +333,8 @@ public class CookRole extends WorkRole implements Cook {
 		f.amount--;
 		o.orderState=state.cooking;
 	}
-	
+
+
 
 	
 	public void checkInventory() {//take market as param?
@@ -315,6 +396,9 @@ public class CookRole extends WorkRole implements Cook {
 		//update amount Cook has
 	}
 
+	
+
+	
 		
 	private void OrderCooked(Order o) {
 		for (Grill g: grills) {
@@ -350,7 +434,38 @@ public class CookRole extends WorkRole implements Cook {
 				o.orderState = state.givenToWaiter;
 	}
 
-//Animation
+
+
+	//utilities
+	
+	public void acquireSemaphore(Semaphore a) {
+		try {
+			a.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void addMarket(MarketRole m) {
+		markets.add(m);
+	}
+
+	public void setGui(CookGui gui) {
+		cookGui = gui;
+	}
+
+	public CookGui getGui() {
+		return cookGui;
+	}
+	
+	public List<Grill> getGrills() {
+		return grills;
+	}
+	
+	public List<PlateArea> getPlateAreas() {
+		return plateAreas;
+	}
+	
 	public void goToGrill(Grill g) {
 		cookGui.DoGoToGrill(g);
 	}
@@ -371,27 +486,30 @@ public class CookRole extends WorkRole implements Cook {
 	public void msgAtDestination() {
 		active.release();
 	}
-	
 
-//accessors, utilities
-	private void acquireSemaphore(Semaphore s) {
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
 		
-		try {
-			s.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
-	public List<Grill> getGrills() {
-		return grills;
-	}
-	
-	public List<PlateArea> getPlateAreas() {
-		return plateAreas;
-	}
-
-
 
 }
+
+	
+

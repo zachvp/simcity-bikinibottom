@@ -1,54 +1,48 @@
 package restaurant.lucas;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 import restaurant.lucas.gui.CustomerGui;
 import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Customer;
-import restaurant.lucas.interfaces.Host;
 import restaurant.lucas.interfaces.Waiter;
-
 import CommonSimpleClasses.CityLocation;
-import agent.PersonAgent.HungerLevel;
-import agent.Role;
+import agent.WorkRole;
 import agent.interfaces.Person;
-import agent.interfaces.Person.Wallet;
 
 /**
- * Restaurant customer role.
- * 
- * @author Jack Lucas
+ * Restaurant customer agent.
  */
-public class CustomerRole extends Role implements Customer {
-	
+
+//Build should not be problem
+public class CustomerRole extends WorkRole implements Customer {
 	private String name;
 	private int hungerLevel = 5;        // determines length of meal
 	int tableXCoord;
 	int tableYCoord;
 	Timer timer = new Timer();
 	Random rnd = new Random();
-
+	
 	String choice = "";
-
+	
 	public class WaitPosition {
 		private Semaphore occupied = new Semaphore(1);
 		int x;
 		int y;
-
+		
 		WaitPosition(int x, int y) {
 			this.x = x;
 			this.y =y;
 		}
-
+		
 		public void tryAcquire(Semaphore s) {
 			try {
 				s.acquire();
@@ -56,30 +50,30 @@ public class CustomerRole extends Role implements Customer {
 				e.printStackTrace();
 			}
 		}
-
+		
 		//semaphore and position
 	}
-
+	
 	static List<WaitPosition> waitPositions = new ArrayList<WaitPosition>();
-
-
+	
+	
 	List<String> menu = new ArrayList<String>();
 	Map<String, Double> menuMap = new HashMap<String, Double>();
-
+	
 	int choiceNumber =0;
-
+	
 	private CustomerGui customerGui;
 
 	// agent correspondents
 	private Waiter waiter;
-	private Host host;
-
+	private HostRole host;
+	
 	double myMoney = 23;
 	double myBill = 0;
 	double owedMoney = 0;
 	boolean willLeaveIfFull = false;
 	Cashier myCashier;
-
+	
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum CustomerState
@@ -90,21 +84,57 @@ public class CustomerRole extends Role implements Customer {
 	{none, gotHungry, followWaiter, reachedTable, decidedOrder, askedForOrder, askedToReorder, receivedFood, receivedBill, receivedChange, doneEating, doneLeaving, restaurantFull};
 	CustomerEvent event = CustomerEvent.none;
 
-
-	@Override
-	public void gotHungry() {
-		// TODO Auto-generated method stub
+	/**
+	 * Constructor for CustomerAgent class
+	 *
+	 * @param name name of the customer
+	 * @param gui  reference to the customergui so the customer can send it messages
+	 */
+	public CustomerRole(Person p, CityLocation c){
+		super(p, c);
+//		if(name.equals("flake")) {
+//			myMoney = 2;
+//		}
+//		if(name.equals("poor")) {
+//			myMoney = 1;
+//		}
+//		if(name.equals("cheapest")) {
+//			myMoney = 5.99;
+//		}
+//		if(name.equals("impatient")) {
+//			willLeaveIfFull = true;
+//		}
 
 	}
 
-	@Override
-	public void msgRestarauntIsFull() {
+	/**
+	 * hack to establish connection to Host agent.
+	 */
+	public void setHost(HostRole host) {
+		this.host = host;
+	}
+
+	public String getCustomerName() {
+		return name;
+	}
+	// Messages
+
+	public void gotHungry() {//from animation
+		print("I'm hungry");
+		event = CustomerEvent.gotHungry;
+		stateChanged();
+	}
+	
+//	public void msgSetWaitingPosition(int position) {
+//		
+//	}
+	
+	public void msgRestaurantIsFull() {
 		event = CustomerEvent.restaurantFull;
-		stateChanged();			
+		stateChanged();
 	}
 
-	@Override
-	public void msgFollowMeToTable(Waiter w, int x, int y, Map<String, Double> m) {
+	public void msgFollowMeToTable(Waiter w, int x, int y,  Map<String, Double> m) { //need to give menu here later
 		this.waiter = w;
 		for (Entry<String, Double> entry : m.entrySet()) {
 		    String food = entry.getKey();
@@ -121,69 +151,68 @@ public class CustomerRole extends Role implements Customer {
 		event = CustomerEvent.followWaiter;
 		stateChanged();
 	}
-
-	@Override
+	
 	public void msgWhatWouldYouLike() {
 		Do("I've been asked for my order");
 		event = CustomerEvent.askedForOrder;
 		stateChanged();
+		//stub
 	}
-
-	@Override
+	
 	public void msgOutOfChoice(Map<String, Double> newMenu) {
 		menuMap = newMenu;
 		doDisplayChoice("?");
 		event = CustomerEvent.askedToReorder;
 		stateChanged();
 	}
-
-	@Override
+	
 	public void msgAnimationFinishedDecidingOrder() {
 		event = CustomerEvent.decidedOrder;
 		stateChanged();
 	}
-
-	@Override
+	
 	public void msgHereIsYourFood() {
+//		Do("here is my food");
 		event = CustomerEvent.receivedFood;
 		stateChanged();
 	}
-
-	@Override
+	
 	public void msgHereIsCheck(Cashier c, double check) {
 		event = CustomerEvent.receivedBill;
 		myCashier = c;
 		myBill = check;
 		stateChanged();
+		
 	}
-
-	@Override
-	public void msgDoneEating() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void msgAnimationFinishedGoToSeat() {
-		event = CustomerEvent.reachedTable;
-		stateChanged();
-	}
-
-	@Override
-	public void msgAnimationFinishedLeaveRestaurant() {
-		event = CustomerEvent.doneLeaving;
-		stateChanged();
-	}
-
-	@Override
+	
 	public void msgHereIsChange(double change) {
 		myMoney += change;
 		event = CustomerEvent.receivedChange;
 		stateChanged();
 	}
+	
+	public void msgDoneEating() {
+		//stub
+	}
+	
+	
 
-	@Override
+	public void msgAnimationFinishedGoToSeat() {
+		//from animation
+		event = CustomerEvent.reachedTable;
+		stateChanged();
+	}
+	public void msgAnimationFinishedLeaveRestaurant() {
+		//from animation
+		event = CustomerEvent.doneLeaving;
+		stateChanged();
+	}
+
+	/**
+	 * Scheduler.  Determine what action is called for, and do it.
+	 */
 	protected boolean pickAndExecuteAnAction() {
+		//	CustomerAgent is a finite state machine
 
 		if (state == CustomerState.DoingNothing && event == CustomerEvent.gotHungry ){
 			state = CustomerState.WaitingInRestaurant;
@@ -272,178 +301,207 @@ public class CustomerRole extends Role implements Customer {
 //			state = CustomerState.DoingNothing;
 //			//no action
 //			return true;
-//		}	
+//		}
 		return false;
 	}
-	
-	
+
 	// Actions
 
-		private void goToRestaurant() {
-			Do("Going to restaurant, I have $" + myMoney);
-			host.msgIWantFood(this);//send our instance, so he can respond to us
-		}
+	private void goToRestaurant() {
+		Do("Going to restaurant, I have $" + myMoney);
+		host.msgIWantFood(this);//send our instance, so he can respond to us
+	}
 
-		private void SitDown() {
-			Do("Being seated. Going to table");
-			customerGui.DoGoToSeat(tableXCoord, tableYCoord);//hack; only one table
+	private void SitDown() {
+		Do("Being seated. Going to table");
+		customerGui.DoGoToSeat(tableXCoord, tableYCoord);//hack; only one table
+	}
+	
+	private void decideOrder(){
+		Do("Deciding Order");
+		if(name.equals("Tofu") || name.equals("Rice") || name.equals("Sushi") || name.equals("Noodles")) {
+			choice = name;
+			name = "merp";
 		}
-		
-		private void decideOrder(){
-			Do("Deciding Order");
-			if(name.equals("Tofu") || name.equals("Rice") || name.equals("Sushi") || name.equals("Noodles")) {
-				choice = name;
-				name = "merp";
+		else {
+			ArrayList<String> menuItems = new ArrayList<String>();
+
+			for (String stringKey : menuMap.keySet()) {
+			     menuItems.add(stringKey);
 			}
-			else {
-				ArrayList<String> menuItems = new ArrayList<String>();
-
-				for (String stringKey : menuMap.keySet()) {
-				     menuItems.add(stringKey);
-				}
-				
-				int choiceNum = rnd.nextInt(menuItems.size());
-				
-				choice = menuItems.get(choiceNum);
-				if(menuMap.get(choice) > myMoney) {//costs more than i got
-					for(int i = 1; i < menuItems.size(); i++) {
-						choice = menuItems.get((choiceNum+ i) % menuItems.size());
-						if(menuMap.get(choice) <= myMoney) { //if i can afford it
-							break;
-						}
-					}
-					if(menuMap.get(choice) > myMoney) {
-						waiter.msgLeavingTable(this);
-						Do("I can't afford anything, leaving!");
-						customerGui.DoExitRestaurant();
-						return;
-					}
-				}
-			}
-			timer.schedule(new TimerTask() {//timer to delay order choice
-				public void run() {
-					print("decided");
-					msgAnimationFinishedDecidingOrder();
-//					event = CustomerEvent.doneEating;
-					//isHungry = false;
-//					stateChanged();
-				}
-			},
-			1400);
-
-//			choice = chooseFromMenu();
-		}
-		
-		private void callWaiter(){
-			Do("Calling Waiter");
-			waiter.msgImReadyToOrder(this);
-		}
-		
-		private void giveOrder() {
-				
-//			int choiceNumber = rnd.nextInt() % 4;
-//			System.out.println(choiceNumber);
-
-			waiter.msgHereIsMyChoice(this, choice);
 			
-			doDisplayChoice(choice + "?");
-			//send message to custgui to draw letter
-			Do("Ordering " + choice);
-		}
-
-		private void EatFood() {
-			Do("Eating Food");
-			doDisplayChoice(choice);
-			//This next complicated line creates and starts a timer thread.
-			//We schedule a deadline of getHungerLevel()*1000 milliseconds.
-			//When that time elapses, it will call back to the run routine
-			//located in the anonymous class created right there inline:
-			//TimerTask is an interface that we implement right there inline.
-			//Since Java does not all us to pass functions, only objects.
-			//So, we use Java syntactic mechanism to create an
-			//anonymous inner class that has the public method run() in it.
-			timer.schedule(new TimerTask() {
-				Object cookie = 1;
-				public void run() {
-					print("Done eating");
-					event = CustomerEvent.doneEating;
-					//isHungry = false;
-					stateChanged();
+			int choiceNum = rnd.nextInt(menuItems.size());
+			
+			choice = menuItems.get(choiceNum);
+			if(menuMap.get(choice) > myMoney) {//costs more than i got
+				for(int i = 1; i < menuItems.size(); i++) {
+					choice = menuItems.get((choiceNum+ i) % menuItems.size());
+					if(menuMap.get(choice) <= myMoney) { //if i can afford it
+						break;
+					}
 				}
-			},
-			14000);//getHungerLevel() * 1000);//how long to wait before running task
-		}
-		
-		private void readyToPay() {
-			waiter.msgReadyToPay(this);
-		}
-		
-		private void pay() {
-			myCashier.msgHereIsMyPayment(this, Math.ceil(myBill + owedMoney));
-			myMoney = this.myMoney - Math.ceil(myBill + owedMoney);
-		}
-
-		private void leaveTable() {
-			Do("Leaving Restaraunt");
-			doDisplayChoice("");
-			if(myMoney < 0) {//if i couldn't afford this meal
-				Do("I couldn't afford it but will pay next time!");
-				owedMoney = myMoney * -1;
-				myMoney = 40;
+				if(menuMap.get(choice) > myMoney) {
+					waiter.msgLeavingTable(this);
+					Do("I can't afford anything, leaving!");
+					customerGui.DoExitRestaurant();
+					return;
+				}
 			}
-			waiter.msgLeavingTable(this);//sends this to host
-			customerGui.DoExitRestaurant();
 		}
+		timer.schedule(new TimerTask() {//timer to delay order choice
+			public void run() {
+				print("decided");
+				msgAnimationFinishedDecidingOrder();
+//				event = CustomerEvent.doneEating;
+				//isHungry = false;
+//				stateChanged();
+			}
+		},
+		1400);
+
+//		choice = chooseFromMenu();
+	}
+	
+	private void callWaiter(){
+		Do("Calling Waiter");
+		waiter.msgImReadyToOrder(this);
+	}
+	
+	private void giveOrder() {
+			
+//		int choiceNumber = rnd.nextInt() % 4;
+//		System.out.println(choiceNumber);
+
+		waiter.msgHereIsMyChoice(this, choice);
 		
-		private void leaveBecauseFull() {
-			customerGui.DoExitRestaurant();
-			host.msgLeavingTable(this);
-			//TODO
-		}
+		doDisplayChoice(choice + "?");
+		//send message to custgui to draw letter
+		Do("Ordering " + choice);
+	}
 
-		// Accessors, etc.
+	private void EatFood() {
+		Do("Eating Food");
+		doDisplayChoice(choice);
+		//This next complicated line creates and starts a timer thread.
+		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
+		//When that time elapses, it will call back to the run routine
+		//located in the anonymous class created right there inline:
+		//TimerTask is an interface that we implement right there inline.
+		//Since Java does not all us to pass functions, only objects.
+		//So, we use Java syntactic mechanism to create an
+		//anonymous inner class that has the public method run() in it.
+		timer.schedule(new TimerTask() {
+			Object cookie = 1;
+			public void run() {
+				print("Done eating");
+				event = CustomerEvent.doneEating;
+				//isHungry = false;
+				stateChanged();
+			}
+		},
+		14000);//getHungerLevel() * 1000);//how long to wait before running task
+	}
+	
+	private void readyToPay() {
+		waiter.msgReadyToPay(this);
+	}
+	
+	private void pay() {
+		myCashier.msgHereIsMyPayment(this, Math.ceil(myBill + owedMoney));
+		myMoney = this.myMoney - Math.ceil(myBill + owedMoney);
+	}
 
-		public void doDisplayChoice(String choice) {
-			customerGui.displayChoice(choice);
+	private void leaveTable() {
+		Do("Leaving Restaraunt");
+		doDisplayChoice("");
+		if(myMoney < 0) {//if i couldn't afford this meal
+			Do("I couldn't afford it but will pay next time!");
+			owedMoney = myMoney * -1;
+			myMoney = 40;
 		}
+		waiter.msgLeavingTable(this);//sends this to host
+		customerGui.DoExitRestaurant();
+	}
+	
+	private void leaveBecauseFull() {
+		customerGui.DoExitRestaurant();
+		host.msgLeavingTable(this);
+		//TODO
+	}
+
+	// Accessors, etc.
+
+	public void doDisplayChoice(String choice) {
+		customerGui.displayChoice(choice);
+	}
+	
+	public void setWaiter(WaiterRole waiter) {
+		this.waiter = waiter;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getHungerLevel() {
+		return hungerLevel;
+	}
+
+	public void setHungerLevel(int hungerLevel) {
+		this.hungerLevel = hungerLevel;
+		//could be a state change. Maybe you don't
+		//need to eat until hunger lever is > 5?
+	}
+
+	public String toString() {
+		return "customer " + getName();
+	}
+
+	public void setGui(CustomerGui g) {
+		customerGui = g;
+	}
+
+	public CustomerGui getGui() {
+		return customerGui;
+	}
+	
+	private class Menu {
 		
-		public void setWaiter(Waiter waiter) {
-			this.waiter = waiter;
-		}
+	}
+	
+	public void goToWaitPosition(int num) {
+		customerGui.updateWaitPosition(num);
+		Do("xXxXxX");
+	}
+
+	@Override
+	public void msgRestarauntIsFull() {
+		// TODO Auto-generated method stub
 		
-		public String getName() {
-			return name;
-		}
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
 		
-		public int getHungerLevel() {
-			return hungerLevel;
-		}
+	}
 
-		public void setHungerLevel(int hungerLevel) {
-			this.hungerLevel = hungerLevel;
-			//could be a state change. Maybe you don't
-			//need to eat until hunger lever is > 5?
-		}
-
-		public String toString() {
-			return "customer " + getName();
-		}
-
-		public void setGui(CustomerGui g) {
-			customerGui = g;
-		}
-
-		public CustomerGui getGui() {
-			return customerGui;
-		}
-
-		
-		public void goToWaitPosition(int num) {
-			customerGui.updateWaitPosition(num);
-		}
-
-
-
-
-
+//	@Override
+//	public void msgFollowMeToTable(Waiter w, int x, int y, Map<String, Double> m) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }
+

@@ -45,7 +45,7 @@ public class CookRole extends WorkRole implements Cook {
 	private Semaphore active = new Semaphore(0, true);
 	
 
-
+	boolean atWork;
 
 	public static class Order
 	{
@@ -126,6 +126,8 @@ public class CookRole extends WorkRole implements Cook {
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
 
+		atWork = false;
+		
 		this.CookTimer = new Timer();
 		this.cookingTimes = new HashMap<String, Integer>();
 		
@@ -260,6 +262,11 @@ public class CookRole extends WorkRole implements Cook {
 //		
 //		Do("Entered sched");
 
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		synchronized(Orders) {
 			for(int i = 0; i < Orders.size(); i++) {
 				if(Orders.get(i).orderState == state.received){
@@ -296,6 +303,12 @@ public class CookRole extends WorkRole implements Cook {
 	}
 
 	// Actions ///////////////////
+	private void goToWork() {
+		cookGui.DoGoToDesk();
+		acquireSemaphore(active);
+		atWork = true;
+	}
+	
 	private void CookOrder(Order o, final int orderNum) {
 	
 		Food f = foods.get(o.Choice);
@@ -490,8 +503,7 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 

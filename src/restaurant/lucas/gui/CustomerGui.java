@@ -125,6 +125,7 @@ public class CustomerGui implements Gui {
 	}
 
 	public void DoGoToSeat(int x, int y) {//later you will map seatnumber to table coordinates. and stuff
+		System.out.println("SOWHA");
 		xDestination = x;
 		yDestination = y;
 		command = Command.GoToSeat;

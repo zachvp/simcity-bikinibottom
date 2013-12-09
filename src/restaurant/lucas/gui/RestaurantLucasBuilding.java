@@ -31,12 +31,19 @@ public class RestaurantLucasBuilding extends Building {
 	
 	private InfoPanel infoPanel = new InfoPanel();
 
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static final int timeDifference = 12;
 	
 	RestaurantGui restaurantGui = new RestaurantGui();
 	
 	public RestaurantLucasBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.existingCustomers = new HashMap<Person, CustomerRole>();
+		
+		// Stagger opening/closing time
+		this.timeOffset = (instanceCount * timeDifference) % 2;
+		instanceCount++;
 		
 		initRoles();
 	}
@@ -132,6 +139,31 @@ public class RestaurantLucasBuilding extends Building {
 	public JPanel getStaffPanel() {
 		return new JPanel();
 	}
+	
+	public boolean isOpen() {
+		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
+				waiterOnDuty();
+	}
+	
+	public boolean hostOnDuty() {
+		return host != null && host.isAtWork();
+	}
+
+	public boolean cashierOnDuty() {
+		return cashier != null && cashier.isAtWork();
+	}
+
+	public boolean cookOnDuty() {
+		return cook != null && cook.isAtWork();
+	}
+
+	public boolean waiterOnDuty() {
+		for (WaiterRole w : waiters) {
+			if (w.isAtWork()) { return true; }
+		}
+		return false;
+	}
+	
 	
 	
 }

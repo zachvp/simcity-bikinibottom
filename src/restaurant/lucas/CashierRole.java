@@ -297,8 +297,7 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 

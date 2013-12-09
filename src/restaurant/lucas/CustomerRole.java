@@ -16,6 +16,7 @@ import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
+import agent.PersonAgent.HungerLevel;
 import agent.interfaces.Person;
 
 /**
@@ -25,7 +26,7 @@ import agent.interfaces.Person;
 //Build should not be problem
 public class CustomerRole extends WorkRole implements Customer {
 	private String name;
-	private int hungerLevel = 5;        // determines length of meal
+//	private int hungerLevel = 5;        // determines length of meal
 	int tableXCoord;
 	int tableYCoord;
 	Timer timer = new Timer();
@@ -106,6 +107,16 @@ public class CustomerRole extends WorkRole implements Customer {
 //		}
 
 	}
+	/**
+	 * starts customer state machine process when entering
+	 * overrides activate function
+	 */
+	@Override
+	public void activate() {
+		super.activate();
+		customerGui.setPresent(true);
+		gotHungry();
+	}
 
 	/**
 	 * hack to establish connection to Host agent.
@@ -145,7 +156,7 @@ public class CustomerRole extends WorkRole implements Customer {
 //		{
 //			menu.add(m.get(i));//gives customer menu from waiter
 //		}
-		print("Following " + w.getName() + " to my table");
+		Do("Following waiter to my table");
 		tableXCoord = x;
 		tableYCoord = y;
 		event = CustomerEvent.followWaiter;
@@ -289,6 +300,7 @@ public class CustomerRole extends WorkRole implements Customer {
 		 */
 		if (state==CustomerState.Leaving &&  event == CustomerEvent.doneLeaving) {
 			state = CustomerState.DoingNothing;
+			deactivate();
 			return true;
 			//do nothing
 		}
@@ -308,22 +320,22 @@ public class CustomerRole extends WorkRole implements Customer {
 	// Actions
 
 	private void goToRestaurant() {
-		Do("Going to restaurant, I have $" + myMoney);
+		Do("Going to restaurant, I have $" + this.getPerson().getWallet().getCashOnHand());
 		host.msgIWantFood(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
-		Do("Being seated. Going to table");
+//		Do("Being seated. Going to table");
 		customerGui.DoGoToSeat(tableXCoord, tableYCoord);//hack; only one table
 	}
 	
 	private void decideOrder(){
 		Do("Deciding Order");
-		if(name.equals("Tofu") || name.equals("Rice") || name.equals("Sushi") || name.equals("Noodles")) {
-			choice = name;
-			name = "merp";
-		}
-		else {
+//		if(name.equals("Tofu") || name.equals("Rice") || name.equals("Sushi") || name.equals("Noodles")) {
+//			choice = name;
+//			name = "merp";
+//		}
+		 {
 			ArrayList<String> menuItems = new ArrayList<String>();
 
 			for (String stringKey : menuMap.keySet()) {
@@ -420,7 +432,11 @@ public class CustomerRole extends WorkRole implements Customer {
 			myMoney = 40;
 		}
 		waiter.msgLeavingTable(this);//sends this to host
+		this.getPerson().setHungerLevel(HungerLevel.FULL);
 		customerGui.DoExitRestaurant();
+		
+		
+		
 	}
 	
 	private void leaveBecauseFull() {
@@ -443,15 +459,6 @@ public class CustomerRole extends WorkRole implements Customer {
 		return name;
 	}
 	
-	public int getHungerLevel() {
-		return hungerLevel;
-	}
-
-	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
-	}
 
 	public String toString() {
 		return "customer " + getName();

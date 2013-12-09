@@ -33,7 +33,7 @@ public class WaiterGui implements Gui {
     boolean canRelease = false;
     private RestaurantGui gui;
 
-    private int entranceX = 0;
+    private int entranceX = -40;
     private int entranceY = 0;
     private int idleX;
     private int idleY;
@@ -122,11 +122,18 @@ public class WaiterGui implements Gui {
     }
     
     public void DoGoAway(int fac) {
+		System.out.println("DINGDANG");
     	canRelease = false;
     	xDestination = 200 + (fac * 20) + fac;
     	yDestination = 0;
     	
     			
+    }
+    
+    public void DoGoToDesk(int fac) {
+    	canRelease = true;
+    	xDestination = 200 + (fac * 20) + fac;
+    	yDestination = 0;
     }
     
     public void DoGoToCashier() {

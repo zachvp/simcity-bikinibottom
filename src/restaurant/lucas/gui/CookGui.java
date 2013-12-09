@@ -41,11 +41,11 @@ public class CookGui implements Gui{
 	
 	boolean canRelease = false;
 	
-	private int entranceX = 0;
+	private int entranceX = -30;
 	private int entranceY = 0;
 	
-	private int deskX = 0;
-	private int deskY = 0;
+	private int deskX = 530;
+	private int deskY = 100;
 	
 
 	public CookGui(CookRole c){ //HostAgent m) {
@@ -146,6 +146,12 @@ public class CookGui implements Gui{
 		canRelease = false;
 		xDestination = 530;
 		yDestination = 100;
+	}
+	
+	public void DoGoToDesk() {
+		canRelease = true;
+		xDestination = deskX;
+		yDestination = deskY;
 	}
 	
 	public void DoGoToFridge() {

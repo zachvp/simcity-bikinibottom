@@ -372,8 +372,7 @@ public class HostRole extends WorkRole implements Host {
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

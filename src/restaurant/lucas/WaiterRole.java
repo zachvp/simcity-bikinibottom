@@ -153,8 +153,8 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	public void msgSitAtTable(Customer c, int table){
 		myCustomers.add(new MyCustomer(c, table, customerState.waiting)); //start c in waiting
-		if(name.equals("lazy"))
-			wantToGoOnBreak = true;
+//		if(name.equals("lazy"))
+//			wantToGoOnBreak = true;
 		stateChanged();	
 		
 	}
@@ -235,7 +235,6 @@ public class WaiterRole extends WorkRole implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
-
 		if(!atWork) {
 			goToWork();
 			return true;
@@ -315,6 +314,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	// Actions ///////////////////////////##################################################
 
 	private void goToWork() {
+
 		doGoToWork();
 		atWork = true; 
 	}
@@ -411,7 +411,9 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	// The animation DoXYZ() routines
 	private void doGoToWork() {
-		waiterGui.DoGoAway(idleFactor);
+		atWork = true;
+		waiterGui.DoGoToDesk(idleFactor);
+		acquireSemaphore(active);
 	}
 	
 	private void doGoToTable(Customer customer, int table) {
@@ -508,7 +510,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	
 	public void setGui(WaiterGui gui) {
 		waiterGui = gui;
-		waiterGui.DoGoAway(idleFactor);
+//		waiterGui.DoGoAway(idleFactor);
 	}
 
 	public WaiterGui getGui() {
@@ -539,8 +541,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

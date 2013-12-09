@@ -15,8 +15,8 @@ import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
-import agent.WorkRole;
 import agent.PersonAgent.HungerLevel;
+import agent.Role;
 import agent.interfaces.Person;
 
 /**
@@ -24,7 +24,7 @@ import agent.interfaces.Person;
  */
 
 //Build should not be problem
-public class CustomerRole extends WorkRole implements Customer {
+public class CustomerRole extends Role implements Customer {
 	private String name;
 //	private int hungerLevel = 5;        // determines length of meal
 	int tableXCoord;
@@ -478,7 +478,7 @@ public class CustomerRole extends WorkRole implements Customer {
 	
 	public void goToWaitPosition(int num) {
 		customerGui.updateWaitPosition(num);
-		Do("xXxXxX");
+//		Do("xXxXxX");
 	}
 
 	@Override
@@ -487,23 +487,7 @@ public class CustomerRole extends WorkRole implements Customer {
 		
 	}
 
-	@Override
-	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
-	}
 
 //	@Override
 //	public void msgFollowMeToTable(Waiter w, int x, int y, Map<String, Double> m) {

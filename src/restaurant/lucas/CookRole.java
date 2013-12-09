@@ -10,12 +10,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import bank.gui.BankBuilding;
+
 import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
+import restaurant.lucas.gui.RestaurantLucasBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 //import restaurant.HostAgent.Table;
 import agent.interfaces.Person;
@@ -123,11 +127,15 @@ public class CookRole extends WorkRole implements Cook {
 	private List<MarketRole> markets = new ArrayList<MarketRole>();
 //	map<String, int> cookTimes; 
 	
+
+	
+	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
 
 		atWork = false;
 		
+
 		this.CookTimer = new Timer();
 		this.cookingTimes = new HashMap<String, Integer>();
 		
@@ -304,9 +312,21 @@ public class CookRole extends WorkRole implements Cook {
 
 	// Actions ///////////////////
 	private void goToWork() {
+		cookGui.DoGoAboveKitchen();
+		acquireSemaphore(active);
 		cookGui.DoGoToDesk();
 		acquireSemaphore(active);
 		atWork = true;
+	}
+	
+	private void leaveWork() {
+		cookGui.DoGoAboveKitchen();
+		acquireSemaphore(active);
+		cookGui.DoLeaveRestaurant();
+		acquireSemaphore(active);
+		
+		atWork = false;
+		deactivate();
 	}
 	
 	private void CookOrder(Order o, final int orderNum) {

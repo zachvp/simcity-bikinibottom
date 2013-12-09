@@ -142,6 +142,18 @@ public class CookGui implements Gui{
 		yDestination = p.y;
 	}
 	
+	public void DoGoAboveKitchen() {
+		canRelease =true;
+		xDestination = deskX;
+		yDestination = 30;
+	}
+	
+	public void DoLeaveRestaurant() {
+		canRelease = true;
+		xDestination = entranceX;
+		yDestination = entranceY;
+	}
+	
 	public void DoGoIdle() {
 		canRelease = false;
 		xDestination = 530;

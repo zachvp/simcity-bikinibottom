@@ -53,19 +53,24 @@ public class RestaurantLucasBuilding extends Building {
 		cashier = new CashierRole(null, this);
 		cook = new CookRole(null, this);
 		
+		//give roles to host so host can end work day
+		host.addRole(cashier);
+		host.addRole(cook);
+		
 		//Create GUIS
 		HostGui hostGui = new HostGui(host);
 		CookGui cookGui = new CookGui(cook);
-		//TODO cashier gui
+		CashierGui cashierGui = new CashierGui(cashier);
 		
 		//add guis to roles
 		host.setGui(hostGui);
 		cook.setGui(cookGui);
+		cashier.setGui(cashierGui);
 		
 		//add to animation panel
 		restaurantGui.getAnimationPanel().addGui(hostGui);
 		restaurantGui.getAnimationPanel().addGui(cookGui);
-
+		restaurantGui.getAnimationPanel().addGui(cashierGui);
 		
 		
 		waiters = new ArrayList<WaiterRole>();
@@ -75,6 +80,9 @@ public class RestaurantLucasBuilding extends Building {
 			WaiterRole w = new WaiterRole(null, this);
 			w.setIdlePosition(i);
 			waiters.add(w);
+			
+			//give roles to host so host can end work day
+			host.addRole(w);
 			
 			// Set references between the waiter and other roles
 			w.setOtherRoles(host, cook, cashier);

@@ -7,12 +7,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+
+import bank.interfaces.AccountManager;
 
 import restaurant.lucas.gui.HostGui;
+import restaurant.lucas.gui.RestaurantLucasBuilding;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Host;
 import restaurant.lucas.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
@@ -31,6 +36,10 @@ public class HostRole extends WorkRole implements Host {
 	public Collection<Table> tables;
 	public List<MyWaiter> myWaiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
+	private Semaphore active = new Semaphore(0);//overall semaphore
+
+	List<WorkRole> workRoles = Collections.synchronizedList(new ArrayList<WorkRole>());
+	
 	public int waiterChoice = 0;
 	
 	private Map<Integer, Dimension> tableMap = new HashMap<Integer, Dimension>();
@@ -44,6 +53,8 @@ public class HostRole extends WorkRole implements Host {
 	public HostGui hostGui = null;
 	
 	int occupiedNum = 0;
+	
+	boolean atWork;
 	
 	public enum waiterState {working, breakRequested, onBreak};
 	
@@ -59,9 +70,35 @@ public class HostRole extends WorkRole implements Host {
 		List<CustomerRole> customers = new ArrayList<CustomerRole>();
 	}
 
+	
+	ScheduleTask closeTask = ScheduleTask.getInstance();
+	boolean endWorkDay = false;;
+	
+	
 	public HostRole(Person p, CityLocation c) {
 		super(p, c);
 		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				//do stuff
+				
+				msgLeaveWork();
+				
+//				System.out.println("ClOCKS RUN");
+				}
+			
+		};
+		
+		// every day at TIME to end
+		int closeHour = ((RestaurantLucasBuilding) c).getClosingHour();
+		int closeMinute = ((RestaurantLucasBuilding) c).getClosingMinute();
+		closeTask.scheduleDailyTask(command, closeHour, closeMinute);
+	
+		
+		
+		
+		atWork = false;
 		Dimension t1 = new Dimension(100, 100);
 		Dimension t2 = new Dimension(200, 100);
 		Dimension t3 = new Dimension(300, 100);
@@ -108,6 +145,11 @@ public class HostRole extends WorkRole implements Host {
 	
 	// MESSAGES//////////////////////#########################################################
 
+	public void msgLeaveWork() {
+		endWorkDay = true;
+		stateChanged();
+	}
+	
 	public void msgIWantFood(CustomerRole cust) {
 		waitingCustomers.add(cust);
 		stateChanged();
@@ -162,6 +204,11 @@ public class HostRole extends WorkRole implements Host {
 //			waitingCustomers.get(0).msgSetWaitingPosition(waitingPositionNum);
 //			waitingPositionNum++;
 //		}
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		synchronized(tables) {
 			for (Table table : tables) {
 				if (!table.isOccupied()) {
@@ -195,6 +242,11 @@ public class HostRole extends WorkRole implements Host {
 			}
 		}
 		
+		if(endWorkDay) {
+			endWorkDay();
+			return true;
+		}
+		
 		
 		return false;
 		//we have tried all our rules and found
@@ -203,6 +255,29 @@ public class HostRole extends WorkRole implements Host {
 	}
 
 	// Actions
+	private void endWorkDay() {//tells all employees to leave
+		if(waitingCustomers.isEmpty()){
+			for(WorkRole r: workRoles) {
+				r.msgLeaveWork();
+			}
+			goOffWork();
+			this.deactivate();
+			atWork = false;
+		}
+	}
+	
+	
+	private void goOffWork() {
+			addPaycheckToWallet();
+			doEndWorkDay();
+			acquireSemaphore(active);
+			this.deactivate();
+	}
+	
+	private void doEndWorkDay() {
+		hostGui.DoEndWorkDay();
+	}
+	
 	private WaiterRole chooseWaiter() {
 		 //chooses different waiter by increasing by one every time called if more available
 		while(!myWaiters.isEmpty()){
@@ -217,6 +292,12 @@ public class HostRole extends WorkRole implements Host {
 		return null;
 
 	}
+	
+	private void goToWork() {
+		hostGui.DoGoToDesk();
+		acquireSemaphore(active);
+		atWork = true;
+	}
 
 	private void seatCustomer(CustomerRole customer, Table table, WaiterRole waiter) {
 
@@ -225,9 +306,21 @@ public class HostRole extends WorkRole implements Host {
 		mw.noCustomers = false;
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
+		hostGui.DoDirectAWaiter();
+		acquireSemaphore(active);
+		hostGui.DoGoToDesk();
+		acquireSemaphore(active);
 		waiter.msgSitAtTable(customer, table.tableNumber);
 		
 
+	}
+
+	private void acquireSemaphore(Semaphore s) {
+		try {
+			s.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// The animation DoXYZ() routines
@@ -246,6 +339,14 @@ public class HostRole extends WorkRole implements Host {
 	}
 	//utilities
 
+	public void addRole(WorkRole r) {
+		workRoles.add(r);
+	}
+	
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(300.0);
+	}
+	
 	public MyWaiter findMyWaiter(WaiterRole w) {
 		for(MyWaiter mw: myWaiters) {
 			if(mw.waiter == w)
@@ -290,6 +391,10 @@ public class HostRole extends WorkRole implements Host {
 
 	public HostGui getGui() {
 		return hostGui;
+	}
+	
+	public void msgAtDestination() {
+		active.release();
 	}
 
 	private class Table {
@@ -381,10 +486,6 @@ public class HostRole extends WorkRole implements Host {
 		return false;
 	}
 
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
-	}
+
 }
 

@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.concurrent.Semaphore;
 
+import restaurant.lucas.gui.CashierGui;
 import restaurant.lucas.gui.HostGui;
 import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Customer;
@@ -39,10 +41,15 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	private String name;
 
-	public HostGui hostGui = null;
+	public CashierGui cashierGui = null;
 	
 	private double money = 1000;
 	
+	boolean atWork;
+	
+	private Semaphore active = new Semaphore(0);//overall semaphore
+
+
 //	boolean marketPaymentRequested = false;//handles paying market
 
 	
@@ -137,6 +144,8 @@ public class CashierRole extends WorkRole implements Cashier {
 	public CashierRole(Person p, CityLocation c) {
 		super(p, c);
 		
+		atWork = false;
+		
 		getPriceMenu().put("Tofu", 15.99);//populates pricemenu map
 		getPriceMenu().put("Rice", 10.99);
 		getPriceMenu().put("Sushi", 5.99);
@@ -182,6 +191,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	 */
 	public boolean pickAndExecuteAnAction() {
 		
+		if(!atWork) {
+			goToWork();
+			return true;
+		}
+		
 		synchronized(myCustomers) {
 			for(MyCustomer mc : myCustomers) {
 				if(mc.getState()== customerState.doneEating) {
@@ -215,8 +229,28 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	// Actions ///////////////////
+	
+	private void goToWork() {
+		cashierGui.DoGoToDesk();
+		acquireSemaphore(active);
+		atWork = true;
+	}
+	
+	private void acquireSemaphore(Semaphore a) {
+		try {
+			a.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	private void calculateBill(MyCustomer mc) {
 		Do("calculateBill");
+		cashierGui.DoDirectAWaiter();
+		acquireSemaphore(active);
+		cashierGui.DoGoToDesk();
+		acquireSemaphore(active);
 		double price = getPriceMenu().get(mc.getChoice());
 		mc.waiter.msgHereIsCheck(mc.getCustomer(), price);
 	}
@@ -258,16 +292,16 @@ public class CashierRole extends WorkRole implements Cashier {
 		 return null;
 	}
 
-	public void setGui(HostGui gui) {
-		hostGui = gui;
+	public void setGui(CashierGui gui) {
+		cashierGui = gui;
 	}
 	
 	public List<MyCustomer> getMyCustomers() {
 		return myCustomers;
 	}
 
-	public HostGui getGui() {
-		return hostGui;
+	public CashierGui getGui() {
+		return cashierGui;
 	}
 
 
@@ -292,6 +326,10 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	public void setPriceMenu(Map<String, Double> priceMenu) {
 		this.priceMenu = priceMenu;
+	}
+	
+	public void msgAtDestination() {
+		active.release();
 	}
 
 

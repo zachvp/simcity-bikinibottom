@@ -8,14 +8,15 @@ package restaurant.lucas.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import restaurant.lucas.CashierRole;
 import restaurant.lucas.HostRole;
 
 import agent.gui.Gui;
 
 
-public class HostGui implements Gui {
+public class CashierGui implements Gui {
 
-    private HostRole agent = null;
+    private CashierRole agent = null;
 
 
     private int xPos = -20, yPos = -20;//default waiter position
@@ -25,7 +26,7 @@ public class HostGui implements Gui {
     public static final int yTable = 250;
     public static final int agentDim = 20;
     
-    private int deskX = 30;
+    private int deskX = 400;
     private int deskY = 0;
 
     int entranceX = -30; 
@@ -33,7 +34,7 @@ public class HostGui implements Gui {
 
     boolean canRelease = false;
     
-    public HostGui(HostRole agent) {
+    public CashierGui(CashierRole agent) {
         this.agent = agent;
         xPos = entranceX;
         yPos = entranceY;
@@ -75,12 +76,6 @@ public class HostGui implements Gui {
     public void DoBringToTable(int x, int y) {
         xDestination = x + agentDim;
         yDestination = y - agentDim;
-    }
-    
-    public void DoEndWorkDay() {
-    	canRelease = true;
-    	xDestination = entranceX;
-    	yDestination = entranceY;
     }
     
     public void DoDirectAWaiter(){

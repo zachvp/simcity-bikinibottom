@@ -68,7 +68,7 @@ public class LayoutGui implements Gui {
 	        cashierArea.setColor(Color.BLACK);
 	        cashierArea.fillRect(400, 0, 50, 20);
 	        cashierArea.setColor(Color.WHITE);
-	        cashierArea.drawString("Cashier", 400, 15);
+	        //cashierArea.drawString("Cashier", 400, 15);
 	        
 	        //Cook and Waiter areas
 
@@ -76,7 +76,8 @@ public class LayoutGui implements Gui {
 	        waiterIdleArea.fillRect(200, 0, 140, 22);
 	        
 	        
-	        //Grill and Plating areas
+	        //Grill and Plating areas (and fridge)
+	        //FRIDGE
 			g.setColor(Color.BLUE);
 			g.fillRect(520, 145, 30, 20);
 			//Grills

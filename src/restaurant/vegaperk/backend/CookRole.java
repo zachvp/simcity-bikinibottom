@@ -1,9 +1,11 @@
 package restaurant.vegaperk.backend;
 
+import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
@@ -63,9 +65,8 @@ public class CookRole extends WorkRole implements Cook {
 		}
 	});
 
-	public CookRole(String name) {
-		super();
-		this.name = name;
+	public CookRole(Person person, CityBuilding building) {
+		super(person, building);
 		
 		for(int i = 0; i < 4; i++){
 			int startY = 50;

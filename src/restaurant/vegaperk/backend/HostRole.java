@@ -1,6 +1,8 @@
 package restaurant.vegaperk.backend;
 
+import CommonSimpleClasses.CityBuilding;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
@@ -36,10 +38,9 @@ public class HostRole extends WorkRole {
 
 	private String name;
 
-	public HostRole(String name) {
-		super();
+	public HostRole(Person person, CityBuilding building) {
+		super(person, building);
 		
-		this.name = name;
 		// make some tables
 		synchronized(tables){
 			for (int ix = 0; ix < NTABLES; ix++) {

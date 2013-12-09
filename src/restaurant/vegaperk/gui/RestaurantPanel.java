@@ -6,6 +6,7 @@ import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
 import restaurant.vegaperk.backend.WaiterAgent;
+import gui.Building;
 
 import javax.swing.*;
 
@@ -24,21 +25,22 @@ import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
-
+	Building building;
+	
     //Host, cook, waiters and customers
 	private ArrayList<Role> agentList = new ArrayList<Role>();
     
     private PersonAgent hostPerson;
-    private HostRole host = new HostRole("Mr. Krabs");
+    private HostRole host;
     
     // TODO the table map should be stored in the table gui
-    private TableGui tableGui = new TableGui(host.getTableMap());
+    private TableGui tableGui;
     
     private PersonAgent cookPerson;
-    private CookRole cook = new CookRole("Cook");
+    private CookRole cook;
     
     private PersonAgent cashierPerson;
-    private CashierRole cashier = new CashierRole("Squidward");
+    private CashierRole cashier;
     
     private MarketAgent m1 = new MarketAgent("Market 1");
     private MarketAgent m2 = new MarketAgent("Market 2");
@@ -53,9 +55,21 @@ public class RestaurantPanel extends JPanel {
 
     private RestaurantGui gui; //reference to main gui
     
-    private CookGui cookGui = new CookGui(cook, gui);
+    private CookGui cookGui;
 
-    public RestaurantPanel(RestaurantGui gui) {
+    public RestaurantPanel(RestaurantGui gui, Building building) {
+    	this.building = building;
+    	
+    	// make the new roles for the building
+    	this.host = new HostRole(hostPerson, building);
+    	
+    	this.cook = new CookRole(cookPerson, building);
+    	this.cookGui = new CookGui(cook, gui);
+    	
+    	this.cashier = new CashierRole(cashierPerson, building);
+    	
+    	this.tableGui = new TableGui(host.getTableMap());
+    	
     	// add all of the agents to the list so they can be paused
     	agentList.add(cook);
     	agentList.add(host);
@@ -160,7 +174,7 @@ public class RestaurantPanel extends JPanel {
     		// new role and person stuff
     		PersonAgent person = new PersonAgent("Customer");
     		
-    		CustomerRole c = new CustomerRole(person, null);
+    		CustomerRole c = new CustomerRole(person, building);
     		CustomerGui g = new CustomerGui(c, gui);
     		
     		person.addRole(c);

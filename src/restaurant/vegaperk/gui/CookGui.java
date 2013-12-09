@@ -40,12 +40,13 @@ public class CookGui implements Gui{
 	private static final int fridgeY = 200;	
 	
 	public CookGui(CookRole c, RestaurantGui gui){ //HostAgent m) {
-		agent = c;
+		this.agent = c;
+		this.gui = gui;
+		
 		xPos = homeX;
 		yPos = homeY;
 		xDestination = xPos;
 		yDestination = yPos;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {

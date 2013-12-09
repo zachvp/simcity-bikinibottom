@@ -15,7 +15,7 @@ import restaurant.vegaperk.gui.RestaurantGui;
 public class RestaurantBuilding extends Building {
 	private XYPos entrancePos;
 	
-	private RestaurantGui gui = new RestaurantGui();
+	private RestaurantGui gui = new RestaurantGui(this);
 	
 	private Map<Person, CustomerRole> existingCustomerRoles = new HashMap<Person, CustomerRole>();
 	

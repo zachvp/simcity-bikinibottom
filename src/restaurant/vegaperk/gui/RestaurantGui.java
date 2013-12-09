@@ -3,6 +3,7 @@ package restaurant.vegaperk.gui;
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.WaiterAgent;
 import gui.AnimationPanel;
+import gui.Building;
 
 import javax.swing.*;
 
@@ -28,7 +29,7 @@ public class RestaurantGui extends JPanel{
      * the staff listing, menu, and lists of current customers all constructed
      * in RestaurantPanel()
      */
-    private RestaurantPanel restPanel = new RestaurantPanel(this);
+    private RestaurantPanel restPanel;
     
     private JPanel imagePanel;
     private JLabel imageLabel;// part of imagePanel
@@ -37,7 +38,9 @@ public class RestaurantGui extends JPanel{
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
      */
-    public RestaurantGui() {    	
+    public RestaurantGui(Building building) {
+    	this.restPanel = new RestaurantPanel(this, building);
+    	
         int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
         int WINDOWY = Constants.ANIMATION_PANEL_HEIGHT;
 

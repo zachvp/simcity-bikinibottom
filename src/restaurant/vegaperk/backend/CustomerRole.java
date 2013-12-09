@@ -8,7 +8,6 @@ import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
-import agent.Role;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -103,7 +102,7 @@ public class CustomerRole extends WorkRole implements Customer {
 	 */
 	public CustomerRole(Person person, Building building){
 		super(person, building);
-		
+		this.name = super.getName();
 		
 		bill = 0.00;
 		if(name.equals("poor")){

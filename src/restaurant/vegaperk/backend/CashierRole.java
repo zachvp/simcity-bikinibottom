@@ -1,6 +1,8 @@
 package restaurant.vegaperk.backend;
 
+import CommonSimpleClasses.CityBuilding;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import gui.trace.AlertTag;
 
 import java.text.DecimalFormat;
@@ -28,11 +30,10 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	// create an anonymous Map class to initialize the foods and cook times
 
-	public CashierRole(String name) {
-		super();
-		this.name = name;
+	public CashierRole(Person person, CityBuilding building) {
+		super(person, building);
 		
-		setCustomers(Collections.synchronizedList(new ArrayList<MyCustomer>()));
+		this.customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	}
 
 	/** Accessor and setter methods */

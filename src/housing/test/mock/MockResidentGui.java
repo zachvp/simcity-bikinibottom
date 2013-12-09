@@ -56,4 +56,10 @@ public class MockResidentGui implements ResidentGui {
 	public void DoShowSpeech(String speech) {
 		log.add("Say " + speech);
 	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
 }

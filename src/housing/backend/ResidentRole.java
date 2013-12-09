@@ -78,12 +78,12 @@ public class ResidentRole extends Role implements Resident {
 	 * Food is kept in the refrigerator and encapsulates all
 	 * the relevant data needed for inventory management.
 	 */
-	public class Food{
+	public class Food {
 		String type;
 		FoodState state;
 		int amount, cookTime, low, capacity;
 		
-		private Food(String type, int amount, int low, int capacity, int cookTime){
+		private Food(String type, int amount, int low, int capacity, int cookTime) {
 			this.type = type;
 			this.amount = amount;
 			this.low = low;
@@ -102,6 +102,7 @@ public class ResidentRole extends Role implements Resident {
 		this.dwelling = dwelling;
 		
 		this.gui = new ResidentRoleGui(this, gui);
+		this.gui.setName(agent.getName());
 	}
 	
 	/* ----- Messages ----- */
@@ -189,7 +190,9 @@ public class ResidentRole extends Role implements Resident {
 			// resident role will deactivate after the delay below
 			listener.taskFinished(schedule);
 			schedule.scheduleTaskWithDelay(command, IMPATIENCE_TIME * Constants.MINUTE);
+			
 			timerSet = true;
+			
 			return true;
 		}
 		

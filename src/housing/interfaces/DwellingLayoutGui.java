@@ -10,4 +10,6 @@ public interface DwellingLayoutGui {
 	public Dimension getStovePosition();
 
 	public Dimension getRefrigeratorPosition();
+
+	public int getID();
 }

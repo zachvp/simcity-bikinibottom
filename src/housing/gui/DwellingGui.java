@@ -23,6 +23,9 @@ import agent.gui.Gui;
 public class DwellingGui implements Gui, DwellingLayoutGui {
 	/* --- Layout Item Positions --- */
 	
+	// position index of unit
+	private int ID = -1;
+	
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
@@ -52,6 +55,8 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 	ScheduleTask move = ScheduleTask.getInstance(); 
 	
 	public DwellingGui(int index) {
+		this.ID = index;
+		
 		ROOM_WIDTH = Constants.ANIMATION_PANEL_WIDTH / 3;
 		ROOM_HEIGHT = Constants.ANIMATION_PANEL_HEIGHT / 3;
 		
@@ -132,6 +137,11 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 	
 	public Dimension getRefrigeratorPosition() {
 		return REFRIGERATOR_POSITION;
+	}
+
+	@Override
+	public int getID() {
+		return this.ID;
 	}
 
 }

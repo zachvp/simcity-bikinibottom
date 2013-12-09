@@ -32,7 +32,7 @@ public interface Waiter {
 
 	public void msgReadyToPay(CustomerRole c, String food);
 
-	public void msgBill(int price, Customer c);
+	public void msgBill(double price, Customer c);
 
 	public void msgImLeaving(CustomerRole c);
 

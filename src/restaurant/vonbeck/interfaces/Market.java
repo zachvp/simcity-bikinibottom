@@ -12,6 +12,6 @@ public interface Market {
 	//Scheduler
 	public abstract boolean pickAndExecuteAnAction();
 
-	public abstract void msgPay(int price);
+	public abstract void msgPay(double price);
 
 }

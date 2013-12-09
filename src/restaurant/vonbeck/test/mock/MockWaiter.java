@@ -1,6 +1,6 @@
 package restaurant.vonbeck.test.mock;
 
-import restaurant.vonbeck.CashierAgent;
+import restaurant.vonbeck.CashierRole;
 import restaurant.vonbeck.CustomerRole;
 import restaurant.vonbeck.Table;
 import restaurant.vonbeck.gui.WaiterGui;
@@ -9,7 +9,7 @@ import restaurant.vonbeck.interfaces.Waiter;
 
 public class MockWaiter extends Mock implements Waiter {
 
-	public CashierAgent cashier;
+	public CashierRole cashier;
 
 	public MockWaiter(String name) {
 		super(name);

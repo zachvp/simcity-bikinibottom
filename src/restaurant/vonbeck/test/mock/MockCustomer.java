@@ -3,8 +3,8 @@ package restaurant.vonbeck.test.mock;
 
 import java.util.Map;
 
-import restaurant.vonbeck.HostAgent;
-import restaurant.vonbeck.WaiterAgent;
+import restaurant.vonbeck.HostRole;
+import restaurant.vonbeck.WaiterRole;
 import restaurant.vonbeck.gui.CustomerGui;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
@@ -46,7 +46,7 @@ public class MockCustomer extends Mock implements Customer {
 	}
 
 	@Override
-	public void setHost(HostAgent host) {
+	public void setHost(HostRole host) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -58,7 +58,7 @@ public class MockCustomer extends Mock implements Customer {
 	}
 
 	@Override
-	public void msgSitAtTable(int tableNum, WaiterAgent w,
+	public void msgSitAtTable(int tableNum, WaiterRole w,
 			Map<String, Integer> menu) {
 		// TODO Auto-generated method stub
 		

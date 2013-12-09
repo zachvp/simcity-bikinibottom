@@ -11,6 +11,7 @@ import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import agent.Agent;
 import agent.Role;
+import agent.PersonAgent.HungerLevel;
 
 /**
  * Restaurant customer agent.
@@ -23,18 +24,15 @@ public class CustomerRole extends Role implements Customer {
 	private String currentPlate = "";
 	private int hungerLevel = 5;        // determines length of meal
 	private int tableNumber = 0;
-	private Map<String, Integer> foodList;
+	private Map<String, Double> foodList;
 	private String foodToOrder;
 	Timer timer = new Timer();
 	private CustomerGui customerGui;
 	// agent correspondents
-	private HostAgent host;
-	private WaiterAgent waiter;
+	private HostRole host;
+	private WaiterRole waiter;
 	private Cashier cashier;
-	private int wallet = 0;
-	private int debt = 0;
-
-	private int priceToPay;
+	private double priceToPay;
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -58,7 +56,7 @@ public class CustomerRole extends Role implements Customer {
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(HostAgent host) {
+	public void setHost(HostRole host) {
 		this.host = host;
 	}
 
@@ -68,7 +66,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 	
 	//Messages
-	public void msgSitAtTable(int tableNum, WaiterAgent w, Map<String, Integer> menu) {
+	public void msgSitAtTable(int tableNum, WaiterRole w, Map<String, Double> menu) {
 		Do("Received msgSitAtTable");
 		event = AgentEvent.followHost;
 		tableNumber = tableNum;
@@ -107,10 +105,10 @@ public class CustomerRole extends Role implements Customer {
 		stateChanged();
 	}
 
-	public void msgBill(int total, Cashier cashier2) {
+	public void msgBill(double total, Cashier cashier2) {
 		this.cashier = cashier2;
 		priceToPay = total;
-		wallet -= priceToPay;
+		getPerson().getWallet().subtractCash(priceToPay);
 		event = AgentEvent.doneEating;
 		
 		stateChanged();
@@ -170,7 +168,7 @@ public class CustomerRole extends Role implements Customer {
 		}
 		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 			state = AgentState.DoingNothing;
-			//no action
+			deactivate();
 			return true;
 		}
 		return false;
@@ -180,19 +178,6 @@ public class CustomerRole extends Role implements Customer {
 	
 	public void gotHungry() {//from animation
 		Do("I'm hungry");
-		
-		boolean hasANumberName = true;
-		try { 
-	        wallet = Integer.parseInt(name);
-	    } catch(NumberFormatException e) { 
-	    	hasANumberName = false; 
-	    }
-		
-		if (!hasANumberName) {
-			wallet = 500+(int)(Math.random()*800);
-		}
-		
-		wallet += debt;
 		
 		getCustomerGui().DoGoToWaitZone();
 		
@@ -207,15 +192,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	private void pay() {
-		if (wallet >= 0) cashier.msgPay(this, priceToPay);
-		else {
-			int temp = -wallet;
-			wallet = 0;
-			debt = temp;
-			Do("Hey, I purposly ordered something I don't have money to pay for, because that's just how I was born.");
-			cashier.msgIDontHaveEnoughMoney(this, priceToPay, temp);
-			Do("LOL. K, thanks.");
-		}
+		cashier.msgPay(this, priceToPay);
 		event = AgentEvent.donePaying;
 		
 		stateChanged();
@@ -236,24 +213,6 @@ public class CustomerRole extends Role implements Customer {
 			}
 		}
 		
-		List<String> foodTooExpensive = new ArrayList<String>();
-		
-		for(Map.Entry<String, Integer> food : foodList.entrySet()) {
-			if (food.getValue() > wallet) {
-				foodTooExpensive.add(food.getKey());
-			}
-		}
-		
-		int lastDigitOfWallet = wallet - ((wallet/10)*10);
-		
-		/*
-		 * Hack, people do not care about food prices if the number of
-		 * cents in their wallet ends with 6
-		 */
-		if (lastDigitOfWallet != 6) for (String food : foodTooExpensive) {
-			foodList.remove(food);
-		}
-		
 		if (foodList.size() > 0) {
 			int choiceNum = (int)(Math.random()*(foodList.size()));
 			foodToOrder = (String) foodList.keySet().toArray()[choiceNum];
@@ -264,6 +223,12 @@ public class CustomerRole extends Role implements Customer {
 			Do("There is no food that I can eat :(");
 			state = AgentState.Paying;
 			event = AgentEvent.donePaying;
+			try {
+				throw new Exception ("Customer doesn't have any eating posibilities"
+						+ " in this restaurant. This shouldn't happen.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		stateChanged();
@@ -272,12 +237,6 @@ public class CustomerRole extends Role implements Customer {
 
 	private void goToRestaurant() {
 		Do("Going to restaurant");
-		
-		if (debt > 0) {
-			Do("Hey I'm back to pay my debt, only because it is required of me by the assignment table left by the prophets.");
-			cashier.msgPayDebt(this, debt);
-			wallet -= debt;
-		}
 		
 		host.msgIWantFood(this);//send our instance, so he can respond to us
 	}
@@ -303,6 +262,7 @@ public class CustomerRole extends Role implements Customer {
 			public void run() {
 				Do("Done eating, cookie=" + cookie);
 				customerGui.DoClearFood();
+				person.setHungerLevel(HungerLevel.FULL);
 				askForBill();
 				//isHungry = false;
 				stateChanged();
@@ -359,6 +319,11 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	public void setCustomerGui(CustomerGui customerGui) {
 		this.customerGui = customerGui;
+	}
+	
+	public void activate() {
+		super.activate();
+		customerGui.setHungry();
 	}
 
 

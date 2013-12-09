@@ -4,33 +4,36 @@ package restaurant.vonbeck.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import restaurant.vonbeck.WaiterAgent;
+import restaurant.vonbeck.WaiterRole;
 import restaurant.vonbeck.interfaces.Customer;
 import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private WaiterRole agent = null;
     
     private final int CUST_WAIT_POS_X = 75;
     private final int CUST_WAIT_POS_Y = 75;
-    private final int SPAWN_POS_X = 20;
-    private final int SPAWN_POS_Y = 20;
-    private final int COOK_POS_X = 430;
-    private final int COOK_POS_Y = 120;
-    private final int CASH_POS_X = 85;
-    private final int CASH_POS_Y = 400;
+    private final int SPAWN_POS_X = -20;
+    private final int SPAWN_POS_Y = 80;
+    private final int COOK_POS_X = LayoutGui.KITCHENX-20-32;
+    private final int COOK_POS_Y = LayoutGui.KITCHENY+32;
+    final static int CASH_POS_X = 85;
+    final static int CASH_POS_Y = 380;
 
     private int xPos = SPAWN_POS_X, yPos = SPAWN_POS_Y;//default waiter position
-    private int xDestination = CUST_WAIT_POS_X, yDestination = CUST_WAIT_POS_Y;//default start position
+    private int xDestination = SPAWN_POS_X, yDestination = SPAWN_POS_X;//default start position
 
-    private static final int xTable = 200;
-    private static final int yTable = 250;
+    private static final int xTable = LayoutGui.TABLEX;
+    private static final int yTable = (int) (LayoutGui.TABLEY+1.5*LayoutGui.TABLEH);
 
 	private static final int TABLE_SEPARATION = 75;
 
 	private static final int CENTER_POS_X = 200;
-	private static final int CENTER_POS_Y = 130;
+	private static final int CENTER_POS_Y = 230;
+
+	private static final int OUT_POS_X = -40;
+	private static final int OUT_POS_Y = 100;
 	
     private final int HOSTW = 20;
     private final int HOSTH = 20;
@@ -42,7 +45,7 @@ public class WaiterGui implements Gui {
 	private int waiterNum;
     
     
-    public WaiterGui(WaiterAgent agent, int waiterNum) {
+    public WaiterGui(WaiterRole agent, int waiterNum) {
         this.agent = agent;
         this.waiterNum = waiterNum;
     }
@@ -85,7 +88,7 @@ public class WaiterGui implements Gui {
 
     public void DoBringToTable(Customer cust, int tableNumber) {
         xDestination = xTable + (tableNumber-1)*TABLE_SEPARATION  + 20;
-        yDestination = yTable   - 20;
+        yDestination = yTable + 20;
         moving = true;
     }
 
@@ -120,9 +123,15 @@ public class WaiterGui implements Gui {
     
     public void DoGoToCustomer(Customer customer) {
     	xDestination = customer.getCustomerGui().getxPos() - 20;
-    	yDestination = customer.getCustomerGui().getyPos() - 20;
+    	yDestination = customer.getCustomerGui().getyPos() + 20;
     	moving = true;
 		
+	}
+    
+    public void DoLeaveWork() {
+		xDestination = OUT_POS_X;
+        yDestination = OUT_POS_Y;
+        moving = true;
 	}
 
     public int getXPos() {

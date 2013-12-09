@@ -1,7 +1,7 @@
 package restaurant.vonbeck.test;
 
 import junit.framework.TestCase;
-import restaurant.vonbeck.CashierAgent;
+import restaurant.vonbeck.CashierRole;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 import restaurant.vonbeck.test.mock.MockCustomer;
 import restaurant.vonbeck.test.mock.MockMarket;
@@ -18,7 +18,7 @@ import restaurant.vonbeck.test.mock.MockWaiter;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	CashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer thief;
@@ -32,7 +32,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent(false);	// TODO Should I add a name?	
+		cashier = new CashierRole(false);	// TODO Should I add a name?	
 		customer = new MockCustomer("mockcustomer");
 		thief = new MockCustomer("thief");
 		waiter = new MockWaiter("mockwaiter");

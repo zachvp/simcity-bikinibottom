@@ -35,6 +35,7 @@ import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
+import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
 import transportation.interfaces.*;
@@ -254,7 +255,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantVonbeckBuilding restaurant = new RestaurantVonbeckBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);
 			}

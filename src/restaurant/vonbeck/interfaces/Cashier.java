@@ -5,13 +5,13 @@ import restaurant.vonbeck.interfaces.Waiter.Order;
 public interface Cashier {
 	void msgNeedBill(Order o);
 	
-	void msgPay(Customer c, int price);
+	void msgPay(Customer c, double priceToPay);
 	
 	public void msgIDontHaveEnoughMoney(Customer customerAgent,
-			int priceToPay, int moneyIOwe);
+			double priceToPay, double moneyIOwe);
 
-	public void msgPayDebt(Customer customerAgent, int debt);
+	public void msgPayDebt(Customer customerAgent, double debt);
 
-	void msgBillFromMarket(Integer integer, Market market);
+	void msgBillFromMarket(Double price, Market market);
 	
 }

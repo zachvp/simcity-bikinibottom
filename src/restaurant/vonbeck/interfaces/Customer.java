@@ -2,8 +2,8 @@ package restaurant.vonbeck.interfaces;
 
 import java.util.Map;
 
-import restaurant.vonbeck.HostAgent;
-import restaurant.vonbeck.WaiterAgent;
+import restaurant.vonbeck.HostRole;
+import restaurant.vonbeck.WaiterRole;
 import restaurant.vonbeck.gui.CustomerGui;
 
 /**
@@ -14,13 +14,13 @@ import restaurant.vonbeck.gui.CustomerGui;
  */
 public interface Customer {
 
-	public void setHost(HostAgent host);
+	public void setHost(HostRole host);
 
 	// Getting name
 	public String getCustomerName();
 	
 	//Messages
-	public void msgSitAtTable(int tableNum, WaiterAgent w, Map<String, Integer> menu);
+	public void msgSitAtTable(int tableNum, WaiterRole w, Map<String, Double> menu);
 
 	public void msgAnimationFinishedGoToSeat();
 	
@@ -32,7 +32,7 @@ public interface Customer {
 	
 	public void msgOutOfFood(String food);
 
-	public void msgBill(int total, Cashier cashier);
+	public void msgBill(double numData, Cashier cashier);
 	
 	public String getOrder();
 	

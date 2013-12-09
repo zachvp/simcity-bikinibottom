@@ -10,43 +10,48 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import restaurant.vonbeck.gui.RestaurantGui;
+import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import restaurant.vonbeck.gui.WaiterGui;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Waiter;
 import agent.Agent;
+import agent.Role;
+import agent.WorkRole;
 
 
 
-public class WaiterAgent extends Agent implements Waiter {
+public class WaiterRole extends WorkRole implements Waiter {
 	private static final long BREAK_MS = 12000;
 	private String name;
 	private Semaphore animating = new Semaphore(0,true);
 	private List<WaiterAction> actionQueue = Collections.synchronizedList(new ArrayList<WaiterAction>());
-	private Map<String, Integer> menuO = Collections.synchronizedMap(new HashMap<String, Integer>());
-	private HostAgent host;
+	private Map<String, Double> menuO = Collections.synchronizedMap(new HashMap<String, Double>());
+	private HostRole host;
 	private Cashier cashier;
 	private int customerCount = 0;
 	private WaiterGui waiterGui;
-	private CookAgent cook;
+	private CookRole cook;
 	private RestaurantGui gui;
 	
 	private BreakState breakState = BreakState.Working;
 	Timer timer = new Timer();
 	//Constructor
-	public WaiterAgent(HostAgent h, CashierAgent cash, CookAgent c, RestaurantGui g, String name, int waiterNum) {
+	public WaiterRole(HostRole h, CashierRole cash, CookRole c, 
+			RestaurantGui g, String name, int waiterNum,
+			RestaurantVonbeckBuilding building) {
+		super(building);
 		host = h;
 		cashier = cash;
 		cook = c;
 		gui = g;
 		waiterGui = new WaiterGui(this, waiterNum);
 		this.name = name;
-		menuO.put("Steak", 1599);
-		menuO.put("Chicken", 1099);
-		menuO.put("Salad", 599);
-		menuO.put("Pizza", 899);
+		menuO.put("Steak", 15.99);
+		menuO.put("Chicken", 10.99);
+		menuO.put("Salad", 5.99);
+		menuO.put("Pizza", 8.99);
 		g.getAnimationPanel().addGui(waiterGui);
-		startThread();
 	}
 	
 	
@@ -55,11 +60,11 @@ public class WaiterAgent extends Agent implements Waiter {
 	private abstract class WaiterAction {
 		public Customer cust;
 		public Table table;
-		public WaiterAgent waiter;
+		public WaiterRole waiter;
 		public Order order;
-		public HostAgent host;
-		public Map<String, Integer> menu;
-		public int numData;
+		public HostRole host;
+		public Map<String, Double> menu;
+		public double numData;
 
 		public abstract void run();
 		
@@ -77,7 +82,7 @@ public class WaiterAgent extends Agent implements Waiter {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				cust.msgSitAtTable(table.tableNumber,waiter,new HashMap<String,Integer>(menu));
+				cust.msgSitAtTable(table.tableNumber,waiter,new HashMap<String,Double>(menu));
 				DoSeatCustomer(cust, table);
 				try {
 					animating.acquire();
@@ -153,7 +158,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	public void msgReadyToPay(CustomerRole c, String food) {
 		WaiterAction action = new WaiterAction() {
 			public void run(){
-				waiter = (WaiterAgent) order.waiter;
+				waiter = (WaiterRole) order.waiter;
 				waiter.GoToCashier();
 				try {
 					animating.acquire();
@@ -171,7 +176,7 @@ public class WaiterAgent extends Agent implements Waiter {
 
 
 
-	public void msgBill(int price, Customer c) {
+	public void msgBill(double price, Customer c) {
 		
 		WaiterAction action = new WaiterAction() {
 			public void run(){
@@ -213,7 +218,7 @@ public class WaiterAgent extends Agent implements Waiter {
 	public void msgOutOfThis(Order o) {
 		WaiterAction action = new WaiterAction() {
 			public void run(){
-				waiter = (WaiterAgent) order.waiter;
+				waiter = (WaiterRole) order.waiter;
 				waiter.displayFood("Out of " + order.food);
 				waiter.GoToCustomer(order.customer);
 				try {
@@ -361,6 +366,43 @@ public class WaiterAgent extends Agent implements Waiter {
 	protected void guiImWorking() {
 		gui.setWaiterEnabled(this);
 
+	}
+
+	public void msgGoHome() {
+		WaiterAction action = new WaiterAction() {
+			public void run(){
+				waiterGui.DoLeaveWork();
+				try {
+					animating.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				deactivate();
+			}
+		};
+		actionQueue.add(action);
+		stateChanged();
+	}
+
+
+
+	@Override
+	public boolean isAtWork() {
+		return isActive();
+	}
+
+
+
+	@Override
+	public boolean isOnBreak() {
+		return false;
+	}
+
+
+
+	@Override
+	public void msgLeaveWork() {
+		// Do nothing, wait for host signal
 	}
 
 

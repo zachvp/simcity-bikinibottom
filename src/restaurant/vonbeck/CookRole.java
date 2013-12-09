@@ -6,15 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import restaurant.vonbeck.gui.CookGui;
 import restaurant.vonbeck.gui.FoodGui;
 import restaurant.vonbeck.gui.RestaurantGui;
+import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 import agent.Agent;
+import agent.Role;
+import agent.WorkRole;
 
 
-public class CookAgent extends Agent {
+public class CookRole extends WorkRole {
 	private static final long COOK_DELAY_MS = 5000;
 	private List<Order> orders 
 		= Collections.synchronizedList(new ArrayList<Order>());
@@ -28,6 +32,7 @@ public class CookAgent extends Agent {
 	private List<CookAction> actionQueue
 		= Collections.synchronizedList(new ArrayList<CookAction>());	
 	private FoodGui foodGui;
+	private CookGui cookGui;
 	
 	private abstract class CookAction {
 		Market market;
@@ -39,7 +44,10 @@ public class CookAgent extends Agent {
 	}
 	
 	@SuppressWarnings("unused")
-	public CookAgent(Cashier cashier, RestaurantGui gui) {
+	public CookRole(Cashier cashier, RestaurantGui gui, 
+			RestaurantVonbeckBuilding building) {
+		super(building);
+		
 		for (int i = 0; i < 3; i++)
 			markets.add(new MarketAgent(this, cashier));
 		
@@ -62,7 +70,13 @@ public class CookAgent extends Agent {
 		
 		foodGui = new FoodGui(gui);
 		
-		startThread();
+		this.cookGui = new CookGui(this);
+		gui.getAnimationPanel().addGui(cookGui);
+	}
+	
+	public void activate() {
+		super.activate();
+		cookGui.DoGoToWork();
 	}
 	
 	//Messages
@@ -245,6 +259,26 @@ public class CookAgent extends Agent {
 
 	public void removePlate() {
 		foodGui.removePlate();
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		//No action, wait for host signal	
+	}
+
+	public void msgGoHome() {
+		cookGui.DoLeaveWork();
+		deactivate();
 	}
 	
 	

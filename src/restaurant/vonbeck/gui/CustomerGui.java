@@ -18,17 +18,17 @@ public class CustomerGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToSeat, GoToCashier, LeaveRestaurant, GoToWaitZone};
 	private Command command=Command.noCommand;
-
-	private static final int xTable = 200;
-	private static final int yTable = 250;
 	private static final int HOME_POS_X = 55;
 	private static final int HOME_POS_Y = 55;
-	private final int CUSTOMER_INIT_POS_X = -40;
-	private final int CUSTOMER_INIT_POS_Y = -40;
-	private final int CUSTOMERW = 20;
-	private final int CUSTOMERH = 20;
-    private final int CASH_POS_X = 85;
-    private final int CASH_POS_Y = 400;
+	private static final int CUSTOMER_INIT_POS_X = -40;
+	private static final int CUSTOMER_INIT_POS_Y = -40;
+	private static final int CUSTOMERW = 20;
+	private static final int CUSTOMERH = 20;
+    private static final int CASH_POS_X = 85;
+    private static final int CASH_POS_Y = 380;
+    private static final int xTable = LayoutGui.TABLEX;
+	private static final int yTable = LayoutGui.TABLEY
+								+ LayoutGui.TABLEH - CUSTOMERH;
 	
 	private String foodLabel = "";
 	

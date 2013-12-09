@@ -16,22 +16,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import restaurant.vonbeck.CustomerRole;
-import restaurant.vonbeck.WaiterAgent;
+import restaurant.vonbeck.WaiterRole;
 import restaurant.vonbeck.interfaces.Waiter.BreakState;
 /**
  * Main GUI class.
  * Contains the main frame and subsequent panels
  */
 @SuppressWarnings("serial")
-public class RestaurantGui extends JFrame implements ActionListener {
+public class RestaurantGui implements ActionListener {
 	private static final int SPACE_FOR_ANIMATION_PANEL = 300;
 	private static final int WINDOWX = 750;
 	private static final int WINDOWY = 350;
 	/* The GUI has two frames, the control frame (in variable gui) 
      * and the animation frame, (in variable animationFrame within gui)
      */
-	JFrame animationFrame = new JFrame("Restaurant Animation");
-	private AnimationPanel animationPanel = new AnimationPanel();
+	//JFrame animationFrame = new JFrame("Restaurant Animation");
+	private AnimationPanel animationPanel;
 	
     /* restPanel holds 2 panels
      * 1) the staff listing, menu, and lists of current customers all constructed
@@ -51,45 +51,13 @@ public class RestaurantGui extends JFrame implements ActionListener {
     /**
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
+     * @param castedAnimationPanel 
      */
-    public RestaurantGui() {
+    public RestaurantGui(AnimationPanel animationPanel) {
     	
-    	animationPanel.addGui(new LayoutGui());
+    	this.animationPanel = animationPanel;
+        
     	
-    	restPanel = new RestaurantPanel(this);
-        
-    	setBounds(50, 50, WINDOWX, WINDOWY+SPACE_FOR_ANIMATION_PANEL);
-
-        setLayout(new BoxLayout((Container) getContentPane(), 
-        		BoxLayout.Y_AXIS));
-
-        Dimension restDim = new Dimension(WINDOWX, (int) (WINDOWY * .6));
-        restPanel.setPreferredSize(restDim);
-        restPanel.setMinimumSize(restDim);
-        restPanel.setMaximumSize(restDim);
-        add(restPanel);
-        
-        // Now, setup the info panel
-        Dimension infoDim = new Dimension(WINDOWX, (int) (WINDOWY * .25));
-        infoPanel = new JPanel();
-        infoPanel.setPreferredSize(infoDim);
-        infoPanel.setMinimumSize(infoDim);
-        infoPanel.setMaximumSize(infoDim);
-        infoPanel.setBorder(BorderFactory.createTitledBorder("Information"));
-
-        stateCB = new JCheckBox();
-        stateCB.setVisible(false);
-        stateCB.addActionListener(this);
-
-        infoPanel.setLayout(new GridLayout(1, 2, 30, 0));
-        
-        infoLabel = new JLabel(); 
-        infoLabel.setText("<html><pre><i>Click Add to make customers</i></pre></html>");
-        infoPanel.add(infoLabel);
-        infoPanel.add(stateCB);
-        add(infoPanel);
-        
-        add(getAnimationPanel());
         
         
     }
@@ -113,8 +81,8 @@ public class RestaurantGui extends JFrame implements ActionListener {
           // Hack. Should ask customerGui
             infoLabel.setText(
                "<html><pre>     Name: " + customer.getName() + " </pre></html>");
-        } else if (person instanceof WaiterAgent) {
-            WaiterAgent waiter = (WaiterAgent) person;
+        } else if (person instanceof WaiterRole) {
+            WaiterRole waiter = (WaiterRole) person;
             stateCB.setText("Break?");
           //Should checkmark be there? 
             stateCB.setSelected(waiter.getBreakState() != BreakState.Working);
@@ -135,8 +103,8 @@ public class RestaurantGui extends JFrame implements ActionListener {
                 CustomerRole c = (CustomerRole) currentPerson;
                 c.getGui().setHungry();
                 stateCB.setEnabled(false);
-            } else if (currentPerson instanceof WaiterAgent) {
-            	WaiterAgent w = (WaiterAgent) currentPerson;
+            } else if (currentPerson instanceof WaiterRole) {
+            	WaiterRole w = (WaiterRole) currentPerson;
             	w.msgGUIGoOnBreak();
             	stateCB.setEnabled(false);
             }
@@ -158,9 +126,9 @@ public class RestaurantGui extends JFrame implements ActionListener {
         }
     }
     
-    public void setWaiterEnabled(WaiterAgent w) {
-        if (currentPerson instanceof WaiterAgent) {
-            WaiterAgent wait = (WaiterAgent) currentPerson;
+    public void setWaiterEnabled(WaiterRole w) {
+        if (currentPerson instanceof WaiterRole) {
+            WaiterRole wait = (WaiterRole) currentPerson;
             if (w == wait) {
                 stateCB.setEnabled(true);
                 stateCB.setSelected(false);
@@ -180,14 +148,9 @@ public class RestaurantGui extends JFrame implements ActionListener {
 	public void setAnimationPanel(AnimationPanel animationPanel) {
 		this.animationPanel = animationPanel;
 	}
-	/**
-     * Main routine to get gui started
-     */
-    public static void main(String[] args) {
-        RestaurantGui gui = new RestaurantGui();
-        gui.setTitle("csci201 Restaurant");
-        gui.setVisible(true);
-        gui.setResizable(false);
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+	public void setRestPanel(RestaurantPanel restPanel) {
+		this.restPanel = restPanel;
+		
+		
+	}
 }

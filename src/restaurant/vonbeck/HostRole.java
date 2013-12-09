@@ -5,10 +5,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import restaurant.vonbeck.gui.HostGui;
 import restaurant.vonbeck.gui.RestaurantGui;
+import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Waiter.BreakState;
 import agent.Agent;
+import agent.Role;
+import agent.WorkRole;
 
 /**
  * Restaurant Host Agent
@@ -17,7 +21,7 @@ import agent.Agent;
 //does all the rest. Rather than calling the other agent a waiter, we called him
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
-public class HostAgent extends Agent {
+public class HostRole extends WorkRole {
 	static final int NTABLES = 3;//a global for the number of tables.
 	static final int NWAITERS = 2;
 	//note that tables is typed with Collection semantics.
@@ -28,14 +32,19 @@ public class HostAgent extends Agent {
 	//with List semantics.
 	private List<CustomerRole> waitingCustomers
 	= Collections.synchronizedList(new ArrayList<CustomerRole>());
-	private List<WaiterAgent> waiters = Collections.synchronizedList(new ArrayList<WaiterAgent>());
-	private CookAgent cook;
+	private List<WaiterRole> waiters = Collections.synchronizedList(new ArrayList<WaiterRole>());
+	private CookRole cook;
 	private Collection<Table> tables;
 	//note that tables is typed with Collection semantics.
 	//Later we will see how it is implemented
+	private CashierRole cashier;
+	private boolean leavingWork = false;
+	private HostGui hostGui;
 
-	public HostAgent(String name, RestaurantGui gui, CookAgent cook) {
-		super();
+	public HostRole(String name, RestaurantGui gui, 
+			CookRole cook, CashierRole cashier,
+			RestaurantVonbeckBuilding restaurantVonbeckBuilding) {
+		super(restaurantVonbeckBuilding);
 
 		this.name = name;
 		
@@ -45,7 +54,16 @@ public class HostAgent extends Agent {
 			tables.add(new Table(ix));//how you add to a collections
 		}
 		
+		this.hostGui = new HostGui(this);
+		gui.getAnimationPanel().addGui(hostGui);
+		
 		this.cook = cook;
+		this.cashier = cashier;
+	}
+	
+	public void activate() {
+		super.activate();
+		hostGui.DoGoToWork();
 	}
 
 	//Get name
@@ -102,10 +120,12 @@ public class HostAgent extends Agent {
 
 
 		if (!waiters.isEmpty()) {
+			
+			/*
 			synchronized (waiters) {
-				for (WaiterAgent waiter : waiters) {
-					if (waiter.getBreakState() == WaiterAgent.BreakState.WantBreak) {
-						for (WaiterAgent waiter2 : waiters) {
+				for (WaiterRole waiter : waiters) {
+					if (waiter.getBreakState() == WaiterRole.BreakState.WantBreak) {
+						for (WaiterRole waiter2 : waiters) {
 							if (waiter2 != waiter
 									&& waiter2.getBreakState() != BreakState.OnBreak) {
 								waiter.msgCanGoOnBreak(true);
@@ -117,7 +137,9 @@ public class HostAgent extends Agent {
 					}
 				}
 			}
-
+			*/
+			boolean customersEating = false;
+			
 			synchronized (tables) {
 				for (Table table : tables) {
 					if (!table.isOccupied()) {
@@ -125,14 +147,17 @@ public class HostAgent extends Agent {
 							if (!waitingCustomers.isEmpty()) {
 								table.setOccupant(waitingCustomers.get(0));
 								waiterWithLessCustomers().msgHeWantsFood(
-										waitingCustomers.get(0), table);//the action
+										waitingCustomers.get(0), table);
 								waitingCustomers.remove(0);
-								return true;//return true to the abstract agent to reinvoke the scheduler.
+								return true;
 							}
 						}
-					}
+					} else customersEating = true;
 				}
-
+			}
+			
+			if (leavingWork && !customersEating && waitingCustomers.isEmpty()) {
+				sendWorkersHome();
 			}
 		}
 		return false;
@@ -141,18 +166,30 @@ public class HostAgent extends Agent {
 		//and wait.
 	}
 	
+	private void sendWorkersHome() {
+		cook.msgGoHome();
+		cashier.msgGoHome();
+		for (WaiterRole w : waiters) {
+			w.msgGoHome();
+		}
+		
+		leavingWork = false;
+		hostGui.DoLeaveWork();
+		deactivate();
+	}
+
 	//Assorted functions
 	
-	private WaiterAgent waiterWithLessCustomers() {
-		WaiterAgent freeWaiter;
+	private WaiterRole waiterWithLessCustomers() {
+		WaiterRole freeWaiter;
 		
 		synchronized (waiters) {
 			freeWaiter = waiters.get(0);
 			for (int i = 1; i < waiters.size(); i++) {
-				if (freeWaiter.getBreakState() == WaiterAgent.BreakState.OnBreak
+				if (freeWaiter.getBreakState() == WaiterRole.BreakState.OnBreak
 						|| (freeWaiter.customerCount() >= waiters.get(i)
 								.customerCount() && waiters.get(i)
-								.getBreakState() != WaiterAgent.BreakState.OnBreak)) {
+								.getBreakState() != WaiterRole.BreakState.OnBreak)) {
 					freeWaiter = waiters.get(i);
 				}
 			}
@@ -161,7 +198,7 @@ public class HostAgent extends Agent {
 		return freeWaiter;
 	}
 
-	public void addWaiter(WaiterAgent waiterAgent) {
+	public void addWaiter(WaiterRole waiterAgent) {
 		synchronized (waiters) {
 			waiters.add(waiterAgent);
 		}
@@ -189,6 +226,22 @@ public class HostAgent extends Agent {
 			response = new ArrayList<Table>(tables);
 		}
 		return response;
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return isActive();
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		leavingWork = true;
+		stateChanged();
 	}
 	
 }

@@ -26,23 +26,23 @@ public class MarketAgent extends Agent implements Market {
 	private List<Order> urgentOs = Collections.synchronizedList(new ArrayList<Order>());
 	private List<FoodReq> orders = Collections.synchronizedList(new ArrayList<FoodReq>());
 	private Map<String, Integer> inventory = Collections.synchronizedMap(new HashMap<String, Integer>());
-	private Map<String, Integer> priceList = Collections.synchronizedMap(new HashMap<String, Integer>());
-	private CookAgent cook;
+	private Map<String, Double> priceList = Collections.synchronizedMap(new HashMap<String, Double>());
+	private CookRole cook;
 	private Cashier cashier;
 	private static final int INITIAL_STOCK = 2;
 	
 	
-	MarketAgent(CookAgent cook, Cashier cashier) {
+	MarketAgent(CookRole cook, Cashier cashier) {
 		this.cook = cook;
 		this.cashier = cashier;
 		inventory.put("Steak", INITIAL_STOCK);
 		inventory.put("Chicken", INITIAL_STOCK);
 		inventory.put("Salad", INITIAL_STOCK);
 		inventory.put("Pizza", INITIAL_STOCK);
-		priceList.put("Steak", 1400);
-		priceList.put("Chicken", 850);
-		priceList.put("Salad", 480);
-		priceList.put("Pizza", 780);
+		priceList.put("Steak", 14.00);
+		priceList.put("Chicken", 8.50);
+		priceList.put("Salad", 4.80);
+		priceList.put("Pizza", 7.80);
 		startThread();
 	}
 	
@@ -130,7 +130,7 @@ public class MarketAgent extends Agent implements Market {
 	 * @see restaurant.Market#msgPay(int)
 	 */
 	@Override
-	public void msgPay(int price) {
+	public void msgPay(double price) {
 		//Get dollaaa	
 	}
 		

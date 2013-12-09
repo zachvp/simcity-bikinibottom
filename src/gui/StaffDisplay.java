@@ -76,8 +76,6 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		
 		staffPanel.add(staffLabel);
 		staffPanel.add(staffPane);
-		
-		//addToStaffList("Cashier", "Steve");
 	}
 
 	private void makeUnemployedPanel() {
@@ -155,11 +153,11 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			personName = new JLabel(name, JLabel.CENTER);
 			roleName = new JLabel(role, JLabel.CENTER);
 			
-			Dimension labelDim = new Dimension((int)(buttonSize.width*0.4), (int)(buttonSize.height));
+			Dimension labelDim = new Dimension((int)(buttonSize.width*0.45), (int)(buttonSize.height));
 			personName.setPreferredSize(labelDim);
 			roleName.setPreferredSize(labelDim);
 			JLabel dash = new JLabel("-", JLabel.CENTER);
-			dash.setPreferredSize(new Dimension((int)(buttonSize.width*0.2), (int)(buttonSize.height)));
+			dash.setPreferredSize(new Dimension((int)(buttonSize.width*0.1), (int)(buttonSize.height)));
 			
 			add(roleName, BorderLayout.WEST);
 			add(dash, BorderLayout.CENTER);
@@ -186,11 +184,14 @@ public class StaffDisplay extends JPanel implements ActionListener{
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			if(selected){
-				setBackground(Color.white);
-				selected = false;
-			}
-			else{
+			if(!selected){
+				//deselect all		
+				for (StaffButton b: staffList){
+					if(b.selected){
+						b.selected = false;
+						b.setBackground(Color.white);
+					}
+				}
 				setBackground(Color.LIGHT_GRAY);
 				selected = true;
 			}

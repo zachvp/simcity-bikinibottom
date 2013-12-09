@@ -43,7 +43,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	MaintenanceWorkerRole worker;
 	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>());
 	
-	
 	// class MyBill from worker
 	enum BillState { RECEIVED, PAYING, PAID }
 	private class MyBill {

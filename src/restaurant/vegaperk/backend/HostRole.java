@@ -1,6 +1,6 @@
 package restaurant.vegaperk.backend;
 
-import agent.Role;
+import agent.WorkRole;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
@@ -13,7 +13,7 @@ import restaurant.vegaperk.interfaces.Waiter;
  * Restaurant Host Agent
  */
 
-public class HostRole extends Role {
+public class HostRole extends WorkRole {
 	/* --- Constants --- */
 	static final int NTABLES = 4;//a global for the number of tables.
 	private static final int TABLECOLNUM = 2;
@@ -253,6 +253,22 @@ public class HostRole extends Role {
 	@Override
 	public void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return true;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		this.deactivate();
 	}
 }
 

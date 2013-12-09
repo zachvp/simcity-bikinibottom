@@ -47,7 +47,7 @@ public class RestaurantBuilding extends Building {
 		
 		// TODO implement person, building constructor for customer
 		if(role == null) {
-			role = new CustomerRole("default");
+			role = new CustomerRole(person, this);
 			gui.getAnimationPanel().addGui(role.getGui());
 			existingCustomerRoles.put(person, role);
 			person.addRole(role);

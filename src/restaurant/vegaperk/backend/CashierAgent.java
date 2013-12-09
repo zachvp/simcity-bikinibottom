@@ -1,6 +1,8 @@
 package restaurant.vegaperk.backend;
 
 import agent.Role;
+import agent.WorkRole;
+import gui.trace.AlertTag;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -14,7 +16,7 @@ import mock.EventLog;
 /**
  * Cook Agent
  */
-public class CashierAgent extends Role implements Cashier {
+public class CashierAgent extends WorkRole implements Cashier {
 	String name;
 	private double money = 500.00;
 	
@@ -240,5 +242,27 @@ public class CashierAgent extends Role implements Cashier {
 		public void setAmount(double amount) {
 			this.amount = amount;
 		}
+	}
+	
+	@Override
+	protected void Do(String msg) {
+		Do(AlertTag.RESTAURANT, msg);
+	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		this.deactivate();
 	}
 }

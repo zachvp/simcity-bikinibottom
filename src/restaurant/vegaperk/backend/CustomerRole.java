@@ -9,7 +9,10 @@ import restaurant.vegaperk.interfaces.Waiter;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
+import agent.WorkRole;
 import agent.gui.Gui;
+import agent.interfaces.Person;
+import gui.Building;
 import gui.trace.AlertTag;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Restaurant customer agent.
  */
-public class CustomerRole extends Role implements Customer {
+public class CustomerRole extends WorkRole implements Customer {
 	private String name;
 	private String choice;
 	private int HUNGER_LEVEL = 6;// determines length of meal
@@ -29,7 +32,7 @@ public class CustomerRole extends Role implements Customer {
 	// sets time delays
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	private CustomerGui customerGui;
+	private CustomerGui gui;
 	
 	@SuppressWarnings("serial")
 	private static List<WaitZone> waitZones = new ArrayList<WaitZone>(){
@@ -58,7 +61,7 @@ public class CustomerRole extends Role implements Customer {
 	private Menu menu;
 
 	//State and event enumerations
-	private enum CustomerState{ 
+	private enum CustomerState { 
 		DOING_NOTHING,
 		WAITING_IN_RESTAURANT,
 		BEING_SEATED,
@@ -98,9 +101,9 @@ public class CustomerRole extends Role implements Customer {
 	 * @param name name of the customer
 	 * @param gui  reference to the customergui so the customer can send it messages
 	 */
-	public CustomerRole(String name){
-		super();
-		this.name = name;
+	public CustomerRole(Person person, Building building){
+		super(person, building);
+		
 		
 		bill = 0.00;
 		if(name.equals("poor")){
@@ -150,7 +153,7 @@ public class CustomerRole extends Role implements Customer {
 	
 	public void msgHereIsYourFood(){
 		event = CustomerEvent.EAT;
-		customerGui.orderState = OrderState.SERVED;
+		gui.orderState = OrderState.SERVED;
 		stateChanged();
 	}
 	
@@ -276,7 +279,7 @@ public class CustomerRole extends Role implements Customer {
 			if(wz.tryAcquire()){
 				myWaitZone = wz;
 				host.msgIWantFood(this);//send our instance, so he can respond to us
-				customerGui.DoGoWait(wz.x, wz.y);
+				gui.DoGoWait(wz.x, wz.y);
 				return;
 			}
 		}
@@ -288,12 +291,12 @@ public class CustomerRole extends Role implements Customer {
 		Do("Being seated. Going to table");
 		myWaitZone.releaseZone();
 		myWaitZone = null;
-		customerGui.DoGoToSeat(tableX, tableY);
+		gui.DoGoToSeat(tableX, tableY);
 	}
 	
 	private void chooseFood(){
-		customerGui.setChoice("");
-		customerGui.orderState = OrderState.NONE;
+		gui.setChoice("");
+		gui.orderState = OrderState.NONE;
 		Runnable command = new Runnable() {
 			public void run(){
 				event = CustomerEvent.ASKED_FOR_ORDER;
@@ -338,8 +341,8 @@ public class CustomerRole extends Role implements Customer {
 			Do("Don't have food name. Ordered " + choice);
 		}
 		
-		customerGui.orderState = OrderState.DECIDED;
-		customerGui.setChoice(choice);
+		gui.orderState = OrderState.DECIDED;
+		gui.setChoice(choice);
 		
 		waiter.msgHereIsMyOrder(this, choice);
 	}
@@ -376,7 +379,7 @@ public class CustomerRole extends Role implements Customer {
 		if(waiter != null){
 			waiter.msgCustomerLeavingTable(this);
 		}
-		customerGui.DoExitRestaurant();
+		gui.DoExitRestaurant();
 	}
 
 	/** Utilities */
@@ -422,11 +425,11 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	public void setGui(CustomerGui g) {
-		customerGui = g;
+		gui = g;
 	}
 
 	public Gui getGui() {
-		return customerGui;
+		return gui;
 	}
 	
 	/**
@@ -439,5 +442,21 @@ public class CustomerRole extends Role implements Customer {
 	@Override
 	public void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
+	}
+
+	@Override
+	public boolean isAtWork() {
+		return true;
+	}
+
+	@Override
+	public boolean isOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		this.deactivate();
 	}
 }

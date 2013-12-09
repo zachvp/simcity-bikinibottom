@@ -160,16 +160,17 @@ public class RestaurantPanel extends JPanel {
     		// new role and person stuff
     		PersonAgent person = new PersonAgent("Customer");
     		
-    		CustomerRole c = new CustomerRole(name);
+    		CustomerRole c = new CustomerRole(person, null);
     		CustomerGui g = new CustomerGui(c, gui);
     		
     		person.addRole(c);
     		c.setPerson(person);
     		c.activate();
+    		
     		// add the role to the list
     		agentList.add(c);
 
-    		gui.getAnimationPanel().addGui(g);// dw
+    		gui.getAnimationPanel().addGui(g);
     		c.setHost(host);
     		c.setGui(g);
     		customers.add(c);

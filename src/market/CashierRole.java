@@ -508,6 +508,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 						synchronized(getMyCustomerList()){
 								MyCustomerList.remove(0);
 						}
+						return;
 					}
 				}
 			}

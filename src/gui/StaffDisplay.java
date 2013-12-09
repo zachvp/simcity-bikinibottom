@@ -21,9 +21,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
 
 public class StaffDisplay extends JPanel implements ActionListener{
+	
+	Building building;
 
 	private Dimension d, panelDim;
 	private JLabel staffLabel, unemployedLabel;
@@ -198,6 +201,10 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		
 	}
 	
+	public void setBuilding(Building b){
+		building = b;
+	}
+	
 	class StaffButton extends JPanel implements MouseListener{
 		JLabel personName;
 		private JLabel roleName;
@@ -286,8 +293,6 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		public void mouseReleased(MouseEvent arg0) {
 			
 		}
-
 		
 	}
-
 }

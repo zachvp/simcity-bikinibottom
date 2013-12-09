@@ -54,6 +54,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		records.SetCashierMarketInfoPanel(infoPanel);
 		
 		staff = new StaffDisplay();
+		staff.setBuilding(this);
 	}
 
 	@Override

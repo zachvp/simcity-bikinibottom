@@ -45,9 +45,9 @@ public class RestaurantPanel extends JPanel {
     private JRadioButton waiterRB = new JRadioButton("Waiters");
     private JRadioButton customerRB = new JRadioButton("Customers");
 
-    private RestaurantGui gui; //reference to main gui
+    private RestaurantGuiFrame gui; //reference to main gui
 
-    public RestaurantPanel(RestaurantGui gui) {
+    public RestaurantPanel(RestaurantGuiFrame gui) {
         this.gui = gui;
        // waiter.setGui(waiterGui); 
        host.setGui(hostGui);

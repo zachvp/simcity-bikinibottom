@@ -1,14 +1,13 @@
 package restaurant.vdea.gui;
 
-
-//import restaurant.WaiterAgent;
-import restaurant.CookAgent;
-
 import java.awt.*;
+
+import agent.gui.Gui;
+import restaurant.vdea.CookRole;
 
 public class CookGui implements Gui {
 
-    private CookAgent agent = null;
+    private CookRole Role = null;
 
     private int xPos = 515, yPos = 50;//default waiter position
     private int xDestination =365, yDestination = 50;//default start position
@@ -35,8 +34,8 @@ public class CookGui implements Gui {
     private boolean[] plating = new boolean[grillNum];
     private String[] plates = new String[grillNum];
 
-    public CookGui(CookAgent agent) {
-        this.agent = agent;
+    public CookGui(CookRole Role) {
+        this.Role = Role;
         
         for (int i = 0; i<grillNum; i++){
         	cooking[i] = false;

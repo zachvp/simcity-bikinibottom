@@ -1,20 +1,21 @@
 package restaurant.vdea.gui;
 
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-
 import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import agent.gui.Gui;
+import restaurant.vdea.CustomerRole;
+import restaurant.vdea.WaiterRole;
+
 public class CustomerGui implements Gui{
 
-	private CustomerAgent agent = null;
+	private CustomerRole role = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
-	private WaiterAgent waiter;
+	private WaiterRole waiter;
 	RestaurantGui gui;
 
 	private int xPos, yPos, sXPos, sYPos;
@@ -29,8 +30,8 @@ public class CustomerGui implements Gui{
 	public static int xTable = 150;
 	public static int yTable = 150;
 
-	public CustomerGui(CustomerAgent c, RestaurantGui gui, WaiterAgent m) {
-		agent = c;
+	public CustomerGui(CustomerRole c, RestaurantGui gui, WaiterRole m) {
+		role = c;
 		xPos = -40;
 		yPos = -40;
 		
@@ -45,8 +46,8 @@ public class CustomerGui implements Gui{
 		waiter = m;
 	}
 	
-	public CustomerGui(CustomerAgent c, RestaurantGui gui){
-		agent = c;
+	public CustomerGui(CustomerRole c, RestaurantGui gui){
+		role = c;
 		xPos = -40;
 		yPos = -40;
 		
@@ -68,12 +69,12 @@ public class CustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) agent.msgAnimationFinishedGoToSeat();
+			if (command==Command.GoToSeat) role.msgAnimationFinishedGoToSeat();
 			else if (command==Command.LeaveRestaurant) {
-				agent.msgAnimationFinishedLeaveRestaurant();
-				//System.out.println("about to call gui.setCustomerEnabled(agent);");
+				role.msgAnimationFinishedLeaveRestaurant();
+				//System.out.println("about to call gui.setCustomerEnabled(Role);");
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+				gui.setCustomerEnabled(role);
 			}
 			command=Command.noCommand;
 		}
@@ -126,7 +127,7 @@ public class CustomerGui implements Gui{
 	}
 	public void setHungry() {
 		isHungry = true;
-		agent.gotHungry();
+		role.gotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {

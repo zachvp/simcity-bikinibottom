@@ -431,4 +431,16 @@ public class WaiterRole extends WorkRole implements Waiter{
 
 		}
 	}
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		// TODO Auto-generated method stub
+		
+	}
 }

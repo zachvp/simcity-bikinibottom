@@ -6,6 +6,8 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import restaurant.vdea.interfaces.*;
+import restaurant.vdea.test.mock.EventLog;
+import restaurant.vdea.test.mock.LoggedEvent;
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
@@ -197,6 +199,24 @@ public class CashierRole extends WorkRole implements Cashier{
 				m = newM;
 				bill = newBill;
 			}
+		}
+
+		@Override
+		public boolean isAtWork() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isOnBreak() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void msgLeaveWork() {
+			// TODO Auto-generated method stub
+			
 		}
 
 

@@ -1,11 +1,10 @@
-package restaurant.test;
+package restaurant.vdea.test;
 
-import restaurant.CashierAgent;
-import restaurant.CashierAgent.BillStatus;
-import restaurant.CashierAgent.PaymentStatus;
-import restaurant.test.mock.MockCustomer;
-import restaurant.test.mock.MockMarket;
-import restaurant.test.mock.MockWaiter;
+
+import restaurant.vdea.CashierRole;
+import restaurant.vdea.CashierRole.BillStatus;
+import restaurant.vdea.CashierRole.PaymentStatus;
+import restaurant.vdea.test.mock.*;
 import junit.framework.*;
 
 /**
@@ -19,7 +18,7 @@ import junit.framework.*;
 public class CashierTest extends TestCase
 {
 	//these are instantiated for each test separately via the setUp() method.
-	CashierAgent cashier;
+	CashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockCustomer badCustomer;
@@ -33,7 +32,7 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierAgent("cashier", 200);		
+		cashier = new CashierRole("cashier", 200);		
 		customer = new MockCustomer("mockcustomer");		
 		badCustomer = new MockCustomer("BADcustomer");
 		waiter = new MockWaiter("mockwaiter");

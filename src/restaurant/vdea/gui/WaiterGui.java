@@ -1,14 +1,14 @@
 package restaurant.vdea.gui;
 
-
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgent;
-
 import java.awt.*;
+
+import restaurant.vdea.CustomerRole;
+import restaurant.vdea.WaiterRole;
+import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-	private WaiterAgent agent = null;
+	private WaiterRole Role = null;
 	RestaurantGui gui;
 	private boolean isOnBreak = false;
 	private boolean isPresent = false;
@@ -28,13 +28,13 @@ public class WaiterGui implements Gui {
 	String order;
 
 
-	public WaiterGui(WaiterAgent agent) {
-		this.agent = agent;
+	public WaiterGui(WaiterRole Role) {
+		this.Role = Role;
 
 	}
 
-	public WaiterGui(WaiterAgent agent, RestaurantGui gui, int pos){
-		this.agent = agent;
+	public WaiterGui(WaiterRole Role, RestaurantGui gui, int pos){
+		this.Role = Role;
 		this.gui = gui;
 
 		xHome = 40 + (pos*21);
@@ -62,23 +62,23 @@ public class WaiterGui implements Gui {
 
 		if (xPos == xDestination && yPos == yDestination
 				&(xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-			agent.msgAtTable();
+			Role.msgAtTable();
 		}
 
 		if (xPos == xDestination && yPos == yDestination){
 			if (command == Command.cust){
-				agent.atDest();
-				agent.getHost().atDest();
+				Role.atDest();
+				Role.getHost().atDest();
 				command = Command.noCommand;
 			}
 		}
 
 		if (xPos == 455 && yPos== 80){
-			agent.msgAtKitchen();
+			Role.msgAtKitchen();
 		}
 
 
-		if(xPos == xHome && yPos== yHome && agent.isOnBreak()){
+		if(xPos == xHome && yPos== yHome && Role.isOnBreak()){
 			isOnBreak = true;
 		}
 
@@ -113,12 +113,12 @@ public class WaiterGui implements Gui {
 	}
 
 	public void setOnBreak() {
-		agent.goOnBreak(); //starts process of going On Break
+		Role.goOnBreak(); //starts process of going On Break
 		setPresent(true);
 	}
 	public void setOffBreak(){
 		isOnBreak = false;
-		agent.goOffBreak();
+		Role.goOffBreak();
 	}
 	public boolean isOnBreak() {
 		return isOnBreak;
@@ -145,7 +145,7 @@ public class WaiterGui implements Gui {
 	}
 
 	public void DoGoToTable(int tblNum) {
-		//agent.setBusy(true);
+		//Role.setBusy(true);
 		tableNumber = tblNum;
 		if (tableNumber == 1){
 			xTable = 150;
@@ -176,7 +176,7 @@ public class WaiterGui implements Gui {
 		yDestination = 80;
 	}
 
-	public void DoServe(CustomerAgent customer, int tblNum){
+	public void DoServe(CustomerRole customer, int tblNum){
 		DoGoToTable(tblNum);
 	}
 

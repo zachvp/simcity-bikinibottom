@@ -1,14 +1,13 @@
 package restaurant.vdea.gui;
 
-
-import restaurant.CustomerAgent;
-import restaurant.HostAgent;
-
 import java.awt.*;
+
+import restaurant.vdea.CustomerRole;
+import restaurant.vdea.HostRole;
 
 public class HostGui implements Gui {
 
-    private HostAgent agent = null;
+    private HostRole role = null;
 
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -21,8 +20,8 @@ public class HostGui implements Gui {
     public int tableNumber = 1;
     
 
-    public HostGui(HostAgent agent) {
-        this.agent = agent;
+    public HostGui(HostRole Role) {
+        this.role = Role;
          
     }
     
@@ -41,15 +40,15 @@ public class HostGui implements Gui {
         
         if (xPos == xDestination && yPos == yDestination
         		& (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-           //agent.msgAtTable();
+           //Role.msgAtTable();
         }
 
         
         if (xPos == -20 && yPos== -20){
-        	//agent.msgAtHome();
+        	//Role.msgAtHome();
         	
         	//System.out.println("host At home");
-	        	//agent.setBusy(false);//set message//
+	        	//Role.setBusy(false);//set message//
         }
         
     }
@@ -63,8 +62,8 @@ public class HostGui implements Gui {
         return true;
     }
 
-    public void DoBringToTable(CustomerAgent customer, int tblNum) {
-    	//agent.setBusy(true);
+    public void DoBringToTable(CustomerRole customer, int tblNum) {
+    	//Role.setBusy(true);
     	tableNumber = tblNum;
     	if (tableNumber == 1){
     		xTable = 150;

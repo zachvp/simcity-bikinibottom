@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import agent.gui.Gui;
 
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 /** This panel will be used for displaying animation within buildings after.
  * Panel will display in a cardlayout after the user has clicked on a building.
@@ -19,21 +22,33 @@ public class AnimationPanel extends JPanel implements ActionListener {
     private final int WINDOWX = 600;//this.getParent().getWidth();
     private final int WINDOWY = 490;//this.getParent().getHeight();
     Timer timer;
-    private final int REFRESH_RATE = 5;
 
     /** Keeps track of all the guis in the panel */
     private List<Gui> guis = 
     		Collections.synchronizedList(new ArrayList<Gui>());
+	private java.util.Timer utilTimer;
     
     public AnimationPanel() {
     	setSize(WINDOWX, WINDOWY);
         setVisible(true);
         
-    	timer = new Timer(REFRESH_RATE, this );
+    	timer = new Timer(Constants.REFRESH_RATE_MS, this );
     	timer.start();
+    	
+    	utilTimer = SingletonTimer.getInstance();
+
+    	utilTimer.scheduleAtFixedRate(new TimerTask() {
+    		public void run() {
+    			updatePositions();
+    		}
+    	}, 0, 5);
     }
 
 	public void actionPerformed(ActionEvent e) {
+		repaint();  //Will have paintComponent called
+	}
+
+	private void updatePositions() {
 		synchronized (guis) {
 			for (Gui gui : guis) {
 				if (gui.isPresent()) {
@@ -41,7 +56,6 @@ public class AnimationPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
-		repaint();  //Will have paintComponent called
 	}
 
     public void paintComponent(Graphics g) {

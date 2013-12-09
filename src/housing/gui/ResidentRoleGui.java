@@ -1,6 +1,7 @@
 package housing.gui;
 
 import housing.backend.ResidentRole;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -38,7 +39,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private String speech = "";
 	
 	// used as reference for furniture and appliance positions
-	LayoutGui layoutGui;
+	DwellingLayoutGui layoutGui;
 	
 	// image for Resident
 	private BufferedImage resImage;
@@ -64,7 +65,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private final int JAZZER_SPOT_Y = 15;
 	
 	/* --- Constructor --- */
-	public ResidentRoleGui(ResidentRole role, LayoutGui gui) {
+	public ResidentRoleGui(ResidentRole role, DwellingLayoutGui gui) {
 		this.resident = role;
 		this.layoutGui = gui;
 		
@@ -107,10 +108,11 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	public void draw(Graphics2D g) {
 		// draw the residence image
 		g.drawImage(residentIcon.getImage(), xPos, yPos, null);
-	    	
+		
 		g.setColor(Color.BLACK);
 		
 		g.drawString(speech, xPos+5, yPos+10);
+		
 		if(eatingFood == true){
 			g.drawImage(krabbyPattyIcon.getImage(), xPos, yPos, null);
 		}
@@ -175,5 +177,10 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	@Override
 	public void DoShowSpeech(String speech) {
 		this.speech = speech;
+	}
+
+	@Override
+	public DwellingLayoutGui getLayoutGui() {
+		return layoutGui;
 	}
 }

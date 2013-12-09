@@ -16,4 +16,6 @@ public interface ResidentGui {
 	public void setPresent(boolean b);
 
 	public void DoShowSpeech(String speech);
+
+	public DwellingLayoutGui getLayoutGui();
 }

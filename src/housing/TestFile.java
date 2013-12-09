@@ -32,5 +32,7 @@ public class TestFile extends JFrame {
 			main.setVisible(true);
 			main.setResizable(false);
 			main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			main.setLocationRelativeTo(null);
 		}
 }

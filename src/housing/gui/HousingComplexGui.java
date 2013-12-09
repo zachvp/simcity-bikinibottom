@@ -46,14 +46,15 @@ public class HousingComplexGui extends JPanel {
 		 */
 		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++){
 			ResidentDwelling dwelling = new ResidentDwelling(i, Condition.GOOD, complex);
+			dwelling.setWorker(complex.getWorker());
+			dwelling.setPayRecipient(complex.getPayRecipient());
 
 			// add the resident using the factory
-			try {
-				dwelling.addResident();
-				this.dwellings.add(dwelling);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			dwelling.addResident();
+			
+			// the complex gui needs to keep track of the dwellings so it can
+			// swap guis among dwellings
+			this.dwellings.add(dwelling);
 			
 			HousingGui gui = new HousingGui(i, dwelling);
 			this.add(gui);

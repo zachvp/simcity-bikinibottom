@@ -30,7 +30,6 @@ package CommonSimpleClasses;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Constants of general use
@@ -82,6 +81,11 @@ public interface Constants {
      * The default encoding used when none is detected
      */
     public static String DEFAULT_ENCODING = "ISO-8859-1";
+    
+    /**
+     * Refresh rate for SWING timers in miliseconds.
+     */
+    public static final int REFRESH_RATE_MS = 30;
     
     /**
      * Dimensions of a building on a map
@@ -140,6 +144,13 @@ public interface Constants {
 	public static final int MarketInitialMoney = 100;
 	
 	/**
+	 * The payroll of each WorkRole in the Market
+	 */
+	public static final double MarketCashierPayRoll = 120;
+	public static final double MarketItemCollectorPayRoll = 100;
+	public static final double MarketDeliveryGuyPayRoll = 70;
+	
+	/**
 	 * The initial amount of Inventory levels of all the items
 	 */
 	public static final int LamboFinnyInitialAmount  = 100;
@@ -153,6 +164,7 @@ public interface Constants {
 	/**
 	 * The PriceList of the market
 	 */
+	@SuppressWarnings("serial")
 	public static HashMap<String, Double> MarketPriceList = new HashMap<String,Double>(){
 		{
 		double Toyoda = 100;
@@ -173,6 +185,7 @@ public interface Constants {
 	/**
 	 * Types of food in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> FOODS = new ArrayList<String>() {
 		{
 			add("Krabby Patty");
@@ -183,9 +196,14 @@ public interface Constants {
 	};
 	
 	/**
+	 * Set to true to test restaurant independent from MainFrame
+	 */
+	public final boolean TEST_POPULATE_RESTAURANT = false;
+	
+	/**
 	 * Set to true to test housing independent from MainFrame
 	 */
-	public boolean TEST_POPULATE_HOUSING = false;
+	public final boolean TEST_POPULATE_HOUSING = false;
 	
 	/**
 	 * Number of units per housing structure
@@ -205,6 +223,7 @@ public interface Constants {
 	/**
 	 * Types of Car in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> CARS = new ArrayList<String>() {
 		{
 			add("LamboFinny");
@@ -212,6 +231,7 @@ public interface Constants {
 		}
 	};
 	
+	@SuppressWarnings("serial")
 	public static final List<String> NAMES = new ArrayList<String>() {
 		{
 			add("Spongebob");

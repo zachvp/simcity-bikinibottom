@@ -66,6 +66,7 @@ public class BankBuilding extends Building {
 		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
+		infoPanel = new InfoPanel(this);
 		initRoles();
 		
 		openHour = this.getOpeningHour();
@@ -131,6 +132,7 @@ public class BankBuilding extends Building {
 		getSecurity().setGui(sgGui);
 		account.setGui(accountGui);
 		loan.setGui(loanGui);
+		loan.setAccountManager(account);
 		tell1.setGui(tGui1);
 		tell2.setGui(tGui2);
 		tell3.setGui(tGui3);
@@ -142,6 +144,9 @@ public class BankBuilding extends Building {
 		bankGui.getAnimationPanel().addGui(tGui1);
 		bankGui.getAnimationPanel().addGui(tGui2);
 		bankGui.getAnimationPanel().addGui(tGui3);
+		
+		//add infopanel to account manager to update
+		account.setInfoPanel(infoPanel);
 
 	}
 
@@ -220,8 +225,12 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		infoPanel = new InfoPanel(this);
 		return infoPanel;
+	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
 	}
 
 	public SecurityGuardRole getSecurity() {
@@ -248,6 +257,10 @@ public class BankBuilding extends Building {
 	
 	public boolean loanManagerOnDuty() {
 		return loan != null && loan.isAtWork();
+	}
+	
+	public double getMoneyInBank() {
+		return account.getMoneyInBank();
 	}
 	
 	public boolean tellerOnDuty() {

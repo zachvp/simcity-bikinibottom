@@ -11,6 +11,8 @@ public interface AccountManager {
 
 	public abstract void msgGiveMeTheMoney(Robber r, double amount);
 	
+	public abstract void msgUpdateMoney(double amount);
+	
 	public abstract String getName();
 
 	public abstract void msgAtDestination();

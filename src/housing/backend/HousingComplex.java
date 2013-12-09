@@ -34,7 +34,9 @@ public class HousingComplex {
 	private MaintenanceWorkerRole worker;
 	
 	// used for producing jobs and residential roads in the complex
-	public Map<Person, Role> population = new HashMap<Person, Role>();
+	private Map<Person, Role> population = new HashMap<Person, Role>();
+	// maps the housing complex unit to the role
+	private Map<Integer, Role> unitMap = new HashMap<Integer, Role>();
 	
 	public HousingComplex(ResidentialBuilding building) {
 		
@@ -42,14 +44,14 @@ public class HousingComplex {
 		this.building = building;
 		
 		// instantiate the gui class for the complex
-		this.gui = new HousingComplexGui(this);
-		
 		
 		if(Constants.TEST_POPULATE_HOUSING) {
 			try {
 				addRole("payrecipient");
 				addRole("worker");
+				this.gui = new HousingComplexGui(this);
 				
+				// assign all the residents of this comlex to a pay recipient
 				for(Dwelling d : gui.getDwellings()) {
 					payRecipient.addResident(d);
 				}
@@ -70,6 +72,8 @@ public class HousingComplex {
 			// put the constant roles in the building map
 			this.population.put(null, payRecipient);
 			this.population.put(null, worker);
+			
+			this.gui = new HousingComplexGui(this);
 		}
 	}
 	
@@ -81,7 +85,8 @@ public class HousingComplex {
 	
 		switch(roleType) {
 			case "worker" : {
-				worker = new MaintenanceWorkerRole(person, building);
+				this.worker = new MaintenanceWorkerRole(person, building);
+				this.worker.setComplex(this);
 				this.population.put(person, worker);
 				person.addRole(worker);
 				worker.activate();
@@ -101,6 +106,10 @@ public class HousingComplex {
 		person.startThread();
 	}
 	
+	public void addRoleToUnit(int unitNum, ResidentRole role) {
+		unitMap.put(unitNum, role);
+	}
+	
 	/* --- Utility functions --- */
 	
 	public void addResident(ResidentRole resident){
@@ -114,6 +123,10 @@ public class HousingComplex {
 	
 	public Map<Person, Role> getPopulation() {
 		return population;
+	}
+	
+	public Map<Integer, Role> getUnitMap() {
+		return unitMap;
 	}
 	
 	public MaintenanceWorkerRole getWorker() {

@@ -1,7 +1,10 @@
 package housing.gui;
 
+import housing.interfaces.DwellingLayoutGui;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,14 +21,19 @@ import agent.gui.Gui;
  * LayoutGui stores all the positional information about housing items
  * (furniture, appliances, etc) and displays them.
  */
-public class LayoutGui implements Gui {
+public class DwellingGui implements Gui, DwellingLayoutGui {
 	/* --- Layout Item Positions --- */
+	
+	// position index of unit
+	private int ID = -1;
+	
+	String residentName = "default";
 	
 	//window size = 550x400
 	private final int ROOM_WIDTH;
 	private final int ROOM_HEIGHT;
 	
-	// used to draw shapes of furniture/appliances 
+	// draws shapes of furniture/appliances 
 	private final int BASE_SIZE = 20;
 	
 	// constants for appliance positions
@@ -49,7 +57,9 @@ public class LayoutGui implements Gui {
 	// timer for gary
 	ScheduleTask move = ScheduleTask.getInstance(); 
 	
-	public LayoutGui(int index) {
+	public DwellingGui(int index) {
+		this.ID = index;
+		
 		ROOM_WIDTH = Constants.ANIMATION_PANEL_WIDTH / 3;
 		ROOM_HEIGHT = Constants.ANIMATION_PANEL_HEIGHT / 3;
 		
@@ -99,8 +109,14 @@ public class LayoutGui implements Gui {
 		g.drawString("Plant", POTTED_PLANT_POSITION.width, POTTED_PLANT_POSITION.height + BASE_SIZE);
 		g.drawString("Door", DOOR_POSITION.width, DOOR_POSITION.height  + BASE_SIZE);
 		g.drawString("Fridge", REFRIGERATOR_POSITION.width, REFRIGERATOR_POSITION.height + BASE_SIZE);
+		
+		// draw surveillance cam info
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("default", Font.BOLD, 13));
+		g.drawString("CAM " + ID + ": " + residentName, 5, 12);
 	}
 	
+	@Override
 	public void DoMoveGary(){
 		Random generator = new Random(); 
 		int position = generator.nextInt(4);
@@ -129,6 +145,15 @@ public class LayoutGui implements Gui {
 	
 	public Dimension getRefrigeratorPosition() {
 		return REFRIGERATOR_POSITION;
+	}
+
+	@Override
+	public int getID() {
+		return this.ID;
+	}
+
+	public void setName(String name) {
+		this.residentName = name;
 	}
 
 }

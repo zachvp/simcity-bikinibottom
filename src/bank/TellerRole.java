@@ -261,8 +261,7 @@ public class TellerRole extends WorkRole implements Teller {
 	
 	private void goToWork() {
 		atWork = true;
-		doGoToDesk();
-		acquireSemaphore(active);
+		doGoToWork();
 		
 	}
 	
@@ -330,7 +329,6 @@ public class TellerRole extends WorkRole implements Teller {
 	private void goOffWork() {
 		addPaycheckToWallet();
 		doEndWorkDay();
-		acquireSemaphore(active);
 		this.deactivate();
 	}
 	
@@ -343,6 +341,18 @@ public class TellerRole extends WorkRole implements Teller {
 	}
 
 	//ANIMATION
+	private void doGoToWork() {
+		tellerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
+		tellerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		tellerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		tellerGui.DoGoToDesk(myDeskPosition);
+		acquireSemaphore(active);
+		
+	}
+	
 	private void doGoToLoanManager() {
 		tellerGui.DoGoToLoanManager();//TODO
 	}
@@ -356,7 +366,14 @@ public class TellerRole extends WorkRole implements Teller {
 		tellerGui.DoGoToWorkstation(myDeskPosition);
 	}
 	private void doEndWorkDay() {
+		tellerGui.DoGoToBackDesk();
+		acquireSemaphore(active);
+		tellerGui.DoGoToRightOfFrontDesk();
+		acquireSemaphore(active);
+		tellerGui.DoGoToFrontDesk();
+		acquireSemaphore(active);
 		tellerGui.DoEndWorkDay();
+		acquireSemaphore(active);
 	}
 	
 	private void acquireSemaphore(Semaphore s) {

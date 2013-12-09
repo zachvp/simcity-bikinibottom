@@ -34,6 +34,7 @@ import kelp.KelpClass;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
@@ -43,6 +44,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 
 
 /** 
@@ -73,6 +75,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
+	private Sound openingSound = Sound.getInstance();
 	
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
@@ -123,7 +126,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.add(map);
 
 		//Information Panel 720x210
-		JTabbedPane tabbedInfoPane = new JTabbedPane();
+		TabbedInfoDisplay tabbedInfoPane = new TabbedInfoDisplay();
 		tabbedInfoPane.setOpaque(false);
 		
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
@@ -132,10 +135,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setMinimumSize(infoDim);
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
+		//InfoPanel is now a JTabbedPane
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
 		tabbedInfoPane.addTab("Log", new LogDisplay());
+		infoPanel.setTabDisplay(tabbedInfoPane);
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
+		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -183,6 +189,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		//Constructs buildings from config file
 		constructCity(needToBuild);
+		openingSound.playSound("OpeningSceneSound.wav");
 	}
 
 	/**
@@ -254,7 +261,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantBuilding restaurant = new RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);
 			}
@@ -290,6 +297,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buildingList.addToList(building.getName());
 		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
+		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);
 	}
 

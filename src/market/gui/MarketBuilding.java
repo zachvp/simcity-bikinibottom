@@ -148,6 +148,11 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		return info;
 	}
 	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
+	
 	public void UpdateInfoPanel(){
 		((MarketInfoPanel) info).UpdateInventoryLevelWithoutButton();
 		return;
@@ -187,5 +192,7 @@ public class MarketBuilding extends gui.Building implements RoleFactory{
 		}
 		return false;
 	}
+
+	
 	
 }

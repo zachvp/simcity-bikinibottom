@@ -1,6 +1,7 @@
 package market.interfaces;
 import java.util.List;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 import market.Item;
 
@@ -20,9 +21,12 @@ public interface DeliveryGuy {
 		public abstract String getMaitreDName();
 		public abstract String getName();
 		public abstract void setCashier(Cashier ca);
+		public abstract Person getPerson(); 
 
 	//Animations
 		public abstract void Ready();
 		public abstract void AtExit();
 		public abstract void AtDeliverExit();
+
+		
 }

@@ -39,14 +39,9 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	// how long role waits before deactivating
 	private final int IMPATIENCE_TIME = 7;
 	
-	enum TaskState { FIRST_TASK, NONE, DOING_TASK }
-	TaskState task = TaskState.FIRST_TASK;
-	
-	
 	// data for the worker
 	MaintenanceWorkerRole worker;
 	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>());
-	
 	
 	// class MyBill from worker
 	enum BillState { RECEIVED, PAYING, PAID }
@@ -107,28 +102,44 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 	}
 
 	/* ----- Messages ----- */
-	public void msgChargeRent() {
-		synchronized(residents) {
-			for(MyResident mr : residents) {
-				System.out.println("Charging rent");
-				Do("Charging rent");
-				mr.state = PaymentState.PAYMENT_DUE;
-				stateChanged();
-			}
+	
+	// from the info panel or a timed event
+	public void msgChargeRent(int unit) {
+		MyResident mr = findResident(unit);
+		if(mr == null) {
+			Do("No resident with that unit number!");
+			return;
 		}
+		mr.state = PaymentState.PAYMENT_DUE;
+		stateChanged();
 	}
 	
+	public MyResident findResident(int unit) {
+		synchronized(residents) {
+			for(MyResident mr : residents) {
+				if(mr.dwelling.getIDNumber() == unit) {
+					return mr;
+				}
+			}
+		}
+		return null;
+	}
+	
+	// from a resident
 	public void msgHereIsPayment(double amount, Resident r) {
 		MyResident mr = findResident(r);
 		if(mr == null) { return; }
+		
 		mr.hasPaid = amount;
 		mr.state = PaymentState.PAYMENT_RECEIVED;
 		Do("Received message 'here is payment' " + amount + " from resident #" + mr.dwelling.getIDNumber());
 		stateChanged();
 	}
 	
+	// from worker after fixing a problem
 	public void msgServiceCharge(double charge, MaintenanceWorkerRole worker) {
 		Do("Received bill for charge");
+		
 		this.worker = worker;
 		bills.add(new MyBill(charge, worker));
 		stateChanged();
@@ -136,11 +147,6 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 
 	/* ----- Scheduler ----- */
 	public boolean pickAndExecuteAnAction() {
-		
-		if(task == TaskState.FIRST_TASK) {
-			task = TaskState.NONE;
-			return true;
-		}
 		
 		// make payment(s) to the maintenance worker
 		if(person.getWallet().getCashOnHand() > 0) {
@@ -154,21 +160,21 @@ public class PayRecipientRole extends WorkRole implements PayRecipient {
 			}
 		}
 		
-		// charge all residents after time of the month has passed
-		synchronized(residents) {
-			for(MyResident mr : residents){
-				if(mr.state == PaymentState.PAYMENT_DUE) {
-					chargeResident(mr);
-					return true;
-				}
-			}
-		}
-		
 		// see if the resident has paid the bill
 		synchronized(residents) {
 			for(MyResident mr : residents) {
 				if(mr.state == PaymentState.PAYMENT_RECEIVED) {
 					checkResidentPayment(mr);
+					return true;
+				}
+			}
+		}
+		
+		// charge all residents after time of the month has passed
+		synchronized(residents) {
+			for(MyResident mr : residents){
+				if(mr.state == PaymentState.PAYMENT_DUE) {
+					chargeResident(mr);
 					return true;
 				}
 			}

@@ -8,6 +8,7 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.StaffDisplay;
 import housing.gui.HousingInfoPanel;
 
 /**
@@ -37,6 +38,8 @@ public class ResidentialBuilding extends Building {
 	private static int instanceCount = 0;
 	private static final int timeDifference = 12;
 	
+	StaffDisplay staff;
+	
 	public ResidentialBuilding(int x, int y, int width, int height) {
 		// set up proper coordinates
 		super(x, y, width, height);
@@ -52,6 +55,9 @@ public class ResidentialBuilding extends Building {
 		this.complex = new HousingComplex(this);
 		
 		this.housingInfoPanel = new HousingInfoPanel(this, getPopulation());
+		
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 	
 	// needed to pass to info to panel
@@ -92,8 +98,8 @@ public class ResidentialBuilding extends Building {
 	}
 	
 	@Override
-	public JPanel getStaffPanel() {
-		return new JPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
 	}
 	
 }

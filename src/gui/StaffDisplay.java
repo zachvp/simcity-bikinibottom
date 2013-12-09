@@ -117,7 +117,6 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 * @param name Name of person
 	 */
 	public void addToStaffList(String role, String name) {
-		System.out.println(role + " - "+ name);
 		if (name == null ||name.equals("Nobody")) {
 			StaffButton button = new StaffButton("", role);
 			button.setAvailable();

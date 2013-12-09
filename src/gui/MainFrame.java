@@ -44,6 +44,7 @@ import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 
 
 /** 
@@ -74,6 +75,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
+	private Sound openingSound = Sound.getInstance();
 	
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
@@ -187,6 +189,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		//Constructs buildings from config file
 		constructCity(needToBuild);
+		openingSound.playSound("OpeningSceneSound.wav");
 	}
 
 	/**

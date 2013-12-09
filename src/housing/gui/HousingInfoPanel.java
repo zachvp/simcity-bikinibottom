@@ -79,10 +79,11 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
+			int charge = chargeUnitNumberOptions.getSelectedIndex();
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof PayRecipientRole) {
 					PayRecipientRole role = (PayRecipientRole) entry.getValue();
-					role.msgChargeRent();
+					role.msgChargeRent(charge);
 				}
 			}
 		}

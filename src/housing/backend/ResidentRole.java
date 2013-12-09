@@ -254,6 +254,7 @@ public class ResidentRole extends Role implements Resident {
 				food = null;
 				doneWaitingForInput();
 				DoJazzercise();
+				setHungry(false);
 				stateChanged();
 			}
 		};

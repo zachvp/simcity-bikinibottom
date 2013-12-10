@@ -6,6 +6,7 @@ import gui.trace.AlertTag;
 import housing.backend.ResidentRole;
 import housing.backend.ResidentialBuilding;
 
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,17 +66,21 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Wallet wallet;
 	private Map<String, Integer> inventory;
+	private BufferedImage image;
 	
 	private Car car;
 	private boolean clearFoodAtHome = false;
 	
 	private boolean timeToRobABank = false;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
+	public PersonAgent(String name, IncomeLevel incomeLevel,
+			HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome,
+			BufferedImage image){
 		super();
 		updateHungerLevel();
 		
 		this.name = name;
+		this.image = image;
 		this.roles = Collections.synchronizedSet(new HashSet<Role>());
 		
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
@@ -99,7 +104,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true, null);
 		updateHungerLevel();
 	}
 	
@@ -798,6 +803,14 @@ public class PersonAgent extends Agent implements Person {
 	public Map<String, Integer> getShoppingList() {
 		return shoppingList;
 	}
+
+	/**
+	 * @return the image
+	 */
+	public BufferedImage getImage() {
+		return image;
+	}
+
 	
 }
 

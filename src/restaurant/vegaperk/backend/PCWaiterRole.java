@@ -35,6 +35,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		super.pickAndExecuteAnAction();
 		
 		if(!timerSet) {
+			timerSet = true;
 			Runnable command = new Runnable() {
 				public void run(){
 					synchronized(revolvingOrders) {
@@ -48,8 +49,6 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 					timerSet = false;
 				}
 			};
-			
-			timerSet = true;
 			
 			schedule.scheduleTaskWithDelay(command,
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);

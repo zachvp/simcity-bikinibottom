@@ -8,7 +8,7 @@ package restaurant.vegaperk.interfaces;
  */
 public interface Cashier extends market.interfaces.PhonePayer {
 	/** From Waiter */
-	public void msgDoneEating(Customer c, double b, Waiter w);
+	public void msgDoneEating(Customer c, Waiter w, Double d);
 	
 	/** From Customer */
 	public void msgHereIsPayment(Customer c, double p);

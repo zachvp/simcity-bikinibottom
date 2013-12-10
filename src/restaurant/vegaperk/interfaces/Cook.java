@@ -17,7 +17,6 @@ public interface Cook extends DeliveryReceiver {
 	public void msgHereIsOrder(Waiter w, String c, int t);
 	
 	/** From Market(s) */
-	public void msgCannotDeliver(Map<String, Integer> cannotDeliver);
 	public void msgHereIsDelivery();
 
 	public void msgCanDeliver(Map<String, Integer> canDeliver);

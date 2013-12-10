@@ -123,19 +123,6 @@ public class CookRole extends WorkRole implements Cook {
 		}
 		stateChanged();
 	}
-	/** From Market(s) */
-	public void msgCannotDeliver(Map<String, Integer> list){
-		Do("Can't fulfill order.");
-		orderFromMarket++;
-		
-		if(orderFromMarket < markets.size()){
-			orderFoodThatIsLow(list);
-		}
-		else{
-			Do("Not at any markets!");
-			orderFromMarket = 0;
-		}
-	}
 	
 	@Override
 	public void msgHereIsDelivery() {
@@ -182,6 +169,7 @@ public class CookRole extends WorkRole implements Cook {
 		synchronized (deliveries) {
 			for (int i = 0; i < deliveries.size(); i++) {
 				MyDelivery delivery = deliveries.get(i);
+				
 				if (delivery.state == DeliveryState.NEED_TO_REORDER) {
 					retryDelivery(delivery, i);
 					return true;
@@ -229,60 +217,72 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/** Actions */
-	private void restockFood() {
+	void restockFood() {
+		// Find all the items we still need to order.
 		Set<Item> itemsToOrder = new HashSet<Item>();
-		
-		for(Map.Entry<String, Food> entry : inventory.entrySet()) {
+		for (Map.Entry<String, Food> entry : inventory.entrySet()) {
 			Food f = entry.getValue();
-			
-			if(f.futureQuantity <+ f.low) {
-				Do("Out of " + f.type);
-				itemsToOrder.add(new Item(
-						f.type,f.capacity - f.futureQuantity));
+			if (f.futureQuantity <= f.low) {
+				Do(AlertTag.RESTAURANT, "Out of " + f.type);
+				itemsToOrder.add(new Item(f.type,
+						f.capacity - f.futureQuantity));
 				f.futureQuantity = f.capacity;
 			}
 		}
 		
-		if(itemsToOrder.isEmpty()) return;
-		
+		if (itemsToOrder.isEmpty()) {
+			return;
+		}
+				
+		// Find a market to order from
 		Building market = null;
 		Building restaurant = (Building) getLocation();
 		
 		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
 				LocationTypeEnum.Market);
-		if(openMarkets != null && !openMarkets.isEmpty()) {
+		if (openMarkets != null && !openMarkets.isEmpty()) {
 			market = (Building) openMarkets.get(0);
 		}
 		
+		// Request the delivery
 		MyDelivery delivery = new MyDelivery(itemsToOrder);
+		delivery.markets = new ArrayList<CityLocation>();
+		int orderNum = 0;
+		
+		market.interfaces.Cashier marketCashier =
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
+		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+				this.cashier, this, restaurant, orderNum);
 		delivery.markets.add(market);
 	}
 	
 	private void retryDelivery(MyDelivery delivery, int orderNum) {
+		// Find a market that hasn't been tried yet.
 		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
 				LocationTypeEnum.Market);
 		Building market = null;
-		
-		for(CityLocation m : openMarkets) {
-			if(!delivery.markets.contains(m)) {
+		for (CityLocation m : openMarkets) {
+			if (!delivery.markets.contains(m)) {
 				market = (Building) m;
 				break;
 			}
 		}
-		
-		if(market == null) {
-			Do("No market can complete this order.");
+		if (market == null) {
+			Do(AlertTag.RESTAURANT, "No market can complete this order.");
 			delivery.state = DeliveryState.COMPLETE;
 			return;
 		}
 		
+		// Request the delivery from the new market
 		delivery.markets.add(market);
 		
 		Building restaurant = (Building) getLocation();
-		market.interfaces.Cashier marketCashier = 
+		market.interfaces.Cashier marketCashier =
 				(market.interfaces.Cashier) market.getGreeter();
 		
-		Do("Placing an order with market " + market);
+		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
 		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
 				this.cashier, this, restaurant, orderNum);
 	}
@@ -363,21 +363,6 @@ public class CookRole extends WorkRole implements Cook {
 		onOpening = false;
 		
 		DoDrawGrillAndPlates();
-		Do("Opening restaurant");
-		
-		for(Map.Entry<String, Food> entry : inventory.entrySet()){
-			Food f = entry.getValue();
-			if(f.amount <= f.low){
-				orderFoodThatIsLow(groceries);
-			}
-		}
-	}
-	
-	private void orderFoodThatIsLow(Map<String, Integer> list){
-		Do("Ordered food.");
-		MarketAgent m = markets.get(orderFromMarket);
-		m.msgNeedFood(list);
-		list.clear();
 	}
 	
 	/** Animation Functions */
@@ -501,11 +486,11 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgHereIsYourItems(List<Item> DeliverList) {
-		for(Item item : DeliverList) {
+		for (Item item : DeliverList) {
 			Food f = inventory.get(item.name);
-			
-			if(f != null && item.amount > 0) {
-				Do("Received delivery " + item.name);
+			if (f != null && item.amount > 0) {
+				Do(AlertTag.RESTAURANT, "Received delivery of " + item.amount
+						+ " " + item.name);
 				f.amount += item.amount;
 			}
 		}
@@ -513,8 +498,8 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
-		if(!MissingItemList.isEmpty()) {
-			Do("Market could not fulfill order.");
+		if (!MissingItemList.isEmpty()) {
+			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
 			stateChanged();
 		}

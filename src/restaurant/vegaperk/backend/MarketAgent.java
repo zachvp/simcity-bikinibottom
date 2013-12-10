@@ -130,7 +130,7 @@ public class MarketAgent extends Agent implements Market {
 		//put into a different action
 		cook.msgCanDeliver(canDeliver);
 		canDeliver.clear();
-		if(cashier != null) cashier.msgHereIsBill(BILL, this);
+//		if(cashier != null) cashier.msgHereIsBill(BILL, this);
 		timer.schedule(new TimerTask() {
 			public void run() {
 				timerDone();
@@ -141,7 +141,7 @@ public class MarketAgent extends Agent implements Market {
 		1000 * DELIVER_TIME);
 	}
 	private void tellCookNoFood(){
-		cook.msgCannotDeliver(cannotDeliver);
+//		cook.msgCannotDeliver(cannotDeliver);
 		cannotDeliver.clear();
 	}
 	

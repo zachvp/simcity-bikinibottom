@@ -176,7 +176,6 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			}
 			for(MyCustomer c : customers){
 				if(c.state==MyCustomerState.OUT_OF_CHOICE){
-					c.state = MyCustomerState.SEATED;
 					tellCustomerOutOfFood(c);
 					return true;
 				}
@@ -243,7 +242,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		
 		double bill = menu.m.get(c.choice);
 		
-		cashier.msgDoneEating(c.c, bill, this);
+		cashier.msgDoneEating(c.c, this, bill);
 		Do("Going to cashier");
 		
 		DoGoToTable(c.table);
@@ -252,8 +251,11 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 	
 	protected void tellCustomerOutOfFood(MyCustomer c){
+		c.state = MyCustomerState.SEATED;
+		
 		DoGoToTable(c.table);
 		waitForInput();
+		
 		c.c.msgOutOfChoice(c.choice);
 	}
 	

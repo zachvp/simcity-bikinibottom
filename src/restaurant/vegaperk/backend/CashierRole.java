@@ -8,6 +8,8 @@ import gui.trace.AlertTag;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import restaurant.strottma.CashierRole.CState;
+import restaurant.strottma.CashierRole.MyCustomer;
 import restaurant.vegaperk.gui.CashierGui;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
@@ -45,31 +47,6 @@ public class CashierRole extends WorkRole implements Cashier {
 		return name;
 	}
 	
-	/** Messages from other agents */
-	
-	/** From WaiterAgent */
-	public void msgDoneEating(Customer c, double b, Waiter w){
-		MyCustomer mc = findCustomer(c);
-		if(mc == null){
-			getCustomers().add(new MyCustomer(c, w, b));
-		}
-		else{
-			mc.waiter = w;
-			mc.setPayment(0);
-			mc.setBill(mc.getBill() + b);
-			mc.state = CustomerState.DONE_EATING;
-		}
-		stateChanged();
-	}
-	
-	/** From Customer */
-	public void msgHereIsPayment(Customer c, double p){
-		Do("Received customer payment");
-		MyCustomer mc = findCustomer(c);
-		mc.setPayment(p);
-		mc.state = CustomerState.PAID;
-		stateChanged();
-	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -125,19 +102,21 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	
 	private void payMarket(MyBill bill){
-		bill.state = BillState.DONE;
-		if(money >= bill.getAmount()){
-			Do("Paying $" + bill.amount + " to " + bill.cashier.getName());
-			bill.cashier.msgHereIsPayment(bill.getAmount(), this);
-			money -= bill.getAmount();
-		}
-		else{
-			Do("Don't have enough money to pay bill! Paid all my money " + money);
+		if (money >= bill.amount) {
+			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
+					" to " + bill.cashier.getName());
+			bill.cashier.msgHereIsPayment(bill.amount, this);
+			money -= bill.amount;
+			bills.remove(bill);
+			
+		} else {
+			// extra credit
+			Do(AlertTag.RESTAURANT, "Cannot pay the market in full. "
+					+ "Paying as much as I can...");
 			bill.cashier.msgHereIsPayment(money, this);
-			money = 0;
+			money = 0.00;
 			bill.amount -= money;
 		}
-		bills.remove(bill);
 	}
 	
 	/** Utilities */
@@ -185,12 +164,16 @@ public class CashierRole extends WorkRole implements Cashier {
 		private double payment;
 		public CustomerState state;
 		
-		MyCustomer(Customer c, Waiter w, double b){
+		MyCustomer(Customer c, Waiter w, double b, CustomerState s){
 			setCustomer(c);
 			waiter = w;
 			setBill(b);
 			setPayment(0);
-			state = CustomerState.DONE_EATING;
+			state = s;
+		}
+
+		public void setState(CustomerState doneEating) {
+			state = doneEating;			
 		}
 
 		public double getPayment() {
@@ -276,8 +259,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	@Override
 	public void activate() {
 		super.activate();
-		DoGoHome();
-		stateChanged();
+		leaveWork = false;
 	}
 
 	@Override
@@ -295,6 +277,30 @@ public class CashierRole extends WorkRole implements Cashier {
 			market.interfaces.Cashier cashier) {
 		Do("Received a bill from " + cashier);
 		bills.add(new MyBill(total, cashier));
+		stateChanged();
+	}
+
+	@Override
+	public void msgDoneEating(Customer c, Waiter w, Double bill) {
+		Do(AlertTag.RESTAURANT, "Received msg that " + c + " is done eating.");
+		MyCustomer mc = findCustomer(c);
+		if (mc == null) {
+			mc = new MyCustomer(c, w, bill, CustomerState.DONE_EATING);
+			customers.add(mc);
+		} else {
+			mc.waiter = w;
+			mc.bill += bill;
+			mc.payment = 0;
+			mc.setState(CustomerState.DONE_EATING);
+		}
+		stateChanged();
+	}
+
+	@Override
+	public void msgHereIsPayment(Customer c, double p) {
+		MyCustomer mc = findCustomer(c);
+		mc.payment = p;
+		mc.setState(CustomerState.PAID);
 		stateChanged();
 	}
 }

@@ -437,14 +437,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		endWorkDay = true;
 		stateChanged();
 	}
-
-
-
-
 	
-
-
-
 }
 
 	

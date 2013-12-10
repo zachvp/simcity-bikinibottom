@@ -1,5 +1,6 @@
 package restaurant.vegaperk.test;
 
+import market.test.mock.MockCashier;
 import CommonSimpleClasses.CityBuilding;
 import agent.PersonAgent;
 import restaurant.vegaperk.backend.CashierRole;
@@ -28,6 +29,7 @@ public class CashierTest extends TestCase
 	MockWaiter waiter;
 	MockCustomer customer;
 	MockMarket market;
+	MockCashier mockCashier;
 	
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -39,6 +41,7 @@ public class CashierTest extends TestCase
 		customer = new MockCustomer("mockcustomer");		
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");
+		mockCashier = new MockCashier("Mock Cashier");
 	}	
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
@@ -53,7 +56,7 @@ public class CashierTest extends TestCase
 		
 		//run scenario
 		double bill = 2.00;
-		cashier.msgDoneEating(customer, bill, waiter);//send message from the waiter
+		cashier.msgDoneEating(customer, waiter, bill);//send message from the waiter
 		customer.msgHereIsCheck(bill, cashier);
 
 		//check log preconditions
@@ -82,7 +85,7 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should contain a bill with the right customer in it. It doesn't.", 
 					cashier.getCustomers().get(0).getCustomer() == customer);
 		//interleaving message
-		cashier.msgHereIsBill(bill, market);
+		cashier.msgHereIsYourTotal(bill, mockCashier);
 		assertTrue("Cashier's scheduler should have returned true (needs to react to Market's hereIsBill), but didn't.", 
 				cashier.pickAndExecuteAnAction());
 		//scheduler
@@ -112,7 +115,7 @@ public class CashierTest extends TestCase
 		
 		//run scenario
 		double bill = 2.00;
-		cashier.msgDoneEating(customer, bill, waiter);//send message from the waiter
+		cashier.msgDoneEating(customer, waiter, bill);//send message from the waiter
 		customer.msgHereIsCheck(bill, cashier);
 
 		//check log preconditions
@@ -147,7 +150,7 @@ public class CashierTest extends TestCase
 						change, customer.money - cashier.getCustomers().get(0).getBill());
 		
 		//interleaving message
-		cashier.msgHereIsBill(bill, market);
+		cashier.msgHereIsYourTotal(bill, mockCashier);
 		assertTrue("Cashier's scheduler should have returned true (needs to react to Market's hereIsBill), but didn't.", 
 				cashier.pickAndExecuteAnAction());
 				
@@ -173,7 +176,7 @@ public class CashierTest extends TestCase
 		
 		//run scenario
 		double bill = 2.00;
-		cashier.msgDoneEating(customer, bill, waiter);//send message from the waiter
+		cashier.msgDoneEating(customer, waiter, bill);//send message from the waiter
 		customer.msgHereIsCheck(bill, cashier);
 
 		//check log preconditions
@@ -202,7 +205,7 @@ public class CashierTest extends TestCase
 		assertTrue("Customer should contain a bill with the right customer in it. It doesn't.", 
 					cashier.getCustomers().get(0).getCustomer() == customer);
 		//interleaving message
-		cashier.msgHereIsBill(bill, market);
+		cashier.msgHereIsYourTotal(bill, mockCashier);
 		assertTrue("Cashier's scheduler should have returned true (needs to react to Market's hereIsBill), but didn't.", 
 				cashier.pickAndExecuteAnAction());
 		//scheduler
@@ -237,19 +240,17 @@ public class CashierTest extends TestCase
 		double bill = 25;
 
 		//message: market bills cashier
-		cashier.msgHereIsBill(bill, market);
+		cashier.msgHereIsYourTotal(bill, mockCashier);
 		//cashier creates a new bill
 		assertEquals("Cashier should have one bill, but doesn't",
 				1, cashier.getBills().size());
 		
 		//scheduler
-		assertTrue("Cashier's scheduler should return true after receiving msgHereIsBill() from the market, but doesn't",
+		assertTrue("Cashier's scheduler should return true after receiving msgHereIsTotal() from the market, but doesn't",
 				cashier.pickAndExecuteAnAction());
 		//action: cashier subtracts own money, pays market, and removes bill
 		assertEquals("Cashier should have $500 - $25 = $475 to pay market, but doesn't.",
 				475.0, cashier.getMoney());
-		assertEquals("Market should have $25 in it, but doesn't.",
-				25.0, market.money);
 		assertEquals("Cashier should have removed the bill (and have no more bills), but didn't.", 
 				0, cashier.getBills().size());
 	}
@@ -266,11 +267,13 @@ public class CashierTest extends TestCase
 		//run scenario
 		double bill = 25;
 		MockMarket market2 = new MockMarket("mockmarket2");
+		MockCashier mockCashier2 = new MockCashier("mockcashier2");
 		
 		//message: cashier gets first market's bill
-		cashier.msgHereIsBill(bill, market);
-		cashier.msgHereIsBill(bill, market2);
-		//cashier creates a new bill
+		cashier.msgHereIsYourTotal(bill, mockCashier);
+		cashier.msgHereIsYourTotal(bill, mockCashier2);
+		
+		//cashier creates a new bills
 		assertEquals("Cashier should have two bills, but doesn't",
 				2, cashier.getBills().size());
 		
@@ -280,8 +283,6 @@ public class CashierTest extends TestCase
 		//action: cashier subtracts own money, pays first market, and removes bill
 		assertEquals("Cashier should have $500 - $25 = $475 to pay market, but doesn't.",
 				475.0, cashier.getMoney());
-		assertEquals("Market should have $25 in it, but doesn't.",
-				25.0, market.money);
 		assertEquals("Cashier should have removed the bill (and have one more bill), but didn't.", 
 				1, cashier.getBills().size());
 		
@@ -291,8 +292,6 @@ public class CashierTest extends TestCase
 		//action: cashier subtracts own money, pays first market, and removes bill
 		assertEquals("Cashier should have $475 - $25 = $450 to pay market, but doesn't.",
 				450.0, cashier.getMoney());
-		assertEquals("Market2 should have $25 in it, but doesn't.",
-				25.0, market2.money);
 		assertEquals("Cashier should have removed the bill (and have no more bills), but didn't.", 
 				0, cashier.getBills().size());
 	}
@@ -310,20 +309,23 @@ public class CashierTest extends TestCase
 		double bill = 1000;
 		
 		//message: cashier gets first market's bill
-		cashier.msgHereIsBill(bill, market);
+		cashier.msgHereIsYourTotal(bill, mockCashier);
+		
 		//cashier creates a new bill
 		assertEquals("Cashier should have one bill, but doesn't",
 				1, cashier.getBills().size());
+		
 		assertEquals("Bill should be 1000, but isn't.",
 				1000.0, cashier.getBills().get(0).getAmount());
+		
 		//scheduler
 		assertTrue("Cashier's scheduler should return true after receiving msgHereIsBill() from the market, but doesn't",
 				cashier.pickAndExecuteAnAction());
+		
 		//action: cashier should give the market all of his money
 		assertEquals("Cashier should have no money now, but does",
 				0.0, cashier.getMoney());
-		assertEquals("Market should have $500, but doesn't.",
-				500.0, market.money);
+
 		assertEquals("Cashier should have removed the bill (and have no more bills), but didn't.", 
 				0, cashier.getBills().size());
 	}

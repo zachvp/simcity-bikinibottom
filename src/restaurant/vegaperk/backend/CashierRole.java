@@ -52,9 +52,10 @@ public class CashierRole extends WorkRole implements Cashier {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean pickAndExecuteAnAction(){
-		synchronized(bills){
-			for(MyBill bill : bills){
-				if(bill.state == BillState.PENDING){
+		
+		synchronized(bills) {
+			for(MyBill bill : bills) {
+				if(bill.state == BillState.PENDING) {
 					payMarket(bill);
 					return true;
 				}
@@ -107,7 +108,6 @@ public class CashierRole extends WorkRole implements Cashier {
 					" to " + bill.cashier.getName());
 			bill.cashier.msgHereIsPayment(bill.amount, this);
 			money -= bill.amount;
-			bills.remove(bill);
 			
 		} else {
 			// extra credit
@@ -117,6 +117,7 @@ public class CashierRole extends WorkRole implements Cashier {
 			money = 0.00;
 			bill.amount -= money;
 		}
+		bills.remove(bill);
 	}
 	
 	/** Utilities */
@@ -167,8 +168,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		MyCustomer(Customer c, Waiter w, double b, CustomerState s){
 			setCustomer(c);
 			waiter = w;
-			setBill(b);
-			setPayment(0);
+			bill = b;
+			payment = 0;
 			state = s;
 		}
 
@@ -209,7 +210,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		
 		MyBill(double a, market.interfaces.Cashier c){
 			setAmount(a);
-			this.cashier = cashier;
+			this.cashier = c;
+			state = BillState.PENDING;
 		}
 		
 		public double getAmount() {
@@ -299,6 +301,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	@Override
 	public void msgHereIsPayment(Customer c, double p) {
 		MyCustomer mc = findCustomer(c);
+		if(mc == null) return;
 		mc.payment = p;
 		mc.setState(CustomerState.PAID);
 		stateChanged();

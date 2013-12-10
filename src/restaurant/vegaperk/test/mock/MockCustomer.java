@@ -32,7 +32,6 @@ public class MockCustomer extends Mock implements Customer {
 	/** Messages From Cashier */
 	public void msgHereIsCheck(double check, Cashier cash){
 		log.add("Received Check from Cashier " + check);
-		System.out.println("Received check from Cashier");
 		cashier = cash;
 		bill = check;
 	}

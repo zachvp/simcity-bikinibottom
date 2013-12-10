@@ -42,7 +42,7 @@ public class TransportationGuiController implements Gui {
 
 			@Override
 			public void run() {
-				startPedestrianCrashSequence();
+				startCarCrashSequence();
 
 			}
 		}, 70000);

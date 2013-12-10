@@ -6,15 +6,12 @@ package restaurant.vegaperk.interfaces;
  * @author Monroe Ekilah
  *
  */
-public interface Cashier {
+public interface Cashier extends market.interfaces.PhonePayer {
 	/** From Waiter */
 	public void msgDoneEating(Customer c, double b, Waiter w);
 	
 	/** From Customer */
 	public void msgHereIsPayment(Customer c, double p);
 	
-	/** From Market  */
-	public void msgHereIsBill(double bill, Market m);
-
 	public void msgAtDestination();
 }

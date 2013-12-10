@@ -4,16 +4,21 @@ import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import gui.Building;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
 import java.util.*;
 
+import kelp.Kelp;
+import kelp.KelpClass;
 import restaurant.vegaperk.backend.RevolvingOrderList.Order;
 import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.CookGui;
+import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Waiter;
 import market.Item;
@@ -28,6 +33,10 @@ public class CookRole extends WorkRole implements Cook {
 	private String name;
 	private CookGui cookGui;
 	
+	private Cashier cashier;
+	
+	private Kelp kelp = KelpClass.getKelpInstance();
+	
 	// used to create time delays and schedule events
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
@@ -37,7 +46,7 @@ public class CookRole extends WorkRole implements Cook {
 	private boolean timerSet = false;
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
-	private List<MyDelivery> deliveries;
+	private List<MyDelivery> deliveries = new ArrayList<MyDelivery>();
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	
@@ -67,10 +76,10 @@ public class CookRole extends WorkRole implements Cook {
 	@SuppressWarnings("serial")
 	Map<String, Food> inventory = Collections.synchronizedMap(new HashMap<String, Food>(){
 		{
-			put("Krabby Patty", new Food("Krabby Patty", 2, 10, 1, 3));
-			put("Kelp Rings", new Food("Kelp Rings", 2, 7, 1, 3));
-			put("Coral Bits", new Food("Coral Bits", 2, 5, 1, 3));
-			put("Kelp Shake", new Food("Kelp Shake", 10, 2, 1, 3));
+			put("Krabby Patty", new Food("Krabby Patty", 1, 10, 1, 3));
+			put("Kelp Rings", new Food("Kelp Rings", 1, 7, 1, 3));
+			put("Coral Bits", new Food("Coral Bits", 1, 5, 1, 3));
+			put("Kelp Shake", new Food("Kelp Shake", 1, 2, 1, 3));
 		}
 	});
 
@@ -161,8 +170,23 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		
-		if(!groceries.isEmpty()){
-			orderFoodThatIsLow(groceries);
+		synchronized(inventory) {
+			for(Food f : inventory.values()) {
+				if(f.futureQuantity <= f.low) {
+					restockFood();
+					return true;
+				}
+			}
+		}
+		
+		synchronized (deliveries) {
+			for (int i = 0; i < deliveries.size(); i++) {
+				MyDelivery delivery = deliveries.get(i);
+				if (delivery.state == DeliveryState.NEED_TO_REORDER) {
+					retryDelivery(delivery, i);
+					return true;
+				}
+			}
 		}
 		
 		synchronized(orders){
@@ -182,15 +206,11 @@ public class CookRole extends WorkRole implements Cook {
 			Runnable command = new Runnable() {
 				public void run(){
 					for(Order o : revolvingOrders.orderList) {
-						Do("Order state " + o.state);
-						
 						if(o.state == OrderState.COOKED){
-							Do("Cooking from revolving orders.");
 							plateIt(o);
 						}
 						
 						else if(o.state == OrderState.NEED_TO_COOK){
-							Do("Cooking from revolving orders.");
 							tryToCookFood(o);
 						}
 					}
@@ -209,6 +229,64 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/** Actions */
+	private void restockFood() {
+		Set<Item> itemsToOrder = new HashSet<Item>();
+		
+		for(Map.Entry<String, Food> entry : inventory.entrySet()) {
+			Food f = entry.getValue();
+			
+			if(f.futureQuantity <+ f.low) {
+				Do("Out of " + f.type);
+				itemsToOrder.add(new Item(
+						f.type,f.capacity - f.futureQuantity));
+				f.futureQuantity = f.capacity;
+			}
+		}
+		
+		if(itemsToOrder.isEmpty()) return;
+		
+		Building market = null;
+		Building restaurant = (Building) getLocation();
+		
+		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+				LocationTypeEnum.Market);
+		if(openMarkets != null && !openMarkets.isEmpty()) {
+			market = (Building) openMarkets.get(0);
+		}
+		
+		MyDelivery delivery = new MyDelivery(itemsToOrder);
+		delivery.markets.add(market);
+	}
+	
+	private void retryDelivery(MyDelivery delivery, int orderNum) {
+		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+				LocationTypeEnum.Market);
+		Building market = null;
+		
+		for(CityLocation m : openMarkets) {
+			if(!delivery.markets.contains(m)) {
+				market = (Building) m;
+				break;
+			}
+		}
+		
+		if(market == null) {
+			Do("No market can complete this order.");
+			delivery.state = DeliveryState.COMPLETE;
+			return;
+		}
+		
+		delivery.markets.add(market);
+		
+		Building restaurant = (Building) getLocation();
+		market.interfaces.Cashier marketCashier = 
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		Do("Placing an order with market " + market);
+		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+				this.cashier, this, restaurant, orderNum);
+	}
+	
 	private void removeOrder(Order o) {
 		DoRemovePlateFood(o.table);
 		PlateZone pz = plateZones.get(o.table);
@@ -256,10 +334,8 @@ public class CookRole extends WorkRole implements Cook {
 	 * @param i circumvents timer restrictions
 	 */
 	private void timeFood(final Order o){
-		Do("timing food");
 		Runnable command = new Runnable() {
 			public void run(){
-				Do(o.choice + " done.");
 				o.state = OrderState.COOKED;
 				stateChanged();
 			}
@@ -271,8 +347,6 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	private void plateIt(Order o){
-		Do("Order Plated");
-		
 		o.state = OrderState.FINISHED;
 		
 		if(o.waiter instanceof WaiterRole)
@@ -364,7 +438,9 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private class Food {
 		String type;
-		int amount, cookTime, low, capacity;
+		int amount, cookTime, low, capacity,
+		futureQuantity;
+		
 		OrderState os;
 		
 		Food(String t, int amt, int ct, int lo, int cap){
@@ -425,13 +501,22 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgHereIsYourItems(List<Item> DeliverList) {
-		// TODO Auto-generated method stub
-		
+		for(Item item : DeliverList) {
+			Food f = inventory.get(item.name);
+			
+			if(f != null && item.amount > 0) {
+				Do("Received delivery " + item.name);
+				f.amount += item.amount;
+			}
+		}
 	}
 
 	@Override
 	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
-		// TODO Auto-generated method stub
-		
+		if(!MissingItemList.isEmpty()) {
+			Do("Market could not fulfill order.");
+			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			stateChanged();
+		}
 	}
 }

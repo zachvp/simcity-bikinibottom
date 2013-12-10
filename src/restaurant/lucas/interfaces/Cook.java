@@ -10,7 +10,7 @@ import java.util.List;
  * @author Jack Lucas
  *
  */
-public interface Cook {
+public interface Cook extends market.interfaces.DeliveryReceiver {
 
 	public abstract void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w);
 	

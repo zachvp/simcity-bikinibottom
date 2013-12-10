@@ -1,23 +1,36 @@
 package restaurant.lucas;
 
+import gui.Building;
+import gui.trace.AlertTag;
+
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
+
+import kelp.Kelp;
+import kelp.KelpClass;
+
+import market.Item;
 
 import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
+import restaurant.strottma.interfaces.Cashier;
+
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.WorkRole;
 import agent.interfaces.Person;
 //import restaurant.HostAgent.Table;
@@ -91,6 +104,7 @@ public class CookRole extends WorkRole implements Cook {
 			this.threshold = threshold;
 			this.capacity = capacity;
 			this.enroute = enroute;
+			this.futureQuantity = amount;//enroute amount
 			
 		}
 		
@@ -99,7 +113,13 @@ public class CookRole extends WorkRole implements Cook {
 		int amount;
 		int threshold;
 		int capacity;
+		int futureQuantity;
 		boolean enroute;
+		
+		void decrementQuantity() {
+			this.amount -= 1;
+			this.futureQuantity -= 1;
+		}
 	}
 
 	private Map<String, Integer> cookingTimes;
@@ -107,6 +127,8 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private List<String> deliveredFoods = new ArrayList<String>();
 	private List<Integer> deliveredAmounts = new ArrayList<Integer>();//used to transfer from message to updating foods action
+	
+	
 	
 	int previousMarket = 0;
 	
@@ -129,6 +151,30 @@ public class CookRole extends WorkRole implements Cook {
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	int CHECK_ORDER_WHEEL_TIME = 7;
 	
+	//DELIVERY CRAP
+	private Kelp kelp = KelpClass.getKelpInstance();
+	
+	private enum DeliveryState {PLACED, NEED_TO_REORDER, COMPLETE};
+	private class MyDelivery {
+		Set<Item> items;
+		Set<Item> itemsToReorder;
+		List<CityLocation> markets;
+		DeliveryState state;
+		
+		MyDelivery(Set<Item> items) {
+			this.items = items;
+			this.itemsToReorder = new HashSet<Item>();
+			this.markets = new ArrayList<CityLocation>();
+			this.state = DeliveryState.PLACED;
+		}
+		
+		MyDelivery() {
+			this(new HashSet<Item>());
+		}
+	}
+	
+	private List<MyDelivery> deliveries;
+	Cashier cashier;
 	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
@@ -431,13 +477,52 @@ public class CookRole extends WorkRole implements Cook {
 				msgOrderCooked(orderNum);
 			}
 		}, cookingTimes.get(o.Choice));
-		f.amount--;
+		f.decrementQuantity();
 		o.orderState=state.cooking;
 	}
 
-
-
-	
+///
+	void restockFood() {
+		// Find all the items we still need to order.
+		Set<Item> itemsToOrder = new HashSet<Item>();
+		for (Map.Entry<String, Food> entry : foods.entrySet()) {
+			Food f = entry.getValue();
+			if (f.futureQuantity <= f.threshold) {
+				Do(AlertTag.RESTAURANT, "Out of " + f.type);
+				itemsToOrder.add(new Item(f.type,
+						f.capacity - f.futureQuantity));
+				f.futureQuantity = f.capacity;
+			}
+		}
+		
+		if (itemsToOrder.isEmpty()) {
+			return;
+		}
+				
+		// Find a market to order from
+		Building market = null;
+		Building restaurant = (Building) getLocation();
+		
+		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+				LocationTypeEnum.Market);
+		if (openMarkets != null && !openMarkets.isEmpty()) {
+			market = (Building) openMarkets.get(0);
+		}
+		
+		// Request the delivery
+		MyDelivery delivery = new MyDelivery(itemsToOrder);
+		delivery.markets = new ArrayList<CityLocation>();
+		int orderNum = 0;
+		
+		market.interfaces.Cashier marketCashier =
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
+		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+				this.cashier, this, restaurant, orderNum);
+		delivery.markets.add(market);
+	}
+///
 	public void checkInventory() {//take market as param?
 		
 		List<String> lowFoodsNames = new ArrayList<String>();
@@ -544,6 +629,14 @@ public class CookRole extends WorkRole implements Cook {
 
 	//utilities
 	
+	public Cashier getCashier() {
+		return cashier;
+	}
+	
+	public void setCashier(Cashier cashier) {
+		this.cashier = cashier;
+	}
+	
 	public void setOrderWheel (OrderWheel o) {
 		orderWheel = o;
 	}
@@ -615,6 +708,32 @@ public class CookRole extends WorkRole implements Cook {
 	public void msgLeaveWork() {
 		endWorkDay = true;
 		stateChanged();
+	}
+
+	
+	
+	
+	//STUFF FROM DELIVERY RECEIVER
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		for (Item item : DeliverList) {
+			Food f = foods.get(item.name);
+			if (f != null && item.amount > 0) {
+				Do(AlertTag.RESTAURANT, "Received delivery of " + item.amount
+						+ " " + item.name);
+				f.amount += item.amount;
+			}
+		}
+	}
+
+
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+		if (!MissingItemList.isEmpty()) {
+			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
+			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			stateChanged();
+		}		
 	}
 	
 

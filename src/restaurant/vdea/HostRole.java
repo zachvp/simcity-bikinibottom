@@ -22,7 +22,9 @@ public class HostRole extends WorkRole implements Host{
 	private String name;
 	private Semaphore atDest = new Semaphore(0, true);
 	private HostGui gui = null;
-
+	
+	private boolean offWork = false;
+	
 	public enum AgentState
 	{none, tablesFull, assigningCustomer, leave, leaveLine}
 	private AgentState state = AgentState.none;
@@ -38,6 +40,14 @@ public class HostRole extends WorkRole implements Host{
 			tables.add(new Table(ix));//how you add to a collections
 		}
 	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
+		
+	}
+
 
 	public List getWaitingCustomers() {
 		return waitingCustomers;
@@ -142,10 +152,7 @@ public class HostRole extends WorkRole implements Host{
 
 	protected boolean pickAndExecuteAnAction() {	
 		sen = sen ? sen : !waitingCustomers.isEmpty() && waiters.isEmpty();
-		//if there is an unoccupied table in tables
-		// && there is a customer in waitingCustomers
-		// 	then assignWaiter(waitingCustomers.get(0), table, waiter);
-		//print("state: " + state);
+
 		synchronized(inLine){
 			for(Customer i: inLine){
 				if (state == AgentState.leaveLine){
@@ -177,7 +184,7 @@ public class HostRole extends WorkRole implements Host{
 			}
 		}
 
-
+		if (offWork) { deactivate(); }
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
@@ -258,8 +265,7 @@ public class HostRole extends WorkRole implements Host{
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive() && !isOnBreak();
 	}
 
 	@Override
@@ -270,7 +276,7 @@ public class HostRole extends WorkRole implements Host{
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
+		offWork = true;
 
 	}
 

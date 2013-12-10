@@ -28,11 +28,19 @@ public class CashierRole extends WorkRole implements Cashier{
 
 	public EventLog log = new EventLog();
 	
+	private boolean offWork = false;
+	
 	public CashierRole(Person person, CityLocation location) {
 		super(person, location);
 		
 		this.name = super.getName();
 		bank = 60;
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 	
 	// Messages
@@ -106,6 +114,7 @@ public class CashierRole extends WorkRole implements Cashier{
 					}
 				}
 			}
+			if (offWork) { deactivate(); }
 			return false;
 		}
 
@@ -203,8 +212,7 @@ public class CashierRole extends WorkRole implements Cashier{
 
 		@Override
 		public boolean isAtWork() {
-			// TODO Auto-generated method stub
-			return false;
+			return isActive() && !isOnBreak();
 		}
 
 		@Override
@@ -215,8 +223,7 @@ public class CashierRole extends WorkRole implements Cashier{
 
 		@Override
 		public void msgLeaveWork() {
-			// TODO Auto-generated method stub
-			
+			offWork = true;
 		}
 
 

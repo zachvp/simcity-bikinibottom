@@ -62,6 +62,10 @@ public class HostGui implements Gui {
     public boolean isPresent() {
         return true;
     }
+    
+    public void DoGoToLobby(){
+    	xDestination = 
+    }
 
     public void DoBringToTable(CustomerRole customer, int tblNum) {
     	//Role.setBusy(true);

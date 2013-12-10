@@ -34,6 +34,8 @@ public class CookRole extends WorkRole implements Cook{
 	private Food steak = new Food("steak", 6);
 	public List<Food> inventory = new ArrayList<Food>();
 	boolean orderSent;
+	
+	private boolean offWork = false;
 
 	public CookRole(Person person, CityLocation location) {
 		super(person, location);
@@ -44,6 +46,12 @@ public class CookRole extends WorkRole implements Cook{
 		inventory.add(pizza);
 		inventory.add(salad);
 		inventory.add(steak);
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 
 	public void setCashier(Cashier c){
@@ -128,6 +136,7 @@ public class CookRole extends WorkRole implements Cook{
 				}
 			}
 		}
+		if (offWork) { deactivate(); }
 		return false;
 	}
 
@@ -286,8 +295,7 @@ public class CookRole extends WorkRole implements Cook{
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive() && !isOnBreak();
 	}
 
 	@Override
@@ -298,8 +306,7 @@ public class CookRole extends WorkRole implements Cook{
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		offWork = true;
 	}
 
 }

@@ -52,6 +52,14 @@ public class CustomerRole extends Role implements Customer {
 		}
 		reorder = "";
 	}
+	/**
+	 * Activate the CustomerRole, then get hungry.
+	 */
+	@Override
+	public void activate() {
+		super.activate();
+		gotHungry();
+	}
 	public void setTableNumber(int t){
 		tableNumber = t;
 	}

@@ -30,10 +30,18 @@ public class WaiterRole extends WorkRole implements Waiter{
 	private Host host;
 	private Cashier cashier;
 	public WaiterGui waiterGui = null;
+	
+	private boolean offWork = false;
 
 	public WaiterRole(Person person, CityLocation location) {
 		super(person, location);
 		this.name = super.getName();
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		offWork = false;
 	}
 
 	public boolean isBusy(){
@@ -174,7 +182,6 @@ public class WaiterRole extends WorkRole implements Waiter{
 		catch(Exception e){}
 	}
 
-
 	//from animation
 	public void msgAtTable() {
 		//print("table released");
@@ -235,6 +242,7 @@ public class WaiterRole extends WorkRole implements Waiter{
 			}
 		}
 		catch(ConcurrentModificationException e){}
+		if (offWork) { deactivate(); }
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
@@ -434,13 +442,12 @@ public class WaiterRole extends WorkRole implements Waiter{
 
 	@Override
 	public boolean isAtWork() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive() && isNotOnBreak();
 	}
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
+		offWork = true;
 		
 	}
 }

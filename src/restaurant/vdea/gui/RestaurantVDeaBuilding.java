@@ -16,7 +16,7 @@ import agent.interfaces.Person;
 import gui.Building;
 import gui.StaffDisplay;
 
-public class RestaurantBuilding extends Building{
+public class RestaurantVDeaBuilding extends Building{
 
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
@@ -31,7 +31,7 @@ public class RestaurantBuilding extends Building{
 	StaffDisplay staff;
 	ScheduleTask task = ScheduleTask.getInstance();
 	
-	public RestaurantBuilding(int x, int y, int width, int height) {
+	public RestaurantVDeaBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width/2, height);

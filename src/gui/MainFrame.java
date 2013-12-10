@@ -34,6 +34,7 @@ import restaurant.lucas.gui.RestaurantLucasBuilding;
 import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
+import restaurant.vdea.gui.RestaurantVDeaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
 import transportation.interfaces.Busstop;
@@ -262,8 +263,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 			if(type == LocationTypeEnum.Restaurant){
 				//RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				//RestaurantLucasBuilding restaurant = new RestaurantLucasBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				restaurant.vdea.gui.RestaurantBuilding restaurant = new restaurant.vdea.gui.RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantLucasBuilding restaurant = new RestaurantLucasBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				//RestaurantVDeaBuilding restaurant = new RestaurantVDeaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);
 			}

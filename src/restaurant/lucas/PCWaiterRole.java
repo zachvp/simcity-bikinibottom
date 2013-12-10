@@ -15,9 +15,9 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 
 	OrderWheel orderWheel;
 	
-	boolean timeToCheckOrderWheel= false;
+	boolean timeToCheckOrderWheel= true;
 	private ScheduleTask schedule = ScheduleTask.getInstance();
-	int CHECK_ORDER_WHEEL_TIME;
+	int CHECK_ORDER_WHEEL_TIME = 7;
 	
 	public PCWaiterRole(Person p, CityLocation c) {
 		super(p, c);
@@ -28,10 +28,25 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 
 	private void checkOrderWheel() {
 		
+		
+		Customer c = orderWheel.getCookedOrderCustomer();
+		if(findCustomer(c) == null) {
+			return;
+		}
+		
+		String choice = orderWheel.getCookedOrderString();
+		int table = orderWheel.getCookedOrderTabelNum();
+		Dimension dim = new Dimension(500, 30);//TODO hack to test
+		msgOrderIsReady(c, choice, table, dim);
+		
+		
+		orderWheel.changeServedOrderState();
 	}
+	
 	
 	@Override
 	protected boolean pickAndExecuteAnAction() {
+		print("sched check");
 		if(!atWork) {
 			goToWork();
 			return true;
@@ -103,13 +118,20 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 			return true;
 		}
 		
+		if(orderWheel.getCookedOrderSize()>0){
+			checkOrderWheel();
+			return true;
+		}
+		
 		if(timeToCheckOrderWheel) {
+			print("TIME CHECK");
 			timeToCheckOrderWheel = false;
-			print("tititi");
+//			print("tititi");
 			Runnable command = new Runnable() {
 				@Override
 				public void run() {
-					checkOrderWheel();
+					stateChanged();
+					timeToCheckOrderWheel = true;
 				}
 			};
 			schedule.scheduleTaskWithDelay(command, CHECK_ORDER_WHEEL_TIME * Constants.MINUTE);

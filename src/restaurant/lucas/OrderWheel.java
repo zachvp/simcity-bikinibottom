@@ -116,11 +116,57 @@ public class OrderWheel {
 			}
 		}
 	}
-	public void changeCookingOrderState() {
+	public void changeCookingOrderState(Customer c) {
 		for(Order o : orderList) {
-			if(o.orderState == state.cooking) {
+			if(o.cust == c) {
 				o.orderState = state.cooked;
 			}
 		}
+	}
+	
+	//USED BY PCWAITER TO TELL WHEN TO CHECK SCHED
+	public int getCookedOrderSize(){
+		int num =0;
+		for(Order o : orderList) {
+			if(o.orderState == state.cooked) {
+				num ++;
+			}
+		}
+		return num;
+	}
+	
+	public void changeServedOrderState() {
+		for(Order o : orderList) {
+			if(o.orderState == state.cooked) {
+				o.orderState = state.none;//Served to customer
+			}
+		}
+	}
+	
+	public String getCookedOrderString() {
+		for(Order o : orderList) {
+			if(o.orderState == state.cooked) {
+				return o.Choice;
+			}
+		}
+		return null;//problem occurred
+	}
+	
+	public int getCookedOrderTabelNum() {
+		for(Order o : orderList) {
+			if(o.orderState == state.cooked) {
+				return o.table;
+			}
+		}
+		return -1;//problem occurred
+	}
+	
+	public Customer getCookedOrderCustomer() {
+		for(Order o : orderList) {
+			if(o.orderState == state.cooked) {
+				return o.cust;
+			}
+		}
+		return null;//problem occurred
 	}
 }

@@ -1,22 +1,8 @@
 package restaurant.lucas;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
-
-import restaurant.lucas.WaiterRoleBase.MyCustomer;
-import restaurant.lucas.WaiterRoleBase.customerState;
-import restaurant.lucas.gui.WaiterGui;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
-import agent.WorkRole;
 import agent.interfaces.Person;
 
 

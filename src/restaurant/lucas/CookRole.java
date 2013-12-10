@@ -10,20 +10,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import bank.gui.BankBuilding;
-
 import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
-import restaurant.lucas.gui.RestaurantLucasBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
-//import restaurant.HostAgent.Table;
 import agent.interfaces.Person;
+//import restaurant.HostAgent.Table;
 
 /**
  * Restaurant Host Agent
@@ -139,7 +136,7 @@ public class CookRole extends WorkRole implements Cook {
 	OrderWheel orderWheel;
 //	Timer checkOrderWheelTimer;
 	private ScheduleTask schedule = ScheduleTask.getInstance();
-	int CHECK_ORDER_WHEEL_TIME = 1;
+	int CHECK_ORDER_WHEEL_TIME = 7;
 	
 	
 	public CookRole(Person p, CityLocation c) {
@@ -207,7 +204,6 @@ public class CookRole extends WorkRole implements Cook {
 			msgHereIsAnOrder(choice, tableNum, c, w);
 			orderWheel.changeReceivedOrderState();//changes state of order so it is not looked at again
 		}
-		timeToCheckOrderWheel = true;
 	}
 	
 	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {//sent from waiter
@@ -336,13 +332,18 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 
+		if(orderWheel.getReceivedOrdersSize() > 0){
+			checkOrderWheel();
+			return true;
+		}
+		
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
-			print("POOPSANDBUTTSANDSOMEMOREPOOPS");
+//			print("POOPSANDBUTTSANDSOMEMOREPOOPS");
 			Runnable command = new Runnable() {
-				@Override
 				public void run() {
-					checkOrderWheel();
+					stateChanged();
+					timeToCheckOrderWheel = true;
 				}
 			};
 			schedule.scheduleTaskWithDelay(command, CHECK_ORDER_WHEEL_TIME * Constants.MINUTE);
@@ -515,12 +516,12 @@ public class CookRole extends WorkRole implements Cook {
 				
 				goToPlateArea(p);
 				Dimension plateDim = new Dimension(p.x, p.y);
-				if(o.waiter instanceof WaiterRole){
-					((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
-				}
-				if(o.waiter instanceof PCWaiterRole) {
-					orderWheel.changeCookingOrderState();
-				}
+				//if(o.waiter instanceof WaiterRole){
+					//((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
+				//}
+				//if(o.waiter instanceof PCWaiterRole) {
+					orderWheel.changeCookingOrderState(o.cust);
+				//}
 				acquireSemaphore(active);
 				p.o = o;
 				break;

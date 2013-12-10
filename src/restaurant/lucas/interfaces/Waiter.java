@@ -22,9 +22,9 @@ public interface Waiter {
 	
 	public abstract void msgHereIsMyChoice(Customer c, String choice);
 	
-	public abstract void msgOutOfFood(int tableNum, String choice);
+//	public abstract void msgOutOfFood(int tableNum, String choice);
 	
-	public abstract void msgOrderIsReady(Customer c, String choic, int table, Dimension p);
+//	public abstract void msgOrderIsReady(Customer c, String choic, int table, Dimension p);
 	
 	public abstract void msgReadyToPay(Customer c);
 	

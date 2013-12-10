@@ -166,4 +166,10 @@ public class WaiterGui implements Gui {
     	agent.msgAtDestination();
     	
     }
+
+	public void DoEndWorkDay() {
+		canRelease = true;
+		xDestination = entranceX;
+		yDestination = entranceY;
+	}
 }

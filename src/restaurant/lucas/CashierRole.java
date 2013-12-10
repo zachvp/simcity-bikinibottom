@@ -47,6 +47,8 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	boolean atWork;
 	
+	boolean endWorkDay = false;
+	
 	private Semaphore active = new Semaphore(0);//overall semaphore
 
 
@@ -220,6 +222,12 @@ public class CashierRole extends WorkRole implements Cashier {
 			payMarket();
 			return true;
 		}
+		
+		if(endWorkDay) {
+			endWorkDay();
+			return true;
+			
+		}
 
 
 		return false;
@@ -229,6 +237,28 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	// Actions ///////////////////
+	private void endWorkDay() { 
+		goOffWork();
+		atWork = false;
+		endWorkDay = false;
+		this.deactivate();
+	}
+
+	private void goOffWork() {
+		addPaycheckToWallet();
+		leaveWork();
+	}
+	
+	private void leaveWork() {
+		cashierGui.DoLeaveRestaurant();
+		acquireSemaphore(active);
+	}
+	
+
+	
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(300.0);
+	}
 	
 	private void goToWork() {
 		cashierGui.DoGoToDesk();
@@ -348,8 +378,8 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		endWorkDay = true;
+		stateChanged();
 	}
 
 

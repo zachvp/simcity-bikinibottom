@@ -124,24 +124,32 @@ public class CookRole extends WorkRole implements Cook {
 	List<Order> Orders = Collections.synchronizedList(new ArrayList<Order>());
 	Timer CookTimer;
 	
+	
+	
+	boolean endWorkDay = false;
+	
 	private List<MarketRole> markets = new ArrayList<MarketRole>();
 //	map<String, int> cookTimes; 
 	
-
-	
+	/**
+	 * used to work with PCWaiter with data sharing
+	 */
+	boolean timeToCheckOrderWheel =true;
+	OrderWheel orderWheel;
+	Timer checkOrderWheelTimer;
 	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
 
 		atWork = false;
 		
-
+		this.checkOrderWheelTimer = new Timer();
 		this.CookTimer = new Timer();
 		this.cookingTimes = new HashMap<String, Integer>();
 		
-		Food tofu = new Food("Tofu", 5*1000, 4, 2, 4, false);
+		Food tofu = new Food("Tofu", 5*1000, 5, 2, 4, false);
 		foods.put("Tofu", tofu);
-		Food rice = new Food("Rice", 7*1000, 3, 4, 6, false);
+		Food rice = new Food("Rice", 7*1000, 6, 2, 6, false);
 		foods.put("Rice", rice);
 		Food sushi = new Food("Sushi", 9*1000, 6, 2, 7, false);
 		foods.put("Sushi", sushi);
@@ -180,8 +188,16 @@ public class CookRole extends WorkRole implements Cook {
 
 
 	// Messages ################################################
+	/**
+	 * check orderWheel for updated info
+	 * makes PCWaiter data sharing work
+	 * called on Timer
+	 */
+	public void checkOrderWheel() {
+		
+	}
 	
-	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {
+	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {//sent from waiter
 		Do("I have received order");
 		Orders.add(new Order(choice, tableNum, customer, w, state.received));
 //		w.doDisplayChoice("none");//TODO too much sharing
@@ -302,8 +318,16 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 		
+		if(endWorkDay) {
+			endWorkDay();
+			return true;
+		}
 
-		
+		if(timeToCheckOrderWheel) {
+			timeToCheckOrderWheel = false;
+			//TODO start timer
+			//does not return true to call sched again
+		}
 
 
 		return false;
@@ -311,6 +335,25 @@ public class CookRole extends WorkRole implements Cook {
 	}
 
 	// Actions ///////////////////
+	
+	private void endWorkDay() { 
+		goOffWork();
+		atWork = false;
+		endWorkDay = false;
+		this.deactivate();
+	}
+	
+	private void goOffWork() {
+			addPaycheckToWallet();
+			leaveWork();
+	}
+	
+
+	
+	private void addPaycheckToWallet() {
+		this.getPerson().getWallet().addCash(300.0);
+	}
+	
 	private void goToWork() {
 		cookGui.DoGoAboveKitchen();
 		acquireSemaphore(active);
@@ -325,8 +368,6 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui.DoLeaveRestaurant();
 		acquireSemaphore(active);
 		
-		atWork = false;
-		deactivate();
 	}
 	
 	private void CookOrder(Order o, final int orderNum) {
@@ -338,7 +379,7 @@ public class CookRole extends WorkRole implements Cook {
 			
 		}
 		if(f.amount <= 0) {
-			o.waiter.msgOutOfFood(o.table, o.Choice);
+			((WaiterRole) o.waiter).msgOutOfFood(o.table, o.Choice);
 			Orders.remove(o);
 			return;
 		}
@@ -453,7 +494,7 @@ public class CookRole extends WorkRole implements Cook {
 				
 				goToPlateArea(p);
 				Dimension plateDim = new Dimension(p.x, p.y);
-				o.waiter.msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
+				((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
 				acquireSemaphore(active);
 				p.o = o;
 				break;
@@ -470,6 +511,10 @@ public class CookRole extends WorkRole implements Cook {
 
 
 	//utilities
+	
+	public void setOrderWheel (OrderWheel o) {
+		orderWheel = o;
+	}
 	
 	public void acquireSemaphore(Semaphore a) {
 		try {
@@ -536,8 +581,8 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
+		endWorkDay = true;
+		stateChanged();
 	}
 	
 

@@ -261,8 +261,9 @@ public class HostRole extends WorkRole implements Host {
 				r.msgLeaveWork();
 			}
 			goOffWork();
-			this.deactivate();
 			atWork = false;
+			endWorkDay = false;
+			this.deactivate();
 		}
 	}
 	
@@ -271,7 +272,6 @@ public class HostRole extends WorkRole implements Host {
 			addPaycheckToWallet();
 			doEndWorkDay();
 			acquireSemaphore(active);
-			this.deactivate();
 	}
 	
 	private void doEndWorkDay() {

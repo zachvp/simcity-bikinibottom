@@ -412,6 +412,7 @@ public class CustomerRole extends Role implements Customer {
 			}
 		},
 		14000);//getHungerLevel() * 1000);//how long to wait before running task
+		
 	}
 	
 	private void readyToPay() {
@@ -420,17 +421,18 @@ public class CustomerRole extends Role implements Customer {
 	
 	private void pay() {
 		myCashier.msgHereIsMyPayment(this, Math.ceil(myBill + owedMoney));
-		myMoney = this.myMoney - Math.ceil(myBill + owedMoney);
+		//myMoney = this.myMoney - Math.ceil(myBill + owedMoney);
+		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() - Math.ceil(myBill + owedMoney));
 	}
 
 	private void leaveTable() {
 		Do("Leaving Restaraunt");
 		doDisplayChoice("");
-		if(myMoney < 0) {//if i couldn't afford this meal
-			Do("I couldn't afford it but will pay next time!");
-			owedMoney = myMoney * -1;
-			myMoney = 40;
-		}
+//		if(myMoney < 0) {//if i couldn't afford this meal
+//			Do("I couldn't afford it but will pay next time!");
+//			owedMoney = myMoney * -1;
+//			myMoney = 40;
+//		}
 		waiter.msgLeavingTable(this);//sends this to host
 		this.getPerson().setHungerLevel(HungerLevel.FULL);
 		customerGui.DoExitRestaurant();

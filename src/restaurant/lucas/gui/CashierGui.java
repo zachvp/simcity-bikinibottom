@@ -84,6 +84,12 @@ public class CashierGui implements Gui {
     	yDestination = deskY;
     }
     
+    public void DoLeaveRestaurant() {
+    	canRelease = true;
+    	xDestination = entranceX;
+    	yDestination = entranceY;
+    }
+    
     public void DoGoToDesk() {
     	canRelease = true;
     	xDestination = deskX;

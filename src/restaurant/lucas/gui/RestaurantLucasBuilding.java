@@ -85,7 +85,9 @@ public class RestaurantLucasBuilding extends Building {
 			host.addRole(w);
 			
 			// Set references between the waiter and other roles
-			w.setOtherRoles(host, cook, cashier);
+			w.setOtherRoles(host, cashier);
+			w.setCook(cook);
+			//TODO make setcook method for normalWaiter
 			host.addWaiter(w);
 			
 			// Create and set up the waiter GUI

@@ -45,7 +45,7 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	public CashierGui cashierGui = null;
 	
-	private double money = 1000;
+	private double money = 500;
 	
 	boolean atWork;
 	
@@ -431,11 +431,24 @@ public class CashierRole extends WorkRole implements Cashier {
 		return false;
 	}
 
+	public double getRestaurantMoney() {
+		return money;
+	}
+	
+	public void setRestaurantMoney(double amount) {
+		this.money = amount;
+	}
 
 	@Override
 	public void msgLeaveWork() {
 		endWorkDay = true;
 		stateChanged();
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		this.getPerson().setShouldDepositRestaurantMoney(true);
 	}
 	
 }

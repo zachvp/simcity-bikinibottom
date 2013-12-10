@@ -218,5 +218,18 @@ public interface Person {
 	Map<String, Integer> getShoppingList();
 
 	public BufferedImage getImage();
+
+	/**
+	 * called by CashierRole and 
+	 * BusinessBankCustomerRole
+	 * @param b
+	 */
+	public void setShouldDepositRestaurantMoney(boolean b);
+	/**
+	 * called by BusinessBankCustomerRole to update money
+	 * to deposit on behalf of restaurant
+	 * @return
+	 */
+	public double getCashierMoney();
 	
 }

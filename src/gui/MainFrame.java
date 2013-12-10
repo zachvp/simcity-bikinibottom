@@ -18,19 +18,14 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
 
-import market.gui.MarketBuilding;
-import bank.gui.BankBuilding;
 import kelp.KelpClass;
+import market.gui.MarketBuilding;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
@@ -38,12 +33,15 @@ import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
-import transportation.interfaces.*;
+import transportation.interfaces.Busstop;
+import transportation.interfaces.Corner;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
+import bank.gui.BankBuilding;
 
 
 /** 
@@ -74,6 +72,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private InfoList buildingList;
 	private InfoList personList;
 	private CitizenRecords citizenRecords;
+	private Sound openingSound = Sound.getInstance();
 	
 	private ArrayList<Building> constructedBuildings = new ArrayList<Building>();
 	HospitalBuilding hospital;
@@ -124,7 +123,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		cityViewSlot.add(map);
 
 		//Information Panel 720x210
-		JTabbedPane tabbedInfoPane = new JTabbedPane();
+		TabbedInfoDisplay tabbedInfoPane = new TabbedInfoDisplay();
 		tabbedInfoPane.setOpaque(false);
 		
 		Dimension infoDim = new Dimension((int)(WINDOWX * .6), (int) (WINDOWY * .3));
@@ -133,10 +132,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanelSlot.setMinimumSize(infoDim);
 		infoPanelSlot.setOpaque(false);
 		infoPanelSlot.setLayout(new BorderLayout());
+		//InfoPanel is now a JTabbedPane
 		infoPanel = new InfoPanel(infoDim.width, infoDim.height);  
 		tabbedInfoPane.addTab("Info", infoPanel);
 		tabbedInfoPane.addTab("Log", new LogDisplay());
+		infoPanel.setTabDisplay(tabbedInfoPane);
 		infoPanelSlot.add(tabbedInfoPane, BorderLayout.CENTER);
+		//infoPanelSlot.add(infoPanel, BorderLayout.CENTER);
 
 		//List of Buildings/People buttons
 		Dimension listDim = new Dimension((int)(WINDOWX * .4), (int) (WINDOWY * .3));
@@ -184,6 +186,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		//Constructs buildings from config file
 		constructCity(needToBuild);
+		openingSound.playSound("OpeningSceneSound.wav");
 	}
 
 	/**
@@ -291,6 +294,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buildingList.addToList(building.getName());
 		}		
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
+		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);
 	}
 

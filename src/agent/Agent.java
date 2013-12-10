@@ -166,6 +166,7 @@ public abstract class Agent {
                     
                 } catch (InterruptedException e) {
                     // no action - expected when stopping or when deadline changed
+                	e.printStackTrace();
                 }
             }
         }

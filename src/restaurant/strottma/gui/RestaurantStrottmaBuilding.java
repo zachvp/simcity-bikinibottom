@@ -57,6 +57,9 @@ public class RestaurantStrottmaBuilding extends Building {
 		cashier = new CashierRole(null, this);
 		cook = new CookRole(null, this);
 		
+		// Introduce Roles to one another
+		cook.setCashier(cashier);
+		
 		// Create GUIs
 		// TODO there's no cashier gui
 		HostGui hostGui = new HostGui(host);
@@ -147,6 +150,11 @@ public class RestaurantStrottmaBuilding extends Building {
 	public JPanel getInfoPanel() {
 		// TODO initialize the info panel
 		return infoPanel;
+	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
 	}
 	
 	@Override

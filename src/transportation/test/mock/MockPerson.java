@@ -1,11 +1,12 @@
 package transportation.test.mock;
 
+import gui.trace.AlertTag;
+import housing.backend.ResidentRole;
+
 import java.util.Map;
 
 import mock.EventLog;
 import mock.Mock;
-import housing.backend.ResidentRole;
-import gui.trace.AlertTag;
 import transportation.PassengerRole;
 import transportation.interfaces.Car;
 import agent.PersonAgent.HungerLevel;
@@ -146,6 +147,18 @@ public class MockPerson extends Mock implements Person{
 	public void agentDo(AlertTag tag, String name, String msg) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void removeRole(Role r) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean hasSomethingToDo() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

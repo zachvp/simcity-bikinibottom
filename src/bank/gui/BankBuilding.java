@@ -227,6 +227,11 @@ public class BankBuilding extends Building {
 	public JPanel getInfoPanel() {
 		return infoPanel;
 	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
+	}
 
 	public SecurityGuardRole getSecurity() {
 		return security;
@@ -239,7 +244,8 @@ public class BankBuilding extends Building {
 	@Override
 	public boolean isOpen() {
 		return securityGuardOnDuty() && accountManagerOnDuty()
-				&& loanManagerOnDuty() && tellerOnDuty();
+				&& loanManagerOnDuty() && tellerOnDuty()
+				&& !TimeManager.getInstance().isNowOnWeekend();
 	}
 	
 	public boolean securityGuardOnDuty() {

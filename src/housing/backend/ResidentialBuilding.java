@@ -31,6 +31,7 @@ public class ResidentialBuilding extends Building {
 	// prevents the repeated retrieval of the building name
 	private boolean name = false;
 	
+	// control scenarios and view housing info here
 	private HousingInfoPanel housingInfoPanel;
 	
 	// Constants for staggering opening/closing time
@@ -89,6 +90,11 @@ public class ResidentialBuilding extends Building {
 	public JPanel getInfoPanel() {
 		if(!name) { housingInfoPanel.name(this.getName()); name = true; }
 		return housingInfoPanel;
+	}
+	
+	@Override
+	public JPanel getStaffPanel() {
+		return new JPanel();
 	}
 	
 }

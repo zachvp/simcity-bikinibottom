@@ -25,6 +25,7 @@ import javax.swing.Timer;
 import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 import CommonSimpleClasses.SingletonTimer;
 import agent.gui.Gui;
 
@@ -46,6 +47,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	private List<Gui> guis = new ArrayList<Gui>();
 
 	private java.util.Timer utilTimer;
+	private Sound Clicking = Sound.getInstance();
 
 	public CityMap(){
 		Dimension panelDim = new Dimension(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
@@ -75,7 +77,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 
 		addMouseListener(this);
 		
-		javax.swing.Timer timer = new javax.swing.Timer(10, this); //call update every 1/10 sec
+		javax.swing.Timer timer = new javax.swing.Timer(Constants.REFRESH_RATE_MS, this);
     	timer.start();
     	
     	utilTimer = SingletonTimer.getInstance();
@@ -195,6 +197,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		for ( int i=0; i<buildings.size(); i++ ) {
 			Building b = buildings.get(i);
 			if ( b.contains( me.getX(), me.getY() ) ) {
+				
+				Clicking.playSound("mouse1.wav");
 				buildingView.showCard(b.getName());
 				infoPanel.updateBuildingInfoPanel(b);
 				if (Constants.PRINT) System.out.println(b.getName()+" clicked");

@@ -4,16 +4,20 @@ package housing.gui;
 import housing.backend.PayRecipientRole;
 import housing.backend.ResidentRole;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.sound.Sound;
 import agent.Role;
 import agent.interfaces.Person;
@@ -24,6 +28,14 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	private Map<Person, Role> people;
 	
 	private JButton chargeRent = new JButton("Charge Rent");
+	
+	// allows for user to choose a specific unit
+	private JComboBox<Integer> chargeUnitNumberOptions;
+	private JComboBox<Integer> breakUnitNumberOptions;
+	
+	// fills the combo boxes
+	private Vector<Integer> unitNumbers = new Vector<Integer>(); 
+	
 	private JButton breakHouse = new JButton("Break House");
 	
 	private Sound myLeg = Sound.getInstance();
@@ -32,31 +44,46 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 		
 		this.people = people;
 		
-		this.setLayout(new GridLayout(2, 1));
+		this.setLayout(new FlowLayout());
 		
-		JPanel panel = new JPanel(new GridLayout(2,0));
+		// populate the vector and add numbers to combo box
+		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++) { this.unitNumbers.add(i); }
+		this.chargeUnitNumberOptions = new JComboBox<Integer>(unitNumbers);
+		this.breakUnitNumberOptions = new JComboBox<Integer>(unitNumbers);
 		
-		// landlord input
+		// instructions for GUI use
+		add(new JLabel("Unit numbers read left-to-right, top-to-bottom."));
+		
+		// for the scenario GUI
+		JPanel panel = new JPanel(new GridLayout(0, 3, 5, 5));
+		
+		// landlord input label
 		panel.add(new JLabel("Ask every resident for rent."));
+		
+		// landlord input button
 		chargeRent.addActionListener(this);
 		panel.add(chargeRent);
-		
-		// maintenance input
+		panel.add(chargeUnitNumberOptions);
+
+		// maintenance input label
 		panel.add(new JLabel("Summon a maintenance worker."));
+		
+		// worker button
 		breakHouse.addActionListener(this);
 		panel.add(breakHouse);
+		panel.add(breakUnitNumberOptions);
 		
-		add(new JLabel("Unit numbers read left-to-right, top-to-bottom."));
 		add(panel);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
+			int charge = chargeUnitNumberOptions.getSelectedIndex();
 			for(Map.Entry<Person, Role> entry : people.entrySet()) {
 				if(entry.getValue() instanceof PayRecipientRole) {
 					PayRecipientRole role = (PayRecipientRole) entry.getValue();
-					role.msgChargeRent();
+					role.msgChargeRent(charge);
 				}
 			}
 		}

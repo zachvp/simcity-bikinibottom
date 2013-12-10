@@ -51,4 +51,22 @@ public class MockTellerGui implements TellerGuiInterface {
 		log.add("leave bank");
 		teller.msgAtDestination();
 	}
+
+	@Override
+	public void DoGoToFrontDesk() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void DoGoToBackDesk() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void DoGoToRightOfFrontDesk() {
+		// TODO Auto-generated method stub
+		
+	}
 }

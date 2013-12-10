@@ -2,13 +2,13 @@ package restaurant.strottma.interfaces;
 
 import java.util.Map;
 
-public interface Cook {
+public interface Cook extends market.interfaces.DeliveryReceiver {
 
 	String getName();
 
-	void msgCannotDeliver(Map<String, Integer> cannotDeliver, int marketNumber);
+//	void msgCannotDeliver(Map<String, Integer> cannotDeliver, int marketNumber);
 
-	void msgHereIsDelivery(Map<String, Integer> delivery);
+//	void msgHereIsDelivery(Map<String, Integer> delivery);
 		
 	public abstract class GrillOrPlate{
 		public abstract void showOrder();

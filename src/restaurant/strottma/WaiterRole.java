@@ -1,5 +1,7 @@
 package restaurant.strottma;
 
+import gui.trace.AlertTag;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -256,7 +258,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 	// Actions
 
 	private void seatCustomer(MyCustomer c) {
-		Do("Seating customer " + c.c.getName());
+		Do(AlertTag.RESTAURANT, "Seating customer " + c.c.getName());
 		DoGoToCustWaitArea();
 		acquire(multiStepAction); // wait until the waiter is at the host
 		// print("multiStepAction has " + multiStepAction.availablePermits() + " permits");
@@ -324,7 +326,8 @@ public class WaiterRole extends WorkRole implements Waiter {
 	}
 	
 	private void getBill(MyCustomer c) {
-		Do("Getting " + c.c.getName() + "'s bill from cashier");
+		Do(AlertTag.RESTAURANT, "Getting " + c.c.getName()
+				+ "'s bill from cashier");
 		DoGoToCashier(); // animation
 		acquire(multiStepAction); // wait
 		
@@ -333,7 +336,8 @@ public class WaiterRole extends WorkRole implements Waiter {
 		acquire(multiStepAction);
 		
 		// TODO: fix this hack
-		Do("Bringing $" + df.format(c.bill) + " bill to " + c.c.getName());
+		Do(AlertTag.RESTAURANT, "Bringing $" + df.format(c.bill)
+				+ " bill to " + c.c.getName());
 		DoGoToTable(c.table); // animation
 		acquire(multiStepAction); // wait
 		
@@ -343,12 +347,12 @@ public class WaiterRole extends WorkRole implements Waiter {
 	}
 
 	private void askToGoOnBreak() {
-		Do("Asking to go on break");
+		Do(AlertTag.RESTAURANT, "Asking to go on break");
 		host.msgCanIGoOnBreak(this);
 	}
 
 	private void goOnBreak() {
-		Do("Going on break");
+		Do(AlertTag.RESTAURANT, "Going on break");
 
 		DoGoOnBreak(); // animation
 		
@@ -365,12 +369,12 @@ public class WaiterRole extends WorkRole implements Waiter {
 	}
 
 	private void cannotGoOnBreak() {
-		Do("Cannot go on break");
+		Do(AlertTag.RESTAURANT, "Cannot go on break");
 		DoGoOffBreak(); // animation
 	}
 	
 	private void finishBreak() {
-		Do("Off of break");
+		Do(AlertTag.RESTAURANT, "Off of break");
 		DoGoOffBreak(); // animation
 		host.msgOffBreak(this);
 	}
@@ -502,10 +506,10 @@ public class WaiterRole extends WorkRole implements Waiter {
 		List<Choice> choices = new ArrayList<Choice>();
 		
 		public Menu() {
-			choices.add( new Choice("Steak",   "ST", 15.99) );
-			choices.add( new Choice("Chicken", "CK", 10.99) );
-			choices.add( new Choice("Salad",   "SA", 5.99) );
-			choices.add( new Choice("Pizza",   "PZ", 8.99) );
+			choices.add( new Choice("Krabby Patty",	"KP", 1.25) );
+			choices.add( new Choice("Kelp Shake",	"KS", 2.00) );
+			choices.add( new Choice("Coral Bits",	"KB", 1.50) );
+			choices.add( new Choice("Kelp Rings",	"KR", 2.00) );
 		}
 		
 		public Choice get(int i) {

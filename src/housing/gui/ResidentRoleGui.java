@@ -108,10 +108,11 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	public void draw(Graphics2D g) {
 		// draw the residence image
 		g.drawImage(residentIcon.getImage(), xPos, yPos, null);
-	    	
+		
 		g.setColor(Color.BLACK);
 		
 		g.drawString(speech, xPos+5, yPos+10);
+		
 		if(eatingFood == true){
 			g.drawImage(krabbyPattyIcon.getImage(), xPos, yPos, null);
 		}
@@ -176,5 +177,10 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	@Override
 	public void DoShowSpeech(String speech) {
 		this.speech = speech;
+	}
+
+	@Override
+	public DwellingLayoutGui getLayoutGui() {
+		return layoutGui;
 	}
 }

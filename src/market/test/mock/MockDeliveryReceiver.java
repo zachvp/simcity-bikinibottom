@@ -30,15 +30,15 @@ public class MockDeliveryReceiver extends Mock implements DeliveryReceiver {
 	}
 
 	@Override
-	public void msgNoItem() {
+	public void msgHereIsYourItems(List<Item> DeliverList) {
 		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
-	public void msgHereIsYourItems(List<Item> DeliverList) {
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
 		// TODO Auto-generated method stub
-		
 		
 	}
 

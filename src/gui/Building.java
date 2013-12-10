@@ -29,6 +29,7 @@ public abstract class Building extends Rectangle2D.Double
 	protected JPanel animationPanel;	
 	LocationTypeEnum type;
 	JPanel info;
+	JPanel staff;
 	
 	protected static final int defaultStartHour = 8;
 	protected static final int defaultStartMinute = 0;
@@ -63,6 +64,9 @@ public abstract class Building extends Rectangle2D.Double
 	
 	//Return your control panel here (null if you don't have one)
 	public abstract JPanel getInfoPanel();
+	
+	//Return panel listing staff
+	public abstract JPanel getStaffPanel();
 	
 	/** Whether the building is open right now. */
 	public boolean isOpen() {

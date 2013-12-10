@@ -148,15 +148,15 @@ public class MarketRole extends Role implements Market {
 			}
 		}, DELIVERY_TIME * 1000);
 		
-		cook.msgCannotDeliver(cannotDeliver, delivery.marketNumber);
+//		cook.msgCannotDeliver(cannotDeliver, delivery.marketNumber);
 	}
 	
 	private void sendDelivery(MyDelivery delivery) {
 		Do("Delivery for cook " + cook.getName() + " ready");
-		cook.msgHereIsDelivery(delivery.delivery);
+//		cook.msgHereIsDelivery(delivery.delivery);
 		if (delivery.getCost() > 0) {
 			Do("Billing cashier $" + df.format(delivery.getCost()));
-			cashier.msgHereIsBill(delivery.getCost(), this);
+//			cashier.msgHereIsBill(delivery.getCost(), this);
 		}
 	}
 

@@ -1,9 +1,9 @@
 package restaurant.anthony.gui;
 
 
-import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
+import restaurant.anthony.interfaces.Cook;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import agent.gui.Gui;
 
 public class CookGui implements Gui {
 
-    private CookRole agent = null;
+    private Cook agent = null;
 
     private int xPos = 50, yPos = -50;//default waiter position
     
@@ -35,7 +35,7 @@ public class CookGui implements Gui {
     private static final int CookHeight = 10;
     
     private static final int xFridge = 180;
-    private static final int yFridge = 300;
+    private static final int yFridge = 280;
     
     private static final int xStove1 = 203;
     private static final int yStove1 = 300;
@@ -55,7 +55,7 @@ public class CookGui implements Gui {
     private static final int xPlatingArea3 = 347;
     private static final int yPlatingArea3 = 270;
     
-    private enum Command {NotAtWork, Idle, GoToWork, GoToWork1, GoToWork2, NoCommand};
+    private enum Command {NotAtWork, Idle, GoToWork, GoToWork1, GoToWork2, GoToExit1, GoToExit2, GoToExit, NoCommand};
     private Command command = Command.NotAtWork;
 
     private static ArrayList<Boolean> Stoves = new ArrayList<Boolean>();
@@ -72,7 +72,7 @@ public class CookGui implements Gui {
     Plates.add(false);
     }
     
-    public CookGui(CookRole agent) {
+    public CookGui(Cook agent) {
         this.agent = agent;
     }
     
@@ -96,16 +96,28 @@ public class CookGui implements Gui {
         
 
         if (xPos == xDestination && yPos == yDestination) {
+        	
+        	if (command == Command.GoToExit1){
+        		ContinueToExit();
+        		return;
+        	}
+        	else if (command == Command.GoToExit2){
+        		ContinueToExit1();
+        		return;
+        	}
+        	else if (command == Command.GoToExit){
+        		agent.atExit();
+        	}
 
-        	if (command == Command.GoToWork1){
+        	else if (command == Command.GoToWork1){
         		ContinueToWork();
         		return;
         	}
-        	if (command == Command.GoToWork2){
+        	else if (command == Command.GoToWork2){
         		ContinueToWork1();
         		return;
         	}
-        	if (command == Command.GoToWork){
+        	else if (command == Command.GoToWork){
         		agent.msgAtHome();
         	}
         
@@ -271,4 +283,22 @@ public class CookGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	public void GoToExit() {
+		command = Command.GoToExit1;
+    	xDestination = ExitX2;
+    	yDestination = ExitY2;
+	}
+	
+	public void ContinueToExit() {
+		command = Command.GoToExit2;
+    	xDestination = ExitX1;
+    	yDestination = ExitY1;
+	}
+	
+	public void ContinueToExit1() {
+		command = Command.GoToExit;
+    	xDestination = ExitX;
+    	yDestination = ExitY;
+	}
 }

@@ -30,7 +30,11 @@ import market.gui.MarketBuilding;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+<<<<<<< HEAD
 import restaurant.lucas.gui.RestaurantLucasBuilding;
+=======
+import restaurant.anthony.gui.RestaurantBuilding;
+>>>>>>> master
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import sun.net.www.content.text.PlainTextInputStream;

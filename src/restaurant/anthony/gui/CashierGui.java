@@ -29,7 +29,7 @@ public class CashierGui implements Gui {
     private static final int CashierWidth = 10;
     private static final int CashierHeight = 10;
 
-    private enum Command {NotAtWork, Idle, GoToWork, GoToWork1, NoCommand};
+    private enum Command {NotAtWork, Idle, GoToWork, GoToWork1, GoToExit, GoToExit1, NoCommand};
     private Command command = Command.NotAtWork;
     
     public CashierGui(Cashier ca) {
@@ -54,11 +54,18 @@ public class CashierGui implements Gui {
             yPos--;
 
         if (xPos == xDestination && yPos == yDestination){
-        	if (command == Command.GoToWork1){
+        	if (command == Command.GoToExit1){
+        		ContinueToExit();
+        		return;
+        	}
+        	else if (command == Command.GoToExit){
+        		agent.msgAtExit();
+        	}
+        	else if (command == Command.GoToWork1){
         		ContinueToWork();
         		return;
         	}
-        	if(command == Command.GoToWork){
+        	else if(command == Command.GoToWork){
         		agent.msgAtHome();
         	}
         	command = Command.NoCommand;
@@ -87,4 +94,15 @@ public class CashierGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	public void GoToExit() {
+		command=Command.GoToExit1;
+    	xDestination = ExitX1;
+    	yDestination = ExitY1;
+	}
+	public void ContinueToExit(){
+		command = Command.GoToExit;
+		xDestination = ExitX;
+    	yDestination = ExitY;
+	}
 }

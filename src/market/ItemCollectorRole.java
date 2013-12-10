@@ -259,7 +259,7 @@ public class ItemCollectorRole extends WorkRole implements ItemCollector{
 			e.printStackTrace();
 		}
 		this.deactivate();
-		state = ItemCollectorstate.GoingToWork;
+		state = ItemCollectorstate.NotAtWork;
 	}
 	
 

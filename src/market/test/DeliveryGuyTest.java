@@ -68,7 +68,7 @@ public class DeliveryGuyTest extends TestCase
 	public void testOneDeliverGuyAndCashierSendMessageScenario()
 	{
 		//Check pre-conditions
-		assertEquals("DeliveryGuyRole's CurrentOrder should be null.",deliveryGuyRole.getCurrentOrder(), null);
+		assertEquals("DeliveryGuyRole's CurrentOrder should be null.",deliveryGuyRole.getOrders().size(), 0);
 		assertEquals("DeliveryGuyRole's Cashier should be MockCashier", deliveryGuyRole.getCashier(), cashier);
 		assertEquals("DeliveryGuyRole's Available boolean should be true initially", true, deliveryGuyRole.msgAreYouAvailable());
 		
@@ -81,9 +81,9 @@ public class DeliveryGuyTest extends TestCase
 		deliveryGuyRole.msgDeliverIt( DeliveryList, deliveryReceiver, null);
 		
 		//Check Post-Conditions
-		assertEquals("DeliveryGuyRole CurrentOrder's DeliveryList should be the same as the local variable DeliveryList.",deliveryGuyRole.getCurrentOrder().getDeliveryList(), DeliveryList);
-		assertEquals("DeliveryGuyRole CurrentOrder's DeliveryReceiver should be the same as the local variable DeliveryReceiver.",deliveryGuyRole.getCurrentOrder().getDeliveryReceiver(), deliveryReceiver);
-		assertEquals("DeliveryGuyRole CurrentOrder's Building should be null as we inputted in", deliveryGuyRole.getCurrentOrder().getBuilding(),null);
+		assertEquals("DeliveryGuyRole CurrentOrder's DeliveryList should be the same as the local variable DeliveryList.",deliveryGuyRole.getOrders().get(0).getDeliveryList(), DeliveryList);
+		assertEquals("DeliveryGuyRole CurrentOrder's DeliveryReceiver should be the same as the local variable DeliveryReceiver.",deliveryGuyRole.getOrders().get(0).getDeliveryReceiver(), deliveryReceiver);
+		assertEquals("DeliveryGuyRole CurrentOrder's Building should be null as we inputted in", deliveryGuyRole.getOrders().get(0).getBuilding(),null);
 		
 		//Check Cashier.PaEaA calls no function (GoDeliver)
 			//assertTrue("DeliveryGuyRole's scheduler shouldn't have returned false , but didn't.", deliveryGuyRole.pickAndExecuteAnAction());

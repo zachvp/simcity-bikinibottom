@@ -1,41 +1,53 @@
 package restaurant.anthony;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.anthony.MarketRole.Delivery;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CookGui;
 import restaurant.anthony.gui.HostGui;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Market;
 import restaurant.anthony.interfaces.Waiter;
 import restaurant.anthony.Food;
+import gui.Building;
+import gui.trace.AlertTag;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import kelp.Kelp;
+import kelp.KelpClass;
+import market.Item;
 
 /**
  * Restaurant Host Agent
  */
 // Cook Agent
-public class CookRole extends WorkRole {
+public class CookRole extends WorkRole implements Cook {
 
 	public enum AgentState {
 		Idle, Cooking, OffWork, NotAtWork
 	};
-
 	private AgentState state = AgentState.NotAtWork;
 	private HostRole host;
 	Timer timer = new Timer();
+	private List<MyDelivery> deliveries = new ArrayList<MyDelivery>();
 	public List<Order> MyOrders = Collections.synchronizedList(new ArrayList<Order>());
-	private List<Food> ShoppingList = Collections.synchronizedList(new ArrayList<Food>());
-	private List<MyMarketAgent> MarketList = Collections.synchronizedList(new ArrayList<MyMarketAgent>());
-
+	private List<Item> ShoppingList = Collections.synchronizedList(new ArrayList<Item>());
+	private Kelp kelp = KelpClass.getKelpInstance();
+	
 	private List<Stove> Stoves = Collections.synchronizedList(new ArrayList<Stove>());
 	{
 	for (int i=0; i<3;i++){
@@ -47,6 +59,7 @@ public class CookRole extends WorkRole {
 	private Semaphore atHome = new Semaphore(0,true);
 	private Semaphore atStove = new Semaphore(0,true);
 	private Semaphore atPlateArea = new Semaphore(0,true);
+	private Semaphore atExit = new Semaphore (0,true);
 	
 	private CookGui cookGui;
 	
@@ -58,41 +71,74 @@ public class CookRole extends WorkRole {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#getMaitreDName()
+	 */
+	@Override
 	public String getMaitreDName() {
 		return person.getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#getName()
+	 */
+	@Override
 	public String getName() {
 		return person.getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#getMyOrders()
+	 */
+	@Override
 	public List getMyOrders() {
 		return MyOrders;
 	}
 
 	// Messages	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgAtFridge()
+	 */
+	@Override
 	public void msgAtFridge(){
 		//print ("At Fridge");
 		atFridge.release();
 	}
 	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgAtStove(int)
+	 */
+	@Override
 	public void msgAtStove(int i){
 		print ("At Stove");
 		atStove.release();
 	}
 	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgAtPlatingArea(int)
+	 */
+	@Override
 	public void msgAtPlatingArea(int i){
 		print ("At PlatingArea");
 		atPlateArea.release();
 	}
 	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgAtHome()
+	 */
+	@Override
 	public void msgAtHome(){
 		//print ("At home position");
 		state = AgentState.Idle;
 		atHome.release();
 		stateChanged();
 	}
+	
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#HeresTheOrder(restaurant.anthony.WaiterRoleBase.Order, restaurant.anthony.interfaces.Waiter)
+	 */
+	@Override
 	public void HeresTheOrder(Order order, Waiter w) {
 		order.process = false;
 		MyOrders.add(order);
@@ -100,35 +146,55 @@ public class CookRole extends WorkRole {
 		// DoCookOrder(order, w);
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgIGetOrder(restaurant.anthony.WaiterRoleBase.Order)
+	 */
+	@Override
 	public void msgIGetOrder (Order order){
 		cookGui.RemoveFood(order.Waiter.getWaiterNumber(), "PlatingArea");
 	}
 	
-	public void Orderfulfillment(List<Delivery> DeliverList, Market m) {
-
-		for (int i = 0; i < DeliverList.size(); i++) {
-			// Re-stock the item into the food list
-			print("DeliverList.size" + DeliverList.size());
-			foods.get(DeliverList.get(i).choice).amount += DeliverList.get(i).amount;
-
-			// The requirement is Fulfilled
-			if (DeliverList.get(i).fulfilled) {
-				// print (DeliverList.get(i).choice + " is fulfilled by " +
-				// m.name);
-				continue;
-			}
-			// The requirement cannot be Fulfilled
-			else {
-				// print (DeliverList.get(i).choice + " fails to fulfill by " +
-				// m.name);
-				CheckInventory();
-				break;
-			}
-
-			// print (DeliverList.get(i).choice + " : " +
-			// foods.get(DeliverList.get(i).choice).amount);
+	/* (non-Javadoc)
+	 * @see msgHereIsMissingItems
+	 */
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+		if (!MissingItemList.isEmpty()) {
+			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
+			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			stateChanged();
 		}
-
+	}
+	
+	@Override
+	// from market delivery guy
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		for (Item item : DeliverList) {
+			Food f = foods.get(item.name);
+			if (f != null && item.amount > 0) {
+				Do(AlertTag.RESTAURANT, "Received delivery of " + item.amount
+						+ " " + item.name);
+				f.amount += item.amount;
+			}
+		}
+		
+	}
+	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#msgLeaveWork()
+	 */
+	@Override
+	public void msgLeaveWork() {
+		state = AgentState.NotAtWork;
+		stateChanged();
+		
+	}
+	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#atExit()
+	 */
+	@Override
+	public void atExit(){
+		atExit.release();
 	}
 
 	/**
@@ -146,12 +212,11 @@ public class CookRole extends WorkRole {
 			return true;
 		}
 
-		while (!MyOrders.isEmpty() && state == AgentState.Idle) {
+		while (!MyOrders.isEmpty()) {
 			synchronized(MyOrders){
 			for (int i = 0; i < MyOrders.size(); i++) {
 				if (!MyOrders.get(i).process) {
 					DoCookOrder(MyOrders.get(i), MyOrders.get(i).Waiter);
-					CheckInventory();
 					MyOrders.remove(i);
 					return true;
 				}
@@ -159,13 +224,33 @@ public class CookRole extends WorkRole {
 			}
 		}
 
-		if (!ShoppingList.isEmpty())
-			BuyFoods();
+		for (int i = 0 ; i <deliveries.size();i++){
+			if (deliveries.get(i).state.equals(DeliveryState.NEED_TO_REORDER)){
+				retryDelivery(deliveries.get(i), i);
+				return true;
+			}
+		}
+		
+		if (state == AgentState.OffWork && MyOrders.size() == 0){
+			OffWork();
+		}
 
 		return false;
 	}
 
 	// Actions
+	private void OffWork(){
+		cookGui.GoToExit();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.deactivate();
+		state = AgentState.NotAtWork;
+	}
+	
 	private void GoToWork(){
 		cookGui.GoToWork();
 		try {
@@ -266,62 +351,77 @@ public class CookRole extends WorkRole {
 		}
 	}
 	private void CheckInventory() {
-		/*
-		print("Checking Inventory");
-		// Clear The shopping List
-		if (!ShoppingList.isEmpty())
-			ShoppingList.clear();
-
-		// Get The ShoppingList
-		for (int i = 0; i < foods.size(); i++) {
-			String j = null;
-			if (i == 0)
-				j = "Kelp Shake";
-			if (i == 1)
-				j = "Coral Bits";
-			if (i == 2)
-				j = "Krabby Patty";
-			if (i == 3)
-				j = "Kelp Rings";
-
-			if (foods.get(j).amount <= 1) {
-				// 5 is the threshold
-				// print (foods.get(j).choice +
-				// " is added to the shoppinglist");
-				ShoppingList.add(new Food(foods.get(j).choice,
-						foods.get(j).cookingTime, 5 - foods.get(j).amount));
+		if (!ShoppingList.isEmpty()){
+		ShoppingList.clear();
+		}
+		
+		for (Map.Entry<String, Food> entry : foods.entrySet()) {
+			Food f = entry.getValue();
+			if (f.amount <= f.amountLowThreshold) {
+				Do(AlertTag.RESTAURANT, "Going to buy food : " + f.choice);
+				ShoppingList.add(new Item(f.choice, f.amountBuyThreshold - f.amount));
 			}
 		}
-		*/
+		
+		if (ShoppingList.isEmpty()){
+			return;
+		}
+		
+		// Find a market to order from
+				Building market = null;
+				Building restaurant = (Building) getLocation();
+				
+				List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+						LocationTypeEnum.Market);
+				if (openMarkets != null && !openMarkets.isEmpty()) {
+					market = (Building) openMarkets.get(0);
+				}
+				
+				// Request the delivery
+				MyDelivery delivery = new MyDelivery(ShoppingList);
+				delivery.markets = new ArrayList<CityLocation>();
+				int orderNum = 0;
+				
+				market.interfaces.Cashier marketCashier =
+						(market.interfaces.Cashier) market.getGreeter();
+				
+				Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
+				marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+						host.cashier, this, restaurant, orderNum);
+				delivery.markets.add(market);
+				deliveries.add(delivery);
 	}
-
-	private void BuyFoods() {
-
-		// Find the LeastOrder Market out
-		int LeastOrderTime = MarketList.get(0).OrderTimes;
-		int LeastOrderMarketIndex = 0;
-		for (int i = 0; i < MarketList.size(); i++) {
-			if (LeastOrderTime > MarketList.get(i).OrderTimes) {
-				LeastOrderTime = MarketList.get(i).OrderTimes;
-				LeastOrderMarketIndex = i;
+		
+	private void retryDelivery(MyDelivery delivery, int orderNum) {
+		// Find a market that hasn't been tried yet.
+		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+				LocationTypeEnum.Market);
+		Building market = null;
+		for (CityLocation m : openMarkets) {
+			if (!delivery.markets.contains(m)) {
+				market = (Building) m;
+				break;
 			}
-
 		}
-		// Order Food from the Least Order Market and Increment the Order time
-		// by one.
-		print("Ordering food to "
-				+ MarketList.get(LeastOrderMarketIndex).market.name);
-		MarketList.get(LeastOrderMarketIndex).market
-				.BuyFood(ShoppingList, this);
-		MarketList.get(LeastOrderMarketIndex).OrderTimes++;
+		if (market == null) {
+			Do(AlertTag.RESTAURANT, "No market can complete this order.");
+			delivery.state = DeliveryState.COMPLETE;
+			return;
+		}
+		
+		// Request the delivery from the new market
+		delivery.markets.add(market);
+		
+		Building restaurant = (Building) getLocation();
+		market.interfaces.Cashier marketCashier =
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
+		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+				host.cashier, this, restaurant, orderNum);
 	}
 
-	public void SetMarket(List<MarketRole> MA) {
-		for (int i = 0; i < MA.size(); i++) {
-			MyMarketAgent temp = new MyMarketAgent(MA.get(i));
-			MarketList.add(temp);
-		}
-	}
+
 
 	private class Stove {
 		boolean occupied;
@@ -330,42 +430,63 @@ public class CookRole extends WorkRole {
 		}
 	}
 	
-	private class MyMarketAgent {
-		MarketRole market;
-		int OrderTimes;
-
-		MyMarketAgent(MarketRole ma) {
-			market = ma;
-			OrderTimes = 0;
+	private enum DeliveryState {PLACED, NEED_TO_REORDER, COMPLETE};
+	private class MyDelivery {
+		List<Item> items;
+		List<Item> itemsToReorder;
+		List<CityLocation> markets;
+		DeliveryState state;
+		
+		MyDelivery(List<Item> items) {
+			this.items = items;
+			this.itemsToReorder = new ArrayList<Item>();
+			this.markets = new ArrayList<CityLocation>();
+			this.state = DeliveryState.PLACED;
+		}
+		
+		MyDelivery() {
+			this(new ArrayList<Item>());
 		}
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#isAtWork()
+	 */
 	@Override
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#isOnBreak()
+	 */
 	@Override
 	public boolean isOnBreak() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#setGui(restaurant.anthony.gui.CookGui)
+	 */
 	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void setGui(CookGui cGui) {
 		cookGui = cGui;
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#setHost(restaurant.anthony.HostRole)
+	 */
+	@Override
 	public void setHost(HostRole h){
 		host = h;
 	}
 	
+	/* (non-Javadoc)
+	 * @see restaurant.anthony.Cook#setInventoryList(java.util.Map)
+	 */
+	@Override
 	public void setInventoryList(Map<String, Food> iList){
 		foods = iList;
 	}

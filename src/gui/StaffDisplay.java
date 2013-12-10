@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 
 import agent.PersonAgent;
 import agent.WorkRole;
+import agent.interfaces.Person;
 import classifieds.ClassifiedsClass;
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
@@ -121,15 +122,15 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 * @param role 
 	 * @param name Name of person
 	 */
-	public void addToStaffList(String role, String name) {
-		if (name == null ||name.equals("Nobody")) {
-			StaffButton button = new StaffButton("", role);
+	public void addToStaffList(WorkRole role, Person person) {
+		if (person == null) {
+			StaffButton button = new StaffButton(null, role);
 			button.setAvailable();
 			staffList.add(button);
 			staffView.add(button);
 		}
 		else {
-			StaffButton button = new StaffButton(name, role);
+			StaffButton button = new StaffButton(person, role);
 			staffList.add(button);
 			staffView.add(button);
 		}
@@ -143,9 +144,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		List<WorkRole> currentBuildingWorkRoles = ClassifiedsClass.getClassifiedsInstance().getJobsForBuilding(building, false);
 		for (WorkRole r: currentBuildingWorkRoles){
 			if(r.getPerson()!=null){
-				addToStaffList(r.getShortName(), r.getPerson().getName());
+				addToStaffList(r, r.getPerson());
 			}else{
-				addToStaffList(r.getShortName(), null);
+				addToStaffList(r, null);
 			}
 		}
 	}
@@ -306,10 +307,16 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	class StaffButton extends JPanel implements MouseListener{
 		JLabel personName;
 		private JLabel roleName;
+		private Person person;
+		private WorkRole role;
 		boolean selected = false;
 		boolean available = false;
 		
-		StaffButton(String name, String role){
+		
+		StaffButton(Person per, WorkRole rol){
+			person = per;
+			role = rol;
+			
 			Dimension buttonSize = new Dimension(panelDim.width - 19, (int) (panelDim.height / 7));
 			setPreferredSize(buttonSize);
 			setMaximumSize(buttonSize);
@@ -318,8 +325,11 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			setLayout(new BorderLayout());
 			addMouseListener(this);
-			personName = new JLabel(name, JLabel.CENTER);
-			roleName = new JLabel(role, JLabel.CENTER);
+			personName = new JLabel("", JLabel.CENTER);
+			roleName = new JLabel(role.getShortName(), JLabel.CENTER);
+			if(person != null){
+				personName.setText(person.getName());
+			}
 			
 			Dimension labelDim = new Dimension((int)(buttonSize.width*0.45), (int)(buttonSize.height));
 			personName.setPreferredSize(labelDim);
@@ -344,12 +354,12 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			personName.setForeground(Color.black);
 		}
 		
-		protected String getWorkRole(){
-			return roleName.getText();
+		protected WorkRole getWorkRole(){
+			return role;
 		}
 		
-		protected String getPersonName(){
-			return personName.getText();
+		protected Person getPerson(){
+			return person;
 		}
 
 		@Override

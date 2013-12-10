@@ -29,7 +29,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private boolean endWorkShift = false;
 	private int accountId = -1;//if -1, has not been assigned
 
-	private Semaphore active = new Semaphore(0, true);
+	protected Semaphore active = new Semaphore(0, true);
 	
 	private int loanManagerXPos;
 	
@@ -390,7 +390,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void doGoToLoanManager(int x) {
 		bankCustomerGui.DoGoToLoanManager(x, this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
-	private void doLeaveBank() {
+	protected void doLeaveBank() {
 		bankCustomerGui.DoLeaveBank(this.getPerson().getWallet().getCashOnHand(), cashInAccount);
 	}
 	private void doGoToTeller(int xLoc) {

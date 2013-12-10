@@ -130,57 +130,104 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 
 	}
 	
-	private void takeOrder(MyCustomer mc){
-
+//	private void takeOrder(MyCustomer mc){
+//
+//		doGoToTable(mc.customer, mc.table);
+////		Do("1");
+//		acquireSemaphore(active);
+////		Do("ICAN");
+//		//doTakeOrder();
+////		Do("2");
+//		mc.customer.msgWhatWouldYouLike();
+////		Do("3");
+//		Do("What would you like customer?" + mc.customer);
+////		Do("4");
+//		acquireSemaphore(active);//released by customer msg
+////		Do("5");
+//		doGoToCook(530, 100);
+//		acquireSemaphore(active);
+//		cook.msgHereIsAnOrder(mc.choice, mc.table, mc.customer, this);
+//		doDisplayChoice("");
+//		doGoAway();
+//		
+//	}
+//	
+//	private void deliverOrder(Customer cust, int table, String choice) {
+//		Do("Beginning order delivery process");
+//		doGoToCook(plateAreaLocs.get(0).width, 50);
+//		acquireSemaphore(active);
+//		doGoToCook(plateAreaLocs.get(0).width, plateAreaLocs.get(0).height);
+//		acquireSemaphore(active);
+//
+//		
+//		cook.msgNullifyPlateArea(plateAreaLocs.get(0).height);
+//		plateAreaLocs.remove(0);
+////		plateAreas.get(0).o = null;//TODO
+////		plateAreas.remove(0);
+//		
+//		doGoToCook(500, 50);
+//		acquireSemaphore(active);
+//		doGoToTable(cust, table);
+//		doDisplayChoice(choice);
+//		acquireSemaphore(active);
+//		
+//		Do("Here is your food " + cust);
+//		doDisplayChoice("none");
+//		cust.msgHereIsYourFood();
+////		Do("Now i should leave you " + cust);
+//		doGoAway();//stop creepily watching customer eat
+//		
+//	}
+	
+	public void setCook(CookRole c) {
+		this.cook = c;
+	}
+	@Override
+	public void takeOrder(MyCustomer mc) {
 		doGoToTable(mc.customer, mc.table);
-//		Do("1");
+		//	Do("1");
 		acquireSemaphore(active);
-//		Do("ICAN");
+		//	Do("ICAN");
 		//doTakeOrder();
-//		Do("2");
+		//	Do("2");
 		mc.customer.msgWhatWouldYouLike();
-//		Do("3");
+		//	Do("3");
 		Do("What would you like customer?" + mc.customer);
-//		Do("4");
+		//	Do("4");
 		acquireSemaphore(active);//released by customer msg
-//		Do("5");
+		//	Do("5");
 		doGoToCook(530, 100);
 		acquireSemaphore(active);
 		cook.msgHereIsAnOrder(mc.choice, mc.table, mc.customer, this);
 		doDisplayChoice("");
-		doGoAway();
-		
+		doGoAway();		
 	}
-	
-	private void deliverOrder(Customer cust, int table, String choice) {
+	@Override
+	public void deliverOrder(Customer cust, int table, String choice) {
 		Do("Beginning order delivery process");
 		doGoToCook(plateAreaLocs.get(0).width, 50);
 		acquireSemaphore(active);
 		doGoToCook(plateAreaLocs.get(0).width, plateAreaLocs.get(0).height);
 		acquireSemaphore(active);
 
-		
+
 		cook.msgNullifyPlateArea(plateAreaLocs.get(0).height);
 		plateAreaLocs.remove(0);
-//		plateAreas.get(0).o = null;//TODO
-//		plateAreas.remove(0);
-		
+		//		plateAreas.get(0).o = null;//TODO
+		//		plateAreas.remove(0);
+
 		doGoToCook(500, 50);
 		acquireSemaphore(active);
 		doGoToTable(cust, table);
 		doDisplayChoice(choice);
 		acquireSemaphore(active);
-		
+
 		Do("Here is your food " + cust);
 		doDisplayChoice("none");
 		cust.msgHereIsYourFood();
-//		Do("Now i should leave you " + cust);
+		//		Do("Now i should leave you " + cust);
 		doGoAway();//stop creepily watching customer eat
-		
-	}
-	
-	public void setCook(CookRole c) {
-		this.cook = c;
+
 	}
 }
 

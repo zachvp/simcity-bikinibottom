@@ -29,7 +29,37 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 				}
 			}
 		}
-		//COOK STUFF TO BE UPDATED
+		//COOK STUFF BELOW
+		synchronized(myCustomers) {
+			for(MyCustomer c : myCustomers) { 
+				if(c.state == customerState.readyToOrder) {
+					takeOrder(c);
+					c.state = customerState.ordered;
+					return true;
+				}
+			}
+		}
+
+		synchronized(myCustomers) {
+			for(MyCustomer c : myCustomers) {
+				if(c.state == customerState.needToReorder) {
+					reTakeOrder(c);
+					c.state = customerState.seated;
+					return true;
+				}
+			}
+		}
+
+		synchronized(myCustomers) {
+			for(MyCustomer c : myCustomers) {
+				if(c.state == customerState.orderIsReady) {
+					deliverOrder(c.customer, c.table, c.choice);
+					c.state=customerState.eating;
+					return true;
+				}
+			}
+		}
+		//END COOK STUFF
 		
 		synchronized(myCustomers) {
 			for(MyCustomer c : myCustomers) {

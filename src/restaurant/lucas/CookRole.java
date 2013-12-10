@@ -19,6 +19,7 @@ import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
 import restaurant.lucas.gui.RestaurantLucasBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 //import restaurant.HostAgent.Table;
@@ -137,6 +138,9 @@ public class CookRole extends WorkRole implements Cook {
 	boolean timeToCheckOrderWheel =true;
 	OrderWheel orderWheel;
 	Timer checkOrderWheelTimer;
+	private ScheduleTask schedule = ScheduleTask.getInstance();
+	int CHECK_ORDER_WHEEL_TIME;
+	
 	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
@@ -194,7 +198,15 @@ public class CookRole extends WorkRole implements Cook {
 	 * called on Timer
 	 */
 	public void checkOrderWheel() {
-		
+		if(orderWheel.getReceivedOrdersSize() != 0){//if there are orders needing cooks attention
+			String choice = orderWheel.getReceivedOrderString();
+			int tableNum = orderWheel.getReceivedOrderTabelNum();
+			Customer c = orderWheel.getReceivedOrderCustomer();
+			Waiter w = orderWheel.getReceivedOrderWaiter();
+			
+			msgHereIsAnOrder(choice, tableNum, c, w);
+			orderWheel.changeReceivedOrderState();//changes state of order so it is not looked at again
+		}
 	}
 	
 	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {//sent from waiter
@@ -325,7 +337,14 @@ public class CookRole extends WorkRole implements Cook {
 
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
-			//TODO start timer
+			Runnable command = new Runnable() {
+				@Override
+				public void run() {
+					checkOrderWheel();
+				}
+			};
+			schedule.scheduleTaskWithDelay(command, CHECK_ORDER_WHEEL_TIME * Constants.MINUTE);
+			return true;
 			//does not return true to call sched again
 		}
 
@@ -494,7 +513,12 @@ public class CookRole extends WorkRole implements Cook {
 				
 				goToPlateArea(p);
 				Dimension plateDim = new Dimension(p.x, p.y);
-				((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
+				if(o.waiter instanceof WaiterRole){
+					((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
+				}
+				if(o.waiter instanceof PCWaiterRole) {
+					orderWheel.changeCookingOrderState();
+				}
 				acquireSemaphore(active);
 				p.o = o;
 				break;

@@ -73,7 +73,6 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		synchronized(myCustomers) {
 			for(MyCustomer c : myCustomers) { 
 				if(c.state == customerState.readyToOrder) {
-
 					takeOrder(c);
 					c.state = customerState.ordered;
 					return true;

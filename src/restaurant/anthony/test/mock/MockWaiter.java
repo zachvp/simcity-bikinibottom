@@ -175,6 +175,12 @@ public class MockWaiter extends Mock implements Waiter {
 		
 	}
 
+	@Override
+	public void AtExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

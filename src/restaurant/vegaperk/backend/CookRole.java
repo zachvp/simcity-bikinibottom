@@ -1,6 +1,7 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
@@ -15,6 +16,7 @@ import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.CookGui;
 import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Waiter;
+import market.Item;
 import mock.EventLog;
 
 /**
@@ -35,13 +37,15 @@ public class CookRole extends WorkRole implements Cook {
 	private boolean timerSet = false;
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
+	private List<MyDelivery> deliveries;
+	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
 	
 	private List<Dimension> grillPositions = Collections.synchronizedList(new ArrayList<Dimension>());
 	private List<Dimension> platePositions = Collections.synchronizedList(new ArrayList<Dimension>());
 	
 	private List<PlateZone> plateZones = Collections.synchronizedList(new ArrayList<PlateZone>());
+	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
 	
 	private Map<String, Integer> groceries = Collections.synchronizedMap(new HashMap<String, Integer>());
 	
@@ -337,6 +341,27 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui = gui;
 	}
 	
+	/* --- Classes --- */
+	private enum DeliveryState { PLACED, NEED_TO_REORDER, COMPLETE }
+	
+	private class MyDelivery {
+		Set<Item> items;
+		Set<Item> itemsToReorder;
+		List<CityLocation> markets;
+		DeliveryState state;
+		
+		MyDelivery(Set<Item> items) {
+			this.items = items;
+			this.itemsToReorder = new HashSet<Item>();
+			this.markets = new ArrayList<CityLocation>();
+			this.state = DeliveryState.PLACED;
+		}
+		
+		MyDelivery() {
+			this(new HashSet<Item>());
+		}
+	}
+	
 	private class Food {
 		String type;
 		int amount, cookTime, low, capacity;
@@ -385,16 +410,28 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public boolean isAtWork() {
-		return isActive();
+		return isActive() && !isOnBreak();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		return isActive();
+		return false;
 	}
 
 	@Override
 	public void msgLeaveWork() {
 		this.deactivate();
+	}
+
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+		// TODO Auto-generated method stub
+		
 	}
 }

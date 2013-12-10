@@ -125,8 +125,8 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		
 		
 		
-		int hour = 16;
-		int minute = 30;
+		int hour = cL.getClosingHour();
+		int minute = cL.getClosingMinute();
 		
 		task.scheduleDailyTask(command, hour, minute);
 			

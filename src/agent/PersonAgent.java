@@ -31,6 +31,7 @@ import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 import agent.interfaces.Person.Wallet.IncomeLevel;
 import bank.RobberRole;
+import bank.gui.BankBuilding;
 
 /**
  * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
@@ -72,6 +73,12 @@ public class PersonAgent extends Agent implements Person {
 	private boolean clearFoodAtHome = false;
 	
 	private boolean timeToRobABank = false;
+	
+	/**
+	 * set true when rest cashier role activated
+	 * set false when businessbankcustomerrole activated
+	 */
+	private boolean shouldDepositRestaurantMoney = false;
 	
 	public PersonAgent(String name, IncomeLevel incomeLevel,
 			HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome,
@@ -351,7 +358,14 @@ public class PersonAgent extends Agent implements Person {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
 		}
-		
+		//you should deposit a restaurant's money and you are at a bank
+		//so get a businessBankCustomerRole and activate it
+		if (shouldDepositRestaurantMoney && loc instanceof BankBuilding){
+			BankBuilding bank = (BankBuilding) loc;
+			Role role = bank.getBusinessBankCustomerRole(this);
+			role.activate();
+			return;
+		}
 		// There is no role for this location! Get a new one.
 		if (loc instanceof Building && !(loc instanceof HospitalBuilding) && 
 				!(loc instanceof ResidentialBuilding)) {
@@ -527,7 +541,25 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setWorkStartThreshold(long newThresh) {
 		this.workStartThreshold = newThresh;
-	}	
+	}
+	
+	/**
+	 * called by CashierRole in restaurant
+	 * makes person go to bank when off shift to
+	 * deposit restaurant money in account
+	 */
+	public void setShouldDepositRestaurantMoney(boolean b) {
+		shouldDepositRestaurantMoney = b;
+	}
+	
+	public double getCashierMoney() {
+		for(Role r: roles) {
+			if(r instanceof restaurant.lucas.CashierRole){
+				return ((restaurant.lucas.CashierRole) r).getRestaurantMoney();
+			}
+		}
+		return -1;
+	}
 	
 	// ---- Methods for finding special roles
 	
@@ -741,7 +773,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
-				|| wallet.needsMoney();
+				|| wallet.needsMoney() || shouldDepositRestaurantMoney;
 	}
 	
 	// ---- Market/Inventory

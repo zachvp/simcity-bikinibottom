@@ -77,12 +77,13 @@ public class RestaurantPanel extends JPanel {
     	this.hostGui = new HostGui(host, gui);
     	this.host.setGui(hostGui);
     	
-    	this.cook = new CookRole(cookPerson, building);
-    	this.cookGui = new CookGui(cook, gui);
-    	
     	this.cashier = new CashierRole(cashierPerson, building);
     	this.cashierGui = new CashierGui(cashier, gui);
     	this.cashier.setGui(cashierGui);
+    	
+    	this.cook = new CookRole(cookPerson, building);
+    	this.cookGui = new CookGui(cook, gui);
+    	this.cook.setCashier(cashier);
     	
     	this.tableGui = new TableGui(host.getTableMap());
     	

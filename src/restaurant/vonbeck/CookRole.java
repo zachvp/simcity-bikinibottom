@@ -43,8 +43,6 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 	private static final int INITIAL_STOCK = 5;
 	private static final int STOCK_THRESHOLD = 5;
 	private static final int STOCK_MAINTAIN = 10;
-	private List<CookAction> actionQueue
-		= Collections.synchronizedList(new ArrayList<CookAction>());	
 	private FoodGui foodGui;
 	private CookGui cookGui;
 	List<MarketBuilding> markets = null;
@@ -62,15 +60,6 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 			this.marketNum = marketNum;
 			this.itemsToBuy = itemsToBuy;
 		}
-	}
-	
-	private abstract class CookAction {
-		Market market;
-		Order o;
-		String food;
-		int num;
-		
-		public abstract void run();
 	}
 	
 	class FoodData {
@@ -185,16 +174,6 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 					return true;
 				}
 			}
-		}
-
-		if (!actionQueue.isEmpty()) {
-			CookAction currAction;
-			synchronized (actionQueue) {
-				currAction = actionQueue.get(0);
-				actionQueue.remove(0);
-			}
-			currAction.run();
-			return true;
 		}
 
 		if (!orders.isEmpty()) {

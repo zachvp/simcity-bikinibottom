@@ -31,7 +31,7 @@ public class HostRole extends WorkRole {
 	private Semaphore atHome = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
 
-	public List<WaiterRole> Waiters = Collections.synchronizedList(new ArrayList<WaiterRole>());
+	public List<WaiterRoleBase> Waiters = Collections.synchronizedList(new ArrayList<WaiterRoleBase>());
 	public CookRole cook;
 	public CashierRole cashier;
 	private int assignedSpace = 0;
@@ -193,7 +193,7 @@ public class HostRole extends WorkRole {
 		 * customer number's waiter and compare the whole list of waiter until
 		 * we find the waiter with the lowest number of customers)
 		 */
-		WaiterRole w = null;
+		WaiterRoleBase w = null;
 		//if (state == AgentState.Idle){
 			while (!waitingCustomers.isEmpty())
 
@@ -286,7 +286,7 @@ public class HostRole extends WorkRole {
 	}
 	
 
-	public void AddWaiter(WaiterRole Wa) {
+	public void AddWaiter(WaiterRoleBase Wa) {
 		Waiters.add(Wa);
 		stateChanged();
 	}

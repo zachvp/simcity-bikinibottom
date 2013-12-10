@@ -2,8 +2,8 @@ package restaurant.anthony;
 
 import agent.Agent;
 import agent.Role;
-import restaurant.anthony.WaiterRole.Item;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Item;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.HostGui;
 import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Market;

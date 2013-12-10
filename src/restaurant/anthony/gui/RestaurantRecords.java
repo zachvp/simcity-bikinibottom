@@ -14,6 +14,7 @@ import restaurant.anthony.CustomerRole;
 import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.WaiterRole;
+import restaurant.anthony.WaiterRoleBase;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.interfaces.Person;
@@ -94,9 +95,9 @@ public class RestaurantRecords {
     	gui.addGui(hostGui);
     	
     	//WaiterRole
-    	WaiterRole waiter1 = new WaiterRole(null, building);
-    	WaiterRole waiter2 = new WaiterRole(null, building);
-    	WaiterRole waiter3 = new WaiterRole(null, building);
+    	WaiterRoleBase waiter1 = new WaiterRole(null, building);
+    	WaiterRoleBase waiter2 = new WaiterRole(null, building);
+    	WaiterRoleBase waiter3 = new WaiterRole(null, building);
     	
     	WaiterGui waiterGui1 = new WaiterGui(waiter1, 0);
     	WaiterGui waiterGui2 = new WaiterGui(waiter2, 1);

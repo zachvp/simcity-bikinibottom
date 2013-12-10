@@ -5,9 +5,9 @@ import java.util.List;
 import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
-import restaurant.anthony.WaiterRole;
+import restaurant.anthony.WaiterRoleBase;
 import restaurant.anthony.CashierRole.Check;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.WaiterGui;
 
 public interface Waiter {

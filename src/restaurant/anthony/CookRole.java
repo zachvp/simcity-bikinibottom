@@ -5,7 +5,7 @@ import agent.Agent;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.anthony.MarketRole.Delivery;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CookGui;
 import restaurant.anthony.gui.HostGui;
 import restaurant.anthony.interfaces.Market;

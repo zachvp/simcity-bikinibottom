@@ -1,17 +1,21 @@
 package restaurant;
 
 import gui.Building;
+import gui.trace.AlertTag;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import market.Item;
+import restaurant.anthony.Food;
 import CommonSimpleClasses.Constants;
 
 public class InfoPanel extends JPanel{
@@ -153,5 +157,25 @@ public class InfoPanel extends JPanel{
 	}
 	public void setKelpRingsInventory(int n){
 		kelpRingsInventory.setText("" + n);
+	}
+	
+	public void UpdateInfoPanel(Map<String, Integer> inventoryList){
+		for (Map.Entry<String, Integer> entry : inventoryList.entrySet()) {
+			int currentAmount = entry.getValue();
+			String currentName = entry.getKey();
+			if (currentName == "Krabby Patty"){
+				setKrabbyPattyInventory(currentAmount);
+			}
+			else if (currentName == "Kelp Shake"){
+				setKelpShakeInventory(currentAmount);
+			}
+			else if (currentName == "Coral Bits"){
+				setCoralBitsInventory(currentAmount);
+			}
+			else if (currentName == "Kelp Rings"){
+				setKelpRingsInventory(currentAmount);
+			}
+		}
+		return;
 	}
 }

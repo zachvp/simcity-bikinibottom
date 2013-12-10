@@ -318,6 +318,11 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
 		
+		if (loc instanceof Building && !((Building) loc).isOpen()) {
+			// Only enter a building if it's open.
+			return;
+		}
+		
 		synchronized (roles) {
 			for (Role r : roles) {
 				if (loc.equals(r.getLocation())
@@ -630,6 +635,10 @@ public class PersonAgent extends Agent implements Person {
 			return false;
 		}
 		long workStartTime = workRole.startTime();
+		if (workRole.getLocation().type() == LocationTypeEnum.Bank &&
+				timeManager.isTimeOnWeekend(workStartTime)) {
+			return false; // banks are only open on weekdays!
+		}
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
 	}
 	

@@ -1,6 +1,7 @@
 package CommonSimpleClasses;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Singleton that keeps track of time in the Agent world.
@@ -287,5 +288,16 @@ public class TimeManager {
 	public long previousSuchTime(int hours, int minutes) {
 		return previousSuchTime(currentSimTime(), hours, minutes);
 	}
-		
+
+	public static boolean isTimeOnWeekend(long workStartTime) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(workStartTime);
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		return dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
+	}
+	
+	public boolean isNowOnWeekend() {
+		return isTimeOnWeekend(currentSimTime());
+	}
+	
 }

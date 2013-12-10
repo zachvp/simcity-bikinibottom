@@ -4,7 +4,7 @@ import CommonSimpleClasses.CityBuilding;
 import agent.PersonAgent;
 import restaurant.vegaperk.backend.CashierRole;
 import restaurant.vegaperk.backend.CashierRole.CustomerState;
-import restaurant.vegaperk.backend.RestaurantBuilding;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vegaperk.test.mock.MockCustomer;
 import restaurant.vegaperk.test.mock.MockMarket;
 import restaurant.vegaperk.test.mock.MockWaiter;
@@ -20,7 +20,7 @@ import junit.framework.*;
  */
 public class CashierTest extends TestCase
 {
-	CityBuilding building = new RestaurantBuilding(0, 0, 0, 0);
+	CityBuilding building = new RestaurantVegaPerkBuilding(0, 0, 0, 0);
 	PersonAgent person = new PersonAgent("Cashier");
 	
 	// these are instantiated for each test separately via the setUp() method.

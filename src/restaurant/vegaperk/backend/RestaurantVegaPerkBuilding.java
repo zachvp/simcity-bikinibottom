@@ -8,22 +8,28 @@ import javax.swing.JPanel;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
 import restaurant.vegaperk.gui.RestaurantGui;
+import restaurant.vegaperk.gui.RestaurantPanel;
 
 @SuppressWarnings("serial")
-public class RestaurantBuilding extends Building {
+public class RestaurantVegaPerkBuilding extends Building {
 	private XYPos entrancePos;
 	
 	private RestaurantGui gui = new RestaurantGui(this);
 	
 	private Map<Person, CustomerRole> existingCustomerRoles = new HashMap<Person, CustomerRole>();
 	
-	public RestaurantBuilding(int x, int y, int width, int height) {
+	private StaffDisplay staff;
+	
+	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width / 2, height);
 		
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override
@@ -47,12 +53,13 @@ public class RestaurantBuilding extends Building {
 		
 		// TODO implement person, building constructor for customer
 		if(role == null) {
-			role = new CustomerRole(person, this);
-			gui.getAnimationPanel().addGui(role.getGui());
-			existingCustomerRoles.put(person, role);
-			person.addRole(role);
+			role = ((RestaurantPanel) getInfoPanel()).addCustomer("Customers", person.getName(), person);
+		}
+		else {
+			role.setPerson(person);
 		}
 		
+		person.addRole(role);
 		return role;
 	}
 
@@ -67,9 +74,12 @@ public class RestaurantBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getStaffPanel() {
-		// TODO Auto-generDSDated method stub
-		return gui.getInfoPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
+	}
+	
+	@Override public boolean isOpen() {
+		return true;
 	}
 
 }

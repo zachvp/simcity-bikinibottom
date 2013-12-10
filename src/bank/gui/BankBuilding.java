@@ -1,6 +1,7 @@
 package bank.gui;
 
 import gui.Building;
+import gui.StaffDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class BankBuilding extends Building {
 	BankCustomerRole bankCustomerRole;
 //	BankRoleFactory bankRoleFactory = new BankRoleFactory(this);
 	InfoPanel infoPanel;
+	StaffDisplay staff;
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	Map<Person, RobberRole> existingRobberRoles = new HashMap<Person, RobberRole>();
@@ -55,7 +57,7 @@ public class BankBuilding extends Building {
 	public BankBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
-		
+		staff = super.getStaffPanel();
 		
 		entrancePosition = new XYPos(width/2, height);
 		bankGui = new BankGui();
@@ -147,7 +149,7 @@ public class BankBuilding extends Building {
 		
 		//add infopanel to account manager to update
 		account.setInfoPanel(infoPanel);
-
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override
@@ -229,8 +231,8 @@ public class BankBuilding extends Building {
 	}
 	
 	@Override
-	public JPanel getStaffPanel() {
-		return new JPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
 	}
 
 	public SecurityGuardRole getSecurity() {
@@ -244,7 +246,8 @@ public class BankBuilding extends Building {
 	@Override
 	public boolean isOpen() {
 		return securityGuardOnDuty() && accountManagerOnDuty()
-				&& loanManagerOnDuty() && tellerOnDuty();
+				&& loanManagerOnDuty() && tellerOnDuty()
+				&& !TimeManager.getInstance().isNowOnWeekend();
 	}
 	
 	public boolean securityGuardOnDuty() {

@@ -2,10 +2,11 @@ package agent;
 
 import gui.Building;
 import gui.HospitalBuilding;
+import gui.trace.AlertTag;
 import housing.backend.ResidentRole;
 import housing.backend.ResidentialBuilding;
-import gui.trace.AlertTag;
 
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,11 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import bank.RobberRole;
-import bank.gui.BankBuilding;
-
 import kelp.Kelp;
 import kelp.KelpClass;
+import market.DeliveryGuyRole;
 import transportation.CarAgent;
 import transportation.PassengerRole;
 import transportation.RealPassengerRole;
@@ -31,6 +30,7 @@ import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 import agent.interfaces.Person.Wallet.IncomeLevel;
+import bank.RobberRole;
 
 /**
  * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
@@ -66,17 +66,21 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Wallet wallet;
 	private Map<String, Integer> inventory;
+	private BufferedImage image;
 	
 	private Car car;
 	private boolean clearFoodAtHome = false;
 	
 	private boolean timeToRobABank = false;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
+	public PersonAgent(String name, IncomeLevel incomeLevel,
+			HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome,
+			BufferedImage image){
 		super();
 		updateHungerLevel();
 		
 		this.name = name;
+		this.image = image;
 		this.roles = Collections.synchronizedSet(new HashSet<Role>());
 		
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
@@ -100,7 +104,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true, null);
 		updateHungerLevel();
 	}
 	
@@ -154,8 +158,25 @@ public class PersonAgent extends Agent implements Person {
 		
 		// If you just arrived somewhere, activate the appropriate Role. 
 		if (event == PersonEvent.ARRIVED_AT_LOCATION) {
-			activateRoleForLoc(getPassengerRole().getLocation(),
-					atLocationForWork());
+			PassengerRole pass = getPassengerRole();
+			if (getWorkRole() instanceof DeliveryGuyRole) {
+				DeliveryGuyRole dg = (DeliveryGuyRole) getWorkRole();
+				if (!dg.msgAreYouAvailable()) {
+					// if the delivery guy is on a delivery
+					if (pass.getLocation().equals(dg.getCurrentOrder().getBuilding())) {
+						Do(AlertTag.MARKET, name,
+								"Arrived at delivery location.");
+						dg.msgArrivedDestination();
+						return true;
+					} else if (pass.getLocation().equals(dg.getLocation())) {
+						Do(AlertTag.MARKET, name, "Returning to work.");
+						dg.msgArrivedDestination();
+						dg.activate();
+						return true;
+					}
+				}
+			}
+			activateRoleForLoc(pass.getLocation(), atLocationForWork());
 			event = PersonEvent.NONE;
 			return true;
 		}
@@ -301,6 +322,12 @@ public class PersonAgent extends Agent implements Person {
 	 * @param forWork only activates a WorkRole if this is true
 	 */
 	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
+		
+		if (loc instanceof Building && !(loc instanceof ResidentialBuilding)
+				&& !forWork && !((Building) loc).isOpen()) {
+			// Only enter a building if it's open.
+			return;
+		}
 		
 		synchronized (roles) {
 			for (Role r : roles) {
@@ -460,7 +487,6 @@ public class PersonAgent extends Agent implements Person {
 		setHungerLevel(HungerLevel.FULL, eatingOut);
 	}
 	
-	
 	/**
 	 * Sets the hunger level to full, without modifying lastTimeEatingOut.
 	 * Convenience for {@link #setHungerLevel(HungerLevel, boolean)}.
@@ -615,6 +641,10 @@ public class PersonAgent extends Agent implements Person {
 			return false;
 		}
 		long workStartTime = workRole.startTime();
+		if (workRole.getLocation().type() == LocationTypeEnum.Bank &&
+				timeManager.isTimeOnWeekend(workStartTime)) {
+			return false; // banks are only open on weekdays!
+		}
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
 	}
 	
@@ -777,6 +807,14 @@ public class PersonAgent extends Agent implements Person {
 	public Map<String, Integer> getShoppingList() {
 		return shoppingList;
 	}
+
+	/**
+	 * @return the image
+	 */
+	public BufferedImage getImage() {
+		return image;
+	}
+
 	
 }
 

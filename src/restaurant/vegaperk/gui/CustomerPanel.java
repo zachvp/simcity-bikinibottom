@@ -1,14 +1,26 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.backend.CustomerRole;
-import restaurant.vegaperk.backend.HostRole;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import restaurant.vegaperk.backend.CustomerRole;
+import agent.PersonAgent;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Subpanel of restaurantPanel.
@@ -32,11 +44,12 @@ public class CustomerPanel extends JPanel implements ActionListener {
     private RestaurantPanel restPanel;
     private String type;
 
-    private class CustomerListItem extends JPanel implements ActionListener{
+    @SuppressWarnings("serial")
+	private class CustomerListItem extends JPanel implements ActionListener{
     	private JButton nameButton;
     	private String name;
     	private	JCheckBox isHungry;
-    	private CustomerGui cGui;
+    	private CustomerRole role;
     	
 	    CustomerListItem(String n){
 	    	setLayout(new FlowLayout());
@@ -47,12 +60,13 @@ public class CustomerPanel extends JPanel implements ActionListener {
 	    	add(isHungry);
 	    	add(nameButton);
 	    	
-	    	cGui = restPanel.addCustomer(type, name);
+	    	role = restPanel.addCustomer(type, name, new PersonAgent("Customer"));
 	    }
 	    
 	    public void actionPerformed(ActionEvent e){
 	    	if(isHungry.isEnabled()){
-	    		cGui.setHungry();
+	    		((CustomerGui) role.getGui()).setHungry();
+	    		role.activate();
 	    		isHungry.setEnabled(false);
 	    	}
 	    } 
@@ -117,7 +131,7 @@ public class CustomerPanel extends JPanel implements ActionListener {
     }
     public void setCustomerEnabled(CustomerRole c){
     	for(CustomerListItem temp:cList){
-    		if(temp.cGui != null && temp.cGui.getAgent() == c){
+    		if(temp.role != null && temp.role == c){
     			temp.isHungry.setSelected(false);
     			temp.isHungry.setEnabled(true);
     		}

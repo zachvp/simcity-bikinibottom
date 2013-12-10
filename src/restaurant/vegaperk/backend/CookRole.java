@@ -3,7 +3,6 @@ package restaurant.vegaperk.backend;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
-import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;
@@ -11,6 +10,8 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
+import restaurant.vegaperk.backend.RevolvingOrderList.Order;
+import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.CookGui;
 import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -29,6 +30,10 @@ public class CookRole extends WorkRole implements Cook {
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	private boolean onOpening = true;
+	
+	private RevolvingOrderList revolvingOrders;
+	private boolean timerSet = false;
+	private final int CHECK_REVOLVING_LIST_TIME = 10;
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
@@ -71,8 +76,8 @@ public class CookRole extends WorkRole implements Cook {
 		for(int i = 0; i < 4; i++){
 			int startY = 50;
 			
-			int grillX = 370;
-			int plateX = 430;
+			int grillX = 470;
+			int plateX = 530;
 			
 			grillPositions.add(new Dimension(grillX, startY + 50*i));
 			platePositions.add(new Dimension(plateX, startY + 50*i));
@@ -82,6 +87,7 @@ public class CookRole extends WorkRole implements Cook {
 			PlateZone pz = plateZones.get(i);
 			pz = null;
 		}
+		
 	}
 
 	/** Accessor and setter methods */
@@ -93,15 +99,13 @@ public class CookRole extends WorkRole implements Cook {
 	
 	/** From Waiter */
 	public void msgHereIsOrder(Waiter w, String c, int t){
-		orders.add(new Order(c, t, w, OrderState.PENDING));
+		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.PENDING));
 		stateChanged();
 	}
 	public void msgGotFood(int table){
 		for(Order o : orders){
 			if(o.table == table){
-				DoRemovePlateFood(table);
-				PlateZone pz = plateZones.get(table);
-				pz = null;
+				removeOrder(o);
 			}
 		}
 		stateChanged();
@@ -119,6 +123,7 @@ public class CookRole extends WorkRole implements Cook {
 			orderFromMarket = 0;
 		}
 	}
+	
 	@Override
 	public void msgHereIsDelivery() {
 		Do("Received delivery.");
@@ -145,9 +150,11 @@ public class CookRole extends WorkRole implements Cook {
 			openStore();
 			return true;
 		}
+		
 		if(!groceries.isEmpty()){
 			orderFoodThatIsLow(groceries);
 		}
+		
 		synchronized(orders){
 			for(Order o : orders){
 				if(o.state==OrderState.COOKED){
@@ -162,19 +169,54 @@ public class CookRole extends WorkRole implements Cook {
 				}
 			}
 		}
+		
+		if(!timerSet) {
+			Runnable command = new Runnable() {
+				public void run(){
+					Do("timer fired");
+					for(Order o : orders) {
+						if(o.state == OrderState.NEED_TO_COOK){
+							tryToCookFood(o);
+						}
+						else if(o.state == OrderState.PICKED_UP) {
+							removeOrder(o);
+						}
+					}
+				}
+			};
+			timerSet = true;
+			
+			Do("Setting timer");
+			schedule.scheduleTaskWithDelay(command,
+			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
+			return true;
+		}
+
 		return false;
 	}
 	
 	/** Actions */
+	private void removeOrder(Order o) {
+		DoRemovePlateFood(o.table);
+		PlateZone pz = plateZones.get(o.table);
+		pz = null;
+	}
+	
 	private void tryToCookFood(Order o){
 		o.state = OrderState.COOKING;
 		Food f = inventory.get(o.choice);
 		if(f.amount <= 0){
 			Do("Out of food");
-			o.waiter.msgOutOfChoice(o.choice, o.table);
+			o.state = OrderState.OUT_OF_CHOICE;
+			
+			if(o.waiter instanceof WaiterRole)
+				((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
+			
 			orders.remove(o);
+			
 			return;
 		}
+		
 		f.amount--;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.amount);
@@ -221,7 +263,10 @@ public class CookRole extends WorkRole implements Cook {
 	private void plateIt(Order o){
 		o.state = OrderState.FINISHED;
 		Do("Order Plated");
-		o.waiter.msgOrderDone(o.choice, o.table);
+		
+		if(o.waiter instanceof WaiterRole)
+			((WaiterRole)o.waiter).msgOrderDone(o.choice, o.table);
+		
 		Do("Order done " + o.choice);
 		plateZones.get(o.table).setOrder(o);
 		
@@ -231,8 +276,10 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private void openStore(){
 		onOpening = false;
+		
 		DoDrawGrillAndPlates();
 		Do("Opening restaurant");
+		
 		for(Map.Entry<String, Food> entry : inventory.entrySet()){
 			Food f = entry.getValue();
 			if(f.amount <= f.low){
@@ -283,23 +330,7 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui = gui;
 	}
 	
-	/** Classes */
-	enum OrderState { PENDING, COOKING, COOKED, FINISHED };
-	private class Order{
-		Waiter waiter;
-		OrderState state;
-		String choice;
-		int table;
-		
-		Order(String c, int t, Waiter w, OrderState s){
-			choice = c;
-			table = t;
-			waiter = w;
-			state = s;
-		}
-	}
-	
-	private class Food{
+	private class Food {
 		String type;
 		int amount, cookTime, low, capacity;
 		OrderState os;
@@ -336,20 +367,23 @@ public class CookRole extends WorkRole implements Cook {
 		}
 	}
 	
+	public void setRevolvingOrders(RevolvingOrderList orderList) {
+		this.revolvingOrders = orderList;
+	}
+	
 	@Override
-	public void Do(String msg) {
+	protected void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
 	}
 
 	@Override
 	public boolean isAtWork() {
-		return true;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

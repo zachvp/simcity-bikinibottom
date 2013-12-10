@@ -1,6 +1,7 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
+import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;
@@ -8,6 +9,7 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
+import restaurant.vegaperk.gui.HostGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
 
@@ -18,9 +20,13 @@ import restaurant.vegaperk.interfaces.Waiter;
 public class HostRole extends WorkRole {
 	/* --- Constants --- */
 	static final int NTABLES = 4;//a global for the number of tables.
-	private static final int TABLECOLNUM = 2;
-	private static final int TABLEROWNUM = 2;
+	private static final int TABLECOLNUM = 4;
+	private static final int TABLEROWNUM = 1;
 	private static final int TABLESPACING = 100;
+	
+	HostGui gui;
+	
+	private boolean shouldLeaveWork = false;
 	
 	int chooseWaiter = -1;//cycles through the list of waiters
 	
@@ -44,10 +50,10 @@ public class HostRole extends WorkRole {
 		// make some tables
 		synchronized(tables){
 			for (int ix = 0; ix < NTABLES; ix++) {
-				int x = (ix%TABLECOLNUM+1)*TABLESPACING;
+				int x = (ix%TABLECOLNUM+1)*TABLESPACING - 25;
 				int y = (ix/TABLEROWNUM+1)*TABLESPACING;
-				tables.add(new Table(ix, x, y));//how you add to a collections
-				Dimension tableCoords = new Dimension(x,y);
+				tables.add(new Table(ix, x, TABLESPACING + 200));//how you add to a collections
+				Dimension tableCoords = new Dimension(x, TABLESPACING + 200);
 				tableMap.put(ix, tableCoords);
 			}
 		}
@@ -58,6 +64,7 @@ public class HostRole extends WorkRole {
 		waitingCustomers.add(c);
 		stateChanged();
 	}
+	
 	public void msgTableIsFree(int t){
 		for(Table table : tables){
 			if(table.getTableID() == t){
@@ -67,6 +74,7 @@ public class HostRole extends WorkRole {
 		}
 		stateChanged();
 	}
+	
 	public void msgIWantBreak(Waiter w){
 		MyWaiter mw = findWaiter(w);
 		Do("wants break");
@@ -90,6 +98,15 @@ public class HostRole extends WorkRole {
             If so seat him at the table.
 		 */
 		synchronized(tables){
+			if(shouldLeaveWork && waitingCustomers.isEmpty() && !tablesOccupied()) {
+				synchronized(waiters) {
+					for(MyWaiter mw : waiters) {
+						tellWaiterToGetOffWork(mw);
+					}
+				}
+				return true;
+			}
+			
 			for (Table table : tables) {
 				if (!waitingCustomers.isEmpty() && !table.isOccupied() && !waiters.isEmpty()) {
 					seatCustomer(waitingCustomers.get(0), table);//the action
@@ -125,7 +142,7 @@ public class HostRole extends WorkRole {
 
 	/** Actions. Implement the methods called in the scheduler. */
 	private void seatCustomer(Customer customer, Table table) {
-		findLeastBusyWaiter().Waiter.msgPleaseSeatCustomer(customer, table.getTableID());
+		findLeastBusyWaiter().waiter.msgPleaseSeatCustomer(customer, table.getTableID());
 		Do("seat at table " + table.getTableID());
 		table.setOccupant(customer);
 		waitingCustomers.remove(customer);
@@ -144,32 +161,42 @@ public class HostRole extends WorkRole {
 		for(MyWaiter mw : waiters){
 			if(mw.state == WaiterState.NONE){
 				w.state = WaiterState.ON_BREAK;
-				w.Waiter.msgCanGoOnBreak();
+				w.waiter.msgCanGoOnBreak();
 				return;
 			}
 		}
 		w.state = WaiterState.NONE;
-		w.Waiter.msgDenyBreak();
+		w.waiter.msgDenyBreak();
+	}
+	
+	private void tellWaiterToGetOffWork(MyWaiter mw) {
+		((WorkRole) mw.waiter).msgLeaveWork();
+		this.deactivate();
 	}
 
 	/** Utility functions */
 	public void addWaiter(Waiter w){
+		if(!((Role) w).isActive()) return;
+		
 		MyWaiter mw = new MyWaiter(w.getName(), w);
 		waiters.add(mw);
 		w.msgHomePosition(waiters.size());
 		stateChanged();
 	}
+	
 	private MyWaiter findLeastBusyWaiter(){
 		chooseWaiter++;
 		while(waiters.get(chooseWaiter%waiters.size()).state == WaiterState.ON_BREAK){
 			chooseWaiter++;
 		}
+		
 		return waiters.get(chooseWaiter%waiters.size());
 	}
+	
 	private MyWaiter findWaiter(Waiter w){
 		synchronized(waiters){
 			for(MyWaiter temp : waiters){
-				if(temp.Waiter == w){
+				if(temp.waiter == w){
 					return temp;
 				}
 			}
@@ -179,11 +206,11 @@ public class HostRole extends WorkRole {
 	
 	private enum WaiterState {NONE, REQUESTED_BREAK, ON_BREAK};
 	private class MyWaiter{
-		Waiter Waiter;
+		Waiter waiter;
 		WaiterState state;
 		
 		MyWaiter(String n, Waiter w){
-			Waiter = w;
+			waiter = w;
 			state = WaiterState.NONE;
 		}
 	}
@@ -205,6 +232,13 @@ public class HostRole extends WorkRole {
 		return tableMap;
 	}
 
+	private boolean tablesOccupied() {
+		for(Table t : tables) {
+			if(t.isOccupied()) return false;
+		}
+		return true;
+	}
+	
 	private class Table {
 		Customer occupiedBy;
 		int tableID;
@@ -258,18 +292,26 @@ public class HostRole extends WorkRole {
 
 	@Override
 	public boolean isAtWork() {
-		return true;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override
 	public void msgLeaveWork() {
-		this.deactivate();
+		shouldLeaveWork = true;
+		stateChanged();
+	}
+
+	public void msgAtDestination() {
+		doneWaitingForInput();
+		stateChanged();
+	}
+	
+	public void setGui(HostGui gui) {
+		this.gui = gui;
 	}
 }
-

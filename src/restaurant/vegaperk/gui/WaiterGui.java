@@ -1,10 +1,10 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.backend.WaiterRole;
+import restaurant.vegaperk.backend.WaiterRoleBase;
 
 import java.awt.*;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 
@@ -12,35 +12,35 @@ import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private WaiterRoleBase agent = null;
     private boolean canRelease = false;//this prevents excessive releases from occurring
     private boolean waiting = false;//checks if waiter is going to waiting zone
     
-    String imgSrc = "resource/spongebob.png";// C:/Users/Zach VP/Documents/GitHub/Java/restaurant_vegaperk/images/spongebob.png
+    String imgSrc = "resource/spongebob.png";
     Image img = new ImageIcon(imgSrc).getImage();
     
-    String orderName="Test";//text of customer order
+    String orderName = "Test";//text of customer order
     private boolean holdingOrder = false;
 
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xPos = 0, yPos = 0;//default waiter position
+    private int xDestination = 40, yDestination = 40;//default start position
 
     private static final int hostX = 40;
     private static final int hostY = 50;
     
-    private static final int cookX = 320;
+    private static final int cookX = 420;
     private static final int cookY = 50;
     
     private static final int homeX = 100;
     private static final int homeY = 50;
     
-    private static final int cashX = 120;
-    private static final int cashY = 300;
+    private static final int cashX = 260;
+    private static final int cashY = 40;
     
     private RestaurantGui gui;
     
-    public WaiterGui(WaiterAgent agent, RestaurantGui g) {
-        this.agent = agent;
+    public WaiterGui(WaiterRoleBase w, RestaurantGui g) {
+        this.agent = w;
         this.gui = g;
     }
 
@@ -89,7 +89,7 @@ public class WaiterGui implements Gui {
     	gui.setWaiterEnabled(agent);
     }
     
-    public WaiterAgent getAgent(){
+    public WaiterRoleBase getAgent(){
     	return agent;
     }
 
@@ -117,6 +117,12 @@ public class WaiterGui implements Gui {
     	waiting = false;
         xDestination = cookX;
         yDestination = cookY;
+        canRelease = true;
+    }
+    
+    public void DoGoToCenter(){
+    	waiting = false;
+        xDestination = cashX;
         canRelease = true;
     }
     

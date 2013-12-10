@@ -4,6 +4,9 @@ import gui.Building;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
@@ -20,7 +23,7 @@ import transportation.interfaces.Passenger;
 public class PassengerGuiClass implements PassengerGui {
 
 	private static final int PASSENGERW = 4;
-	private static final int PASSENGERH = 4;
+	static final int PASSENGERH = 4;
 
 	private int xPos, yPos;
 	private Passenger passenger;
@@ -137,8 +140,6 @@ public class PassengerGuiClass implements PassengerGui {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.GREEN);
-		
 		XYPos drawingPos;
 		
 		try {
@@ -148,39 +149,21 @@ public class PassengerGuiClass implements PassengerGui {
 			e.printStackTrace();
 		}
 		
-		g.fillRect(drawingPos.x, drawingPos.y,
+		Rectangle2D r = new Rectangle2D.Double(drawingPos.x, drawingPos.y,
 				PASSENGERW, PASSENGERH);
+		
+		BufferedImage img = passenger.getPerson().getImage();
+		if (img == null) g.setColor(Color.GREEN);
+		else {
+			g.setPaint(new TexturePaint(img, r));
+		}
+		
+		g.fill(r);
 	}
 	
 	private XYPos calculateDrawingPosition() throws Exception {
 		XYPos response = new XYPos(xPos,yPos);
-		/*
-		switch (passenger.currentDirection()) {
-		case North:
-			response = new XYPos(xPos+Constants.SPACE_BETWEEN_BUILDINGS/2
-										-PASSENGERW/2, yPos);
-			break;
-		case South:
-			response = new XYPos(xPos-Constants.SPACE_BETWEEN_BUILDINGS/2
-										+PASSENGERW/2, yPos);
-			break;
-		case West:
-			response = new XYPos(xPos,
-					yPos-Constants.SPACE_BETWEEN_BUILDINGS/2
-							+PASSENGERH/2);
-			break;
-		case East:
-			response = new XYPos(xPos,
-					yPos+Constants.SPACE_BETWEEN_BUILDINGS/2
-							-PASSENGERH/2);
-			break;
-		case None:
-			response = new XYPos(xPos, yPos);
-			break;
-		default:
-			throw new Exception("This shouldn't happen");
-		}
-		*/
+		
 		//adjust from center to corner
 		response.x -= PASSENGERW/2;
 		response.y -= PASSENGERH/2;

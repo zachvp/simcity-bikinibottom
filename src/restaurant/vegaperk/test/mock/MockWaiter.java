@@ -3,6 +3,7 @@ package restaurant.vegaperk.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
+import restaurant.vegaperk.backend.CashierRole;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -62,18 +63,6 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void msgOutOfChoice(String choice, int table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgOrderDone(String choice, int table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgPleaseSeatCustomer(Customer customer, int tableID) {
 		// TODO Auto-generated method stub
 		
@@ -106,6 +95,12 @@ public class MockWaiter extends Mock implements Waiter {
 	@Override
 	public String getName() {
 		return super.getName();
+	}
+
+	@Override
+	public void setCashier(CashierRole cashier) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

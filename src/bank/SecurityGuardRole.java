@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.ScheduleTask;
+import CommonSimpleClasses.sound.Sound;
 import agent.PersonAgent;
 import agent.Role;
 import agent.WorkRole;
@@ -33,6 +34,7 @@ import bank.interfaces.Teller;
 public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
+	private Sound robBank = Sound.getInstance();
 	SecurityGuardGuiInterface securityGuardGui;
 	
 	BankBuilding bankBuilding;
@@ -246,6 +248,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	// Actions
 	
 	private void tryToStopRobber(MyRobber mr) {
+		robBank.playSound("RobABank.wav");
 		mr.r.msgAttemptToStop(accountManager, false); //TODO, make success of stop attemp random
 		mr.state = robberState.robbing;
 	}

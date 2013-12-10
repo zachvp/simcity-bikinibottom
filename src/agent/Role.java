@@ -128,6 +128,9 @@ public abstract class Role {
      * for a multi-step action. Use this in conjunction with
      * {@link #isActive()} to determine whether
      * {@link #pickAndExecuteAnAction()} should be called.
+     * 
+     * @see #waitForInput()
+     * @see #doneWaitingForInput()
      */
     public boolean isAwaitingInput() {
         // return this.awaitingInput;
@@ -156,6 +159,7 @@ public abstract class Role {
      * Temporarily pauses the Role.
      * 
      * @see #isAwaitingInput()
+     * @see #doneWaitingForInput()
      */
     public void waitForInput() {
     	// this.awaitingInput = true;
@@ -172,6 +176,7 @@ public abstract class Role {
      * {@link #waitForInput}.
      * 
      * @see #isAwaitingInput()
+     * @see #waitForInput()
      */
     public void doneWaitingForInput() {
     	// this.awaitingInput = false;

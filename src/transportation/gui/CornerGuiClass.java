@@ -3,6 +3,7 @@ package transportation.gui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import CommonSimpleClasses.Constants;
 import transportation.gui.interfaces.CornerGui;
 import transportation.interfaces.Corner;
 
@@ -34,22 +35,42 @@ public class CornerGuiClass implements CornerGui {
 
 	@Override
 	public void draw(Graphics2D g) {
+		Color verticalColor;
+		Color horizontalColor;
+		
 		switch (corner.getCurrDir()) {
 		case vertical:
-			g.setColor(Color.GREEN);
+			verticalColor = Color.GREEN;
+			horizontalColor = Color.RED;
 			break;
 			
 		case horizontal:
-			g.setColor(Color.RED);
+			verticalColor = Color.RED;
+			horizontalColor = Color.GREEN;
 			break;
-			
+		case transitioningToVertical:
+			verticalColor = Color.RED;
+			horizontalColor = Color.YELLOW;
+			break;
+		case transitioningToHorizontal:
 		default:
-			g.setColor(Color.YELLOW);
+			verticalColor = Color.YELLOW;
+			horizontalColor = Color.RED;
 			break;
 		}
 		
-		g.drawRect(xPos, yPos, 6, 6);
-
+		int x1 = xPos - 4;
+		int x2 = xPos + 4;
+		int y1 = yPos - 4;
+		int y2 = yPos + 4;
+		
+		g.setColor(verticalColor);
+		g.drawLine(x1, y1, x2, y1);
+		g.drawLine(x1, y2, x2, y2);
+		
+		g.setColor(horizontalColor);
+		g.drawLine(x1, y1, x1, y2);
+		g.drawLine(x2, y1, x2, y2);
 	}
 
 	@Override

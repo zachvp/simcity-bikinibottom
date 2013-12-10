@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
 import restaurant.vegaperk.gui.RestaurantGui;
 import restaurant.vegaperk.gui.RestaurantPanel;
@@ -20,11 +21,15 @@ public class RestaurantVegaPerkBuilding extends Building {
 	
 	private Map<Person, CustomerRole> existingCustomerRoles = new HashMap<Person, CustomerRole>();
 	
+	private StaffDisplay staff;
+	
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width / 2, height);
 		
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override
@@ -69,9 +74,12 @@ public class RestaurantVegaPerkBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getStaffPanel() {
-		// TODO Auto-generated method stub
-		return gui.getInfoPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
+	}
+	
+	@Override public boolean isOpen() {
+		return true;
 	}
 
 }

@@ -1,4 +1,4 @@
-package restaurant.strottma.test.mock;
+package restaurant.lucas.test.mock;
 
 import java.text.DateFormat;
 import java.util.Date;

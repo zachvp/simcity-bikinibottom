@@ -18,33 +18,29 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
 
-import market.gui.MarketBuilding;
-import bank.gui.BankBuilding;
 import kelp.KelpClass;
+import market.gui.MarketBuilding;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
-import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
-import transportation.interfaces.*;
+import transportation.interfaces.Busstop;
+import transportation.interfaces.Corner;
 import transportation.mapbuilder.MapBuilder;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.sound.Sound;
+import bank.gui.BankBuilding;
 
 
 /** 
@@ -261,7 +257,8 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantBuilding restaurant = new RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantStrottmaBuilding restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				//restaurant.vdea.gui.RestaurantBuilding restaurant = new restaurant.vdea.gui.RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);
 			}
@@ -295,7 +292,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		map.addBuildingToMap(building);
 		if(building.type() != LocationTypeEnum.None){
 			buildingList.addToList(building.getName());
-		}		
+		}	
+		building.setCitizenRecords(citizenRecords);
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		constructedBuildings.add(building);

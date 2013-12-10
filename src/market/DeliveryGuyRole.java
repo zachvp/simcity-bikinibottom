@@ -6,22 +6,13 @@ import gui.trace.AlertTag;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import market.ItemCollectorRole.ItemCollectorstate;
-import market.gui.DeliveryGuyGui;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
-import market.interfaces.Customer;
 import market.interfaces.DeliveryGuy;
 import market.interfaces.DeliveryGuyGuiInterfaces;
 import market.interfaces.DeliveryReceiver;
 import market.test.mock.EventLog;
-import CommonSimpleClasses.CityLocation;
-import CommonSimpleClasses.Constants;
-import CommonSimpleClasses.TimeManager;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
-import agent.Agent;
-import agent.PersonAgent;
-import agent.Role;
 import agent.WorkRole;
 import agent.gui.Gui;
 import agent.interfaces.Person;
@@ -95,15 +86,16 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 		public void msgArrivedDestination(){
 			//Do(AlertTag.MARKET, "Receive msg delivery Guy has arrived Destination");
-			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Restaurant)
+			if (person.getPassengerRole().getLocation().equals(getCurrentOrder().getBuilding()))
 			{
 				getCurrentOrder().getDeliveryReceiver().msgHereIsYourItems(getCurrentOrder().getDeliveryList());
-				person.getPassengerRole().msgGoToLocation(super.person.getWorkRole().getLocation(), false);
+				person.getPassengerRole().msgGoToLocation(getLocation(), false);
 				person.getPassengerRole().activate();
 			}
-			if (person.getPassengerRole().getLocation().type() == LocationTypeEnum.Market)
+			if (person.getPassengerRole().getLocation().equals(getLocation()))
 			{
 				deliveryguyGui.BackReadyStation();
+				setCurrentOrder(null);
 			}
 		}
 		 
@@ -178,8 +170,9 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		person.getPassengerRole().activate();
 		person.getPassengerRole().msgGoToLocation(getCurrentOrder().getBuilding(), false);
+		person.getPassengerRole().activate();
+		deactivate();
 		//stateChanged()?
 		
 		

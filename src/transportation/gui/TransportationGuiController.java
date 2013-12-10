@@ -45,7 +45,7 @@ public class TransportationGuiController implements Gui {
 				startCarCrashSequence();
 
 			}
-		}, 7000);
+		}, 70000);
 		
 	}
 	

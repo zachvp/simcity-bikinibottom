@@ -79,7 +79,6 @@ public class RestaurantPanel extends JPanel {
     	
     	this.cook = new CookRole(cookPerson, building);
     	this.cookGui = new CookGui(cook, gui);
-    	this.cook.setRevolvingOrders(revolvingOrderList);
     	
     	this.cashier = new CashierRole(cashierPerson, building);
     	this.cashierGui = new CashierGui(cashier, gui);
@@ -245,6 +244,7 @@ public class RestaurantPanel extends JPanel {
 	    		else {
 	    			w = new PCWaiterRole(null, building);
 	    			((PCWaiterRole) w).setRevolvingOrders(revolvingOrderList);
+	    			this.cook.setRevolvingOrders(revolvingOrderList);
 	    		}
 	    	}
     		

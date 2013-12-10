@@ -163,16 +163,20 @@ public class PersonAgent extends Agent implements Person {
 				DeliveryGuyRole dg = (DeliveryGuyRole) getWorkRole();
 				if (!dg.msgAreYouAvailable()) {
 					// if the delivery guy is on a delivery
-					if (pass.getLocation().equals(dg.getCurrentOrder().getBuilding())) {
-						Do(AlertTag.MARKET, name,
-								"Arrived at delivery location.");
-						dg.msgArrivedDestination();
-						return true;
-					} else if (pass.getLocation().equals(dg.getLocation())) {
-						Do(AlertTag.MARKET, name, "Returning to work.");
-						dg.msgArrivedDestination();
-						dg.activate();
-						return true;
+					if (!dg.getOrders().isEmpty()){
+						for (int i = 0 ; i< dg.getOrders().size(); i++){
+							if (pass.getLocation().equals(dg.getOrders().get(i).getBuilding())) {
+								Do(AlertTag.MARKET, name,
+										"Arrived at delivery location.");
+								dg.msgArrivedDestination();
+								return true;
+							} else if (pass.getLocation().equals(dg.getLocation())) {
+								Do(AlertTag.MARKET, name, "Returning to work.");
+								dg.msgArrivedDestination();
+								dg.activate();
+								return true;
+							}
+						}
 					}
 				}
 			}
@@ -729,6 +733,10 @@ public class PersonAgent extends Agent implements Person {
 	public void setTimeToRobABank(){
 		timeToRobABank = true;
 		stateChanged();
+	}
+	
+	public boolean getTimeToRobABank() {
+		return timeToRobABank;
 	}
 	
 	public boolean needToGoToBank() {

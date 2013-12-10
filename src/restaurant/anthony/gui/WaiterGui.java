@@ -62,7 +62,7 @@ public class WaiterGui implements Gui {
     private static final int WaiterWidth = 15;
     private static final int WaiterHeight = 15;
     
-    private enum Command {NotAtWork, GoToWork1, GoToWork, noCommand, GoToIdle, GoToIdle1, GoToTable, GoToTable1, GoToCook, GoToCook1, GoToHost, GoToCashier};
+    private enum Command {NotAtWork, GoToWork1, GoToWork, noCommand, GoToIdle, GoToIdle1, GoToTable, GoToTable1, GoToCook, GoToCook1, GoToHost, GoToCashier, GoToExit, GoToExit1};
     private Command command = Command.NotAtWork;
     
     public WaiterGui(Waiter agent, int x) {
@@ -83,7 +83,14 @@ public class WaiterGui implements Gui {
         
         if ((xPos == xDestination && yPos == yDestination) && command != Command.noCommand) {
 			
-        	if (command == Command.GoToWork1){
+        	if (command == Command.GoToExit1){
+        		ContinueToExit();
+        		return;
+        	}
+        	else if (command == Command.GoToExit){
+        		agent.AtExit();
+        	}
+        	else if (command == Command.GoToWork1){
         		ContinueToWork();
         		return;
         	}
@@ -349,4 +356,16 @@ public class WaiterGui implements Gui {
     	idlePositionX = idlePositionX + x*100;
     	//idlePositionY = idlePositionY ;
     }
+
+	public void GoToExit() {
+		command = Command.GoToExit1;
+		xDestination = ExitX1;
+        yDestination = ExitY1;
+	}
+	
+	public void ContinueToExit(){
+		command = Command.GoToExit;
+		xDestination = ExitX;
+        yDestination = ExitY;
+	}
 }

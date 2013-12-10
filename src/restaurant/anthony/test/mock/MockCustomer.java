@@ -3,8 +3,8 @@ package restaurant.anthony.test.mock;
 
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
-import restaurant.anthony.WaiterRole.Menu;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Menu;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Customer;

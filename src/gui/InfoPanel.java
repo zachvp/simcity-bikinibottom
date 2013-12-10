@@ -208,6 +208,11 @@ public class InfoPanel extends JPanel implements ActionListener{
 		if(tabDisplay.getTabCount() == 3){
 			tabDisplay.hideBuildingTabs();
 		}
+		
+		if(!person.getTimeToRobABank()){
+			robberButton.setEnabled(true);
+		}
+		
 		cl.show(card, "person");
 		//System.out.println("update info with "+person.getName());
 		/*info.setText("<html><div>&nbsp;</div><div> "
@@ -290,6 +295,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 				if(loc instanceof BankBuilding && ((BankBuilding) loc).isOpen()){
 					currentPerson.setTimeToRobABank();
 					currentPerson.addRole(((BankBuilding) loc).getRobberRole(currentPerson));
+					robberButton.setEnabled(false);
 				}
 			}
 		}

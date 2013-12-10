@@ -2,8 +2,8 @@ package restaurant.anthony.interfaces;
 
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
-import restaurant.anthony.WaiterRole.Menu;
-import restaurant.anthony.WaiterRole.Order;
+import restaurant.anthony.WaiterRoleBase.Menu;
+import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 
 public interface Customer {

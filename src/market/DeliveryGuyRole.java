@@ -1,8 +1,10 @@
 package market;
 
 
+import gui.Building;
 import gui.trace.AlertTag;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -27,10 +29,10 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	
 	private DeliveryGuyGuiInterfaces deliveryguyGui;
 	private String name;
-	private boolean Available = true;
 	private Cashier cashier;
 	private CommonSimpleClasses.CityBuilding Market;
-	private Order CurrentOrder = null;
+	private boolean present;
+	private List<Order> orders = new ArrayList<Order>();
 	
 	private Semaphore atDeliver = new Semaphore (0,true);
 	private Semaphore atExit = new Semaphore (0,true);
@@ -58,7 +60,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	 */
 		public boolean msgAreYouAvailable() {
 			//Do(AlertTag.MARKET, "Receive message asking if the DeliveryGuy is available");
-			return Available;
+			return (getOrders().isEmpty() || present);
 		}
 
 		
@@ -76,8 +78,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 		public void msgDeliverIt(List<Item> DeliveryList , DeliveryReceiver deliveryReceiver , CommonSimpleClasses.CityLocation building) {
 			//Do(AlertTag.MARKET, "Receive msg from Cashier to Deliver Item to Restaurant");
-			setCurrentOrder(new Order(DeliveryList, deliveryReceiver, building));
-			 Available = false;
+			getOrders().add(new Order(DeliveryList, deliveryReceiver, building));
 			 stateChanged();
 		}
 		
@@ -86,16 +87,29 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 		public void msgArrivedDestination(){
 			//Do(AlertTag.MARKET, "Receive msg delivery Guy has arrived Destination");
-			if (person.getPassengerRole().getLocation().equals(getCurrentOrder().getBuilding()))
-			{
-				getCurrentOrder().getDeliveryReceiver().msgHereIsYourItems(getCurrentOrder().getDeliveryList());
-				person.getPassengerRole().msgGoToLocation(getLocation(), false);
-				person.getPassengerRole().activate();
-			}
-			if (person.getPassengerRole().getLocation().equals(getLocation()))
-			{
-				deliveryguyGui.BackReadyStation();
-				setCurrentOrder(null);
+			for (int i = 0 ; i<getOrders().size();i++){
+				if (person.getPassengerRole().getLocation().equals(getOrders().get(i).getBuilding()))
+				{
+					if (getOrders().get(i).getBuilding() instanceof gui.Building){
+						if (((Building) getOrders().get(i).getBuilding()).isOpen()){
+							getOrders().get(i).getDeliveryReceiver().msgHereIsYourItems(getOrders().get(i).getDeliveryList());
+							getOrders().remove(i);
+						}
+						else{
+							getOrders().get(i).retry = true;
+							Order currentOrder = getOrders().get(i);
+							//put the currentOrder at the back of the orderlist
+							getOrders().remove(i);
+							getOrders().add(currentOrder);
+						}
+						person.getPassengerRole().msgGoToLocation(getLocation(), false);
+						person.getPassengerRole().activate();
+					}
+				}
+				if (person.getPassengerRole().getLocation().equals(getLocation()))
+				{
+					deliveryguyGui.BackReadyStation();
+				}
 			}
 		}
 		 
@@ -105,7 +119,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		 */
 		public void Ready(){
 			//Do(AlertTag.MARKET, "Ready!");
-			Available = true;
+			present = true;
 		}
 		
 		/**
@@ -137,14 +151,25 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			GoToWork();
 			return true;
 		}
-		if (CurrentOrder != null){
-			//if (CurrentOrder.Building.isOpen())
-			if (Available == false){
-				GoDeliver();
-				return true;
+		
+		if (present == true){
+			for (int i=0;i<getOrders().size();i++){
+				if(!getOrders().get(i).retry){
+					GoDeliver(getOrders().get(i));
+					return true;
+				}
+			}
+			
+			for (int i=0;i<getOrders().size();i++){
+				if(getOrders().get(i).retry){
+					GoDeliver(getOrders().get(i));
+					return true;
+				}
 			}
 		}
-		if (Available == true && getState() == DeliveryGuystate.OffWork){
+		
+		
+		if (present == true && getState() == DeliveryGuystate.OffWork){
 			OffWork();
 				return true;
 		}
@@ -160,9 +185,10 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 	/**
 	 * Action to go deliver items!
 	 */
-	private void GoDeliver(){
+	private void GoDeliver(Order o){
 		//Do(AlertTag.MARKET, "Going To Deliver");
 		// animation to go to the location (Building)
+		present = false;
 		deliveryguyGui.GoDeliver();
 		try {
 			atDeliver.acquire();
@@ -170,7 +196,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		person.getPassengerRole().msgGoToLocation(getCurrentOrder().getBuilding(), false);
+		person.getPassengerRole().msgGoToLocation(o.getBuilding(), false);
 		person.getPassengerRole().activate();
 		deactivate();
 		//stateChanged()?
@@ -227,15 +253,7 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		public boolean isOnBreak(){
 			return false;
 		}
-
-	public Order getCurrentOrder() {
-			return CurrentOrder;
-		}
-
-		public void setCurrentOrder(Order currentOrder) {
-			CurrentOrder = currentOrder;
-		}
-
+		
 	public Cashier getCashier() {
 			return cashier;
 		}
@@ -248,15 +266,25 @@ public class DeliveryGuyRole extends WorkRole implements DeliveryGuy{
 		this.state = state;
 	}
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	public class Order{
 		private List<Item> DeliveryList;
 		private DeliveryReceiver deliveryReceiver;
 		private CommonSimpleClasses.CityLocation Building;
+		private boolean retry;
 		
 		Order(List<Item> DList, DeliveryReceiver dR, CommonSimpleClasses.CityLocation CB){
 			setDeliveryList(DList);
 			setDeliveryReceiver(dR);
 			setBuilding(CB);
+			retry = false;
 		}
 
 		public List<Item> getDeliveryList() {

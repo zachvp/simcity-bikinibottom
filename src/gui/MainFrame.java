@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +30,11 @@ import market.gui.MarketBuilding;
 import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+<<<<<<< HEAD
+import restaurant.lucas.gui.RestaurantLucasBuilding;
+=======
+import restaurant.anthony.gui.RestaurantBuilding;
+>>>>>>> master
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
@@ -258,7 +264,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantVegaPerkBuilding restaurant = new RestaurantVegaPerkBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantLucasBuilding restaurant = new RestaurantLucasBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				//restaurant.vdea.gui.RestaurantBuilding restaurant = new restaurant.vdea.gui.RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);

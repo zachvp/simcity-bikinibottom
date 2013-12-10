@@ -1,5 +1,7 @@
 package restaurant.vdea;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,16 +98,16 @@ public class CookRole extends WorkRole implements Cook{
 		orderSent = false; //received back order
 
 		for(Food i: inventory){
-			print("new "+ i.getName() + " quantity: "+ i.quantity);
+			Do(AlertTag.RESTAURANT, "new "+ i.getName() + " quantity: "+ i.quantity);
 		}
 
 		if(!orderFull){
-			print("Shipment from market incomplete");
+			Do(AlertTag.RESTAURANT, "Shipment from market incomplete");
 			shipmentStatus = OrderStatus.shipmentIncomplete;
 			stateChanged();
 		}
 		else{
-			print("Inventory is full!");
+			Do(AlertTag.RESTAURANT, "Inventory is full!");
 		}
 	}
 
@@ -150,13 +152,13 @@ public class CookRole extends WorkRole implements Cook{
 		boolean enough = checkFoodInventory(o.choice);	//check if there is enough food
 
 		if (enough){
-			print("There is enough " + o.choice);
+			Do(AlertTag.RESTAURANT, "There is enough " + o.choice);
 			decreaseQuantity(o);
 			o.status = OrderStatus.enoughFood;
 			//stateChanged();
 		}
 		else{
-			print("There is not enough " + o.choice);
+			Do(AlertTag.RESTAURANT, "There is not enough " + o.choice);
 			o.status = OrderStatus.notEnoughFood;
 			//restockInventory();	//TODO MarketAgent test
 			//stateChanged();
@@ -166,7 +168,7 @@ public class CookRole extends WorkRole implements Cook{
 	private void decreaseQuantity(Order o){
 		if(o.choice.getName().equals("steak")){
 			steak.cook();
-			System.out.println(steak.quantity + " steaks left");
+			//System.out.println(steak.quantity + " steaks left");
 		}
 		else if(o.choice.getName().equals("chicken")){
 			chicken.cook();
@@ -184,7 +186,7 @@ public class CookRole extends WorkRole implements Cook{
 	//and check if food hits threshold
 	public boolean checkFoodInventory(Food f){
 		Food compare = new Food();
-		print("Checking amount of " + f);
+		Do(AlertTag.RESTAURANT, "Checking amount of " + f);
 		if(f.equals(steak)){
 			compare = steak;
 		}
@@ -201,7 +203,7 @@ public class CookRole extends WorkRole implements Cook{
 
 		if(!orderSent && compare.quantity <= compare.threshold){	//TODO inventory
 			//print("low on " + compare);
-			print("under threshold, need to restock");
+			Do(AlertTag.RESTAURANT, "under threshold, need to restock");
 			restockInventory();
 		}
 
@@ -212,7 +214,7 @@ public class CookRole extends WorkRole implements Cook{
 
 	//if one of the foods is low, triggers to check all inventory
 	private void restockInventory() {
-		print("restocking inventory");
+		Do(AlertTag.RESTAURANT, "restocking inventory");
 		List<Food> shoppingList = new ArrayList<Food>();
 		if(shipmentStatus == OrderStatus.shipmentIncomplete){
 			for (Food f: inventory){
@@ -244,7 +246,7 @@ public class CookRole extends WorkRole implements Cook{
 
 
 	private void cookOrder(final Order o) { //TODO fix
-		print("Cooking " + o.choice + "...");
+		Do(AlertTag.RESTAURANT, "Cooking " + o.choice + "...");
 		o.status = OrderStatus.none;
 		cookGui.DoCooking(o.choice.getName(), o.table);
 		timer.schedule(new TimerTask() {
@@ -258,7 +260,7 @@ public class CookRole extends WorkRole implements Cook{
 
 	private void orderDone(Order o){
 		cookGui.doneCooking(o.table);
-		print(o.choice +" is ready!");
+		Do(AlertTag.RESTAURANT, o.choice +" is ready!");
 		o.w.msgOrderReady(o.choice.getName(), o.table);
 		orders.remove(o);
 		o.status = OrderStatus.done;

@@ -48,8 +48,8 @@ public class CustomerGui implements Gui{
 	
 	public CustomerGui(CustomerRole c, RestaurantGui gui){
 		role = c;
-		//xPos = -40;
-		//yPos = -40;
+		//xPos = 0;
+		//yPos = 0;
 		
 		//xDestination = -40;
 		//yDestination = -40;
@@ -170,22 +170,22 @@ public class CustomerGui implements Gui{
 	public void DoGoToSeat(int seatnumber, int tableNumber) {//later you will map seatnumber to table coordinates.
 		
 		if (tableNumber == 1){
-    		xTable = 150;
-    	    yTable = 150;
-    	}
-    	if (tableNumber == 2)
-    	{
-    		xTable = 250;
-    		yTable = 150;
-    	}
-    	if (tableNumber ==3){
-    		xTable = 150;
-    		yTable = 250;
-    	}
-    	if (tableNumber ==4){
-    		xTable = 250;
-    		yTable = 250;
-    	}
+			xTable = 120;
+			yTable = 200;
+		}
+		if (tableNumber == 2)
+		{
+			xTable = 220;
+			yTable = 200;
+		}
+		if (tableNumber ==3){
+			xTable = 320;
+			yTable = 200;
+		}
+		if (tableNumber ==4){
+			xTable = 420;
+			yTable = 200;
+		}
 		
 		xDestination = xTable;
 		yDestination = yTable;
@@ -194,6 +194,7 @@ public class CustomerGui implements Gui{
 
 	public void DoExitRestaurant() {
 		recieved = false;
+		isHungry = false;
 		xDestination = -40;
 		yDestination = -40;
 		command = Command.LeaveRestaurant;

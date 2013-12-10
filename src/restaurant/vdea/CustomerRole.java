@@ -8,6 +8,7 @@ import restaurant.vdea.gui.*;
 import restaurant.vdea.interfaces.*;
 import CommonSimpleClasses.CityLocation;
 import agent.Role;
+import agent.PersonAgent.HungerLevel;
 import agent.interfaces.Person;
 
 public class CustomerRole extends Role implements Customer {
@@ -58,6 +59,7 @@ public class CustomerRole extends Role implements Customer {
 	@Override
 	public void activate() {
 		super.activate();
+		customerGui.setHungry();
 		gotHungry();
 	}
 	public void setTableNumber(int t){
@@ -241,7 +243,8 @@ public class CustomerRole extends Role implements Customer {
 			}
 			if (state == AgentState.Leaving && event == AgentEvent.doneLeaving){
 				state = AgentState.DoingNothing;
-				//no action
+				person.setHungerLevel(HungerLevel.FULL);
+				deactivate();
 				return true;
 			}
 			return false;

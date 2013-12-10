@@ -119,5 +119,29 @@ public class RestaurantBuilding extends Building{
 	public StaffDisplay getStaffPanel() {
 		return staff;
 	}
+	
+	@Override
+	public boolean isOpen() {
+		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
+				waiterOnDuty();
+	}
+	public boolean hostOnDuty() {
+		return host != null && host.isAtWork();
+	}
+
+	public boolean cashierOnDuty() {
+		return cashier != null && cashier.isAtWork();
+	}
+
+	public boolean cookOnDuty() {
+		return cook != null && cook.isAtWork();
+	}
+
+	public boolean waiterOnDuty() {
+		for (WaiterRole w : waiters) {
+			if (w.isAtWork()) { return true; }
+		}
+		return false;
+	}
 
 }

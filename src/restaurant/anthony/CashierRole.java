@@ -131,7 +131,7 @@ public class CashierRole extends WorkRole implements Cashier {
 			GoToWork();
 			return true;
 		}
-		if (state == Cashierstate.Idle){
+		//if (state == Cashierstate.Idle){
 			synchronized(MyCheckList){
 				for (int i = 0; i < getMyCheckList().size(); i++) {
 					if (getMyCheckList().get(i).getPrice() == 0 && !getMyCheckList().get(i).GetIt) {
@@ -154,7 +154,7 @@ public class CashierRole extends WorkRole implements Cashier {
 				PayDebt();
 				return true;
 			}
-		}
+		//}
 		
 		if (event == Cashierevent.NotAtWork && MyCheckList.size() == 0){
 			OffWork();

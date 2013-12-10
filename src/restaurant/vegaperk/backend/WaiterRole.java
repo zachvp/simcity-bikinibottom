@@ -1,9 +1,9 @@
 package restaurant.vegaperk.backend;
 
-import java.util.ConcurrentModificationException;
-
 import CommonSimpleClasses.CityBuilding;
 import agent.interfaces.Person;
+import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomer;
+import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
 
 /**
@@ -18,82 +18,28 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 
 	CookRole cook = null;
 	
-	public void setCook(CookRole c){
-		cook = c;
-	}
-	
-	public boolean pickAndExecuteAnAction() {
-		try{
-			for (MyCustomer c : customers) {
-				if (c.state==MyCustomerState.WAITING) {
-					c.state = MyCustomerState.SEATED;
-					seatCustomer(c, c.table);//the action
-					return true;//return true to the abstract agent to reinvoke the scheduler.
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.READY_TO_ORDER){
-					c.state = MyCustomerState.ORDERED;
-					takeOrder(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.FOOD_READY){
-					c.state = MyCustomerState.SERVED;
-					getFood(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.LEAVING){
-					c.state = MyCustomerState.DONE;
-					tellHostFreeTable(c.table);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.OUT_OF_CHOICE){
-					c.state = MyCustomerState.SEATED;
-					tellCustomerOutOfFood(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.DONE_EATING){
-					c.state = MyCustomerState.PAYING;
-					getCheck(c);
-				}
-				if(breakState == BreakState.OFF_BREAK){
-					breakState = BreakState.NONE;
-					goOffBreak();
-					return true;
-				}
-			}	
-			if(breakState == BreakState.GOING_ON_BREAK){
-				boolean hasCustomers = false;
-				for(MyCustomer c : customers){
-					if(c.state != MyCustomerState.DONE){
-						hasCustomers = true;
-					}
-				}
-				if(hasCustomers == false){
-					breakState = BreakState.ON_BREAK;
-					goOnBreak();
-				}
-				return true;
+	/** Messages from cook */
+	public void msgOrderDone(String choice, int t){
+		for(MyCustomer mc : customers){
+			if(mc.table == t){
+				mc.state = MyCustomerState.FOOD_READY;
 			}
 		}
-			
-		catch(ConcurrentModificationException e){
-			return true;
+		stateChanged();
+	}
+	public void msgOutOfChoice(String choice, int t){
+		for(MyCustomer mc : customers){
+			if(mc.table == t){
+				mc.state = MyCustomerState.OUT_OF_CHOICE;
+			}
 		}
-		
-		goWait();
-		return false;
+		stateChanged();
 	}
 	
-	private void takeOrder(MyCustomer c){
+	
+	/* --- Actions --- */
+	
+	protected void takeOrder(MyCustomer c){
 		DoGoToTable(c.table);
 		waitForInput();
 		
@@ -114,7 +60,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		stateChanged();
 	}
 	
-	private void getFood(MyCustomer c){
+	protected void getFood(MyCustomer c){
 		if(c.state == MyCustomerState.LEAVING){
 			return;
 		}
@@ -137,5 +83,12 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	private void DoGoToCook(){
 		waiterGui.DoGoToCook();
 	}
+	
+	/* --- Actions --- */
+	public void setCook(CookRole c){
+		cook = c;
+	}
+	
 
 }
+

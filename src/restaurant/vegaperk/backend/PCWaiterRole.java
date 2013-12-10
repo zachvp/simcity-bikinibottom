@@ -15,7 +15,7 @@ import java.util.*;
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
-public class PCWaiterRole extends WorkRole implements Waiter {
+public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };

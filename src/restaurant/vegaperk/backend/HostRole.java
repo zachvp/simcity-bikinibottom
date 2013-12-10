@@ -1,6 +1,7 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
+import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;
@@ -175,6 +176,8 @@ public class HostRole extends WorkRole {
 
 	/** Utility functions */
 	public void addWaiter(Waiter w){
+		if(!((Role) w).isActive()) return;
+		
 		MyWaiter mw = new MyWaiter(w.getName(), w);
 		waiters.add(mw);
 		w.msgHomePosition(waiters.size());

@@ -124,24 +124,6 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		stateChanged();
 	}
 	
-	/** Messages from cook */
-	public void msgOrderDone(String choice, int t){
-		for(MyCustomer mc : customers){
-			if(mc.table == t){
-				mc.state = MyCustomerState.FOOD_READY;
-			}
-		}
-		stateChanged();
-	}
-	public void msgOutOfChoice(String choice, int t){
-		for(MyCustomer mc : customers){
-			if(mc.table == t){
-				mc.state = MyCustomerState.OUT_OF_CHOICE;
-			}
-		}
-		stateChanged();
-	}
-	
 	public void msgGotFatigue(){
 		breakState = BreakState.REQUEST_BREAK;
 		host.msgIWantBreak(this);
@@ -169,6 +151,20 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 					c.state = MyCustomerState.SEATED;
 					seatCustomer(c, c.table);//the action
 					return true;//return true to the abstract agent to reinvoke the scheduler.
+				}
+			}
+			for(MyCustomer c : customers){
+				if(c.state==MyCustomerState.READY_TO_ORDER){
+					c.state = MyCustomerState.ORDERED;
+					takeOrder(c);
+					return true;
+				}
+			}
+			for(MyCustomer c : customers){
+				if(c.state==MyCustomerState.FOOD_READY){
+					c.state = MyCustomerState.SERVED;
+					getFood(c);
+					return true;
 				}
 			}
 			for(MyCustomer c : customers){
@@ -232,6 +228,10 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		stateChanged();
 	}
 	
+	abstract protected void takeOrder(MyCustomer c);
+	
+	abstract protected void getFood(MyCustomer c);
+	
 	protected void getCheck(MyCustomer c){
 		Do("Going to cashier");
 		
@@ -283,6 +283,9 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	
 	protected void DoGoToHost(){
 		waiterGui.DoGoToHost();
+	}
+	private void DoGoToCook(){
+		waiterGui.DoGoToCook();
 	}
 	protected void DoGoWait(){
 		waiterGui.DoGoToHomePosition(homePosition);

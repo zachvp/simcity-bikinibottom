@@ -10,6 +10,8 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
+import restaurant.vegaperk.backend.RevolvingOrderList.Order;
+import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.CookGui;
 import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -28,6 +30,10 @@ public class CookRole extends WorkRole implements Cook {
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	private boolean onOpening = true;
+	
+	private RevolvingOrderList revolvingOrders;
+	private boolean timerSet = false;
+	private final int CHECK_REVOLVING_LIST_TIME = 10;
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
@@ -93,7 +99,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	/** From Waiter */
 	public void msgHereIsOrder(Waiter w, String c, int t){
-		orders.add(new Order(c, t, w, OrderState.PENDING));
+		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.PENDING));
 		stateChanged();
 	}
 	public void msgGotFood(int table){
@@ -146,9 +152,11 @@ public class CookRole extends WorkRole implements Cook {
 			openStore();
 			return true;
 		}
+		
 		if(!groceries.isEmpty()){
 			orderFoodThatIsLow(groceries);
 		}
+		
 		synchronized(orders){
 			for(Order o : orders){
 				if(o.state==OrderState.COOKED){
@@ -163,6 +171,24 @@ public class CookRole extends WorkRole implements Cook {
 				}
 			}
 		}
+		
+		if(!timerSet) {
+			Runnable command = new Runnable() {
+				public void run(){
+					for(Order o : orders) {
+						if(o.state == OrderState.NEED_TO_COOK){
+							tryToCookFood(o);
+						}
+					}
+				}
+			};
+			timerSet = true;
+			
+			schedule.scheduleTaskWithDelay(command,
+			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -172,10 +198,16 @@ public class CookRole extends WorkRole implements Cook {
 		Food f = inventory.get(o.choice);
 		if(f.amount <= 0){
 			Do("Out of food");
-			((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
+			o.state = OrderState.OUT_OF_CHOICE;
+			
+			if(o.waiter instanceof WaiterRole)
+				((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
+			
 			orders.remove(o);
+			
 			return;
 		}
+		
 		f.amount--;
 		if(f.amount == f.low){
 			groceries.put(f.type, f.capacity - f.amount);
@@ -222,7 +254,10 @@ public class CookRole extends WorkRole implements Cook {
 	private void plateIt(Order o){
 		o.state = OrderState.FINISHED;
 		Do("Order Plated");
-		((WaiterRole)o.waiter).msgOrderDone(o.choice, o.table);
+		
+		if(o.waiter instanceof WaiterRole)
+			((WaiterRole)o.waiter).msgOrderDone(o.choice, o.table);
+		
 		Do("Order done " + o.choice);
 		plateZones.get(o.table).setOrder(o);
 		
@@ -287,20 +322,20 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/** Classes */
-	enum OrderState { PENDING, COOKING, COOKED, FINISHED };
-	private class Order{
-		Waiter waiter;
-		OrderState state;
-		String choice;
-		int table;
-		
-		Order(String c, int t, Waiter w, OrderState s){
-			choice = c;
-			table = t;
-			waiter = w;
-			state = s;
-		}
-	}
+//	private class Order{
+//		Waiter waiter;
+//		OrderState state;
+//		String choice;
+//		int table;
+//		
+//		public Order(String c, int t, Waiter w, OrderState s){
+//			choice = c;
+//			table = t;
+//			waiter = w;
+//			state = s;
+//		}
+//	}
+	
 	
 	private class Food{
 		String type;
@@ -337,6 +372,10 @@ public class CookRole extends WorkRole implements Cook {
 		private void setOrder(Order o){
 			order = o;
 		}
+	}
+	
+	public void setRevolvingOrders(RevolvingOrderList orderList) {
+		this.revolvingOrders = orderList;
 	}
 	
 	@Override

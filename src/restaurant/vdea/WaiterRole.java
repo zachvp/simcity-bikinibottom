@@ -42,6 +42,7 @@ public class WaiterRole extends WorkRole implements Waiter{
 	public void activate() {
 		super.activate();
 		offWork = false;
+		waiterGui.DoGoHomePos();
 	}
 
 	public boolean isBusy(){
@@ -242,7 +243,10 @@ public class WaiterRole extends WorkRole implements Waiter{
 			}
 		}
 		catch(ConcurrentModificationException e){}
-		if (offWork) { deactivate(); }
+		if (offWork) { 
+			deactivate();
+			waiterGui.DoLeave();
+		}
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent

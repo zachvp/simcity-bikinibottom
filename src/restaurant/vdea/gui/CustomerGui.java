@@ -17,9 +17,9 @@ public class CustomerGui implements Gui{
 
 	private WaiterRole waiter;
 	RestaurantGui gui;
-
-	private int xPos, yPos, sXPos, sYPos;
-	private int xDestination, yDestination;
+	
+	private int xPos = -20, yPos = -20;//default waiter position
+	private int xDestination = -20, yDestination = -20;//default start position
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 	
@@ -32,14 +32,14 @@ public class CustomerGui implements Gui{
 
 	public CustomerGui(CustomerRole c, RestaurantGui gui, WaiterRole m) {
 		role = c;
-		xPos = -40;
-		yPos = -40;
+		//xPos = -40;
+		//yPos = -40;
 		
-		sXPos = -40;
-		sYPos = -40;
+		//sXPos = -40;
+		//sYPos = -40;
 		
-		xDestination = -40;
-		yDestination = -40;
+		//xDestination = -40;
+		//yDestination = -40;
 		//maitreD = m;
 		this.gui = gui;
 		
@@ -48,11 +48,11 @@ public class CustomerGui implements Gui{
 	
 	public CustomerGui(CustomerRole c, RestaurantGui gui){
 		role = c;
-		xPos = -40;
-		yPos = -40;
+		//xPos = -40;
+		//yPos = -40;
 		
-		xDestination = -40;
-		yDestination = -40;
+		//xDestination = -40;
+		//yDestination = -40;
 		//maitreD = m;
 		this.gui = gui;
 	}
@@ -158,8 +158,8 @@ public class CustomerGui implements Gui{
 	public void DoGoToWaitingArea(int n){
 		yDestination = 50 + (21*n);
 		xDestination = 15;
-		xPos = xDestination;
-		yPos = yDestination;
+		//xPos = xDestination;
+		//yPos = yDestination;
 	}
 	
 	public void updateWait(int n){

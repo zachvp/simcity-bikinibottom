@@ -13,8 +13,8 @@ public class WaiterGui implements Gui {
 	private boolean isOnBreak = false;
 	private boolean isPresent = false;
 
-	private int xPos = -20, yPos = -20;//default waiter position
-	private int xDestination = -20, yDestination = -20;//default start position
+	private int xPos = -40, yPos = -40;//default waiter position
+	private int xDestination = -40, yDestination = -40;//default start position
 	private int xHome, yHome;
 
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant, WaitingArea, cust};
@@ -28,25 +28,18 @@ public class WaiterGui implements Gui {
 	String order;
 
 
-	public WaiterGui(WaiterRole Role) {
-		this.Role = Role;
-
-	}
-
 	public WaiterGui(WaiterRole Role, RestaurantGui gui, int pos){
 		this.Role = Role;
 		this.gui = gui;
 
-		xHome = 40 + (pos*21);
+		xHome = 250 - (pos*26);
 		yHome = 15;
+	}
 
-		xPos = xHome;
-		yPos = yHome;
+	public void DoGoHomePos(){
 		xDestination = xHome;
 		yDestination = yHome;
 	}
-
-
 
 
 	public void updatePosition() {
@@ -87,7 +80,7 @@ public class WaiterGui implements Gui {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.MAGENTA);
 		g.fillRect(xPos, yPos, 20, 20);
-		
+
 		g.setColor(Color.BLACK);
 		if(isOnBreak){
 			g.drawString("BR", xPos, yPos+10);
@@ -148,21 +141,21 @@ public class WaiterGui implements Gui {
 		//Role.setBusy(true);
 		tableNumber = tblNum;
 		if (tableNumber == 1){
-			xTable = 150;
-			yTable = 150;
+			xTable = 120;
+			yTable = 200;
 		}
 		if (tableNumber == 2)
 		{
-			xTable = 250;
-			yTable = 150;
+			xTable = 220;
+			yTable = 200;
 		}
 		if (tableNumber ==3){
-			xTable = 150;
-			yTable = 250;
+			xTable = 320;
+			yTable = 200;
 		}
 		if (tableNumber ==4){
-			xTable = 250;
-			yTable = 250;
+			xTable = 420;
+			yTable = 200;
 		}
 
 		xDestination = xTable + 20;
@@ -185,6 +178,11 @@ public class WaiterGui implements Gui {
 		xDestination = xHome;
 		yDestination = yHome;
 
+	}
+
+	public void DoLeave(){
+		xDestination = -40;
+		yDestination = -40;
 	}
 
 	public int getXPos() {

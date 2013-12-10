@@ -10,11 +10,10 @@ public class HostGui implements Gui {
 
     private HostRole role = null;
 
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
-
-    //public static final int xTable = 150;
-    //public static final int yTable = 150;
+    private int xPos = -60, yPos = -60;//default waiter position
+    private int xDestination = -60, yDestination = -60;//default start position
+    RestaurantGui gui;
+    private int xHome, yHome;
     
     public int xTable = 150;
     public int yTable = 150;
@@ -24,6 +23,8 @@ public class HostGui implements Gui {
     public HostGui(HostRole Role) {
         this.role = Role;
          
+        xHome = 130;
+        yHome = 15;
     }
     
     
@@ -39,23 +40,10 @@ public class HostGui implements Gui {
         else if (yPos > yDestination)
             yPos--;
         
-        if (xPos == xDestination && yPos == yDestination
-        		& (xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-           //Role.msgAtTable();
-        }
-
-        
-        if (xPos == -20 && yPos== -20){
-        	//Role.msgAtHome();
-        	
-        	//System.out.println("host At home");
-	        	//Role.setBusy(false);//set message//
-        }
-        
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
+        g.setColor(Color.RED);
         g.fillRect(xPos, yPos, 20, 20);
     }
 
@@ -64,7 +52,8 @@ public class HostGui implements Gui {
     }
     
     public void DoGoToLobby(){
-    	xDestination = 
+    	xDestination = xHome;
+    	yDestination = yHome;
     }
 
     public void DoBringToTable(CustomerRole customer, int tblNum) {
@@ -90,9 +79,9 @@ public class HostGui implements Gui {
         yDestination = yTable - 20;
     }
 
-    public void DoLeaveCustomer() {
-        xDestination = -20;
-        yDestination = -20;
+    public void DoLeave() {
+        xDestination = -60;
+        yDestination = -60;
         
     }
 

@@ -1,5 +1,7 @@
 package restaurant.vdea.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ public class RestaurantBuilding extends Building{
 	private CashierRole cashier;
 	private CookRole cook;
 	private List<WaiterRole> waiters;
+	private final int WAITER_STAFF_COUNT = 4;
 	
 	//private InfoPanel infoPanel = new InfoPanel();
 	RestaurantGui restaurantGui = new RestaurantGui();
@@ -29,6 +32,8 @@ public class RestaurantBuilding extends Building{
 		super(x, y, width, height);
 		
 		this.entrancePos = new XYPos(width/2, height);
+		this.existingCustomers = new HashMap<Person, CustomerRole>();
+		waiters = new ArrayList<WaiterRole>();
 		
 		host = new HostRole(null, this);
 		cashier = new CashierRole(null, this);
@@ -38,6 +43,21 @@ public class RestaurantBuilding extends Building{
 		CookGui cookGui = new CookGui(cook);
 		host.setGui(hostGui);
 		cook.setGui(cookGui);
+		restaurantGui.animationPanel.addGui(hostGui);
+		restaurantGui.animationPanel.addGui(cookGui);
+		
+		for(int i=0; i<WAITER_STAFF_COUNT; i++){
+			WaiterRole w = new WaiterRole(null, this);
+			w.setCashier(cashier);
+			w.setCook(cook);
+			w.setHost(host);
+			host.addWaiter(w);
+			waiters.add(w);
+			
+			WaiterGui waiterGui = new WaiterGui(w, restaurantGui, i);
+			w.setGui(waiterGui);
+    		restaurantGui.animationPanel.addGui(waiterGui);
+		}
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
@@ -64,12 +84,15 @@ public class RestaurantBuilding extends Building{
 		if (role == null) {
 			// Create a new role if none exists
 			role = new CustomerRole(person, this);
-			role.setLocation(this);
 			role.setHost(host);
+			role.setCashier(cashier);
+			
+			existingCustomers.put(person, role);
+			person.addRole(role);
 			
 			CustomerGui custGui = new CustomerGui(role, restaurantGui);
 			role.setGui(custGui);
-			restaurantGui.getAnimationPanel().addGui(custGui);
+			restaurantGui.animationPanel.addGui(custGui);
 			
 		} else {
 			// Otherwise use the existing role

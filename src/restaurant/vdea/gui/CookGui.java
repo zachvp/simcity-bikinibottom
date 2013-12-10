@@ -9,8 +9,9 @@ public class CookGui implements Gui {
 
     private CookRole Role = null;
 
-    private int xPos = 515, yPos = 50;//default waiter position
-    private int xDestination =365, yDestination = 50;//default start position
+    private int xPos = -20, yPos = 50;
+    private int xDestination = -20, yDestination = 50;//default start position
+    private int xHome, yHome;
     
     private final int WINDOWX = 600;
     private final int WINDOWY = 490;
@@ -44,11 +45,30 @@ public class CookGui implements Gui {
         	plates[i] = "";
         }
         
-     
+        xHome = 515;
+		yHome = 50;
+        
+    }//135
+    
+    public void DoGoToCookStation(){
+    	xDestination = xHome;
+		yDestination = yHome;
     }
 
+    public void DoLeave(){
+    	xDestination = -20;
+		yDestination = -20;
+    }
     public void updatePosition() {
-        
+    	if (xPos < xDestination)
+			xPos++;
+		else if (xPos > xDestination)
+			xPos--;
+
+		if (yPos < yDestination)
+			yPos++;
+		else if (yPos > yDestination)
+			yPos--;
     }
     
     public boolean isPresent() {

@@ -253,7 +253,7 @@ public class CustomerRole extends Role implements Customer {
 			Do("Going to restaurant");
 			
 			int lineNum = host.getLineNum(this);
-			print("line num: "+lineNum);
+			//print("line num: "+lineNum);
 			
 			customerGui.DoGoToWaitingArea(lineNum);
 			host.msgIWantFood(this);

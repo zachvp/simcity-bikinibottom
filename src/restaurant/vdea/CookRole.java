@@ -52,6 +52,7 @@ public class CookRole extends WorkRole implements Cook{
 	public void activate() {
 		super.activate();
 		offWork = false;
+		cookGui.DoGoToCookStation();
 	}
 
 	public void setCashier(Cashier c){
@@ -136,7 +137,10 @@ public class CookRole extends WorkRole implements Cook{
 				}
 			}
 		}
-		if (offWork) { deactivate(); }
+		if (offWork) { 
+			deactivate(); 
+			cookGui.DoLeave();
+		}
 		return false;
 	}
 

@@ -21,8 +21,8 @@ public class LayoutGui implements Gui{
     
     static final int rectW = 50;
     static final int rectH = 50;
-	private int rectX = 150;
-	private int rectY = 150;
+	private int rectX = 120;
+	private int rectY = 200;
 	
 	//kitchen coordinates
 	//cook should stay within start pt(355,40)
@@ -75,8 +75,8 @@ public class LayoutGui implements Gui{
         g2.fillRect(rectX, rectY, rectW, rectH);//200 and 250 need to be table params
         
         g2.fillRect(rectX+100, rectY, rectW, rectH); //table 2 (250, 150)
-        g2.fillRect(rectX, rectY+100, rectW, rectH); //table 3 (150, 250)
-        g2.fillRect(rectX+100, rectY+100, rectW, rectH); //table 4 (250, 250)
+        g2.fillRect(rectX+200, rectY, rectW, rectH); //table 3 (150, 250)
+        g2.fillRect(rectX+300, rectY, rectW, rectH); //table 4 (250, 250)
         
         g2.setColor(Color.red);
         g2.fillRect(grillX, grillY, grillW, grillH);

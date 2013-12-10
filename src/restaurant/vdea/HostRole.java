@@ -45,7 +45,7 @@ public class HostRole extends WorkRole implements Host{
 	public void activate() {
 		super.activate();
 		offWork = false;
-		
+		gui.DoGoToLobby();
 	}
 
 
@@ -184,7 +184,10 @@ public class HostRole extends WorkRole implements Host{
 			}
 		}
 
-		if (offWork) { deactivate(); }
+		if (offWork) { 
+			deactivate(); 
+			gui.DoLeave();
+		}
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent

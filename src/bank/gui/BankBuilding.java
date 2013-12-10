@@ -18,6 +18,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import bank.AccountManagerRole;
 import bank.BankCustomerRole;
+import bank.BusinessBankCustomerRole;
 import bank.LoanManagerRole;
 import bank.RobberRole;
 import bank.SecurityGuardRole;
@@ -38,6 +39,8 @@ public class BankBuilding extends Building {
 	
 	Map<Person, BankCustomerRole> existingRoles;// = new HashMap<Person, bank.BankCustomerRole>();
 	Map<Person, RobberRole> existingRobberRoles = new HashMap<Person, RobberRole>();
+	Map<Person, BusinessBankCustomerRole> existingBusinessBankCustomerRoles = new HashMap<Person, BusinessBankCustomerRole>();
+
 	private CityLocation bank;
 
 	// Constants for staggering opening/closing time
@@ -166,7 +169,11 @@ public class BankBuilding extends Building {
 	public LocationTypeEnum type() {
 		return LocationTypeEnum.Bank;
 	}
-
+	/**
+	 * called by customer upon entering bank
+	 * will give new customer if person is new
+	 * or activate old customerRole
+	 */
 	@Override
 	public Role getCustomerRole(Person person) {
 		
@@ -210,6 +217,30 @@ public class BankBuilding extends Building {
 		}
 		role.msgGoToSecurityGuard(getSecurity());
 
+		return role;
+	}
+	/**
+	 * Gives person a BusinessBankCustomerRole
+	 * if they are a cashier
+	 * @param person
+	 * @return
+	 */
+	public Role getBusinessBankCustomerRole(Person person) {
+		BusinessBankCustomerRole role = existingBusinessBankCustomerRoles.get(person);
+		if(role == null) {
+			role = new BusinessBankCustomerRole(person, bank);
+			BankCustomerGui bg = new BankCustomerGui(role);
+			role.setGui(bg);
+			bankGui.getAnimationPanel().addGui(bg);
+			role.setLocation(bank);
+			existingBusinessBankCustomerRoles.put(person, role);
+			person.addRole(role);
+		}
+		else{
+			
+		}
+		role.msgGoToSecurityGuard(getSecurity());
+		
 		return role;
 	}
 	/*

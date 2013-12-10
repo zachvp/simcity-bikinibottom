@@ -154,6 +154,7 @@ public class CookRole extends WorkRole implements Cook {
 		
 	@Override
 	// from market delivery guy
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (1/7) */
 	public void msgHereIsYourItems(List<Item> DeliverList) {
 		for (Item item : DeliverList) {
 			Food f = foods.get(item.name);
@@ -167,6 +168,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	@Override
 	// from market cashier
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (2/7) */
 	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
@@ -189,6 +191,7 @@ public class CookRole extends WorkRole implements Cook {
 	 */
 	protected boolean pickAndExecuteAnAction() {
 		
+		/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (3/7) */
 		synchronized (foods) {
 			for (Food f : foods.values()) {
 				if (f.futureQuantity <= f.lowThreshold) {
@@ -198,6 +201,7 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		
+		/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (4/7) */
 		synchronized (deliveries) {
 			for (int i = 0; i < deliveries.size(); i++) {
 				MyDelivery delivery = deliveries.get(i);
@@ -330,6 +334,7 @@ public class CookRole extends WorkRole implements Cook {
 		DoGoHome(); // animation - return to the default location
 	}
 	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (5/7) */
 	void restockFood() {
 		// Find all the items we still need to order.
 		Set<Item> itemsToOrder = new HashSet<Item>();
@@ -370,7 +375,8 @@ public class CookRole extends WorkRole implements Cook {
 				this.cashier, this, restaurant, orderNum);
 		delivery.markets.add(market);
 	}
-
+	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (6/7) */
 	private void retryDelivery(MyDelivery delivery, int orderNum) {
 		// Find a market that hasn't been tried yet.
 		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
@@ -606,6 +612,7 @@ public class CookRole extends WorkRole implements Cook {
 		public synchronized boolean orderVisible() { return showOrder; }
 	}
 	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (7/7) */
 	private enum DeliveryState {PLACED, NEED_TO_REORDER, COMPLETE};
 	private class MyDelivery {
 		Set<Item> items;

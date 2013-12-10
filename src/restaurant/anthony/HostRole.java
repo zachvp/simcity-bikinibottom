@@ -40,12 +40,10 @@ public class HostRole extends WorkRole {
 		Idle, OffWork, NotAtWork
 	};
 	
-	public enum AgentEvent {
-		AtWork, NotAtWork
-	};
+	//public enum AgentEvent {AtWork, NotAtWork};
 
 	private AgentState state = AgentState.NotAtWork;
-	private AgentEvent event = AgentEvent.NotAtWork;
+	//private AgentEvent event = AgentEvent.NotAtWork;
 	
 	public HostGui hostGui = null;
 
@@ -69,8 +67,8 @@ public class HostRole extends WorkRole {
 		
 		
 		
-		int hour = 6;
-		int minute = 45;
+		int hour = super.getShiftEndHour();
+		int minute = super.getShiftEndMinute();
 		
 		task.scheduleDailyTask(command, hour, minute);
 	}
@@ -94,7 +92,7 @@ public class HostRole extends WorkRole {
 	// Messages
 	public void AtWork() {
 		state = AgentState.Idle;
-		event = AgentEvent.AtWork;
+		//event = AgentEvent.AtWork;
 		atHome.release();
 		stateChanged();
 		
@@ -162,7 +160,7 @@ public class HostRole extends WorkRole {
 	
 	@Override
 	public void msgLeaveWork() {
-		event = AgentEvent.NotAtWork;
+		state = AgentState.OffWork;
 		stateChanged();
 		
 	}
@@ -196,7 +194,7 @@ public class HostRole extends WorkRole {
 		 * we find the waiter with the lowest number of customers)
 		 */
 		WaiterRole w = null;
-		if (state == AgentState.Idle){
+		//if (state == AgentState.Idle){
 			while (!waitingCustomers.isEmpty())
 
 				if (!Waiters.isEmpty()) {
@@ -242,9 +240,9 @@ public class HostRole extends WorkRole {
 						}
 					}
 				}
-		}
+		//}
 		
-		if (event == AgentEvent.NotAtWork && waitingCustomers.size() == 0){
+		if (state == AgentState.OffWork && waitingCustomers.size() == 0){
 			OffWork();
 		}
 

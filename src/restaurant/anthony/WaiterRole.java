@@ -396,6 +396,7 @@ public class WaiterRole extends WorkRole implements Waiter {
 		
 		this.deactivate();
 		state = AgentState.NotAtWork;
+		event = AgentEvent.AtWork;
 	}
 	
 	private void GoToWork(){

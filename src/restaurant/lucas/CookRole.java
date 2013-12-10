@@ -30,15 +30,6 @@ import agent.interfaces.Person;
 //the HostAgent. A Host is the manager of a restaurant who sees that all
 //is proceeded as he wishes.
 public class CookRole extends WorkRole implements Cook {
-	//static final int NTABLES = 3;//a global for the number of tables.
-	//Notice that we implement waitingCustomers using ArrayList, but type it
-	//with List semantics.
-	//public List<CustomerAgent> waitingCustomers
-	//= new ArrayList<CustomerAgent>();
-	//public Collection<Table> tables;
-	//private boolean isAtDesk = true;
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented
 
 	private String name;
 
@@ -354,7 +345,6 @@ public class CookRole extends WorkRole implements Cook {
 		
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
-//			print("POOPSANDBUTTSANDSOMEMOREPOOPS");
 			Runnable command = new Runnable() {
 				public void run() {
 					stateChanged();

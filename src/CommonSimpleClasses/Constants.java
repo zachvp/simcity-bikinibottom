@@ -144,6 +144,13 @@ public interface Constants {
 	public static final int MarketInitialMoney = 100;
 	
 	/**
+	 * The payroll of each WorkRole in the Market
+	 */
+	public static final double MarketCashierPayRoll = 120;
+	public static final double MarketItemCollectorPayRoll = 100;
+	public static final double MarketDeliveryGuyPayRoll = 70;
+	
+	/**
 	 * The initial amount of Inventory levels of all the items
 	 */
 	public static final int LamboFinnyInitialAmount  = 100;
@@ -162,10 +169,10 @@ public interface Constants {
 		{
 		double Toyoda = 100;
 		double LamboFinny = 300;
-		double KrabbyPatty = 20;
-		double KelpShake = 10;
-		double CoralBits = 15;
-		double KelpRings = 5;
+		double KrabbyPatty = .75;	// $1.25
+		double KelpShake = 1.5;		// $2
+		double CoralBits = 1;		// $1.50
+		double KelpRings = 1.5;		// $2
 		put("Krabby Patty", KrabbyPatty);
 		put("Kelp Shake", KelpShake);
 		put("Coral Bits", CoralBits);

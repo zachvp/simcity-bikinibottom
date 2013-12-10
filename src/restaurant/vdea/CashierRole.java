@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import restaurant.vdea.gui.CashierGui;
 import restaurant.vdea.interfaces.*;
 import restaurant.vdea.test.mock.EventLog;
 import restaurant.vdea.test.mock.LoggedEvent;
@@ -25,7 +26,8 @@ public class CashierRole extends WorkRole implements Cashier{
 
 	private String name;
 	private double bank;
-
+	private CashierGui gui = null;
+	
 	public EventLog log = new EventLog();
 	
 	private boolean offWork = false;
@@ -41,6 +43,7 @@ public class CashierRole extends WorkRole implements Cashier{
 	public void activate() {
 		super.activate();
 		offWork = false;
+		gui.DoGoToCashRegister();
 	}
 	
 	// Messages
@@ -114,7 +117,10 @@ public class CashierRole extends WorkRole implements Cashier{
 					}
 				}
 			}
-			if (offWork) { deactivate(); }
+			if (offWork) {
+				deactivate();
+				gui.DoLeave();
+			}
 			return false;
 		}
 
@@ -224,6 +230,10 @@ public class CashierRole extends WorkRole implements Cashier{
 		@Override
 		public void msgLeaveWork() {
 			offWork = true;
+		}
+
+		public void setGui(CashierGui cashierGui) {
+			gui = cashierGui;
 		}
 
 

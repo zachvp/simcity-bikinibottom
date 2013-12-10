@@ -139,7 +139,7 @@ public class ResidentRole extends Role implements Resident {
 	public boolean pickAndExecuteAnAction() {
 		if(!timerSet){
 			gui.setPresent(true);
-			this.gui.setName(person.getName());
+			gui.getLayoutGui().setName(person.getName());
 		}
 		
 		if(food != null && food.state == FoodState.COOKED) {
@@ -254,6 +254,7 @@ public class ResidentRole extends Role implements Resident {
 				food = null;
 				doneWaitingForInput();
 				DoJazzercise();
+				setHungry(false);
 				stateChanged();
 			}
 		};

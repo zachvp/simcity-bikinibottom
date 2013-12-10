@@ -57,6 +57,12 @@ public class MockAccountManager extends Mock implements AccountManager {
 			
 		}
 
+		@Override
+		public void msgUpdateMoney(double amount) {
+			// TODO Auto-generated method stub
+			
+		}
+
 		
 		
        

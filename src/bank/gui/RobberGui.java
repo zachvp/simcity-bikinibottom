@@ -11,6 +11,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
 
+import CommonSimpleClasses.sound.Sound;
 import agent.gui.Gui;
 import bank.SecurityGuardRole;
 import bank.interfaces.Robber;
@@ -31,6 +32,7 @@ public class RobberGui implements Gui{
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
+	
 	
 	String choiceDisplay = "";
 	
@@ -148,6 +150,7 @@ public class RobberGui implements Gui{
 		canRelease = true;
 		xDestination = amXPos;
 		yDestination = amYPos;
+		
 	}
 	
     public void DoEndWorkDay(){

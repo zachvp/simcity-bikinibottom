@@ -1,10 +1,9 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.backend.WaiterAgent;
+import restaurant.vegaperk.backend.WaiterRole;
 
 import java.awt.*;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 
@@ -12,18 +11,18 @@ import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-    private WaiterAgent agent = null;
+    private WaiterRole agent = null;
     private boolean canRelease = false;//this prevents excessive releases from occurring
     private boolean waiting = false;//checks if waiter is going to waiting zone
     
-    String imgSrc = "resource/spongebob.png";// C:/Users/Zach VP/Documents/GitHub/Java/restaurant_vegaperk/images/spongebob.png
+    String imgSrc = "resource/spongebob.png";
     Image img = new ImageIcon(imgSrc).getImage();
     
-    String orderName="Test";//text of customer order
+    String orderName = "Test";//text of customer order
     private boolean holdingOrder = false;
 
-    private int xPos = -20, yPos = -20;//default waiter position
-    private int xDestination = -20, yDestination = -20;//default start position
+    private int xPos = 0, yPos = 0;//default waiter position
+    private int xDestination = 40, yDestination = 40;//default start position
 
     private static final int hostX = 40;
     private static final int hostY = 50;
@@ -39,7 +38,7 @@ public class WaiterGui implements Gui {
     
     private RestaurantGui gui;
     
-    public WaiterGui(WaiterAgent agent, RestaurantGui g) {
+    public WaiterGui(WaiterRole agent, RestaurantGui g) {
         this.agent = agent;
         this.gui = g;
     }
@@ -89,7 +88,7 @@ public class WaiterGui implements Gui {
     	gui.setWaiterEnabled(agent);
     }
     
-    public WaiterAgent getAgent(){
+    public WaiterRole getAgent(){
     	return agent;
     }
 

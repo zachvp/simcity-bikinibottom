@@ -3,7 +3,6 @@ package restaurant.vegaperk.backend;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
-import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import gui.trace.AlertTag;
@@ -82,6 +81,7 @@ public class CookRole extends WorkRole implements Cook {
 			PlateZone pz = plateZones.get(i);
 			pz = null;
 		}
+		
 	}
 
 	/** Accessor and setter methods */
@@ -119,6 +119,7 @@ public class CookRole extends WorkRole implements Cook {
 			orderFromMarket = 0;
 		}
 	}
+	
 	@Override
 	public void msgHereIsDelivery() {
 		Do("Received delivery.");
@@ -231,8 +232,10 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private void openStore(){
 		onOpening = false;
+		
 		DoDrawGrillAndPlates();
 		Do("Opening restaurant");
+		
 		for(Map.Entry<String, Food> entry : inventory.entrySet()){
 			Food f = entry.getValue();
 			if(f.amount <= f.low){
@@ -337,19 +340,18 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	@Override
-	public void Do(String msg) {
+	protected void Do(String msg) {
 		Do(AlertTag.RESTAURANT, msg);
 	}
 
 	@Override
 	public boolean isAtWork() {
-		return true;
+		return isActive();
 	}
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return isActive();
 	}
 
 	@Override

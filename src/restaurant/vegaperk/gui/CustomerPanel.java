@@ -1,14 +1,22 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.backend.CustomerRole;
-import restaurant.vegaperk.backend.HostRole;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.List;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import restaurant.vegaperk.backend.CustomerRole;
 
 /**
  * Subpanel of restaurantPanel.
@@ -47,7 +55,8 @@ public class CustomerPanel extends JPanel implements ActionListener {
 	    	add(isHungry);
 	    	add(nameButton);
 	    	
-	    	cGui = restPanel.addCustomer(type, name);
+	    	// TODO Sorry Zach! commented this out to fix compile error
+	    	// cGui = restPanel.addCustomer(type, name);
 	    }
 	    
 	    public void actionPerformed(ActionEvent e){

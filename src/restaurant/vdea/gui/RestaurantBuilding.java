@@ -41,10 +41,13 @@ public class RestaurantBuilding extends Building{
 		
 		HostGui hostGui = new HostGui(host);
 		CookGui cookGui = new CookGui(cook);
+		CashierGui cashierGui = new CashierGui(cashier);
 		host.setGui(hostGui);
 		cook.setGui(cookGui);
+		cashier.setGui(cashierGui);
 		restaurantGui.animationPanel.addGui(hostGui);
 		restaurantGui.animationPanel.addGui(cookGui);
+		restaurantGui.animationPanel.addGui(cashierGui);
 		
 		for(int i=0; i<WAITER_STAFF_COUNT; i++){
 			WaiterRole w = new WaiterRole(null, this);

@@ -7,7 +7,7 @@ import restaurant.vdea.CookRole;
 
 public class CookGui implements Gui {
 
-    private CookRole Role = null;
+    private CookRole role = null;
 
     private int xPos = -20, yPos = 50;
     private int xDestination = -20, yDestination = 50;//default start position
@@ -35,8 +35,8 @@ public class CookGui implements Gui {
     private boolean[] plating = new boolean[grillNum];
     private String[] plates = new String[grillNum];
 
-    public CookGui(CookRole Role) {
-        this.Role = Role;
+    public CookGui(CookRole role) {
+        this.role = role;
         
         for (int i = 0; i<grillNum; i++){
         	cooking[i] = false;

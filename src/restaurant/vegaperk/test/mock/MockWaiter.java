@@ -3,6 +3,7 @@ package restaurant.vegaperk.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
+import restaurant.vegaperk.backend.CashierRole;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -106,6 +107,12 @@ public class MockWaiter extends Mock implements Waiter {
 	@Override
 	public String getName() {
 		return super.getName();
+	}
+
+	@Override
+	public void setCashier(CashierRole cashier) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

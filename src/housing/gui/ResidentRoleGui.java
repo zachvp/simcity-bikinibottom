@@ -6,7 +6,6 @@ import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -38,7 +37,6 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	private boolean present = false;
 	
 	private String speech = "";
-	private String name = "noman";
 	
 	// used as reference for furniture and appliance positions
 	DwellingLayoutGui layoutGui;
@@ -115,10 +113,6 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 		
 		g.drawString(speech, xPos+5, yPos+10);
 		
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("default", Font.BOLD, 13));
-		g.drawString("CAM " + layoutGui.getID() + ": " + name, 5, 12);
-		
 		if(eatingFood == true){
 			g.drawImage(krabbyPattyIcon.getImage(), xPos, yPos, null);
 		}
@@ -186,7 +180,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public DwellingLayoutGui getLayoutGui() {
+		return layoutGui;
 	}
 }

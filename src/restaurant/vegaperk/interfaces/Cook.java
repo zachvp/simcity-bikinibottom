@@ -2,6 +2,9 @@ package restaurant.vegaperk.interfaces;
 
 import java.util.Map;
 
+import restaurant.vegaperk.backend.MarketAgent;
+import restaurant.vegaperk.gui.CookGui;
+
 /**
  * A sample Customer interface built to unit test a CashierAgent.
  *
@@ -17,4 +20,10 @@ public interface Cook {
 	public void msgHereIsDelivery();
 
 	public void msgCanDeliver(Map<String, Integer> canDeliver);
+
+	public void msgAtDestination();
+
+	public void setGui(CookGui gui);
+
+	public void addMarket(MarketAgent m1);
 }

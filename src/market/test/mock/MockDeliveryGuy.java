@@ -6,6 +6,7 @@ import java.util.List;
 
 import java.util.Map;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
@@ -75,5 +76,11 @@ public class MockDeliveryGuy extends Mock implements DeliveryGuy {
 	public void AtDeliverExit() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Person getPerson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

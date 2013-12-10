@@ -1,6 +1,7 @@
 package housing.test.mock;
 
 import mock.EventLog;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -58,8 +59,8 @@ public class MockResidentGui implements ResidentGui {
 	}
 
 	@Override
-	public void setName(String name) {
+	public DwellingLayoutGui getLayoutGui() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

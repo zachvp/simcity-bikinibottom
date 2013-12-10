@@ -15,4 +15,6 @@ public interface Cashier {
 	
 	/** From Market  */
 	public void msgHereIsBill(double bill, Market m);
+
+	public void msgAtDestination();
 }

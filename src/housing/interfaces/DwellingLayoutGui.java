@@ -12,4 +12,6 @@ public interface DwellingLayoutGui {
 	public Dimension getRefrigeratorPosition();
 
 	public int getID();
+
+	public void setName(String name);
 }

@@ -22,5 +22,10 @@ public class Item{
 	
 	public void ItemEqual (int i){
 		amount = i;
-	} 
+	}
+	
+	@Override
+	public String toString() {
+		return name + "=" + amount;
+	}
 }

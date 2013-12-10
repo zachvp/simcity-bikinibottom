@@ -325,8 +325,11 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			setLayout(new BorderLayout());
 			addMouseListener(this);
-			personName = new JLabel(person.getName(), JLabel.CENTER);
+			personName = new JLabel("", JLabel.CENTER);
 			roleName = new JLabel(role.getShortName(), JLabel.CENTER);
+			if(person != null){
+				personName.setText(person.getName());
+			}
 			
 			Dimension labelDim = new Dimension((int)(buttonSize.width*0.45), (int)(buttonSize.height));
 			personName.setPreferredSize(labelDim);

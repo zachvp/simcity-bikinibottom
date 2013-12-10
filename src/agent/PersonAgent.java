@@ -701,6 +701,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public boolean getTimeToRobABank() {
+		return timeToRobABank;
+	}
+	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
 				|| wallet.needsMoney();

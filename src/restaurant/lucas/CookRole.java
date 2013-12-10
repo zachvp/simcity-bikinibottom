@@ -204,6 +204,16 @@ public class CookRole extends WorkRole implements Cook {
 			msgHereIsAnOrder(choice, tableNum, c, w);
 			orderWheel.changeReceivedOrderState();//changes state of order so it is not looked at again
 		}
+		
+	}
+	
+	public void checkPlateAreas() {
+		for(PlateArea p: plateAreas) {
+			if(p.o.cust == orderWheel.getNoneOrderStateCustomer()){
+				p.o = null;
+				return;
+			}
+		}
 	}
 	
 	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {//sent from waiter
@@ -337,6 +347,11 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 		
+		if(orderWheel.getNoneOrderStateSize() > 0) {
+			checkPlateAreas();
+			return true;
+		}
+		
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
 //			print("POOPSANDBUTTSANDSOMEMOREPOOPS");
@@ -422,7 +437,7 @@ public class CookRole extends WorkRole implements Cook {
 		CookTimer.schedule(new TimerTask() {
 			//Object cookie = 1;
 			public void run() {
-				print("Done cooking ");
+//				print("Done cooking ");
 				msgOrderCooked(orderNum);
 			}
 		}, cookingTimes.get(o.Choice));
@@ -516,12 +531,12 @@ public class CookRole extends WorkRole implements Cook {
 				
 				goToPlateArea(p);
 				Dimension plateDim = new Dimension(p.x, p.y);
-				//if(o.waiter instanceof WaiterRole){
-					//((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
-				//}
-				//if(o.waiter instanceof PCWaiterRole) {
+				if(o.waiter instanceof WaiterRole){
+					((WaiterRole) o.waiter).msgOrderIsReady(o.cust, o.Choice, o.table, plateDim);
+				}
+				if(o.waiter instanceof PCWaiterRole) {
 					orderWheel.changeCookingOrderState(o.cust);
-				//}
+				}
 				acquireSemaphore(active);
 				p.o = o;
 				break;

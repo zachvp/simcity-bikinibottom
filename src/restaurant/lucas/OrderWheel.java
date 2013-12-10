@@ -26,7 +26,7 @@ public class OrderWheel {
 		int table;
 		public String Choice;
 		Waiter waiter;
-		public enum state {none, received, cooking, cooked, givenToWaiter};
+		public enum state {none, received, cooking, cooked, givenToWaiter, completed};
 		private state orderState;
 		
 	};
@@ -122,6 +122,27 @@ public class OrderWheel {
 				o.orderState = state.cooked;
 			}
 		}
+	}
+	
+	public int getNoneOrderStateSize() {
+		int num =0;
+		for(Order o : orderList) {
+			if(o.orderState == state.none) {
+				num ++;
+			}
+		}
+		return num;
+	}
+	
+	public Customer getNoneOrderStateCustomer() {
+		for(Order o : orderList) {
+			if(o.orderState == state.none) {
+				
+				o.orderState = state.completed;
+				return o.cust;
+			}
+		}
+		return null;//bad things happened
 	}
 	
 	//USED BY PCWAITER TO TELL WHEN TO CHECK SCHED

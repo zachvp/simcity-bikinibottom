@@ -46,7 +46,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	
 	@Override
 	protected boolean pickAndExecuteAnAction() {
-		print("sched check");
+//		print("sched check");
 		if(!atWork) {
 			goToWork();
 			return true;
@@ -124,7 +124,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		}
 		
 		if(timeToCheckOrderWheel) {
-			print("TIME CHECK");
+//			print("TIME CHECK");
 			timeToCheckOrderWheel = false;
 //			print("tititi");
 			Runnable command = new Runnable() {

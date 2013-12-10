@@ -22,10 +22,10 @@ import market.Item;
 
 import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
+import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
-import restaurant.strottma.interfaces.Cashier;
 
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
@@ -185,19 +185,21 @@ public class CookRole extends WorkRole implements Cook {
 		this.CookTimer = new Timer();
 		this.cookingTimes = new HashMap<String, Integer>();
 		
-		Food tofu = new Food("Tofu", 5*1000, 5, 2, 4, false);
-		foods.put("Tofu", tofu);
-		Food rice = new Food("Rice", 7*1000, 6, 2, 6, false);
-		foods.put("Rice", rice);
-		Food sushi = new Food("Sushi", 9*1000, 6, 2, 7, false);
-		foods.put("Sushi", sushi);
-		Food noodles = new Food("Noodles", 11*1000, 6, 3, 8, false);
-		foods.put("Noodles", noodles);
+		this.deliveries = new ArrayList<MyDelivery>();
 		
-		cookingTimes.put("Tofu", 5*1000);
-		cookingTimes.put("Rice", 7*1000);//introduce food to map menu
-		cookingTimes.put("Sushi", 9*1000);
-		cookingTimes.put("Noodles", 11*1000);
+		Food kPatty = new Food("Krabby Patty", 5*1000, 1, 2, 4, false);
+		foods.put("Krabby Patty", kPatty);
+		Food kShake = new Food("Kelp Shake", 7*1000, 6, 2, 6, false);
+		foods.put("Kelp Shake", kShake);
+		Food cBits = new Food("Coral Bits", 9*1000, 6, 2, 7, false);
+		foods.put("Coral Bits", cBits);
+		Food kRings = new Food("Kelp Rings", 11*1000, 6, 3, 8, false);
+		foods.put("Kelp Rings", kRings);
+		
+		cookingTimes.put("Krabby Patty", 5*1000);
+		cookingTimes.put("Kelp Shake", 7*1000);//introduce food to map menu
+		cookingTimes.put("Coral Bits", 9*1000);
+		cookingTimes.put("Kelp Rings", 11*1000);
 		
 		grills.add(new Grill(550, 50));
 		grills.add(new Grill(550, 75));
@@ -266,6 +268,29 @@ public class CookRole extends WorkRole implements Cook {
 		o.orderState = state.cooked;
 		stateChanged();
 		
+	}
+	
+	//STUFF FROM DELIVERY RECEIVER
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		for (Item item : DeliverList) {
+			Food f = foods.get(item.name);
+			if (f != null && item.amount > 0) {
+				Do(AlertTag.RESTAURANT, "Received delivery of " + item.amount
+						+ " " + item.name);
+				f.amount += item.amount;
+			}
+		}
+	}
+
+
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+		if (!MissingItemList.isEmpty()) {
+			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
+			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			stateChanged();
+		}		
 	}
 	
 	public void msgIDontHave(List<String> foodList, List<Integer> amountList) {//for Market implementation NOTE CHANGE TO MSGIDONTHAVE
@@ -342,6 +367,28 @@ public class CookRole extends WorkRole implements Cook {
 //		
 //		Do("Entered sched");
 
+		/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (3/7) */
+		synchronized (foods) {
+			for (Food f : foods.values()) {
+				if (f.futureQuantity <= f.threshold) {
+					restockFood();
+					return true;
+				}
+			}
+		}
+		
+		/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (4/7) */
+		synchronized (deliveries) {
+			for (int i = 0; i < deliveries.size(); i++) {
+				MyDelivery delivery = deliveries.get(i);
+				if (delivery.state == DeliveryState.NEED_TO_REORDER) {
+					retryDelivery(delivery, i);
+					return true;
+				}
+			}
+		}
+		//END ERIKSTUFF
+		
 		if(!atWork) {
 			goToWork();
 			return true;
@@ -368,11 +415,11 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		
-		if(!deliveredFoods.isEmpty()) {
-//			Do("CONDITON MeT");
-			updateInventory(deliveredFoods, deliveredAmounts);
-			return true;
-		}
+//		if(!deliveredFoods.isEmpty()) {
+////			Do("CONDITON MeT");
+//			updateInventory(deliveredFoods, deliveredAmounts);
+//			return true;
+//		}
 		
 		if(endWorkDay) {
 			endWorkDay();
@@ -448,7 +495,7 @@ public class CookRole extends WorkRole implements Cook {
 		Food f = foods.get(o.Choice);
 		if(f.amount < f.threshold) { //need to order more from market
 //			Do("TRYING to orDEr");
-			checkInventory();//hack, need to choose
+			restockFood();//hack, need to choose
 			
 		}
 		if(f.amount <= 0) {
@@ -522,65 +569,95 @@ public class CookRole extends WorkRole implements Cook {
 				this.cashier, this, restaurant, orderNum);
 		delivery.markets.add(market);
 	}
-///
-	public void checkInventory() {//take market as param?
-		
-		List<String> lowFoodsNames = new ArrayList<String>();
-		List<Integer> lowFoodsAmount = new ArrayList<Integer>();
-		
-		if((foods.get("Tofu").amount < foods.get("Tofu").threshold) && !foods.get("Tofu").enroute) {
-			Food temp = foods.get("Tofu");
-			lowFoodsNames.add(temp.type);
-			lowFoodsAmount.add(temp.capacity - temp.amount);
+	
+	private void retryDelivery(MyDelivery delivery, int orderNum) {
+		// Find a market that hasn't been tried yet.
+		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
+				LocationTypeEnum.Market);
+		Building market = null;
+		for (CityLocation m : openMarkets) {
+			if (!delivery.markets.contains(m)) {
+				market = (Building) m;
+				break;
+			}
 		}
-		if((foods.get("Rice").amount < foods.get("Rice").threshold) && !foods.get("Rice").enroute) {
-			Food temp = foods.get("Rice");
-			Do("A " + temp.capacity);
-			Do("B " + foods.get("Rice").capacity + " " + foods.get("Tofu").capacity);
-			lowFoodsNames.add(temp.type);
-			lowFoodsAmount.add(temp.capacity - temp.amount);
-		}
-		if((foods.get("Sushi").amount < foods.get("Sushi").threshold) && !foods.get("Sushi").enroute) {
-			Food temp = foods.get("Sushi");
-			lowFoodsNames.add(temp.type);
-			lowFoodsAmount.add(temp.capacity - temp.amount);
-		}
-		if((foods.get("Noodles").amount < foods.get("Noodles").threshold) && !foods.get("Noodles").enroute) {
-			Food temp = foods.get("Noodles");
-			lowFoodsNames.add(temp.type);
-			lowFoodsAmount.add(temp.capacity - temp.amount);
+		if (market == null) {
+			Do(AlertTag.RESTAURANT, "No market can complete this order.");
+			delivery.state = DeliveryState.COMPLETE;
+			return;
 		}
 		
-//		if(lowFoodsNames.size() > 0) {
-			markets.get(previousMarket % markets.size()).msgLowOnFood(lowFoodsNames, lowFoodsAmount, this);
-//		}
+		// Request the delivery from the new market
+		delivery.markets.add(market);
+		
+		Building restaurant = (Building) getLocation();
+		market.interfaces.Cashier marketCashier =
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
+		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+				this.cashier, this, restaurant, orderNum);
 	}
 	
-	public void updateInventory(List<String> deliveredFoodsList, List<Integer> deliveredAmountsList) {
-		Do("updating inventory");//NEVER CALLED
-		for(int i = 0; i < deliveredFoodsList.size(); i++) {
-			if(deliveredFoodsList.get(i).equals("Tofu")) {
-				foods.get("Tofu").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
-				
-			}
-			if(deliveredFoodsList.get(i).equals("Rice")) {
-				Do("Received Rice " + deliveredAmountsList.get(i));
-				foods.get("Rice").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
-			
-			}
-			if(deliveredFoodsList.get(i).equals("Sushi")) {
-				foods.get("Sushi").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
-				
-			}
-			if(deliveredFoodsList.get(i).equals("Noodles")) {
-				foods.get("Noodles").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
-				
-			}
-		}
-		deliveredFoods.clear();
-		deliveredAmounts.clear();
-		//update amount Cook has
-	}
+///
+//	public void checkInventory() {//take market as param?
+//		
+//		List<String> lowFoodsNames = new ArrayList<String>();
+//		List<Integer> lowFoodsAmount = new ArrayList<Integer>();
+//		
+//		if((foods.get("Tofu").amount < foods.get("Tofu").threshold) && !foods.get("Tofu").enroute) {
+//			Food temp = foods.get("Tofu");
+//			lowFoodsNames.add(temp.type);
+//			lowFoodsAmount.add(temp.capacity - temp.amount);
+//		}
+//		if((foods.get("Rice").amount < foods.get("Rice").threshold) && !foods.get("Rice").enroute) {
+//			Food temp = foods.get("Rice");
+//			Do("A " + temp.capacity);
+//			Do("B " + foods.get("Rice").capacity + " " + foods.get("Tofu").capacity);
+//			lowFoodsNames.add(temp.type);
+//			lowFoodsAmount.add(temp.capacity - temp.amount);
+//		}
+//		if((foods.get("Sushi").amount < foods.get("Sushi").threshold) && !foods.get("Sushi").enroute) {
+//			Food temp = foods.get("Sushi");
+//			lowFoodsNames.add(temp.type);
+//			lowFoodsAmount.add(temp.capacity - temp.amount);
+//		}
+//		if((foods.get("Noodles").amount < foods.get("Noodles").threshold) && !foods.get("Noodles").enroute) {
+//			Food temp = foods.get("Noodles");
+//			lowFoodsNames.add(temp.type);
+//			lowFoodsAmount.add(temp.capacity - temp.amount);
+//		}
+//		
+////		if(lowFoodsNames.size() > 0) {
+//			markets.get(previousMarket % markets.size()).msgLowOnFood(lowFoodsNames, lowFoodsAmount, this);
+////		}
+//	}
+	
+//	public void updateInventory(List<String> deliveredFoodsList, List<Integer> deliveredAmountsList) {
+//		Do("updating inventory");//NEVER CALLED
+//		for(int i = 0; i < deliveredFoodsList.size(); i++) {
+//			if(deliveredFoodsList.get(i).equals("Tofu")) {
+//				foods.get("Tofu").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
+//				
+//			}
+//			if(deliveredFoodsList.get(i).equals("Rice")) {
+//				Do("Received Rice " + deliveredAmountsList.get(i));
+//				foods.get("Rice").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
+//			
+//			}
+//			if(deliveredFoodsList.get(i).equals("Sushi")) {
+//				foods.get("Sushi").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
+//				
+//			}
+//			if(deliveredFoodsList.get(i).equals("Noodles")) {
+//				foods.get("Noodles").amount = deliveredAmountsList.get(i);//increase amount have with amount delivered
+//				
+//			}
+//		}
+//		deliveredFoods.clear();
+//		deliveredAmounts.clear();
+//		//update amount Cook has
+//	}
 
 	
 
@@ -713,28 +790,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	
 	
-	//STUFF FROM DELIVERY RECEIVER
-	@Override
-	public void msgHereIsYourItems(List<Item> DeliverList) {
-		for (Item item : DeliverList) {
-			Food f = foods.get(item.name);
-			if (f != null && item.amount > 0) {
-				Do(AlertTag.RESTAURANT, "Received delivery of " + item.amount
-						+ " " + item.name);
-				f.amount += item.amount;
-			}
-		}
-	}
 
-
-	@Override
-	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
-		if (!MissingItemList.isEmpty()) {
-			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
-			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
-			stateChanged();
-		}		
-	}
 	
 
 }

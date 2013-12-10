@@ -91,15 +91,15 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		this.BreakTimer= new Timer();
 		
 		tableMap = h.getTableMap();
-		menuMap.put("Tofu",  15.99);
-		menuMap.put("Rice", 10.99);
-		menuMap.put("Sushi",  5.99);
-		menuMap.put("Noodles",  8.99);
+		menuMap.put("Krabby Patties",  15.99);
+		menuMap.put("Kelp Shake", 10.99);
+		menuMap.put("Coral Bits",  5.99);
+		menuMap.put("Kelp Rings",  8.99);
 		
-		menu.add("Tofu");
-		menu.add("Rice");
-		menu.add("Sushi");
-		menu.add("Noodles");
+		menu.add("Krabby Patties");
+		menu.add("Kelp Shake");
+		menu.add("Coral Bits");
+		menu.add("Kelp Rings");
 //		// make some tables
 //		tables = new ArrayList<Table>(NTABLES);
 //		for (int ix = 0; ix <= NTABLES; ix++) {
@@ -124,15 +124,15 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		tableMap.put(2, t3);
 		tableMap.put(3, t4);
 		
-		menuMap.put("Tofu",  15.99);
-		menuMap.put("Rice", 10.99);
-		menuMap.put("Sushi",  5.99);
-		menuMap.put("Noodles",  8.99);
+		menuMap.put("Krabby Patty",  15.99);
+		menuMap.put("Kelp Shake", 10.99);
+		menuMap.put("Coral Bits",  5.99);
+		menuMap.put("Kelp Rings",  8.99);
 		
-		menu.add("Tofu");
-		menu.add("Rice");
-		menu.add("Sushi");
-		menu.add("Noodles");
+		menu.add("Krabby Patty");
+		menu.add("Kelp Shake");
+		menu.add("Coral Bits");
+		menu.add("Kelp Rings");
 	}
 
 	public String getMaitreDName() {

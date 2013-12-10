@@ -1,5 +1,8 @@
 package restaurant.lucas;
 
+import gui.trace.AlertTag;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,17 +12,16 @@ import java.util.Timer;
 import java.util.concurrent.Semaphore;
 
 import restaurant.lucas.gui.CashierGui;
-import restaurant.lucas.gui.HostGui;
 import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Market;
 import restaurant.lucas.interfaces.Waiter;
+import restaurant.strottma.CashierRole.MyBill;
 import CommonSimpleClasses.CityLocation;
-import agent.Agent;
-//import restaurant.Customer.CustomerEvent;
-//import restaurant.HostAgent.Table;
 import agent.WorkRole;
 import agent.interfaces.Person;
+//import restaurant.Customer.CustomerEvent;
+//import restaurant.HostAgent.Table;
 
 /**
  * Restaurant Host Agent
@@ -142,16 +144,34 @@ public class CashierRole extends WorkRole implements Cashier {
 	private List<MyCustomer> myCustomers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private Map<String, Double> priceMenu = new HashMap<String, Double>();
 
+	public class MyBill {
+		private double amount;
+		private market.interfaces.Cashier cashier;
+		
+		public MyBill(double amount, market.interfaces.Cashier cashier) {
+			this.amount = amount;
+			this.cashier = cashier;
+		}
+		
+		public double getAmount() { return amount; }
+		public void setAmount(double amount) { this.amount = amount; }
+		
+		public market.interfaces.Cashier getCashier() { return cashier; }
+	}
+	
+	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>());
+	DecimalFormat df = new DecimalFormat("#.##");
+	
 	
 	public CashierRole(Person p, CityLocation c) {
 		super(p, c);
 		
 		atWork = false;
 		
-		getPriceMenu().put("Tofu", 15.99);//populates pricemenu map
-		getPriceMenu().put("Rice", 10.99);
-		getPriceMenu().put("Sushi", 5.99);
-		getPriceMenu().put("Noodles", 8.99);
+		getPriceMenu().put("Krabby Patty", 15.99);//populates pricemenu map
+		getPriceMenu().put("Kelp Shake", 10.99);
+		getPriceMenu().put("Coral Bits", 5.99);
+		getPriceMenu().put("Kelp Rings", 8.99);
 
 		this.CookTimer = new Timer();
 	}
@@ -183,7 +203,15 @@ public class CashierRole extends WorkRole implements Cashier {
 //		marketPaymentAmount = amount;
 		marketPayments.add(new MarketPayment(m, amount));
 		stateChanged();
-		//TODO
+	}
+	
+
+	@Override
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		Do(AlertTag.RESTAURANT, "Received a bill from " + cashier);
+		bills.add(new MyBill(total, cashier));
+		stateChanged();		
 	}
 
 
@@ -196,6 +224,15 @@ public class CashierRole extends WorkRole implements Cashier {
 		if(!atWork) {
 			goToWork();
 			return true;
+		}
+		
+		if (money != 0) {
+			synchronized (bills) {
+				for (MyBill bill : bills) {
+					payBill(bill);
+					return true;
+				}
+			}
 		}
 		
 		synchronized(myCustomers) {
@@ -237,6 +274,25 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	// Actions ///////////////////
+	
+	private void payBill(MyBill bill) {
+		if (money >= bill.amount) {
+			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
+					" to " + bill.cashier.getName());
+			bill.cashier.msgHereIsPayment(bill.amount, this);
+			money -= bill.amount;
+			bills.remove(bill);
+			
+		} else {
+			// extra credit
+			Do(AlertTag.RESTAURANT, "Cannot pay the market in full. "
+					+ "Paying as much as I can...");
+			bill.cashier.msgHereIsPayment(money, this);
+			money = 0.00;
+			bill.amount -= money;
+		}
+	}
+	
 	private void endWorkDay() { 
 		goOffWork();
 		atWork = false;
@@ -381,6 +437,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		endWorkDay = true;
 		stateChanged();
 	}
+
+
 
 
 	

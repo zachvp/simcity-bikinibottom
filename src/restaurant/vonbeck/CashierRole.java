@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
@@ -22,6 +23,7 @@ import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 import restaurant.vonbeck.test.mock.LoggedEvent;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;
 import agent.Role;
 import agent.WorkRole;

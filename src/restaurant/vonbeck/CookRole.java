@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Map.Entry;
 
 import kelp.Kelp;
@@ -25,6 +27,7 @@ import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.Role;
@@ -48,6 +51,8 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 	private List<MarketOrder> orderList = 
 			Collections.synchronizedList(new ArrayList<MarketOrder>());
 	private Cashier cashier;
+	Timer timer = SingletonTimer.getInstance();
+
 	
 	class MarketOrder {
 		int marketNum;
@@ -133,19 +138,28 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 	}
 
 	@Override
-	public void msgHereIsMissingItems(List<Item> MissingItemList, 
+	public void msgHereIsMissingItems(final List<Item> MissingItemList, 
 			int orderNum) {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			if (orderNum < markets.size()) {
-				orderList.add(new MarketOrder(orderNum+1, MissingItemList));
+				orderList.add(new MarketOrder(orderNum+1, new ArrayList<Item>(MissingItemList)));
 			} else {
+				
 				Do(AlertTag.RESTAURANT, "No market can complete this order.");
-				for (Item item : MissingItemList) {
-					// TODO Ordering loop! busy wait and death
-					FoodData data = inventory.get(item.name);
-					data.futureQty -= item.amount;
-				}
+				
+				timer.schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						for (Item item : MissingItemList) {
+							FoodData data = inventory.get(item.name);
+							data.futureQty -= item.amount;
+						}
+					}
+				}, 120000);
+				
+				
 			}
 			stateChanged();
 		}
@@ -259,12 +273,15 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 	private void orderFromMarket(MarketOrder o) {
 		MarketBuilding market = markets.get(o.marketNum);
 		
-		market.interfaces.Cashier marketCashier =
-				(market.interfaces.Cashier) market.getGreeter();
-		
-		marketCashier.msgPhoneOrder(o.itemsToBuy, this.cashier,
-				this, getLocation(), o.marketNum);
-		
+		if(market.isOpen()) {
+			market.interfaces.Cashier marketCashier =
+					(market.interfaces.Cashier) market.getGreeter();
+
+			marketCashier.msgPhoneOrder(o.itemsToBuy, this.cashier,
+					this, getLocation(), o.marketNum);
+		} else {
+			msgHereIsMissingItems(o.itemsToBuy, o.marketNum);
+		}
 		
 	}
 

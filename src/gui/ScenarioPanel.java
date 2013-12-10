@@ -39,7 +39,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	JButton populateButton;
 	
 	//normative panel components
-	JRadioButton scenarioA, scenarioB, scenarioC; //TODO Add more scenarios here
+	JRadioButton scenarioA, scenarioB, scenarioC, scenarioJ; //TODO Add more scenarios here
 	JButton runScenarioButton;
 	
 	public ScenarioPanel() {
@@ -133,13 +133,16 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		scenarioA = new JRadioButton("Scenario A");
 		scenarioB = new JRadioButton("Scenario B");
 		scenarioC = new JRadioButton("Scenario C");
+		scenarioJ = new JRadioButton("Scenario J");
 		scenarioA.setOpaque(false);
 		scenarioB.setOpaque(false);
 		scenarioC.setOpaque(false);
+		scenarioJ.setOpaque(false);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(scenarioA);
 		buttonGroup.add(scenarioB);
 		buttonGroup.add(scenarioC);
+		buttonGroup.add(scenarioJ);
 		JPanel rButtons = new JPanel();
 		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.7)));
 		rButtons.setLayout(new GridLayout(5,1,1,1));
@@ -147,6 +150,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		rButtons.add(scenarioA);
 		rButtons.add(scenarioB);
 		rButtons.add(scenarioC);
+		rButtons.add(scenarioJ);
 
 		normativePanel.add(title);
 		normativePanel.add(rButtons);
@@ -163,7 +167,9 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		}
 		
 		if(e.getSource() == runScenarioButton){
-			
+			if(scenarioJ.isEnabled()){//fully populate city with interesting people
+				
+			}
 		}
 		
 	}

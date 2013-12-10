@@ -29,7 +29,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	public PCWaiterRole(Person person, CityBuilding building) {
 		super(person, building);
 	}
-
+	
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		super.pickAndExecuteAnAction();
@@ -39,11 +39,13 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 				public void run(){
 					synchronized(revolvingOrders) {
 						for(Order o : revolvingOrders.orderList) {
-							if(o.state == OrderState.FINISHED) {
+							if(findCustomerOrder(o) != null && o.state == OrderState.FINISHED) {
 								checkRevolvingOrderList(o);
 							}
 						}
 					}
+					stateChanged();
+					timerSet = false;
 				}
 			};
 			
@@ -62,7 +64,15 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		waitForInput();
 		
 		MyCustomer mc = findCustomerOrder(o);
-		if(mc == null) return;
+		if(mc == null){
+			DoGoWait();
+			return;
+		}
+		
+		if(o.state == OrderState.OUT_OF_CHOICE) {
+			this.tellCustomerOutOfFood(mc);
+			return;
+		}
 		
 		o.state = OrderState.PICKED_UP;
 		getFood(mc);
@@ -111,12 +121,10 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 			return;
 		}
 		
-		DoGoToCook();
-		waitForInput();
-		
 		waiterGui.setOrderName(c.choice);
 		waiterGui.toggleHoldingOrder();
 		
+		Do("Going to table");
 		DoGoToTable(c.table);
 		waitForInput();
 		

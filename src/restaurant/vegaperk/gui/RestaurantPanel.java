@@ -21,6 +21,7 @@ import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 /**

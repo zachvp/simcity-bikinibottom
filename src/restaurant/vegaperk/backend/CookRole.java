@@ -105,9 +105,7 @@ public class CookRole extends WorkRole implements Cook {
 	public void msgGotFood(int table){
 		for(Order o : orders){
 			if(o.table == table){
-				DoRemovePlateFood(table);
-				PlateZone pz = plateZones.get(table);
-				pz = null;
+				removeOrder(o);
 			}
 		}
 		stateChanged();
@@ -179,6 +177,9 @@ public class CookRole extends WorkRole implements Cook {
 						if(o.state == OrderState.NEED_TO_COOK){
 							tryToCookFood(o);
 						}
+						else if(o.state == OrderState.PICKED_UP) {
+							removeOrder(o);
+						}
 					}
 				}
 			};
@@ -188,11 +189,17 @@ public class CookRole extends WorkRole implements Cook {
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
 			return true;
 		}
-		
+
 		return false;
 	}
 	
 	/** Actions */
+	private void removeOrder(Order o) {
+		DoRemovePlateFood(o.table);
+		PlateZone pz = plateZones.get(o.table);
+		pz = null;
+	}
+	
 	private void tryToCookFood(Order o){
 		o.state = OrderState.COOKING;
 		Food f = inventory.get(o.choice);
@@ -321,23 +328,7 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui = gui;
 	}
 	
-	/** Classes */
-//	private class Order{
-//		Waiter waiter;
-//		OrderState state;
-//		String choice;
-//		int table;
-//		
-//		public Order(String c, int t, Waiter w, OrderState s){
-//			choice = c;
-//			table = t;
-//			waiter = w;
-//			state = s;
-//		}
-//	}
-	
-	
-	private class Food{
+	private class Food {
 		String type;
 		int amount, cookTime, low, capacity;
 		OrderState os;

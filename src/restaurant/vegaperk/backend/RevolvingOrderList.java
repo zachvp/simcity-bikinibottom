@@ -1,5 +1,6 @@
 package restaurant.vegaperk.backend;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import restaurant.vegaperk.interfaces.Waiter;
@@ -8,7 +9,7 @@ public class RevolvingOrderList {
 	List<Order> orderList;
 	
 	public RevolvingOrderList() {
-		this.orderList = new ArrayList<Order>();
+		this.orderList = Collections.synchronizedList(new ArrayList<Order>());
 	}
 	
 	/* --- Order Data --- */
@@ -18,7 +19,8 @@ public class RevolvingOrderList {
 		COOKING,
 		COOKED,
 		FINISHED,
-		OUT_OF_CHOICE
+		OUT_OF_CHOICE,
+		PICKED_UP
 	};
 	
 	public class Order {

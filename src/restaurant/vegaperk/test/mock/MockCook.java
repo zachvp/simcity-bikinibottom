@@ -5,6 +5,8 @@ import java.util.Map;
 
 import mock.EventLog;
 import mock.Mock;
+import restaurant.vegaperk.backend.MarketAgent;
+import restaurant.vegaperk.gui.CookGui;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -47,5 +49,26 @@ public class MockCook extends Mock implements Cook {
 	@Override
 	public void msgHereIsDelivery() {
 		log.add("Received message here is delivery");
+	}
+
+
+	@Override
+	public void msgAtDestination() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setGui(CookGui gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addMarket(MarketAgent m1) {
+		// TODO Auto-generated method stub
+		
 	}
 }

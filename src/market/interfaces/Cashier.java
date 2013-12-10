@@ -12,7 +12,7 @@ public interface Cashier {
 
 
 	// Messages
-	public abstract void msgPhoneOrder(List<Item>ShoppingList, PhonePayer pP, DeliveryReceiver rP, CityLocation building);
+	public abstract void msgPhoneOrder(List<Item>ShoppingList, PhonePayer pP, DeliveryReceiver rP, CityLocation building, int orderNum);
 
 	public abstract void msgIWantItem(List<Item> ShoppingList, Customer C);
 

@@ -94,10 +94,6 @@ public class HospitalBuilding extends Building{
 		return 59;
 	}
 
-	@Override
-	public JPanel getStaffPanel() {
-		return new JPanel();
-	}
-	
+
 
 }

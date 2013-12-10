@@ -29,7 +29,7 @@ public class CarAgent extends VehicleAgent implements Car {
 	@Override
 	void endTravel() {
 		try {
-			driver.msgWeHaveArrived(currentCorner);
+			if (driver != null) driver.msgWeHaveArrived(currentCorner);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

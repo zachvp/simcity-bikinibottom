@@ -1,16 +1,26 @@
 package restaurant.vegaperk.gui;
 
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
 import restaurant.vegaperk.backend.CustomerRole;
-import restaurant.vegaperk.backend.HostRole;
-
-import javax.swing.*;
-
 import agent.PersonAgent;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Subpanel of restaurantPanel.

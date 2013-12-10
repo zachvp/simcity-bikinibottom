@@ -1,21 +1,18 @@
 package transportation.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import CommonSimpleClasses.XYPos;
 import transportation.CornerAgent;
 import transportation.IntersectionAction;
-import transportation.interfaces.BusstopRequester;
-import transportation.interfaces.Corner;
-import transportation.interfaces.Vehicle;
 import transportation.test.mock.MockBus;
 import transportation.test.mock.MockBusstop;
 import transportation.test.mock.MockCorner;
 import transportation.test.mock.MockVehicle;
+import CommonSimpleClasses.XYPos;
 
 public class CornerAgentTest {
 
@@ -56,8 +53,9 @@ public class CornerAgentTest {
 		assertEquals(0, corner.getWaitingForCorners().size());
 		assertEquals(0, corner.getWaitingToCross().size());
 		
+		// TODO should this be false? - Erik
 		corner.msgIWantToDriveTo(new IntersectionAction
-				(mockCorner, mockVehicle1));
+				(mockCorner, mockVehicle1, false));
 		
 		assertEquals(new Integer(1), corner.getCrossroadBusy());
 		assertEquals(0, corner.getWaitingForBusstops().size());
@@ -73,8 +71,9 @@ public class CornerAgentTest {
 		assertEquals("Got msgDriveNow()", 
 				mockVehicle1.log.getLastLoggedEvent().getMessage());
 		
+		// TODO should this be false? - Erik
 		corner.msgIWantToDriveTo(new IntersectionAction
-				(mockCorner, mockVehicle2));
+				(mockCorner, mockVehicle2, false));
 		
 		assertEquals(new Integer(0), corner.getCrossroadBusy());
 		assertEquals(0, corner.getWaitingForBusstops().size());

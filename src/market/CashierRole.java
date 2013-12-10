@@ -49,7 +49,6 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	
 	private Map<String,Integer> InventoryList ;
 	
-
 	
 	/**
 	 * PriceList in the market
@@ -71,6 +70,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		private List<Item> MissingItemList = new ArrayList<Item>();
 		ItemCollector itemCollector;
 		PhoneOrder phoneOrder = null;
+		int orderNum = 0;
 		public Customerstate state = Customerstate.Arrived;
 		public List<Item> getDeliveryList() {
 			return DeliveryList;
@@ -139,10 +139,10 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
      * @param C the customer himself
      * @param CityBuilding the building that is going to deliver to
      */
-	public void msgPhoneOrder(List<Item>ShoppingList, PhonePayer payingPerson, DeliveryReceiver receivingPerson, CommonSimpleClasses.CityLocation building)	
+	public void msgPhoneOrder(List<Item>ShoppingList, PhonePayer payingPerson, DeliveryReceiver receivingPerson, CommonSimpleClasses.CityLocation building, int orderNum)	
 	{				//The Customer will be the phone calling guy
 		//print ("Received Phone Order");
-		//Do(AlertTag.MARKET, "Recived Phone Order");
+		Do(AlertTag.MARKET, "Recived Phone Order from building " + building);
 		MyCustomer MC = new MyCustomer();
 		MC.c = null;
 		MC.state = Customerstate.Ordered;
@@ -150,6 +150,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		for (int i=0;i<ShoppingList.size();i++){
 			MC.OrderList.add(ShoppingList.get(i));
 		}
+		MC.orderNum = orderNum;
 		getMyCustomerList().add(MC);
 		stateChanged();
 	}
@@ -455,7 +456,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 			MC.c.msgNoItem();
 		}
 		else{
-			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(new ArrayList<Item>());
+			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(new ArrayList<Item>(), MC.orderNum);
 		}
 					MyCustomerList.remove(0);
 		
@@ -479,7 +480,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		}
 		else {
 			MC.phoneOrder.personPayingDelivery.msgHereIsYourTotal(total, this);
-			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(MC.MissingItemList);
+			MC.phoneOrder.personReceivingDelivery.msgHereIsMissingItems(MC.MissingItemList, MC.orderNum);
 		}
 	}
 
@@ -506,6 +507,7 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 						synchronized(getMyCustomerList()){
 								MyCustomerList.remove(0);
 						}
+						return;
 					}
 				}
 			}
@@ -517,6 +519,12 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 	private void OffWork(){
 		//Do(AlertTag.MARKET, "Going To Call off all the workers in the market (including himself)");
 		DomsgAllWorkersToOffWork();
+		
+		double employeeCash = person.getWallet().getCashOnHand();
+		employeeCash += Constants.MarketCashierPayRoll;
+		person.getWallet().setCashOnHand(employeeCash);
+		
+		
 		cashierGui.OffWork();
 		try {
 			atExit.acquire();
@@ -536,12 +544,18 @@ private Semaphore atFrontDesk = new Semaphore(0,true);
 		synchronized(getICList()){
 			for (int i=0; i<ICList.size();i++){
 				ICList.get(i).msgLeaveWork();
+				double employeeCash = ICList.get(i).getPerson().getWallet().getCashOnHand();
+				employeeCash += Constants.MarketItemCollectorPayRoll;
+				ICList.get(i).getPerson().getWallet().setCashOnHand(employeeCash);
 			}
 		}
 		
 		synchronized(getDGList()){
 			for (int i=0; i<DGList.size();i++){
 				DGList.get(i).msgLeaveWork();
+				double employeeCash = DGList.get(i).getPerson().getWallet().getCashOnHand(); 
+				employeeCash += Constants.MarketDeliveryGuyPayRoll;
+				DGList.get(i).getPerson().getWallet().setCashOnHand(employeeCash);
 			}
 		}
 		

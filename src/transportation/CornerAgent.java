@@ -26,6 +26,7 @@ import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.XYPos;
 import agent.Agent;
 
+// TODO UPDATE DD
 public class CornerAgent extends Agent implements Corner {
 	public class MyCorner {
 		public Corner c;

@@ -1,6 +1,7 @@
 package restaurant.strottma.gui;
 
 import gui.Building;
+import gui.StaffDisplay;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	
 	private InfoPanel infoPanel = new InfoPanel();
 	RestaurantGui restaurantGui = new RestaurantGui();
+	StaffDisplay staff;
 	
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -49,6 +51,8 @@ public class RestaurantStrottmaBuilding extends Building {
 		instanceCount++;
 		
 		initRoles();
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 	
 	private void initRoles() {
@@ -56,6 +60,9 @@ public class RestaurantStrottmaBuilding extends Building {
 		host = new HostRole(null, this);
 		cashier = new CashierRole(null, this);
 		cook = new CookRole(null, this);
+		
+		// Introduce Roles to one another
+		cook.setCashier(cashier);
 		
 		// Create GUIs
 		// TODO there's no cashier gui
@@ -150,8 +157,8 @@ public class RestaurantStrottmaBuilding extends Building {
 	}
 	
 	@Override
-	public JPanel getStaffPanel() {
-		return new JPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
 	}
 	
 	@Override

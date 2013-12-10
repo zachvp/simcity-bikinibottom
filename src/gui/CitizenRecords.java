@@ -11,6 +11,7 @@ import transportation.interfaces.Car;
 import transportation.interfaces.Corner;
 import transportation.interfaces.Passenger;
 import CommonSimpleClasses.CardinalDirectionEnum;
+import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.XYPos;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.PersonAgent;
@@ -104,6 +105,7 @@ public class CitizenRecords {
 		if (job != null) {
 			newPerson.addRole(job);
 			job.setPerson(newPerson);
+			updateStaff(job.getLocation());
 		}
 		
 		//Assigning residence
@@ -127,8 +129,18 @@ public class CitizenRecords {
 
 		infoPanel.updatePersonInfoPanel(newPerson);
 
+		for (Building b: buildings){
+			b.staff.updateUnemployedList();
+		}
 	}
 	
+	
+
+	private void updateStaff(CityLocation location) {
+		((Building)location).staff.updateStaffDisplay();
+		
+	}
+
 	/**
 	 * Displays the PersonAgent's details on the InfoPanel
 	 * @param name the name of the PersonAgent

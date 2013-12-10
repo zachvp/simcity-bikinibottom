@@ -33,7 +33,7 @@ public class RestaurantLucasBuilding extends Building {
 	private List<WaiterRole> normalWaiters;
 	private List<PCWaiterRole> pcWaiters;
 	
-	private InfoPanel infoPanel = new InfoPanel();
+	private restaurant.InfoPanel infoPanel;
 
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
@@ -54,6 +54,12 @@ public class RestaurantLucasBuilding extends Building {
 		instanceCount++;
 		
 		initRoles();
+		
+		infoPanel = new restaurant.InfoPanel(this);
+		infoPanel.setKrabbyPattyPrice("1.00");
+		infoPanel.setKelpShakePrice("1.00");
+		infoPanel.setCoralBitsPrice("1.00");
+		infoPanel.setKelpRingsPrice("1.00");
 	}
 	
 	private void initRoles() {

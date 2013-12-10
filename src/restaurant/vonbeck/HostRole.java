@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.sun.medialib.mlib.mediaLibException;
+
 import restaurant.vonbeck.gui.HostGui;
 import restaurant.vonbeck.gui.RestaurantGui;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
@@ -186,12 +188,22 @@ public class HostRole extends WorkRole {
 		synchronized (waiters) {
 			freeWaiter = waiters.get(0);
 			for (int i = 1; i < waiters.size(); i++) {
-				if (freeWaiter.getBreakState() == WaiterRole.BreakState.OnBreak
+				if (!freeWaiter.isActive() ||
+						freeWaiter.getBreakState() == WaiterRole.BreakState.OnBreak
 						|| (freeWaiter.customerCount() >= waiters.get(i)
 								.customerCount() && waiters.get(i)
 								.getBreakState() != WaiterRole.BreakState.OnBreak)) {
 					freeWaiter = waiters.get(i);
 				}
+			}
+		}
+		
+		if (!freeWaiter.isActive()) {
+			try {
+				throw new Exception("Customer need to be assigned a waiter,"
+						+ " but there are none available.");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		

@@ -176,6 +176,17 @@ public class CashierRole extends WorkRole implements Cashier {
 		this.CookTimer = new Timer();
 	}
 
+	/**
+	 * constructor used for JUnit testing
+	 * @param string
+	 */
+	public CashierRole(String string) {
+		getPriceMenu().put("Krabby Patty", 15.99);//populates pricemenu map
+		getPriceMenu().put("Kelp Shake", 10.99);
+		getPriceMenu().put("Coral Bits", 5.99);
+		getPriceMenu().put("Kelp Rings", 8.99);
+	}
+
 
 	public String getMaitreDName() {
 		return name;

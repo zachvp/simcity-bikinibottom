@@ -10,6 +10,7 @@ import agent.interfaces.Person;
 import gui.Building;
 import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
+import restaurant.InfoPanel;
 import restaurant.vegaperk.gui.RestaurantGui;
 import restaurant.vegaperk.gui.RestaurantPanel;
 
@@ -22,6 +23,7 @@ public class RestaurantVegaPerkBuilding extends Building {
 	private Map<Person, CustomerRole> existingCustomerRoles = new HashMap<Person, CustomerRole>();
 	
 	private StaffDisplay staff;
+	private InfoPanel infoPanel = new InfoPanel(this);
 	
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -30,6 +32,12 @@ public class RestaurantVegaPerkBuilding extends Building {
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
+		
+		infoPanel = new restaurant.InfoPanel(this);
+		infoPanel.setKrabbyPattyPrice("1.00");
+		infoPanel.setKelpShakePrice("1.00");
+		infoPanel.setCoralBitsPrice("1.00");
+		infoPanel.setKelpRingsPrice("1.00");
 	}
 
 	@Override
@@ -70,7 +78,8 @@ public class RestaurantVegaPerkBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		return gui.getInfoPanel();
+		infoPanel.setBuildingName(getName());
+		return infoPanel;
 	}
 
 	@Override

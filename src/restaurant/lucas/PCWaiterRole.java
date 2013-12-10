@@ -1,18 +1,31 @@
 package restaurant.lucas;
 
+import java.awt.Dimension;
+
 import CommonSimpleClasses.CityLocation;
 import agent.interfaces.Person;
 import restaurant.lucas.WaiterRoleBase.MyCustomer;
 import restaurant.lucas.WaiterRoleBase.customerState;
+import restaurant.lucas.interfaces.Customer;
 import restaurant.lucas.interfaces.Waiter;
 
 public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 
+	OrderWheel orderWheel;
+	
 	public PCWaiterRole(Person p, CityLocation c) {
 		super(p, c);
 		// TODO Auto-generated constructor stub
 	}
 
+	//MESSAGES
+	@Override
+	public void msgOrderIsReady(Customer c, String choice, int table,
+			Dimension plateDim) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	protected boolean pickAndExecuteAnAction() {
 		if(!atWork) {
@@ -88,5 +101,25 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		
 		return false;
 	}
+
+	@Override
+	public void takeOrder(MyCustomer mc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deliverOrder(Customer cust, int table, String choice) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	//utils
+	
+	public void setOrderWheel(OrderWheel o) {
+		orderWheel = o;
+	}
+
+
 	
 }

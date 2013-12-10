@@ -25,7 +25,7 @@ import agent.interfaces.Person;
 @SuppressWarnings("serial")
 public class HousingInfoPanel extends JPanel implements ActionListener {
 	
-	private Map<Person, Role> people;
+	private Map<Role, Person> people;
 	
 	private JButton chargeRent = new JButton("Charge Rent");
 	
@@ -40,9 +40,7 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	
 	private Sound myLeg = Sound.getInstance();
 	
-	public HousingInfoPanel(CityLocation building, Map<Person, Role> people) {
-		
-		this.people = people;
+	public HousingInfoPanel(CityLocation building) {
 		
 		this.setLayout(new FlowLayout());
 		
@@ -79,24 +77,26 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
-			int charge = chargeUnitNumberOptions.getSelectedIndex();
-			for(Map.Entry<Person, Role> entry : people.entrySet()) {
-				if(entry.getValue() instanceof PayRecipientRole) {
+			int chargeUnit = chargeUnitNumberOptions.getSelectedIndex();
+			
+			for(Map.Entry<Role, Person> entry : people.entrySet()) {
+				if(entry.getKey() instanceof PayRecipientRole) {
 					PayRecipientRole role = (PayRecipientRole) entry.getValue();
-					role.msgChargeRent(charge);
+					System.out.println("Charging " + chargeUnit);
+					role.msgChargeRent(chargeUnit);
 				}
 			}
 		}
-		else if(evt.getSource() == breakHouse) {
-			myLeg.playSound("hitsound.wav");
-			for(Map.Entry<Person, Role> entry : people.entrySet()) {
-				if(entry.getValue() instanceof ResidentRole) {
-					ResidentRole role = (ResidentRole) entry.getValue();
-					role.getDwelling().degradeCondition();
-				}
-			}
-
-		}
+//		else if(evt.getSource() == breakHouse) {
+//			myLeg.playSound("hitsound.wav");
+//			for(Map.Entry<Person, Role> entry : people.entrySet()) {
+//				if(entry.getValue() instanceof ResidentRole) {
+//					ResidentRole role = (ResidentRole) entry.getValue();
+//					role.getDwelling().degradeCondition();
+//				}
+//			}
+//
+//		}
 	}
 	
 	public void updatePanel(){
@@ -105,5 +105,9 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	
 	public void name(String name) {
 		add(new JLabel(name));
+	}
+
+	public void setPopulation(Map<Role, Person> map) {
+		this.people = map;
 	}
 }

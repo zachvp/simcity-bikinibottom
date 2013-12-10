@@ -18,4 +18,6 @@ public interface ResidentGui {
 	public void DoShowSpeech(String speech);
 
 	public DwellingLayoutGui getLayoutGui();
+
+	public void setLayoutGui(DwellingLayoutGui mockLayoutGui);
 }

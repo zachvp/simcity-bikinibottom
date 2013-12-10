@@ -3,7 +3,13 @@ package bank.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
+
+import javax.imageio.ImageIO;
 
 import agent.gui.Gui;
 import bank.BankCustomerRole;
@@ -44,6 +50,7 @@ public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 	
 	boolean canRelease = false;
 
+	BufferedImage image;
 	public BankCustomerGui(BankCustomerRole c){ //HostAgent m) {
 		agent = c;
 		name = c.getName();
@@ -52,7 +59,11 @@ public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 		xDestination = entranceX;
 		yDestination = entranceY;
 //		c.msgGotToTeller();
-	
+		try {
+			image = ImageIO.read(getClass().getResource("spongebob.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 //		DoGoToTeller(200);
 		//maitreD = m;
 //		this.gui = gui;
@@ -81,8 +92,11 @@ public class BankCustomerGui implements Gui, BankCustomerGuiInterface{
 
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
-		g.setColor(Color.RED);
-		g.fillRect(xPos, yPos, agentDim, agentDim);
+		Rectangle2D r = new Rectangle2D.Double(xPos, yPos, agentDim, agentDim);
+		Rectangle2D tr = new Rectangle2D.Double(xPos, yPos, agentDim, agentDim);
+		TexturePaint tp = new TexturePaint(image, tr);
+		g.setPaint(tp);
+		g.fill(r);
 		
 		drawLetter(g, name, money, cashInAccount);
 				

@@ -55,6 +55,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
+		setLayout(new BorderLayout());
 
 		panelDim = new Dimension((int)(d.width*0.35), d.height);
 		
@@ -76,9 +77,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		buttons.add(replaceButton);
 		buttons.add(msg);
 		
-		add(staffPanel);
-		add(unemployedPanel);
-		add(buttons);
+		add(staffPanel, BorderLayout.WEST);
+		add(unemployedPanel, BorderLayout.CENTER);
+		add(buttons, BorderLayout.EAST);
 		
 		
 		Runnable command = new Runnable(){

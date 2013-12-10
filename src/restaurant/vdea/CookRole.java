@@ -28,10 +28,10 @@ public class CookRole extends WorkRole implements Cook{
 	int marketTried = 0;
 
 	//Food(name, init inventory numbers)
-	private Food chicken = new Food("chicken", 3);
-	private Food salad = new Food("salad", 2);
-	private Food pizza = new Food("pizza", 3);
-	private Food steak = new Food("steak", 6);
+	private Food chicken = new Food("chicken", 13);
+	private Food salad = new Food("salad", 12);
+	private Food pizza = new Food("pizza", 13);
+	private Food steak = new Food("steak", 16);
 	public List<Food> inventory = new ArrayList<Food>();
 	boolean orderSent;
 	

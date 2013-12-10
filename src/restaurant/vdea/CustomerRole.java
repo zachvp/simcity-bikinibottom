@@ -3,6 +3,7 @@ package restaurant.vdea;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import restaurant.vdea.gui.*;
 import restaurant.vdea.interfaces.*;
@@ -25,6 +26,7 @@ public class CustomerRole extends Role implements Customer {
 	private double cash = 20;	//TODO decide on how to instantiate money
 	private boolean bad = false;
 	private double debt = 0;
+	private Semaphore atDest = new Semaphore(0,true);
 	// agent correspondents
 	private Waiter waiter;
 	private Host host;
@@ -169,6 +171,10 @@ public class CustomerRole extends Role implements Customer {
 			stateChanged();
 		}
 		
+		public void atDest(){
+			atDest.release();
+		}
+		
 		/**
 		 * Scheduler.  Determine what action is called for, and do it.
 		 */
@@ -254,11 +260,14 @@ public class CustomerRole extends Role implements Customer {
 
 		private void goToRestaurant() { //TODO fix lineNum
 			Do("Going to restaurant");
-			
 			int lineNum = host.getLineNum(this);
-			//print("line num: "+lineNum);
-			
 			customerGui.DoGoToWaitingArea(lineNum);
+			try {
+				atDest.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			host.msgIWantFood(this);
 		}
 		

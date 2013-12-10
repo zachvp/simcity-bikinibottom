@@ -20,7 +20,7 @@ public class CustomerGui implements Gui{
 	
 	private int xPos = -20, yPos = -20;//default waiter position
 	private int xDestination = -20, yDestination = -20;//default start position
-	private enum Command {noCommand, GoToSeat, LeaveRestaurant};
+	private enum Command {noCommand ,wait, GoToSeat, paying, LeaveRestaurant};
 	private Command command=Command.noCommand;
 	
 	boolean ordered, recieved;
@@ -69,14 +69,28 @@ public class CustomerGui implements Gui{
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command==Command.GoToSeat) role.msgAnimationFinishedGoToSeat();
+			if (command == Command.wait){
+				role.atDest();
+				command = Command.noCommand;
+			}
+			else if (command==Command.GoToSeat) {
+				role.msgAnimationFinishedGoToSeat();
+			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
 				//System.out.println("about to call gui.setCustomerEnabled(Role);");
 				isHungry = false;
 				//gui.setCustomerEnabled(role); //enables CB?
 			}
+			
 			command=Command.noCommand;
+		}
+		
+		if (xPos == xDestination && yPos == yDestination){
+			if (command == Command.wait){
+				role.atDest();
+				command = Command.noCommand;
+			}
 		}
 		
 	}
@@ -158,6 +172,7 @@ public class CustomerGui implements Gui{
 	public void DoGoToWaitingArea(int n){
 		yDestination = 120 - (21*n);
 		xDestination = 15;
+		command = Command.wait;
 		//xPos = xDestination;
 		//yPos = yDestination;
 	}
@@ -190,6 +205,12 @@ public class CustomerGui implements Gui{
 		xDestination = xTable;
 		yDestination = yTable;
 		command = Command.GoToSeat;
+	}
+	
+	public void DoGoToCashier(){
+		xDestination = 150;
+		yDestination = 15;
+		command = Command.paying;
 	}
 
 	public void DoExitRestaurant() {

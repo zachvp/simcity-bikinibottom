@@ -212,8 +212,8 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			boolean hasUnempSelection = false;
 			boolean correctStaffSelection = false;
 			//boolean posOpen = false;
-			WorkRole openRole;
-			Person newHire;
+			WorkRole openRole = null;
+			Person newHire = null;
 			for (StaffButton staff: staffList){
 				if(staff.selected && staff.available){
 					correctStaffSelection = true;
@@ -235,8 +235,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				return;
 			}
 			else if(hasUnempSelection && correctStaffSelection){
-				//openRole
-				//newHire
+				HirePerson(openRole, newHire);
+				updateUnemployedList();
+				updateStaffDisplay();
 			}
 			return;
 		}
@@ -285,6 +286,13 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		Person currentFiringPerson = r.getPerson();
 		currentFiringPerson.removeRole(r);
 		r.setPerson(null);
+	}
+	
+	public void HirePerson(WorkRole r, Person prospectivePerson){
+		
+		r.setPerson(prospectivePerson);
+		prospectivePerson.addRole(r);
+		
 	}
 	
 	class StaffButton extends JPanel implements MouseListener{

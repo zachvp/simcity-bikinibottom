@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import restaurant.lucas.WaiterRole;
+import restaurant.lucas.WaiterRoleBase;
 
 import agent.gui.Gui;
 
@@ -16,7 +17,7 @@ public class WaiterGui implements Gui {
 
 	
 
-    private WaiterRole agent = null;
+    private WaiterRoleBase agent = null;
 
 
     private int xPos = 0, yPos = 0;//default waiter position
@@ -38,7 +39,7 @@ public class WaiterGui implements Gui {
     private int idleX;
     private int idleY;
     
-    public WaiterGui(WaiterRole agent, RestaurantGui gui) {
+    public WaiterGui(WaiterRoleBase agent, RestaurantGui gui) {
         this.agent = agent;
         this.gui = gui;
         xPos = entranceX;
@@ -119,6 +120,12 @@ public class WaiterGui implements Gui {
     public void DoLeaveCustomer() {
         xDestination = -agentDim;
         yDestination = -agentDim;
+    }
+    
+    public void DoGoToOrderWheel() {//called by PCWaiter
+    	canRelease = true;
+    	xDestination = 490;
+    	yDestination = 100;
     }
     
     public void DoGoAway(int fac) {

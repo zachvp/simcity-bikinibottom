@@ -137,9 +137,9 @@ public class CookRole extends WorkRole implements Cook {
 	 */
 	boolean timeToCheckOrderWheel =true;
 	OrderWheel orderWheel;
-	Timer checkOrderWheelTimer;
+//	Timer checkOrderWheelTimer;
 	private ScheduleTask schedule = ScheduleTask.getInstance();
-	int CHECK_ORDER_WHEEL_TIME;
+	int CHECK_ORDER_WHEEL_TIME = 1;
 	
 	
 	public CookRole(Person p, CityLocation c) {
@@ -147,7 +147,7 @@ public class CookRole extends WorkRole implements Cook {
 
 		atWork = false;
 		
-		this.checkOrderWheelTimer = new Timer();
+//		this.checkOrderWheelTimer = new Timer();
 		this.CookTimer = new Timer();
 		this.cookingTimes = new HashMap<String, Integer>();
 		
@@ -207,6 +207,7 @@ public class CookRole extends WorkRole implements Cook {
 			msgHereIsAnOrder(choice, tableNum, c, w);
 			orderWheel.changeReceivedOrderState();//changes state of order so it is not looked at again
 		}
+		timeToCheckOrderWheel = true;
 	}
 	
 	public void msgHereIsAnOrder(String choice, int tableNum, Customer customer, Waiter w) {//sent from waiter
@@ -325,7 +326,7 @@ public class CookRole extends WorkRole implements Cook {
 		}
 		
 		if(!deliveredFoods.isEmpty()) {
-			Do("CONDITON MeT");
+//			Do("CONDITON MeT");
 			updateInventory(deliveredFoods, deliveredAmounts);
 			return true;
 		}
@@ -337,6 +338,7 @@ public class CookRole extends WorkRole implements Cook {
 
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
+			print("POOPSANDBUTTSANDSOMEMOREPOOPS");
 			Runnable command = new Runnable() {
 				@Override
 				public void run() {

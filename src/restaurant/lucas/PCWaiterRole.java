@@ -105,6 +105,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		
 		if(timeToCheckOrderWheel) {
 			timeToCheckOrderWheel = false;
+			print("tititi");
 			Runnable command = new Runnable() {
 				@Override
 				public void run() {
@@ -118,17 +119,59 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		
 		return false;
 	}
-
+	
+	//ACTIONS
 	@Override
 	public void takeOrder(MyCustomer mc) {
-		// TODO Auto-generated method stub
+		doGoToTable(mc.customer, mc.table);
+		acquireSemaphore(active);
+	
+		mc.customer.msgWhatWouldYouLike();
+		Do("What would you like customer?" + mc.customer);
+		acquireSemaphore(active);//released by customer msg
+
+		doGoToOrderWheel();
+		acquireSemaphore(active);
 		
+		orderWheel.addOrder(mc.choice, mc.table, mc.customer, this);
+//		cook.msgHereIsAnOrder(mc.choice, mc.table, mc.customer, this);
+		doDisplayChoice("");
+		doGoAway();			
 	}
+	
+
 
 	@Override
 	public void deliverOrder(Customer cust, int table, String choice) {
-		// TODO Auto-generated method stub
+		Do("Beginning order delivery process");
+		doGoToCook(plateAreaLocs.get(0).width, 50);
+		acquireSemaphore(active);
+		doGoToCook(plateAreaLocs.get(0).width, plateAreaLocs.get(0).height);
+		acquireSemaphore(active);
+
+
+//		cook.msgNullifyPlateArea(plateAreaLocs.get(0).height);//TODO need way to nullify
+		plateAreaLocs.remove(0);
+		//		plateAreas.get(0).o = null;//TODO
+		//		plateAreas.remove(0);
+
+		doGoToCook(500, 50);
+		acquireSemaphore(active);
+		doGoToTable(cust, table);
+		doDisplayChoice(choice);
+		acquireSemaphore(active);
+
+		Do("Here is your food " + cust);
+		doDisplayChoice("none");
+		cust.msgHereIsYourFood();
+		//		Do("Now i should leave you " + cust);
+		doGoAway();//stop creepily watching customer eat
 		
+	}
+	
+	//ANIMATION
+	private void doGoToOrderWheel() {
+		waiterGui.DoGoToOrderWheel();
 	}
 	
 	//utils

@@ -13,6 +13,8 @@ import restaurant.lucas.CashierRole;
 import restaurant.lucas.CookRole;
 import restaurant.lucas.CustomerRole;
 import restaurant.lucas.HostRole;
+import restaurant.lucas.OrderWheel;
+import restaurant.lucas.PCWaiterRole;
 import restaurant.lucas.WaiterRole;
 import restaurant.lucas.gui.CustomerGui;
 import CommonSimpleClasses.Constants;
@@ -27,7 +29,8 @@ public class RestaurantLucasBuilding extends Building {
 	private HostRole host;
 	private CashierRole cashier;
 	private CookRole cook;
-	private List<WaiterRole> waiters;
+	private List<WaiterRole> normalWaiters;
+	private List<PCWaiterRole> pcWaiters;
 	
 	private InfoPanel infoPanel = new InfoPanel();
 
@@ -37,9 +40,13 @@ public class RestaurantLucasBuilding extends Building {
 	
 	RestaurantGui restaurantGui = new RestaurantGui();
 	
+	OrderWheel orderWheel;
+	
 	public RestaurantLucasBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.existingCustomers = new HashMap<Person, CustomerRole>();
+		
+		orderWheel = new OrderWheel();
 		
 		// Stagger opening/closing time
 		this.timeOffset = (instanceCount * timeDifference) % 2;
@@ -67,26 +74,54 @@ public class RestaurantLucasBuilding extends Building {
 		cook.setGui(cookGui);
 		cashier.setGui(cashierGui);
 		
+		//add orderwheel to cook
+		cook.setOrderWheel(orderWheel);
+		
 		//add to animation panel
 		restaurantGui.getAnimationPanel().addGui(hostGui);
 		restaurantGui.getAnimationPanel().addGui(cookGui);
 		restaurantGui.getAnimationPanel().addGui(cashierGui);
 		
 		
-		waiters = new ArrayList<WaiterRole>();
+		normalWaiters = new ArrayList<WaiterRole>();
+		pcWaiters = new ArrayList<PCWaiterRole>();
 		
-		for (int i = 0; i < 4; i++) {
+//		//Creates Normal WaiterRoles
+//		for (int i = 0; i < 2; i++) {
+//			// Create the waiter and add it to the list
+//			WaiterRole w = new WaiterRole(null, this);
+//			w.setIdlePosition(i);
+//			normalWaiters.add(w);
+//			
+//			//give roles to host so host can end work day
+//			host.addRole(w);
+//			
+//			// Set references between the waiter and other roles
+//			w.setOtherRoles(host, cashier);
+//			w.setCook(cook);
+//			//TODO make setcook method for normalWaiter
+//			host.addWaiter(w);
+//			
+//			// Create and set up the waiter GUI
+//			WaiterGui wGui = new WaiterGui(w, restaurantGui);
+//			w.setGui(wGui);
+//			restaurantGui.getAnimationPanel().addGui(wGui);
+//		}
+		
+		//Creates PCWaiterRoles
+		for (int i = 0; i < 2; i++) {
 			// Create the waiter and add it to the list
-			WaiterRole w = new WaiterRole(null, this);
+			PCWaiterRole w = new PCWaiterRole(null, this);
 			w.setIdlePosition(i);
-			waiters.add(w);
+			w.setOrderWheel(orderWheel);
+			pcWaiters.add(w);
 			
 			//give roles to host so host can end work day
 			host.addRole(w);
 			
 			// Set references between the waiter and other roles
 			w.setOtherRoles(host, cashier);
-			w.setCook(cook);
+//			w.setCook(cook);
 			//TODO make setcook method for normalWaiter
 			host.addWaiter(w);
 			
@@ -168,7 +203,10 @@ public class RestaurantLucasBuilding extends Building {
 	}
 
 	public boolean waiterOnDuty() {
-		for (WaiterRole w : waiters) {
+		for (WaiterRole w : normalWaiters) {
+			if (w.isAtWork()) { return true; }
+		}
+		for (PCWaiterRole w : pcWaiters) {
 			if (w.isAtWork()) { return true; }
 		}
 		return false;

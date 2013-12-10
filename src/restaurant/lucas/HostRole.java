@@ -59,12 +59,12 @@ public class HostRole extends WorkRole implements Host {
 	public enum waiterState {working, breakRequested, onBreak};
 	
 	public static class MyWaiter {
-		MyWaiter(WaiterRole waiter, waiterState state) {
-			this.waiter = waiter;
+		MyWaiter(WaiterRoleBase waiter2, waiterState state) {
+			this.waiter = waiter2;
 			this.state = state;
 		}
 		
-		WaiterRole waiter;
+		WaiterRoleBase waiter;
 		boolean noCustomers = true;
 		waiterState state;
 		List<CustomerRole> customers = new ArrayList<CustomerRole>();
@@ -124,7 +124,7 @@ public class HostRole extends WorkRole implements Host {
 		return tableMap;
 	}
 	
-	public void addWaiter(WaiterRole waiter) {
+	public void addWaiter(WaiterRoleBase waiter) {
 		Do("Welcome new waiter: " + waiter.getName());
 		myWaiters.add(new MyWaiter(waiter, waiterState.working));
 		waiter.setIdlePosition(myWaiters.size()); //ensures unique idle positions
@@ -278,10 +278,10 @@ public class HostRole extends WorkRole implements Host {
 		hostGui.DoEndWorkDay();
 	}
 	
-	private WaiterRole chooseWaiter() {
+	private WaiterRoleBase chooseWaiter() {
 		 //chooses different waiter by increasing by one every time called if more available
 		while(!myWaiters.isEmpty()){
-			WaiterRole w = myWaiters.get(waiterChoice%myWaiters.size()).waiter;
+			WaiterRoleBase w = myWaiters.get(waiterChoice%myWaiters.size()).waiter;
 			waiterChoice++;
 			if(findMyWaiter(w).state == waiterState.working) {
 				if(findMyWaiter(w).waiter.isActive()){
@@ -302,9 +302,9 @@ public class HostRole extends WorkRole implements Host {
 		atWork = true;
 	}
 
-	private void seatCustomer(CustomerRole customer, Table table, WaiterRole waiter) {
+	private void seatCustomer(CustomerRole customer, Table table, WaiterRoleBase waiterRoleBase) {
 
-		MyWaiter mw = findMyWaiter(waiter);
+		MyWaiter mw = findMyWaiter(waiterRoleBase);
 		mw.customers.add(customer);
 		mw.noCustomers = false;
 		table.setOccupant(customer);
@@ -313,7 +313,7 @@ public class HostRole extends WorkRole implements Host {
 		acquireSemaphore(active);
 		hostGui.DoGoToDesk();
 		acquireSemaphore(active);
-		waiter.msgSitAtTable(customer, table.tableNumber);
+		waiterRoleBase.msgSitAtTable(customer, table.tableNumber);
 		
 
 	}
@@ -350,7 +350,7 @@ public class HostRole extends WorkRole implements Host {
 		this.getPerson().getWallet().addCash(300.0);
 	}
 	
-	public MyWaiter findMyWaiter(WaiterRole w) {
+	public MyWaiter findMyWaiter(WaiterRoleBase w) {
 		for(MyWaiter mw: myWaiters) {
 			if(mw.waiter == w)
 				return mw;

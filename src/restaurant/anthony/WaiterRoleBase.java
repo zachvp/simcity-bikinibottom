@@ -8,6 +8,7 @@ import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.CustomerRole.AgentState;
 import restaurant.anthony.gui.WaiterGui;
 import restaurant.anthony.interfaces.Cashier;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Customer;
 import restaurant.anthony.interfaces.Waiter;
 
@@ -26,7 +27,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	public List<Check> CheckList = new ArrayList<Check>();
 	protected int waiterNumber;
 	protected HostRole host;
-	protected CookRole cook;
+	protected Cook cook;
 	protected Cashier cashier;
 	protected Semaphore atTable = new Semaphore(0, true);
 	protected Semaphore atCook = new Semaphore(0, true);
@@ -602,7 +603,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	 * @see restaurant.Waiter#setCook(restaurant.CookAgent)
 	 */
 	
-	public void setCook(CookRole co) {
+	public void setCook(Cook co) {
 		cook = co;
 	}
 

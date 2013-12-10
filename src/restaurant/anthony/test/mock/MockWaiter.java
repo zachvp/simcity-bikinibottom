@@ -3,7 +3,6 @@ package restaurant.anthony.test.mock;
 
 import java.util.List;
 
-import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
@@ -12,6 +11,7 @@ import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.gui.WaiterGui;
 import restaurant.anthony.interfaces.Cashier;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Customer;
 import restaurant.anthony.interfaces.Waiter;
 
@@ -152,7 +152,7 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void setCook(CookRole co) {
+	public void setCook(Cook co) {
 		// TODO Auto-generated method stub
 		
 	}

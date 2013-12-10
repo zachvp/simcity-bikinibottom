@@ -6,6 +6,7 @@ import restaurant.anthony.WaiterRoleBase.Item;
 import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.HostGui;
 import restaurant.anthony.interfaces.Cashier;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Market;
 import restaurant.anthony.Food;
 
@@ -27,7 +28,7 @@ public class MarketRole extends Role implements Market {
 	private double money =0;
 	Timer timer = new Timer();
 	public String name;
-	private CookRole cook;
+	private Cook cook;
 	private Cashier cashier;
 	// public List<Order> MyOrders= new ArrayList<Order>();
 	private List<Food> ShoppingList = null;
@@ -85,7 +86,7 @@ public class MarketRole extends Role implements Market {
 	 * @see restaurant.Market#BuyFood(java.util.List, restaurant.CookAgent)
 	 */
 	@Override
-	public void BuyFood(List<Food> shoppingList2, CookRole co) {
+	public void BuyFood(List<Food> shoppingList2, Cook co) {
 		print("Got the message from cook, going to give food to him");
 		cook = co;
 		ShoppingList = shoppingList2;
@@ -155,7 +156,7 @@ public class MarketRole extends Role implements Market {
 
 		}
 		CalculateTotalMoney(DeliverList);
-		cook.Orderfulfillment(DeliverList, this);
+		//cook.Orderfulfillment(DeliverList, this);
 		return;
 
 	}
@@ -173,7 +174,7 @@ public class MarketRole extends Role implements Market {
 		}
 		}
 		print ("Asking Cashier to pay for the ingredients : " + CurrentTotalPrice);
-		cashier.HeresTheIngredientPrice(CurrentTotalPrice, this);
+		//cashier.HeresTheIngredientPrice(CurrentTotalPrice, this);
 	}
 	
 	/* (non-Javadoc)

@@ -1,9 +1,9 @@
 package restaurant.anthony.gui;
 
 
-import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
+import restaurant.anthony.interfaces.Cook;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import agent.gui.Gui;
 
 public class CookGui implements Gui {
 
-    private CookRole agent = null;
+    private Cook agent = null;
 
     private int xPos = 50, yPos = -50;//default waiter position
     
@@ -72,7 +72,7 @@ public class CookGui implements Gui {
     Plates.add(false);
     }
     
-    public CookGui(CookRole agent) {
+    public CookGui(Cook agent) {
         this.agent = agent;
     }
     

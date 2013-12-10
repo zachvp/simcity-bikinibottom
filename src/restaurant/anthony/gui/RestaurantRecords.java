@@ -15,6 +15,7 @@ import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.WaiterRole;
 import restaurant.anthony.WaiterRoleBase;
+import restaurant.anthony.interfaces.Cook;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Role;
 import agent.interfaces.Person;
@@ -33,22 +34,22 @@ public class RestaurantRecords {
 	private RestaurantBackgroundLayoutGui restBackgroundLayout;
 	
 	private Map<String,Double> priceList = new HashMap<String,Double>(){
-	{
-		put("Kelp Rings", (double) 10);
-		put("Kelp Shake", (double) 20);
-		put("Krabby Patty", (double) 30);
-		put("Coral Bits", (double) 50);
-		
-		
-	}
+		{
+			put("Kelp Rings", (double) 10);
+			put("Kelp Shake", (double) 20);
+			put("Krabby Patty", (double) 30);
+			put("Coral Bits", (double) 50);
+
+
+		}
 	};
 
 	private Map<String, Food>InventoryList = new HashMap<String, Food>(){
 		{
-			Food KrabbyPatty = new Food("Krabby Patty", 400, 10);
-			Food KelpShake = new Food("Kelp Shake", 300, 10);
-			Food CoralBits = new Food("Coral Bits", 500, 10);
-			Food KelpRings = new Food("Kelp Rings", 200, 10);
+			Food KrabbyPatty = new Food("Krabby Patty", 400, 1);
+			Food KelpShake = new Food("Kelp Shake", 300, 1);
+			Food CoralBits = new Food("Coral Bits", 500, 1);
+			Food KelpRings = new Food("Kelp Rings", 200, 1);
 		put("Krabby Patty", KrabbyPatty);
 		put("Kelp Shake", KelpShake);
 		put("Coral Bits", CoralBits);
@@ -111,7 +112,7 @@ public class RestaurantRecords {
     	gui.addGui(waiterGui3);
     	
     	//CookRole
-    	CookRole cook = new CookRole(null, building);
+    	Cook cook = new CookRole(null, building);
     	CookGui cookGui = new CookGui(cook);
     	cook.setInventoryList(InventoryList);
     	cook.setGui(cookGui);

@@ -2,7 +2,6 @@ package restaurant.anthony.interfaces;
 
 import java.util.List;
 
-import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.WaiterRoleBase;
@@ -52,7 +51,7 @@ public interface Waiter {
 
 	public abstract void setHost(HostRole ho);
 
-	public abstract void setCook(CookRole co);
+	public abstract void setCook(Cook co);
 
 	public abstract void setCashier(Cashier ca);
 

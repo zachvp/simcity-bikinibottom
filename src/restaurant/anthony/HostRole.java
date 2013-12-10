@@ -6,6 +6,7 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.anthony.CustomerRole.AgentState;
 import restaurant.anthony.gui.HostGui;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Customer;
 import restaurant.anthony.interfaces.Waiter;
 
@@ -32,7 +33,7 @@ public class HostRole extends WorkRole {
 	private Semaphore atExit = new Semaphore (0,true);
 
 	public List<WaiterRoleBase> Waiters = Collections.synchronizedList(new ArrayList<WaiterRoleBase>());
-	public CookRole cook;
+	public Cook cook;
 	public CashierRole cashier;
 	private int assignedSpace = 0;
 
@@ -358,7 +359,7 @@ public class HostRole extends WorkRole {
 
 	
 	
-	public void setCook(CookRole co){
+	public void setCook(Cook co){
 		cook = co;
 	}
 	

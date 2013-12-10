@@ -3,7 +3,6 @@ package restaurant.anthony.test.mock;
 
 import java.util.List;
 
-import restaurant.anthony.CookRole;
 import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
@@ -11,6 +10,7 @@ import restaurant.anthony.WaiterRoleBase.Menu;
 import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.interfaces.Cashier;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Customer;
 import restaurant.anthony.interfaces.Market;
 import restaurant.anthony.interfaces.Waiter;
@@ -39,7 +39,7 @@ public class MockMarket extends Mock implements Market {
 		return null;}
 
 	// Messages
-	public void BuyFood(List<Food> shoppingList2, CookRole co){}
+	public void BuyFood(List<Food> shoppingList2, Cook co){}
 
 	public void HeresTheMoney(double payment) {
 		log.add(new LoggedEvent("I Got the money from cashier " + payment));

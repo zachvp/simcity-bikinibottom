@@ -3,6 +3,7 @@ package restaurant.anthony;
 import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import gui.trace.AlertTag;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -17,6 +18,7 @@ import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Customer;
 import restaurant.anthony.interfaces.Waiter;
 import restaurant.anthony.interfaces.Market;
+import restaurant.strottma.CashierRole.MyBill;
 
 /**
  * Restaurant Cashier Agent
@@ -59,31 +61,12 @@ public class CashierRole extends WorkRole implements Cashier {
 		stateChanged();
 	}
 	
-	public void HeresTheIngredientPrice(double price, Market ma){
-		/*
-		if (money - price >= 0){
-			print ("I am able to pay for the ingredients");
-			money = money - price;
-			ma.HeresTheMoney(price);
-		}
-		*/
-		
-		print ("Receive the Debt msg from Market");
-		Debt d = new Debt(price,ma);
-		getDebtList().add(d);
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		// TODO Auto-generated method stub
+		Do(AlertTag.RESTAURANT, "Received a bill from " + cashier);
+		DebtList.add(new Debt(total, cashier));
 		stateChanged();
-		
-		/*
-		if (money - price < 0 ){
-			print ("I am not able to pay for the ingredients");
-			print ("I will give all my money first and pay the rest when I have enough money");
-			ma.HeresTheMoney(money);
-			double debt = price - money;
-			Debt d = new Debt(debt,ma);
-			money = 0;
-			DebtList.add(d);
-		}
-		*/
 	}
 
 	/* (non-Javadoc)
@@ -225,16 +208,22 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void PayDebt(){
-		print ("I am going to pay debt");
+		print ("I am going to pay to the market");
 		synchronized(DebtList){
-		for (int i=0;i<getDebtList().size();i++){
-			if (money >= getDebtList().get(i).debt){
-				print ("I am able to pay the debt");
-				getDebtList().get(i).ma.HeresTheMoney(getDebtList().get(i).debt);
-				money = money - getDebtList().get(i).debt;
-				getDebtList().remove(i);
+			for (int i=0;i<getDebtList().size();i++){
+				if (money >= getDebtList().get(i).debt){
+					print ("I am able to pay the debt");
+					getDebtList().get(i).cashier.msgHereIsPayment(getDebtList().get(i).debt, this);
+					money = money - getDebtList().get(i).debt;
+					getDebtList().remove(i);
+				}
+				else{
+					print ("I can't pay the debt but I will pay with all my money");
+					getDebtList().get(i).cashier.msgHereIsPayment(money, this);
+					money = 0;
+					getDebtList().remove(i);
+				}
 			}
-		}
 		}
 		
 	}
@@ -256,11 +245,21 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 	public class Debt {
-		Market ma;
+		private market.interfaces.Cashier cashier;
 		double debt;
-		Debt (double d, Market m){
-			ma = m;
+		Debt (double d, market.interfaces.Cashier ca){
+			cashier = ca;
 			debt = d;
+		}
+		
+		public void setDebt(double p){
+			debt = p;
+		}
+		public double getDebt(){
+			return debt;
+		}
+		public market.interfaces.Cashier getCashier(){
+			return cashier;
 		}
 	}
 	public class Check {

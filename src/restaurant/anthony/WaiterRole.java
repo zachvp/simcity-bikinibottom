@@ -4,6 +4,7 @@ import CommonSimpleClasses.CityBuilding;
 import agent.interfaces.Person;
 import restaurant.anthony.WaiterRoleBase.MyCustomer;
 import restaurant.anthony.WaiterRoleBase.Order;
+import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Waiter;
 
 /**
@@ -16,7 +17,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		super(person, building);
 	}
 
-	CookRole cook = null;
+	Cook cook = null;
 	
 	/* (non-Javadoc)
 	 * @see restaurant.Waiter#OrderIsReady(restaurant.WaiterAgent.Order)
@@ -109,7 +110,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		return;
 	}	
 	/* --- Actions --- */
-	public void setCook(CookRole c){
+	public void setCook(Cook c){
 		cook = c;
 	}
 	

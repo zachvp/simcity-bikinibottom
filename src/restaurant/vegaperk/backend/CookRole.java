@@ -504,4 +504,8 @@ public class CookRole extends WorkRole implements Cook {
 			stateChanged();
 		}
 	}
+
+	public void setCashier(CashierRole cashier) {
+		this.cashier = cashier;
+	}
 }

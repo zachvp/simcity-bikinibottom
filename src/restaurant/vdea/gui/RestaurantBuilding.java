@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import restaurant.InfoPanel;
 import restaurant.vdea.*;
 import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.XYPos;
@@ -24,7 +25,7 @@ public class RestaurantBuilding extends Building{
 	private List<WaiterRole> waiters;
 	private final int WAITER_STAFF_COUNT = 4;
 	
-	//private InfoPanel infoPanel = new InfoPanel();
+	private InfoPanel infoPanel = new InfoPanel(this);
 	RestaurantGui restaurantGui = new RestaurantGui();
 	private XYPos entrancePos;
 	StaffDisplay staff;
@@ -50,6 +51,12 @@ public class RestaurantBuilding extends Building{
 		restaurantGui.animationPanel.addGui(hostGui);
 		restaurantGui.animationPanel.addGui(cookGui);
 		restaurantGui.animationPanel.addGui(cashierGui);
+		
+		infoPanel = new restaurant.InfoPanel(this);
+		infoPanel.setKrabbyPattyPrice("1.00");
+		infoPanel.setKelpShakePrice("1.00");
+		infoPanel.setCoralBitsPrice("1.00");
+		infoPanel.setKelpRingsPrice("1.00");
 		
 		for(int i=0; i<WAITER_STAFF_COUNT; i++){
 			WaiterRole w = new WaiterRole(null, this);
@@ -144,8 +151,8 @@ public class RestaurantBuilding extends Building{
 
 	@Override
 	public JPanel getInfoPanel() {
-		// TODO Auto-generated method stub
-		return new JPanel();
+		infoPanel.setBuildingName(getName());
+		return infoPanel;
 	}
 
 	@Override

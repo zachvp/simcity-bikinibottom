@@ -187,6 +187,7 @@ public class RestaurantLucasBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
+		infoPanel.setBuildingName(getName());
 		return infoPanel;
 	}
 

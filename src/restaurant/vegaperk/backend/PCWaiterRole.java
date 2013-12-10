@@ -1,258 +1,61 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
-import agent.Role;
-import agent.WorkRole;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
-import restaurant.vegaperk.gui.WaiterGui;
-import restaurant.vegaperk.interfaces.Customer;
+import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
+import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
-import gui.trace.AlertTag;
 
-import java.util.*;
 
 /**
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
 public class PCWaiterRole extends WaiterRoleBase implements Waiter {
-	private List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
+	// prevents the scheduler fro repeatedly running the time delay
+	private boolean timerSet = false;
 	
-	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };
-	BreakState breakState = BreakState.NONE;
+	// schedules the time delay
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	//agent members
-	CookRole cook = null;
-	CashierRole cashier = null;
+	//shared order list
+	private RevolvingOrderList revolvingOrders;
 	
-	public WaiterGui waiterGui = null;
-	public Menu menu = new Menu();
-	private int homePosition = -1;
+	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
-	private HostRole host;
-
 	public PCWaiterRole(Person person, CityBuilding building) {
 		super(person, building);
 	}
 
-	/** Accessors and setters */
-	public String getName() {
-		return super.getName();
-	}
-
-	public int getWaitingCustomers() {
-		return customers.size();
-	}
-	
-	public void setGui(WaiterGui gui) {
-		waiterGui = gui;
-	}
-
-	public WaiterGui getGui() {
-		return waiterGui;
-	}
-	
-	public void setHost(HostRole h){
-		host = h;
-	}
-	
-	public void setCook(CookRole c){
-		cook = c;
-	}
-	
-	/** Messages - Received from Other Agents. */
-	
-	/** Messages from HostAgent */
-	public void msgPleaseSeatCustomer(Customer c, int t){
-		MyCustomer mc = findCustomer(c);
-		if(mc == null){
-			customers.add(new MyCustomer(c,t));
-		}else{
-			mc.state = MyCustomerState.WAITING;
-		}
-		stateChanged();
-	}
-	public void msgCanGoOnBreak(){
-		Do("Going on break!");
-		breakState = BreakState.GOING_ON_BREAK;
-		stateChanged();
-	}
-	public void msgDenyBreak(){
-		Do("break denied =(");
-		breakState = BreakState.NONE;
-		waiterGui.denyBreak();
-		stateChanged();
-	}
-	public void msgHomePosition(int position){
-		homePosition = position;
-	}
-	
-	/** Messages from WaiterGui */
-	public void msgAtDest() {//from animation
-		doneWaitingForInput();
-		stateChanged();
-	}
-	
-	/** Messages from Customer */ 
-	public void msgReadyToOrder(Customer c){
-		MyCustomer mc = findCustomer(c);
-		mc.state = MyCustomerState.READY_TO_ORDER;
-		stateChanged();
-	}
-	public void msgHereIsMyOrder(Customer c, String choice){
-		doneWaitingForInput();
+	@Override
+	public boolean pickAndExecuteAnAction() {
+		super.pickAndExecuteAnAction();
 		
-		MyCustomer mc = findCustomer(c);
-		mc.choice = choice;
-		
-		waiterGui.setOrderName(choice);
-		stateChanged();
-	}
-	public void msgCustomerLeavingTable(Customer c) {
-		MyCustomer mc = findCustomer(c);
-		mc.state = MyCustomerState.LEAVING;
-		stateChanged();
-	}
-	public void msgCannotPay(Customer c){
-		doneWaitingForInput();
-		stateChanged();
-	}
-	public void msgIAmDoneEating(Customer c){
-		MyCustomer mc = findCustomer(c);
-		mc.state = MyCustomerState.DONE_EATING;
-		stateChanged();
-	}
-	public void msgHereIsCheck(Customer c, double check){
-		Do("Got check.");
-		MyCustomer mc = findCustomer(c);
-		mc.bill = check;
-		doneWaitingForInput();
-		stateChanged();
-	}
-	
-	/** Messages from cook */
-	public void msgOrderDone(String choice, int t){
-		for(MyCustomer mc : customers){
-			if(mc.table == t){
-				mc.state = MyCustomerState.FOOD_READY;
-			}
-		}
-		stateChanged();
-	}
-	public void msgOutOfChoice(String choice, int t){
-		for(MyCustomer mc : customers){
-			if(mc.table == t){
-				mc.state = MyCustomerState.OUT_OF_CHOICE;
-			}
-		}
-		stateChanged();
-	}
-	
-	public void msgGotFatigue(){
-		breakState = BreakState.REQUEST_BREAK;
-		host.msgIWantBreak(this);
-		stateChanged();
-	}
-	
-	public void msgOffBreak(){
-		doneWaitingForInput();
-		breakState = BreakState.OFF_BREAK;
-		stateChanged();
-	}
-	
-	/**
-	 * Scheduler.  Determine what action is called for, and do it.
-	 */
-	protected boolean pickAndExecuteAnAction() {
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
-		try{
-			for (MyCustomer c : customers) {
-				if (c.state==MyCustomerState.WAITING) {
-					c.state = MyCustomerState.SEATED;
-					seatCustomer(c, c.table);//the action
-					return true;//return true to the abstract agent to reinvoke the scheduler.
+		if(!timerSet) {
+			Runnable command = new Runnable() {
+				public void run(){
+					checkRevolvingOrderList();
 				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.READY_TO_ORDER){
-					c.state = MyCustomerState.ORDERED;
-					takeOrder(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.FOOD_READY){
-					c.state = MyCustomerState.SERVED;
-					getFood(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.LEAVING){
-					c.state = MyCustomerState.DONE;
-					tellHostFreeTable(c.table);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.OUT_OF_CHOICE){
-					c.state = MyCustomerState.SEATED;
-					tellCustomerOutOfFood(c);
-					return true;
-				}
-			}
-			for(MyCustomer c : customers){
-				if(c.state==MyCustomerState.DONE_EATING){
-					c.state = MyCustomerState.PAYING;
-					getCheck(c);
-				}
-			}
+			};
+			timerSet = true;
 			
-			if(breakState == BreakState.OFF_BREAK){
-				breakState = BreakState.NONE;
-				goOffBreak();
-				return true;
-			}
-			
-			if(breakState == BreakState.GOING_ON_BREAK){
-				boolean hasCustomers = false;
-				for(MyCustomer c : customers){
-					if(c.state != MyCustomerState.DONE){
-						hasCustomers = true;
-					}
-				}
-				if(hasCustomers == false){
-					breakState = BreakState.ON_BREAK;
-					goOnBreak();
-				}
-				return true;
-			}
-		}
-		catch(ConcurrentModificationException e){
+			schedule.scheduleTaskWithDelay(command,
+			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
 			return true;
 		}
 		
-		goWait();
 		return false;
 	}
-
-	/** Actions called in the Scheduler */
-	private void seatCustomer(MyCustomer customer, int table) {
-		DoGoToHost();
+	
+	private void checkRevolvingOrderList() {
+		DoGoToCook();
 		waitForInput();
-		
-		customer.c.msgSitAtTable(this, new Menu(),
-				host.getTableMap().get(table).width, host.getTableMap().get(table).height);
-		DoGoToTable(table);
-		waitForInput();
-		stateChanged();
 	}
 	
-	private void takeOrder(MyCustomer c){
+	@Override
+	protected void takeOrder(MyCustomer c) {
 		DoGoToTable(c.table);
 		waitForInput();
 		
@@ -267,171 +70,18 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		DoGoToCook();
 		waitForInput();
 		
-		Do("choice "+c.choice);
-		cook.msgHereIsOrder(this, c.choice, c.table);
+		Do("Customer choice " + c.choice);
+		
+		revolvingOrders.addOrder(c.choice, c.table, this, OrderState.NEED_TO_COOK);
+		
 		waiterGui.toggleHoldingOrder();
 		stateChanged();
 	}
-	
-	private void getFood(MyCustomer c){
-		if(c.state == MyCustomerState.LEAVING){
-			return;
-		}
-		
-		DoGoToCook();
-		waitForInput();
-		
-		cook.msgGotFood(c.table);
-		
-		waiterGui.setOrderName(c.choice);
-		waiterGui.toggleHoldingOrder();
-		
-		DoGoToTable(c.table);
-		waitForInput();
-		
-		c.c.msgHereIsYourFood();
-		waiterGui.toggleHoldingOrder();
-	}
-	
-	private void getCheck(MyCustomer c){
-		Do("Going to cashier");
-		
-		DoGoToCenter();
-		waitForInput();
-		
-		DoGoToCashier();
-		waitForInput();
-		
-		double bill = menu.m.get(c.choice);
-		
-		cashier.msgDoneEating(c.c, bill, this);
-		Do("Going to cashier");
-		
-		DoGoToTable(c.table);
-		waitForInput();
-		c.c.msgHereIsCheck(c.bill, cashier);
-	}
-	
-	private void tellCustomerOutOfFood(MyCustomer c){
-		DoGoToTable(c.table);
-		waitForInput();
-		c.c.msgOutOfChoice(c.choice);
-	}
-	
-	private void tellHostFreeTable(int table){
-		host.msgTableIsFree(table);
-	}
-	
-	private void goOnBreak(){
-		Do("Go On Break");
-		DoGoOnBreak();
-		waitForInput();
-	}
-	
-	private void goOffBreak(){
-		Do("Go off break");
-		host.msgOffBreak(this);
-	}
-	
-	private void goWait(){
-		DoGoWait();
-	}
-	
-	/** The animation DoXYZ() routines */
-	private void DoGoToTable(int table) {
-		waiterGui.DoGoToTable(host.getTableMap().get(table).width, host.getTableMap().get(table).height); 
-	}
-	
-	private void DoGoToCook(){
-		waiterGui.DoGoToCook();
-	}
-	private void DoGoToHost(){
-		waiterGui.DoGoToHost();
-	}
-	private void DoGoWait(){
-		waiterGui.DoGoToHomePosition(homePosition);
-	}
-	private void DoGoOnBreak(){
-		waiterGui.DoGoOnBreak();
-	}
-	private void DoGoToCenter(){
-		waiterGui.DoGoToCenter();
-	}
-	private void DoGoToCashier(){
-		waiterGui.DoGoToCashier();
-	}
-	
-	/** Classes */
-	private enum MyCustomerState { NONE, WAITING, SEATED, READY_TO_ORDER,
-		ORDERED, FOOD_READY, SERVED, DONE_EATING, PAYING, LEAVING, DONE, OUT_OF_CHOICE }
-	
-	private static class MyCustomer {
-		Customer c;
-		int table;
-		String choice;
-		double bill;
-		MyCustomerState state;
-		
-		MyCustomer(Customer mc, int mt){
-			c = mc;
-			table = mt;
-			this.state = MyCustomerState.WAITING; 
-		}
-	};
-	
-	public class Menu{
-		Map<String, Double> m;
-		
-		Menu(){
-			m = new HashMap<String, Double>();
-			m.put("Krabby Patty", 1.25);
-			m.put("Kelp Rings", 2.00);
-			m.put("Coral Bits", 1.50);
-			m.put("Kelp Shake", 2.00);
-		}
-	} 
-	
-	/** Utility Functions */
-	private MyCustomer findCustomer(Customer c){
-		synchronized(customers){
-			for(MyCustomer mc : customers){
-				if(mc.c == c){
-					return mc;
-				}
-			}
-		}
-		return null;
-	}
-	
-	public int getCustomerCount(){
-		return customers.size();
-	}
-	
-	@Override
-	public void Do(String msg) {
-		Do(AlertTag.RESTAURANT, msg);
-	}
 
 	@Override
-	public boolean isAtWork() {
-		return isActive();
-	}
-
-	@Override
-	public boolean isOnBreak() {
-		return isActive();
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		DoGoToHost();
-		waitForInput();
+	protected void getFood(MyCustomer c) {
+		// TODO Auto-generated method stub
 		
-		this.deactivate();
 	}
-
-	@Override
-	public void setCashier(CashierRole cashier) {
-		this.cashier = cashier;
-	}
+	
 }

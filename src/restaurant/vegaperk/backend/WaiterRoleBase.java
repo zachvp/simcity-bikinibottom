@@ -284,7 +284,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	protected void DoGoToHost(){
 		waiterGui.DoGoToHost();
 	}
-	private void DoGoToCook(){
+	protected void DoGoToCook(){
 		waiterGui.DoGoToCook();
 	}
 	protected void DoGoWait(){

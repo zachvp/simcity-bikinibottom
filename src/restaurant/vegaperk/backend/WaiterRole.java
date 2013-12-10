@@ -80,10 +80,6 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		waiterGui.toggleHoldingOrder();
 	}
 	
-	private void DoGoToCook(){
-		waiterGui.DoGoToCook();
-	}
-	
 	/* --- Actions --- */
 	public void setCook(CookRole c){
 		cook = c;

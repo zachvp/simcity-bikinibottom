@@ -376,6 +376,7 @@ public class WaiterRole extends WorkRole implements Waiter{
 		print("Here is your check");
 		customer.setState(CustomerState.none);
 		customer.c.msgHereIsYourCheck(customer.bill);
+		waiterGui.DoLeaveCustomer();
 	}
 
 	private void clearTable(MyCustomer customer){

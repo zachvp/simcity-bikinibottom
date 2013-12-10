@@ -71,10 +71,12 @@ public class CustomerGui implements Gui{
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command == Command.wait){
 				role.atDest();
-				command = Command.noCommand;
 			}
 			else if (command==Command.GoToSeat) {
 				role.msgAnimationFinishedGoToSeat();
+			}
+			else if (command==Command.paying) {
+				role.atDest();
 			}
 			else if (command==Command.LeaveRestaurant) {
 				role.msgAnimationFinishedLeaveRestaurant();
@@ -84,13 +86,6 @@ public class CustomerGui implements Gui{
 			}
 			
 			command=Command.noCommand;
-		}
-		
-		if (xPos == xDestination && yPos == yDestination){
-			if (command == Command.wait){
-				role.atDest();
-				command = Command.noCommand;
-			}
 		}
 		
 	}
@@ -208,16 +203,16 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoGoToCashier(){
-		xDestination = 150;
-		yDestination = 15;
+		recieved = false;
+		xDestination = 130;
+		yDestination = 35;
 		command = Command.paying;
 	}
 
 	public void DoExitRestaurant() {
-		recieved = false;
 		isHungry = false;
 		xDestination = -40;
-		yDestination = -40;
+		yDestination = 35;
 		command = Command.LeaveRestaurant;
 	}
 }

@@ -8,7 +8,7 @@ import agent.gui.Gui;
 
 public class WaiterGui implements Gui {
 
-	private WaiterRole Role = null;
+	private WaiterRole role = null;
 	RestaurantGui gui;
 	private boolean isOnBreak = false;
 	private boolean isPresent = false;
@@ -28,8 +28,8 @@ public class WaiterGui implements Gui {
 	String order;
 
 
-	public WaiterGui(WaiterRole Role, RestaurantGui gui, int pos){
-		this.Role = Role;
+	public WaiterGui(WaiterRole role, RestaurantGui gui, int pos){
+		this.role = role;
 		this.gui = gui;
 
 		xHome = 250 - (pos*26);
@@ -53,25 +53,26 @@ public class WaiterGui implements Gui {
 		else if (yPos > yDestination)
 			yPos--;
 
-		if (xPos == xDestination && yPos == yDestination
-				&(xDestination == xTable + 20) & (yDestination == yTable - 20)) {
-			Role.msgAtTable();
-		}
-
 		if (xPos == xDestination && yPos == yDestination){
 			if (command == Command.cust){
-				Role.atDest();
-				Role.getHost().atDest();
-				command = Command.noCommand;
+				role.atDest();
+				role.getHost().atDest();
 			}
+			command = Command.noCommand;
 		}
+		if (xPos == xDestination && yPos == yDestination
+				&(xDestination == xTable + 20) & (yDestination == yTable - 20)) {
+			role.msgAtTable();
+		}
+
+
 
 		if (xPos == 455 && yPos== 80){
-			Role.msgAtKitchen();
+			role.msgAtKitchen();
 		}
 
 
-		if(xPos == xHome && yPos== yHome && Role.isOnBreak()){
+		if(xPos == xHome && yPos== yHome && role.isOnBreak()){
 			isOnBreak = true;
 		}
 
@@ -106,12 +107,12 @@ public class WaiterGui implements Gui {
 	}
 
 	public void setOnBreak() {
-		Role.goOnBreak(); //starts process of going On Break
+		role.goOnBreak(); //starts process of going On Break
 		setPresent(true);
 	}
 	public void setOffBreak(){
 		isOnBreak = false;
-		Role.goOffBreak();
+		role.goOffBreak();
 	}
 	public boolean isOnBreak() {
 		return isOnBreak;

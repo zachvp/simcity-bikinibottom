@@ -323,7 +323,7 @@ public class CustomerRole extends Role implements Customer {
 					stateChanged();
 				}
 			},
-			6 * 1000);		//adjust time to read menu
+			4 * 1000);		//adjust time to read menu
 			
 		}
 		
@@ -387,7 +387,7 @@ public class CustomerRole extends Role implements Customer {
 					stateChanged();
 				}
 			},
-			getHungerLevel() * 500);
+			getHungerLevel() * 400);
 			
 			
 			///--------------------------------------------\\\\\
@@ -408,6 +408,12 @@ public class CustomerRole extends Role implements Customer {
 		}
 		
 		private void payBill(){
+			customerGui.DoGoToCashier();
+			try {
+				atDest.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			System.out.printf(name + ": Paying bill with $%.2f%n", cash);
 			cashier.msgPayment(this, bill, cash);
 			waiter.msgDoneAndPaying(this);

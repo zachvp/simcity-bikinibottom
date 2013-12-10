@@ -30,6 +30,7 @@ import parser.BuildingDef;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;

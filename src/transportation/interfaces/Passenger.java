@@ -1,6 +1,9 @@
 package transportation.interfaces;
 
+import java.awt.image.BufferedImage;
+
 import agent.Role;
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CardinalDirectionEnum;
 
@@ -38,5 +41,7 @@ public interface Passenger {
 	CardinalDirectionEnum currentDirection();
 
 	void setLocation(CityLocation startLocation);
+
+	Person getPerson();
 
 }

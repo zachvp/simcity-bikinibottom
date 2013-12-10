@@ -3,8 +3,12 @@ package gui;
 import housing.backend.ResidentRole;
 import housing.interfaces.Dwelling;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import transportation.CornerAgent.MyCorner;
 import transportation.interfaces.Car;
@@ -97,9 +101,19 @@ public class CitizenRecords {
 			break;
 		}
 		
+		BufferedImage img;
+		
+		try {
+			img = ImageIO.read(getClass().getResource("Patrick_Star.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			img = null;
+		}
+		
 		
 		PersonAgent newPerson  = new PersonAgent
-				(name, incomeLevel, hunger, goToRestaurant, (foodAtHome.equals("Has food at home")));
+				(name, incomeLevel, hunger, goToRestaurant,
+						(foodAtHome.equals("Has food at home")),img);
 		
 		//Assigning job
 		if (job != null) {

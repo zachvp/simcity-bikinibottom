@@ -151,9 +151,11 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 		
-		for(Order o : revolvingOrders.orderList) {
-			if(o.state == OrderState.PICKED_UP) {
-				removeOrder(o);
+		synchronized(revolvingOrders) {
+			for(Order o : revolvingOrders.orderList) {
+				if(o.state == OrderState.PICKED_UP) {
+					removeOrder(o);
+				}
 			}
 		}
 		
@@ -193,13 +195,15 @@ public class CookRole extends WorkRole implements Cook {
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
-					for(Order o : revolvingOrders.orderList) {
-						if(o.state == OrderState.COOKED){
-							plateIt(o);
-						}
-						
-						else if(o.state == OrderState.NEED_TO_COOK){
-							tryToCookFood(o);
+					synchronized(revolvingOrders) {
+						for(Order o : revolvingOrders.orderList) {
+							if(o.state == OrderState.COOKED){
+								plateIt(o);
+							}
+							
+							else if(o.state == OrderState.NEED_TO_COOK){
+								tryToCookFood(o);
+							}
 						}
 					}
 					timerSet = false;

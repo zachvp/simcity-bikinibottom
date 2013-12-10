@@ -6,7 +6,6 @@ import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
 import restaurant.vegaperk.backend.RevolvingOrderList.Order;
 import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
-import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
 
 

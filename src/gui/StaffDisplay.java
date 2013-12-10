@@ -11,7 +11,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,6 +30,7 @@ import agent.interfaces.Person;
 import classifieds.ClassifiedsClass;
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 
 public class StaffDisplay extends JPanel implements ActionListener{
 	
@@ -42,6 +46,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	private List<StaffButton> staffList;
 	private JButton fireButton, hireButton, replaceButton;
 	private JLabel msg;
+	private ScheduleTask task = ScheduleTask.getInstance();
+	private Map<WorkRole, Person> FutureCareerMap = new HashMap<WorkRole, Person>();
+	private Person firePerson = new PersonAgent("FIREPERSON");
 	
 	public StaffDisplay() {
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, Constants.INFO_PANEL_HEIGHT);
@@ -72,6 +79,22 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		add(staffPanel);
 		add(unemployedPanel);
 		add(buttons);
+		
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				NewWorksTakePlace();
+			
+			}
+
+			
+		};
+		
+		int hour = 0;
+		int minute = 0;
+		
+		task.scheduleDailyTask(command, hour, minute);
 		
 		//test
 		/*addToStaffList("jsaljdsk", "anjdg");
@@ -190,8 +213,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
-					FirePerson(staff.role);
-					updateStaffDisplay();
+					FutureCareerMap.put(staff.role, firePerson);
+					//FirePerson(staff.role);
+					//updateStaffDisplay();
 					//TODO fire staff.getPersonName()
 				}
 			}
@@ -235,9 +259,10 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				return;
 			}
 			else if(hasUnempSelection && correctStaffSelection){
-				HirePerson(openRole, newHire);
-				updateUnemployedList();
-				updateStaffDisplay();
+				FutureCareerMap.put(openRole, newHire);
+				//HirePerson(openRole, newHire);
+				//updateUnemployedList();
+				//updateStaffDisplay();
 			}
 			return;
 		}
@@ -269,15 +294,41 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				return;
 			}
 			if(hasStaffSelection && hasUnempSelection){
-				SwitchRole(switchRole, newHire);
-				updateUnemployedList();
-				updateStaffDisplay();
+				FutureCareerMap.put(switchRole,newHire);
+				//SwitchRole(switchRole, newHire);
+				//updateUnemployedList();
+				//updateStaffDisplay();
 				//TODO fire staff.getPersonName()
 				//TODO hire b.getName();
 			}
 			
 			return;
 		}
+	}
+	
+	private void NewWorksTakePlace() {
+		
+		for (Map.Entry<WorkRole, Person> entry : FutureCareerMap.entrySet()) {
+		    WorkRole currentRole = entry.getKey();
+		    Person currentPerson = entry.getValue();
+			//Firing
+			if (currentPerson == firePerson){
+				FirePerson(currentRole);
+			}
+			//Hiring or Switch
+			else {
+				//Hiring
+				if (currentRole.getPerson() == null){
+					HirePerson(currentRole,currentPerson);
+				}
+				else{
+					SwitchRole(currentRole, currentPerson);
+				}
+			}
+		}
+		updateUnemployedList();
+		updateStaffDisplay();
+		
 	}
 	
 	public void setBuilding(Building b){

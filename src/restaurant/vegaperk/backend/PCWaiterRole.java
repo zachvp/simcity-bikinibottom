@@ -77,6 +77,10 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		return null;
 	}
 	
+	public void setRevolvingOrders(RevolvingOrderList orderList) {
+		this.revolvingOrders = orderList;
+	}
+	
 	@Override
 	protected void takeOrder(MyCustomer c) {
 		DoGoToTable(c.table);

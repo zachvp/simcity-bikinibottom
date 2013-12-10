@@ -173,6 +173,7 @@ public class CookRole extends WorkRole implements Cook {
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
+					Do("timer fired");
 					for(Order o : orders) {
 						if(o.state == OrderState.NEED_TO_COOK){
 							tryToCookFood(o);
@@ -185,6 +186,7 @@ public class CookRole extends WorkRole implements Cook {
 			};
 			timerSet = true;
 			
+			Do("Setting timer");
 			schedule.scheduleTaskWithDelay(command,
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
 			return true;

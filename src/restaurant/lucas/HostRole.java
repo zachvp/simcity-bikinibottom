@@ -284,8 +284,11 @@ public class HostRole extends WorkRole implements Host {
 			WaiterRole w = myWaiters.get(waiterChoice%myWaiters.size()).waiter;
 			waiterChoice++;
 			if(findMyWaiter(w).state == waiterState.working) {
+				if(findMyWaiter(w).waiter.isActive()){
+					return w;
+				}
 				
-				return w;
+			
 			}	
 		}
 		

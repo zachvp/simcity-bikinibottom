@@ -105,7 +105,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 				if(c.state == customerState.doneEating) {
 					getCheck(c);
 					c.state = customerState.paying;
-					return true;//TODO added return true
+					return true;
 				}
 			}
 		}

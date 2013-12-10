@@ -1,6 +1,7 @@
 package restaurant.vdea.gui;
 
 import java.awt.*;
+import java.util.concurrent.Semaphore;
 
 import agent.gui.Gui;
 import restaurant.vdea.CookRole;
@@ -12,6 +13,9 @@ public class CookGui implements Gui {
     private int xPos = -20, yPos = 50;
     private int xDestination = -20, yDestination = 50;//default start position
     private int xHome, yHome;
+    private Semaphore atTurn = new Semaphore(0, true);
+    private enum Command {noCommand ,bottom};
+	private Command command=Command.noCommand;
     
     private final int WINDOWX = 600;
     private final int WINDOWY = 490;
@@ -51,8 +55,19 @@ public class CookGui implements Gui {
     }//135
     
     public void DoGoToCookStation(){
+    	goToBottom();
+    	try {
+			atTurn.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     	xDestination = xHome;
 		yDestination = yHome;
+    }
+    private void goToBottom(){
+    	xDestination = xHome;
+		yDestination = 135;
+		command = Command.bottom;
     }
 
     public void DoLeave(){
@@ -69,6 +84,14 @@ public class CookGui implements Gui {
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
+		
+		if(xPos == xDestination && yPos == yDestination){
+			if (command == Command.bottom){
+				atTurn.release();
+			}
+			
+			command=Command.noCommand;
+		}
     }
     
     public boolean isPresent() {

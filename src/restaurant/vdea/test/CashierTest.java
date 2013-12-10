@@ -21,7 +21,6 @@ public class CashierTest extends TestCase
 	CashierRole cashier;
 	MockWaiter waiter;
 	MockCustomer customer;
-	MockCustomer badCustomer;
 	MockMarket market;
 	MockMarket market2;
 	
@@ -33,8 +32,7 @@ public class CashierTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();		
 		cashier = new CashierRole("cashier", 200);		
-		customer = new MockCustomer("mockcustomer");		
-		badCustomer = new MockCustomer("BADcustomer");
+		customer = new MockCustomer("mockcustomer");	
 		waiter = new MockWaiter("mockwaiter");
 		market = new MockMarket("mockmarket");
 		market2 = new MockMarket("mockmarket2");
@@ -377,7 +375,7 @@ public class CashierTest extends TestCase
 
 	
 	//Tests one bad customer, one normal customer, and one market scenario
-	public void testOneBadOneGoodCustomerOneMarketBillScenario(){
+	/*public void testOneBadOneGoodCustomerOneMarketBillScenario(){
 		System.out.println("TESTING: One bad customer, one good customer, and one market scenario");
 		customer.cashier = cashier;	
 		customer.waiter = waiter;
@@ -500,5 +498,5 @@ public class CashierTest extends TestCase
 		//last
 		assertFalse("Cashier's scheduler should have returned false (no actions left to do), but didn't.", 
 				cashier.pickAndExecuteAnAction());
-	}//OneBadOneGoodCustomerOneMarketBillScenario
+	}//OneBadOneGoodCustomerOneMarketBillScenario*/
 }

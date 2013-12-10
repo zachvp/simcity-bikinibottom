@@ -53,10 +53,14 @@ public class RestaurantVDeaBuilding extends Building{
 		restaurantGui.animationPanel.addGui(cashierGui);
 		
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		infoPanel.setKrabbyPattyPrice("5.99");
+		infoPanel.setKelpShakePrice("1.99");
+		infoPanel.setCoralBitsPrice("2.99");
+		infoPanel.setKelpRingsPrice("3.99");
+		infoPanel.setKrabbyPattyInventory(cook.krabbyPatty.getInventory());
+		infoPanel.setKelpShakeInventory(cook.kelpShake.getInventory());
+		infoPanel.setCoralBitsInventory(cook.coralBits.getInventory());
+		infoPanel.setKelpRingsInventory(cook.kelpRings.getInventory());
 		
 		for(int i=0; i<WAITER_STAFF_COUNT; i++){
 			WaiterRole w = new WaiterRole(null, this);
@@ -81,6 +85,13 @@ public class RestaurantVDeaBuilding extends Building{
 			}
 		};		
 		task.scheduleDailyTask(command, getClosingHour(), getClosingMinute());
+	}
+	
+	public void updateInventory(){
+		infoPanel.setKrabbyPattyInventory(cook.krabbyPatty.getInventory());
+		infoPanel.setKelpShakeInventory(cook.kelpShake.getInventory());
+		infoPanel.setCoralBitsInventory(cook.coralBits.getInventory());
+		infoPanel.setKelpRingsInventory(cook.kelpRings.getInventory());
 	}
 
 

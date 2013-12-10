@@ -31,6 +31,7 @@ import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
 import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
 import transportation.interfaces.Busstop;
@@ -258,7 +259,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantBuilding restaurant = new RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				RestaurantVegaPerkBuilding restaurant = new RestaurantVegaPerkBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				//restaurant.vdea.gui.RestaurantBuilding restaurant = new restaurant.vdea.gui.RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				restaurant.setName(buildingName);
 				construct(restaurant);

@@ -23,7 +23,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	//agent members
 	CashierRole cashier = null;
 	
-	public WaiterGui waiterGui = null;
+	public WaiterGui waiterGui;
 	public Menu menu = new Menu();
 	protected int homePosition = -1;
 	

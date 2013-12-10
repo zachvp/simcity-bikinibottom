@@ -21,6 +21,7 @@ import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -78,7 +79,6 @@ public class RestaurantPanel extends JPanel {
     	
     	this.cook = new CookRole(cookPerson, building);
     	this.cookGui = new CookGui(cook, gui);
-    	this.cook.setRevolvingOrders(revolvingOrderList);
     	
     	this.cashier = new CashierRole(cashierPerson, building);
     	this.cashierGui = new CashierGui(cashier, gui);
@@ -145,7 +145,7 @@ public class RestaurantPanel extends JPanel {
         }
         else {
         	for(int i = 0; i < WAITER_COUNT; i++) {
-        		if(i < 2) addWaiter("Waiters", "cook");
+        		if(i > 2) addWaiter("Waiters", "cook");
         		else addWaiter("Waiters", "pc");
         	}
         }
@@ -241,7 +241,11 @@ public class RestaurantPanel extends JPanel {
 	    			w = new WaiterRole(null, building);
 	    			((WaiterRole) w).setCook(cook);
 	    		}
-	    		else w = new PCWaiterRole(null, building);
+	    		else {
+	    			w = new PCWaiterRole(null, building);
+	    			((PCWaiterRole) w).setRevolvingOrders(revolvingOrderList);
+	    			this.cook.setRevolvingOrders(revolvingOrderList);
+	    		}
 	    	}
     		
     		w.setCashier(cashier);

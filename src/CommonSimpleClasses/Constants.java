@@ -30,7 +30,6 @@ package CommonSimpleClasses;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Constants of general use
@@ -145,6 +144,13 @@ public interface Constants {
 	public static final int MarketInitialMoney = 100;
 	
 	/**
+	 * The payroll of each WorkRole in the Market
+	 */
+	public static final double MarketCashierPayRoll = 120;
+	public static final double MarketItemCollectorPayRoll = 100;
+	public static final double MarketDeliveryGuyPayRoll = 70;
+	
+	/**
 	 * The initial amount of Inventory levels of all the items
 	 */
 	public static final int LamboFinnyInitialAmount  = 100;
@@ -158,14 +164,15 @@ public interface Constants {
 	/**
 	 * The PriceList of the market
 	 */
+	@SuppressWarnings("serial")
 	public static HashMap<String, Double> MarketPriceList = new HashMap<String,Double>(){
 		{
 		double Toyoda = 100;
 		double LamboFinny = 300;
-		double KrabbyPatty = 20;
-		double KelpShake = 10;
-		double CoralBits = 15;
-		double KelpRings = 5;
+		double KrabbyPatty = .75;	// $1.25
+		double KelpShake = 1.5;		// $2
+		double CoralBits = 1;		// $1.50
+		double KelpRings = 1.5;		// $2
 		put("Krabby Patty", KrabbyPatty);
 		put("Kelp Shake", KelpShake);
 		put("Coral Bits", CoralBits);
@@ -178,6 +185,7 @@ public interface Constants {
 	/**
 	 * Types of food in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> FOODS = new ArrayList<String>() {
 		{
 			add("Krabby Patty");
@@ -186,6 +194,11 @@ public interface Constants {
 			add("Kelp Rings");
 		}
 	};
+	
+	/**
+	 * Set to true to test restaurant independent from MainFrame
+	 */
+	public final boolean TEST_POPULATE_RESTAURANT = false;
 	
 	/**
 	 * Set to true to test housing independent from MainFrame
@@ -210,6 +223,7 @@ public interface Constants {
 	/**
 	 * Types of Car in the city
 	 */
+	@SuppressWarnings("serial")
 	public static final List<String> CARS = new ArrayList<String>() {
 		{
 			add("LamboFinny");
@@ -217,6 +231,7 @@ public interface Constants {
 		}
 	};
 	
+	@SuppressWarnings("serial")
 	public static final List<String> NAMES = new ArrayList<String>() {
 		{
 			add("Spongebob");

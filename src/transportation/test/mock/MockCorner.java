@@ -3,6 +3,7 @@ package transportation.test.mock;
 import java.util.List;
 
 import mock.Mock;
+import transportation.CornerAgent.CornerDirectionEnum;
 import transportation.CornerAgent.MyCorner;
 import transportation.IntersectionAction;
 import transportation.interfaces.AdjCornerRequester;
@@ -108,6 +109,18 @@ public class MockCorner extends Mock implements Corner {
 	public void msgIAmCrossing() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void msgChangeDir() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CornerDirectionEnum getCurrDir() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

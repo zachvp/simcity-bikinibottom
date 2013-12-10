@@ -138,7 +138,7 @@ public class MockCashier extends Mock implements Cashier {
 
 	@Override
 	public void msgPhoneOrder(List<Item> ShoppingList, PhonePayer pP,
-			DeliveryReceiver rP, CityLocation building) {
+			DeliveryReceiver rP, CityLocation building, int orderNum) {
 		// TODO Auto-generated method stub
 		
 	}

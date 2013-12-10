@@ -1,6 +1,7 @@
 package housing.test.mock;
 
 import mock.EventLog;
+import housing.interfaces.DwellingLayoutGui;
 import housing.interfaces.Resident;
 import housing.interfaces.ResidentGui;
 
@@ -55,5 +56,11 @@ public class MockResidentGui implements ResidentGui {
 	@Override
 	public void DoShowSpeech(String speech) {
 		log.add("Say " + speech);
+	}
+
+	@Override
+	public DwellingLayoutGui getLayoutGui() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

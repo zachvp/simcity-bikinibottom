@@ -62,4 +62,6 @@ public interface Waiter {
 
 	public abstract void msgAtHome();
 
+	public abstract void AtExit();
+
 }

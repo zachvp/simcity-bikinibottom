@@ -188,6 +188,10 @@ public class CustomerRole extends Role implements Customer {
 	@Override
 	public void HereIsYourChange(double change) {
 		print("I got my change :" + change);
+		if (change > 0)
+			person.getWallet().setCashOnHand(change);
+		else
+			person.getWallet().setCashOnHand(0);
 	}
 
 	/* (non-Javadoc)

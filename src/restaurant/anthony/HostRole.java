@@ -1,6 +1,7 @@
 package restaurant.anthony;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.anthony.CustomerRole.AgentState;
@@ -26,7 +27,9 @@ public class HostRole extends WorkRole {
 	public List<CustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<CustomerRole>());
 	public List<Table> tables;
 	
+	ScheduleTask task = ScheduleTask.getInstance();
 	private Semaphore atHome = new Semaphore (0,true);
+	private Semaphore atExit = new Semaphore (0,true);
 
 	public List<WaiterRole> Waiters = Collections.synchronizedList(new ArrayList<WaiterRole>());
 	public CookRole cook;
@@ -36,8 +39,13 @@ public class HostRole extends WorkRole {
 	public enum AgentState {
 		Idle, OffWork, NotAtWork
 	};
+	
+	public enum AgentEvent {
+		AtWork, NotAtWork
+	};
 
 	private AgentState state = AgentState.NotAtWork;
+	private AgentEvent event = AgentEvent.NotAtWork;
 	
 	public HostGui hostGui = null;
 
@@ -49,6 +57,22 @@ public class HostRole extends WorkRole {
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new Table(ix));// how you add to a collections
 		}
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				msgLeaveWork();
+			
+			}
+		};
+		
+		
+		
+		
+		int hour = 6;
+		int minute = 45;
+		
+		task.scheduleDailyTask(command, hour, minute);
 	}
 
 	public String getMaitreDName() {
@@ -70,6 +94,7 @@ public class HostRole extends WorkRole {
 	// Messages
 	public void AtWork() {
 		state = AgentState.Idle;
+		event = AgentEvent.AtWork;
 		atHome.release();
 		stateChanged();
 		
@@ -134,6 +159,17 @@ public class HostRole extends WorkRole {
 		atHome.release();
 		stateChanged();
 	}
+	
+	@Override
+	public void msgLeaveWork() {
+		event = AgentEvent.NotAtWork;
+		stateChanged();
+		
+	}
+	
+	public void AtExit(){
+		atExit.release();
+	}
 
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
@@ -179,7 +215,7 @@ public class HostRole extends WorkRole {
 						if (!table.isOccupied()) {
 							synchronized(Waiters){
 								for (int i = 0; i < Waiters.size(); i++) {
-									if (!Waiters.get(i).IsOnBreak()) {
+									if (!Waiters.get(i).IsOnBreak() && Waiters.get(i).isAtWork()) {
 										if (w.MyCustomers.size() < Waiters.get(i).MyCustomers
 												.size())
 											continue;
@@ -208,7 +244,9 @@ public class HostRole extends WorkRole {
 				}
 		}
 		
-		
+		if (event == AgentEvent.NotAtWork && waitingCustomers.size() == 0){
+			OffWork();
+		}
 
 		return false;
 		// we have tried all our rules and found
@@ -217,6 +255,28 @@ public class HostRole extends WorkRole {
 	}
 
 	// Actions
+	private void OffWork(){
+		DoMsgAllWorkersOffWork();
+		hostGui.GoToExit();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.deactivate();
+		state = AgentState.NotAtWork;
+	}
+	
+	private void DoMsgAllWorkersOffWork(){
+		for (int i=0;i<Waiters.size();i++){
+			Waiters.get(i).msgLeaveWork();
+		}
+		cashier.msgLeaveWork();
+		cook.msgLeaveWork();
+	}
+	
 	private void GoToWork(){
 		hostGui.GoToWork();
 		try {
@@ -298,11 +358,7 @@ public class HostRole extends WorkRole {
 		return false;
 	}
 
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	
 	public void setCook(CookRole co){
 		cook = co;

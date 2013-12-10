@@ -15,6 +15,7 @@ import restaurant.anthony.Food;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,7 +29,11 @@ public class CookRole extends WorkRole {
 	public enum AgentState {
 		Idle, Cooking, OffWork, NotAtWork
 	};
+	public enum AgentEvent {
+		NotAtWork, AtWork
+	}
 
+	private AgentEvent event = AgentEvent.NotAtWork;
 	private AgentState state = AgentState.NotAtWork;
 	private HostRole host;
 	Timer timer = new Timer();
@@ -47,6 +52,7 @@ public class CookRole extends WorkRole {
 	private Semaphore atHome = new Semaphore(0,true);
 	private Semaphore atStove = new Semaphore(0,true);
 	private Semaphore atPlateArea = new Semaphore(0,true);
+	private Semaphore atExit = new Semaphore (0,true);
 	
 	private CookGui cookGui;
 	
@@ -92,6 +98,7 @@ public class CookRole extends WorkRole {
 		atHome.release();
 		stateChanged();
 	}
+	
 
 	public void HeresTheOrder(Order order, Waiter w) {
 		order.process = false;
@@ -130,6 +137,17 @@ public class CookRole extends WorkRole {
 		}
 
 	}
+	
+	@Override
+	public void msgLeaveWork() {
+		event = AgentEvent.NotAtWork;
+		stateChanged();
+		
+	}
+	
+	public void atExit(){
+		atExit.release();
+	}
 
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
@@ -159,14 +177,31 @@ public class CookRole extends WorkRole {
 			}
 		}
 
-		if (!ShoppingList.isEmpty())
+		if (!((List<Food>) ShoppingList).isEmpty())
 			BuyFoods();
+		
+		if (event == AgentEvent.NotAtWork && MyOrders.size() == 0){
+			OffWork();
+		}
 
 		return false;
 	}
 
 	// Actions
+	private void OffWork(){
+		cookGui.GoToExit();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.deactivate();
+		state = AgentState.NotAtWork;
+	}
+	
 	private void GoToWork(){
+		event = AgentEvent.AtWork;
 		cookGui.GoToWork();
 		try {
 			atHome.acquire();
@@ -349,12 +384,6 @@ public class CookRole extends WorkRole {
 	public boolean isOnBreak() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void setGui(CookGui cGui) {

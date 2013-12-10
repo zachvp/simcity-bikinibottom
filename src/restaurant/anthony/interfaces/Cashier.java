@@ -20,4 +20,6 @@ public interface Cashier {
 
 	public abstract void msgAtHome();
 
+	public abstract void msgAtExit();
+
 }

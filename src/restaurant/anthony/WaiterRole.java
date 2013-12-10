@@ -34,11 +34,16 @@ public class WaiterRole extends WorkRole implements Waiter {
 	private Semaphore atCashier = new Semaphore(0, true);
 	private Semaphore atWaitingLine = new Semaphore(0,true);
 	private Semaphore atHome = new Semaphore(0,true);
+	private Semaphore atExit = new Semaphore(0,true);
 
 	public enum AgentState {
 		Idle, OffWork, TakingCustomer, AtCook, AtCashier, TakingFood, GoingToCook, TakingOrder, DeliverBadNews, GivingCheck, returning, NotAtWork
 	};
+	public enum AgentEvent {
+		NotAtWork, AtWork
+	};
 
+	private AgentEvent event = AgentEvent.NotAtWork;
 	private AgentState state = AgentState.NotAtWork;
 
 	public WaiterGui waiterGui = null;
@@ -281,6 +286,16 @@ public class WaiterRole extends WorkRole implements Waiter {
 		print("At WaitingLine now");
 		atWaitingLine.release();
 	}
+	
+	@Override
+	public void msgLeaveWork() {
+		event = AgentEvent.NotAtWork;
+		stateChanged();
+	}
+	
+	public void AtExit(){
+		atExit.release();
+	}
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
 	 */
@@ -357,6 +372,11 @@ public class WaiterRole extends WorkRole implements Waiter {
 		catch (ConcurrentModificationException e){
 			return false;
 		}
+		
+		if (event == AgentEvent.NotAtWork && MyCustomers.size() == 0){
+			OffWork();
+			return true;
+		}
 
 		return false;
 		// we have tried all our rules and found
@@ -365,7 +385,21 @@ public class WaiterRole extends WorkRole implements Waiter {
 	}
 
 	// Actions
+	private void OffWork(){
+		waiterGui.GoToExit();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		this.deactivate();
+		state = AgentState.NotAtWork;
+	}
+	
 	private void GoToWork(){
+		event = AgentEvent.AtWork;
 		waiterGui.GoToWork();
 		try {
 			atHome.acquire();
@@ -769,9 +803,5 @@ public class WaiterRole extends WorkRole implements Waiter {
 		return false;
 	}
 
-	@Override
-	public void msgLeaveWork() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }

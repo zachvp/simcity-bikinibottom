@@ -33,9 +33,12 @@ public class CashierRole extends WorkRole implements Cashier {
 	private List<Debt> DebtList = Collections.synchronizedList(new ArrayList<Debt>());
 	Map<String, Double> priceList = new HashMap<String, Double>();
 	private enum Cashierstate {Idle, OffWork, NotAtWork};
+	private enum Cashierevent {NotAtWork, AtWork};
 	private Cashierstate state = Cashierstate.NotAtWork;
+	private Cashierevent event = Cashierevent.NotAtWork;
 	
 	private Semaphore atHome = new Semaphore (0,true);
+	private Semaphore atExit = new Semaphore (0,true);
 
 	public CashierRole(Person person, CityLocation location) {
 		super(person, location);
@@ -108,6 +111,16 @@ public class CashierRole extends WorkRole implements Cashier {
 		atHome.release();
 		stateChanged();
 	}
+	
+	public void msgAtExit(){
+		atExit.release();
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		event = Cashierevent.NotAtWork;
+		stateChanged();
+	}
 
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
@@ -142,12 +155,29 @@ public class CashierRole extends WorkRole implements Cashier {
 				return true;
 			}
 		}
+		
+		if (event == Cashierevent.NotAtWork && MyCheckList.size() == 0){
+			OffWork();
+		}
 
 		return false;
 	}
 
 	// Actions
+	private void OffWork() {
+		cashierGui.GoToExit();
+		try {
+			atExit.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.deactivate();
+		state = Cashierstate.NotAtWork;
+	}
+	
 	private void GoToWork(){
+		event = Cashierevent.AtWork;
 		cashierGui.GoToWork();
 		try {
 			atHome.acquire();
@@ -285,11 +315,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 
 
-	@Override
-	public void msgLeaveWork() {
-		leaveWork = true;
-		
-	}
+	
 	
 	public void setPriceList(Map<String, Double> pList){
 		priceList = pList;

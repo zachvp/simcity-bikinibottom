@@ -82,23 +82,23 @@ public class CookGui implements Gui{
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 		
 
-//		for(Grill gr : agent.getGrills()) {
-//			g.setColor(Color.BLACK);
-//			g.fillRect(gr.x, gr.y, 20, 20);
-//			if(gr.o!=null) {
-//				g.setColor(Color.RED);
-//				g.drawString(gr.o.Choice, gr.x, gr.y);
-//			}
-//		}
-//		
-//		for(PlateArea p : agent.getPlateAreas()) {
-//			g.setColor(Color.DARK_GRAY);
-//			g.fillRect(p.x, p.y, 20, 20);
-//			if(p.o!=null) {
-//				g.setColor(Color.RED);
-//				g.drawString(p.o.Choice, p.x, p.y);
-//			}
-//		}
+		for(Grill gr : agent.getGrills()) {
+			g.setColor(Color.BLACK);
+			g.fillRect(gr.x, gr.y, 20, 20);
+			if(gr.o!=null) {
+				g.setColor(Color.RED);
+				g.drawString(gr.o.Choice, gr.x, gr.y);
+			}
+		}
+		
+		for(PlateArea p : agent.getPlateAreas()) {
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(p.x, p.y, 20, 20);
+			if(p.o!=null) {
+				g.setColor(Color.RED);
+				g.drawString(p.o.Choice, p.x, p.y);
+			}
+		}
 		g.setColor(Color.CYAN);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
 		

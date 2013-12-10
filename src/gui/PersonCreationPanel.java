@@ -459,6 +459,27 @@ ClassifiedsChangedListener{
 	public void setRecords(CitizenRecords records) {
 		citizenRecords = records;		
 	}
+	
+	public void populateCity() {
+		if (resList.size() < occList.size()) {
+			msg.setText("Not enough housing for all required workers.");
+			return;
+		}
+		if(nameTextF.getText()==null || nameTextF.getText().equals("")){
+			msg.setText("Please complete all inputs");
+			return;
+
+		}
+		
+		while(occList.size() > 1) {
+			occupationsCB.setSelectedIndex(1);
+			residencesCB.setSelectedIndex(1);
+			actionPerformed(new ActionEvent(createButton, 0, ""));
+			checkClassifiedsforJobs();
+			checkClassifiedsforHome();
+			
+		}
+	}
 
 
 }

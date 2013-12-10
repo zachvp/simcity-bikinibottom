@@ -45,7 +45,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	public CashierRole(Person person, CityLocation location) {
 		super(person, location);
 
-		this.money = 200;
+		this.money = 500;
 
 	}
 
@@ -312,7 +312,14 @@ public class CashierRole extends WorkRole implements Cashier {
 
 		return false;
 	}
-
+	
+	public double getRestaurantMoney() {
+		return money;
+	}
+	
+	public void setRestaurantMoney(double amount) {
+		this.money = amount;
+	}
 
 	
 	

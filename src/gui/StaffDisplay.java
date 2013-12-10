@@ -199,6 +199,8 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
+					FirePerson(staff.role);
+					updateStaffDisplay();
 					//TODO fire staff.getPersonName()
 				}
 			}
@@ -402,5 +404,15 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			
 		}
 		
+		
+		
+	}
+	
+	public void FirePerson(WorkRole r){
+		//GUI to move the person offscreen (Exit)
+		
+		Person currentFiringPerson = r.getPerson();
+		currentFiringPerson.removeRole(r);
+		r.setPerson(null);
 	}
 }

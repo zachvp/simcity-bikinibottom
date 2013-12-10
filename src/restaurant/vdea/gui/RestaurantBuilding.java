@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import restaurant.vdea.*;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
@@ -27,6 +28,7 @@ public class RestaurantBuilding extends Building{
 	RestaurantGui restaurantGui = new RestaurantGui();
 	private XYPos entrancePos;
 	StaffDisplay staff;
+	ScheduleTask task = ScheduleTask.getInstance();
 	
 	public RestaurantBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -64,6 +66,34 @@ public class RestaurantBuilding extends Building{
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				msgAllLeaveWork();
+			}
+		};		
+		task.scheduleDailyTask(command, getClosingHour(), getClosingMinute());
+	}
+
+
+	private void msgAllLeaveWork() {
+		host.msgLeaveWork();
+		payEmployee(host.getPerson());
+		cashier.msgLeaveWork();
+		payEmployee(cashier.getPerson());
+		cook.msgLeaveWork();
+		payEmployee(cook.getPerson());
+		for (WaiterRole w: waiters){
+			w.msgLeaveWork();
+			payEmployee(w.getPerson());
+		}
+		
+	}
+	private void payEmployee(Person emp){
+		double empCash = emp.getWallet().getCashOnHand();
+		empCash += 200;
+		emp.getWallet().setCashOnHand(empCash);
 	}
 
 	@Override

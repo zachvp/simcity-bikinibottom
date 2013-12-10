@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.ScheduleTask;
 import agent.WorkRole;
 import agent.interfaces.Person;
-import restaurant.vdea.gui.HostGui;
+import restaurant.vdea.gui.*;
 import restaurant.vdea.interfaces.*;
 
 public class HostRole extends WorkRole implements Host{
@@ -28,7 +29,7 @@ public class HostRole extends WorkRole implements Host{
 	public enum AgentState
 	{none, tablesFull, assigningCustomer, leave, leaveLine}
 	private AgentState state = AgentState.none;
-
+	
 
 	public HostRole(Person person, CityBuilding building) {
 		super(person, building);
@@ -279,8 +280,8 @@ public class HostRole extends WorkRole implements Host{
 
 	@Override
 	public void msgLeaveWork() {
-		offWork = true;
-
+		offWork = true;	
+		
 	}
 
 	public class Table {

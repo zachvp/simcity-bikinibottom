@@ -208,6 +208,18 @@ public class WaiterRole extends WorkRole implements Waiter{
 	public void atDest(){
 		atDest.release();
 	}
+	
+
+	@Override
+	public boolean isAtWork() {
+		return isActive() && isNotOnBreak();
+	}
+
+	@Override
+	public void msgLeaveWork() {
+		offWork = true;
+		
+	}
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
@@ -445,14 +457,4 @@ public class WaiterRole extends WorkRole implements Waiter{
 		}
 	}
 
-	@Override
-	public boolean isAtWork() {
-		return isActive() && isNotOnBreak();
-	}
-
-	@Override
-	public void msgLeaveWork() {
-		offWork = true;
-		
-	}
 }

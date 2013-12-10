@@ -154,7 +154,13 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		//stateChanged();
 	}
 	
-	public abstract void msgOrderIsReady(Customer c, String choice, int table, Dimension plateDim);
+	public void msgOrderIsReady(Customer c, String choice, int table, Dimension plateDim) {
+		MyCustomer mc = findCustomer(c);
+		mc.state = customerState.orderIsReady; 
+		plateAreaLocs.add(plateDim);
+//		plateAreas.add(p);//TODO
+		stateChanged();
+	}
 	
 	public void msgSitAtTable(Customer c, int table){
 		myCustomers.add(new MyCustomer(c, table, customerState.waiting)); //start c in waiting

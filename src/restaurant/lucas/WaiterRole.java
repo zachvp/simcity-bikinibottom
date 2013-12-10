@@ -43,13 +43,13 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		stateChanged();
 	}
 	
-	public void msgOrderIsReady(Customer c, String choice, int table, Dimension plateDim) {
-		MyCustomer mc = findCustomer(c);
-		mc.state = customerState.orderIsReady; 
-		plateAreaLocs.add(plateDim);
-//		plateAreas.add(p);//TODO
-		stateChanged();
-	}
+//	public void msgOrderIsReady(Customer c, String choice, int table, Dimension plateDim) {
+//		MyCustomer mc = findCustomer(c);
+//		mc.state = customerState.orderIsReady; 
+//		plateAreaLocs.add(plateDim);
+////		plateAreas.add(p);//TODO
+//		stateChanged();
+//	}
 	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.

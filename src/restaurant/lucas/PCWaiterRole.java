@@ -3,6 +3,8 @@ package restaurant.lucas;
 import java.awt.Dimension;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
 import restaurant.lucas.WaiterRoleBase.MyCustomer;
 import restaurant.lucas.WaiterRoleBase.customerState;
@@ -13,16 +15,18 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 
 	OrderWheel orderWheel;
 	
+	boolean timeToCheckOrderWheel= false;
+	private ScheduleTask schedule = ScheduleTask.getInstance();
+	int CHECK_ORDER_WHEEL_TIME;
+	
 	public PCWaiterRole(Person p, CityLocation c) {
 		super(p, c);
 		// TODO Auto-generated constructor stub
 	}
 
 	//MESSAGES
-	@Override
-	public void msgOrderIsReady(Customer c, String choice, int table,
-			Dimension plateDim) {
-		// TODO Auto-generated method stub
+
+	private void checkOrderWheel() {
 		
 	}
 	
@@ -97,6 +101,19 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		if(endWorkDay) {
 			endWorkDay();
 			return true;
+		}
+		
+		if(timeToCheckOrderWheel) {
+			timeToCheckOrderWheel = false;
+			Runnable command = new Runnable() {
+				@Override
+				public void run() {
+					checkOrderWheel();
+				}
+			};
+			schedule.scheduleTaskWithDelay(command, CHECK_ORDER_WHEEL_TIME * Constants.MINUTE);
+			return true;
+			//does not return true to call sched again
 		}
 		
 		return false;

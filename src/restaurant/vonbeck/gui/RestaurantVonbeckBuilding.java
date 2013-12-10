@@ -29,7 +29,10 @@ public class RestaurantVonbeckBuilding extends Building {
 	private CashierRole cashier;
 	private CookRole cook;
 	private RestaurantPanel restPanel;
+	
+	// TODO Return legitimate panels
 	private JPanel infoPanel = new JPanel();
+	private JPanel staffPanel = new JPanel();
 
 	public RestaurantVonbeckBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -103,5 +106,10 @@ public class RestaurantVonbeckBuilding extends Building {
 	public JPanel getInfoPanel() {
 		
 		return infoPanel;
+	}
+
+	@Override
+	public JPanel getStaffPanel() {
+		return staffPanel;
 	}
 }

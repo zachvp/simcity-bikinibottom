@@ -22,8 +22,8 @@ public class TableGui implements Gui{
     	    g.fillRect(tableMap.get(i).width, tableMap.get(i).height, TABLE_WIDTH, TABLE_HEIGHT);
     	}
     	
-    	g.drawString("Cashier", 150, 300);
-    	g.drawString("Refrigerator", 380, 240);
+    	g.drawString("Cashier", 250, 20);
+    	g.drawString("Refrigerator", 480, 240);
 	}
 
 	@Override

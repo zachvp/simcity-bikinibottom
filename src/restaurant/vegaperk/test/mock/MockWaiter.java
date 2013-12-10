@@ -63,18 +63,6 @@ public class MockWaiter extends Mock implements Waiter {
 	}
 
 	@Override
-	public void msgOutOfChoice(String choice, int table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgOrderDone(String choice, int table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgPleaseSeatCustomer(Customer customer, int tableID) {
 		// TODO Auto-generated method stub
 		

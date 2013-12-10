@@ -317,7 +317,8 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
 		
-		if (loc instanceof Building && !((Building) loc).isOpen()) {
+		if (loc instanceof Building && !(loc instanceof ResidentialBuilding)
+				&& !forWork && !((Building) loc).isOpen()) {
 			// Only enter a building if it's open.
 			return;
 		}

@@ -224,7 +224,7 @@ public class HostRole extends WorkRole {
 		}
 		MyWaiter leastBusy = null;
 		for (MyWaiter w : waiters) {
-			if (w.state == WState.NORMAL // && w.w.isAvailable()
+			if (w.state == WState.NORMAL  && w.w.isActive()
 					&& (leastBusy == null || w.w.getHowBusy() < leastBusy.w.getHowBusy())) {
 				leastBusy = w;
 			}

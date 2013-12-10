@@ -33,7 +33,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private RevolvingOrderList revolvingOrders;
 	private boolean timerSet = false;
-	private final int CHECK_REVOLVING_LIST_TIME = 10;
+	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Grill> grills = Collections.synchronizedList(new ArrayList<Grill>());
@@ -99,15 +99,13 @@ public class CookRole extends WorkRole implements Cook {
 	
 	/** From Waiter */
 	public void msgHereIsOrder(Waiter w, String c, int t){
-		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.PENDING));
+		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.NEED_TO_COOK));
 		stateChanged();
 	}
 	public void msgGotFood(int table){
 		for(Order o : orders){
 			if(o.table == table){
-				DoRemovePlateFood(table);
-				PlateZone pz = plateZones.get(table);
-				pz = null;
+				removeOrder(o);
 			}
 		}
 		stateChanged();
@@ -153,6 +151,12 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 		
+		for(Order o : revolvingOrders.orderList) {
+			if(o.state == OrderState.PICKED_UP) {
+				removeOrder(o);
+			}
+		}
+		
 		if(!groceries.isEmpty()){
 			orderFoodThatIsLow(groceries);
 		}
@@ -163,9 +167,7 @@ public class CookRole extends WorkRole implements Cook {
 					plateIt(o);
 					return true;
 				}
-			}
-			for(Order o : orders){
-				if(o.state==OrderState.PENDING){
+				else if(o.state==OrderState.NEED_TO_COOK){
 					tryToCookFood(o);
 					return true;
 				}
@@ -175,11 +177,21 @@ public class CookRole extends WorkRole implements Cook {
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
-					for(Order o : orders) {
-						if(o.state == OrderState.NEED_TO_COOK){
+					for(Order o : revolvingOrders.orderList) {
+						Do("Order state " + o.state);
+						
+						if(o.state == OrderState.COOKED){
+							Do("Cooking from revolving orders.");
+							plateIt(o);
+						}
+						
+						else if(o.state == OrderState.NEED_TO_COOK){
+							Do("Cooking from revolving orders.");
 							tryToCookFood(o);
 						}
 					}
+					timerSet = false;
+					stateChanged();
 				}
 			};
 			timerSet = true;
@@ -188,11 +200,17 @@ public class CookRole extends WorkRole implements Cook {
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
 			return true;
 		}
-		
+
 		return false;
 	}
 	
 	/** Actions */
+	private void removeOrder(Order o) {
+		DoRemovePlateFood(o.table);
+		PlateZone pz = plateZones.get(o.table);
+		pz = null;
+	}
+	
 	private void tryToCookFood(Order o){
 		o.state = OrderState.COOKING;
 		Food f = inventory.get(o.choice);
@@ -225,35 +243,33 @@ public class CookRole extends WorkRole implements Cook {
 		DoToggleHolding(null);
 		DoGoHome();
 		waitForInput();
-//		must iterate through by integer instead of pointers because of the timer below
-		for(int i = 0; i < orders.size(); i++){
-			if(orders.get(i) == o){
-				timeFood(i);
-			}
-		}
+		
+		timeFood(o);
 	}
 
 	/**
 	 * Delay the food cook time
 	 * @param i circumvents timer restrictions
 	 */
-	private void timeFood(final int i){
+	private void timeFood(final Order o){
+		Do("timing food");
 		Runnable command = new Runnable() {
 			public void run(){
-				Do(orders.get(i).choice + " done.");
-				orders.get(i).state = OrderState.COOKED;
+				Do(o.choice + " done.");
+				o.state = OrderState.COOKED;
 				stateChanged();
 			}
 		};
 		
 		// resident role will deactivate after the delay below
 		schedule.scheduleTaskWithDelay(command,
-				cookTimes.get(orders.get(i).choice) * Constants.MINUTE);
+				cookTimes.get(o.choice) * Constants.MINUTE);
 	}
 	
 	private void plateIt(Order o){
-		o.state = OrderState.FINISHED;
 		Do("Order Plated");
+		
+		o.state = OrderState.FINISHED;
 		
 		if(o.waiter instanceof WaiterRole)
 			((WaiterRole)o.waiter).msgOrderDone(o.choice, o.table);
@@ -321,23 +337,7 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui = gui;
 	}
 	
-	/** Classes */
-//	private class Order{
-//		Waiter waiter;
-//		OrderState state;
-//		String choice;
-//		int table;
-//		
-//		public Order(String c, int t, Waiter w, OrderState s){
-//			choice = c;
-//			table = t;
-//			waiter = w;
-//			state = s;
-//		}
-//	}
-	
-	
-	private class Food{
+	private class Food {
 		String type;
 		int amount, cookTime, low, capacity;
 		OrderState os;

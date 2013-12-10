@@ -1,5 +1,6 @@
 package agent.interfaces;
 
+import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import market.Item;
@@ -215,5 +216,7 @@ public interface Person {
 	/** Return the singular shopping list so it can be accessed by
 	 * all roles. */
 	Map<String, Integer> getShoppingList();
+
+	public BufferedImage getImage();
 	
 }

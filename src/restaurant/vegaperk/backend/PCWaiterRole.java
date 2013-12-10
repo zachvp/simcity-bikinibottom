@@ -4,6 +4,7 @@ import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
+import restaurant.vegaperk.backend.RevolvingOrderList.Order;
 import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -28,7 +29,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	public PCWaiterRole(Person person, CityBuilding building) {
 		super(person, building);
 	}
-
+	
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		super.pickAndExecuteAnAction();
@@ -36,9 +37,18 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
-					checkRevolvingOrderList();
+					synchronized(revolvingOrders) {
+						for(Order o : revolvingOrders.orderList) {
+							if(findCustomerOrder(o) != null && o.state == OrderState.FINISHED) {
+								checkRevolvingOrderList(o);
+							}
+						}
+					}
+					stateChanged();
+					timerSet = false;
 				}
 			};
+			
 			timerSet = true;
 			
 			schedule.scheduleTaskWithDelay(command,
@@ -49,9 +59,36 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		return false;
 	}
 	
-	private void checkRevolvingOrderList() {
+	private void checkRevolvingOrderList(Order o) {
 		DoGoToCook();
 		waitForInput();
+		
+		MyCustomer mc = findCustomerOrder(o);
+		if(mc == null){
+			DoGoWait();
+			return;
+		}
+		
+		if(o.state == OrderState.OUT_OF_CHOICE) {
+			this.tellCustomerOutOfFood(mc);
+			return;
+		}
+		
+		o.state = OrderState.PICKED_UP;
+		getFood(mc);
+	}
+	
+	private MyCustomer findCustomerOrder(Order o) {
+		for(MyCustomer mc : customers) {
+			if(mc.table == o.table) {
+				return mc;
+			}
+		}
+		return null;
+	}
+	
+	public void setRevolvingOrders(RevolvingOrderList orderList) {
+		this.revolvingOrders = orderList;
 	}
 	
 	@Override
@@ -80,8 +117,19 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 
 	@Override
 	protected void getFood(MyCustomer c) {
-		// TODO Auto-generated method stub
+		if(c.state == MyCustomerState.LEAVING){
+			return;
+		}
 		
+		waiterGui.setOrderName(c.choice);
+		waiterGui.toggleHoldingOrder();
+		
+		Do("Going to table");
+		DoGoToTable(c.table);
+		waitForInput();
+		
+		c.c.msgHereIsYourFood();
+		waiterGui.toggleHoldingOrder();
 	}
 	
 }

@@ -15,16 +15,13 @@ public class HostGui implements Gui {
     RestaurantGui gui;
     private int xHome, yHome;
     
-    public int xTable = 150;
-    public int yTable = 150;
-    public int tableNumber = 1;
     
 
     public HostGui(HostRole Role) {
         this.role = Role;
          
-        xHome = 130;
-        yHome = 15;
+        yHome = 150;
+        xHome = 15;
     }
     
     
@@ -54,29 +51,6 @@ public class HostGui implements Gui {
     public void DoGoToLobby(){
     	xDestination = xHome;
     	yDestination = yHome;
-    }
-
-    public void DoBringToTable(CustomerRole customer, int tblNum) {
-    	//Role.setBusy(true);
-    	tableNumber = tblNum;
-    	if (tableNumber == 1){
-    		xTable = 150;
-    	    yTable = 150;
-    	}
-    	if (tableNumber == 2)
-    	{
-    		xTable = 250;
-    		yTable = 150;
-    	}
-    	if (tableNumber ==3){
-    		xTable = 150;
-    		yTable = 250;
-    	}
-    	
-        System.out.println("Going to TABLE " + tableNumber+ " at " + xTable + ", "+ yTable);
-        
-        xDestination = xTable + 20;
-        yDestination = yTable - 20;
     }
 
     public void DoLeave() {

@@ -156,14 +156,14 @@ public class CustomerGui implements Gui{
 	}
 	
 	public void DoGoToWaitingArea(int n){
-		yDestination = 50 + (21*n);
+		yDestination = 120 - (21*n);
 		xDestination = 15;
 		//xPos = xDestination;
 		//yPos = yDestination;
 	}
 	
 	public void updateWait(int n){
-		yDestination = 50 + (21*n);
+		yDestination = 120 - (21*n);
 		xDestination = 15;
 	}
 	

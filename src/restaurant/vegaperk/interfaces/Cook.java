@@ -2,6 +2,7 @@ package restaurant.vegaperk.interfaces;
 
 import java.util.Map;
 
+import market.interfaces.DeliveryReceiver;
 import restaurant.vegaperk.backend.MarketAgent;
 import restaurant.vegaperk.gui.CookGui;
 
@@ -11,12 +12,11 @@ import restaurant.vegaperk.gui.CookGui;
  * @author Monroe Ekilah
  *
  */
-public interface Cook {
+public interface Cook extends DeliveryReceiver {
 	/** From WaiterAgent */
 	public void msgHereIsOrder(Waiter w, String c, int t);
 	
 	/** From Market(s) */
-	public void msgCannotDeliver(Map<String, Integer> cannotDeliver);
 	public void msgHereIsDelivery();
 
 	public void msgCanDeliver(Map<String, Integer> canDeliver);

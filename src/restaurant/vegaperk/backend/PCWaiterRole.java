@@ -6,7 +6,6 @@ import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
 import restaurant.vegaperk.backend.RevolvingOrderList.Order;
 import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
-import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
 
 
@@ -35,6 +34,7 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		super.pickAndExecuteAnAction();
 		
 		if(!timerSet) {
+			timerSet = true;
 			Runnable command = new Runnable() {
 				public void run(){
 					synchronized(revolvingOrders) {
@@ -48,8 +48,6 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 					timerSet = false;
 				}
 			};
-			
-			timerSet = true;
 			
 			schedule.scheduleTaskWithDelay(command,
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);

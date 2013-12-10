@@ -144,8 +144,10 @@ public class CustomerRole extends Role implements Customer {
 	
 	public void msgOutOfChoice(String c){
 		menu.m.remove(c);
+		if(menu.m.isEmpty()) this.leaveTable();
+		
 		event = CustomerEvent.OUT_OF_FOOD;
-		Do("can't get "+c);
+		Do("can't get " + c);
 		stateChanged();
 	}
 	

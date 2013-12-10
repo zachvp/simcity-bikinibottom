@@ -1,8 +1,10 @@
 package restaurant.vegaperk.test.mock;
 
 
+import java.util.List;
 import java.util.Map;
 
+import market.Item;
 import mock.EventLog;
 import mock.Mock;
 import restaurant.vegaperk.backend.MarketAgent;
@@ -35,12 +37,6 @@ public class MockCook extends Mock implements Cook {
 	}
 
 	@Override
-	public void msgCannotDeliver(Map<String, Integer> cannotDeliver) {
-		log.add("Received message connot deliever");
-	}
-
-
-	@Override
 	public void msgCanDeliver(Map<String, Integer> canDeliver) {
 		log.add("Received message can deliever");
 	}
@@ -70,5 +66,17 @@ public class MockCook extends Mock implements Cook {
 	public void addMarket(MarketAgent m1) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		log.add("Received items");
+	}
+
+
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+		log.add("Received list of missing items");
 	}
 }

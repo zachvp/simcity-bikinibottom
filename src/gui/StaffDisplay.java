@@ -246,9 +246,12 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		if (e.getSource() == replaceButton){
 			boolean hasStaffSelection = false;
 			boolean hasUnempSelection = false;
+			WorkRole switchRole = null;
+			Person newHire = null;
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
+					switchRole = staff.getWorkRole();
 				}
 			}
 			if(!hasStaffSelection){
@@ -258,6 +261,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			for (UnemployedButton b: unemployedList){
 				if(b.selected){
 					hasUnempSelection = true;
+					newHire = b.getPerson();
 				}
 			}
 			if(!hasUnempSelection){
@@ -265,6 +269,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				return;
 			}
 			if(hasStaffSelection && hasUnempSelection){
+				SwitchRole(switchRole, newHire);
+				updateUnemployedList();
+				updateStaffDisplay();
 				//TODO fire staff.getPersonName()
 				//TODO hire b.getName();
 			}
@@ -293,6 +300,20 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		r.setPerson(prospectivePerson);
 		prospectivePerson.addRole(r);
 		
+	}
+	
+	public void SwitchRole(WorkRole r, Person prospectivePerson){
+		
+		Person currentFiringPerson = r.getPerson();
+		
+		//Remove the role in the firing person's list of role
+		currentFiringPerson.removeRole(r);
+		
+		//Add the role in the hiring person's list of role
+		prospectivePerson.addRole(r);
+		
+		//set the role's person to be the prospectivePerson (new hiring person)
+		r.setPerson(prospectivePerson);
 	}
 	
 	class StaffButton extends JPanel implements MouseListener{

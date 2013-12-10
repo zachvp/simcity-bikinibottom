@@ -22,7 +22,6 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		cook = c;
 	}
 	
-	
 	public boolean pickAndExecuteAnAction() {
 		try{
 			for (MyCustomer c : customers) {
@@ -93,8 +92,6 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		goWait();
 		return false;
 	}
-	
-	
 	
 	private void takeOrder(MyCustomer c){
 		DoGoToTable(c.table);

@@ -172,7 +172,7 @@ public class CookRole extends WorkRole implements Cook {
 		Food f = inventory.get(o.choice);
 		if(f.amount <= 0){
 			Do("Out of food");
-			o.waiter.msgOutOfChoice(o.choice, o.table);
+			((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
 			orders.remove(o);
 			return;
 		}
@@ -222,7 +222,7 @@ public class CookRole extends WorkRole implements Cook {
 	private void plateIt(Order o){
 		o.state = OrderState.FINISHED;
 		Do("Order Plated");
-		o.waiter.msgOrderDone(o.choice, o.table);
+		((WaiterRole)o.waiter).msgOrderDone(o.choice, o.table);
 		Do("Order done " + o.choice);
 		plateZones.get(o.table).setOrder(o);
 		

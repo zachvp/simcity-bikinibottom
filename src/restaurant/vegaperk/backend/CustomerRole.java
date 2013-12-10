@@ -1,6 +1,6 @@
 package restaurant.vegaperk.backend;
 
-import restaurant.vegaperk.backend.WaiterRole.Menu;
+import restaurant.vegaperk.backend.WaiterRoleBase.Menu;
 import restaurant.vegaperk.gui.CustomerGui;
 import restaurant.vegaperk.gui.CustomerGui.OrderState;
 import restaurant.vegaperk.interfaces.Cashier;

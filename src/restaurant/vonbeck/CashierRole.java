@@ -1,5 +1,8 @@
 package restaurant.vonbeck;
 
+import gui.trace.AlertTag;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +12,7 @@ import java.util.Map;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import bank.test.mock.EventLog;
+import restaurant.strottma.CashierRole.MyBill;
 import restaurant.vonbeck.gui.CashierGui;
 import restaurant.vonbeck.gui.RestaurantGui;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
@@ -17,6 +21,7 @@ import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 import restaurant.vonbeck.test.mock.LoggedEvent;
+import CommonSimpleClasses.Constants;
 import agent.Agent;
 import agent.Role;
 import agent.WorkRole;
@@ -30,6 +35,8 @@ public class CashierRole extends WorkRole implements Cashier {
 	private double wallet = 0;
 	Object walletSyncObject = new Object();
 	EventLog log = new EventLog();
+	DecimalFormat df = new DecimalFormat("#.##");
+
 	
 	private class MyMarketOrder {
 		Market market;
@@ -41,16 +48,32 @@ public class CashierRole extends WorkRole implements Cashier {
 		}
 	}
 	
+	public class MyBill {
+		private double amount;
+		private market.interfaces.Cashier cashier;
+		
+		public MyBill(double amount, market.interfaces.Cashier cashier) {
+			this.amount = amount;
+			this.cashier = cashier;
+		}
+		
+		public double getAmount() { return amount; }
+		public void setAmount(double amount) { this.amount = amount; }
+		
+		public market.interfaces.Cashier getCashier() { return cashier; }
+	}
+	
 	private List<MyMarketOrder> marketOrders = new ArrayList<MyMarketOrder>();
 	private CashierGui cashierGui;
+	private List<MyBill> bills = Collections.synchronizedList(new ArrayList<MyBill>()); // money owed to markets
 	
 	public CashierRole(RestaurantGui gui, RestaurantVonbeckBuilding building) {
 		super(building);
 		
-		priceList.put("Steak", 15.99);
-		priceList.put("Chicken", 10.99);
-		priceList.put("Salad", 5.99);
-		priceList.put("Pizza", 8.99);
+		priceList.put(Constants.FOODS.get(0), 15.99);
+		priceList.put(Constants.FOODS.get(1), 10.99);
+		priceList.put(Constants.FOODS.get(2), 5.99);
+		priceList.put(Constants.FOODS.get(3), 8.99);
 		
 		wallet = 50.00+(int)(Math.random()*50.00);
 		
@@ -109,6 +132,16 @@ public class CashierRole extends WorkRole implements Cashier {
 	//Scheduler
 	@Override
 	public boolean pickAndExecuteAnAction() {
+
+		if (wallet != 0) {
+			synchronized (bills) {
+				for (MyBill bill : bills) {
+					payBill(bill);
+					return true;
+				}
+			}
+		}
+		
 		synchronized (marketOrders) {
 			if (!marketOrders.isEmpty()) {
 				payMarket(marketOrders.get(0));
@@ -127,6 +160,24 @@ public class CashierRole extends WorkRole implements Cashier {
 		return false;
 	}
 	
+	private void payBill(MyBill bill) {
+		if (wallet >= bill.amount) {
+			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
+					" to " + bill.cashier.getName());
+			bill.cashier.msgHereIsPayment(bill.amount, this);
+			wallet -= bill.amount;
+			bills.remove(bill);
+			
+		} else {
+			// extra credit
+			Do(AlertTag.RESTAURANT, "Cannot pay the market in full. "
+					+ "Paying as much as I can...");
+			bill.cashier.msgHereIsPayment(wallet, this);
+			wallet = 0.00;
+			bill.amount -= wallet;
+		}		
+	}
+
 	private void payMarket(MyMarketOrder o) {
 		Do("Paying " + o.price + " to market.");
 		synchronized (walletSyncObject) {
@@ -199,6 +250,14 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void msgGoHome() {
 		cashierGui.DoLeaveWork();
 		deactivate();
+	}
+
+	@Override
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		Do(AlertTag.RESTAURANT, "Received a bill from " + cashier);
+		bills.add(new MyBill(total, cashier));
+		stateChanged();
 	}
 
 

@@ -1,11 +1,21 @@
 package restaurant.vonbeck;
 
+import gui.trace.AlertTag;
+
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import kelp.Kelp;
+import kelp.KelpClass;
+import market.Item;
+import market.gui.MarketBuilding;
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.vonbeck.gui.CookGui;
 import restaurant.vonbeck.gui.FoodGui;
 import restaurant.vonbeck.gui.RestaurantGui;
@@ -13,26 +23,41 @@ import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
+import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.Role;
 import agent.WorkRole;
 
 
-public class CookRole extends WorkRole {
+public class CookRole extends WorkRole implements DeliveryReceiver {
 	private static final long COOK_DELAY_MS = 5000;
 	private List<Order> orders 
 		= Collections.synchronizedList(new ArrayList<Order>());
-	private Map<String, Integer> inventory 
-		= Collections.synchronizedMap(new HashMap<String, Integer>());
+	private Map<String, FoodData> inventory 
+		= Collections.synchronizedMap(new HashMap<String, FoodData>());
 	private static final int INITIAL_STOCK = 5;
 	private static final int STOCK_THRESHOLD = 5;
 	private static final int STOCK_MAINTAIN = 10;
-	private List<MarketAgent> markets 
-		= Collections.synchronizedList(new ArrayList<MarketAgent>());
 	private List<CookAction> actionQueue
 		= Collections.synchronizedList(new ArrayList<CookAction>());	
 	private FoodGui foodGui;
 	private CookGui cookGui;
+	List<MarketBuilding> markets = null;
+	private List<MarketOrder> orderList = 
+			Collections.synchronizedList(new ArrayList<MarketOrder>());
+	private Cashier cashier;
+	
+	class MarketOrder {
+		int marketNum;
+		List<Item> itemsToBuy;
+		
+		public MarketOrder(int marketNum, List<Item> itemsToBuy) {
+			this.marketNum = marketNum;
+			this.itemsToBuy = itemsToBuy;
+		}
+	}
 	
 	private abstract class CookAction {
 		Market market;
@@ -43,30 +68,39 @@ public class CookRole extends WorkRole {
 		public abstract void run();
 	}
 	
+	class FoodData {
+		String name;
+		int actualQty;
+		int capacity;
+		int lowThreshold;
+		int futureQty;
+		
+		public FoodData(String name, int actualQty, int capacity,
+				int lowThreshold, int futureQty) {
+			this.name = name;
+			this.actualQty = actualQty;
+			this.capacity = capacity;
+			this.lowThreshold = lowThreshold;
+			this.futureQty = futureQty;
+		}
+		
+		void decrementQty(){
+			actualQty -= 1;
+			futureQty -= 1;
+		}
+	}
+	
 	@SuppressWarnings("unused")
 	public CookRole(Cashier cashier, RestaurantGui gui, 
 			RestaurantVonbeckBuilding building) {
 		super(building);
 		
-		for (int i = 0; i < 3; i++)
-			markets.add(new MarketAgent(this, cashier));
-		
-		inventory.put("Steak", INITIAL_STOCK);
-		inventory.put("Chicken", INITIAL_STOCK);
-		inventory.put("Salad", INITIAL_STOCK);
-		inventory.put("Pizza", INITIAL_STOCK);
-		
-		
-		
-		for(String food : inventory.keySet()) {
-			if (INITIAL_STOCK < STOCK_THRESHOLD) {
-				int numLeftToOrder = STOCK_MAINTAIN - INITIAL_STOCK;
-				
-				Do("Ordering " + numLeftToOrder + " " + 
-						food + " to market " + 0 +"!");
-				markets.get(0).msgOrder(food, numLeftToOrder);
-			}
+		for (String foodName : Constants.FOODS) {
+			inventory.put(foodName, new FoodData
+					(foodName, INITIAL_STOCK, STOCK_MAINTAIN, 
+							STOCK_THRESHOLD, INITIAL_STOCK));
 		}
+		 this.cashier = cashier;
 		
 		foodGui = new FoodGui(gui);
 		
@@ -88,111 +122,56 @@ public class CookRole extends WorkRole {
 		stateChanged();
 	}
 
-	public void msgOutOfThis(Market market, Order o) {
-		CookAction action = new CookAction() {
-			public void run () {
-				int nextMarket = 0;
-
-				synchronized (markets) {
-					for (int i = 0; i < markets.size(); i++) {
-						if (markets.get(i) == market) {
-							nextMarket = i + 1;
-							break;
-						}
-					}
-				}
-				Do("Received " + 0 + " " + o.food + 
-						" from market " + (nextMarket - 1));
-
-				synchronized (markets) {
-					if (nextMarket < markets.size()) {
-						Do("Ordering " + 1 + " " + o.food + " to market "
-								+ nextMarket + "!");
-						markets.get(nextMarket).msgOrder(o);
-					} else {
-						o.waiter.msgOutOfThis(o);
-					}
-				}
-			}
-		};
-		action.o = o;
-		action.market = market;
-		actionQueue.add(action);
+	@Override
+	public void msgHereIsYourItems(List<Item> DeliverList) {
+		synchronized (inventory){ for (Item item : DeliverList) {
+			FoodData currFood = inventory.get(item.name);
+			currFood.actualQty += item.amount;
+		}}
+		
 		stateChanged();
 	}
 
-	public void msgOrderReady(Market market, Order o) {
-		CookAction action = new CookAction() {
-			public void run () {
-
-				int nextMarket = 0;
-
-				synchronized (markets) {
-					for (int i = 0; i < markets.size(); i++) {
-						if (markets.get(i) == market) {
-							nextMarket = i + 1;
-							break;
-						}
-					}
-				}
-				Do("Received " + 1 + " " + o.food + " from market "
-						+ (nextMarket - 1));
-				synchronized (inventory) {
-					inventory.put(o.food, inventory.get(o.food) + 1);
-				}
-				msgCook(o);
-
-			}
-		};
-		action.o = o;
-		action.market = market;
-		actionQueue.add(action);
-		stateChanged();
-	}
-
-	public void msgOrderReady(Market market, String food, int num) {
-		CookAction action = new CookAction() {
-			public void run () {
-				synchronized (inventory) {
-					inventory.put(food, inventory.get(food) + num);
-				}
-				int nextMarket = 0;
-
-				synchronized (markets) {
-					for (int i = 0; i < markets.size(); i++) {
-						if (markets.get(i) == market) {
-							nextMarket = i + 1;
-							break;
-						}
-					}
-				}
-				Do("Received " + num + " " + 
-						food + " from market " + (nextMarket - 1));
-
-				int numLeftToOrder = STOCK_MAINTAIN - inventory.get(food);
-
-				synchronized (markets) {
-					if (numLeftToOrder > 0) {
-						if (nextMarket < markets.size()) {
-							Do("Ordering " + numLeftToOrder + " " + food
-									+ " to market " + nextMarket + "!");
-							markets.get(nextMarket).msgOrder(food,
-									numLeftToOrder);
-						}
-					}
+	@Override
+	public void msgHereIsMissingItems(List<Item> MissingItemList, 
+			int orderNum) {
+		if (!MissingItemList.isEmpty()) {
+			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
+			if (orderNum < markets.size()) {
+				orderList.add(new MarketOrder(orderNum+1, MissingItemList));
+			} else {
+				Do(AlertTag.RESTAURANT, "No market can complete this order.");
+				for (Item item : MissingItemList) {
+					// TODO Ordering loop! busy wait and death
+					FoodData data = inventory.get(item.name);
+					data.futureQty -= item.amount;
 				}
 			}
-		};
-		action.food = food;
-		action.market = market;
-		action.num = num;
-		actionQueue.add(action);
-		stateChanged();
+			stateChanged();
+		}
 	}
+
+	
 
 	//Scheduler
 	@Override
 	protected boolean pickAndExecuteAnAction() {
+		
+		if(!orderList.isEmpty()) {
+			orderFromMarket(orderList.get(0));
+			orderList.remove(0);
+			return true;
+		}
+		
+		synchronized (inventory) {
+			for (Entry<String, FoodData> entry : inventory.entrySet()) {
+				if (entry.getValue().futureQty <
+						entry.getValue().lowThreshold) {
+					restockFood();
+					return true;
+				}
+			}
+		}
 
 		if (!actionQueue.isEmpty()) {
 			CookAction currAction;
@@ -203,8 +182,6 @@ public class CookRole extends WorkRole {
 			currAction.run();
 			return true;
 		}
-
-
 
 		if (!orders.isEmpty()) {
 			Order currOrder;
@@ -223,38 +200,72 @@ public class CookRole extends WorkRole {
 	//Actions
 
 	private void cook(Order o) {
-		synchronized (markets) {
-			synchronized (inventory) {
-				if (inventory.get(o.food) <= 0) {
-					//o.waiter.msgOutOfThis(o);
-					Do("Ordering 1 " + o.food + " to market 0!");
-					markets.get(0).msgOrder(o);
-				} else {
-					inventory.put(o.food, inventory.get(o.food) - 1);
-					if (inventory.get(o.food) <= STOCK_THRESHOLD) {
-						int numToOrder= STOCK_MAINTAIN-inventory.get(o.food);
-						Do("Ordering " + numToOrder + " " + o.food
-								+ " to market 0!");
-						markets.get(0).msgOrder(o.food, numToOrder);
-					}
+		synchronized (inventory) {
+
+			inventory.get(o.food).decrementQty();
+		
+			foodGui.toggleCooking();
+
+			synchronized (this) {
+				try {
+					wait(COOK_DELAY_MS);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			foodGui.toggleCooking();
+			foodGui.addPlate();
+			o.waiter.msgOrderReady(o);
+
+			//Move food from grill to plating
+		}
+	}
+
+	public void restockFood() {
+		
+		//Populating markets list
+		if (markets == null || markets.size() == 0) {
+			Kelp kelp = KelpClass.getKelpInstance();
+			List<CityLocation> marketsTemp = 
+					kelp.placesNearMe(getLocation(), LocationTypeEnum.Market);
+			markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
+			
+			for (CityLocation cL : marketsTemp) {
+				markets.add((MarketBuilding) cL);
+			}
+		}
+		
+		ArrayList<Item> itemsToBuy = new ArrayList<Item>();
+
+		
+		synchronized (inventory) {
+			for (Entry<String, FoodData> entry : inventory.entrySet()) {
+				if (entry.getValue().futureQty <
+						entry.getValue().lowThreshold) {
 					
-					foodGui.toggleCooking();
+					int amount = entry.getValue().capacity 
+							- entry.getValue().futureQty;
 					
-					synchronized (this) {
-						try {
-							wait(COOK_DELAY_MS);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-					foodGui.toggleCooking();
-					foodGui.addPlate();
-					o.waiter.msgOrderReady(o);
-					
-					//Move food from grill to plating=
+					itemsToBuy.add(new Item(entry.getKey(), amount));
+					entry.getValue().futureQty += amount;
 				}
 			}
 		}
+		
+		orderList.add(new MarketOrder(0, itemsToBuy));
+		
+	}
+
+	private void orderFromMarket(MarketOrder o) {
+		MarketBuilding market = markets.get(o.marketNum);
+		
+		market.interfaces.Cashier marketCashier =
+				(market.interfaces.Cashier) market.getGreeter();
+		
+		marketCashier.msgPhoneOrder(o.itemsToBuy, this.cashier,
+				this, getLocation(), o.marketNum);
+		
+		
 	}
 
 	public void removePlate() {
@@ -273,7 +284,7 @@ public class CookRole extends WorkRole {
 
 	@Override
 	public void msgLeaveWork() {
-		//No action, wait for host signal	
+		//No action, wait for host signal
 	}
 
 	public void msgGoHome() {

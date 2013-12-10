@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import restaurant.vonbeck.gui.CustomerGui;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
+import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;
 import agent.Role;
 import agent.PersonAgent.HungerLevel;
@@ -26,13 +27,14 @@ public class CustomerRole extends Role implements Customer {
 	private int tableNumber = 0;
 	private Map<String, Double> foodList;
 	private String foodToOrder;
-	Timer timer = new Timer();
+	Timer timer = SingletonTimer.getInstance();
 	private CustomerGui customerGui;
 	// agent correspondents
 	private HostRole host;
 	private WaiterRole waiter;
 	private Cashier cashier;
 	private double priceToPay;
+	CustomerRole pointerToMe = this;
 
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
@@ -205,32 +207,30 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	private void chooseFood() {
-		synchronized (this) {
-			try {
-				wait(CHOICE_DELAY_MS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				if (foodList.size() > 0) {
+					int choiceNum = (int)(Math.random()*(foodList.size()));
+					foodToOrder = (String) foodList.keySet().toArray()[choiceNum];
+					customerGui.DoDisplayFood(foodToOrder,true);
+					Do("I want to order!");
+					waiter.msgIWantToOrder(pointerToMe);
+				} else {
+					Do("There is no food that I can eat :(");
+					state = AgentState.Paying;
+					event = AgentEvent.donePaying;
+					try {
+						throw new Exception ("Customer doesn't have any eating posibilities"
+								+ " in this restaurant. This shouldn't happen.");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
-		}
-		
-		if (foodList.size() > 0) {
-			int choiceNum = (int)(Math.random()*(foodList.size()));
-			foodToOrder = (String) foodList.keySet().toArray()[choiceNum];
-			customerGui.DoDisplayFood(foodToOrder,true);
-			Do("I want to order!");
-			waiter.msgIWantToOrder(this);
-		} else {
-			Do("There is no food that I can eat :(");
-			state = AgentState.Paying;
-			event = AgentEvent.donePaying;
-			try {
-				throw new Exception ("Customer doesn't have any eating posibilities"
-						+ " in this restaurant. This shouldn't happen.");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
+		}, CHOICE_DELAY_MS);
+			
 		stateChanged();
 		
 	}

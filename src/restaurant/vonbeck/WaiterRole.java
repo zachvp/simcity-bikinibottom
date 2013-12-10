@@ -15,6 +15,7 @@ import restaurant.vonbeck.gui.WaiterGui;
 import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Waiter;
+import CommonSimpleClasses.Constants;
 import agent.Agent;
 import agent.Role;
 import agent.WorkRole;
@@ -47,10 +48,12 @@ public class WaiterRole extends WorkRole implements Waiter {
 		gui = g;
 		waiterGui = new WaiterGui(this, waiterNum);
 		this.name = name;
-		menuO.put("Steak", 15.99);
-		menuO.put("Chicken", 10.99);
-		menuO.put("Salad", 5.99);
-		menuO.put("Pizza", 8.99);
+		
+		menuO.put(Constants.FOODS.get(0), 15.99);
+		menuO.put(Constants.FOODS.get(1), 10.99);
+		menuO.put(Constants.FOODS.get(2), 5.99);
+		menuO.put(Constants.FOODS.get(3), 8.99);
+		
 		g.getAnimationPanel().addGui(waiterGui);
 	}
 	

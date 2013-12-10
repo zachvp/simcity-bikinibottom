@@ -108,8 +108,4 @@ public class RestaurantVonbeckBuilding extends Building {
 		return infoPanel;
 	}
 
-	@Override
-	public JPanel getStaffPanel() {
-		return staffPanel;
-	}
 }

@@ -1,8 +1,9 @@
 package restaurant.vonbeck.interfaces;
 
+import market.interfaces.PhonePayer;
 import restaurant.vonbeck.interfaces.Waiter.Order;
 
-public interface Cashier {
+public interface Cashier extends PhonePayer {
 	void msgNeedBill(Order o);
 	
 	void msgPay(Customer c, double priceToPay);

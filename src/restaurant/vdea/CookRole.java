@@ -30,10 +30,10 @@ public class CookRole extends WorkRole implements Cook{
 	int marketTried = 0;
 
 	//Food(name, init inventory numbers)
-	private Food chicken = new Food("chicken", 13);
-	private Food salad = new Food("salad", 12);
-	private Food pizza = new Food("pizza", 13);
-	private Food steak = new Food("steak", 16);
+	public Food kelpShake = new Food("kelpShake", 13);
+	public Food coralBits = new Food("coralBits", 12);
+	public Food kelpRings = new Food("kelpRings", 13);
+	public Food krabbyPatty = new Food("krabbyPatty", 16);
 	public List<Food> inventory = new ArrayList<Food>();
 	boolean orderSent;
 	
@@ -44,10 +44,10 @@ public class CookRole extends WorkRole implements Cook{
 
 		this.name = super.getName();
 
-		inventory.add(chicken);
-		inventory.add(pizza);
-		inventory.add(salad);
-		inventory.add(steak);
+		inventory.add(kelpShake);
+		inventory.add(kelpRings);
+		inventory.add(coralBits);
+		inventory.add(krabbyPatty);
 	}
 	
 	@Override
@@ -78,21 +78,21 @@ public class CookRole extends WorkRole implements Cook{
 	public void msgOrderFufillment(List<Food> shipment, boolean orderFull){
 		print("RESTOCKING INVENTORY");
 		for (Food f: shipment){
-			if(f.equals(steak)){
-				steak.addInventory(f.quantity);
-				//print("steak in "+ f.quantity);
+			if(f.equals(krabbyPatty)){
+				krabbyPatty.addInventory(f.quantity);
+				//print("krabbyPatty in "+ f.quantity);
 			}
-			else if(f.equals(chicken)){
-				chicken.addInventory(f.quantity);
-				//print("chicken in "+ f.quantity);
+			else if(f.equals(kelpShake)){
+				kelpShake.addInventory(f.quantity);
+				//print("kelpShake in "+ f.quantity);
 			}
-			else if(f.equals(salad)){
-				salad.addInventory(f.quantity);
-				//print("salad in "+ f.quantity);
+			else if(f.equals(coralBits)){
+				coralBits.addInventory(f.quantity);
+				//print("coralBits in "+ f.quantity);
 			}
-			else if(f.equals(pizza)){
-				pizza.addInventory(f.quantity);
-				//print("pizza in "+ f.quantity);
+			else if(f.equals(kelpRings)){
+				kelpRings.addInventory(f.quantity);
+				//print("kelpRings in "+ f.quantity);
 			}
 		}
 		orderSent = false; //received back order
@@ -166,18 +166,18 @@ public class CookRole extends WorkRole implements Cook{
 	}
 
 	private void decreaseQuantity(Order o){
-		if(o.choice.getName().equals("steak")){
-			steak.cook();
-			//System.out.println(steak.quantity + " steaks left");
+		if(o.choice.getName().equals("krabbyPatty")){
+			krabbyPatty.cook();
+			//System.out.println(krabbyPatty.quantity + " krabbyPattys left");
 		}
-		else if(o.choice.getName().equals("chicken")){
-			chicken.cook();
+		else if(o.choice.getName().equals("kelpShake")){
+			kelpShake.cook();
 		}
-		else if(o.choice.getName().equals("salad")){
-			salad.cook();
+		else if(o.choice.getName().equals("coralBits")){
+			coralBits.cook();
 		}
-		else if(o.choice.getName().equals("pizza")){
-			pizza.cook();
+		else if(o.choice.getName().equals("kelpRings")){
+			kelpRings.cook();
 		}
 	}
 
@@ -187,17 +187,17 @@ public class CookRole extends WorkRole implements Cook{
 	public boolean checkFoodInventory(Food f){
 		Food compare = new Food();
 		Do(AlertTag.RESTAURANT, "Checking amount of " + f);
-		if(f.equals(steak)){
-			compare = steak;
+		if(f.equals(krabbyPatty)){
+			compare = krabbyPatty;
 		}
-		else if(f.equals(chicken)){
-			compare = chicken;
+		else if(f.equals(kelpShake)){
+			compare = kelpShake;
 		}
-		else if(f.equals(salad)){
-			compare = salad;
+		else if(f.equals(coralBits)){
+			compare = coralBits;
 		}
-		else if(f.equals(pizza)){
-			compare = pizza;
+		else if(f.equals(kelpRings)){
+			compare = kelpRings;
 		}
 
 
@@ -259,6 +259,7 @@ public class CookRole extends WorkRole implements Cook{
 	}
 
 	private void orderDone(Order o){
+		((RestaurantVDeaBuilding)location).updateInventory();
 		cookGui.doneCooking(o.table);
 		Do(AlertTag.RESTAURANT, o.choice +" is ready!");
 		o.w.msgOrderReady(o.choice.getName(), o.table);

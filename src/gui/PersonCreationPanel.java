@@ -173,7 +173,8 @@ ClassifiedsChangedListener{
 		nameIndex++;
 		buildingsCB.setSelectedIndex(0);
 		occupationsCB.setSelectedIndex(0);
-		residencesCB.setSelectedIndex(0);
+		if(resList.size() > 1) residencesCB.setSelectedIndex(1);
+		else residencesCB.setSelectedIndex(0);
 		wealthCB.setSelectedIndex(1);
 		carCB.setSelectedIndex(0);
 		hungerCB.setSelectedIndex(4);
@@ -284,8 +285,9 @@ ClassifiedsChangedListener{
 					//reset input fields
 					nameTextF.setText("");
 					occupationsCB.setSelectedIndex(0);
-					residencesCB.setSelectedIndex(0);
-					wealthCB.setSelectedIndex(0);
+					if(resList.size() > 1) residencesCB.setSelectedIndex(1);
+					else residencesCB.setSelectedIndex(0);					
+					wealthCB.setSelectedIndex(1);
 					carCB.setSelectedIndex(1);
 					restaurantCB.setSelectedIndex(0);
 					hungerCB.setSelectedIndex(4);
@@ -310,10 +312,13 @@ ClassifiedsChangedListener{
 					nameTextF.setText(Constants.NAMES.get(nameIndex));
 					nameIndex++;
 
+					checkClassifiedsforJobs();
+					checkClassifiedsforHome();
 					
 					occupationsCB.setSelectedIndex(0);
-					residencesCB.setSelectedIndex(0);
-					wealthCB.setSelectedIndex(0);
+					if(resList.size() > 1) residencesCB.setSelectedIndex(1);
+					else residencesCB.setSelectedIndex(0);
+					wealthCB.setSelectedIndex(1);
 					carCB.setSelectedIndex(1);
 					restaurantCB.setSelectedIndex(0);
 					hungerCB.setSelectedIndex(4);
@@ -324,8 +329,6 @@ ClassifiedsChangedListener{
 			} else {
 				msg.setText("Can't create a person without a house");
 			}
-			checkClassifiedsforJobs();
-			checkClassifiedsforHome();
 		} else if (e.getSource() == populateButton){
 			// TODO check for residences too!
 			if (resList.size() < occList.size()) {

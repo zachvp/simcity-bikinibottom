@@ -33,14 +33,14 @@ public class InfoPanel extends JPanel implements ActionListener{
 //		updateButton.addActionListener(this);
 		JLabel label = new JLabel("<html><div>&nbsp;</div><div> "
 				+ "Name: "+ b.getName() +"</div><div>&nbsp;</div>");
-		bankMoney = new JLabel("" + 100000);
+		bankMoney = new JLabel("Money in Vault: " + 100000);
 //		JLabel amLabel = new JLabel("<html><div>&nbsp;</div><div> " + "Security Guard: " + b.getNumberOfTellers());
 		JLabel openHours = new JLabel("<html><div>&nbsp;</div><div> "+ "Hours: "+ b.openHour + " - "+ b.closeHour +"</div><div>&nbsp;</div>");
 		JLabel amStatus = new JLabel("Account Manager: " + b.accountManagerOnDuty());
 		
 		add(label);
 		add(bankMoney);
-		add(updateButton);
+		//add(updateButton);
 		add(openHours);
 //		add(amStatus);
 		//add (amLabel);
@@ -50,7 +50,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	 * update info panel, called by accountManager
 	 */
 	public void updateInfoPanel() {
-		bankMoney.setText("" + bank.getMoneyInBank());
+		bankMoney.setText("Money in Vault: " + bank.getMoneyInBank());
 	}
 
 	@Override

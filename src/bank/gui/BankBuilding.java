@@ -246,7 +246,8 @@ public class BankBuilding extends Building {
 	@Override
 	public boolean isOpen() {
 		return securityGuardOnDuty() && accountManagerOnDuty()
-				&& loanManagerOnDuty() && tellerOnDuty();
+				&& loanManagerOnDuty() && tellerOnDuty()
+				&& !TimeManager.getInstance().isNowOnWeekend();
 	}
 	
 	public boolean securityGuardOnDuty() {

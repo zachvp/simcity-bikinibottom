@@ -2,7 +2,7 @@ package restaurant.anthony.interfaces;
 
 import restaurant.anthony.CashierRole.Check;
 
-public interface Cashier {
+public interface Cashier extends market.interfaces.PhonePayer {
 
 	public abstract String getMaitreDName();
 
@@ -15,9 +15,8 @@ public interface Cashier {
 
 	public abstract void PayDebt(double p);
 
-	public abstract void HeresTheIngredientPrice(double currentTotalPrice,
-			Market marketAgent);
-
 	public abstract void msgAtHome();
+
+	public abstract void msgAtExit();
 
 }

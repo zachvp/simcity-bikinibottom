@@ -76,6 +76,7 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	// from market cashier
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (1/3) */
 	public void msgHereIsYourTotal(double total,
 			market.interfaces.Cashier cashier) {
 		// TODO Auto-generated method stub
@@ -165,6 +166,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		mc.setState(CState.DONE);
 	}
 	
+	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (2/3) */
 	private void payBill(MyBill bill) {
 		if (money >= bill.amount) {
 			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
@@ -262,6 +265,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		}
 	}
 	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (3/3) */
 	public class MyBill {
 		private double amount;
 		private market.interfaces.Cashier cashier;

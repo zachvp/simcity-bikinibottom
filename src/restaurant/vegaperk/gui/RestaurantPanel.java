@@ -5,7 +5,10 @@ import restaurant.vegaperk.backend.CookRole;
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
+import restaurant.vegaperk.backend.PCWaiterRole;
+import restaurant.vegaperk.backend.RevolvingOrderList;
 import restaurant.vegaperk.backend.WaiterRole;
+import restaurant.vegaperk.backend.WaiterRoleBase;
 import gui.Building;
 
 import javax.swing.*;
@@ -18,6 +21,7 @@ import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -27,6 +31,8 @@ import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class RestaurantPanel extends JPanel {
+	private final int WAITER_COUNT = 4;
+	
 	Building building;
 	
     //Host, cook, waiters and customers
@@ -37,6 +43,8 @@ public class RestaurantPanel extends JPanel {
     
     // TODO the table map should be stored in the table gui
     private TableGui tableGui;
+    
+    private RevolvingOrderList revolvingOrderList = new RevolvingOrderList();
     
     private PersonAgent cookPerson;
     private CookRole cook;
@@ -136,8 +144,9 @@ public class RestaurantPanel extends JPanel {
         	cashierPerson.startThread();
         }
         else {
-        	for(int i = 0; i < 4; i++) {
-        		addWaiter("Waiters", "flinja");
+        	for(int i = 0; i < WAITER_COUNT; i++) {
+        		if(i > 2) addWaiter("Waiters", "cook");
+        		else addWaiter("Waiters", "pc");
         	}
         }
         
@@ -190,7 +199,6 @@ public class RestaurantPanel extends JPanel {
     		
     		// new role and person stuff
     		if(Constants.TEST_POPULATE_RESTAURANT){
-    			person = new PersonAgent("Customer");
     			c = new CustomerRole(person, building);
     			
         		person.addRole(c);
@@ -199,12 +207,12 @@ public class RestaurantPanel extends JPanel {
     		}
     		else {
     			c = new CustomerRole(person, building);
+    			c.activate();
     			c.gotHungry();
     		}
     		c.setLocation(building);
     		
     		c.setHost(host);
-    		c.activate();
     		CustomerGui g = new CustomerGui(c, gui);
     		c.setGui(g);
     		
@@ -215,8 +223,8 @@ public class RestaurantPanel extends JPanel {
     	}
     	return null;
     }
-    public WaiterGui addWaiter(String type, String name){
-    	WaiterRole w;
+    public WaiterGui addWaiter(String type, String subType){
+    	WaiterRoleBase w;
     	
     	if(type.equals("Waiters")){
     		if(Constants.TEST_POPULATE_RESTAURANT) {
@@ -229,19 +237,22 @@ public class RestaurantPanel extends JPanel {
 	    		person.startThread();
     		}
 	    	else {
-	    		w = new WaiterRole(null, building);
+	    		if(subType.equals("cook")){
+	    			w = new WaiterRole(null, building);
+	    			((WaiterRole) w).setCook(cook);
+	    		}
+	    		else {
+	    			w = new PCWaiterRole(null, building);
+	    			((PCWaiterRole) w).setRevolvingOrders(revolvingOrderList);
+	    			this.cook.setRevolvingOrders(revolvingOrderList);
+	    		}
 	    	}
     		
     		w.setCashier(cashier);
     		
-	    	agentList.add(w);
-	    	w.setHost(host);
-	    	w.setCook(cook);
-	    	
 	    	WaiterGui wg = new WaiterGui(w, gui);
 	    	agentList.add(w);
 			w.setHost(host);
-			w.setCook(cook);
 			
 			w.activate();
 			
@@ -258,8 +269,8 @@ public class RestaurantPanel extends JPanel {
     	customerPanel.setCustomerEnabled(c);
     }
     
-    public void denyBreak(WaiterRole w){
-    	waiterPanel.denyBreak(w);
+    public void denyBreak(WaiterRoleBase agent){
+    	waiterPanel.denyBreak(agent);
     }
     
     public HostRole getHost(){

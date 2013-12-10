@@ -6,7 +6,7 @@ package restaurant.lucas.interfaces;
  * @author Jack Lucas
  *
  */
-public interface Cashier {
+public interface Cashier extends market.interfaces.PhonePayer {
 
         public abstract void msgComputeBill(Customer c, String choice, Waiter w);
 

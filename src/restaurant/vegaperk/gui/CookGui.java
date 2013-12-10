@@ -1,6 +1,5 @@
 package restaurant.vegaperk.gui;
 
-import restaurant.vegaperk.backend.CookRole;
 import restaurant.vegaperk.interfaces.Cook;
 
 import java.awt.*;
@@ -35,7 +34,7 @@ public class CookGui implements Gui{
 	private static final int width = 20;
 	private static final int height = 20;
 	
-	private static final int homeX = 400;
+	private static final int homeX = 505;
 	private static final int homeY = 50;
 	
 	private static final int fridgeY = 200;	
@@ -68,7 +67,7 @@ public class CookGui implements Gui{
 	}
 
 	public void draw(Graphics2D g) {
-		g.drawString("Cook", 400, 40);
+		g.drawString("Cook", 500, 40);
 		
 		g.setColor(Color.RED);
     	g.fillRect(xPos, yPos, width, height);

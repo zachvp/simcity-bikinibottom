@@ -71,7 +71,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	// constants
 	private final int EAT_TIME = 3; 
-	private final int IMPATIENCE_TIME = 20;
+	private final int IMPATIENCE_TIME = 10;
 	
 	/* ----- Class Data ----- */
 	/**

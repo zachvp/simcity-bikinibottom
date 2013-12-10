@@ -6,6 +6,7 @@ import gui.trace.AlertTag;
 import housing.backend.ResidentRole;
 import housing.backend.ResidentialBuilding;
 
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,17 +66,21 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Wallet wallet;
 	private Map<String, Integer> inventory;
+	private BufferedImage image;
 	
 	private Car car;
 	private boolean clearFoodAtHome = false;
 	
 	private boolean timeToRobABank = false;
 	
-	public PersonAgent(String name, IncomeLevel incomeLevel, HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome){
+	public PersonAgent(String name, IncomeLevel incomeLevel,
+			HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome,
+			BufferedImage image){
 		super();
 		updateHungerLevel();
 		
 		this.name = name;
+		this.image = image;
 		this.roles = Collections.synchronizedSet(new HashSet<Role>());
 		
 		this.shoppingList = Collections.synchronizedMap(new HashMap<String, Integer>());
@@ -99,7 +104,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	public PersonAgent(String name){
-		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true);
+		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true, null);
 		updateHungerLevel();
 	}
 	
@@ -158,16 +163,20 @@ public class PersonAgent extends Agent implements Person {
 				DeliveryGuyRole dg = (DeliveryGuyRole) getWorkRole();
 				if (!dg.msgAreYouAvailable()) {
 					// if the delivery guy is on a delivery
-					if (pass.getLocation().equals(dg.getCurrentOrder().getBuilding())) {
-						Do(AlertTag.MARKET, name,
-								"Arrived at delivery location.");
-						dg.msgArrivedDestination();
-						return true;
-					} else if (pass.getLocation().equals(dg.getLocation())) {
-						Do(AlertTag.MARKET, name, "Returning to work.");
-						dg.msgArrivedDestination();
-						dg.activate();
-						return true;
+					if (!dg.getOrders().isEmpty()){
+						for (int i = 0 ; i< dg.getOrders().size(); i++){
+							if (pass.getLocation().equals(dg.getOrders().get(i).getBuilding())) {
+								Do(AlertTag.MARKET, name,
+										"Arrived at delivery location.");
+								dg.msgArrivedDestination();
+								return true;
+							} else if (pass.getLocation().equals(dg.getLocation())) {
+								Do(AlertTag.MARKET, name, "Returning to work.");
+								dg.msgArrivedDestination();
+								dg.activate();
+								return true;
+							}
+						}
 					}
 				}
 			}
@@ -317,6 +326,12 @@ public class PersonAgent extends Agent implements Person {
 	 * @param forWork only activates a WorkRole if this is true
 	 */
 	private void activateRoleForLoc(CityLocation loc, boolean forWork) {
+		
+		if (loc instanceof Building && !(loc instanceof ResidentialBuilding)
+				&& !forWork && !((Building) loc).isOpen()) {
+			// Only enter a building if it's open.
+			return;
+		}
 		
 		synchronized (roles) {
 			for (Role r : roles) {
@@ -630,6 +645,10 @@ public class PersonAgent extends Agent implements Person {
 			return false;
 		}
 		long workStartTime = workRole.startTime();
+		if (workRole.getLocation().type() == LocationTypeEnum.Bank &&
+				timeManager.isTimeOnWeekend(workStartTime)) {
+			return false; // banks are only open on weekdays!
+		}
 		return timeManager.timeUntil(workStartTime) <= this.workStartThreshold;
 	}
 	
@@ -716,6 +735,10 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public boolean getTimeToRobABank() {
+		return timeToRobABank;
+	}
+	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
 				|| wallet.needsMoney();
@@ -788,6 +811,14 @@ public class PersonAgent extends Agent implements Person {
 	public Map<String, Integer> getShoppingList() {
 		return shoppingList;
 	}
+
+	/**
+	 * @return the image
+	 */
+	public BufferedImage getImage() {
+		return image;
+	}
+
 	
 }
 

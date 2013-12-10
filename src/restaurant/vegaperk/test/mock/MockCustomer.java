@@ -3,7 +3,7 @@ package restaurant.vegaperk.test.mock;
 
 import mock.EventLog;
 import mock.Mock;
-import restaurant.vegaperk.backend.WaiterRole.Menu;
+import restaurant.vegaperk.backend.WaiterRoleBase.Menu;
 import restaurant.vegaperk.interfaces.Cashier;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;

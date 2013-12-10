@@ -11,7 +11,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,6 +30,7 @@ import agent.interfaces.Person;
 import classifieds.ClassifiedsClass;
 import market.gui.MarketBuilding;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 
 public class StaffDisplay extends JPanel implements ActionListener{
 	
@@ -38,16 +42,20 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	private JPanel staffPanel, unemployedPanel;
 	private JScrollPane staffPane, unemployedPane;
 	private JPanel staffView, unemployedView;
-	private List<JButton> unemployedList;
+	private List<UnemployedButton> unemployedList;
 	private List<StaffButton> staffList;
 	private JButton fireButton, hireButton, replaceButton;
 	private JLabel msg;
+	private ScheduleTask task = ScheduleTask.getInstance();
+	private Map<WorkRole, Person> FutureCareerMap = new HashMap<WorkRole, Person>();
+	private Person firePerson = new PersonAgent("FIREPERSON");
 	
 	public StaffDisplay() {
 		d = new Dimension(Constants.INFO_PANEL_WIDTH, Constants.INFO_PANEL_HEIGHT);
 		setPreferredSize(d);
 		setMaximumSize(d);
 		setMinimumSize(d);
+		setLayout(new BorderLayout());
 
 		panelDim = new Dimension((int)(d.width*0.35), d.height);
 		
@@ -69,9 +77,25 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		buttons.add(replaceButton);
 		buttons.add(msg);
 		
-		add(staffPanel);
-		add(unemployedPanel);
-		add(buttons);
+		add(staffPanel, BorderLayout.WEST);
+		add(unemployedPanel, BorderLayout.CENTER);
+		add(buttons, BorderLayout.EAST);
+		
+		
+		Runnable command = new Runnable(){
+			@Override
+			public void run() {
+				NewWorksTakePlace();
+			
+			}
+
+			
+		};
+		
+		int hour = 0;
+		int minute = 0;
+		
+		task.scheduleDailyTask(command, hour, minute);
 		
 		//test
 		/*addToStaffList("jsaljdsk", "anjdg");
@@ -108,7 +132,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				
 		unemployedView = new JPanel();
 		unemployedView.setLayout(new BoxLayout((Container) unemployedView, BoxLayout.Y_AXIS));
-		unemployedList = new ArrayList<JButton>();
+		unemployedList = new ArrayList<UnemployedButton>();
 		unemployedPane = new JScrollPane(unemployedView, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		unemployedPane.setPreferredSize(new Dimension(panelDim.width, (int)(panelDim.height*0.85)));
 		
@@ -161,19 +185,10 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	 * Adds people to unemployed list
 	 * @param name
 	 */
-	public void addToUnemployedList(String name) {
-		if (name != null) {
-			JButton button = new JButton(name);
-			button.setBackground(Color.white);
-			Dimension buttonSize = new Dimension(panelDim.width - 19, (int) (panelDim.height / 7));
-			button.setPreferredSize(buttonSize);
-			button.setMinimumSize(buttonSize);
-			button.setMaximumSize(buttonSize);
-			button.setBorder(BorderFactory.createLineBorder(Color.black));
-			button.addActionListener(this);
+	public void addToUnemployedList(Person person) {
+			UnemployedButton button = new UnemployedButton(person);
 			unemployedList.add(button);
 			unemployedView.add(button);
-		}
 		validate();		
 	}
 	
@@ -183,7 +198,7 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		List<PersonAgent> people = citizenRecords.getCitizenList();
 		for (PersonAgent p: people){
 			if(p.getWorkRole() == null){
-				addToUnemployedList(p.getName());
+				addToUnemployedList(p);
 			}
 		}
 	}
@@ -199,6 +214,9 @@ public class StaffDisplay extends JPanel implements ActionListener{
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
+					FutureCareerMap.put(staff.role, firePerson);
+					//FirePerson(staff.role);
+					//updateStaffDisplay();
 					//TODO fire staff.getPersonName()
 				}
 			}
@@ -217,35 +235,36 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		//Hire
 		if (e.getSource() == hireButton){
 			boolean hasUnempSelection = false;
-			boolean hasStaffSelection = false;
-			boolean posOpen = false;
+			boolean correctStaffSelection = false;
+			//boolean posOpen = false;
+			WorkRole openRole = null;
+			Person newHire = null;
 			for (StaffButton staff: staffList){
-				if(staff.selected){
-					hasStaffSelection = true;
-				}
-				if(staff.available){
-					posOpen = true;
+				if(staff.selected && staff.available){
+					correctStaffSelection = true;
+					openRole = staff.getWorkRole();
 				}
 			}
-			if(!hasStaffSelection ||!posOpen){
+			if(!correctStaffSelection){
 				msg.setText("Please select an available position");
 				return;
 			}
-			
-			for (JButton b: unemployedList){
-				if(b.getBackground() == Color.LIGHT_GRAY){
+			for (UnemployedButton b: unemployedList){
+				if(b.selected){
 					hasUnempSelection = true;
-					if(hasStaffSelection && posOpen){
-						//TODO hire b.getName();
-						return;
-					}
+					newHire = b.getPerson();
 				}
 			}
-			
 			if(!hasUnempSelection){
 				msg.setText("Please select a person to hire");
 				return;
-			}			
+			}
+			else if(hasUnempSelection && correctStaffSelection){
+				FutureCareerMap.put(openRole, newHire);
+				//HirePerson(openRole, newHire);
+				//updateUnemployedList();
+				//updateStaffDisplay();
+			}
 			return;
 		}
 		
@@ -253,18 +272,22 @@ public class StaffDisplay extends JPanel implements ActionListener{
 		if (e.getSource() == replaceButton){
 			boolean hasStaffSelection = false;
 			boolean hasUnempSelection = false;
+			WorkRole switchRole = null;
+			Person newHire = null;
 			for (StaffButton staff: staffList){
 				if(staff.selected && !staff.available){
 					hasStaffSelection = true;
+					switchRole = staff.getWorkRole();
 				}
 			}
 			if(!hasStaffSelection){
 				msg.setText("Please select a person to fire");
 				return;
 			}
-			for (JButton b: unemployedList){
-				if(b.getBackground() == Color.LIGHT_GRAY){
+			for (UnemployedButton b: unemployedList){
+				if(b.selected){
 					hasUnempSelection = true;
+					newHire = b.getPerson();
 				}
 			}
 			if(!hasUnempSelection){
@@ -272,28 +295,40 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				return;
 			}
 			if(hasStaffSelection && hasUnempSelection){
+				FutureCareerMap.put(switchRole,newHire);
+				//SwitchRole(switchRole, newHire);
+				//updateUnemployedList();
+				//updateStaffDisplay();
 				//TODO fire staff.getPersonName()
 				//TODO hire b.getName();
 			}
 			
 			return;
 		}
+	}
+	
+	private void NewWorksTakePlace() {
 		
-		//Button selection
-		for (JButton b: unemployedList){
-			if(e.getSource() == b){
-				if(b.getBackground() == Color.white){
-					b.setBackground(Color.LIGHT_GRAY);
-				}
-				else if(b.getBackground() == Color.LIGHT_GRAY){
-					b.setBackground(Color.white);
-				}
+		for (Map.Entry<WorkRole, Person> entry : FutureCareerMap.entrySet()) {
+		    WorkRole currentRole = entry.getKey();
+		    Person currentPerson = entry.getValue();
+			//Firing
+			if (currentPerson == firePerson){
+				FirePerson(currentRole);
 			}
-			else{
-				b.setBackground(Color.white);
+			//Hiring or Switch
+			else {
+				//Hiring
+				if (currentRole.getPerson() == null){
+					HirePerson(currentRole,currentPerson);
+				}
+				else{
+					SwitchRole(currentRole, currentPerson);
+				}
 			}
 		}
-		
+		updateUnemployedList();
+		updateStaffDisplay();
 		
 	}
 	
@@ -302,6 +337,35 @@ public class StaffDisplay extends JPanel implements ActionListener{
 	}
 	public void setCitizenRecords(CitizenRecords rec){
 		citizenRecords = rec;
+	}
+	
+	public void FirePerson(WorkRole r){
+		//GUI to move the person offscreen (Exit)
+		
+		Person currentFiringPerson = r.getPerson();
+		currentFiringPerson.removeRole(r);
+		r.setPerson(null);
+	}
+	
+	public void HirePerson(WorkRole r, Person prospectivePerson){
+		
+		r.setPerson(prospectivePerson);
+		prospectivePerson.addRole(r);
+		
+	}
+	
+	public void SwitchRole(WorkRole r, Person prospectivePerson){
+		
+		Person currentFiringPerson = r.getPerson();
+		
+		//Remove the role in the firing person's list of role
+		currentFiringPerson.removeRole(r);
+		
+		//Add the role in the hiring person's list of role
+		prospectivePerson.addRole(r);
+		
+		//set the role's person to be the prospectivePerson (new hiring person)
+		r.setPerson(prospectivePerson);
 	}
 	
 	class StaffButton extends JPanel implements MouseListener{
@@ -378,29 +442,72 @@ public class StaffDisplay extends JPanel implements ActionListener{
 				selected = false;
 				setBackground(Color.white);
 			}
-			
-			
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			
-		}
-
+		public void mouseEntered(MouseEvent arg0) {}
 		@Override
-		public void mouseExited(MouseEvent arg0) {
-			
-		}
-
+		public void mouseExited(MouseEvent arg0) {}
 		@Override
-		public void mousePressed(MouseEvent arg0) {
-			
-		}
-
+		public void mousePressed(MouseEvent arg0) {}
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
+		public void mouseReleased(MouseEvent arg0) {}
+	}
+	
+	class UnemployedButton extends JPanel implements MouseListener{
+		JLabel personName;
+		Person person;
+		boolean selected = false;
+		
+		UnemployedButton(Person per){
+			person = per;
 			
+			Dimension buttonSize = new Dimension(panelDim.width - 19, (int) (panelDim.height / 7));
+			setPreferredSize(buttonSize);
+			setMaximumSize(buttonSize);
+			setMinimumSize(buttonSize);
+			setBackground(Color.white);
+			setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			setLayout(new BorderLayout());
+			addMouseListener(this);
+			
+			personName = new JLabel(person.getName(), JLabel.CENTER);
+			personName.setPreferredSize(new Dimension((int)(buttonSize.width*0.45), (int)(buttonSize.height)));
+			
+			add(personName, BorderLayout.CENTER);
 		}
 		
+		protected Person getPerson(){
+			return person;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			if(!selected){
+				//deselect all		
+				for (UnemployedButton b: unemployedList){
+					if(b.selected){
+						b.selected = false;
+						b.setBackground(Color.white);
+					}
+				}
+				setBackground(Color.LIGHT_GRAY);
+				selected = true;
+			}else{
+				selected = false;
+				setBackground(Color.white);
+			}
+		}
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
+		
 	}
+	
+	
 }

@@ -15,14 +15,14 @@ public class CashierGui implements Gui{
 	RestaurantGui gui;
 
 	private int xPos = 0, yPos = 0;
-	private int xDestination = 160, yDestination = 310;
+	private int xDestination, yDestination;
 	private boolean canRelease = false;
 	
 	private static final int width = 20;
 	private static final int height = 20;
 	
-	private static final int homeX = 160;
-	private static final int homeY = 310;
+	private static final int homeX = 260;
+	private static final int homeY = 25;
 	
 	public CashierGui(Cashier c, RestaurantGui gui){
 		this.agent = c;
@@ -30,8 +30,8 @@ public class CashierGui implements Gui{
 		
 		xPos = 0;
 		yPos = 0;
-		xDestination = 160;
-		yDestination = 310;
+		xDestination = homeX;
+		yDestination = homeY;
 	}
 
 	public void updatePosition() {

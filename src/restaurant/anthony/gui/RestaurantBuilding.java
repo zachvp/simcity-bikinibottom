@@ -1,6 +1,7 @@
 package restaurant.anthony.gui;
 
 import gui.AnimationPanel;
+import gui.StaffDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
+
 
 
 
@@ -30,6 +32,7 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 	AnimationPanel animationPanel = new AnimationPanel();	
 	private RestaurantRecords records;
 	JPanel info = new JPanel();
+	StaffDisplay staff;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
 	Map<Person, CustomerRole> RestaurantCustomerMap = new HashMap<Person, CustomerRole>();
@@ -50,6 +53,9 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 		//RestaurantInfoPanel infoPanel = new RestaurantInfoPanel(getRecords());
 		//info = infoPanel;
 		//records.SetCashierMarketInfoPanel(infoPanel);
+		
+		staff = super.getStaffPanel();
+		staff.addAllWorkRolesToStaffList();
 	}
 
 	@Override
@@ -109,8 +115,8 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 	}
 	
 	@Override
-	public JPanel getStaffPanel() {
-		return new JPanel();
+	public StaffDisplay getStaffPanel() {
+		return staff;
 	}
 	
 	public void UpdateInfoPanel(){

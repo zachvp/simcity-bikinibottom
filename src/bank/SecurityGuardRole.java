@@ -39,7 +39,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	
 	BankBuilding bankBuilding;
 	
-	ScheduleTask task = ScheduleTask.getInstance();
+	ScheduleTask closeTask = ScheduleTask.getInstance();
 	
 	boolean endWorkShift = false;
 	boolean atWork;
@@ -112,11 +112,12 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		};
 		
 		// every day at TIME to end
-		int hour = ((BankBuilding) bank).getClosingHour();
-		int minute = ((BankBuilding) bank).getClosingMinute();
+		int closeHour = ((BankBuilding) bank).getClosingHour();
+		int closeMinute = ((BankBuilding) bank).getClosingMinute();
+		closeTask.scheduleDailyTask(command, closeHour, closeMinute);
 		
 		bankBuilding . changeOpenSign(false, startHour, endHour);
-		task.scheduleDailyTask(command, hour, minute);
+		
 		
 		startHour = ((BankBuilding) bank).getOpeningHour();
 		startMinute = ((BankBuilding) bank).getOpeningMinute();
@@ -294,9 +295,9 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 		this.activate();
 		securityGuardGui.DoGoToDesk();
 		acquireSemaphore(active);
-		for(WorkRole r: workRoles) {
-			
-		}
+//		for(WorkRole r: workRoles) {
+//			
+//		}
 	}
 	
 	private void removeCustomer(WaitingCustomer w) {
@@ -357,7 +358,7 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	public void addRole(WorkRole r) {
 		workRoles.add(r);
 		if(r instanceof AccountManager) {
-			accountManager = (AccountManager) r;//TODO Test, this is for robber to know who AM is
+			accountManager = (AccountManager) r;// Test, this is for robber to know who AM is
 		}
 	}
 	

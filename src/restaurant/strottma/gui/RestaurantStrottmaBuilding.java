@@ -34,7 +34,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	private CookRole cook;
 	private List<WaiterRole> waiters;
 	
-	private InfoPanel infoPanel = new InfoPanel();
+	private restaurant.InfoPanel infoPanel = new restaurant.InfoPanel(this);
 	RestaurantGui restaurantGui = new RestaurantGui();
 	StaffDisplay staff;
 	

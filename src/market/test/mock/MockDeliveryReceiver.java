@@ -39,9 +39,13 @@ public class MockDeliveryReceiver extends Mock implements DeliveryReceiver {
 
 
 	@Override
+<<<<<<< HEAD
 
 	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
 
+=======
+	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
+>>>>>>> master
 		// TODO Auto-generated method stub
 		
 	}

@@ -40,10 +40,12 @@ public class TimeManager {
 	/**
 	 * The time and date at which the simulation "starts". Added to the actual
 	 * elapsed time to calculate the in-world date and time. Currently set to
-	 * the date of the first airing of SpongeBob SquarePants:
-	 * Sat May 01 1999 06:00:00 GMT-0700 (PDT)
+	 * the date at which the United States government forced the residents of
+	 * Bikini Atoll to relocate in order that it might carry out nuclear
+	 * testing "for the good of mankind and to end all world wars":
+	 * Thu Mar 07 1946 08:00:00 GMT-0800 (PST)
 	 */
-	private static final long FAKE_START_TIME = 925563600000L;
+	private static final long FAKE_START_TIME = -751708800000L;
 	
 	/**
 	 * The time at which the simulation actually started. Used to calculate the
@@ -287,5 +289,16 @@ public class TimeManager {
 	public long previousSuchTime(int hours, int minutes) {
 		return previousSuchTime(currentSimTime(), hours, minutes);
 	}
-		
+
+	public static boolean isTimeOnWeekend(long workStartTime) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(workStartTime);
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		return dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
+	}
+	
+	public boolean isNowOnWeekend() {
+		return isTimeOnWeekend(currentSimTime());
+	}
+	
 }

@@ -3,6 +3,7 @@ package restaurant.vegaperk.gui;
 import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.WaiterRole;
+import restaurant.vegaperk.backend.WaiterRoleBase;
 
 import javax.swing.*;
 
@@ -118,9 +119,9 @@ public class WaiterPanel extends JPanel implements ActionListener {
             validate();
         }
     }
-    public void denyBreak(WaiterRole w){
+    public void denyBreak(WaiterRoleBase agent){
     	for(WaiterListItem temp:waiterList){
-    		if(temp.wGui != null && temp.wGui.getAgent() == w){
+    		if(temp.wGui != null && temp.wGui.getAgent() == agent){
     			temp.isFatigued.setText("Tired?");
     		}
     	}

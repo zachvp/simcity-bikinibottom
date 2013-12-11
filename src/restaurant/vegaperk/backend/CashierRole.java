@@ -314,4 +314,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		mc.setState(CustomerState.PAID);
 		stateChanged();
 	}
+
+	public boolean onDuty() {
+		return isActive();
+	}
 }

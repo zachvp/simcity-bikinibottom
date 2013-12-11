@@ -70,7 +70,10 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 
 ###Anthony Cheung
 + Market design, implementation and GUI.
-+ Market - Restaurant interaction
++ Market - Restaurant interaction.
++ DeliveryReceiver Interface and PhonePayer Interface (Both Interfaces)
++ Firing/Hiring/Switching Role.
++ Soudn Implementations. (Clicking, OpeningSound, Testing, Robbery)
 
 ###Victoria Dea
 + GUI Main Frame
@@ -110,12 +113,11 @@ You will create enough people to cover every employment spot in the city. This i
 + Rents are paid daily
 
 ##Unfulfilled requirements
-+ We only have apartments, not houses, because we need enough housing to accommodate a large number of people.
-+ We only have one type of restaurant in our town.
++ (Done) We only have apartments, not houses, because we need enough housing to accommodate a large number of people.
++ (Done) We only have one type of restaurant in our town.
 + Restaurant excess money is not being deposited in a Bank.
-+ We are not incorporating Shared Data between Cook and Waiter.
-+ Bank Accounts can be negative.
-+ There is no system in place that would result in denying a loan.
-+ Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
-+ There should be different behavior on weekends.
-+ Buses sometimes get stuck at intersections
++ (Done) We are not incorporating Shared Data between Cook and Waiter.
++ (Done) Bank Accounts can be negative.
++ (Done) Restaurants do not order to markets remotely, instead, they use a v2.2 type of market.
++ (Done) There should be different behavior on weekends.
++ (Done) Buses sometimes get stuck at intersections

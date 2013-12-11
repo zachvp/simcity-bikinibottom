@@ -64,7 +64,6 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 + Scenario panel backend.
 + Transportation non-norms
 + Added restaurant
-+ Singleton Timer
 
 ###Erik Strottmann
 + Team leader
@@ -80,8 +79,8 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 + Market design, implementation and GUI.
 + Market - Restaurant interaction.
 + DeliveryReceiver Interface and PhonePayer Interface (Both Interfaces)
-+ Firing/Hiring/Switching Role. (STAFFTAB)
-+ Sound Implementations. (Clicking, OpeningSound, Testing, Robbery)
++ Firing/Hiring/Switching Role.
++ Soudn Implementations. (Clicking, OpeningSound, Testing, Robbery)
 
 ###Victoria Dea
 + GUI Main Frame
@@ -92,7 +91,10 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 		+ Name field checking and assigning.
 + Restaurant integration (with Erik)
 + Image editing and collection for MainFrame and Building role GUIs.
-+ Mentored other group members with their AnimationPanel and other GUI elements.
++ Mentored other group members with their AnimationPanel and other GUI elements
++ Created log display
++ Created scenarios panel
++ Created base Restaurant information panel for all restaurants
 
 ###Zach Vega-Perkins
 + Housing design, implementation and GUI.

@@ -66,17 +66,20 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		}
 		stateChanged();
 	}
+	
 	public void msgCanGoOnBreak(){
 		Do("Going on break!");
 		breakState = BreakState.GOING_ON_BREAK;
 		stateChanged();
 	}
+	
 	public void msgDenyBreak(){
 		Do("break denied =(");
 		breakState = BreakState.NONE;
 		waiterGui.denyBreak();
 		stateChanged();
 	}
+	
 	public void msgHomePosition(int position){
 		homePosition = position;
 	}
@@ -93,6 +96,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		mc.state = MyCustomerState.READY_TO_ORDER;
 		stateChanged();
 	}
+	
 	public void msgHereIsMyOrder(Customer c, String choice){
 		doneWaitingForInput();
 		
@@ -102,20 +106,24 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		waiterGui.setOrderName(choice);
 		stateChanged();
 	}
+	
 	public void msgCustomerLeavingTable(Customer c) {
 		MyCustomer mc = findCustomer(c);
 		mc.state = MyCustomerState.LEAVING;
 		stateChanged();
 	}
+	
 	public void msgCannotPay(Customer c){
 		doneWaitingForInput();
 		stateChanged();
 	}
+	
 	public void msgIAmDoneEating(Customer c){
 		MyCustomer mc = findCustomer(c);
 		mc.state = MyCustomerState.DONE_EATING;
 		stateChanged();
 	}
+	
 	public void msgHereIsCheck(Customer c, double check){
 		Do("Got check.");
 		MyCustomer mc = findCustomer(c);
@@ -176,7 +184,6 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			}
 			for(MyCustomer c : customers){
 				if(c.state==MyCustomerState.OUT_OF_CHOICE){
-					c.state = MyCustomerState.SEATED;
 					tellCustomerOutOfFood(c);
 					return true;
 				}
@@ -243,7 +250,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		
 		double bill = menu.m.get(c.choice);
 		
-		cashier.msgDoneEating(c.c, bill, this);
+		cashier.msgDoneEating(c.c, this, bill);
 		Do("Going to cashier");
 		
 		DoGoToTable(c.table);
@@ -252,8 +259,11 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 	
 	protected void tellCustomerOutOfFood(MyCustomer c){
+		c.state = MyCustomerState.SEATED;
+		
 		DoGoToTable(c.table);
 		waitForInput();
+		
 		c.c.msgOutOfChoice(c.choice);
 	}
 	

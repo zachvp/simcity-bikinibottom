@@ -8,10 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 
-import market.interfaces.PhonePayer;
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
-import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import restaurant.strottma.test.mock.EventLog;
 import CommonSimpleClasses.CityLocation;
@@ -76,6 +74,7 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	// from market cashier
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (1/3) */
 	public void msgHereIsYourTotal(double total,
 			market.interfaces.Cashier cashier) {
 		// TODO Auto-generated method stub
@@ -165,6 +164,8 @@ public class CashierRole extends WorkRole implements Cashier {
 		mc.setState(CState.DONE);
 	}
 	
+	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (2/3) */
 	private void payBill(MyBill bill) {
 		if (money >= bill.amount) {
 			Do(AlertTag.RESTAURANT, "Paying $" + df.format(bill.amount) +
@@ -262,6 +263,7 @@ public class CashierRole extends WorkRole implements Cashier {
 		}
 	}
 	
+	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (3/3) */
 	public class MyBill {
 		private double amount;
 		private market.interfaces.Cashier cashier;

@@ -46,6 +46,9 @@ public class HostGui implements Gui {
         	if (command == Command.GoToWork){
         		agent.AtWork();
         	}
+        	if (command == Command.NotAtWork){
+        		agent.AtExit();
+        	}
         	command = Command.NoCommand;
         }
 
@@ -76,4 +79,10 @@ public class HostGui implements Gui {
     public int getYPos() {
         return yPos;
     }
+
+	public void GoToExit() {
+		command = Command.NotAtWork;
+		xDestination = ExitX;
+    	yDestination = ExitY;
+	}
 }

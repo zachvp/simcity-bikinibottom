@@ -20,7 +20,10 @@ public class Food {
 	String choice;
 	int cookingTime;
 	int amount;
+	int amountLowThreshold = 5;
+	int amountBuyThreshold = 40;
 	double price;
+	
 
 	public Food(String name, int time, int number) {
 		choice = name;

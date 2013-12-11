@@ -5,16 +5,21 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
+import restaurant.InfoPanel;
 import restaurant.vegaperk.gui.RestaurantGui;
 import restaurant.vegaperk.gui.RestaurantPanel;
 
 @SuppressWarnings("serial")
-public class RestaurantVegaPerkBuilding extends Building {
+public class RestaurantVegaPerkBuilding extends Building
+	implements RestaurantFakeOrderInterface{
 	private XYPos entrancePos;
 	
 	private RestaurantGui gui = new RestaurantGui(this);
@@ -22,6 +27,7 @@ public class RestaurantVegaPerkBuilding extends Building {
 	private Map<Person, CustomerRole> existingCustomerRoles = new HashMap<Person, CustomerRole>();
 	
 	private StaffDisplay staff;
+	private InfoPanel infoPanel = new InfoPanel(this);
 	
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -30,6 +36,12 @@ public class RestaurantVegaPerkBuilding extends Building {
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
+		
+		infoPanel = new restaurant.InfoPanel(this);
+		infoPanel.setKrabbyPattyPrice("1.00");
+		infoPanel.setKelpShakePrice("1.00");
+		infoPanel.setCoralBitsPrice("1.00");
+		infoPanel.setKelpRingsPrice("1.00");
 	}
 
 	@Override
@@ -70,7 +82,8 @@ public class RestaurantVegaPerkBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		return gui.getInfoPanel();
+		infoPanel.setBuildingName(getName());
+		return infoPanel;
 	}
 
 	@Override
@@ -80,6 +93,16 @@ public class RestaurantVegaPerkBuilding extends Building {
 	
 	@Override public boolean isOpen() {
 		return true;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return gui.getRestPanel().cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return gui.getRestPanel().cashier;
 	}
 
 }

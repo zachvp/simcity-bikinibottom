@@ -213,6 +213,7 @@ public class CustomerRole extends Role implements Customer {
 	protected boolean pickAndExecuteAnAction() {
 		//	CustomerRole is a finite state machine
 		
+
 		if (state == CustomerState.DOING_NOTHING && event == CustomerEvent.GOT_HUNGRY ){
 			state = CustomerState.WAITING_IN_RESTAURANT;
 			goToRestaurant();

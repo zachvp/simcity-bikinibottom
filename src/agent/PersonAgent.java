@@ -32,6 +32,7 @@ import CommonSimpleClasses.XYPos;
 import agent.interfaces.Person;
 import agent.interfaces.Person.Wallet.IncomeLevel;
 import bank.RobberRole;
+import bank.gui.BankBuilding;
 
 /**
  * A PersonAgent is the heart and soul of SimCity. Nearly all interactions in
@@ -47,6 +48,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private PersonEvent event;
 	private HungerLevel hungerLevel;
+	private boolean forgotAboutFoodAtHome = false;
 	
 	private TimeManager timeManager;
 	
@@ -73,6 +75,12 @@ public class PersonAgent extends Agent implements Person {
 	private boolean clearFoodAtHome = false;
 	
 	private boolean timeToRobABank = false;
+	
+	/**
+	 * set true when rest cashier role activated
+	 * set false when businessbankcustomerrole activated
+	 */
+	private boolean shouldDepositRestaurantMoney = false;
 	
 	public PersonAgent(String name, IncomeLevel incomeLevel,
 			HungerLevel hunger, boolean goToRestaurant, boolean foodAtHome,
@@ -171,16 +179,20 @@ public class PersonAgent extends Agent implements Person {
 				DeliveryGuyRole dg = (DeliveryGuyRole) getWorkRole();
 				if (!dg.msgAreYouAvailable()) {
 					// if the delivery guy is on a delivery
-					if (pass.getLocation().equals(dg.getCurrentOrder().getBuilding())) {
-						Do(AlertTag.MARKET, name,
-								"Arrived at delivery location.");
-						dg.msgArrivedDestination();
-						return true;
-					} else if (pass.getLocation().equals(dg.getLocation())) {
-						Do(AlertTag.MARKET, name, "Returning to work.");
-						dg.msgArrivedDestination();
-						dg.activate();
-						return true;
+					if (!dg.getOrders().isEmpty()){
+						for (int i = 0 ; i< dg.getOrders().size(); i++){
+							if (pass.getLocation().equals(dg.getOrders().get(i).getBuilding())) {
+								Do(AlertTag.MARKET, name,
+										"Arrived at delivery location.");
+								dg.msgArrivedDestination();
+								return true;
+							} else if (pass.getLocation().equals(dg.getLocation())) {
+								Do(AlertTag.MARKET, name, "Returning to work.");
+								dg.msgArrivedDestination();
+								dg.activate();
+								return true;
+							}
+						}
 					}
 				}
 			}
@@ -355,7 +367,14 @@ public class PersonAgent extends Agent implements Person {
 			// You tried to go here for work, but you don't work here. Oops.
 			return;
 		}
-		
+		//you should deposit a restaurant's money and you are at a bank
+		//so get a businessBankCustomerRole and activate it
+		if (shouldDepositRestaurantMoney && loc instanceof BankBuilding){
+			BankBuilding bank = (BankBuilding) loc;
+			Role role = bank.getBusinessBankCustomerRole(this);
+			role.activate();
+			return;
+		}
 		// There is no role for this location! Get a new one.
 		if (loc instanceof Building && !(loc instanceof HospitalBuilding) && 
 				!(loc instanceof ResidentialBuilding)) {
@@ -531,7 +550,25 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	public void setWorkStartThreshold(long newThresh) {
 		this.workStartThreshold = newThresh;
-	}	
+	}
+	
+	/**
+	 * called by CashierRole in restaurant
+	 * makes person go to bank when off shift to
+	 * deposit restaurant money in account
+	 */
+	public void setShouldDepositRestaurantMoney(boolean b) {
+		shouldDepositRestaurantMoney = b;
+	}
+	
+	public double getCashierMoney() {
+		for(Role r: roles) {
+			if(r instanceof restaurant.lucas.CashierRole){
+				return ((restaurant.lucas.CashierRole) r).getRestaurantMoney();
+			}
+		}
+		return -1;
+	}
 	
 	// ---- Methods for finding special roles
 	
@@ -717,8 +754,17 @@ public class PersonAgent extends Agent implements Person {
 	
 	/** Whether this person has food at home. */
 	public boolean hasFoodAtHome() {
+		if (forgotAboutFoodAtHome) return false;
 		ResidentRole res = getResidentRole();
 		return (res != null) && res.thereIsFoodAtHome();
+	}
+	
+	public void forgetAboutFoodAtHome() {
+		forgotAboutFoodAtHome = true;
+	}
+	
+	public void rememberAboutFoodAtHome() {
+		forgotAboutFoodAtHome = false;
 	}
 	
 	public boolean hasFoodInInventory() {
@@ -739,9 +785,13 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	public boolean getTimeToRobABank() {
+		return timeToRobABank;
+	}
+	
 	public boolean needToGoToBank() {
 		return wallet.hasTooMuch() || wallet.hasTooLittle()
-				|| wallet.needsMoney();
+				|| wallet.needsMoney() || shouldDepositRestaurantMoney;
 	}
 	
 	// ---- Market/Inventory

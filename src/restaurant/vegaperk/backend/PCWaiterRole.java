@@ -6,7 +6,6 @@ import CommonSimpleClasses.ScheduleTask;
 import agent.interfaces.Person;
 import restaurant.vegaperk.backend.RevolvingOrderList.Order;
 import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
-import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
 
 
@@ -29,25 +28,26 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	public PCWaiterRole(Person person, CityBuilding building) {
 		super(person, building);
 	}
-
+	
 	@Override
 	public boolean pickAndExecuteAnAction() {
 		super.pickAndExecuteAnAction();
 		
 		if(!timerSet) {
+			timerSet = true;
 			Runnable command = new Runnable() {
 				public void run(){
 					synchronized(revolvingOrders) {
 						for(Order o : revolvingOrders.orderList) {
-							if(o.state == OrderState.FINISHED) {
+							if(findCustomerOrder(o) != null && o.state == OrderState.FINISHED) {
 								checkRevolvingOrderList(o);
 							}
 						}
 					}
+					stateChanged();
+					timerSet = false;
 				}
 			};
-			
-			timerSet = true;
 			
 			schedule.scheduleTaskWithDelay(command,
 			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
@@ -62,7 +62,15 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		waitForInput();
 		
 		MyCustomer mc = findCustomerOrder(o);
-		if(mc == null) return;
+		if(mc == null){
+			DoGoWait();
+			return;
+		}
+		
+		if(o.state == OrderState.OUT_OF_CHOICE) {
+			this.tellCustomerOutOfFood(mc);
+			return;
+		}
 		
 		o.state = OrderState.PICKED_UP;
 		getFood(mc);
@@ -111,12 +119,10 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 			return;
 		}
 		
-		DoGoToCook();
-		waitForInput();
-		
 		waiterGui.setOrderName(c.choice);
 		waiterGui.toggleHoldingOrder();
 		
+		Do("Going to table");
 		DoGoToTable(c.table);
 		waitForInput();
 		

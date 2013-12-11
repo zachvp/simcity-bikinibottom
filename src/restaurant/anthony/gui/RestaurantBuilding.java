@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 
 
 
+
+import restaurant.InfoPanel;
 import restaurant.anthony.CustomerRole;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.XYPos;
@@ -31,7 +33,7 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
 	private RestaurantRecords records;
-	JPanel info = new JPanel();
+	private InfoPanel infoPanel = new InfoPanel(this);
 	StaffDisplay staff;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
@@ -56,6 +58,11 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
+		infoPanel = new restaurant.InfoPanel(this);
+		infoPanel.setKrabbyPattyPrice("1.00");
+		infoPanel.setKelpShakePrice("1.00");
+		infoPanel.setCoralBitsPrice("1.00");
+		infoPanel.setKelpRingsPrice("1.00");
 	}
 
 	@Override
@@ -110,8 +117,8 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 
 	@Override
 	public JPanel getInfoPanel() {
-		// TODO Auto-generated method stub
-		return info;
+		infoPanel.setBuildingName(getName());
+		return infoPanel;
 	}
 	
 	@Override

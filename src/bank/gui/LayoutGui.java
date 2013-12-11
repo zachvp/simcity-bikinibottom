@@ -87,7 +87,6 @@ public class LayoutGui implements Gui{
 	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
 
 		Graphics2D g2 = (Graphics2D)g;
-
 		g2.fillRect(0, 0, WINDOWX, WINDOWY);
 		g2.drawImage(icon.getImage(), 0, 0, null);
 

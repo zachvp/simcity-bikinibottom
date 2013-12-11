@@ -1,7 +1,5 @@
 package restaurant.strottma.interfaces;
 
-import java.util.Map;
-
 public interface Cook extends market.interfaces.DeliveryReceiver {
 
 	String getName();
@@ -15,4 +13,6 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 		public abstract void hideOrder();
 		public abstract void removeOrder();
 	}
+
+	boolean hasAnyFood();
 }

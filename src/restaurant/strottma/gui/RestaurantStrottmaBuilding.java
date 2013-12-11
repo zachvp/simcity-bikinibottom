@@ -1,6 +1,7 @@
 package restaurant.strottma.gui;
 
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
 import java.awt.Dimension;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.strottma.CashierRole;
 import restaurant.strottma.CookRole;
 import restaurant.strottma.CustomerRole;
@@ -27,14 +30,15 @@ import agent.interfaces.Person;
  * @author Erik Strottmann
  * @see Building
  */
-public class RestaurantStrottmaBuilding extends Building {
+public class RestaurantStrottmaBuilding extends Building 
+	implements RestaurantFakeOrderInterface {
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
 	private CashierRole cashier;
 	private CookRole cook;
 	private List<WaiterRole> waiters;
 	
-	private InfoPanel infoPanel = new InfoPanel();
+	private restaurant.InfoPanel infoPanel = new restaurant.InfoPanel(this);
 	RestaurantGui restaurantGui = new RestaurantGui();
 	StaffDisplay staff;
 	
@@ -47,7 +51,7 @@ public class RestaurantStrottmaBuilding extends Building {
 		this.existingCustomers = new HashMap<Person, CustomerRole>();
 		
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount * timeDifference) % 2;
+		this.timeOffset = (instanceCount % 2) * timeDifference;
 		instanceCount++;
 		
 		initRoles();
@@ -164,7 +168,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-				waiterOnDuty();
+				waiterOnDuty() && cook.hasAnyFood();
 	}
 
 	public boolean hostOnDuty() {
@@ -184,6 +188,16 @@ public class RestaurantStrottmaBuilding extends Building {
 			if (w.isAtWork()) { return true; }
 		}
 		return false;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
 	}
 	
 }

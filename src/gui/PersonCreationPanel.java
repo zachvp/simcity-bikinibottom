@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ComboBoxModel;
@@ -29,7 +30,10 @@ import org.junit.Ignore;
 
 import CommonSimpleClasses.CityBuilding;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.SingletonTimer;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
+import agent.PersonAgent;
 import agent.WorkRole;
 import agent.PersonAgent.HungerLevel;
 import classifieds.Classifieds;
@@ -458,6 +462,154 @@ ClassifiedsChangedListener{
 	 */
 	public void setRecords(CitizenRecords records) {
 		citizenRecords = records;		
+	}
+	
+	public void populateCity() {
+		if (resList.size() < occList.size()) {
+			msg.setText("Not enough housing for all required workers.");
+			return;
+		}
+		if(nameTextF.getText()==null || nameTextF.getText().equals("")){
+			msg.setText("Please complete all inputs");
+			return;
+
+		}
+		
+		while(occList.size() > 1) {
+			occupationsCB.setSelectedIndex(1);
+			residencesCB.setSelectedIndex(1);
+			actionPerformed(new ActionEvent(createButton, 0, ""));
+			checkClassifiedsforJobs();
+			checkClassifiedsforHome();
+			
+		}
+	}
+
+	public void populateAll() {
+		buildingsCB.setSelectedIndex(0);
+		actionPerformed(new ActionEvent(populateButton, 0, ""));
+	}
+
+	public void employRestaurants() {
+		populateTypeOfBuilding(LocationTypeEnum.Restaurant);
+	}
+
+	private void populateTypeOfBuilding(LocationTypeEnum type) {
+		outerloop:
+		while(true) {
+			for (MyComboBoxItem cbItem : buildList) {
+				if ( ((CityLocation)(cbItem.object)).type() == type) {
+					buildingsCB.setSelectedItem(cbItem);
+					checkClassifiedsforJobs();
+					if(occList.size() > 1){
+						actionPerformed(new ActionEvent(populateButton, 0, ""));
+						continue outerloop;
+					}
+				}
+			}
+			break;
+		}
+	}
+
+	public void employMarkets() {
+		populateTypeOfBuilding(LocationTypeEnum.Market);
+		
+	}
+
+	public void createUnemployedUntil150People() {
+		while(citizenRecords.citizens.size() < 150) {
+			occupationsCB.setSelectedIndex(0);
+			residencesCB.setSelectedIndex(1);
+			wealthCB.setSelectedIndex(0);
+			carCB.setSelectedIndex(1);
+			restaurantCB.setSelectedIndex(0);
+			hungerCB.setSelectedIndex(4);
+			foodCB.setSelectedIndex(0);
+			
+			actionPerformed(new ActionEvent(createButton, 0, ""));
+		}
+		
+		
+	}
+
+	public void createNonWorkingPersonThatVisitsEverywhere() {
+		occupationsCB.setSelectedIndex(0);
+		residencesCB.setSelectedIndex(1);
+		wealthCB.setSelectedIndex(0);
+		carCB.setSelectedIndex(1);
+		restaurantCB.setSelectedIndex(1);
+		hungerCB.setSelectedIndex(0);
+		foodCB.setSelectedIndex(0);
+		
+		actionPerformed(new ActionEvent(createButton, 0, ""));
+		
+		final PersonAgent personAgent = citizenRecords.citizens.get
+				(citizenRecords.citizens.size()-1);
+		
+		SingletonTimer.getInstance().schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// if noneed to go to bank
+				//		make hungry and lasttimeeating out = 0
+				//      schedule if no hungry anymore
+				//			forget food at home
+				//			make hungry again
+				if (!personAgent.needToGoToBank()) {
+					this.cancel();
+					personAgent.setLastTimeEatingOut(0);
+					personAgent.setHungerLevel(HungerLevel.STARVING);
+					SingletonTimer.getInstance().schedule(new TimerTask() {
+						
+						@Override
+						public void run() {
+							if(!personAgent.isHungry()) {
+								this.cancel();
+								personAgent.forgetAboutFoodAtHome();
+								personAgent.setHungerLevel(HungerLevel.STARVING);
+							}
+							
+						}
+					},0,4000);
+					
+				}
+				
+			}
+		}, 0, 4000);
+		
+	}
+
+	public void employRestaurantsWithoutCook() {
+		outerloop:
+		while(true) {
+			for (MyComboBoxItem cbItem : buildList) {
+				if ( ((CityLocation)(cbItem.object)).type() == LocationTypeEnum.Restaurant) {
+					buildingsCB.setSelectedItem(cbItem);
+					checkClassifiedsforJobs();
+					for (MyComboBoxItem cbItem2 : occList) {
+						if (cbItem2.object != null &&
+							!(cbItem2.object instanceof market.interfaces.DeliveryReceiver)) {
+							occupationsCB.setSelectedItem(cbItem2);
+							residencesCB.setSelectedIndex(1);
+							wealthCB.setSelectedIndex(1);
+							carCB.setSelectedIndex(1);
+							restaurantCB.setSelectedIndex(0);
+							hungerCB.setSelectedIndex(4);
+							foodCB.setSelectedIndex(0);
+							
+							actionPerformed(new ActionEvent(createButton, 0, ""));
+							continue outerloop;
+						}
+					}
+				}
+			}
+			break;
+		}		
+	}
+
+	public void employBanks() {
+		populateTypeOfBuilding(LocationTypeEnum.Bank);
+		
 	}
 
 

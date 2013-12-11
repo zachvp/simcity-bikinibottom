@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,11 +28,15 @@ import javax.swing.JTabbedPane;
 import kelp.KelpClass;
 import market.gui.MarketBuilding;
 import parser.BuildingDef;
+import parser.BuildingDef.CreatorEnum;
 import parser.BuildingPosParser;
 import parser.CornersWithBusstopsParser;
+import restaurant.lucas.gui.RestaurantLucasBuilding;
+import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
+import restaurant.vdea.gui.RestaurantVDeaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
 import transportation.interfaces.Busstop;
@@ -212,9 +217,10 @@ public class MainFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		
-		for(BuildingDef b: list){
+		for(BuildingDef b : list){
 			String buildingName = b.getName();
 			LocationTypeEnum type = b.getType();
+			CreatorEnum creator = b.getCreator();
 
 			x = map.getNextBuildingX();
 			y = map.getNextBuildingY();
@@ -259,7 +265,21 @@ public class MainFrame extends JFrame implements ActionListener {
 				construct(house); 
 			}
 			if(type == LocationTypeEnum.Restaurant){
-				RestaurantVonbeckBuilding restaurant = new RestaurantVonbeckBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				Building restaurant;
+				if (creator == CreatorEnum.ANTHONY) {
+					restaurant = new RestaurantBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else if (creator == CreatorEnum.JACK) {
+					restaurant = new RestaurantLucasBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else if (creator == CreatorEnum.VICTORIA) {
+					restaurant = new RestaurantVDeaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else if (creator == CreatorEnum.ZACH) {
+					restaurant = new RestaurantVegaPerkBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else if (creator == CreatorEnum.DIEGO) {
+					restaurant = new RestaurantVonbeckBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else { // creator == CreatorEnum.ERIK
+					restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				}
+
 				restaurant.setName(buildingName);
 				construct(restaurant);
 			}

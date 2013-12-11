@@ -1,5 +1,6 @@
 package transportation.test.mock;
 
+import agent.interfaces.Person;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CardinalDirectionEnum;
 import transportation.interfaces.Bus;
@@ -55,6 +56,12 @@ public class MockPassenger implements Passenger {
 	public void setLocation(CityLocation startLocation) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Person getPerson() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

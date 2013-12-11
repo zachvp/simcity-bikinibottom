@@ -47,10 +47,10 @@ public class RestaurantPanel extends JPanel {
     private RevolvingOrderList revolvingOrderList = new RevolvingOrderList();
     
     private PersonAgent cookPerson;
-    private CookRole cook;
+    public CookRole cook;
     
     private PersonAgent cashierPerson;
-    private CashierRole cashier;
+    public CashierRole cashier;
     
     private MarketAgent m1 = new MarketAgent("Market 1");
     private MarketAgent m2 = new MarketAgent("Market 2");
@@ -77,13 +77,13 @@ public class RestaurantPanel extends JPanel {
     	this.hostGui = new HostGui(host, gui);
     	this.host.setGui(hostGui);
     	
-    	this.cook = new CookRole(cookPerson, building);
-    	this.cookGui = new CookGui(cook, gui);
-    	this.cook.setRevolvingOrders(revolvingOrderList);
-    	
     	this.cashier = new CashierRole(cashierPerson, building);
     	this.cashierGui = new CashierGui(cashier, gui);
     	this.cashier.setGui(cashierGui);
+    	
+    	this.cook = new CookRole(cookPerson, building);
+    	this.cookGui = new CookGui(cook, gui);
+    	this.cook.setCashier(cashier);
     	
     	this.tableGui = new TableGui(host.getTableMap());
     	
@@ -245,6 +245,7 @@ public class RestaurantPanel extends JPanel {
 	    		else {
 	    			w = new PCWaiterRole(null, building);
 	    			((PCWaiterRole) w).setRevolvingOrders(revolvingOrderList);
+	    			this.cook.setRevolvingOrders(revolvingOrderList);
 	    		}
 	    	}
     		

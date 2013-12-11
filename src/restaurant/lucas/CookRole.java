@@ -813,6 +813,24 @@ public class CookRole extends WorkRole implements Cook {
 		stateChanged();
 	}
 
+
+	public void setLowOnFood() {
+		foods.get("Krabby Patty").amount = 1;
+		foods.get("Kelp Shake").amount = 1;
+		foods.get("Coral Bits").amount = 1;
+		foods.get("Kelp Rings").amount = 1;
+	}
+
+
+	public boolean hasAnyFood() {
+		for(Food f: foods.values()){
+			if(f.amount > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	
 	
 	

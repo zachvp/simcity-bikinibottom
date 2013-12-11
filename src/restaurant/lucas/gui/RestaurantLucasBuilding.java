@@ -200,9 +200,10 @@ public class RestaurantLucasBuilding extends Building
 		return new StaffDisplay();//TODO FIX
 	}
 	
+	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-				waiterOnDuty();
+				waiterOnDuty() && cook.hasAnyFood() && super.isOpen();
 	}
 	
 	public boolean hostOnDuty() {
@@ -244,6 +245,12 @@ public class RestaurantLucasBuilding extends Building
 		infoPanel.setCoralBitsInventory(cb);
 		infoPanel.setKelpRingsInventory(kr);
 	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.setLowOnFood();
+	}
+	
 	
 	
 }

@@ -32,7 +32,8 @@ public class CashierTest extends TestCase
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		cashier = new CashierRole("cashier", 200);		
+		// cashier = new CashierRole("cashier", 200);
+		cashier = new CashierRole(null, null); // TODO ERIK WAS HERE, FIXING YOUR COMPILE ERRORS
 		customer = new MockCustomer("mockcustomer");		
 		badCustomer = new MockCustomer("BADcustomer");
 		waiter = new MockWaiter("mockwaiter");

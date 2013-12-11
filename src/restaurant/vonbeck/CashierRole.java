@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import bank.test.mock.EventLog;
 import restaurant.strottma.CashierRole.MyBill;
 import restaurant.vonbeck.gui.CashierGui;

@@ -225,7 +225,8 @@ public class ResidentRole extends Role implements Resident {
 		}
 		else {
 			Do("Don't have any money to pay my dues.");
-			// TODO person.needToGoToBank()
+			// person's money will now be below the threshold and
+			// he/she will go to bank
 		}
 		DoMoveGary();
 	}
@@ -254,7 +255,6 @@ public class ResidentRole extends Role implements Resident {
 				food = null;
 				doneWaitingForInput();
 				DoJazzercise();
-				setHungry(false);
 				stateChanged();
 			}
 		};
@@ -377,6 +377,11 @@ public class ResidentRole extends Role implements Resident {
 		}
 		Do("There is no food at home");
 		return false;
+	}
+	
+	public void activate() {
+		super.activate();
+		gui.setPresent(true);
 	}
 	
 	/* --- Getters and Setters (mostly used for unit testing) --- */

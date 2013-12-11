@@ -8,6 +8,7 @@ import housing.interfaces.ResidentGui;
 public class MockResidentGui implements ResidentGui {
 	EventLog log = new EventLog();
 	Resident resident;
+	DwellingLayoutGui layoutGui;
 
 	public MockResidentGui(Resident resident) {
 		this.resident = resident;
@@ -60,7 +61,11 @@ public class MockResidentGui implements ResidentGui {
 
 	@Override
 	public DwellingLayoutGui getLayoutGui() {
-		// TODO Auto-generated method stub
-		return null;
+		return layoutGui;
+	}
+
+	@Override
+	public void setLayoutGui(DwellingLayoutGui mockLayoutGui) {
+		this.layoutGui = mockLayoutGui;
 	}
 }

@@ -183,4 +183,9 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	public DwellingLayoutGui getLayoutGui() {
 		return layoutGui;
 	}
+
+	@Override
+	public void setLayoutGui(DwellingLayoutGui layoutGui) {
+		this.layoutGui = layoutGui;
+	}
 }

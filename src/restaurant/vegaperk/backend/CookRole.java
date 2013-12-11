@@ -76,6 +76,8 @@ public class CookRole extends WorkRole implements Cook {
 		}
 	});
 	
+	private CityBuilding building;
+	
 	private List<MarketAgent> markets = Collections.synchronizedList(new ArrayList<MarketAgent>());
 	private int orderFromMarket = 0;
 	
@@ -91,6 +93,8 @@ public class CookRole extends WorkRole implements Cook {
 
 	public CookRole(Person person, CityBuilding building) {
 		super(person, building);
+		
+		this.building = building;
 		
 		for(int i = 0; i < 4; i++){
 			int startY = 50;
@@ -331,6 +335,12 @@ public class CookRole extends WorkRole implements Cook {
 			groceries.put(f.type, f.capacity - f.amount);
 		}
 		
+		Map<String, Integer> update = new HashMap<String, Integer>();
+		for(Map.Entry<String, Food> entry : inventory.entrySet()) {
+			update.put(entry.getKey(), entry.getValue().amount);
+		}
+		((RestaurantVegaPerkBuilding) this.building).updateInfoPanel(update);
+		
 		DoGoToFridge();
 		waitForInput();
 		
@@ -349,7 +359,6 @@ public class CookRole extends WorkRole implements Cook {
 
 	/**
 	 * Delay the food cook time
-	 * @param i circumvents timer restrictions
 	 */
 	private void timeFood(final Order o){
 		Runnable command = new Runnable() {
@@ -521,6 +530,13 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgHereIsYourItems(List<Item> DeliverList) {
+		Map<String, Integer> update = new HashMap<String, Integer>();
+		
+		for(Map.Entry<String, Food> entry : inventory.entrySet()) {
+			update.put(entry.getKey(), entry.getValue().amount);
+		}
+		((RestaurantVegaPerkBuilding) this.building).updateInfoPanel(update);
+		
 		for (Item item : DeliverList) {
 			Food f = inventory.get(item.name);
 			if (f != null && item.amount > 0) {

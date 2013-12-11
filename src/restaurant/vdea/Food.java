@@ -21,21 +21,21 @@ public class Food {
 		name = n;
 		quantity = initAmount;
 		
-		if(name.equals("steak")){
-			cookTime = 10;
-			price = 15.99;
-		}
-		else if(name.equals("chicken")){
+		if(name.equals("krabbyPatty")){
 			cookTime = 8;
-			price = 10.99;
-		}
-		else if(name.equals("salad")){
-			cookTime = 4;
 			price = 5.99;
 		}
-		else if(name.equals("pizza")){
+		else if(name.equals("kelpShake")){
+			cookTime = 4;
+			price = 1.99;
+		}
+		else if(name.equals("coralBits")){
+			cookTime = 5;
+			price = 2.99;
+		}
+		else if(name.equals("kelpRings")){
 			cookTime = 6;
-			price = 8.99;
+			price = 3.99;
 		}
 	}
 	

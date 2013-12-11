@@ -1,5 +1,7 @@
 package restaurant.vdea;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,10 +30,10 @@ public class CookRole extends WorkRole implements Cook{
 	int marketTried = 0;
 
 	//Food(name, init inventory numbers)
-	private Food chicken = new Food("chicken", 13);
-	private Food salad = new Food("salad", 12);
-	private Food pizza = new Food("pizza", 13);
-	private Food steak = new Food("steak", 16);
+	public Food kelpShake = new Food("kelpShake", 13);
+	public Food coralBits = new Food("coralBits", 12);
+	public Food kelpRings = new Food("kelpRings", 13);
+	public Food krabbyPatty = new Food("krabbyPatty", 16);
 	public List<Food> inventory = new ArrayList<Food>();
 	boolean orderSent;
 	
@@ -42,10 +44,10 @@ public class CookRole extends WorkRole implements Cook{
 
 		this.name = super.getName();
 
-		inventory.add(chicken);
-		inventory.add(pizza);
-		inventory.add(salad);
-		inventory.add(steak);
+		inventory.add(kelpShake);
+		inventory.add(kelpRings);
+		inventory.add(coralBits);
+		inventory.add(krabbyPatty);
 	}
 	
 	@Override
@@ -76,36 +78,36 @@ public class CookRole extends WorkRole implements Cook{
 	public void msgOrderFufillment(List<Food> shipment, boolean orderFull){
 		print("RESTOCKING INVENTORY");
 		for (Food f: shipment){
-			if(f.equals(steak)){
-				steak.addInventory(f.quantity);
-				//print("steak in "+ f.quantity);
+			if(f.equals(krabbyPatty)){
+				krabbyPatty.addInventory(f.quantity);
+				//print("krabbyPatty in "+ f.quantity);
 			}
-			else if(f.equals(chicken)){
-				chicken.addInventory(f.quantity);
-				//print("chicken in "+ f.quantity);
+			else if(f.equals(kelpShake)){
+				kelpShake.addInventory(f.quantity);
+				//print("kelpShake in "+ f.quantity);
 			}
-			else if(f.equals(salad)){
-				salad.addInventory(f.quantity);
-				//print("salad in "+ f.quantity);
+			else if(f.equals(coralBits)){
+				coralBits.addInventory(f.quantity);
+				//print("coralBits in "+ f.quantity);
 			}
-			else if(f.equals(pizza)){
-				pizza.addInventory(f.quantity);
-				//print("pizza in "+ f.quantity);
+			else if(f.equals(kelpRings)){
+				kelpRings.addInventory(f.quantity);
+				//print("kelpRings in "+ f.quantity);
 			}
 		}
 		orderSent = false; //received back order
 
 		for(Food i: inventory){
-			print("new "+ i.getName() + " quantity: "+ i.quantity);
+			Do(AlertTag.RESTAURANT, "new "+ i.getName() + " quantity: "+ i.quantity);
 		}
 
 		if(!orderFull){
-			print("Shipment from market incomplete");
+			Do(AlertTag.RESTAURANT, "Shipment from market incomplete");
 			shipmentStatus = OrderStatus.shipmentIncomplete;
 			stateChanged();
 		}
 		else{
-			print("Inventory is full!");
+			Do(AlertTag.RESTAURANT, "Inventory is full!");
 		}
 	}
 
@@ -150,13 +152,13 @@ public class CookRole extends WorkRole implements Cook{
 		boolean enough = checkFoodInventory(o.choice);	//check if there is enough food
 
 		if (enough){
-			print("There is enough " + o.choice);
+			Do(AlertTag.RESTAURANT, "There is enough " + o.choice);
 			decreaseQuantity(o);
 			o.status = OrderStatus.enoughFood;
 			//stateChanged();
 		}
 		else{
-			print("There is not enough " + o.choice);
+			Do(AlertTag.RESTAURANT, "There is not enough " + o.choice);
 			o.status = OrderStatus.notEnoughFood;
 			//restockInventory();	//TODO MarketAgent test
 			//stateChanged();
@@ -164,18 +166,18 @@ public class CookRole extends WorkRole implements Cook{
 	}
 
 	private void decreaseQuantity(Order o){
-		if(o.choice.getName().equals("steak")){
-			steak.cook();
-			System.out.println(steak.quantity + " steaks left");
+		if(o.choice.getName().equals("krabbyPatty")){
+			krabbyPatty.cook();
+			//System.out.println(krabbyPatty.quantity + " krabbyPattys left");
 		}
-		else if(o.choice.getName().equals("chicken")){
-			chicken.cook();
+		else if(o.choice.getName().equals("kelpShake")){
+			kelpShake.cook();
 		}
-		else if(o.choice.getName().equals("salad")){
-			salad.cook();
+		else if(o.choice.getName().equals("coralBits")){
+			coralBits.cook();
 		}
-		else if(o.choice.getName().equals("pizza")){
-			pizza.cook();
+		else if(o.choice.getName().equals("kelpRings")){
+			kelpRings.cook();
 		}
 	}
 
@@ -184,24 +186,24 @@ public class CookRole extends WorkRole implements Cook{
 	//and check if food hits threshold
 	public boolean checkFoodInventory(Food f){
 		Food compare = new Food();
-		print("Checking amount of " + f);
-		if(f.equals(steak)){
-			compare = steak;
+		Do(AlertTag.RESTAURANT, "Checking amount of " + f);
+		if(f.equals(krabbyPatty)){
+			compare = krabbyPatty;
 		}
-		else if(f.equals(chicken)){
-			compare = chicken;
+		else if(f.equals(kelpShake)){
+			compare = kelpShake;
 		}
-		else if(f.equals(salad)){
-			compare = salad;
+		else if(f.equals(coralBits)){
+			compare = coralBits;
 		}
-		else if(f.equals(pizza)){
-			compare = pizza;
+		else if(f.equals(kelpRings)){
+			compare = kelpRings;
 		}
 
 
 		if(!orderSent && compare.quantity <= compare.threshold){	//TODO inventory
 			//print("low on " + compare);
-			print("under threshold, need to restock");
+			Do(AlertTag.RESTAURANT, "under threshold, need to restock");
 			restockInventory();
 		}
 
@@ -212,7 +214,7 @@ public class CookRole extends WorkRole implements Cook{
 
 	//if one of the foods is low, triggers to check all inventory
 	private void restockInventory() {
-		print("restocking inventory");
+		Do(AlertTag.RESTAURANT, "restocking inventory");
 		List<Food> shoppingList = new ArrayList<Food>();
 		if(shipmentStatus == OrderStatus.shipmentIncomplete){
 			for (Food f: inventory){
@@ -244,7 +246,7 @@ public class CookRole extends WorkRole implements Cook{
 
 
 	private void cookOrder(final Order o) { //TODO fix
-		print("Cooking " + o.choice + "...");
+		Do(AlertTag.RESTAURANT, "Cooking " + o.choice + "...");
 		o.status = OrderStatus.none;
 		cookGui.DoCooking(o.choice.getName(), o.table);
 		timer.schedule(new TimerTask() {
@@ -257,8 +259,9 @@ public class CookRole extends WorkRole implements Cook{
 	}
 
 	private void orderDone(Order o){
+		((RestaurantVDeaBuilding)location).updateInventory();
 		cookGui.doneCooking(o.table);
-		print(o.choice +" is ready!");
+		Do(AlertTag.RESTAURANT, o.choice +" is ready!");
 		o.w.msgOrderReady(o.choice.getName(), o.table);
 		orders.remove(o);
 		o.status = OrderStatus.done;

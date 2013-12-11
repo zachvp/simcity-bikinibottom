@@ -32,7 +32,7 @@ import agent.interfaces.Person.Wallet.IncomeLevel;
  */
 public class CitizenRecords {
 	private MainFrame main;
-	private ArrayList<PersonAgent> citizens = new ArrayList<PersonAgent>();
+	public ArrayList<PersonAgent> citizens = new ArrayList<PersonAgent>();
 	ArrayList<Building> buildings;
 	private InfoList personInfoList;
 	private InfoPanel infoPanel;

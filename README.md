@@ -97,8 +97,17 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 
 ###Jack Lucas
 + Bank design, implementation and GUI.
+	+Banks have limited amount of money they start with
+	+ Bank InfoPanel is constantly updated with current available money
 + Work shift scheduling.
 + Periodic hunger incrementation.
++ Robber Non-normative scenario and GUI initialization
++ Designing initial Producer-Consumer Interaction for new Waiter
++ added own restaurant and extensively tested it within city
++ Bank and Lucas restaurant InfoPanels
++ Created name list for people to be created
+
+
 
 
 ##How to run our system

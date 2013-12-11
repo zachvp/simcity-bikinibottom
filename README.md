@@ -80,8 +80,8 @@ Our creation panel has two buttons. The "Create" button creates one person with 
 + Market design, implementation and GUI.
 + Market - Restaurant interaction.
 + DeliveryReceiver Interface and PhonePayer Interface (Both Interfaces)
-+ Firing/Hiring/Switching Role.
-+ Soudn Implementations. (Clicking, OpeningSound, Testing, Robbery)
++ Firing/Hiring/Switching Role. (STAFFTAB)
++ Sound Implementations. (Clicking, OpeningSound, Testing, Robbery)
 
 ###Victoria Dea
 + GUI Main Frame

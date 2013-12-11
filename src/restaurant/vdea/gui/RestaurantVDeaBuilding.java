@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.InfoPanel;
 import restaurant.vdea.*;
 import CommonSimpleClasses.ScheduleTask;
@@ -14,9 +16,11 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
-public class RestaurantVDeaBuilding extends Building{
+public class RestaurantVDeaBuilding extends Building
+	implements RestaurantFakeOrderInterface{
 
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
@@ -194,6 +198,18 @@ public class RestaurantVDeaBuilding extends Building{
 			if (w.isAtWork()) { return true; }
 		}
 		return false;
+	}
+
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
 	}
 
 }

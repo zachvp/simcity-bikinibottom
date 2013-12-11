@@ -5,9 +5,12 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import agent.Role;
 import agent.interfaces.Person;
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
 import restaurant.InfoPanel;
@@ -15,7 +18,8 @@ import restaurant.vegaperk.gui.RestaurantGui;
 import restaurant.vegaperk.gui.RestaurantPanel;
 
 @SuppressWarnings("serial")
-public class RestaurantVegaPerkBuilding extends Building {
+public class RestaurantVegaPerkBuilding extends Building
+	implements RestaurantFakeOrderInterface{
 	private XYPos entrancePos;
 	
 	private RestaurantGui gui = new RestaurantGui(this);
@@ -89,6 +93,16 @@ public class RestaurantVegaPerkBuilding extends Building {
 	
 	@Override public boolean isOpen() {
 		return true;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return gui.getRestPanel().cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return gui.getRestPanel().cashier;
 	}
 
 }

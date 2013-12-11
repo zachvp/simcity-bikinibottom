@@ -10,6 +10,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,13 +23,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
-import classifieds.Classifieds;
-import classifieds.ClassifiedsClass;
+import kelp.KelpClass;
+import market.Item;
+import market.gui.MarketBuilding;
+import market.interfaces.Cashier;
+import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
+import CommonSimpleClasses.XYPos;
 
 public class ScenarioPanel extends JPanel implements ActionListener{ 
 
@@ -43,9 +50,15 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	//normative panel components
 	JRadioButton scenarioA, scenarioB, scenarioC, scenarioJ; //TODO Add more scenarios here
 	JButton runScenarioButton;
+	JRadioButton scenarioE, scenarioF, scenarioG, scenarioO, scenarioP;
+	JRadioButton scenarioQ, scenarioR, scenarioS;
+	private PersonCreationPanel pcp;
+	Timer timer = SingletonTimer.getInstance();
 	JCheckBox gradingViewCB;
+	JLabel msg;
 	
-	public ScenarioPanel() {
+	public ScenarioPanel(PersonCreationPanel pcp) {
+		this.pcp = pcp;
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
 		setPreferredSize(d);
 		setMaximumSize(d);
@@ -149,31 +162,69 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		scenarioA = new JRadioButton("Scenario A");
 		scenarioB = new JRadioButton("Scenario B");
 		scenarioC = new JRadioButton("Scenario C");
+		scenarioE = new JRadioButton("Scenario E");
+		scenarioF = new JRadioButton("Scenario F");
+		scenarioG = new JRadioButton("Scenario G");
 		scenarioJ = new JRadioButton("Scenario J");
+		scenarioO = new JRadioButton("Scenario O");
+		scenarioP = new JRadioButton("Scenario P");
+		scenarioQ = new JRadioButton("Scenario Q");
+		scenarioR = new JRadioButton("Scenario R");
+		scenarioS = new JRadioButton("Scenario S");
 		scenarioA.setOpaque(false);
 		scenarioB.setOpaque(false);
 		scenarioC.setOpaque(false);
+		scenarioE.setOpaque(false);
+		scenarioF.setOpaque(false);
+		scenarioG.setOpaque(false);
 		scenarioJ.setOpaque(false);
+		scenarioO.setOpaque(false);
+		scenarioP.setOpaque(false);
+		scenarioQ.setOpaque(false);
+		scenarioR.setOpaque(false);
+		scenarioS.setOpaque(false);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(scenarioA);
 		buttonGroup.add(scenarioB);
 		buttonGroup.add(scenarioC);
+		buttonGroup.add(scenarioE);
+		buttonGroup.add(scenarioF);
+		buttonGroup.add(scenarioG);
 		buttonGroup.add(scenarioJ);
+		buttonGroup.add(scenarioO);
+		buttonGroup.add(scenarioP);
+		buttonGroup.add(scenarioQ);
+		buttonGroup.add(scenarioR);
+		buttonGroup.add(scenarioS);
 		JPanel rButtons = new JPanel();
-		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.7)));
+		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.6)));
 		rButtons.setLayout(new GridLayout(5,1,1,1));
 		rButtons.setOpaque(false);
 		rButtons.add(scenarioA);
 		rButtons.add(scenarioB);
 		rButtons.add(scenarioC);
+		rButtons.add(scenarioE);
+		rButtons.add(scenarioF);
+		rButtons.add(scenarioG);
 		rButtons.add(scenarioJ);
+		rButtons.add(scenarioO);
+		rButtons.add(scenarioP);
+		rButtons.add(scenarioQ);
+		rButtons.add(scenarioR);
+		rButtons.add(scenarioS);
+		
+		msg = new JLabel("", JLabel.CENTER);
+		msg.setPreferredSize(new Dimension(normativeDim.width-20, (int)(normativeDim.height*0.15)));
 
 		normativePanel.add(title);
 		normativePanel.add(rButtons);
 		normativePanel.add(runScenarioButton);
+		normativePanel.add(msg);
 	}
 	
-	
+	private void say(String str){
+		msg.setText(str);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -182,10 +233,65 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 			
 		}
 		
+		// TODO Add delays to scenarios?
 		if(e.getSource() == runScenarioButton){
-			if(scenarioJ.isEnabled()){//fully populate city with interesting people
+			if (scenarioA.isSelected()) {
+				employAllWorkplaces();
+				createNonWorkingPersonThatVisitsEverywhere();
 				
+			} else if (scenarioB.isSelected()) {
+				employAllWorkplaces();
+				for (int i = 0; i < 3; i++)
+					createNonWorkingPersonThatVisitsEverywhere();
+				
+			} else if (scenarioC.isSelected()) {
+				employRestaurants();
+				employMarkets();
+				makeRestaurantsLowOnFood();
+				triggerRestaurantsCooksSchedulers();
+				
+			} else if (scenarioE.isSelected()) {
+				employAllWorkplaces();
+				
+			} else if (scenarioF.isSelected()) {
+				employAllWorkplaces();
+				createUnemployedUntil50People();
+				explainScenarioF();
+				
+			} else if (scenarioG.isSelected()) {
+				employMarkets();
+				employRestaurantsWithoutCook();
+				fakeRestaurantOrder();
+				describeTheRestOfScenarioG();
+				
+			} else if (scenarioJ.isSelected()) {
+				employAllWorkplaces();
+				createUnemployedUntil50People();
+				describeHowToHaveMoreTraffic();
+				
+			} else if (scenarioO.isSelected()) {
+				employBanks();
+				createBankRobber();
+				
+			} else if (scenarioP.isSelected()) {
+				triggerCarAccident();
+				
+			} else if (scenarioQ.isSelected()) {
+				triggerPedestrianAccident();
+				
+			} else if (scenarioR.isSelected()) {
+				employAllWorkplaces();
+				createUnemployedUntil50People();
+				describeHowScenarioR();
+				
+			} else if (scenarioS.isSelected()) {
+				employAllWorkplaces();
+				createUnemployedUntil50People();
+				describeHowScenarioS();
 			}
+			
+			
+			runScenarioButton.setEnabled(false);
 		}
 		
 		if(e.getSource() == gradingViewCB){
@@ -198,5 +304,132 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		}
 		
 	}
+
+	private void describeHowToHaveMoreTraffic() {
+		say("Create people with cars to add more traffic.");
+		
+	}
+
+	private void describeTheRestOfScenarioG() {
+		say("Add a cook to the restaurant to make it able to "
+				+ "accept the delivery.");
+		
+	}
+
+	private void explainScenarioF() {
+		say("We run the normative scenario, people "
+				+ "will naturally avoid closed venues.");
+	}
+
+	private void describeHowScenarioS() {
+		say("Each building has a staff tab were you can hire and"
+				+ "fire people.");
+	}
+
+	private void describeHowScenarioR() {
+		say("Banks are closed on weekends");
+	}
+	
+	private void employRestaurantsWithoutCook() {
+		pcp.employRestaurantsWithoutCook();
+	}
+
+	private void triggerPedestrianAccident() {
+		TransportationGuiController.getInstance().startPedestrianCrashSequence();
+	}
+
+	private void triggerCarAccident() {
+		TransportationGuiController.getInstance().startCarCrashSequence();
+	}
+
+	private void createBankRobber() {
+		say("Create a new person, go inside his info panel, and "
+				+ "click the rob bank button.");
+		
+	}
+
+	private void createUnemployedUntil50People() {
+		pcp.createUnemployedUntil150People();
+		
+	}
+
+	private void fakeRestaurantOrder() {
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				final MarketBuilding market = getOpenMarket();
+				if (market != null) {
+					this.cancel();
+					market.interfaces.Cashier cashier 
+						= (Cashier) market.getGreeter();
+					List<CityLocation> restaurants = KelpClass.
+							getKelpInstance().placesNearMe(market,
+							LocationTypeEnum.Restaurant);
+					RestaurantFakeOrderInterface restaurant =
+							(RestaurantFakeOrderInterface) restaurants.get(0);
+					List<Item> shoppingList = new ArrayList<Item>();
+					shoppingList.add(new Item(Constants.FOODS.get(0), 1));
+					cashier.msgPhoneOrder(shoppingList, restaurant.getCashier(),
+							restaurant.getCook(), restaurant, 0);
+				}
+			}
+		}, 0, 4000);
+		
+		
+	}
+
+	protected MarketBuilding getOpenMarket() {
+		List<CityLocation> markets = 
+				KelpClass.getKelpInstance().placesNearMe
+					(new XYPos(0,0), LocationTypeEnum.Market);
+		for (CityLocation cL : markets) {
+			if (((MarketBuilding)(cL)).isOpen()) {
+				return (MarketBuilding)cL;
+			}
+		}
+		
+		return null;
+	}
+
+	private void triggerRestaurantsCooksSchedulers() {
+		List<CityLocation> restaurants = KelpClass.
+				getKelpInstance().placesNearMe(new XYPos(0,0),
+				LocationTypeEnum.Restaurant);
+		for (CityLocation res : restaurants) {
+			((RestaurantFakeOrderInterface)res).getCook().stateChanged();
+		}
+	}
+
+	private void makeRestaurantsLowOnFood() {
+		List<CityLocation> restaurants = 
+				KelpClass.getKelpInstance().placesNearMe
+				(new XYPos(0,0), LocationTypeEnum.Restaurant);
+		
+		for (CityLocation res : restaurants) {
+			((RestaurantFakeOrderInterface)res).makeLowOnFood();
+		}
+	}
+
+	private void employMarkets() {
+		pcp.employMarkets();
+	}
+
+	private void employBanks() {
+		pcp.employBanks();
+	}
+
+	private void employRestaurants() {
+		pcp.employRestaurants();		
+	}
+
+	private void createNonWorkingPersonThatVisitsEverywhere() {
+		pcp.createNonWorkingPersonThatVisitsEverywhere();
+	}
+
+	private void employAllWorkplaces() {
+		pcp.populateAll();
+	}
+
 
 }

@@ -10,4 +10,6 @@ public interface DeliveryReceiver {
 	
 	public abstract void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum);
 	
+	public void stateChanged();
+	
 }

@@ -47,6 +47,7 @@ public class CookGui implements Gui{
 	private int deskX = 530;
 	private int deskY = 100;
 	
+	String name;
 
 	public CookGui(CookRole c){ //HostAgent m) {
 		agent = c;
@@ -54,6 +55,7 @@ public class CookGui implements Gui{
 		yPos = entranceY;
 		xDestination = entranceX;
 		yDestination = entranceY;
+		name = c.getName();
 		//maitreD = m;
 //		this.gui = gui;
 	}
@@ -83,8 +85,8 @@ public class CookGui implements Gui{
 		
 
 		for(Grill gr : agent.getGrills()) {
-			g.setColor(Color.BLACK);
-			g.fillRect(gr.x, gr.y, 20, 20);
+//			g.setColor(Color.BLACK);
+//			g.fillRect(gr.x, gr.y, 20, 20);
 			if(gr.o!=null) {
 				g.setColor(Color.RED);
 				g.drawString(gr.o.Choice, gr.x, gr.y);
@@ -92,8 +94,8 @@ public class CookGui implements Gui{
 		}
 		
 		for(PlateArea p : agent.getPlateAreas()) {
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(p.x, p.y, 20, 20);
+//			g.setColor(Color.DARK_GRAY);
+//			g.fillRect(p.x, p.y, 20, 20);
 			if(p.o!=null) {
 				g.setColor(Color.RED);
 				g.drawString(p.o.Choice, p.x, p.y);
@@ -105,6 +107,10 @@ public class CookGui implements Gui{
 		if(!choiceDisplay.equals("")) {
 			g.drawString(choiceDisplay, xPos, yPos);
 		}
+		
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos + 10);
+		
 		
 		
 
@@ -146,6 +152,10 @@ public class CookGui implements Gui{
 		canRelease =true;
 		xDestination = deskX;
 		yDestination = 30;
+	}
+	
+	public void setName(String str){
+		name = str;
 	}
 	
 	public void DoLeaveRestaurant() {

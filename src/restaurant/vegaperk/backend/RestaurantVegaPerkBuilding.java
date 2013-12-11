@@ -29,8 +29,15 @@ public class RestaurantVegaPerkBuilding extends Building
 	private StaffDisplay staff;
 	private InfoPanel infoPanel = new InfoPanel(this);
 	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 1;
+	private static final int timeDifference = 12;
+	
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
+		// Stagger opening/closing time
+		this.timeOffset = (instanceCount % 2 * timeDifference); // TODO (instanceCount * timeDifference) %2
+		instanceCount++;
 		
 		this.entrancePos = new XYPos(width / 2, height);
 		
@@ -38,10 +45,14 @@ public class RestaurantVegaPerkBuilding extends Building
 		staff.addAllWorkRolesToStaffList();
 		
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		infoPanel.setKrabbyPattyPrice("1.25");
+		infoPanel.setKelpShakePrice("2.00");
+		infoPanel.setCoralBitsPrice("1.50");
+		infoPanel.setKelpRingsPrice("2.00");
+		
+		
+//		System.out.println("VP Closing hour " + this.getClosingHour());
+//		System.out.println("VP Closing minute " + this.getClosingMinute());
 	}
 
 	@Override
@@ -65,7 +76,7 @@ public class RestaurantVegaPerkBuilding extends Building
 		
 		// TODO implement person, building constructor for customer
 		if(role == null) {
-			role = ((RestaurantPanel) getInfoPanel()).addCustomer("Customers", person.getName(), person);
+			role = ((RestaurantPanel) getRestPanel()).addCustomer("Customers", person.getName(), person);
 		}
 		else {
 			role.setPerson(person);
@@ -92,8 +103,15 @@ public class RestaurantVegaPerkBuilding extends Building
 	}
 	
 	@Override public boolean isOpen() {
-		return true;
+		return false;
+//		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
+//				waiterOnDuty() && cookHasAnyFood() && super.isOpen();
 	}
+
+	public RestaurantPanel getRestPanel() {
+		return gui.getRestPanel();
+	}
+	
 
 	@Override
 	public DeliveryReceiver getCook() {
@@ -103,6 +121,12 @@ public class RestaurantVegaPerkBuilding extends Building
 	@Override
 	public PhonePayer getCashier() {
 		return gui.getRestPanel().cashier;
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

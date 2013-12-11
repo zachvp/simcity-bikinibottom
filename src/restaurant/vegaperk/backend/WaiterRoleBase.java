@@ -14,18 +14,25 @@ import java.util.*;
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
+
+// TODO Step 1: copy this class from the old waiter into a new class
 public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	protected List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };
 	BreakState breakState = BreakState.NONE;
 	
+	// TODO Step 2: cut all references to the cook and paste into the old waiter role
+	
 	//agent members
 	CashierRole cashier = null;
 	
-	public WaiterGui waiterGui;
-	public Menu menu = new Menu();
+	private boolean shouldWork = false;
+	
+	protected WaiterGui waiterGui;
 	protected int homePosition = -1;
+	
+	protected Menu menu = new Menu();
 	
 	protected HostRole host;
 
@@ -148,11 +155,6 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
 		try{
 			for (MyCustomer c : customers) {
 				if (c.state==MyCustomerState.WAITING) {
@@ -219,7 +221,9 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			return true;
 		}
 		
-		goWait();
+		if(shouldWork) goWait();
+		else DoLeaveWork();
+		
 		return false;
 	}
 
@@ -235,9 +239,11 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		stateChanged();
 	}
 	
+	// TODO step 3: make these two methods abstract, since they both reference the cook
 	abstract protected void takeOrder(MyCustomer c);
 	
 	abstract protected void getFood(MyCustomer c);
+	// END TODO	GO TO OLD WAITER
 	
 	protected void getCheck(MyCustomer c){
 		Do("Going to cashier");
@@ -283,12 +289,17 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 	
 	protected void goWait(){
+		setPresent(true);
 		DoGoWait();
 	}
 	
 	/** The animation DoXYZ() routines */
 	protected void DoGoToTable(int table) {
 		waiterGui.DoGoToTable(host.getTableMap().get(table).width, host.getTableMap().get(table).height); 
+	}
+	
+	protected void DoLeaveWork() {
+		waiterGui.DoLeaveWork();
 	}
 	
 	protected void DoGoToHost(){
@@ -371,9 +382,21 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		return isActive();
 	}
 
+	public void setPresent(boolean p) {
+		waiterGui.setPresent(p);
+	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		shouldWork = true;
+	}
+	
 	@Override
 	public void msgLeaveWork() {
-		DoGoToHost();
+		Do("Leaving Work");
+		shouldWork = false;
+		DoLeaveWork();
 		waitForInput();
 		
 		this.deactivate();

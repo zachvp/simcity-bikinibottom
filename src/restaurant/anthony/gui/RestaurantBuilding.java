@@ -1,6 +1,8 @@
 package restaurant.anthony.gui;
 
 import gui.AnimationPanel;
+import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
 import java.util.ArrayList;
@@ -15,6 +17,11 @@ import javax.swing.JPanel;
 
 
 
+
+
+
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.InfoPanel;
 import restaurant.anthony.CustomerRole;
 import CommonSimpleClasses.Constants;
@@ -27,13 +34,13 @@ import agent.interfaces.Person;
 
 
 
-public class RestaurantBuilding extends gui.Building implements RoleFactory{
+public class RestaurantBuilding extends Building implements RoleFactory, RestaurantFakeOrderInterface{
 	
 	XYPos entrancePosition;
 	String name;
 	AnimationPanel animationPanel = new AnimationPanel();	
 	private RestaurantRecords records;
-	private InfoPanel infoPanel = new InfoPanel(this);
+	InfoPanel infoPanel = new InfoPanel(this);
 	StaffDisplay staff;
 	//ATTENTION
 		//{records.SetCashierMarketInfoPanel((MarketInfoPanel)info);};
@@ -172,6 +179,24 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		// TODO Auto-generated method stub
+		return records.host.cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		// TODO Auto-generated method stub
+		return records.host.cashier;
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		// TODO Auto-generated method stub
+		records.LowFood();
 	}
 	
 	

@@ -46,10 +46,10 @@ public class RestaurantRecords {
 
 	private Map<String, Food>InventoryList = new HashMap<String, Food>(){
 		{
-			Food KrabbyPatty = new Food("Krabby Patty", 400, 1);
-			Food KelpShake = new Food("Kelp Shake", 300, 1);
-			Food CoralBits = new Food("Coral Bits", 500, 1);
-			Food KelpRings = new Food("Kelp Rings", 200, 1);
+			Food KrabbyPatty = new Food("Krabby Patty", 400, 100);
+			Food KelpShake = new Food("Kelp Shake", 300, 100);
+			Food CoralBits = new Food("Coral Bits", 500, 100);
+			Food KelpRings = new Food("Kelp Rings", 200, 100);
 		put("Krabby Patty", KrabbyPatty);
 		put("Kelp Shake", KelpShake);
 		put("Coral Bits", CoralBits);
@@ -218,6 +218,29 @@ public Map<String,Double> getPriceList() {
 
 public void setPriceList(Map<String,Double> pList) {
 	priceList = pList;
+}
+
+public void LowFood() {
+	for(Map.Entry<String, Food> f: InventoryList.entrySet()){
+		
+	}
+	
+	InventoryList.clear();
+	Food KrabbyPatty = new Food("Krabby Patty", 400, 1);
+	Food KelpShake = new Food("Kelp Shake", 300, 1);
+	Food CoralBits = new Food("Coral Bits", 500, 1);
+	Food KelpRings = new Food("Kelp Rings", 200, 1);
+	InventoryList.put("Krabby Patty", KrabbyPatty);
+	InventoryList.put("Kelp Shake", KelpShake);
+	InventoryList.put("Coral Bits", CoralBits);
+	InventoryList.put("Kelp Rings", KelpRings);
+	
+	Map<String, Integer> UpdateList = new HashMap<String, Integer>();
+	UpdateList.put("Krabby Patty", 1);
+	UpdateList.put("Kelp Shake", 1);
+	UpdateList.put("Coral Bits", 1);
+	UpdateList.put("Kelp Rings", 1);
+	building.infoPanel.UpdateInfoPanel(UpdateList);
 }
 
 

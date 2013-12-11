@@ -99,4 +99,11 @@ public class MockWaiter extends Mock implements Waiter {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+
+	@Override
+	public boolean isAtWork() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

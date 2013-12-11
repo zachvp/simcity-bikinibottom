@@ -13,10 +13,6 @@ import restaurant.vdea.interfaces.*;
 
 public class WaiterRole extends WaiterRoleBase implements Waiter{
 
-	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
-
-	private Semaphore atTable = new Semaphore(0,true);
-	private Semaphore atKitchen = new Semaphore(0,true);
 
 	private Cook cook;
 	//public WaiterGui waiterGui = null;

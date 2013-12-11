@@ -5,6 +5,7 @@ import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import restaurant.InfoPanel;
 import restaurant.anthony.MarketRole.Delivery;
 import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CookGui;
@@ -47,6 +48,7 @@ public class CookRole extends WorkRole implements Cook {
 	public List<Order> MyOrders = Collections.synchronizedList(new ArrayList<Order>());
 	private List<Item> ShoppingList = Collections.synchronizedList(new ArrayList<Item>());
 	private Kelp kelp = KelpClass.getKelpInstance();
+	private InfoPanel infoPanel;
 	
 	private List<Stove> Stoves = Collections.synchronizedList(new ArrayList<Stove>());
 	{
@@ -176,6 +178,7 @@ public class CookRole extends WorkRole implements Cook {
 				f.amount += item.amount;
 			}
 		}
+		UpdateInfoPanel();
 		
 	}
 	
@@ -301,6 +304,8 @@ public class CookRole extends WorkRole implements Cook {
 					cookGui.AddFood(w.getWaiterNumber(), "PlatingArea");
 					w.OrderIsReady(o);
 					currentFood.foodConsumed();
+					//Update InfoPanel
+					UpdateInfoPanel();
 					GoToHome();
 					state = AgentState.Idle;
 					if (currentFood.amount <= 5)
@@ -456,6 +461,16 @@ public class CookRole extends WorkRole implements Cook {
 	public boolean isAtWork() {
 		return isActive() && !isOnBreak();
 	}
+	
+	private void UpdateInfoPanel(){
+		Map<String, Integer> tempMap = new HashMap<String,Integer>();
+		for (Map.Entry<String, Food> entry : foods.entrySet()) {
+			int currentAmount = entry.getValue().amount;
+			String currentName = entry.getKey();
+			tempMap.put(currentName, currentAmount);
+		}
+		infoPanel.UpdateInfoPanel(tempMap);
+	}
 
 	/* (non-Javadoc)
 	 * @see restaurant.anthony.Cook#isOnBreak()
@@ -490,6 +505,12 @@ public class CookRole extends WorkRole implements Cook {
 	public void setInventoryList(Map<String, Food> iList){
 		foods = iList;
 	}
+	
+	public void setInfoPanel (InfoPanel in){
+		infoPanel = in;
+	}
+	
+
 
 	
 

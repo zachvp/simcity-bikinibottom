@@ -25,6 +25,10 @@ public class RestaurantVegaPerkBuilding extends Building {
 	private StaffDisplay staff;
 	private InfoPanel infoPanel = new InfoPanel(this);
 	
+	// Constants for staggering opening/closing time
+	private static int instanceCount = 0;
+	private static final int timeDifference = 12;
+	
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
@@ -38,6 +42,10 @@ public class RestaurantVegaPerkBuilding extends Building {
 		infoPanel.setKelpShakePrice("1.00");
 		infoPanel.setCoralBitsPrice("1.00");
 		infoPanel.setKelpRingsPrice("1.00");
+		
+		// Stagger opening/closing time
+		this.timeOffset = (instanceCount * timeDifference) % 2;
+		instanceCount++;
 	}
 
 	@Override

@@ -238,6 +238,7 @@ public class CookRole extends WorkRole implements Cook {
 			OffWork();
 		}
 
+		CheckInventory();
 		return false;
 	}
 

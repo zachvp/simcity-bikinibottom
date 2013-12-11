@@ -37,17 +37,7 @@ public class TransportationGuiController implements Gui {
 	private List<CornerGui> cornerGuis = 
 			Collections.synchronizedList(new ArrayList<CornerGui>());;
 	
-	private TransportationGuiController() {
-		SingletonTimer.getInstance().schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				startCarCrashSequence();
-
-			}
-		}, 70000);
-		
-	}
+	private TransportationGuiController() {}
 	
 	public static TransportationGuiController getInstance(){
 		if (instance == null) {

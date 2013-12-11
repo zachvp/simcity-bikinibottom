@@ -103,9 +103,9 @@ public class RestaurantVegaPerkBuilding extends Building
 	}
 	
 	@Override public boolean isOpen() {
-		return false;
-//		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-//				waiterOnDuty() && cookHasAnyFood() && super.isOpen();
+		return getRestPanel().getHost().onDuty() && getRestPanel().cashier.onDuty() &&
+				getRestPanel().cook.onDuty() && getRestPanel().cook.hasFood()
+				&& super.isOpen();
 	}
 
 	public RestaurantPanel getRestPanel() {
@@ -125,8 +125,7 @@ public class RestaurantVegaPerkBuilding extends Building
 
 	@Override
 	public void makeLowOnFood() {
-		// TODO Auto-generated method stub
-		
+		gui.getRestPanel().cook.makeLowOnFood();
 	}
 
 }

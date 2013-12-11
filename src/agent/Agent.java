@@ -14,7 +14,7 @@ import CommonSimpleClasses.StringUtil;
 public abstract class Agent {
     Semaphore stateChange = new Semaphore(1, true);//binary semaphore, fair
     private AgentThread agentThread;
-    private EventLog log = new EventLog();
+    public EventLog log = new EventLog();
     
     private boolean pause = false;
     

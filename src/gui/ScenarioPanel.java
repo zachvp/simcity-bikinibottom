@@ -62,6 +62,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	
 	public ScenarioPanel(PersonCreationPanel pcp) {
 		this.pcp = pcp;
+		pcp.setScenarioPanel(this);
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
 		setPreferredSize(d);
 		setMaximumSize(d);
@@ -129,7 +130,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 		JLabel workplaceLabel = new JLabel("Workplace: ", JLabel.CENTER);
 		
-		workplaceCB = new JComboBox<MyComboBoxItem>(); //TODO add array here
+		workplaceCB = new JComboBox<MyComboBoxItem>();
 		workplaceCB.addActionListener(this);
 		Dimension cbDim = new Dimension((int)(populateDim.width*0.8), (int)(middleDim.height));
 		workplaceCB.setPreferredSize(cbDim);
@@ -236,7 +237,6 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 			
 		}
 		
-		// TODO Add delays to scenarios?
 		if(e.getSource() == runScenarioButton){
 			Testing.playSound("testing.wav");
 			if (scenarioA.isSelected()) {
@@ -295,7 +295,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 			}
 			
 			
-			runScenarioButton.setEnabled(false);
+			disableScenarioButton();
 		}
 		
 		if(e.getSource() == gradingViewCB){
@@ -307,6 +307,10 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 			}
 		}
 		
+	}
+
+	public void disableScenarioButton() {
+		runScenarioButton.setEnabled(false);
 	}
 
 	private void describeHowToHaveMoreTraffic() {

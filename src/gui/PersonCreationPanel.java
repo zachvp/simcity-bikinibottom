@@ -87,6 +87,7 @@ ClassifiedsChangedListener{
 	JLabel msg;
 	private JButton populateButton;
 	private BufferedImage image;
+	private ScenarioPanel scenarioPanel;
 
 	public PersonCreationPanel(){
 		Dimension d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
@@ -302,6 +303,8 @@ ClassifiedsChangedListener{
 					//TODO add all person info
 					citizenRecords.addCitizen(name, job, home, status, hasCar,
 							hungerLevel, restaurant, foodAtHome);
+					
+					scenarioPanel.disableScenarioButton();
 					if (Constants.PRINT)
 						System.out.println(name
 								+ " has been added to your city!");
@@ -611,6 +614,11 @@ ClassifiedsChangedListener{
 
 	public void employBanks() {
 		populateTypeOfBuilding(LocationTypeEnum.Bank);
+		
+	}
+
+	public void setScenarioPanel(ScenarioPanel scenarioPanel) {
+		this.scenarioPanel = scenarioPanel;
 		
 	}
 

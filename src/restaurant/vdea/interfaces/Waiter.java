@@ -39,6 +39,8 @@ public interface Waiter {
 	public abstract int numOfCust();
 
 	public abstract String getName();
+	
+	public abstract boolean isAtWork();
 
 
 }

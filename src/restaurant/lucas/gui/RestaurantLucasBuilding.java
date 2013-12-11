@@ -50,7 +50,7 @@ public class RestaurantLucasBuilding extends Building {
 		orderWheel = new OrderWheel();
 		
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount * timeDifference) % 2;
+		this.timeOffset = ((instanceCount % 2) * timeDifference);
 		instanceCount++;
 		
 		initRoles();

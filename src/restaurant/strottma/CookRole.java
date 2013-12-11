@@ -665,5 +665,15 @@ public class CookRole extends WorkRole implements Cook {
 		return false;
 	}
 	
+	@Override
+	public boolean hasAnyFood() {
+		for (Food f : foods.values()) {
+			if (f.quantity > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
 

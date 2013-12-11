@@ -26,7 +26,7 @@ public class WaiterGui implements Gui {
 
 	boolean delivering;
 	String order;
-
+	private boolean holdingOrder = false;
 
 	public WaiterGui(WaiterRole role, RestaurantGui gui, int pos){
 		this.role = role;
@@ -163,7 +163,13 @@ public class WaiterGui implements Gui {
 		yDestination = yTable - 20;
 	}
 
-
+	public void toggleHoldingOrder(){
+    	if(holdingOrder==true){
+    		holdingOrder = false;
+    		return;
+    	}
+    	holdingOrder = true;
+    }
 
 	public void DoGoToKitchen(){ //TODO add specific plate areas
 		xDestination = 455;

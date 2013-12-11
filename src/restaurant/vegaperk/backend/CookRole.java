@@ -146,6 +146,8 @@ public class CookRole extends WorkRole implements Cook {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
+		setPresent(true);
+		
 		if(onOpening){
 			openStore();
 			return true;
@@ -396,7 +398,6 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui.DoGoToFridge();
 	}
 	private void DoGoHome(){
-		setPresent(true);
 		cookGui.DoGoHome();
 	}
 	

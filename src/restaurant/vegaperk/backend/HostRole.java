@@ -1,6 +1,8 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
@@ -9,6 +11,8 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
+import restaurant.vegaperk.backend.RevolvingOrderList.Order;
+import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.HostGui;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
@@ -23,6 +27,8 @@ public class HostRole extends WorkRole {
 	private static final int TABLECOLNUM = 4;
 	private static final int TABLEROWNUM = 1;
 	private static final int TABLESPACING = 100;
+	
+	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
 	HostGui gui;
 	
@@ -57,6 +63,17 @@ public class HostRole extends WorkRole {
 				tableMap.put(ix, tableCoords);
 			}
 		}
+		
+		Runnable command = new Runnable() {
+			public void run(){
+				Do("Leave work everyone!");
+				msgLeaveWork();
+			}
+		};
+		
+		int closingHour = ((RestaurantVegaPerkBuilding) building).getClosingHour();
+		int closingMinute = ((RestaurantVegaPerkBuilding) building).getClosingMinute();
+		schedule.scheduleDailyTask(command, closingHour, closingMinute);
 	}
 
 	/** Messages from other agents */
@@ -98,7 +115,7 @@ public class HostRole extends WorkRole {
             If so seat him at the table.
 		 */
 		setPresent(true);
-		
+
 		synchronized(tables){
 			if(shouldLeaveWork && waitingCustomers.isEmpty() && !tablesOccupied()) {
 				synchronized(waiters) {

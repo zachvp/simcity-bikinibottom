@@ -76,6 +76,8 @@ public class CashierRole extends WorkRole implements Cashier {
 				}
 			}
 		}
+		
+		DoGoHome();
 		return false;
 	}
 	
@@ -234,6 +236,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void DoGoHome() {
+		gui.setPresent(true);
 		gui.DoGoHome();
 		waitForInput();
 	}

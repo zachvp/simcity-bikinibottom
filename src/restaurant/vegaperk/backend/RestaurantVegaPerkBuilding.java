@@ -44,7 +44,7 @@ public class RestaurantVegaPerkBuilding extends Building {
 		infoPanel.setKelpRingsPrice("2.00");
 		
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount * timeDifference) % 2;
+		this.timeOffset = (instanceCount % 2* timeDifference); // TODO (instanceCount * timeDifference) %2
 		instanceCount++;
 	}
 

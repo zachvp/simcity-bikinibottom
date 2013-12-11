@@ -30,8 +30,8 @@ public class CashierGui implements Gui{
 		
 		xPos = 0;
 		yPos = 0;
-		xDestination = homeX;
-		yDestination = homeY;
+		xDestination = 0;
+		yDestination = 0;
 	}
 
 	public void updatePosition() {

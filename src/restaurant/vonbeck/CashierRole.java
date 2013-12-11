@@ -21,7 +21,6 @@ import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
-import restaurant.vonbeck.test.mock.LoggedEvent;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;

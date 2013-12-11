@@ -39,7 +39,7 @@ public class HostGui implements Gui {
         
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, 20, 20);
     }

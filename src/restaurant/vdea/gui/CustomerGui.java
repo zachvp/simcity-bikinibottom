@@ -90,7 +90,7 @@ public class CustomerGui implements Gui{
 		
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, 20, 20);
 

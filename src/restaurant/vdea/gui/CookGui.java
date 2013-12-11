@@ -125,7 +125,7 @@ public class CookGui implements Gui {
         return yPos;
     }
     
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.blue);
         g.fillRect(xPos, yPos, 20, 20);
         

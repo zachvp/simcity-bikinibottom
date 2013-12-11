@@ -40,7 +40,7 @@ public class MockMarket extends Mock implements Market{
 		log.add(new LoggedEvent("Received order request from cook"));
 		System.out.println(getName() + ":New order received from cook");
 		double bill = 100;
-		cash.msgMarketBill(this, bill);
+		//cash.msgMarketBill(this, bill); // TODO erik was here, fixing your compile errors
 		
 	}
 	

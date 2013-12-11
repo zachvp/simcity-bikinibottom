@@ -1,6 +1,7 @@
 package restaurant.vegaperk.gui;
 
 import restaurant.vegaperk.backend.CustomerRole;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vegaperk.backend.WaiterRole;
 import restaurant.vegaperk.backend.WaiterRoleBase;
 import gui.AnimationPanel;
@@ -39,7 +40,7 @@ public class RestaurantGui extends JPanel{
      * Constructor for RestaurantGui class.
      * Sets up all the gui components.
      */
-    public RestaurantGui(Building building) {
+    public RestaurantGui(RestaurantVegaPerkBuilding building) {
     	this.restPanel = new RestaurantPanel(this, building);
     	
         int WINDOWX = Constants.ANIMATION_PANEL_WIDTH * 2;
@@ -115,5 +116,12 @@ public class RestaurantGui extends JPanel{
 
 	public void setAnimationPanel(AnimationPanel animationPanel) {
 		this.animationPanel = animationPanel;
+	}
+
+	/**
+	 * @return the restPanel
+	 */
+	public RestaurantPanel getRestPanel() {
+		return restPanel;
 	}
 }

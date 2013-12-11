@@ -2,20 +2,21 @@ package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
 import agent.interfaces.Person;
-import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomer;
-import restaurant.vegaperk.backend.WaiterRoleBase.MyCustomerState;
 import restaurant.vegaperk.interfaces.Waiter;
 
 /**
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
+
+// TODO step 4: extend the old waiter role from the new base class  
 public class WaiterRole extends WaiterRoleBase implements Waiter {
 	
 	public WaiterRole(Person person, CityBuilding building) {
 		super(person, building);
 	}
 
+	// TODO Move the data and messages referencing the cook into this Waiter
 	CookRole cook = null;
 	
 	/** Messages from cook */
@@ -38,7 +39,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	
 	
 	/* --- Actions --- */
-	
+	// TODO implement abstract takeOrder
 	protected void takeOrder(MyCustomer c){
 		DoGoToTable(c.table);
 		waitForInput();
@@ -60,6 +61,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 		stateChanged();
 	}
 	
+	// TODO implement abstract getFood()
 	protected void getFood(MyCustomer c){
 		if(c.state == MyCustomerState.LEAVING){
 			return;
@@ -84,7 +86,5 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	public void setCook(CookRole c){
 		cook = c;
 	}
-	
-
 }
 

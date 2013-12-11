@@ -17,7 +17,8 @@ public class HostGui implements Gui {
 
     private HostRole agent = null;
 
-
+    String name = "";
+    
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
 
@@ -66,6 +67,14 @@ public class HostGui implements Gui {
     public void draw(Graphics2D g) {
         g.setColor(Color.MAGENTA);
         g.fillRect(xPos, yPos, agentDim, agentDim);
+    
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos + 10);
+		
+    }
+    
+    public void setName(String str) {
+    	name = str;
     }
 
     public boolean isPresent() {
@@ -78,7 +87,7 @@ public class HostGui implements Gui {
     }
     
     public void DoEndWorkDay() {
-    	canRelease = true;
+    	canRelease = false;
     	xDestination = entranceX;
     	yDestination = entranceY;
     }

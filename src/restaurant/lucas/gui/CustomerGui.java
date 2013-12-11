@@ -14,6 +14,7 @@ public class CustomerGui implements Gui {
 	private boolean isPresent = false;
 	private boolean isHungry = false;
 
+	String name = "";
 	//private HostAgent host;
 	RestaurantGui gui;
 
@@ -69,7 +70,14 @@ public class CustomerGui implements Gui {
 			g.drawString(choiceDisplay, xPos, yPos);
 		}
 		
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos + 10);
+		
 
+	}
+	
+	public void setName(String str) {
+		name = str;
 	}
 	
 	public void displayChoice(String choice) {

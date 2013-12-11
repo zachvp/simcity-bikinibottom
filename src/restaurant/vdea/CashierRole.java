@@ -1,5 +1,7 @@
 package restaurant.vdea;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
@@ -51,7 +53,7 @@ public class CashierRole extends WorkRole implements Cashier{
 		//from waiter
 		public void msgComputeBill(Waiter w, Customer c, String choice, int table) {
 			log.add(new LoggedEvent("Received msgComputeBill from waiter."));
-			print("Recieved new bill to compute");
+			Do(AlertTag.RESTAURANT,"Recieved new bill to compute");
 			transactions.add(new Transaction(w, c, choice, table));
 			//status = PaymentStatus.pending;
 			stateChanged();
@@ -67,7 +69,7 @@ public class CashierRole extends WorkRole implements Cashier{
 						t.status = PaymentStatus.paymentReceived;
 					}
 					else{
-						print(c.getName() + " doesn't have enough money!");
+						Do(AlertTag.RESTAURANT, c.getName() + " doesn't have enough money!");
 						t.status = PaymentStatus.notEnough;
 					}
 					t.payment = cash;
@@ -77,12 +79,22 @@ public class CashierRole extends WorkRole implements Cashier{
 		}
 			
 		//from Market
-		public void msgMarketBill(Market m, double bill){
+		/*public void msgMarketBill(Market m, double bill){
 			log.add(new LoggedEvent("Received MarketBill from market. Bill = "+ bill));
-			print("recieved bill from market " + m.getName());
+			Do(AlertTag.RESTAURANT, "recieved bill from market " + m.getName());
 			bills.add(new MarketBill(m, bill));
 			bStatus = BillStatus.pending;
 			stateChanged();
+		}*/
+		
+		@Override
+		public void msgHereIsYourTotal(double total, market.interfaces.Cashier cashier) {
+			log.add(new LoggedEvent("Received MarketBill from market."));
+			Do(AlertTag.RESTAURANT, "recieved bill from market");
+			bills.add(new MarketBill(total, cashier));
+			bStatus = BillStatus.pending;
+			stateChanged();
+			
 		}
 		
 
@@ -131,21 +143,21 @@ public class CashierRole extends WorkRole implements Cashier{
 			if(bank>=b.bill){
 				check = b.bill;	//write check for amnt
 				bank -= b.bill;			//deduct from bank
-				print("Paying bill to market: " + b.m.getName());
-				b.m.msgBillPayment(check, this);
+				Do(AlertTag.RESTAURANT, "Paying bill to market: " + b.m.getName());
+				b.m.msgHereIsPayment(check, this);
 				bills.remove(b);
 			}
 			else{
 				check = bank;
 				bank = 0;
-				b.m.msgNotEnough(check,this);
+				b.m.msgHereIsPayment(check,this);
 				b.debt = b.bill-check;
 			}
 			
 		}
 
 		private void calculateBill(Transaction t){
-			print("Calculating bill for table " + t.table);
+			Do(AlertTag.RESTAURANT, "Calculating bill for table " + t.table);
 			t.w.msgHereIsCheck(t.total, t.table);
 		}
 		
@@ -157,7 +169,7 @@ public class CashierRole extends WorkRole implements Cashier{
 		}
 
 		private void chargeIt(Transaction t){
-			print("calculating change...");
+			Do(AlertTag.RESTAURANT, "calculating change...");
 			bank += t.payment;
 			double change = t.getChange();
 			t.c.msgHereIsYourChange(change);
@@ -173,7 +185,7 @@ public class CashierRole extends WorkRole implements Cashier{
 					else
 					{
 						bank-=b.debt;
-						b.m.msgBillPayment(b.debt, this);
+						b.m.msgHereIsPayment(b.debt, this);
 						bills.remove(b); //TODO
 						
 					}
@@ -206,13 +218,18 @@ public class CashierRole extends WorkRole implements Cashier{
 		}
 		
 		public class MarketBill{
-			public Market m;
-			public double bill;
-			public double debt;
+			//public Market m;
+			//public double bill;
+			public double debt = 0;
+			double bill;
+			market.interfaces.Cashier m;
 			
-			MarketBill(Market newM, double newBill){
-				m = newM;
-				bill = newBill;
+			MarketBill(double t, market.interfaces.Cashier c){
+				//m = newM;
+				//bill = newBill;
+				bill = t;
+				m = c;
+				
 			}
 		}
 
@@ -235,6 +252,8 @@ public class CashierRole extends WorkRole implements Cashier{
 		public void setGui(CashierGui cashierGui) {
 			gui = cashierGui;
 		}
+
+	
 
 
 }

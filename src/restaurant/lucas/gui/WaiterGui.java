@@ -19,6 +19,7 @@ public class WaiterGui implements Gui {
 
     private WaiterRoleBase agent = null;
 
+    String name = "";
 
     private int xPos = 0, yPos = 0;//default waiter position
     private int xDestination = 0, yDestination = 0;//default start position
@@ -77,13 +78,21 @@ public class WaiterGui implements Gui {
 //    	g.drawImage(waiterImg, xPos, yPos, null);
         g.setColor(Color.MAGENTA);
         g.fillRect(xPos, yPos, agentDim, agentDim);
-        
+
         if(!customerChoice.equals("none")) {
-        	
-        g.drawString(customerChoice, xPos, yPos);
-        	}
+
+        	g.drawString(customerChoice, xPos, yPos);
+        }
+        
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos + 10);
+		
 
     }
+    
+	public void setName(String str){
+		name = str;
+	}
     
     public void displayChoice(String choice) {
     	customerChoice = choice;

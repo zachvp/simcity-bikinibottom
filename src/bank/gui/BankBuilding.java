@@ -258,6 +258,7 @@ public class BankBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
+		infoPanel.setBuildingName(getName());
 		return infoPanel;
 	}
 	

@@ -176,6 +176,17 @@ public class CashierRole extends WorkRole implements Cashier {
 		this.CookTimer = new Timer();
 	}
 
+	/**
+	 * constructor used for JUnit testing
+	 * @param string
+	 */
+	public CashierRole(String string) {
+		getPriceMenu().put("Krabby Patty", 15.99);//populates pricemenu map
+		getPriceMenu().put("Kelp Shake", 10.99);
+		getPriceMenu().put("Coral Bits", 5.99);
+		getPriceMenu().put("Kelp Rings", 8.99);
+	}
+
 
 	public String getMaitreDName() {
 		return name;
@@ -307,7 +318,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private void leaveWork() {
 		cashierGui.DoLeaveRestaurant();
-		acquireSemaphore(active);
+		Do(AlertTag.RESTAURANT, "" +active.availablePermits());
 	}
 	
 
@@ -317,15 +328,19 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void goToWork() {
+		cashierGui.setName(person.getName());
 		cashierGui.DoGoToDesk();
+		Do(AlertTag.RESTAURANT, "" +active.availablePermits());
 		acquireSemaphore(active);
 		atWork = true;
 	}
 	
 	private void acquireSemaphore(Semaphore a) {
 		try {
+			Do(AlertTag.RESTAURANT, "" +a.availablePermits());
 			a.acquire();
 		} catch (InterruptedException e) {
+			print("AHHHHHHHHHH");
 			e.printStackTrace();
 		}
 	}
@@ -449,6 +464,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void activate() {
 		super.activate();
 		this.getPerson().setShouldDepositRestaurantMoney(true);
+	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
 	}
 	
 }

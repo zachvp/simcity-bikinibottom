@@ -65,7 +65,7 @@ public class LayoutGui implements Gui {
 	        t4.fillRect(400, 100, tableColor, tableColor);//200 and 250 need to be table params (locations)
 
 	        //Cashier area
-	        cashierArea.setColor(Color.BLACK);
+	        cashierArea.setColor(Color.LIGHT_GRAY);
 	        cashierArea.fillRect(400, 0, 50, 20);
 	        cashierArea.setColor(Color.WHITE);
 	        //cashierArea.drawString("Cashier", 400, 15);
@@ -82,7 +82,7 @@ public class LayoutGui implements Gui {
 			g.fillRect(520, 145, 30, 20);
 			//Grills
 			for(int i = 0; i < 4; i++) {
-				g.setColor(Color.BLACK);
+				g.setColor(Color.GRAY);
 				g.fillRect(550, 50 + (i*25), 20, 20);
 //				if(gr.o!=null) {
 //					g.setColor(Color.RED);
@@ -91,7 +91,7 @@ public class LayoutGui implements Gui {
 			}
 			
 			for(int i = 0; i < 4; i++) {
-				g.setColor(Color.DARK_GRAY);
+				g.setColor(Color.PINK);
 				g.fillRect(500, 50 + (i*25), 20, 20);
 //				if(p.o!=null) {
 //					g.setColor(Color.RED);

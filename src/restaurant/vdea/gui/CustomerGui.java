@@ -96,17 +96,17 @@ public class CustomerGui implements Gui{
 
 		if(ordered){
 			g.setColor(Color.BLACK);
-			if(myChoice.equals("steak")){
-				g.drawString("ST?", xPos+22, yPos+10);
+			if(myChoice.equals("Krabby Patty")){
+				g.drawString("KP?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("chicken")){
-				g.drawString("CH?", xPos+22, yPos+10);
+			if(myChoice.equals("Kelp Shake")){
+				g.drawString("KS?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("salad")){
-				g.drawString("SAL?", xPos+22, yPos+10);
+			if(myChoice.equals("coral Bits")){
+				g.drawString("CB?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("pizza")){
-				g.drawString("PZ?", xPos+22, yPos+10);
+			if(myChoice.equals("Kelp Rings")){
+				g.drawString("KR?", xPos+22, yPos+10);
 			}
 			if(myChoice.equals("nothing")){
 				g.drawString("", xPos+22, yPos+10);
@@ -115,17 +115,17 @@ public class CustomerGui implements Gui{
 		
 		if(recieved){
 			g.setColor(Color.BLACK);
-    		if(myChoice.equals("steak")){
-    			g.drawString("ST", xPos+22, yPos+10);
+    		if(myChoice.equals("Krabby Patty")){
+    			g.drawString("KP", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("chicken")){
-    			g.drawString("CH", xPos+22, yPos+10);
+    		if(myChoice.equals("Kelp Shake")){
+    			g.drawString("KS", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("salad")){
-    			g.drawString("SAL", xPos+22, yPos+10);
+    		if(myChoice.equals("Coral Bits")){
+    			g.drawString("CB", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("pizza")){
-    			g.drawString("PZ", xPos+22, yPos+10);
+    		if(myChoice.equals("Kelp Rings")){
+    			g.drawString("KR", xPos+22, yPos+10);
     		}
 		}
 		

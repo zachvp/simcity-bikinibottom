@@ -3,6 +3,7 @@ package transportation.test.mock;
 import gui.trace.AlertTag;
 import housing.backend.ResidentRole;
 
+import java.awt.image.BufferedImage;
 import java.util.Map;
 
 import mock.EventLog;
@@ -159,6 +160,24 @@ public class MockPerson extends Mock implements Person{
 	public boolean hasSomethingToDo() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public BufferedImage getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setShouldDepositRestaurantMoney(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getCashierMoney() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

@@ -13,7 +13,7 @@ import agent.gui.Gui;
 public class CookGui implements Gui{
 
 	private Cook agent = null;
-	private boolean isPresent = true;
+	private boolean isPresent = false;
 	private String holding = null;
 	
 	private List<Dimension> grillPositions = null;
@@ -171,5 +171,11 @@ public class CookGui implements Gui{
 	}
 	public Cook getAgent(){
 		return agent;
+	}
+
+	public void DoLeaveWork() {
+		canRelease = true;
+		xDestination = -20;
+		yDestination = -20;
 	}
 }

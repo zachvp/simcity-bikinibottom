@@ -1,6 +1,7 @@
 package restaurant.lucas.gui;
 
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.lucas.CashierRole;
 import restaurant.lucas.CookRole;
 import restaurant.lucas.CustomerRole;
@@ -24,7 +27,8 @@ import agent.Role;
 import agent.interfaces.Person;
 
 
-public class RestaurantLucasBuilding extends Building {
+public class RestaurantLucasBuilding extends Building
+	implements RestaurantFakeOrderInterface{
 	
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
@@ -37,7 +41,7 @@ public class RestaurantLucasBuilding extends Building {
 
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static final int timeDifference = 12;
+	private static final int timeDifference = 1;
 	
 	RestaurantGui restaurantGui = new RestaurantGui();
 	
@@ -50,16 +54,16 @@ public class RestaurantLucasBuilding extends Building {
 		orderWheel = new OrderWheel();
 		
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount * timeDifference) % 2;
+		this.timeOffset = ((instanceCount % 2) * timeDifference);
 		instanceCount++;
 		
 		initRoles();
 		
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		infoPanel.setKrabbyPattyPrice("15.99");
+		infoPanel.setKelpShakePrice("10.99");
+		infoPanel.setCoralBitsPrice("5.99");
+		infoPanel.setKelpRingsPrice("8.99");
 	}
 	
 	private void initRoles() {
@@ -118,33 +122,33 @@ public class RestaurantLucasBuilding extends Building {
 			restaurantGui.getAnimationPanel().addGui(wGui);
 		}
 		
-		//Creates PCWaiterRoles
-//		for (int i = 0; i < 2; i++) {
-//			// Create the waiter and add it to the list
-//			PCWaiterRole w = new PCWaiterRole(null, this);
-//			w.setIdlePosition(i);
-//			w.setOrderWheel(orderWheel);
-//			pcWaiters.add(w);
-//			
-//			//give roles to host so host can end work day
-//			host.addRole(w);
-//			
-//			// Set references between the waiter and other roles
-//			w.setOtherRoles(host, cashier);
-////			w.setCook(cook);
-//			//TODO make setcook method for normalWaiter
-//			host.addWaiter(w);
-//			
-//			// Create and set up the waiter GUI
-//			WaiterGui wGui = new WaiterGui(w, restaurantGui);
-//			w.setGui(wGui);
-//			restaurantGui.getAnimationPanel().addGui(wGui);
-//		}
+//		Creates PCWaiterRoles
+		for (int i = 0; i < 2; i++) {
+			// Create the waiter and add it to the list
+			PCWaiterRole w = new PCWaiterRole(null, this);
+			w.setIdlePosition(i);
+			w.setOrderWheel(orderWheel);
+			pcWaiters.add(w);
+			
+			//give roles to host so host can end work day
+			host.addRole(w);
+			
+			// Set references between the waiter and other roles
+			w.setOtherRoles(host, cashier);
+//			w.setCook(cook);
+			//TODO make setcook method for normalWaiter
+			host.addWaiter(w);
+			
+			// Create and set up the waiter GUI
+			WaiterGui wGui = new WaiterGui(w, restaurantGui);
+			w.setGui(wGui);
+			restaurantGui.getAnimationPanel().addGui(wGui);
+		}
 	}
 
 	@Override
 	public XYPos entrancePos() {
-		return new XYPos(Constants.BUILDING_WIDTH/2, Constants.BUILDING_HEIGHT/2);
+		return new XYPos(Constants.BUILDING_WIDTH/2, Constants.BUILDING_HEIGHT);
 	}
 
 	@Override
@@ -196,9 +200,10 @@ public class RestaurantLucasBuilding extends Building {
 		return new StaffDisplay();//TODO FIX
 	}
 	
+	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-				waiterOnDuty();
+				waiterOnDuty() && cook.hasAnyFood() && super.isOpen();
 	}
 	
 	public boolean hostOnDuty() {
@@ -221,6 +226,29 @@ public class RestaurantLucasBuilding extends Building {
 			if (w.isAtWork()) { return true; }
 		}
 		return false;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
+	}
+	
+	
+	public void updateInfoPanelInventory(int kp, int ks, int cb, int kr ) {
+		infoPanel.setKrabbyPattyInventory(kp);
+		infoPanel.setKelpShakeInventory(ks);
+		infoPanel.setCoralBitsInventory(cb);
+		infoPanel.setKelpRingsInventory(kr);
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.setLowOnFood();
 	}
 	
 	

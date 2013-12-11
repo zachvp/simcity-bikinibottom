@@ -74,6 +74,9 @@ public class HostRole extends WorkRole {
 		int closingHour = ((RestaurantVegaPerkBuilding) building).getClosingHour();
 		int closingMinute = ((RestaurantVegaPerkBuilding) building).getClosingMinute();
 		schedule.scheduleDailyTask(command, closingHour, closingMinute);
+		
+		Do("closing hour " + closingHour);
+		Do("closing minute " + closingMinute);
 	}
 
 	/** Messages from other agents */

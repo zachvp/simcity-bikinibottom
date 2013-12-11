@@ -21,8 +21,8 @@ public class HostGui implements Gui{
 	private static final int width = 20;
 	private static final int height = 20;
 	
-	private static final int homeX = 160;
-	private static final int homeY = 310;
+	private static final int homeX = 10;
+	private static final int homeY = 10;
 	
 	public HostGui(HostRole c, RestaurantGui gui){
 		this.agent = c;

@@ -23,7 +23,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	//agent members
 	CashierRole cashier = null;
 	
-	private boolean atWork = false;
+	private boolean shouldWork = false;
 	
 	protected WaiterGui waiterGui;
 	protected int homePosition = -1;
@@ -217,7 +217,9 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			return true;
 		}
 		
-		goWait();
+		if(shouldWork) goWait();
+		else DoLeaveWork();
+		
 		return false;
 	}
 
@@ -288,6 +290,10 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	/** The animation DoXYZ() routines */
 	protected void DoGoToTable(int table) {
 		waiterGui.DoGoToTable(host.getTableMap().get(table).width, host.getTableMap().get(table).height); 
+	}
+	
+	protected void DoLeaveWork() {
+		waiterGui.DoLeaveWork();
 	}
 	
 	protected void DoGoToHost(){
@@ -375,8 +381,16 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 	
 	@Override
+	public void activate() {
+		super.activate();
+		shouldWork = true;
+	}
+	
+	@Override
 	public void msgLeaveWork() {
-		DoGoToHost();
+		Do("Leaving Work");
+		shouldWork = false;
+		DoLeaveWork();
 		waitForInput();
 		
 		this.deactivate();

@@ -42,6 +42,8 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private boolean onOpening = true;
 	
+	private boolean shouldWork = false;
+	
 	private RevolvingOrderList revolvingOrders;
 	private boolean timerSet = false;
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
@@ -488,9 +490,18 @@ public class CookRole extends WorkRole implements Cook {
 	public boolean isOnBreak() {
 		return false;
 	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		shouldWork = true;
+		cookGui.DoGoHome();
+	}
 
 	@Override
 	public void msgLeaveWork() {
+		Do("Leaving Work");
+		shouldWork = false;
 		cookGui.DoLeaveWork();
 		waitForInput();
 		
@@ -514,6 +525,7 @@ public class CookRole extends WorkRole implements Cook {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			deliveries.get(orderNum).state = DeliveryState.NEED_TO_REORDER;
 			stateChanged();
 		}
 	}

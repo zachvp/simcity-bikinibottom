@@ -5,6 +5,7 @@ import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 import agent.WorkRole;
 import agent.interfaces.Person;
+import gui.Building;
 import gui.trace.AlertTag;
 
 import java.awt.Dimension;
@@ -34,12 +35,12 @@ public class HostRole extends WorkRole {
 	
 	private HostGui gui;
 	
-	private boolean shouldLeaveWork = false;
+	private boolean shouldWork = false;
 	
 	int chooseWaiter = -1;//cycles through the list of waiters
 	
-	public List<Customer> waitingCustomers =
-			Collections.synchronizedList(new ArrayList<Customer>());
+	public List<MyCustomer> waitingCustomers =
+			Collections.synchronizedList(new ArrayList<MyCustomer>());
 	private List<MyWaiter> waiters =
 			Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
@@ -54,6 +55,9 @@ public class HostRole extends WorkRole {
 
 	public HostRole(Person person, CityBuilding building) {
 		super(person, building);
+		
+		System.out.println("Closing hour " + ((Building) building).getClosingHour());
+		System.out.println("Closing minute " + ((Building) building).getClosingMinute());
 		
 		// make some tables
 		synchronized(tables){
@@ -73,17 +77,20 @@ public class HostRole extends WorkRole {
 			}
 		};
 		
-		int closingHour = ((RestaurantVegaPerkBuilding) building).getClosingHour();
-		int closingMinute = ((RestaurantVegaPerkBuilding) building).getClosingMinute();
-		schedule.scheduleDailyTask(command, closingHour, closingMinute);
+//		int closingHour = ((RestaurantVegaPerkBuilding) building).getOpeningHour();
+//		int closingMinute = ((RestaurantVegaPerkBuilding) building).getOpeningMinute();
 		
-		Do("closing hour " + closingHour);
-		Do("closing minute " + closingMinute);
+		schedule.scheduleDailyTask(command, 9, 20);
+		
+//		System.out.println("closing hour " + closingHour);
+//		System.out.println("closing minute " + closingMinute);
+//		System.out.println("opening hour " + openingHour);
+//		System.out.println("opening minute " + openingMinute);
 	}
 
 	/** Messages from other agents */
 	public void msgIWantFood(Customer c) {
-		waitingCustomers.add(c);
+		waitingCustomers.add(new MyCustomer(c));
 		stateChanged();
 	}
 	
@@ -91,7 +98,11 @@ public class HostRole extends WorkRole {
 		for(Table table : tables){
 			if(table.getTableID() == t){
 				table.setUnoccupied();
-				Do("Set table unoccupied");
+			}
+		}
+		for(MyCustomer mc : waitingCustomers) {
+			if(mc.table == t) {
+				waitingCustomers.remove(mc);
 			}
 		}
 		stateChanged();
@@ -122,14 +133,6 @@ public class HostRole extends WorkRole {
 		setPresent(true);
 
 		synchronized(tables){
-			if(shouldLeaveWork && waitingCustomers.isEmpty() && !tablesOccupied()) {
-				synchronized(waiters) {
-					for(MyWaiter mw : waiters) {
-						tellWaiterToGetOffWork(mw);
-					}
-				}
-				return true;
-			}
 			
 			for (Table table : tables) {
 				if (!waitingCustomers.isEmpty() && !table.isOccupied() && !waiters.isEmpty()) {
@@ -140,9 +143,9 @@ public class HostRole extends WorkRole {
 		}
 		
 		synchronized(waitingCustomers){
-			for(Customer c : waitingCustomers){
-				if(c.getName().equals("impatient")){
-					tellCustomerNoTables(c);
+			for(MyCustomer c : waitingCustomers){
+				if(c.customer.getName().equals("impatient")){
+					tellCustomerNoTables(c.customer);
 					return true;
 				}
 			}
@@ -158,18 +161,22 @@ public class HostRole extends WorkRole {
 			}
 		}
 		
+		if(!shouldWork && waitingCustomers.isEmpty()) {
+			closeRestaurant();
+			return true;
+		}
+		
 		return false;
-		//we have tried all our rules and found
-		//nothing to do. So return false to main loop of abstract agent
-		//and wait.
 	}
 
 	/** Actions. Implement the methods called in the scheduler. */
-	private void seatCustomer(Customer customer, Table table) {
-		findLeastBusyWaiter().waiter.msgPleaseSeatCustomer(customer, table.getTableID());
+	private void seatCustomer(MyCustomer c, Table table) {
+		findLeastBusyWaiter().waiter.msgPleaseSeatCustomer(c.customer, table.getTableID());
 		Do("seat at table " + table.getTableID());
-		table.setOccupant(customer);
-		waitingCustomers.remove(customer);
+		table.setOccupant(c.customer);
+		c.state = CustomerState.EATING;
+		c.table = table.tableID;
+//		waitingCustomers.remove(customer);
 		stateChanged();
 	}
 	
@@ -193,13 +200,6 @@ public class HostRole extends WorkRole {
 		w.waiter.msgDenyBreak();
 	}
 	
-	private void tellWaiterToGetOffWork(MyWaiter mw) {
-		gui.DoLeaveWork();
-		((WorkRole) mw.waiter).msgLeaveWork();
-		waitForInput();
-		this.deactivate();
-	}
-
 	/** Utility functions */
 	public void addWaiter(Waiter w){
 		if(!((Role) w).isActive()) return;
@@ -233,6 +233,18 @@ public class HostRole extends WorkRole {
 		return null;
 	}
 	
+	private enum CustomerState { NONE, SEATED, EATING }
+	private class MyCustomer {
+		Customer customer;
+		CustomerState state;
+		int table;
+		
+		MyCustomer(Customer c) {
+			this.customer = c;
+			this.state = CustomerState.NONE;
+		}
+	}
+	
 	private enum WaiterState {NONE, REQUESTED_BREAK, ON_BREAK};
 	private class MyWaiter{
 		Waiter waiter;
@@ -261,7 +273,7 @@ public class HostRole extends WorkRole {
 		this.cashier = cashier;
 	}
 	
-	public List<Customer> getWaitingCustomers() {
+	public List<MyCustomer> getWaitingCustomers() {
 		return waitingCustomers;
 	}
 
@@ -338,15 +350,37 @@ public class HostRole extends WorkRole {
 	}
 
 	@Override
-	public void msgLeaveWork() {
-		shouldLeaveWork = true;
-		for(MyWaiter mw : waiters) {
-			((WorkRole) mw.waiter).msgLeaveWork();
-		}
-		((WorkRole) cook).msgLeaveWork();
-		((WorkRole) cashier).msgLeaveWork();
+	public void activate() {
+		super.activate();
+		gui.DoGoHome();
 		
+		for(MyWaiter mw : waiters) {
+			((WaiterRoleBase) mw.waiter).activate();
+		}
+		((CookRole) cook).activate();
+		((CashierRole) cashier).activate();
+		
+		shouldWork = true;
+	}
+	
+	@Override
+	public void msgLeaveWork() {
+		shouldWork = false;
 		stateChanged();
+	}
+	
+	public void closeRestaurant() {
+		for(MyWaiter mw : waiters) {
+			((WaiterRoleBase) mw.waiter).msgLeaveWork();
+		}
+		
+		((CookRole) cook).msgLeaveWork();
+		((CashierRole) cashier).msgLeaveWork();
+		
+		this.gui.DoLeaveWork();
+		waitForInput();
+		
+		this.deactivate();
 	}
 
 	public void msgAtDestination() {

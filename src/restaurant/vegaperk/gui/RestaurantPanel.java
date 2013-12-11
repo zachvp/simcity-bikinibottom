@@ -6,6 +6,7 @@ import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
 import restaurant.vegaperk.backend.PCWaiterRole;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vegaperk.backend.RevolvingOrderList;
 import restaurant.vegaperk.backend.WaiterRole;
 import restaurant.vegaperk.backend.WaiterRoleBase;
@@ -32,7 +33,7 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel {
 	private final int WAITER_COUNT = 4;
 	
-	Building building;
+	RestaurantVegaPerkBuilding building;
 	
     //Host, cook, waiters and customers
 	private ArrayList<Role> agentList = new ArrayList<Role>();
@@ -68,11 +69,15 @@ public class RestaurantPanel extends JPanel {
     private CashierGui cashierGui;
     private HostGui hostGui;
 
-    public RestaurantPanel(RestaurantGui gui, Building building) {
+    public RestaurantPanel(RestaurantGui gui, RestaurantVegaPerkBuilding building) {
     	this.building = building;
     	
+//    	System.out.println("Closing hour " + building.getClosingHour());
+//		System.out.println("Closing minute " + building.getClosingMinute());
+    	
     	// make the new roles for the building
-    	this.host = new HostRole(hostPerson, building);
+    	this.host = new HostRole(hostPerson, this.building);
+    	
     	this.hostGui = new HostGui(host, gui);
     	this.host.setGui(hostGui);
     	
@@ -260,7 +265,7 @@ public class RestaurantPanel extends JPanel {
 	    	agentList.add(w);
 			w.setHost(host);
 			
-//			w.activate();
+			w.activate();
 			
 			gui.getAnimationPanel().addGui(wg);
 			w.setGui(wg);

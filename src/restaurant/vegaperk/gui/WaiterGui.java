@@ -26,8 +26,8 @@ public class WaiterGui implements Gui {
     private int xPos = 0, yPos = 0;//default waiter position
     private int xDestination = 0, yDestination = 0;//default start position
 
-    private static final int hostX = 40;
-    private static final int hostY = 50;
+    private static final int hostX = 0;
+    private static final int hostY = 0;
     
     private static final int cookX = 420;
     private static final int cookY = 50;
@@ -142,6 +142,13 @@ public class WaiterGui implements Gui {
     	waiting = false;
         xDestination = 30;
         yDestination = 170;
+        canRelease = false;
+    }
+    
+    public void DoLeaveWork(){
+    	waiting = false;
+        xDestination = -20;
+        yDestination = -20;
         canRelease = false;
     }
     

@@ -38,10 +38,10 @@ public class RestaurantVegaPerkBuilding extends Building {
 		staff.addAllWorkRolesToStaffList();
 		
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		infoPanel.setKrabbyPattyPrice("1.25");
+		infoPanel.setKelpShakePrice("2.00");
+		infoPanel.setCoralBitsPrice("1.50");
+		infoPanel.setKelpRingsPrice("2.00");
 		
 		// Stagger opening/closing time
 		this.timeOffset = (instanceCount * timeDifference) % 2;

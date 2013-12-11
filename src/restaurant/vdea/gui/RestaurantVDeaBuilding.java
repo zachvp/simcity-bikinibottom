@@ -80,6 +80,7 @@ public class RestaurantVDeaBuilding extends Building
     		restaurantGui.animationPanel.addGui(waiterGui);
 		}
 		
+		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
 		

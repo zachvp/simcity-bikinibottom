@@ -498,7 +498,8 @@ ClassifiedsChangedListener{
 		outerloop:
 		while(true) {
 			for (MyComboBoxItem cbItem : buildList) {
-				if ( ((CityLocation)(cbItem.object)).type() == type) {
+				if (cbItem.object != null &&
+						((CityLocation)(cbItem.object)).type() == type) {
 					buildingsCB.setSelectedItem(cbItem);
 					checkClassifiedsforJobs();
 					if(occList.size() > 1){
@@ -516,8 +517,8 @@ ClassifiedsChangedListener{
 		
 	}
 
-	public void createUnemployedUntil150People() {
-		while(citizenRecords.citizens.size() < 150) {
+	public void createUnemployedUntil130People() {
+		while(citizenRecords.citizens.size() < 130) {
 			occupationsCB.setSelectedIndex(0);
 			residencesCB.setSelectedIndex(1);
 			wealthCB.setSelectedIndex(0);
@@ -583,7 +584,8 @@ ClassifiedsChangedListener{
 		outerloop:
 		while(true) {
 			for (MyComboBoxItem cbItem : buildList) {
-				if ( ((CityLocation)(cbItem.object)).type() == LocationTypeEnum.Restaurant) {
+				if (cbItem.object != null &&
+						 ((CityLocation)(cbItem.object)).type() == LocationTypeEnum.Restaurant) {
 					buildingsCB.setSelectedItem(cbItem);
 					checkClassifiedsforJobs();
 					for (MyComboBoxItem cbItem2 : occList) {

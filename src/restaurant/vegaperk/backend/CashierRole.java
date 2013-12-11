@@ -27,7 +27,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private DecimalFormat df = new DecimalFormat("#.##");
 	
-	private boolean leaveWork = false;
+	private boolean shouldWork = false;
 	
 	private CashierGui gui;
 	
@@ -76,6 +76,10 @@ public class CashierRole extends WorkRole implements Cashier {
 				}
 			}
 		}
+		
+		if(shouldWork) DoGoHome();
+		else DoLeaveWork();
+		
 		return false;
 	}
 	
@@ -230,12 +234,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	/* --- Animation Routines --- */
 	private void DoLeaveWork() {
 		gui.DoLeaveWork();
-		waitForInput();
 	}
 	
 	private void DoGoHome() {
+		gui.setPresent(true);
 		gui.DoGoHome();
-		waitForInput();
 	}
 	
 	@Override
@@ -255,13 +258,18 @@ public class CashierRole extends WorkRole implements Cashier {
 
 	@Override
 	public void msgLeaveWork() {
-		leaveWork = true;
+		Do("Leaving Work");
+		shouldWork = false;
+		DoLeaveWork();
+		waitForInput();
+		
+		this.deactivate();
 	}
 	
 	@Override
 	public void activate() {
 		super.activate();
-		leaveWork = false;
+		shouldWork = true;
 	}
 
 	@Override
@@ -305,5 +313,9 @@ public class CashierRole extends WorkRole implements Cashier {
 		mc.payment = p;
 		mc.setState(CustomerState.PAID);
 		stateChanged();
+	}
+
+	public boolean onDuty() {
+		return isActive();
 	}
 }

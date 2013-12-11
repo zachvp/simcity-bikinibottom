@@ -6,6 +6,7 @@ import restaurant.vegaperk.backend.CustomerRole;
 import restaurant.vegaperk.backend.HostRole;
 import restaurant.vegaperk.backend.MarketAgent;
 import restaurant.vegaperk.backend.PCWaiterRole;
+import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
 import restaurant.vegaperk.backend.RevolvingOrderList;
 import restaurant.vegaperk.backend.WaiterRole;
 import restaurant.vegaperk.backend.WaiterRoleBase;
@@ -21,7 +22,6 @@ import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -33,7 +33,7 @@ import java.util.Vector;
 public class RestaurantPanel extends JPanel {
 	private final int WAITER_COUNT = 4;
 	
-	Building building;
+	RestaurantVegaPerkBuilding building;
 	
     //Host, cook, waiters and customers
 	private ArrayList<Role> agentList = new ArrayList<Role>();
@@ -69,11 +69,15 @@ public class RestaurantPanel extends JPanel {
     private CashierGui cashierGui;
     private HostGui hostGui;
 
-    public RestaurantPanel(RestaurantGui gui, Building building) {
+    public RestaurantPanel(RestaurantGui gui, RestaurantVegaPerkBuilding building) {
     	this.building = building;
     	
+//    	System.out.println("Closing hour " + building.getClosingHour());
+//		System.out.println("Closing minute " + building.getClosingMinute());
+    	
     	// make the new roles for the building
-    	this.host = new HostRole(hostPerson, building);
+    	this.host = new HostRole(hostPerson, this.building);
+    	
     	this.hostGui = new HostGui(host, gui);
     	this.host.setGui(hostGui);
     	
@@ -84,6 +88,9 @@ public class RestaurantPanel extends JPanel {
     	this.cook = new CookRole(cookPerson, building);
     	this.cookGui = new CookGui(cook, gui);
     	this.cook.setCashier(cashier);
+    	
+    	this.host.setCashier(cashier);
+    	this.host.setCook(cook);
     	
     	this.tableGui = new TableGui(host.getTableMap());
     	
@@ -146,8 +153,11 @@ public class RestaurantPanel extends JPanel {
         }
         else {
         	for(int i = 0; i < WAITER_COUNT; i++) {
-        		if(i > 2) addWaiter("Waiters", "cook");
-        		else addWaiter("Waiters", "pc");
+        		WaiterGui wg;
+        		if(i > 2) wg = addWaiter("Waiters", "cook");
+        		else wg = addWaiter("Waiters", "pc");
+        		
+        		wg.getAgent().msgHomePosition(i);
         	}
         }
         

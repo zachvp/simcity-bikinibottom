@@ -17,10 +17,10 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	// prevents the scheduler fro repeatedly running the time delay
 	private boolean timerSet = false;
 	
-	// schedules the time delay
+	// TODO schedules the time delay
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	//shared order list
+	// TODO shared order list that cook also holds
 	private RevolvingOrderList revolvingOrders;
 	
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
@@ -31,8 +31,10 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 	
 	@Override
 	public boolean pickAndExecuteAnAction() {
+		// TODO call the base pick and execute
 		super.pickAndExecuteAnAction();
 		
+		// TODO just like the cook, check the revolving order list based on a time interval
 		if(!timerSet) {
 			timerSet = true;
 			Runnable command = new Runnable() {
@@ -57,6 +59,8 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		return false;
 	}
 	
+	// TODO unique to PC waiter, called from the one scheduled action in the overloaded
+	// scheduler
 	private void checkRevolvingOrderList(Order o) {
 		DoGoToCook();
 		waitForInput();
@@ -85,10 +89,12 @@ public class PCWaiterRole extends WaiterRoleBase implements Waiter {
 		return null;
 	}
 	
+	// TODO set the list
 	public void setRevolvingOrders(RevolvingOrderList orderList) {
 		this.revolvingOrders = orderList;
 	}
 	
+	// TODO implement abstract methods
 	@Override
 	protected void takeOrder(MyCustomer c) {
 		DoGoToTable(c.table);

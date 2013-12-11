@@ -153,11 +153,12 @@ public class PassengerGuiClass implements PassengerGui {
 				PASSENGERW, PASSENGERH);
 		
 		BufferedImage img = passenger.getPerson().getImage();
-		if (img == null) g.setColor(Color.GREEN);
+		/*if (img == null)*/ g.setColor(Color.GREEN);
+		/*
 		else {
 			g.setPaint(new TexturePaint(img, r));
 		}
-		
+		*/
 		g.fill(r);
 	}
 	

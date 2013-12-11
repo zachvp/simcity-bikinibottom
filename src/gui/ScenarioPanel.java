@@ -31,6 +31,7 @@ import market.interfaces.Cashier;
 import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.XYPos;
@@ -57,6 +58,8 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	JCheckBox gradingViewCB;
 	JLabel msg;
 	
+	private Sound Testing = Sound.getInstance();
+	
 	public ScenarioPanel(PersonCreationPanel pcp) {
 		this.pcp = pcp;
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
@@ -74,7 +77,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		imagePanel.setOpaque(false);
 		
 		eastPanel = new JPanel();
-		eastDim = new Dimension((int)(d.width*0.50),(int)(d.height));
+		eastDim = new Dimension((int)(d.width),(int)(d.height));
 		eastPanel.setPreferredSize(eastDim);
 		eastPanel.setMaximumSize(eastDim);
 		eastPanel.setMinimumSize(eastDim);
@@ -235,6 +238,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 		// TODO Add delays to scenarios?
 		if(e.getSource() == runScenarioButton){
+			Testing.playSound("testing.wav");
 			if (scenarioA.isSelected()) {
 				employAllWorkplaces();
 				createNonWorkingPersonThatVisitsEverywhere();
@@ -255,7 +259,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioF.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				explainScenarioF();
 				
 			} else if (scenarioG.isSelected()) {
@@ -266,7 +270,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioJ.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowToHaveMoreTraffic();
 				
 			} else if (scenarioO.isSelected()) {
@@ -281,12 +285,12 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioR.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowScenarioR();
 				
 			} else if (scenarioS.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowScenarioS();
 			}
 			
@@ -327,7 +331,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	}
 
 	private void describeHowScenarioR() {
-		say("Banks are closed on weekends");
+		say("Banks are closed on weekends, please wait for the weekend.");
 	}
 	
 	private void employRestaurantsWithoutCook() {
@@ -348,8 +352,8 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 	}
 
-	private void createUnemployedUntil50People() {
-		pcp.createUnemployedUntil150People();
+	private void createUnemployedUntil130People() {
+		pcp.createUnemployedUntil130People();
 		
 	}
 

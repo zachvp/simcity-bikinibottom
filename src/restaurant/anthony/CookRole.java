@@ -238,6 +238,7 @@ public class CookRole extends WorkRole implements Cook {
 			OffWork();
 		}
 
+		CheckInventory();
 		return false;
 	}
 
@@ -271,7 +272,7 @@ public class CookRole extends WorkRole implements Cook {
 		GoToFridge();
 
 		if (currentFood.amount == 0) {
-			print("No more " + currentFood.choice);
+			//print("No more " + currentFood.choice);
 			GoToHome();
 			w.msgNoMoreFood(o.name, o);
 			CheckInventory();
@@ -295,7 +296,7 @@ public class CookRole extends WorkRole implements Cook {
 			GoToHome();
 			timer.schedule(new TimerTask() {
 				public void run() {
-					print("Done cooking " + o.name);
+					//print("Done cooking " + o.name);
 					GoToStove(w.getWaiterNumber());
 					
 					cookGui.RemoveFood(w.getWaiterNumber(), "Stove");

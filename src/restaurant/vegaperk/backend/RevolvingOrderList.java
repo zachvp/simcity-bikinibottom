@@ -5,6 +5,12 @@ import java.util.List;
 
 import restaurant.vegaperk.interfaces.Waiter;
 
+/**
+ * RevolvingOrderList acts as both an order factory (for the cook) and a
+ * single container for orders accessed by the new waiter and cook. 
+ * @author Zach VP
+ *
+ */
 public class RevolvingOrderList {
 	List<Order> orderList;
 	
@@ -12,6 +18,7 @@ public class RevolvingOrderList {
 		this.orderList = Collections.synchronizedList(new ArrayList<Order>());
 	}
 	
+	// TODO move order data from cook into here
 	/* --- Order Data --- */
 	public enum OrderState {
 		NEED_TO_COOK,
@@ -35,24 +42,15 @@ public class RevolvingOrderList {
 			waiter = w;
 			state = s;
 		}
-		
-		public boolean shouldMessage() { return waiter instanceof WaiterRole; }
-		
-		public Waiter getWaiter() { return waiter; }
-		public OrderState getOrderState() { return state; }
-		public String getChoice() { return choice; }
-		public int getTable() { return table; }
 	}
 
+	// TODO accessed by PC waiter to submit a new order
 	public void addOrder(String c, int t, Waiter w, OrderState pending) {
 		orderList.add(new Order(c, t, w, pending));
 	}
 	
+	// TODO accessed by the cook to create a new order in his own list (like the old way)
 	public Order getNewOrder(String c, int t, Waiter w, OrderState pending) {
 		return new Order(c, t, w, pending);
 	}
-
-	public boolean isEmpty() { return orderList.isEmpty(); }
-	
-	public int getSize() { return orderList.size(); }
 }

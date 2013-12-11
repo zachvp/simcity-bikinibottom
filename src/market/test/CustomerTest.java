@@ -122,7 +122,7 @@ public class CustomerTest extends TestCase
 			//Check money
 				assertEquals("Customer should have $30 in it. It doesn't.", (int) Customer1.getCash(), 30);
 			//Check ActualCost (The invoice)
-				assertEquals("Customer should be $5 in it. It doesn't.", (int) Customer1.getActualCost(), 5);
+				assertEquals("Customer should be $5 in it. It doesn't.", (int) Customer1.getActualCost(), 1);
 				
 			//Check if customer's inventory changes
 				for (int i=0;i<ShoppingList.size();i++){
@@ -144,7 +144,7 @@ public class CustomerTest extends TestCase
 					assertEquals("Customer should have no item in each type of item in his inventorylist (except Kelp Rings). It doesn't.", CurrentInventoryLevel, 0);	
 			}
 			//Check money
-				assertEquals("Customer should have $25 in it. It doesn't.", (int) Customer1.getCash(), 25);
+				assertEquals("Customer should have $25 in it. It doesn't.", (int) Customer1.getCash(), 28);
 				
 			//Check Conditions
 				assertEquals("Customer should have the state as EnteringMarket. It doesn't", Customerstate.Paid, Customer1.getState());
@@ -167,7 +167,7 @@ public class CustomerTest extends TestCase
 							assertEquals("Customer should have no item in each type of item in his inventorylist (except Kelp Rings). It doesn't.", CurrentInventoryLevel, 0);	
 					}
 				//Check money
-					assertEquals("Customer should have $30 in it. It doesn't.", (int) Customer1.getCash(), 25);
+					assertEquals("Customer should have $30 in it. It doesn't.", (int) Customer1.getCash(), 28);
 				//Check Cashier.PaEaA calls no function (Do nothing)
 					assertFalse("Customer's scheduler shouldn't have returned true , but didn't.", Customer1.pickAndExecuteAnAction());
 				//Check Name

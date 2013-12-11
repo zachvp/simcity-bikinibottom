@@ -44,4 +44,11 @@ public class MockDeliveryReceiver extends Mock implements DeliveryReceiver {
 		
 	}
 
+
+	@Override
+	public void stateChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

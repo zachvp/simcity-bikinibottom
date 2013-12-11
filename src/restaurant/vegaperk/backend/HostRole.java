@@ -387,4 +387,8 @@ public class HostRole extends WorkRole {
 	public void setGui(HostGui gui) {
 		this.gui = gui;
 	}
+
+	public boolean onDuty() {
+		return isActive();
+	}
 }

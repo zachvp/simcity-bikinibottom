@@ -544,4 +544,19 @@ public class CookRole extends WorkRole implements Cook {
 	public void setCashier(CashierRole cashier) {
 		this.cashier = cashier;
 	}
+
+	public void makeLowOnFood() {
+		for(Map.Entry<String, Food> entry : inventory.entrySet()) {
+			entry.getValue().amount = 0;
+			entry.getValue().futureQuantity = 0;
+		}
+	}
+
+	public boolean onDuty() {
+		return isActive();
+	}
+
+	public boolean hasFood() {
+		return isActive();
+	}
 }

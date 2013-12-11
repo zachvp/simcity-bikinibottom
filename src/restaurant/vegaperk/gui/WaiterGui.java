@@ -1,7 +1,6 @@
 package restaurant.vegaperk.gui;
 
 
-import restaurant.vegaperk.backend.WaiterRole;
 import restaurant.vegaperk.backend.WaiterRoleBase;
 
 import java.awt.*;
@@ -16,6 +15,8 @@ public class WaiterGui implements Gui {
     private boolean canRelease = false;//this prevents excessive releases from occurring
     private boolean waiting = false;//checks if waiter is going to waiting zone
     
+    private boolean isPresent = false;
+    
     String imgSrc = "resource/spongebob.png";
     Image img = new ImageIcon(imgSrc).getImage();
     
@@ -23,7 +24,7 @@ public class WaiterGui implements Gui {
     private boolean holdingOrder = false;
 
     private int xPos = 0, yPos = 0;//default waiter position
-    private int xDestination = 40, yDestination = 40;//default start position
+    private int xDestination = 0, yDestination = 0;//default start position
 
     private static final int hostX = 40;
     private static final int hostY = 50;
@@ -73,7 +74,11 @@ public class WaiterGui implements Gui {
     }
 
     public boolean isPresent() {
-        return true;
+        return isPresent;
+    }
+    
+    public void setPresent(boolean p) {
+    	this.isPresent = p;
     }
     
     public void setFatigued(){

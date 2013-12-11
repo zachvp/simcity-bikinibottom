@@ -370,6 +370,10 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/** Animation Functions */
+	public void setPresent(boolean b) {
+		cookGui.setPresent(b);
+	}
+	
 	private void DoDrawGrillAndPlates(){
 		cookGui.setGrillDrawPositions(grillPositions, platePositions);
 	}
@@ -392,6 +396,7 @@ public class CookRole extends WorkRole implements Cook {
 		cookGui.DoGoToFridge();
 	}
 	private void DoGoHome(){
+		setPresent(true);
 		cookGui.DoGoHome();
 	}
 	
@@ -485,6 +490,9 @@ public class CookRole extends WorkRole implements Cook {
 
 	@Override
 	public void msgLeaveWork() {
+		cookGui.DoLeaveWork();
+		waitForInput();
+		
 		this.deactivate();
 	}
 

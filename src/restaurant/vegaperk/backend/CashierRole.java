@@ -256,6 +256,10 @@ public class CashierRole extends WorkRole implements Cashier {
 	@Override
 	public void msgLeaveWork() {
 		leaveWork = true;
+		DoLeaveWork();
+		waitForInput();
+		
+		this.deactivate();
 	}
 	
 	@Override

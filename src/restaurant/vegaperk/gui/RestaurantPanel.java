@@ -21,7 +21,6 @@ import agent.interfaces.Person;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -146,8 +145,11 @@ public class RestaurantPanel extends JPanel {
         }
         else {
         	for(int i = 0; i < WAITER_COUNT; i++) {
-        		if(i > 2) addWaiter("Waiters", "cook");
-        		else addWaiter("Waiters", "pc");
+        		WaiterGui wg;
+        		if(i > 2) wg = addWaiter("Waiters", "cook");
+        		else wg = addWaiter("Waiters", "pc");
+        		
+        		wg.getAgent().msgHomePosition(i);
         	}
         }
         
@@ -255,7 +257,7 @@ public class RestaurantPanel extends JPanel {
 	    	agentList.add(w);
 			w.setHost(host);
 			
-			w.activate();
+//			w.activate();
 			
 			gui.getAnimationPanel().addGui(wg);
 			w.setGui(wg);

@@ -8,7 +8,7 @@ import agent.gui.Gui;
 public class CashierGui implements Gui{
 
 	private Cashier agent = null;
-	private boolean isPresent = true;
+	private boolean isPresent = false;
 	private String holding = null;
 	
 	/** Will store the items cooking at each grill */

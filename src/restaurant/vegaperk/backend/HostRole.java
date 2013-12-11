@@ -97,6 +97,8 @@ public class HostRole extends WorkRole {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		setPresent(true);
+		
 		synchronized(tables){
 			if(shouldLeaveWork && waitingCustomers.isEmpty() && !tablesOccupied()) {
 				synchronized(waiters) {
@@ -170,7 +172,9 @@ public class HostRole extends WorkRole {
 	}
 	
 	private void tellWaiterToGetOffWork(MyWaiter mw) {
+		gui.DoLeaveWork();
 		((WorkRole) mw.waiter).msgLeaveWork();
+		waitForInput();
 		this.deactivate();
 	}
 
@@ -180,7 +184,6 @@ public class HostRole extends WorkRole {
 		
 		MyWaiter mw = new MyWaiter(w.getName(), w);
 		waiters.add(mw);
-		w.msgHomePosition(waiters.size());
 		stateChanged();
 	}
 	
@@ -191,6 +194,10 @@ public class HostRole extends WorkRole {
 		}
 		
 		return waiters.get(chooseWaiter%waiters.size());
+	}
+	
+	public void setPresent(boolean b) {
+		gui.setPresent(b);
 	}
 	
 	private MyWaiter findWaiter(Waiter w){

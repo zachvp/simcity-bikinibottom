@@ -23,9 +23,12 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	//agent members
 	CashierRole cashier = null;
 	
-	public WaiterGui waiterGui;
-	public Menu menu = new Menu();
+	private boolean atWork = false;
+	
+	protected WaiterGui waiterGui;
 	protected int homePosition = -1;
+	
+	protected Menu menu = new Menu();
 	
 	protected HostRole host;
 
@@ -148,11 +151,6 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
-		/* Think of this next rule as:
-            Does there exist a table and customer,
-            so that table is unoccupied and customer is waiting.
-            If so seat him at the table.
-		 */
 		try{
 			for (MyCustomer c : customers) {
 				if (c.state==MyCustomerState.WAITING) {
@@ -283,6 +281,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 	
 	protected void goWait(){
+		setPresent(true);
 		DoGoWait();
 	}
 	
@@ -371,6 +370,10 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		return isActive();
 	}
 
+	public void setPresent(boolean p) {
+		waiterGui.setPresent(p);
+	}
+	
 	@Override
 	public void msgLeaveWork() {
 		DoGoToHost();

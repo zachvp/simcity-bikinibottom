@@ -84,7 +84,6 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public Role getCustomerRole(Person person) {
-		// TODO return an actual role?
 		return null;
 	}
 

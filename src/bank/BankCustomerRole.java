@@ -332,7 +332,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount< ((myTooLittle() + myTooMuch())/2)) {
-//			Do("Im getting Loan");
+			Do("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
 			return;
@@ -499,6 +499,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void Do(String str){
+		Do(AlertTag.BANK, str);
 	}
 
 

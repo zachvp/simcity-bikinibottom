@@ -9,11 +9,11 @@ import bank.interfaces.BankCustomer;
 public class BusinessBankCustomerRole extends BankCustomerRole implements BankCustomer {
 
 	double money;
-	int accountId = -1;
+	int restAccountId = -1;
 	
 	public BusinessBankCustomerRole(Person person, CityLocation bank) {
 		super(person, bank);
-		Do(AlertTag.BANK, "BUSINESSBANKCUSTOMERLIVES");
+		Do(AlertTag.BANK, "Business Bank Customer created");
 	}
 	
 	public void msgUpdateRestaurantMoney(double money) {//sent from CashierRole
@@ -22,7 +22,7 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 	
 	public void msgAccountOpened(int accountIdNumber) {
 		event = Event.accountOpened;
-		this.accountId = accountIdNumber;
+		this.restAccountId = accountIdNumber;
 		stateChanged();
 	}
 	
@@ -31,7 +31,7 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 		Do(AlertTag.BANK, "BUSINESS speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 
 		
-		if(accountId == -1) {//have not been assigned accountID yet
+		if(restAccountId == -1) {//have not been assigned accountID yet
 			Do(AlertTag.BANK, "need to open BUSINESS account");
 //			
 //			if(money < initialDepositAmount) {//is too poor/worthless to afford initialdeposit
@@ -65,9 +65,9 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 //			return;
 //		}
 		if(money > 0) {
-			Do(AlertTag.BANK, "Im depositing");
+			Do(AlertTag.BANK, "Im depositing ID: " + restAccountId);
 			double depositAmount = money;
-			teller.msgDepositMoney(this, accountId, depositAmount); 
+			teller.msgDepositMoney(this, restAccountId, depositAmount); 
 			state = State.depositing;
 			return;
 		}
@@ -82,7 +82,8 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 	
 	@Override
 	protected void leaveBank() {
-		Do(AlertTag.BANK, "leaving bank " + accountId);
+		this.getPerson().setShouldDepositRestaurantMoney(false);
+		Do(AlertTag.BANK, "leaving bank BUSINESS " + restAccountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(loanAmount);
@@ -98,6 +99,7 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 		acquireSemaphore(active);
 		
 		state = State.enteredBank;
+		
 		this.deactivate();
 	}
 	
@@ -105,7 +107,6 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 	@Override
 	public void activate() {
 		super.activate();
-		this.getPerson().setShouldDepositRestaurantMoney(false);
 		this.money = this.getPerson().getCashierMoney();
 		msgGoToSecurityGuard( ((BankBuilding) getLocation()).getSecurity() );
 	}

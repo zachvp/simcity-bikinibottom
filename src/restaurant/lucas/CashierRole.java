@@ -318,7 +318,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private void leaveWork() {
 		cashierGui.DoLeaveRestaurant();
-		acquireSemaphore(active);
+		Do(AlertTag.RESTAURANT, "" +active.availablePermits());
 	}
 	
 
@@ -329,14 +329,17 @@ public class CashierRole extends WorkRole implements Cashier {
 	
 	private void goToWork() {
 		cashierGui.DoGoToDesk();
+		Do(AlertTag.RESTAURANT, "" +active.availablePermits());
 		acquireSemaphore(active);
 		atWork = true;
 	}
 	
 	private void acquireSemaphore(Semaphore a) {
 		try {
+			Do(AlertTag.RESTAURANT, "" +a.availablePermits());
 			a.acquire();
 		} catch (InterruptedException e) {
+			print("AHHHHHHHHHH");
 			e.printStackTrace();
 		}
 	}
@@ -460,6 +463,11 @@ public class CashierRole extends WorkRole implements Cashier {
 	public void activate() {
 		super.activate();
 		this.getPerson().setShouldDepositRestaurantMoney(true);
+	}
+	
+	@Override
+	public void deactivate() {
+		super.deactivate();
 	}
 	
 }

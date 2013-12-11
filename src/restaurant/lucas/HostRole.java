@@ -260,7 +260,10 @@ public class HostRole extends WorkRole implements Host {
 			for(WorkRole r: workRoles) {
 				r.msgLeaveWork();
 			}
-			goOffWork();
+//			goOffWork();
+//			active.release();
+			addPaycheckToWallet();
+			hostGui.DoEndWorkDay();
 			atWork = false;
 			endWorkDay = false;
 			this.deactivate();
@@ -271,11 +274,12 @@ public class HostRole extends WorkRole implements Host {
 	private void goOffWork() {
 			addPaycheckToWallet();
 			doEndWorkDay();
-			acquireSemaphore(active);
+			
 	}
 	
 	private void doEndWorkDay() {
 		hostGui.DoEndWorkDay();
+//		acquireSemaphore(active);
 	}
 	
 	private WaiterRoleBase chooseWaiter() {

@@ -113,7 +113,7 @@ public class HostRole extends WorkRole {
 		int B = 0;
 		if (Waiters.size() == 1) {
 			// No Break
-			print("No Break, only one waiter");
+			//print("No Break, only one waiter");
 			waiter.GoBreak(false);
 			return;
 		}
@@ -127,19 +127,19 @@ public class HostRole extends WorkRole {
 		synchronized(Waiters){
 		if (B == Waiters.size() - 1) {
 			// Only 1 waiter is active
-			print("No Break only 1 waiter is active");
+			//print("No Break only 1 waiter is active");
 			waiter.GoBreak(false);
 			return;
 		}
 		}
 		// Go Break!
 		waiter.GoBreak(true);
-		print("Permission Given to " + waiter.getName());
+		//print("Permission Given to " + waiter.getName());
 		return;
 	}
 
 	public void msgIWantFood(CustomerRole cust) {
-		print("Customer : " + cust.getName() + " wants food");
+		//print("Customer : " + cust.getName() + " wants food");
 		waitingCustomers.add(cust);
 		
 		//Experimenting

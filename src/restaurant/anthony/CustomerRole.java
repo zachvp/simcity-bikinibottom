@@ -116,7 +116,7 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	@Override
 	public void gotHungry() {// from animation
-		print("I'm hungry and I have $" + money);
+		//print("I'm hungry and I have $" + money);
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -130,7 +130,7 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	@Override
 	public void msgSitAtTable(int i, Waiter wa, Menu M) {
-		print("Received msgSitAtTable");
+		//print("Received msgSitAtTable");
 		event = AgentEvent.followWaiter;
 		currentTable = i;
 		waiter = wa;
@@ -143,7 +143,7 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	@Override
 	public void msgOrderFail(Menu M) {
-		print("Get The Bad News");
+		//print("Get The Bad News");
 		menu = M;
 		state = AgentState.BeingSeated;
 		event = AgentEvent.seated;
@@ -165,7 +165,7 @@ public class CustomerRole extends Role implements Customer {
 	@Override
 	public void HeresYourOrder(Order o) {
 		if (o.process == true) {
-			print("Served and I am happy now");
+			//print("Served and I am happy now");
 			state = AgentState.Eating;
 			EatFood();
 			stateChanged();
@@ -187,7 +187,7 @@ public class CustomerRole extends Role implements Customer {
 	 */
 	@Override
 	public void HereIsYourChange(double change) {
-		print("I got my change :" + change);
+		//print("I got my change :" + change);
 		if (change > 0)
 			person.getWallet().setCashOnHand(change);
 		else
@@ -200,7 +200,7 @@ public class CustomerRole extends Role implements Customer {
 	@Override
 	public void HereIsYourDebt(double de) {
 		debt = de;
-		print("I got my debt :" + debt);
+		//print("I got my debt :" + debt);
 	}
 
 	public void msgGoToAssignedSpace(int x){
@@ -304,7 +304,7 @@ public class CustomerRole extends Role implements Customer {
 	}
 
 	private void PayBill() {
-		print("in PayBill");
+		//print("in PayBill");
 		cashier.Payment(check, money, this);
 		customerGui.FinishCheck();
 		state = AgentState.NowLeave;
@@ -314,7 +314,7 @@ public class CustomerRole extends Role implements Customer {
 	private void goToRestaurant() {
 		Do("Going to restaurant");
 		if (debt != 0) {
-			print("Pay debt for the previous meal");
+			//print("Pay debt for the previous meal");
 			cashier.PayDebt(debt);
 			money = money - debt;
 			debt = 0;
@@ -338,7 +338,7 @@ public class CustomerRole extends Role implements Customer {
 
 	private void ChooseFood() {
 		Do("Thinking what to order.");
-		print("I have that much " + money + " of Money");
+		//print("I have that much " + money + " of Money");
 
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -350,7 +350,7 @@ public class CustomerRole extends Role implements Customer {
 
 					if (decision == 0) {
 						// no money to pay but order it anyway
-						print("I dun hv money but im going to eat anyway");
+						//print("I dun hv money but im going to eat anyway");
 						String SelectedFood = menu.Menulist.get((int) (Math
 								.random() * menu.Menulist.size())).name;
 						choice = SelectedFood;
@@ -371,8 +371,7 @@ public class CustomerRole extends Role implements Customer {
 				int i = (int) (Math.random() * menu.number);
 				// Compare if the customer has enough money
 				while (menu.Menulist.get(i).price > money) {
-					print("Not enough money for eating "
-							+ menu.Menulist.get(i).name);
+					//print("Not enough money for eating "+ menu.Menulist.get(i).name);
 					// Eliminate the possibility of that food
 					menu.Menulist.remove(i);
 					menu.number--;
@@ -413,7 +412,7 @@ public class CustomerRole extends Role implements Customer {
 			Object cookie = 1;
 
 			public void run() {
-				print("Done eating, cookie=" + cookie);
+				//print("Done eating, cookie=" + cookie);
 				customerGui.FinishFood();
 				event = AgentEvent.doneEating;
 				// isHungry = false;

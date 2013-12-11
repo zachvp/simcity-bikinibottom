@@ -25,6 +25,7 @@ import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import agent.WorkRole;
 import agent.interfaces.Person;
@@ -173,6 +174,7 @@ public class CookRole extends WorkRole implements Cook {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			deliveries.get(orderNum).state = DeliveryState.NEED_TO_REORDER;
 			stateChanged();
 		}
 	}
@@ -377,7 +379,7 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (6/7) */
-	private void retryDelivery(MyDelivery delivery, int orderNum) {
+	private void retryDelivery(MyDelivery delivery, final int orderNum) {
 		// Find a market that hasn't been tried yet.
 		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
 				LocationTypeEnum.Market);
@@ -389,8 +391,26 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		if (market == null) {
-			Do(AlertTag.RESTAURANT, "No market can complete this order.");
-			delivery.state = DeliveryState.COMPLETE;
+			// TODO BIG IMPORTANT I CHANGED HOW THIS WORKS --------------------
+			// No market can complete our order! 
+			TimerTask task = new TimerTask() {
+				/**
+				 * Decrement the "future quantity", but after a delay so we
+				 * don't keep retrying the same order every few milliseconds.
+				 */
+				@Override
+				public void run() {
+					Do(AlertTag.RESTAURANT,
+							"No market can complete this order.");
+					
+					MyDelivery d = deliveries.get(orderNum);
+					for (Item i : d.itemsToReorder) {
+						foods.get(i.name).futureQuantity -= i.amount;
+					}
+					d.state = DeliveryState.COMPLETE;
+				}
+			};
+			timer.schedule(task, 2 * Constants.MINUTE);
 			return;
 		}
 		
@@ -402,8 +422,11 @@ public class CookRole extends WorkRole implements Cook {
 				(market.interfaces.Cashier) market.getGreeter();
 		
 		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
-		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+		marketCashier.msgPhoneOrder(
+				new ArrayList<Item>(delivery.itemsToReorder),
 				this.cashier, this, restaurant, orderNum);
+		/* TODO IMPORTANT, I CHANGED THIS - ONLY REORDER itemsToReorder, NOT
+		 * ALL ITEMS */
 	}
 	
 //	void restockFoodsssss() {
@@ -640,6 +663,16 @@ public class CookRole extends WorkRole implements Cook {
 	@Override
 	public boolean isOnBreak() {
 		// TODO maybe cooks can go on breaks in v3
+		return false;
+	}
+	
+	@Override
+	public boolean hasAnyFood() {
+		for (Food f : foods.values()) {
+			if (f.quantity > 0) {
+				return true;
+			}
+		}
 		return false;
 	}
 	

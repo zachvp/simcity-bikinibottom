@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import parser.BuildingDef.CreatorEnum;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 
 /*
@@ -42,35 +43,63 @@ public class BuildingPosParser {
 			String name = line.substring(2);
 			
 			LocationTypeEnum buildingType;
+			CreatorEnum buildingCreator;
 			
 			switch (buildingInt) {
-			case 0:
-				buildingType = LocationTypeEnum.None;
-				break;
+//			case 0:
+//				buildingType = LocationTypeEnum.None;
+//				buildingCreator = CreatorEnum.UNKNOWN;
+//				break;
 			case 1:
 				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.ERIK;
 				break;
 			case 2:
 				buildingType = LocationTypeEnum.Bank;
+				buildingCreator = CreatorEnum.JACK;
 				break;
 			case 3:
 				buildingType = LocationTypeEnum.Market;
+				buildingCreator = CreatorEnum.ANTHONY;
 				break;
 			case 4:
 				buildingType = LocationTypeEnum.House;
+				buildingCreator = CreatorEnum.ZACH;
 				break;
-			case 5:
-				buildingType = LocationTypeEnum.Apartment;
-				break;
+//			case 5:
+//				buildingType = LocationTypeEnum.Apartment;
+//				buildingCreator = CreatorEnum.ZACH;
+//				break;
 			case 6:
 				buildingType = LocationTypeEnum.Hospital;
+				buildingCreator = CreatorEnum.VICTORIA;
+				break;
+			case 7:
+				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.ANTHONY;
+				break;
+			case 8:
+				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.JACK;
+				break;
+			case 9:
+				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.VICTORIA;
+				break;
+			case 0:
+				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.ZACH;
+				break;
+			case 5:
+				buildingType = LocationTypeEnum.Restaurant;
+				buildingCreator = CreatorEnum.DIEGO;
 				break;
 			default:
 				throw new Exception("Parser was given an int that does "
 						+ "not correspond to any building type.");
 			}
 			
-			response.add(new BuildingDef(name, buildingType));
+			response.add(new BuildingDef(name, buildingType, buildingCreator));
 			
 		}
 		

@@ -331,7 +331,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	}
 
 	private void describeHowScenarioR() {
-		say("Banks are closed on weekends");
+		say("Banks are closed on weekends, please wait for the weekend.");
 	}
 	
 	private void employRestaurantsWithoutCook() {

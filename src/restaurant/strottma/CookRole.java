@@ -24,6 +24,7 @@ import restaurant.strottma.interfaces.Cook;
 import restaurant.strottma.interfaces.Customer;
 import restaurant.strottma.interfaces.Waiter;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.SingletonTimer;
 import agent.WorkRole;
@@ -377,7 +378,7 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/* TODO LOOK HERE FOR HELP WITH RESTAURANT-MARKET INTEGRATION (6/7) */
-	private void retryDelivery(MyDelivery delivery, int orderNum) {
+	private void retryDelivery(MyDelivery delivery, final int orderNum) {
 		// Find a market that hasn't been tried yet.
 		List<CityLocation> openMarkets = kelp.placesNearMe(getLocation(),
 				LocationTypeEnum.Market);
@@ -389,8 +390,26 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		if (market == null) {
-			Do(AlertTag.RESTAURANT, "No market can complete this order.");
-			delivery.state = DeliveryState.COMPLETE;
+			// TODO BIG IMPORTANT I CHANGED HOW THIS WORKS --------------------
+			// No market can complete our order! 
+			TimerTask task = new TimerTask() {
+				/**
+				 * Decrement the "future quantity", but after a delay so we
+				 * don't keep retrying the same order every few milliseconds.
+				 */
+				@Override
+				public void run() {
+					Do(AlertTag.RESTAURANT,
+							"No market can complete this order.");
+					
+					MyDelivery d = deliveries.get(orderNum);
+					for (Item i : d.itemsToReorder) {
+						foods.get(i.name).futureQuantity -= i.amount;
+					}
+					d.state = DeliveryState.COMPLETE;
+				}
+			};
+			timer.schedule(task, 2 * Constants.MINUTE);
 			return;
 		}
 		
@@ -402,8 +421,11 @@ public class CookRole extends WorkRole implements Cook {
 				(market.interfaces.Cashier) market.getGreeter();
 		
 		Do(AlertTag.RESTAURANT, "Placing an order with market " + market);
-		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
+		marketCashier.msgPhoneOrder(
+				new ArrayList<Item>(delivery.itemsToReorder),
 				this.cashier, this, restaurant, orderNum);
+		/* TODO IMPORTANT, I CHANGED THIS - ONLY REORDER itemsToReorder, NOT
+		 * ALL ITEMS */
 	}
 	
 //	void restockFoodsssss() {

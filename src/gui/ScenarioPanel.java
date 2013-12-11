@@ -44,6 +44,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	JRadioButton scenarioA, scenarioB, scenarioC, scenarioJ; //TODO Add more scenarios here
 	JButton runScenarioButton;
 	JCheckBox gradingViewCB;
+	JLabel msg;
 	
 	public ScenarioPanel() {
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
@@ -160,20 +161,26 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		buttonGroup.add(scenarioC);
 		buttonGroup.add(scenarioJ);
 		JPanel rButtons = new JPanel();
-		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.7)));
+		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.6)));
 		rButtons.setLayout(new GridLayout(5,1,1,1));
 		rButtons.setOpaque(false);
 		rButtons.add(scenarioA);
 		rButtons.add(scenarioB);
 		rButtons.add(scenarioC);
 		rButtons.add(scenarioJ);
+		
+		msg = new JLabel("", JLabel.CENTER);
+		msg.setPreferredSize(new Dimension(normativeDim.width-20, (int)(normativeDim.height*0.15)));
 
 		normativePanel.add(title);
 		normativePanel.add(rButtons);
 		normativePanel.add(runScenarioButton);
+		normativePanel.add(msg);
 	}
 	
-	
+	private void say(String str){
+		msg.setText(str);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

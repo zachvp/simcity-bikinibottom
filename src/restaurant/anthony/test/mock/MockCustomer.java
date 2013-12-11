@@ -4,7 +4,6 @@ package restaurant.anthony.test.mock;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.WaiterRoleBase.Menu;
-import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Customer;
@@ -52,7 +51,6 @@ public class MockCustomer extends Mock implements Customer {
 
 	public  void OrderGotIt(){}
 
-	public  void HeresYourOrder(Order o){}
 
 	public  void HeresYourCheck(Check ch){
 		
@@ -83,6 +81,18 @@ public class MockCustomer extends Mock implements Customer {
 
 	@Override
 	public void atWaitingLine() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void HeresYourOrder(restaurant.anthony.RevolvingOrderList.Order o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgEpicFail() {
 		// TODO Auto-generated method stub
 		
 	}

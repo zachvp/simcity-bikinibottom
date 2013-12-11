@@ -196,7 +196,7 @@ public class CookRole extends WorkRole implements Cook {
 	 */
 	@Override
 	public void msgLeaveWork() {
-		state = AgentState.NotAtWork;
+		state = AgentState.OffWork;
 		stateChanged();
 		
 	}

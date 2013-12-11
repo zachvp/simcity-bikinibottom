@@ -7,7 +7,6 @@ import restaurant.anthony.CustomerRole;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.WaiterRoleBase.Menu;
-import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.gui.WaiterGui;
 import restaurant.anthony.interfaces.Cashier;
@@ -66,17 +65,6 @@ public class MockWaiter extends Mock implements Waiter {
 		
 	}
 
-	@Override
-	public void OrderIsReady(Order o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgNoMoreFood(String choice, Order o) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void AskForCheck(Customer customer) {
@@ -177,6 +165,19 @@ public class MockWaiter extends Mock implements Waiter {
 
 	@Override
 	public void AtExit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void OrderIsReady(restaurant.anthony.RevolvingOrderList.Order o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgNoMoreFood(String choice,
+			restaurant.anthony.RevolvingOrderList.Order o) {
 		// TODO Auto-generated method stub
 		
 	}

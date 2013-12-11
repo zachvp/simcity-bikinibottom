@@ -84,6 +84,9 @@ public class RestaurantPanel extends JPanel {
     	this.cookGui = new CookGui(cook, gui);
     	this.cook.setCashier(cashier);
     	
+    	this.host.setCashier(cashier);
+    	this.host.setCook(cook);
+    	
     	this.tableGui = new TableGui(host.getTableMap());
     	
     	// add all of the agents to the list so they can be paused

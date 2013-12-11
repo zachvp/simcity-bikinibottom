@@ -1,7 +1,6 @@
 package restaurant.vegaperk.backend;
 
 import CommonSimpleClasses.CityBuilding;
-import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.ScheduleTask;
 import agent.Role;
 import agent.WorkRole;
@@ -11,9 +10,9 @@ import gui.trace.AlertTag;
 import java.awt.Dimension;
 import java.util.*;
 
-import restaurant.vegaperk.backend.RevolvingOrderList.Order;
-import restaurant.vegaperk.backend.RevolvingOrderList.OrderState;
 import restaurant.vegaperk.gui.HostGui;
+import restaurant.vegaperk.interfaces.Cashier;
+import restaurant.vegaperk.interfaces.Cook;
 import restaurant.vegaperk.interfaces.Customer;
 import restaurant.vegaperk.interfaces.Waiter;
 
@@ -30,7 +29,10 @@ public class HostRole extends WorkRole {
 	
 	private ScheduleTask schedule = ScheduleTask.getInstance();
 	
-	HostGui gui;
+	private Cook cook;
+	private Cashier cashier;
+	
+	private HostGui gui;
 	
 	private boolean shouldLeaveWork = false;
 	
@@ -251,6 +253,14 @@ public class HostRole extends WorkRole {
 		return name;
 	}
 
+	public void setCook(Cook cook) {
+		this.cook = cook;
+	}
+	
+	public void setCashier(Cashier cashier) {
+		this.cashier = cashier;
+	}
+	
 	public List<Customer> getWaitingCustomers() {
 		return waitingCustomers;
 	}
@@ -330,6 +340,12 @@ public class HostRole extends WorkRole {
 	@Override
 	public void msgLeaveWork() {
 		shouldLeaveWork = true;
+		for(MyWaiter mw : waiters) {
+			((WorkRole) mw.waiter).msgLeaveWork();
+		}
+		((WorkRole) cook).msgLeaveWork();
+		((WorkRole) cashier).msgLeaveWork();
+		
 		stateChanged();
 	}
 

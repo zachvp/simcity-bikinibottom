@@ -97,26 +97,26 @@ public class RestaurantLucasBuilding extends Building {
 		pcWaiters = new ArrayList<PCWaiterRole>();
 		
 		//Creates Normal WaiterRoles
-//		for (int i = 0; i < 2; i++) {
-//			// Create the waiter and add it to the list
-//			WaiterRole w = new WaiterRole(null, this);
-//			w.setIdlePosition(i);
-//			normalWaiters.add(w);
-//			
-//			//give roles to host so host can end work day
-//			host.addRole(w);
-//			
-//			// Set references between the waiter and other roles
-//			w.setOtherRoles(host, cashier);
-//			w.setCook(cook);
-//			//TODO make setcook method for normalWaiter
-//			host.addWaiter(w);
-//			
-//			// Create and set up the waiter GUI
-//			WaiterGui wGui = new WaiterGui(w, restaurantGui);
-//			w.setGui(wGui);
-//			restaurantGui.getAnimationPanel().addGui(wGui);
-//		}
+		for (int i = 0; i < 2; i++) {
+			// Create the waiter and add it to the list
+			WaiterRole w = new WaiterRole(null, this);
+			w.setIdlePosition(i);
+			normalWaiters.add(w);
+			
+			//give roles to host so host can end work day
+			host.addRole(w);
+			
+			// Set references between the waiter and other roles
+			w.setOtherRoles(host, cashier);
+			w.setCook(cook);
+			//TODO make setcook method for normalWaiter
+			host.addWaiter(w);
+			
+			// Create and set up the waiter GUI
+			WaiterGui wGui = new WaiterGui(w, restaurantGui);
+			w.setGui(wGui);
+			restaurantGui.getAnimationPanel().addGui(wGui);
+		}
 		
 //		Creates PCWaiterRoles
 		for (int i = 0; i < 2; i++) {

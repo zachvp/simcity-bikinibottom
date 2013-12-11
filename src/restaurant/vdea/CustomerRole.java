@@ -1,5 +1,7 @@
 package restaurant.vdea;
 
+import gui.trace.AlertTag;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -103,7 +105,7 @@ public class CustomerRole extends Role implements Customer {
 	// Messages
 
 		public void gotHungry() {//from animation
-			print("I'm hungry");
+			//print("I'm hungry");
 			event = AgentEvent.gotHungry;
 			stateChanged();
 		}
@@ -259,7 +261,7 @@ public class CustomerRole extends Role implements Customer {
 		// Actions
 
 		private void goToRestaurant() { //TODO fix lineNum
-			Do("Going to restaurant");
+			Do(AlertTag.RESTAURANT, "Going to restaurant");
 			int lineNum = host.getLineNum(this);
 			customerGui.DoGoToWaitingArea(lineNum);
 			try {
@@ -282,11 +284,11 @@ public class CustomerRole extends Role implements Customer {
 				stay = r1%2==0;
 			}
 			if (stay){
-				print("I will wait");
+				Do(AlertTag.RESTAURANT, "I will wait");
 			}
 			else
 			{
-				print("I'm going to leave");
+				Do(AlertTag.RESTAURANT, "I'm going to leave");
 				state = AgentState.DoingNothing;
 				customerGui.DoExitRestaurant();
 			}
@@ -295,7 +297,7 @@ public class CustomerRole extends Role implements Customer {
 		}
 
 		private void SitDown() {
-			Do("Being seated. Going to table");
+			Do(AlertTag.RESTAURANT, "Being seated. Going to table");
 			customerGui.DoGoToSeat(1, tableNumber);
 			//choice = decideOnOrder();
 			event = AgentEvent.seated;
@@ -313,11 +315,11 @@ public class CustomerRole extends Role implements Customer {
 			timer.schedule(new TimerTask() {
 				public void run() {
 					if (choice.equals("nothing") && !bad){
-						print("Food is too expensive. I am leaving");
+						Do(AlertTag.RESTAURANT, "Food is too expensive. I am leaving");
 						event = AgentEvent.leaving;
 					}
 					else{
-					print("Done reading the menu");
+						Do(AlertTag.RESTAURANT, "Done reading the menu");
 					event = AgentEvent.doneReading;
 					}
 					stateChanged();
@@ -348,41 +350,41 @@ public class CustomerRole extends Role implements Customer {
 		}
 		
 		private void askToOrder(){
-			print("I'm ready to Order");
+			Do(AlertTag.RESTAURANT, "I'm ready to Order");
 			waiter.msgReadyToOrder(this);
 			customerGui.ordering(choice);
 		}
 		
 		private void orderFood(){
 			event = AgentEvent.ordered;
-			print("I would like to order " + choice);
+			Do(AlertTag.RESTAURANT, "I would like to order " + choice);
 			waiter.msgHereIsMyOrder(this, choice);
 		}
 		
 		private void reorderFood(){
 			choice = menu.reorder(reorder, cash);
-			print("new choice "+choice);
+			Do(AlertTag.RESTAURANT, "new choice "+choice);
 			if(choice.equals("nothing")){
 				customerGui.ordering("nothing");
-				print("Food is too expensive. I am leaving");
+				Do(AlertTag.RESTAURANT, "Food is too expensive. I am leaving");
 				event = AgentEvent.leaving;
 				stateChanged();
 			}
 			else{
 				event = AgentEvent.ordered;
 				customerGui.ordering(choice);
-				print("I would like to order " + choice); //reset choice in gui
+				Do(AlertTag.RESTAURANT, "I would like to order " + choice); //reset choice in gui
 				waiter.msgHereIsMyOrder(this, choice);
 			}
 		}
 
 		private void eatFood() {
 			customerGui.gotFood();
-			print("Eating...");
+			Do(AlertTag.RESTAURANT, "Eating...");
 			//Timer times the customer eating food
 			timer.schedule(new TimerTask() {
 				public void run() {
-					print("Done eating " + choice);
+					Do(AlertTag.RESTAURANT, "Done eating " + choice);
 					event = AgentEvent.doneEating;
 					stateChanged();
 				}
@@ -403,7 +405,7 @@ public class CustomerRole extends Role implements Customer {
 		}	
 		
 		private void askForCheck(){
-			print("Check please!");
+			Do(AlertTag.RESTAURANT, "Check please!");
 			waiter.msgCheckPlease(this);
 		}
 		
@@ -415,6 +417,7 @@ public class CustomerRole extends Role implements Customer {
 				e.printStackTrace();
 			}
 			System.out.printf(name + ": Paying bill with $%.2f%n", cash);
+			Do(AlertTag.RESTAURANT, "Paying bill");
 			cashier.msgPayment(this, bill, cash);
 			waiter.msgDoneAndPaying(this);
 		}
@@ -422,6 +425,7 @@ public class CustomerRole extends Role implements Customer {
 
 		private void leaveTable() {
 			System.out.printf(name + ": Leaving with $%.2f%n", cash);
+			Do(AlertTag.RESTAURANT, "Leaving");
 			customerGui.DoExitRestaurant();
 		}
 		

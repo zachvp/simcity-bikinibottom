@@ -15,4 +15,6 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 		public abstract void hideOrder();
 		public abstract void removeOrder();
 	}
+
+	boolean hasAnyFood();
 }

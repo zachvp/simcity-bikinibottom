@@ -37,7 +37,7 @@ public class RestaurantLucasBuilding extends Building {
 
 	// Constants for staggering opening/closing time
 	private static int instanceCount = 0;
-	private static final int timeDifference = 12;
+	private static final int timeDifference = 1;
 	
 	RestaurantGui restaurantGui = new RestaurantGui();
 	
@@ -56,10 +56,10 @@ public class RestaurantLucasBuilding extends Building {
 		initRoles();
 		
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		infoPanel.setKrabbyPattyPrice("15.99");
+		infoPanel.setKelpShakePrice("10.99");
+		infoPanel.setCoralBitsPrice("5.99");
+		infoPanel.setKelpRingsPrice("8.99");
 	}
 	
 	private void initRoles() {
@@ -223,6 +223,13 @@ public class RestaurantLucasBuilding extends Building {
 		return false;
 	}
 	
+	
+	public void updateInfoPanelInventory(int kp, int ks, int cb, int kr ) {
+		infoPanel.setKrabbyPattyInventory(kp);
+		infoPanel.setKelpShakeInventory(ks);
+		infoPanel.setCoralBitsInventory(cb);
+		infoPanel.setKelpRingsInventory(kr);
+	}
 	
 	
 }

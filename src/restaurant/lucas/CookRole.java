@@ -22,6 +22,7 @@ import market.Item;
 
 import restaurant.lucas.CookRole.Order.state;
 import restaurant.lucas.gui.CookGui;
+import restaurant.lucas.gui.RestaurantLucasBuilding;
 import restaurant.lucas.interfaces.Cashier;
 import restaurant.lucas.interfaces.Cook;
 import restaurant.lucas.interfaces.Customer;
@@ -173,11 +174,15 @@ public class CookRole extends WorkRole implements Cook {
 		}
 	}
 	
+	RestaurantLucasBuilding rest;
+	
 	private List<MyDelivery> deliveries;
 	Cashier cashier;
 	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
+		
+		rest = (RestaurantLucasBuilding) c;
 		
 		atWork = false;
 		
@@ -195,6 +200,8 @@ public class CookRole extends WorkRole implements Cook {
 		foods.put("Coral Bits", cBits);
 		Food kRings = new Food("Kelp Rings", 11*1000, 6, 3, 8, false);
 		foods.put("Kelp Rings", kRings);
+		
+//		rest.updateInfoPanelInventory(1, 6, 6, 6);
 		
 		cookingTimes.put("Krabby Patty", 5*1000);
 		cookingTimes.put("Kelp Shake", 7*1000);//introduce food to map menu
@@ -527,6 +534,14 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}, cookingTimes.get(o.Choice));
 		f.decrementQuantity();
+		
+		int kp = foods.get("Krabby Patty").amount;
+		int ks = foods.get("Kelp Shake").amount;
+		int cb = foods.get("Coral Bits").amount;
+		int kr = foods.get("Kelp Rings").amount;
+	
+		rest.updateInfoPanelInventory(kp, ks, cb, kr);
+
 		o.orderState=state.cooking;
 	}
 
@@ -570,6 +585,13 @@ public class CookRole extends WorkRole implements Cook {
 		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
 				this.cashier, this, restaurant, orderNum);
 		delivery.markets.add(market);
+		
+		int kp = foods.get("Krabby Patty").amount;
+		int ks = foods.get("Kelp Shake").amount;
+		int cb = foods.get("Coral Bits").amount;
+		int kr = foods.get("Kelp Rings").amount;
+
+		rest.updateInfoPanelInventory(kp, ks, cb, kr);
 	}
 	
 	private void retryDelivery(MyDelivery delivery, int orderNum) {
@@ -600,6 +622,8 @@ public class CookRole extends WorkRole implements Cook {
 		marketCashier.msgPhoneOrder(new ArrayList<Item>(delivery.items),
 				this.cashier, this, restaurant, orderNum);
 	}
+
+
 	
 ///
 //	public void checkInventory() {//take market as param?

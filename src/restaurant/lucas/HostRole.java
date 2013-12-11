@@ -33,6 +33,8 @@ public class HostRole extends WorkRole implements Host {
 	//Notice that we implement waitingCustomers using ArrayList, but type it
 	//with List semantics.
 	public List<CustomerRole> waitingCustomers	= new ArrayList<CustomerRole>();
+	public List<CustomerRole> activeCustomers	= new ArrayList<CustomerRole>();
+
 	public Collection<Table> tables;
 	public List<MyWaiter> myWaiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	
@@ -92,7 +94,7 @@ public class HostRole extends WorkRole implements Host {
 		// every day at TIME to end
 		int closeHour = ((RestaurantLucasBuilding) c).getClosingHour();
 		int closeMinute = ((RestaurantLucasBuilding) c).getClosingMinute();
-		System.out.println("Close: " + closeHour);
+//		System.out.println("Close: " + closeHour);
 		closeTask.scheduleDailyTask(command, closeHour, closeMinute);
 	
 		
@@ -152,6 +154,7 @@ public class HostRole extends WorkRole implements Host {
 	
 	public void msgIWantFood(CustomerRole cust) {
 		waitingCustomers.add(cust);
+		activeCustomers.add(cust);
 		stateChanged();
 	}
 
@@ -170,6 +173,7 @@ public class HostRole extends WorkRole implements Host {
 				stateChanged();
 			}
 		}
+		activeCustomers.remove(customer);//to not close when customers present
 	}
 	
 	public void msgIdLikeToGoOnBreak(WaiterRole w) {//v2.1 put waiter onbreak
@@ -256,7 +260,7 @@ public class HostRole extends WorkRole implements Host {
 
 	// Actions
 	private void endWorkDay() {//tells all employees to leave
-		if(waitingCustomers.isEmpty()){
+		if(activeCustomers.isEmpty()){
 			for(WorkRole r: workRoles) {
 				r.msgLeaveWork();
 			}

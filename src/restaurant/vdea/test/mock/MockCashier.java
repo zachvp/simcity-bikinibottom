@@ -23,10 +23,17 @@ public class MockCashier extends Mock implements Cashier {
 
 	}
 
-	@Override
+	//@Override
 	public void msgMarketBill(Market m, double bill) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void msgHereIsYourTotal(double total,
+			market.interfaces.Cashier cashier) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

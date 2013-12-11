@@ -55,6 +55,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	private PersonCreationPanel pcp;
 	Timer timer = SingletonTimer.getInstance();
 	JCheckBox gradingViewCB;
+	JLabel msg;
 	
 	public ScenarioPanel(PersonCreationPanel pcp) {
 		this.pcp = pcp;
@@ -196,7 +197,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		buttonGroup.add(scenarioR);
 		buttonGroup.add(scenarioS);
 		JPanel rButtons = new JPanel();
-		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.7)));
+		rButtons.setPreferredSize(new Dimension(normativeDim.width, (int)(normativeDim.height*0.6)));
 		rButtons.setLayout(new GridLayout(5,1,1,1));
 		rButtons.setOpaque(false);
 		rButtons.add(scenarioA);
@@ -211,13 +212,19 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		rButtons.add(scenarioQ);
 		rButtons.add(scenarioR);
 		rButtons.add(scenarioS);
+		
+		msg = new JLabel("", JLabel.CENTER);
+		msg.setPreferredSize(new Dimension(normativeDim.width-20, (int)(normativeDim.height*0.15)));
 
 		normativePanel.add(title);
 		normativePanel.add(rButtons);
 		normativePanel.add(runScenarioButton);
+		normativePanel.add(msg);
 	}
 	
-	
+	private void say(String str){
+		msg.setText(str);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -295,11 +302,6 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				//TODO pretty view
 			}
 		}
-		
-	}
-
-	private void say(String string) {
-		// TODO Auto-generated method stub
 		
 	}
 

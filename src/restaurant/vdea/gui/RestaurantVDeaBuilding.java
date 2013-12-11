@@ -47,6 +47,7 @@ public class RestaurantVDeaBuilding extends Building{
 		CashierGui cashierGui = new CashierGui(cashier);
 		host.setGui(hostGui);
 		cook.setGui(cookGui);
+		cook.setCashier(cashier);
 		cashier.setGui(cashierGui);
 		restaurantGui.animationPanel.addGui(hostGui);
 		restaurantGui.animationPanel.addGui(cookGui);

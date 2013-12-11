@@ -259,7 +259,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioF.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				explainScenarioF();
 				
 			} else if (scenarioG.isSelected()) {
@@ -270,7 +270,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioJ.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowToHaveMoreTraffic();
 				
 			} else if (scenarioO.isSelected()) {
@@ -285,12 +285,12 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 				
 			} else if (scenarioR.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowScenarioR();
 				
 			} else if (scenarioS.isSelected()) {
 				employAllWorkplaces();
-				createUnemployedUntil50People();
+				createUnemployedUntil130People();
 				describeHowScenarioS();
 			}
 			
@@ -352,8 +352,8 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 	}
 
-	private void createUnemployedUntil50People() {
-		pcp.createUnemployedUntil150People();
+	private void createUnemployedUntil130People() {
+		pcp.createUnemployedUntil130People();
 		
 	}
 

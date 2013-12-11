@@ -516,8 +516,8 @@ ClassifiedsChangedListener{
 		
 	}
 
-	public void createUnemployedUntil150People() {
-		while(citizenRecords.citizens.size() < 150) {
+	public void createUnemployedUntil130People() {
+		while(citizenRecords.citizens.size() < 130) {
 			occupationsCB.setSelectedIndex(0);
 			residencesCB.setSelectedIndex(1);
 			wealthCB.setSelectedIndex(0);

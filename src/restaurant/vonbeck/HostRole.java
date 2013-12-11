@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.sun.medialib.mlib.mediaLibException;
-
 import restaurant.vonbeck.gui.HostGui;
 import restaurant.vonbeck.gui.RestaurantGui;
 import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;

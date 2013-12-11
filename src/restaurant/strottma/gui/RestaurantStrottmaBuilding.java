@@ -1,6 +1,7 @@
 package restaurant.strottma.gui;
 
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
 import java.awt.Dimension;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.strottma.CashierRole;
 import restaurant.strottma.CookRole;
 import restaurant.strottma.CustomerRole;
@@ -27,7 +30,8 @@ import agent.interfaces.Person;
  * @author Erik Strottmann
  * @see Building
  */
-public class RestaurantStrottmaBuilding extends Building {
+public class RestaurantStrottmaBuilding extends Building 
+	implements RestaurantFakeOrderInterface {
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
 	private CashierRole cashier;
@@ -184,6 +188,21 @@ public class RestaurantStrottmaBuilding extends Building {
 			if (w.isAtWork()) { return true; }
 		}
 		return false;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.runOutOfSomeFood();
 	}
 	
 }

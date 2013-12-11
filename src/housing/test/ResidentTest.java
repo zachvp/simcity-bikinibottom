@@ -39,6 +39,7 @@ public class ResidentTest extends TestCase {
 		
 		resident = new ResidentRole(residentPerson, null, dwelling, mockLayoutGui);
 		gui = new MockResidentGui(resident);
+		gui.setLayoutGui(mockLayoutGui);
 		dwelling.setResident(resident);
 		
 		worker.setDwelling(dwelling);

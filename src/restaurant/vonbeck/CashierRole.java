@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import bank.test.mock.EventLog;
 import restaurant.strottma.CashierRole.MyBill;
 import restaurant.vonbeck.gui.CashierGui;
@@ -21,7 +19,6 @@ import restaurant.vonbeck.interfaces.Cashier;
 import restaurant.vonbeck.interfaces.Customer;
 import restaurant.vonbeck.interfaces.Market;
 import restaurant.vonbeck.interfaces.Waiter.Order;
-import restaurant.vonbeck.test.mock.LoggedEvent;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import agent.Agent;

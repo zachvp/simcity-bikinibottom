@@ -15,7 +15,7 @@ import CommonSimpleClasses.CityLocation;
 import agent.WorkRole;
 import agent.interfaces.Person;
 
-public class WaiterRoleBase extends WorkRole implements Waiter{
+public abstract class WaiterRoleBase extends WorkRole implements Waiter{
 
 	public List<MyCustomer> customers = new ArrayList<MyCustomer>();
 
@@ -23,19 +23,19 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 	{none, waiting, seated, readyToOrder, ordered, reorder, waitingForFood, foodready, served, needCheck, waitingForCheck, leaving};	
 
 
-	private String name;
-	private boolean busy= false;
-	private boolean onBreak, goingOnBreak = false;
-	private Semaphore atTable = new Semaphore(0,true);
-	private Semaphore atKitchen = new Semaphore(0,true);
-	private Semaphore atDest = new Semaphore(0,true);
+	protected String name;
+	protected boolean busy= false;
+	protected boolean onBreak, goingOnBreak = false;
+	protected Semaphore atTable = new Semaphore(0,true);
+	protected Semaphore atKitchen = new Semaphore(0,true);
+	protected Semaphore atDest = new Semaphore(0,true);
 
-	private Cook cook;
-	private Host host;
-	private Cashier cashier;
+	//protected Cook cook;
+	protected Host host;
+	protected Cashier cashier;
 	public WaiterGui waiterGui = null;
 	
-	private boolean offWork = false;
+	protected boolean offWork = false;
 
 	public WaiterRoleBase(Person person, CityLocation location) {
 		super(person, location);
@@ -68,9 +68,9 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 		return host;
 	}
 
-	public void setCook(Cook newCook){
+	/*public void setCook(Cook newCook){
 		cook = newCook;
-	}
+	}*/
 
 	public void setCashier(Cashier newCashier){
 		cashier = newCashier;
@@ -271,7 +271,7 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 
 	// Actions
 
-	private void seatCustomer(MyCustomer customer) { //TODO
+	protected void seatCustomer(MyCustomer customer) { //TODO
 		/*	waiterGui.DoGoToKitchen();
 				try {
 					atKitchen.acquire();
@@ -298,7 +298,7 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 	}
 
 	//helper method
-	private void GoToTable(MyCustomer customer){
+	protected void GoToTable(MyCustomer customer){
 		waiterGui.DoGoToTable(customer.table);
 
 		try {
@@ -311,14 +311,15 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 	}
 
 
-	private void takeOrder(MyCustomer customer){
+	protected void takeOrder(MyCustomer customer){
 		GoToTable(customer);
 		customer.setState(CustomerState.none);
 		print("What would you like?");
 		customer.c.msgWhatWouldYouLike();
 	}
 
-	private void sendToKitchen(MyCustomer customer){
+	abstract protected void sendToKitchen(MyCustomer customer);
+	/*protected void sendToKitchen(MyCustomer customer){
 		print("going to kitchen");
 		waiterGui.DoGoToKitchen();
 		//if(host.sen || customers.size()>1){
@@ -336,17 +337,19 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 		print("Order for the kitchen");
 		customer.setState(CustomerState.waitingForFood);
 		cook.msgThereIsAnOrder(this, customer.choice, customer.table);
-	}
+	}*/
 
 	//Asks customer to reorder
-	private void retakeOrder(MyCustomer customer){
+	protected void retakeOrder(MyCustomer customer){
 		GoToTable(customer);
 		customer.setState(CustomerState.none);
 		print("Sorry, we are out of " + customer.choice + ". What else would you like?");
 		customer.c.msgPleaseReorder(customer.choice);
 	}
+	
+	abstract protected void deliverOrder(MyCustomer customer);
 
-	private void deliverOrder(MyCustomer customer){	//called when cook responds with cooked food
+	/*protected void deliverOrder(MyCustomer customer){	//called when cook responds with cooked food
 		waiterGui.DoGoToKitchen();
 		print("going to kitchen");
 		try {
@@ -376,9 +379,9 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 
 
 		customer.setState(CustomerState.served);
-	}
+	}*/
 
-	private void getCheck(MyCustomer customer){
+	protected void getCheck(MyCustomer customer){
 		GoToTable(customer);
 		print("I'll be right back with your check!");
 		waiterGui.DoLeaveCustomer();
@@ -386,7 +389,7 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 		cashier.msgComputeBill(this, customer.c, customer.choice, customer.table);
 	}
 
-	private void deliverCheck(MyCustomer customer){
+	protected void deliverCheck(MyCustomer customer){
 		print("going to table to deliver check");
 		GoToTable(customer);
 		print("Here is your check");
@@ -395,7 +398,7 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 		waiterGui.DoLeaveCustomer();
 	}
 
-	private void clearTable(MyCustomer customer){
+	protected void clearTable(MyCustomer customer){
 		GoToTable(customer);
 		print("Clearing table " + customer.table);
 		host.msgTableIsFree(customer.table);
@@ -420,7 +423,7 @@ public class WaiterRoleBase extends WorkRole implements Waiter{
 		return waiterGui;
 	}
 
-	private class MyCustomer {
+	public class MyCustomer {
 		Customer c;
 		int table;
 		String choice;

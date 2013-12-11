@@ -63,6 +63,7 @@ public class Food {
 	
 	public void setInventory(int num){
 		quantity = num;
+		newStock = num;
 	}
 	
 	public int getInventory(){

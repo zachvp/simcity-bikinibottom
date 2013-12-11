@@ -64,37 +64,32 @@ public class CornerAgentTest {
 		
 		corner.pickAndExecuteAnAction();
 		
-		assertEquals(new Integer(0), corner.getCrossroadBusy());
 		assertEquals(0, corner.getWaitingForBusstops().size());
 		assertEquals(0, corner.getWaitingForCorners().size());
-		assertEquals(0, corner.getWaitingToCross().size());
-		assertEquals("Got msgDriveNow()", 
-				mockVehicle1.log.getLastLoggedEvent().getMessage());
-		
+
 		// TODO should this be false? - Erik
 		corner.msgIWantToDriveTo(new IntersectionAction
 				(mockCorner, mockVehicle2, false));
 		
-		assertEquals(new Integer(0), corner.getCrossroadBusy());
-		assertEquals(0, corner.getWaitingForBusstops().size());
-		assertEquals(0, corner.getWaitingForCorners().size());
-		assertEquals(1, corner.getWaitingToCross().size());
-		
-		corner.msgDoneCrossing();
-		
 		assertEquals(new Integer(1), corner.getCrossroadBusy());
 		assertEquals(0, corner.getWaitingForBusstops().size());
 		assertEquals(0, corner.getWaitingForCorners().size());
-		assertEquals(1, corner.getWaitingToCross().size());
+		assertEquals(2, corner.getWaitingToCross().size());
+		
+		corner.msgDoneCrossing();
+		
+		assertEquals(new Integer(2), corner.getCrossroadBusy());
+		assertEquals(0, corner.getWaitingForBusstops().size());
+		assertEquals(0, corner.getWaitingForCorners().size());
+		assertEquals(2, corner.getWaitingToCross().size());
 		
 		corner.pickAndExecuteAnAction();
 		
-		assertEquals(new Integer(0), corner.getCrossroadBusy());
+		assertEquals(new Integer(2), corner.getCrossroadBusy());
 		assertEquals(0, corner.getWaitingForBusstops().size());
 		assertEquals(0, corner.getWaitingForCorners().size());
-		assertEquals(0, corner.getWaitingToCross().size());
-		assertEquals("Got msgDriveNow()", 
-				mockVehicle2.log.getLastLoggedEvent().getMessage());
+		assertEquals(2, corner.getWaitingToCross().size());
+
 	}
 	
 	@Test

@@ -4,7 +4,6 @@ import gui.PersonCreationPanel.MyComboBoxItem;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -15,32 +14,22 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 
 import kelp.KelpClass;
 import market.Item;
 import market.gui.MarketBuilding;
 import market.interfaces.Cashier;
-
-import com.sun.org.apache.bcel.internal.generic.Select;
-
-import restaurant.anthony.gui.RestaurantBuilding;
-import transportation.FakePassengerRole;
 import transportation.gui.TransportationGuiController;
-import classifieds.Classifieds;
-import classifieds.ClassifiedsClass;
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
-import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import CommonSimpleClasses.XYPos;
 
 public class ScenarioPanel extends JPanel implements ActionListener{ 
@@ -222,58 +211,56 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 		// TODO Add delays to scenarios?
 		if(e.getSource() == runScenarioButton){
-			if (scenarioA.isEnabled()) {
+			if (scenarioA.isSelected()) {
 				employAllWorkplaces();
-				startDay();
 				createNonWorkingPersonThatVisitsEverywhere();
 				
-			} else if (scenarioB.isEnabled()) {
+			} else if (scenarioB.isSelected()) {
 				employAllWorkplaces();
-				startDay();
 				for (int i = 0; i < 3; i++)
 					createNonWorkingPersonThatVisitsEverywhere();
 				
-			} else if (scenarioC.isEnabled()) {
+			} else if (scenarioC.isSelected()) {
 				employRestaurants();
 				employMarkets();
-				startDay();
 				makeRestaurantsLowOnFood();
 				triggerRestaurantsCooksSchedulers();
 				
-			} else if (scenarioE.isEnabled()) {
+			} else if (scenarioE.isSelected()) {
 				employAllWorkplaces();
 				
-			} else if (scenarioF.isEnabled()) {
-				// TODO fill this
+			} else if (scenarioF.isSelected()) {
+				employAllWorkplaces();
+				createUnemployedUntil50People();
+				explainScenarioF();
 				
-			} else if (scenarioG.isEnabled()) {
+			} else if (scenarioG.isSelected()) {
 				employMarkets();
 				employRestaurantsWithoutCook();
-				startDay();
 				fakeRestaurantOrder();
 				describeTheRestOfScenarioG();
 				
-			} else if (scenarioJ.isEnabled()) {
+			} else if (scenarioJ.isSelected()) {
 				employAllWorkplaces();
 				createUnemployedUntil50People();
-				dealWithHavingMoreTraffic();
+				describeHowToHaveMoreTraffic();
 				
-			} else if (scenarioO.isEnabled()) {
-				employMarkets();
+			} else if (scenarioO.isSelected()) {
+				employBanks();
 				createBankRobber();
 				
-			} else if (scenarioP.isEnabled()) {
+			} else if (scenarioP.isSelected()) {
 				triggerCarAccident();
 				
-			} else if (scenarioQ.isEnabled()) {
+			} else if (scenarioQ.isSelected()) {
 				triggerPedestrianAccident();
 				
-			} else if (scenarioR.isEnabled()) {
+			} else if (scenarioR.isSelected()) {
 				employAllWorkplaces();
 				createUnemployedUntil50People();
 				describeHowScenarioR();
 				
-			} else if (scenarioS.isEnabled()) {
+			} else if (scenarioS.isSelected()) {
 				employAllWorkplaces();
 				createUnemployedUntil50People();
 				describeHowScenarioS();
@@ -285,7 +272,22 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 	}
 
-private void describeTheRestOfScenarioG() {
+	private void say(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void describeHowToHaveMoreTraffic() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void describeTheRestOfScenarioG() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void explainScenarioF() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -301,8 +303,7 @@ private void describeTheRestOfScenarioG() {
 	}
 	
 	private void employRestaurantsWithoutCook() {
-		// TODO Auto-generated method stub
-		
+		pcp.employRestaurantsWithoutCook();
 	}
 
 	private void triggerPedestrianAccident() {
@@ -314,17 +315,13 @@ private void describeTheRestOfScenarioG() {
 	}
 
 	private void createBankRobber() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void dealWithHavingMoreTraffic() {
-		// TODO Auto-generated method stub
+		say("Create a new person, go inside his info panel, and "
+				+ "click the rob bank button.");
 		
 	}
 
 	private void createUnemployedUntil50People() {
-		pcp.createUnemployedUntil50People();
+		pcp.createUnemployedUntil150People();
 		
 	}
 
@@ -377,11 +374,21 @@ private void describeTheRestOfScenarioG() {
 	}
 
 	private void makeRestaurantsLowOnFood() {
-		// TODO Auto-generated method stub
+		List<CityLocation> restaurants = 
+				KelpClass.getKelpInstance().placesNearMe
+				(new XYPos(0,0), LocationTypeEnum.Restaurant);
+		
+		for (CityLocation res : restaurants) {
+			((RestaurantFakeOrderInterface)res).makeLowOnFood();
+		}
 	}
 
 	private void employMarkets() {
 		pcp.employMarkets();
+	}
+
+	private void employBanks() {
+		pcp.employBanks();
 	}
 
 	private void employRestaurants() {
@@ -390,11 +397,6 @@ private void describeTheRestOfScenarioG() {
 
 	private void createNonWorkingPersonThatVisitsEverywhere() {
 		pcp.createNonWorkingPersonThatVisitsEverywhere();
-	}
-
-	private void startDay() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void employAllWorkplaces() {

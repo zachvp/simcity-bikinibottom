@@ -11,9 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,6 +43,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	//normative panel components
 	JRadioButton scenarioA, scenarioB, scenarioC, scenarioJ; //TODO Add more scenarios here
 	JButton runScenarioButton;
+	JCheckBox gradingViewCB;
 	
 	public ScenarioPanel() {
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
@@ -64,21 +67,34 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		eastPanel.setMinimumSize(eastDim);
 		eastPanel.setOpaque(false);
 		
+		gradingViewCB = new JCheckBox("Grading View");
+		gradingViewCB.addActionListener(this);
+		gradingViewCB.setOpaque(false);
+		
+		JPanel north = new JPanel();
+		north.setPreferredSize(new Dimension(d.width, (int)(d.height*0.2)));
+		north.setLayout(new BorderLayout());
+		north.setOpaque(false);
+		
 		populatePanel = new JPanel();
 		normativePanel = new JPanel();
 		makePopulatePanel();
 		makeNormativePanel();
 		
-		eastPanel.add(populatePanel, BorderLayout.NORTH);
+		north.add(populatePanel, BorderLayout.WEST);
+		north.add(gradingViewCB, BorderLayout.EAST);
+		
+		//eastPanel.add(north, BorderLayout.NORTH);
 		eastPanel.add(normativePanel, BorderLayout.SOUTH);
 		
 		//add(imagePanel, BorderLayout.WEST);
 		//add(eastPanel, BorderLayout.EAST);
+		add(north, BorderLayout.NORTH);
 		add(eastPanel, BorderLayout.CENTER);
 	}
 
 	private void makePopulatePanel() {
-		populateDim = new Dimension((int)(eastDim.width),(int)(eastDim.height*0.2));
+		populateDim = new Dimension((int)(d.width*0.7),(int)(eastDim.height*0.2));
 		populatePanel.setPreferredSize(populateDim);
 		populatePanel.setMaximumSize(populateDim);
 		populatePanel.setMinimumSize(populateDim);
@@ -92,18 +108,18 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		JPanel middle = new JPanel();
 		Dimension middleDim = new Dimension(populateDim.width, (int)(populateDim.height*0.3));
 		middle.setPreferredSize(middleDim);
-		middle.setLayout(new BorderLayout());
+		middle.setLayout(new GridLayout());
 		middle.setOpaque(false);
 		
 		JLabel workplaceLabel = new JLabel("Workplace: ", JLabel.CENTER);
 		
 		workplaceCB = new JComboBox<MyComboBoxItem>(); //TODO add array here
 		workplaceCB.addActionListener(this);
-		Dimension cbDim = new Dimension((int)(populateDim.width*0.7), (int)(populateDim.height*.15));
+		Dimension cbDim = new Dimension((int)(populateDim.width*0.8), (int)(middleDim.height));
 		workplaceCB.setPreferredSize(cbDim);
 		
-		middle.add(workplaceLabel, BorderLayout.WEST);
-		middle.add(workplaceCB, BorderLayout.EAST);
+		middle.add(workplaceLabel);
+		middle.add(workplaceCB);
 		
 		//Populate Button
 		populateButton = new JButton("Populate");
@@ -169,6 +185,15 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		if(e.getSource() == runScenarioButton){
 			if(scenarioJ.isEnabled()){//fully populate city with interesting people
 				
+			}
+		}
+		
+		if(e.getSource() == gradingViewCB){
+			if(gradingViewCB.isSelected()){
+				//TODO grading view
+			}
+			else{
+				//TODO pretty view
 			}
 		}
 		

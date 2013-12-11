@@ -87,12 +87,12 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	@Override
 	public void AskForPermission() {
 		if (Break) {
-			print("I am back to work");
+			//print("I am back to work");
 			Break = false;
 			return;
 		}
 		if (!Break) {
-			print("Ask For Permission");
+			//print("Ask For Permission");
 			host.RequestABreak(this);
 		}
 	}
@@ -175,8 +175,8 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	 */
 	@Override
 	public void msgAtTable(int tnumb) {// from animation
-		// print("msgAtTable() called");
-		print(" at table " + tnumb);
+		// //print("msgAtTable() called");
+		//print(" at table " + tnumb);
 		atTable.release();
 		if (state == AgentState.TakingCustomer){
 			for (int i=0;i<MyCustomers.size();i++){
@@ -256,14 +256,14 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	 */
 	@Override
 	public void msgAtCashier() {
-		print("At Cashier now");
+		//print("At Cashier now");
 		atCashier.release();
 		state = AgentState.AtCashier;
 		stateChanged();
 	}
 
 	public void msgAtWaitingLine() {
-		print("At WaitingLine now");
+		//print("At WaitingLine now");
 		atWaitingLine.release();
 	}
 	
@@ -409,7 +409,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 
 		state = AgentState.TakingCustomer;
 		stateChanged();
-		// System.out.print("Available permits :" + atTable.availablePermits()
+		// System.out.//print("Available permits :" + atTable.availablePermits()
 		// );
 		try {
 			atTable.acquire();
@@ -418,7 +418,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			e.printStackTrace();
 		}
 		waiterGui.DoLeaveCustomer(c.t);
-		// System.out.print("Available permits :" + atTable.availablePermits()
+		// System.out.//print("Available permits :" + atTable.availablePermits()
 		// );
 
 	}
@@ -433,7 +433,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		for (int i = 0; i < MyCustomers.size(); i++) {
 			if (MyCustomers.get(i).NeedCheck) {
 				// compute the bill
-				print("Compute Bill");
+				//print("Compute Bill");
 				MyCustomers.get(i).NeedCheck = false;
 				cashier.ComputeBill(MyCustomers.get(i).choice,
 						MyCustomers.get(i).t, this);
@@ -441,7 +441,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		}
 		for (int i = 0; i < CheckList.size(); i++) {
 			if (CheckList.get(i).doneComputing) {
-				print("Delivering Check");
+				//print("Delivering Check");
 				CheckList.get(i).doneComputing = false;
 				waiterGui.GoToTable(CheckList.get(i).table);
 				state = AgentState.GivingCheck;
@@ -473,7 +473,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	protected void DoTellCustomerBadNews(int TableNumber) {
 		for (int i = 0; i < MyCustomers.size(); i++) {
 			if (MyCustomers.get(i).t == TableNumber) {
-				print("Delivered Bad News to Customer");
+				//print("Delivered Bad News to Customer");
 				MyCustomers.get(i).FailOrder = false;
 				waiterGui.DoLeaveCustomer(TableNumber);
 				Menu menu = new Menu();
@@ -514,7 +514,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		// Notice how we print "customer" directly. It's toString method will do
 		// it.
 		// Same with "table"
-		print("Seating " + customer + " at " + table);
+		//print("Seating " + customer + " at " + table);
 		waiterGui.DoBringToTable(customer, table);
 	}
 
@@ -522,7 +522,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		// Notice how we print "customer" directly. It's toString method will do
 		// it.
 		// Same with "table"
-		print("Going to " + customer + " at " + table);
+		//print("Going to " + customer + " at " + table);
 		waiterGui.GoToTable(table);
 	}
 
@@ -538,7 +538,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 
 	protected void DeliveOrder(MyCustomer c, int table) {
-		print("Going To deliver Order to " + c.c + " at " + table);
+		//print("Going To deliver Order to " + c.c + " at " + table);
 		// print the food's name
 		waiterGui.ServeOrder(c.choice);
 		waiterGui.GoToTable(table);
@@ -546,7 +546,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	}
 
 	protected void GoToCashier() {
-		print("Going to Cashier and Compute Bill");
+		//print("Going to Cashier and Compute Bill");
 		waiterGui.GoToCashier();
 		try {
 			atCashier.acquire();

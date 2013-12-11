@@ -73,7 +73,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	 * @see restaurant.Cashier#Payment(restaurant.CashierAgent.Check, double, restaurant.interfaces.Customer)
 	 */
 	public void Payment(Check check, double cash, restaurant.anthony.interfaces.Customer cust) {
-		print("Payment received");
+		//print("Payment received");
 		check.Customer = cust;
 		check.payment = cash;
 		check.paid = true;
@@ -84,7 +84,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	 * @see restaurant.Cashier#PayDebt(double)
 	 */
 	public void PayDebt(double p) {
-		print("Received Money from customer paying the previous meal");
+		//print("Received Money from customer paying the previous meal");
 		money = money + p;
 	}
 	
@@ -174,7 +174,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	private void DoComputeCheck(final Check check, final int i) {
 
 
-				print("Done computing " + check.choice);
+				//print("Done computing " + check.choice);
 				double p = priceList.get(check.choice);
 
 				check.setPrice(p);

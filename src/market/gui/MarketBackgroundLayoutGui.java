@@ -44,7 +44,7 @@ public class MarketBackgroundLayoutGui implements Gui {
 		}
 
 		@Override
-		public void draw(Graphics2D g) {
+		public void draw(Graphics2D g, boolean gradingView) {
 			// TODO Auto-generated method stub
 			Graphics2D g2 = (Graphics2D)g;
 			

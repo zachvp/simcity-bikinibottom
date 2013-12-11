@@ -108,7 +108,7 @@ public class DeliveryGuyGui implements Gui, DeliveryGuyGuiInterfaces {
 	 * @see market.gui.DeliveryGuyGuiInterfaces#draw(java.awt.Graphics2D)
 	 */
     @Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.ORANGE);
         g.fillRect(xPos, yPos, DeliveryGuyWidth, DeliveryGuyHeight);
         

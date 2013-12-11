@@ -84,7 +84,7 @@ public class LayoutGui implements Gui{
 	}
 
 
-	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
+	public void draw(Graphics2D g, boolean gradingView) {//abstract definition, needed for Graphics
 
 		Graphics2D g2 = (Graphics2D)g;
 		g2.fillRect(0, 0, WINDOWX, WINDOWY);

@@ -55,9 +55,8 @@ public class HospitalBuilding extends Building{
 		return null;
 	}
 
-	@Override
-	public JPanel getAnimationPanel() {
-		return panel;
+	public AnimationPanel getAnimationPanel() {
+		return (AnimationPanel)panel;
 	}
 
 	@Override

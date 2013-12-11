@@ -93,7 +93,7 @@ public class LoanManagerGui implements Gui{
 		}
 	
 
-	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
+	public void draw(Graphics2D g, boolean gradingView) {//abstract definition, needed for Graphics
 		
 		Rectangle2D r = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);
 		Rectangle2D tr = new Rectangle2D.Double(xPos, yPos, agentDimW, agentDimH);

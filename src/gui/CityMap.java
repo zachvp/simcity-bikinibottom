@@ -176,7 +176,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		
 		for(Gui gui : guis) {
             if (gui.isPresent()) {
-                gui.draw(g2);
+                gui.draw(g2, gradingView);
             }
         }
 	}

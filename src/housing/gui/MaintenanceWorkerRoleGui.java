@@ -93,7 +93,7 @@ public class MaintenanceWorkerRoleGui implements Gui, MaintenanceWorkerGui {
 	}
 
 	/* --- Draw the Resident Graphics --- */
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		// draw the worker image
 		g.drawImage(workerIcon.getImage(), xPos, yPos, null);
 	    	

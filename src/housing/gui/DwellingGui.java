@@ -93,7 +93,7 @@ public class DwellingGui implements Gui, DwellingLayoutGui {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		// draw the background image
 		g.drawImage(icon.getImage(), 0, 0, null);
 		

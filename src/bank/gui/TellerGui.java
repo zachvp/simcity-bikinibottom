@@ -90,7 +90,7 @@ public class TellerGui implements agent.gui.Gui, TellerGuiInterface{
 		}
 	
 
-	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
+	public void draw(Graphics2D g, boolean gradingView) {//abstract definition, needed for Graphics
 		
 		//g.setColor(Color.CYAN);
 		//g.fillRect(xPos, yPos, agentDim, agentDim);

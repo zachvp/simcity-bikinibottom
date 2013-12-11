@@ -105,7 +105,7 @@ public class ResidentRoleGui implements Gui, ResidentGui {
 	}
 
 	/* --- Draw the Resident Graphics --- */
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		// draw the residence image
 		g.drawImage(residentIcon.getImage(), xPos, yPos, null);
 		

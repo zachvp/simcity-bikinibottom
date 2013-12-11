@@ -9,6 +9,7 @@ import market.interfaces.CashierGuiInterfaces;
 
 
 
+
 import java.awt.*;
 
 import agent.gui.Gui;
@@ -167,7 +168,7 @@ public class CashierGui implements Gui, CashierGuiInterfaces {
 	 * @see market.gui.MockCashierGui#draw(java.awt.Graphics2D)
 	 */
     @Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, CashierWidth, CashierHeight);
         

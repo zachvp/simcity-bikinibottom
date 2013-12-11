@@ -58,6 +58,11 @@ public class CashierGui implements Gui{
 	public void draw(Graphics2D g, boolean gradingView) {
 		g.setColor(Color.PINK);
 		g.fillRect(xPos, yPos, 20, 20);
+		
+		if(gradingView){
+			g.setColor(Color.BLACK);
+			g.drawString("Cashier", xPos, yPos+20);
+		}
 	}
 
 	

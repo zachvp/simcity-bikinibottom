@@ -77,7 +77,7 @@ public class CustomerGui implements Gui, CustomerGuiInterfaces{
 	 * @see market.gui.CustomerGuiInterfaces#draw(java.awt.Graphics2D)
 	 */
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		g.setColor(Color.YELLOW);
 		g.fillRect(xPos, yPos, CustomerWidth, CustomerHeight);
 		

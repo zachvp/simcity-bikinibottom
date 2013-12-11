@@ -20,20 +20,21 @@ public class Food {
 	Food(String n, int initAmount){
 		name = n;
 		quantity = initAmount;
+		newStock = initAmount;
 		
-		if(name.equals("krabbyPatty")){
+		if(name.equals("Krabby Patty")){
 			cookTime = 8;
 			price = 5.99;
 		}
-		else if(name.equals("kelpShake")){
+		else if(name.equals("Kelp Shake")){
 			cookTime = 4;
 			price = 1.99;
 		}
-		else if(name.equals("coralBits")){
+		else if(name.equals("Coral Bits")){
 			cookTime = 5;
 			price = 2.99;
 		}
-		else if(name.equals("kelpRings")){
+		else if(name.equals("Kelp Rings")){
 			cookTime = 6;
 			price = 3.99;
 		}
@@ -53,6 +54,7 @@ public class Food {
 	
 	public void sell(int num){
 		quantity -= num; 
+		newStock -= num;
 	}
 	
 	public void addInventory(int num){

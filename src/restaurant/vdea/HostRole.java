@@ -210,7 +210,7 @@ public class HostRole extends WorkRole implements Host{
 		//print("pick waiter");
 		List<Waiter> workingWaiters = new ArrayList<Waiter>();
 		for(Waiter waiter: waiters){
-			if(!waiter.isGoingOnBreak()){
+			if(!waiter.isGoingOnBreak() && waiter.isAtWork()){
 				workingWaiters.add(waiter);
 				//print("adding waiter " + waiter);
 			}

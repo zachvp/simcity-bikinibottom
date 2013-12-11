@@ -3,6 +3,7 @@ package restaurant.anthony.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import restaurant.InfoPanel;
 import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.MarketRole;
@@ -45,5 +46,7 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 	public abstract void setHost(HostRole h);
 
 	public abstract void setInventoryList(Map<String, Food> iList);
+
+	public abstract void setInfoPanel(InfoPanel infoPanel);
 
 }

@@ -47,10 +47,10 @@ public class RestaurantPanel extends JPanel {
     private RevolvingOrderList revolvingOrderList = new RevolvingOrderList();
     
     private PersonAgent cookPerson;
-    private CookRole cook;
+    public CookRole cook;
     
     private PersonAgent cashierPerson;
-    private CashierRole cashier;
+    public CashierRole cashier;
     
     private MarketAgent m1 = new MarketAgent("Market 1");
     private MarketAgent m2 = new MarketAgent("Market 2");

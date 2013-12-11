@@ -6,7 +6,7 @@ package restaurant.vdea.interfaces;
  * @author Victoria Dea
  *
  */
-public interface Cashier {
+public interface Cashier extends market.interfaces.PhonePayer {
 	
 	/**
 	 * @param w the waiter
@@ -33,5 +33,5 @@ public interface Cashier {
 	 * 
 	 * Sent by the market to give cashier the bill.
 	 */
-	public void msgMarketBill(Market m, double bill);
+	//public void msgMarketBill(Market m, double bill);
 }

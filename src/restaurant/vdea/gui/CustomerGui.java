@@ -96,16 +96,16 @@ public class CustomerGui implements Gui{
 
 		if(ordered){
 			g.setColor(Color.BLACK);
-			if(myChoice.equals("krabbyPatty")){
+			if(myChoice.equals("Krabby Patty")){
 				g.drawString("KP?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("kelpShake")){
+			if(myChoice.equals("Kelp Shake")){
 				g.drawString("KS?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("coralBits")){
+			if(myChoice.equals("coral Bits")){
 				g.drawString("CB?", xPos+22, yPos+10);
 			}
-			if(myChoice.equals("kelpRings")){
+			if(myChoice.equals("Kelp Rings")){
 				g.drawString("KR?", xPos+22, yPos+10);
 			}
 			if(myChoice.equals("nothing")){
@@ -115,16 +115,16 @@ public class CustomerGui implements Gui{
 		
 		if(recieved){
 			g.setColor(Color.BLACK);
-    		if(myChoice.equals("krabbyPatty")){
+    		if(myChoice.equals("Krabby Patty")){
     			g.drawString("KP", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("kelpShake")){
+    		if(myChoice.equals("Kelp Shake")){
     			g.drawString("KS", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("coralBits")){
+    		if(myChoice.equals("Coral Bits")){
     			g.drawString("CB", xPos+22, yPos+10);
     		}
-    		if(myChoice.equals("kelpRings")){
+    		if(myChoice.equals("Kelp Rings")){
     			g.drawString("KR", xPos+22, yPos+10);
     		}
 		}

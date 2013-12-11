@@ -87,17 +87,17 @@ public class WaiterGui implements Gui {
 			g.drawString("BR", xPos, yPos+10);
 		}
 		if(delivering){
-			if(order.equals("steak")){
-				g.drawString("ST", xPos, yPos);
+			if(order.equals("Krabby Patty")){
+				g.drawString("KP", xPos, yPos);
 			}
-			if(order.equals("chicken")){
-				g.drawString("CH", xPos, yPos);
+			if(order.equals("Kelp Shake")){
+				g.drawString("KS", xPos, yPos);
 			}
-			if(order.equals("salad")){
-				g.drawString("SAL", xPos, yPos);
+			if(order.equals("Coral Bits")){
+				g.drawString("CB", xPos, yPos);
 			}
-			if(order.equals("pizza")){
-				g.drawString("PZ", xPos, yPos);
+			if(order.equals("Kelp Rings")){
+				g.drawString("KR", xPos, yPos);
 			}
 		}
 	}

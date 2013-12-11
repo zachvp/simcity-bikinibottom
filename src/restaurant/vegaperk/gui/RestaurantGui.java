@@ -118,6 +118,9 @@ public class RestaurantGui extends JPanel{
 		this.animationPanel = animationPanel;
 	}
 
+	/**
+	 * @return the restPanel
+	 */
 	public RestaurantPanel getRestPanel() {
 		return restPanel;
 	}

@@ -36,7 +36,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	public void msgNoMoreFood(String choice, Order o) {
 
 		for (int i = 0; i < MyCustomers.size(); i++) {
-			print("Going to Deliver the bad news to customer");
+			//print("Going to Deliver the bad news to customer");
 			if (MyCustomers.get(i).t == o.table) {
 				MyCustomers.get(i).FailOrder = true;
 				stateChanged();

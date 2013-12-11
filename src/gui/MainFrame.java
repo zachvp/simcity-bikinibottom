@@ -35,6 +35,7 @@ import restaurant.lucas.gui.RestaurantLucasBuilding;
 import restaurant.anthony.gui.RestaurantBuilding;
 import restaurant.strottma.gui.RestaurantStrottmaBuilding;
 import restaurant.vegaperk.backend.RestaurantVegaPerkBuilding;
+import restaurant.vonbeck.gui.RestaurantVonbeckBuilding;
 import restaurant.vdea.gui.RestaurantVDeaBuilding;
 import sun.net.www.content.text.PlainTextInputStream;
 import transportation.BusAgent;
@@ -273,10 +274,9 @@ public class MainFrame extends JFrame implements ActionListener {
 					restaurant = new RestaurantVDeaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				} else if (creator == CreatorEnum.ZACH) {
 					restaurant = new RestaurantVegaPerkBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				} /*else if (creator == CreatorEnum.DIEGO) {
-					// TODO
-					restaurant = new RestaurantVonBeckBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
-				}*/ else { // creator == CreatorEnum.ERIK
+				} else if (creator == CreatorEnum.DIEGO) {
+					restaurant = new RestaurantVonbeckBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
+				} else { // creator == CreatorEnum.ERIK
 					restaurant = new RestaurantStrottmaBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
 				}
 

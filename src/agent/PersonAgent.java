@@ -7,6 +7,7 @@ import housing.backend.ResidentRole;
 import housing.backend.ResidentialBuilding;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -113,7 +114,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	public PersonAgent(String name){
 		this(name, IncomeLevel.MEDIUM, HungerLevel.NEUTRAL, true, true, null);
-		updateHungerLevel();
 	}
 	
 	/* -------- Messages -------- */
@@ -144,19 +144,27 @@ public class PersonAgent extends Agent implements Person {
 		boolean roleExecuted = false;
 		boolean roleActive = false;
 		
+		List<Role> activeRoles = new ArrayList<Role>();
+		
+		
+		
 		synchronized (roles) {
-		for (Role r : roles) {
-			if (r.isActive()) {
-//				if (r.isAwaitingInput()) {
-//					// The Role is paused. Return false, but don't activate
-//					// another Role!
-//					return false;
-//				} else {
-					roleExecuted = r.pickAndExecuteAnAction() || roleExecuted;
+			for (Role r : roles) {
+				if (r.isActive()) {
+					//				if (r.isAwaitingInput()) {
+					//					// The Role is paused. Return false, but don't activate
+					//					// another Role!
+					//					return false;
+					//				} else {
+					activeRoles.add(r);
 					roleActive = true;
-//				}
+					//				}
+				}
 			}
 		}
+		
+		for (Role r : activeRoles) {
+			roleExecuted = r.pickAndExecuteAnAction() || roleExecuted;
 		}
 		
 		// if at least one role's scheduler returned true, return true

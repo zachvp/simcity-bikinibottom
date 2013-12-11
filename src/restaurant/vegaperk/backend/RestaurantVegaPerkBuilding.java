@@ -36,7 +36,7 @@ public class RestaurantVegaPerkBuilding extends Building
 	public RestaurantVegaPerkBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount % 2 * timeDifference); // TODO (instanceCount * timeDifference) %2
+		this.timeOffset = (instanceCount * timeDifference) % 2;
 		instanceCount++;
 		
 		this.entrancePos = new XYPos(width / 2, height);
@@ -74,7 +74,6 @@ public class RestaurantVegaPerkBuilding extends Building
 	public Role getCustomerRole(Person person) {
 		CustomerRole role = existingCustomerRoles.get(person);
 		
-		// TODO implement person, building constructor for customer
 		if(role == null) {
 			role = ((RestaurantPanel) getRestPanel()).addCustomer("Customers", person.getName(), person);
 		}
@@ -126,6 +125,10 @@ public class RestaurantVegaPerkBuilding extends Building
 	@Override
 	public void makeLowOnFood() {
 		gui.getRestPanel().cook.makeLowOnFood();
+	}
+
+	public void updateInfoPanel(Map<String, Integer> inventoryList) {
+		this.infoPanel.UpdateInfoPanel(inventoryList);
 	}
 
 }

@@ -441,6 +441,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	
 	// The animation DoXYZ() routines
 	protected void doGoToWork() {
+		waiterGui.setName(person.getName());
 		atWork = true;
 		waiterGui.DoGoToDesk(idleFactor);
 		acquireSemaphore(active);

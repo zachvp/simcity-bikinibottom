@@ -42,8 +42,14 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private boolean onOpening = true;
 	
+	private boolean shouldWork = false;
+	
+	// TODO shared order list with PC waiter 
 	private RevolvingOrderList revolvingOrders;
+	
+	// TODO timerSet variable prevents the cook from repeatedly calling timer
 	private boolean timerSet = false;
+	// TODO constant to determine time b/t cook checking the revolving orders
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
 	private List<MyDelivery> deliveries = new ArrayList<MyDelivery>();
@@ -111,6 +117,8 @@ public class CookRole extends WorkRole implements Cook {
 	/** Messages from other agents */
 	
 	/** From Waiter */
+	// TODO instead of creating a new order, the cook uses the revolving order factory
+	// note that the cook still uses the same orders list as before for this
 	public void msgHereIsOrder(Waiter w, String c, int t){
 		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.NEED_TO_COOK));
 		stateChanged();
@@ -146,11 +154,14 @@ public class CookRole extends WorkRole implements Cook {
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	protected boolean pickAndExecuteAnAction() {
+		setPresent(true);
+		
 		if(onOpening){
 			openStore();
 			return true;
 		}
 		
+		// TODO remove the order if a waiter has picked it up
 		synchronized(revolvingOrders) {
 			for(Order o : revolvingOrders.orderList) {
 				if(o.state == OrderState.PICKED_UP) {
@@ -192,6 +203,7 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		
+		// TODO check the revolving orders if the cook hasn't already been instructed to
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
@@ -304,6 +316,8 @@ public class CookRole extends WorkRole implements Cook {
 			Do("Out of food");
 			o.state = OrderState.OUT_OF_CHOICE;
 			
+			// TODO message to waiter stays same as before, but we need to see if
+			// he is the older waiter type
 			if(o.waiter instanceof WaiterRole)
 				((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
 			
@@ -370,6 +384,10 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	/** Animation Functions */
+	public void setPresent(boolean b) {
+		cookGui.setPresent(b);
+	}
+	
 	private void DoDrawGrillAndPlates(){
 		cookGui.setGrillDrawPositions(grillPositions, platePositions);
 	}
@@ -482,9 +500,22 @@ public class CookRole extends WorkRole implements Cook {
 	public boolean isOnBreak() {
 		return false;
 	}
+	
+	@Override
+	public void activate() {
+		super.activate();
+		shouldWork = true;
+		cookGui.setPresent(true);
+		cookGui.DoGoHome();
+	}
 
 	@Override
 	public void msgLeaveWork() {
+		Do("Leaving Work");
+		shouldWork = false;
+		cookGui.DoLeaveWork();
+		waitForInput();
+		
 		this.deactivate();
 	}
 
@@ -505,6 +536,7 @@ public class CookRole extends WorkRole implements Cook {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			deliveries.get(orderNum).state = DeliveryState.NEED_TO_REORDER;
 			stateChanged();
 		}
 	}

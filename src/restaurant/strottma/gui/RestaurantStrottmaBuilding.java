@@ -168,7 +168,7 @@ public class RestaurantStrottmaBuilding extends Building
 	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-				waiterOnDuty() && cook.hasAnyFood();
+				waiterOnDuty() && cook.hasAnyFood() && super.isOpen();
 	}
 
 	public boolean hostOnDuty() {
@@ -198,6 +198,11 @@ public class RestaurantStrottmaBuilding extends Building
 	@Override
 	public PhonePayer getCashier() {
 		return cashier;
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.runOutOfSomeFood();
 	}
 	
 }

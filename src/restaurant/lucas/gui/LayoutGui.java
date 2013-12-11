@@ -2,6 +2,11 @@ package restaurant.lucas.gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 
 
@@ -17,6 +22,19 @@ public class LayoutGui implements Gui {
     public static final int yTable = 250;
     public static final int tableColor = 50;
 	
+	BufferedImage image;
+	ImageIcon icon;
+    
+	public LayoutGui () {
+
+		try {
+			image = ImageIO.read(getClass().getResource("bank_floor.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		icon = new ImageIcon(image);
+	}
+	
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
@@ -27,6 +45,8 @@ public class LayoutGui implements Gui {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.lightGray);
 		g.fillRect(0, 0, WINDOWX, WINDOWY);
+		
+		g.drawImage(icon.getImage(), 0, 0, null);
 		
 		g.setColor(Color.BLUE);
 		g.fillRect(520, 145, 30, 20);

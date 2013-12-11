@@ -35,6 +35,8 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	private String name;
 	private Semaphore active = new Semaphore(0, true);
 	private Sound robBank = Sound.getInstance();
+	boolean playSound = true;
+	
 	SecurityGuardGuiInterface securityGuardGui;
 	
 	BankBuilding bankBuilding;
@@ -248,12 +250,16 @@ public class SecurityGuardRole extends WorkRole implements SecurityGuard {
 	// Actions
 	
 	private void tryToStopRobber(MyRobber mr) {
-		robBank.playSound("RobABank.wav");
+		if(playSound){
+			playSound = false;
+			robBank.playSound("RobABank.wav");
+		}
 		mr.r.msgAttemptToStop(accountManager, false); //TODO, make success of stop attemp random
 		mr.state = robberState.robbing;
 	}
 	
 	private void removeRobber(MyRobber mr) {
+		playSound = true;
 		mr.state = robberState.done;
 	}
 	

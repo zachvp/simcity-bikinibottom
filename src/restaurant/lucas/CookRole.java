@@ -816,9 +816,7 @@ public class CookRole extends WorkRole implements Cook {
 
 	public void setLowOnFood() {
 		foods.get("Krabby Patty").amount = 1;
-		foods.get("Kelp Shake").amount = 1;
-		foods.get("Coral Bits").amount = 1;
-		foods.get("Kelp Rings").amount = 1;
+		foods.get("Krabby Patty").futureQuantity = 1;
 	}
 
 

@@ -463,7 +463,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	@Override
 	public void activate() {
 		super.activate();
-		this.getPerson().setShouldDepositRestaurantMoney(true);
+//		this.getPerson().setShouldDepositRestaurantMoney(true);//TODO businessbankcustomernotworking
 	}
 	
 	@Override

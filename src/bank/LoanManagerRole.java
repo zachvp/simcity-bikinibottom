@@ -25,7 +25,7 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 	AccountManager accountManager;
 	
 	double paycheckAmount = 300;
-	
+	double maxLoanAmount = 800;
 	
 	boolean atWork;
 	private boolean endWorkShift = false;
@@ -108,6 +108,12 @@ public class LoanManagerRole extends WorkRole implements LoanManager {
 		acquireSemaphore(active);
 		doGoToDesk();
 		acquireSemaphore(active);
+		if(lt.loanAmount > maxLoanAmount) {
+			lt.bc.msgLoanApproved(lt.loanAmount);
+//			accountManager.msgUpdateMoney(lt.loanAmount);
+			loanTasks.remove(lt);
+			return;
+		}
 		lt.bc.msgLoanApproved(lt.loanAmount);
 		accountManager.msgUpdateMoney(lt.loanAmount);
 		loanTasks.remove(lt);

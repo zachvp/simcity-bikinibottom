@@ -99,11 +99,13 @@ public class RestaurantVegaPerkBuilding extends Building {
 	}
 	
 	@Override public boolean isOpen() {
-		return true;
+		return false;
+//		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
+//				waiterOnDuty() && cookHasAnyFood() && super.isOpen();
 	}
 	
 	public RestaurantPanel getRestPanel() {
 		return gui.getRestPanel();
 	}
-
+	
 }

@@ -44,8 +44,12 @@ public class CookRole extends WorkRole implements Cook {
 	
 	private boolean shouldWork = false;
 	
+	// TODO shared order list with PC waiter 
 	private RevolvingOrderList revolvingOrders;
+	
+	// TODO timerSet variable prevents the cook from repeatedly calling timer
 	private boolean timerSet = false;
+	// TODO constant to determine time b/t cook checking the revolving orders
 	private final int CHECK_REVOLVING_LIST_TIME = 5;
 	
 	private List<MyDelivery> deliveries = new ArrayList<MyDelivery>();
@@ -113,6 +117,8 @@ public class CookRole extends WorkRole implements Cook {
 	/** Messages from other agents */
 	
 	/** From Waiter */
+	// TODO instead of creating a new order, the cook uses the revolving order factory
+	// note that the cook still uses the same orders list as before for this
 	public void msgHereIsOrder(Waiter w, String c, int t){
 		orders.add(revolvingOrders.getNewOrder(c, t, w, OrderState.NEED_TO_COOK));
 		stateChanged();
@@ -155,6 +161,7 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 		
+		// TODO remove the order if a waiter has picked it up
 		synchronized(revolvingOrders) {
 			for(Order o : revolvingOrders.orderList) {
 				if(o.state == OrderState.PICKED_UP) {
@@ -196,6 +203,7 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		
+		// TODO check the revolving orders if the cook hasn't already been instructed to
 		if(!timerSet) {
 			Runnable command = new Runnable() {
 				public void run(){
@@ -308,6 +316,8 @@ public class CookRole extends WorkRole implements Cook {
 			Do("Out of food");
 			o.state = OrderState.OUT_OF_CHOICE;
 			
+			// TODO message to waiter stays same as before, but we need to see if
+			// he is the older waiter type
 			if(o.waiter instanceof WaiterRole)
 				((WaiterRole) o.waiter).msgOutOfChoice(o.choice, o.table);
 			

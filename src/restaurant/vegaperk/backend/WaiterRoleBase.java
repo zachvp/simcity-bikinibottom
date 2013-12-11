@@ -14,11 +14,15 @@ import java.util.*;
  * Restaurant Waiter Agent
  */
 //The waiter is the agent we see seating customers and taking orders in the GUI
+
+// TODO Step 1: copy this class from the old waiter into a new class
 public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 	protected List<MyCustomer> customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
 	
 	enum BreakState { REQUEST_BREAK, ON_BREAK, NONE, OFF_BREAK, GOING_ON_BREAK };
 	BreakState breakState = BreakState.NONE;
+	
+	// TODO Step 2: cut all references to the cook and paste into the old waiter role
 	
 	//agent members
 	CashierRole cashier = null;
@@ -235,9 +239,11 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		stateChanged();
 	}
 	
+	// TODO step 3: make these two methods abstract, since they both reference the cook
 	abstract protected void takeOrder(MyCustomer c);
 	
 	abstract protected void getFood(MyCustomer c);
+	// END TODO	GO TO OLD WAITER
 	
 	protected void getCheck(MyCustomer c){
 		Do("Going to cashier");

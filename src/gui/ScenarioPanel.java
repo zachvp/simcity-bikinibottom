@@ -89,7 +89,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 		//add(imagePanel, BorderLayout.WEST);
 		//add(eastPanel, BorderLayout.EAST);
-		add(north, BorderLayout.NORTH);
+		//add(north, BorderLayout.NORTH);
 		add(eastPanel, BorderLayout.CENTER);
 	}
 

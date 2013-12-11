@@ -321,6 +321,7 @@ public class CustomerRole extends Role implements Customer {
 
 	private void goToRestaurant() {
 		Do("Going to restaurant, I have $" + this.getPerson().getWallet().getCashOnHand());
+		customerGui.setName(person.getName());
 		host.msgIWantFood(this);//send our instance, so he can respond to us
 	}
 

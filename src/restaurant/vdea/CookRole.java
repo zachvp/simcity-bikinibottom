@@ -42,7 +42,7 @@ public class CookRole extends WorkRole implements Cook{
 	public Food kelpShake = new Food("Kelp Shake", 9);
 	public Food coralBits = new Food("Coral Bits", 8);
 	public Food kelpRings = new Food("Kelp Rings", 10);
-	public Food krabbyPatty = new Food("Krabby Patty", 1);
+	public Food krabbyPatty = new Food("Krabby Patty", 5);
 	public List<Food> inventory = new ArrayList<Food>();
 	boolean orderSent;
 	

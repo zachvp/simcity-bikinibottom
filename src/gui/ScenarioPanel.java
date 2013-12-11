@@ -31,6 +31,7 @@ import market.interfaces.Cashier;
 import transportation.gui.TransportationGuiController;
 import CommonSimpleClasses.CityLocation;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
+import CommonSimpleClasses.sound.Sound;
 import CommonSimpleClasses.Constants;
 import CommonSimpleClasses.SingletonTimer;
 import CommonSimpleClasses.XYPos;
@@ -56,6 +57,8 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	Timer timer = SingletonTimer.getInstance();
 	JCheckBox gradingViewCB;
 	JLabel msg;
+	
+	private Sound Testing = Sound.getInstance();
 	
 	public ScenarioPanel(PersonCreationPanel pcp) {
 		this.pcp = pcp;
@@ -235,6 +238,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		
 		// TODO Add delays to scenarios?
 		if(e.getSource() == runScenarioButton){
+			Testing.playSound("testing.wav");
 			if (scenarioA.isSelected()) {
 				employAllWorkplaces();
 				createNonWorkingPersonThatVisitsEverywhere();

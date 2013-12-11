@@ -79,4 +79,11 @@ public class MockCook extends Mock implements Cook {
 	public void msgHereIsMissingItems(List<Item> MissingItemList, int orderNum) {
 		log.add("Received list of missing items");
 	}
+
+
+	@Override
+	public void stateChanged() {
+		// TODO Auto-generated method stub
+		
+	}
 }

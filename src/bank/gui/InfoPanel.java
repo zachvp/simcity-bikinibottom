@@ -18,6 +18,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 	GridLayout layout;
 	JButton updateButton;
+	JLabel label;
 	JLabel bankMoney;
 	BankBuilding bank;
 	public InfoPanel(BankBuilding b) {
@@ -31,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		this.setLayout(layout);
 		updateButton = new JButton("UPDATE");
 //		updateButton.addActionListener(this);
-		JLabel label = new JLabel("<html><div>&nbsp;</div><div> "
+		label = new JLabel("<html><div>&nbsp;</div><div> "
 				+ "Name: "+ b.getName() +"</div><div>&nbsp;</div>");
 		bankMoney = new JLabel("Money in Vault: " + 100000);
 //		JLabel amLabel = new JLabel("<html><div>&nbsp;</div><div> " + "Security Guard: " + b.getNumberOfTellers());
@@ -41,7 +42,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		add(label);
 		add(bankMoney);
 		//add(updateButton);
-		add(openHours);
+//		add(openHours);//TODO maybe implement this
 //		add(amStatus);
 		//add (amLabel);
 	}
@@ -58,6 +59,10 @@ public class InfoPanel extends JPanel implements ActionListener{
 		if (e.getSource() == updateButton) {
 			bankMoney.setText("" + bank.getMoneyInBank());
 		}
+	}
+
+	public void setBuildingName(String name) {
+		label.setText("Welcome to "  + name);		
 	}
 
 }

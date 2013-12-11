@@ -6,17 +6,17 @@ import java.util.Random;
 
 
 public class Menu {
-	private Food chicken = new Food("chicken");
-	private Food salad = new Food("salad");
-	private Food pizza = new Food("pizza");
-	private Food steak = new Food("steak");
+	private Food kelpShake = new Food("Kelp Shake");
+	private Food coralBits = new Food("Coral Bits");
+	private Food kelpRings = new Food("Kelp Rings");
+	private Food krabbyPatty = new Food("Krabby Patty");
 	public List<Food> list = new ArrayList<Food>();
 	
 	Menu(){
-		list.add(steak);
-		list.add(chicken);
-		list.add(salad);
-		list.add(pizza);		
+		list.add(krabbyPatty);
+		list.add(kelpShake);
+		list.add(coralBits);
+		list.add(kelpRings);		
 	}
 	
 	
@@ -51,19 +51,19 @@ public class Menu {
 	}
 	
 	private Food toFood(String s){
-		if(s.equals("chicken")){
-			return chicken;
+		if(s.equals("Kelp Shake")){
+			return kelpShake;
 		}
-		if(s.equals("steak")){
-			return steak;
+		if(s.equals("Krabb yPatty")){
+			return krabbyPatty;
 		}
-		if(s.equals("pizza")){
-			return pizza;
+		if(s.equals("Kelp Rings")){
+			return kelpRings;
 		}
-		if(s.equals("salad")){
-			return salad;
+		if(s.equals("Coral Bits")){
+			return coralBits;
 		}
-		return steak;
+		return krabbyPatty;
 	}
 	
 	public String reorder(String oldChoice, double cash){
@@ -121,17 +121,17 @@ public class Menu {
 	}
 	
 	public double getPrice(String f){
-		if(f.equals("chicken")){
-			return chicken.price;
+		if(f.equals("Kelp Shake")){
+			return kelpShake.price;
 		}
-		if(f.equals("steak")){
-			return steak.price;
+		if(f.equals("Krabby Patty")){
+			return krabbyPatty.price;
 		}
-		if(f.equals("pizza")){
-			return pizza.price;
+		if(f.equals("Kelp Rings")){
+			return kelpRings.price;
 		}
-		if(f.equals("salad")){
-			return salad.price;
+		if(f.equals("Coral Bits")){
+			return coralBits.price;
 		}
 		
 		return 0;

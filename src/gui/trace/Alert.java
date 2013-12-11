@@ -2,6 +2,7 @@ package gui.trace;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,22 +24,25 @@ public class Alert implements Comparable<Alert> {
 	public final String message;
 	
 	/** Timestamp of this alert */
-	public final Date date;
+	//public final Date date;
+	public final Calendar cal;
 
-	public Alert(AlertLevel level, AlertTag tag, String sender, String message, Date date) {
+	public Alert(AlertLevel level, AlertTag tag, String sender, String message, Calendar cal){// Date date) {
 		this.level = level;
 		this.tag = tag;
 		this.name = sender;
 		this.message = message;
-		this.date = date;
+		//this.date = date;
+		this.cal = cal;
 	}
 
 	public String toString() {
 		DateFormat format = new SimpleDateFormat("HH:mm:ss");
+		
 		if(this.level == AlertLevel.MESSAGE) {
-			return format.format(this.date) + " | (" + this.name + ") " + this.message;
+			return format.format(cal.getTime()) + " | (" + this.name + ") " + this.message;
 		}
-		return format.format(this.date) + " | [" + this.level + "] : (" + this.name + ") " + this.message;
+		return format.format(cal.getTime()) + " | [" + this.level + "] : (" + this.name + ") " + this.message;
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class Alert implements Comparable<Alert> {
 			throw new ClassCastException("Object being compared to is not an instance of Alert!");
 		}
 		Alert otherAlert = (Alert) a;
-		return this.date.compareTo(otherAlert.date);
+		return this.cal.compareTo(otherAlert.cal);
 	}
 
 }

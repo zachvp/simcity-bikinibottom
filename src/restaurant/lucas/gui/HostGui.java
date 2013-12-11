@@ -78,7 +78,7 @@ public class HostGui implements Gui {
     }
     
     public void DoEndWorkDay() {
-    	canRelease = true;
+    	canRelease = false;
     	xDestination = entranceX;
     	yDestination = entranceY;
     }

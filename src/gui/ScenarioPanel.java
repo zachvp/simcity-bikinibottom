@@ -14,8 +14,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,6 +54,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	JRadioButton scenarioQ, scenarioR, scenarioS;
 	private PersonCreationPanel pcp;
 	Timer timer = SingletonTimer.getInstance();
+	JCheckBox gradingViewCB;
 	
 	public ScenarioPanel(PersonCreationPanel pcp) {
 		this.pcp = pcp;
@@ -75,21 +79,34 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		eastPanel.setMinimumSize(eastDim);
 		eastPanel.setOpaque(false);
 		
+		gradingViewCB = new JCheckBox("Grading View");
+		gradingViewCB.addActionListener(this);
+		gradingViewCB.setOpaque(false);
+		
+		JPanel north = new JPanel();
+		north.setPreferredSize(new Dimension(d.width, (int)(d.height*0.2)));
+		north.setLayout(new BorderLayout());
+		north.setOpaque(false);
+		
 		populatePanel = new JPanel();
 		normativePanel = new JPanel();
 		makePopulatePanel();
 		makeNormativePanel();
 		
-		eastPanel.add(populatePanel, BorderLayout.NORTH);
+		north.add(populatePanel, BorderLayout.WEST);
+		north.add(gradingViewCB, BorderLayout.EAST);
+		
+		//eastPanel.add(north, BorderLayout.NORTH);
 		eastPanel.add(normativePanel, BorderLayout.SOUTH);
 		
 		//add(imagePanel, BorderLayout.WEST);
 		//add(eastPanel, BorderLayout.EAST);
+		//add(north, BorderLayout.NORTH);
 		add(eastPanel, BorderLayout.CENTER);
 	}
 
 	private void makePopulatePanel() {
-		populateDim = new Dimension((int)(eastDim.width),(int)(eastDim.height*0.2));
+		populateDim = new Dimension((int)(d.width*0.7),(int)(eastDim.height*0.2));
 		populatePanel.setPreferredSize(populateDim);
 		populatePanel.setMaximumSize(populateDim);
 		populatePanel.setMinimumSize(populateDim);
@@ -103,18 +120,18 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		JPanel middle = new JPanel();
 		Dimension middleDim = new Dimension(populateDim.width, (int)(populateDim.height*0.3));
 		middle.setPreferredSize(middleDim);
-		middle.setLayout(new BorderLayout());
+		middle.setLayout(new GridLayout());
 		middle.setOpaque(false);
 		
 		JLabel workplaceLabel = new JLabel("Workplace: ", JLabel.CENTER);
 		
 		workplaceCB = new JComboBox<MyComboBoxItem>(); //TODO add array here
 		workplaceCB.addActionListener(this);
-		Dimension cbDim = new Dimension((int)(populateDim.width*0.7), (int)(populateDim.height*.15));
+		Dimension cbDim = new Dimension((int)(populateDim.width*0.8), (int)(middleDim.height));
 		workplaceCB.setPreferredSize(cbDim);
 		
-		middle.add(workplaceLabel, BorderLayout.WEST);
-		middle.add(workplaceCB, BorderLayout.EAST);
+		middle.add(workplaceLabel);
+		middle.add(workplaceCB);
 		
 		//Populate Button
 		populateButton = new JButton("Populate");
@@ -270,6 +287,15 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 			runScenarioButton.setEnabled(false);
 		}
 		
+		if(e.getSource() == gradingViewCB){
+			if(gradingViewCB.isSelected()){
+				//TODO grading view
+			}
+			else{
+				//TODO pretty view
+			}
+		}
+		
 	}
 
 	private void say(String string) {
@@ -278,28 +304,28 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	}
 
 	private void describeHowToHaveMoreTraffic() {
-		// TODO Auto-generated method stub
+		say("Create people with cars to add more traffic.");
 		
 	}
 
 	private void describeTheRestOfScenarioG() {
-		// TODO Auto-generated method stub
+		say("Add a cook to the restaurant to make it able to "
+				+ "accept the delivery.");
 		
 	}
 
 	private void explainScenarioF() {
-		// TODO Auto-generated method stub
-		
+		say("We run the normative scenario, people "
+				+ "will naturally avoid closed venues.");
 	}
 
 	private void describeHowScenarioS() {
-		// TODO Auto-generated method stub
-		
+		say("Each building has a staff tab were you can hire and"
+				+ "fire people.");
 	}
 
 	private void describeHowScenarioR() {
-		// TODO Auto-generated method stub
-		
+		say("Banks are closed on weekends");
 	}
 	
 	private void employRestaurantsWithoutCook() {

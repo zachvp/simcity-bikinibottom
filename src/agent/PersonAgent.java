@@ -47,6 +47,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private PersonEvent event;
 	private HungerLevel hungerLevel;
+	private boolean forgotAboutFoodAtHome = false;
 	
 	private TimeManager timeManager;
 	
@@ -745,8 +746,17 @@ public class PersonAgent extends Agent implements Person {
 	
 	/** Whether this person has food at home. */
 	public boolean hasFoodAtHome() {
+		if (forgotAboutFoodAtHome) return false;
 		ResidentRole res = getResidentRole();
 		return (res != null) && res.thereIsFoodAtHome();
+	}
+	
+	public void forgetAboutFoodAtHome() {
+		forgotAboutFoodAtHome = true;
+	}
+	
+	public void rememberAboutFoodAtHome() {
+		forgotAboutFoodAtHome = false;
 	}
 	
 	public boolean hasFoodInInventory() {

@@ -565,7 +565,8 @@ ClassifiedsChangedListener{
 						public void run() {
 							if(!personAgent.isHungry()) {
 								this.cancel();
-								personAgent.
+								personAgent.forgetAboutFoodAtHome();
+								personAgent.setHungerLevel(HungerLevel.STARVING);
 							}
 							
 						}

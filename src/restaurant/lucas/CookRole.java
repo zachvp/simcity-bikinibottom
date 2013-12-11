@@ -289,6 +289,7 @@ public class CookRole extends WorkRole implements Cook {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			deliveries.get(orderNum).state= DeliveryState.NEED_TO_REORDER;
 			stateChanged();
 		}		
 	}

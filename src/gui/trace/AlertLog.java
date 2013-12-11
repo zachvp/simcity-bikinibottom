@@ -1,12 +1,17 @@
 package gui.trace;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
 
 import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.SingletonTimer;
+import CommonSimpleClasses.TimeManager;
 
 /**
  * This is a class designed to make it easier to send alerts and control them in
@@ -124,10 +129,13 @@ public class AlertLog {
 
 //		String senderClassName = new Throwable().getStackTrace()[1].getClassName();
 
-		Date date = new Date();	//Timestamp
-
+		//Date date = new Date();	//Timestamp
+		TimeManager timeManager = TimeManager.getInstance();
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timeManager.currentSimTime());
+		
 		//Make the alert.  Also prints to std out/err.
-		Alert alert = new Alert(level, tag, name, message, date);
+		Alert alert = new Alert(level, tag, name, message, cal);
 		if (this.printedAlertLevels.contains(level)) {
 			if (level == AlertLevel.ERROR) {
 				System.err.println(alert);

@@ -51,7 +51,7 @@ public class RestaurantStrottmaBuilding extends Building
 		this.existingCustomers = new HashMap<Person, CustomerRole>();
 		
 		// Stagger opening/closing time
-		this.timeOffset = (instanceCount * timeDifference) % 2;
+		this.timeOffset = (instanceCount % 2) * timeDifference;
 		instanceCount++;
 		
 		initRoles();
@@ -168,7 +168,7 @@ public class RestaurantStrottmaBuilding extends Building
 	@Override
 	public boolean isOpen() {
 		return hostOnDuty() && cashierOnDuty() && cookOnDuty() &&
-				waiterOnDuty();
+				waiterOnDuty() && cook.hasAnyFood();
 	}
 
 	public boolean hostOnDuty() {

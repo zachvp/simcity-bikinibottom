@@ -212,4 +212,12 @@ public class RestaurantVDeaBuilding extends Building
 		return cashier;
 	}
 
+	@Override
+	public void makeLowOnFood() {
+		cook.krabbyPatty.setInventory(2);
+		cook.kelpShake.setInventory(1);
+		cook.coralBits.setInventory(2);
+		cook.kelpRings.setInventory(3);
+	}
+
 }

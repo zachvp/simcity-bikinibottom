@@ -77,7 +77,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		imagePanel.setOpaque(false);
 		
 		eastPanel = new JPanel();
-		eastDim = new Dimension((int)(d.width*0.50),(int)(d.height));
+		eastDim = new Dimension((int)(d.width),(int)(d.height));
 		eastPanel.setPreferredSize(eastDim);
 		eastPanel.setMaximumSize(eastDim);
 		eastPanel.setMinimumSize(eastDim);
@@ -331,7 +331,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	}
 
 	private void describeHowScenarioR() {
-		say("Banks are closed on weekends");
+		say("Banks are closed on weekends, please wait for the weekend.");
 	}
 	
 	private void employRestaurantsWithoutCook() {

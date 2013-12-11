@@ -1,6 +1,7 @@
 package housing.gui;
 
 
+import housing.backend.HousingComplex;
 import housing.backend.PayRecipientRole;
 import housing.backend.ResidentRole;
 
@@ -33,6 +34,8 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	private JComboBox<Integer> chargeUnitNumberOptions;
 	private JComboBox<Integer> breakUnitNumberOptions;
 	
+	private HousingComplex complex; 
+	
 	// fills the combo boxes
 	private Vector<Integer> unitNumbers = new Vector<Integer>(); 
 	
@@ -40,9 +43,11 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	
 	private Sound myLeg = Sound.getInstance();
 	
-	public HousingInfoPanel(CityLocation building) {
+	public HousingInfoPanel(CityLocation building, HousingComplex complex) {
 		
 		this.setLayout(new FlowLayout());
+		
+		this.complex = complex;
 		
 		// populate the vector and add numbers to combo box
 		for(int i = 0; i < Constants.HOUSING_UNIT_COUNT; i++) { this.unitNumbers.add(i); }
@@ -78,25 +83,28 @@ public class HousingInfoPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getSource() == chargeRent) {
 			int chargeUnit = chargeUnitNumberOptions.getSelectedIndex();
+			complex.getPayRecipient().msgChargeRent(chargeUnit);
 			
-			for(Map.Entry<Role, Person> entry : people.entrySet()) {
-				if(entry.getKey() instanceof PayRecipientRole) {
-					PayRecipientRole role = (PayRecipientRole) entry.getValue();
-					System.out.println("Charging " + chargeUnit);
-					role.msgChargeRent(chargeUnit);
-				}
-			}
-		}
-//		else if(evt.getSource() == breakHouse) {
-//			myLeg.playSound("hitsound.wav");
-//			for(Map.Entry<Person, Role> entry : people.entrySet()) {
-//				if(entry.getValue() instanceof ResidentRole) {
-//					ResidentRole role = (ResidentRole) entry.getValue();
-//					role.getDwelling().degradeCondition();
+//			for(Map.Entry<Role, Person> entry : people.entrySet()) {
+//				if(entry.getKey() instanceof PayRecipientRole && entry.getKey() != null) {
+//					PayRecipientRole role = (PayRecipientRole) entry.getValue();
+//					System.out.println("Charging " + chargeUnit);
+//					role.msgChargeRent(chargeUnit);
 //				}
 //			}
-//
-//		}
+		}
+		
+		else if(evt.getSource() == breakHouse) {
+			myLeg.playSound("hitsound.wav");
+			
+			for(Map.Entry<Role, Person> entry : complex.getPopulation().entrySet()) {
+				if(entry.getValue() instanceof ResidentRole) {
+					ResidentRole role = (ResidentRole) entry.getValue();
+					role.getDwelling().degradeCondition();
+				}
+			}
+
+		}
 	}
 	
 	public void updatePanel(){

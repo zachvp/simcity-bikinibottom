@@ -55,7 +55,7 @@ public class ResidentialBuilding extends Building {
 		// set up the housing complex containing the building roles and GUI
 		this.complex = new HousingComplex(this);
 		
-		this.housingInfoPanel = new HousingInfoPanel(this);
+		this.housingInfoPanel = new HousingInfoPanel(this, complex);
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();

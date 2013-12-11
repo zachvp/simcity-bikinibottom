@@ -55,14 +55,14 @@ public class ResidentialBuilding extends Building {
 		// set up the housing complex containing the building roles and GUI
 		this.complex = new HousingComplex(this);
 		
-		this.housingInfoPanel = new HousingInfoPanel(this, getPopulation());
+		this.housingInfoPanel = new HousingInfoPanel(this, complex);
 		
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
 	}
 	
 	// needed to pass to info to panel
-	public Map<Person, Role> getPopulation() {
+	public Map<Role, Person> getPopulation() {
 		return complex.getPopulation();
 	}
 	
@@ -94,7 +94,11 @@ public class ResidentialBuilding extends Building {
 
 	@Override
 	public JPanel getInfoPanel() {
-		if(!name) { housingInfoPanel.name(this.getName()); name = true; }
+		if(!name) {
+			housingInfoPanel.name(this.getName());
+			housingInfoPanel.setPopulation(complex.getPopulation());
+			name = true;
+		}
 		return housingInfoPanel;
 	}
 	

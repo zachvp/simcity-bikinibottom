@@ -33,8 +33,8 @@ public class HousingComplex {
 	private PayRecipientRole payRecipient;
 	private MaintenanceWorkerRole worker;
 	
-	// used for producing jobs and residential roads in the complex
-	private Map<Person, Role> population = new HashMap<Person, Role>();
+	// used for producing jobs and residential roles in the complex
+	private Map<Role, Person> population = new HashMap<Role, Person>();
 	// maps the housing complex unit to the role
 	private Map<Integer, Role> unitMap = new HashMap<Integer, Role>();
 	
@@ -70,8 +70,8 @@ public class HousingComplex {
 			this.worker.setComplex(this);
 			
 			// put the constant roles in the building map
-			this.population.put(null, payRecipient);
-			this.population.put(null, worker);
+			this.population.put(payRecipient, null);
+			this.population.put(worker, null);
 			
 			this.gui = new HousingComplexGui(this);
 		}
@@ -87,14 +87,14 @@ public class HousingComplex {
 			case "worker" : {
 				this.worker = new MaintenanceWorkerRole(person, building);
 				this.worker.setComplex(this);
-				this.population.put(person, worker);
+				this.population.put(worker, person);
 				person.addRole(worker);
 				worker.activate();
 				break;
 			}
 			case "payrecipient" : {
 				payRecipient = new PayRecipientRole(person, building);
-				this.population.put(person, payRecipient);
+				this.population.put(payRecipient, person);
 				person.addRole(payRecipient);
 				payRecipient.activate();
 				break;
@@ -113,7 +113,7 @@ public class HousingComplex {
 	/* --- Utility functions --- */
 	
 	public void addResident(ResidentRole resident){
-		this.population.put(null, resident);
+		this.population.put(resident, null);
 	}
 	
 	/* --- Getters --- */
@@ -121,7 +121,7 @@ public class HousingComplex {
 		return building;
 	}
 	
-	public Map<Person, Role> getPopulation() {
+	public Map<Role, Person> getPopulation() {
 		return population;
 	}
 	

@@ -74,15 +74,10 @@ public class HostRole extends WorkRole {
 			}
 		};
 		
-//		int closingHour = ((RestaurantVegaPerkBuilding) building).getOpeningHour();
-//		int closingMinute = ((RestaurantVegaPerkBuilding) building).getOpeningMinute();
+		int closingHour = ((RestaurantVegaPerkBuilding) building).getOpeningHour();
+		int closingMinute = ((RestaurantVegaPerkBuilding) building).getOpeningMinute();
 		
-		schedule.scheduleDailyTask(command, 9, 30);
-		
-//		System.out.println("closing hour " + closingHour);
-//		System.out.println("closing minute " + closingMinute);
-//		System.out.println("opening hour " + openingHour);
-//		System.out.println("opening minute " + openingMinute);
+		schedule.scheduleDailyTask(command, closingHour, closingMinute);
 	}
 
 	/** Messages from other agents */

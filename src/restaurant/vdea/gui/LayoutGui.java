@@ -103,10 +103,16 @@ public class LayoutGui implements Gui{
 			g2.fill(r);
 		}
 
+		for (int i = 0; i<4; i++){
+			Rectangle2D r = new Rectangle2D.Double(grillX + i*(grillW/4), grillY, grillW/4, grillH);
+			Rectangle2D tr = new Rectangle2D.Double(grillX + i*(grillW/4), grillY, grillW/4, grillH);
+			TexturePaint tp = new TexturePaint(grillImage, tr);
+			g2.setPaint(tp);
+			g2.fill(r);
+		}
 
-
-		g2.setColor(Color.red);
-		g2.fillRect(grillX, grillY, grillW, grillH);
+		//g2.setColor(Color.red);
+		//g2.fillRect(grillX, grillY, grillW, grillH);
 
 		g2.setColor(Color.lightGray);
 		g2.fillRect(platingX, platingY, platingW, platingH);

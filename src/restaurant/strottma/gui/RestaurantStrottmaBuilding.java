@@ -199,5 +199,10 @@ public class RestaurantStrottmaBuilding extends Building
 	public PhonePayer getCashier() {
 		return cashier;
 	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.runOutOfSomeFood();
+	}
 	
 }

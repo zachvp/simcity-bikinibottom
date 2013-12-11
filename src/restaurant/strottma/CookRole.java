@@ -73,7 +73,7 @@ public class CookRole extends WorkRole implements Cook {
 		
 		// new Food(name, quantity, capacity, low threshold, cooking time in milliseconds)
 		Food st = new Food("Krabby Patty",	3, 5, 2, 7*1000);
-		Food ck = new Food("Kelp Shake",	0, 5, 2, 5*1000);
+		Food ck = new Food("Kelp Shake",	3, 5, 2, 5*1000);
 		Food sa = new Food("Coral Bits",	1, 5, 2, 2*1000);
 		Food pz = new Food("Kelp Rings",	3, 5, 2, 8*1000);
 		
@@ -674,6 +674,11 @@ public class CookRole extends WorkRole implements Cook {
 			}
 		}
 		return false;
+	}
+	
+	public void runOutOfSomeFood() {
+		foods.get("Krabby Patty").quantity = 0;
+		foods.get("Krabby Patty").futureQuantity = 0;
 	}
 	
 }

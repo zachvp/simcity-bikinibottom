@@ -570,6 +570,16 @@ public class CookRole extends WorkRole implements Cook {
 		MyOrders = revolvingOrderList.orderList;
 		
 	}
+
+	@Override
+	public boolean hasAnyFood() {
+		for (Map.Entry<String, Food> entry : foods.entrySet()) {
+			if (entry.getValue().amount > 0){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 
 

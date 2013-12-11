@@ -150,7 +150,7 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 	
 	@Override
 	public boolean isOpen() {
-		return cashierOnDuty() && hostOnDuty() && cookOnDuty() && waiterOnDuty();
+		return cashierOnDuty() && hostOnDuty() && cookOnDuty() && waiterOnDuty() && records.host.cook.hasAnyFood();
 	}
 	
 	public boolean hostOnDuty() {

@@ -51,4 +51,6 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 	public abstract void setRevolvingOrders(
 			RevolvingOrderList revolvingOrderList);
 
+	public abstract boolean hasAnyFood();
+
 }

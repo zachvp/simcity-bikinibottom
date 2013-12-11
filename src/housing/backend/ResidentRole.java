@@ -379,6 +379,11 @@ public class ResidentRole extends Role implements Resident {
 		return false;
 	}
 	
+	public void activate() {
+		super.activate();
+		gui.setPresent(true);
+	}
+	
 	/* --- Getters and Setters (mostly used for unit testing) --- */
 	public void setGui(ResidentGui gui2) {
 		this.gui = gui2;

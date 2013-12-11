@@ -1,18 +1,20 @@
 package restaurant.anthony;
 
 import CommonSimpleClasses.CityLocation;
+import CommonSimpleClasses.Constants;
+import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.CityLocation.LocationTypeEnum;
 import agent.Agent;
 import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.InfoPanel;
-import restaurant.anthony.MarketRole.Delivery;
-import restaurant.anthony.WaiterRoleBase.Order;
+import restaurant.anthony.RevolvingOrderList.OrderState;
 import restaurant.anthony.gui.CookGui;
 import restaurant.anthony.gui.HostGui;
 import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Market;
 import restaurant.anthony.interfaces.Waiter;
+import restaurant.anthony.RevolvingOrderList.Order;
 import restaurant.anthony.Food;
 import gui.Building;
 import gui.trace.AlertTag;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -45,9 +48,14 @@ public class CookRole extends WorkRole implements Cook {
 	private HostRole host;
 	Timer timer = new Timer();
 	private List<MyDelivery> deliveries = new ArrayList<MyDelivery>();
-	public List<Order> MyOrders = Collections.synchronizedList(new ArrayList<Order>());
+	
 	private List<Item> ShoppingList = Collections.synchronizedList(new ArrayList<Item>());
+	private ScheduleTask schedule = ScheduleTask.getInstance();
+	private final int CHECK_REVOLVING_LIST_TIME = 5;
+	private boolean timerSet = false;
+	private RevolvingOrderList revolvingOrderList;
 	private Kelp kelp = KelpClass.getKelpInstance();
+	public List<restaurant.anthony.RevolvingOrderList.Order> MyOrders;
 	private InfoPanel infoPanel;
 	
 	private List<Stove> Stoves = Collections.synchronizedList(new ArrayList<Stove>());
@@ -133,6 +141,7 @@ public class CookRole extends WorkRole implements Cook {
 		//print ("At home position");
 		state = AgentState.Idle;
 		atHome.release();
+		UpdateInfoPanel();
 		stateChanged();
 	}
 	
@@ -141,9 +150,9 @@ public class CookRole extends WorkRole implements Cook {
 	 * @see restaurant.anthony.Cook#HeresTheOrder(restaurant.anthony.WaiterRoleBase.Order, restaurant.anthony.interfaces.Waiter)
 	 */
 	@Override
-	public void HeresTheOrder(Order order, Waiter w) {
-		order.process = false;
-		MyOrders.add(order);
+	public void HeresTheOrder(String s, int t, Waiter w) {
+		print ("HeresTheOrder");
+		revolvingOrderList.orderList.add(revolvingOrderList.getNewOrder(s, t, w, OrderState.NEED_TO_COOK));
 		stateChanged();
 		// DoCookOrder(order, w);
 	}
@@ -151,9 +160,8 @@ public class CookRole extends WorkRole implements Cook {
 	/* (non-Javadoc)
 	 * @see restaurant.anthony.Cook#msgIGetOrder(restaurant.anthony.WaiterRoleBase.Order)
 	 */
-	@Override
-	public void msgIGetOrder (Order order){
-		cookGui.RemoveFood(order.Waiter.getWaiterNumber(), "PlatingArea");
+	public void msgIGetOrder (int tnumb){
+		cookGui.RemoveFood(tnumb -1, "PlatingArea");
 	}
 	
 	/* (non-Javadoc)
@@ -163,6 +171,7 @@ public class CookRole extends WorkRole implements Cook {
 		if (!MissingItemList.isEmpty()) {
 			Do(AlertTag.RESTAURANT, "Market couldn't complete order");
 			deliveries.get(orderNum).itemsToReorder.addAll(MissingItemList);
+			deliveries.get(orderNum).state = DeliveryState.NEED_TO_REORDER;
 			stateChanged();
 		}
 	}
@@ -215,10 +224,11 @@ public class CookRole extends WorkRole implements Cook {
 			return true;
 		}
 
+		/*
 		while (!MyOrders.isEmpty()) {
 			synchronized(MyOrders){
 			for (int i = 0; i < MyOrders.size(); i++) {
-				if (!MyOrders.get(i).process) {
+				if (!MyOrders.get(i).IsProcessed()) {
 					DoCookOrder(MyOrders.get(i), MyOrders.get(i).Waiter);
 					MyOrders.remove(i);
 					return true;
@@ -226,6 +236,7 @@ public class CookRole extends WorkRole implements Cook {
 			}
 			}
 		}
+		*/
 
 		for (int i = 0 ; i <deliveries.size();i++){
 			if (deliveries.get(i).state.equals(DeliveryState.NEED_TO_REORDER)){
@@ -233,6 +244,28 @@ public class CookRole extends WorkRole implements Cook {
 				return true;
 			}
 		}
+		
+		if(!timerSet) {
+			Runnable command = new Runnable() {
+				public void run(){
+					synchronized(revolvingOrderList) {
+						for(restaurant.anthony.RevolvingOrderList.Order o : revolvingOrderList.orderList) {
+							if (o.state == OrderState.NEED_TO_COOK){
+								DoCookOrder(o, o.Waiter);
+							}
+						}
+					}
+					timerSet = false;
+					stateChanged();
+				}
+			};
+			timerSet = true;
+			
+			schedule.scheduleTaskWithDelay(command,
+			CHECK_REVOLVING_LIST_TIME * Constants.MINUTE);
+			return true;
+		}
+		
 		
 		if (state == AgentState.OffWork && MyOrders.size() == 0){
 			OffWork();
@@ -265,15 +298,31 @@ public class CookRole extends WorkRole implements Cook {
 	}
 
 	private void DoCookOrder(final Order o, final Waiter w) { // final?
-		print(o.name);
 		state = AgentState.Cooking;
-		final Food currentFood = foods.get(o.name);
+		final Food currentFood = foods.get(o.choice);
 		GoToFridge();
 
+		/*
+		for (Entry<String, Food> entry : foods.entrySet()){
+			String testString = entry.getKey();
+			int testAmount = entry.getValue().amount;
+			if (testAmount == 0){
+				count++;
+			}
+			if (count == foods.size()){
+				o.
+			}
+		}
+		*/
 		if (currentFood.amount == 0) {
 			print("No more " + currentFood.choice);
 			GoToHome();
-			w.msgNoMoreFood(o.name, o);
+			if (!( w instanceof PCWaiterRole)){
+			w.msgNoMoreFood(o.choice, o);
+			}
+			else {
+				o.state = OrderState.OUT_OF_CHOICE;
+			}
 			CheckInventory();
 			return;
 		} else
@@ -295,14 +344,19 @@ public class CookRole extends WorkRole implements Cook {
 			GoToHome();
 			timer.schedule(new TimerTask() {
 				public void run() {
-					print("Done cooking " + o.name);
+					print("Done cooking " + o.choice);
 					GoToStove(w.getWaiterNumber());
 					
 					cookGui.RemoveFood(w.getWaiterNumber(), "Stove");
 					Stoves.get(w.getWaiterNumber()).occupied = false;
 					GoToPlateArea(w.getWaiterNumber());
 					cookGui.AddFood(w.getWaiterNumber(), "PlatingArea");
-					w.OrderIsReady(o);
+					if (!(w instanceof PCWaiterRole)){
+						w.OrderIsReady(o);
+					}
+					else{
+						o.state = OrderState.COOKED;
+					}
 					currentFood.foodConsumed();
 					//Update InfoPanel
 					UpdateInfoPanel();
@@ -508,6 +562,13 @@ public class CookRole extends WorkRole implements Cook {
 	
 	public void setInfoPanel (InfoPanel in){
 		infoPanel = in;
+	}
+
+	@Override
+	public void setRevolvingOrders(RevolvingOrderList rOL) {
+		revolvingOrderList = rOL;
+		MyOrders = revolvingOrderList.orderList;
+		
 	}
 	
 

@@ -6,11 +6,10 @@ import java.util.Map;
 import restaurant.InfoPanel;
 import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
-import restaurant.anthony.MarketRole;
+import restaurant.anthony.RevolvingOrderList;
 import restaurant.anthony.WaiterRoleBase;
-import restaurant.anthony.MarketRole.Delivery;
-import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CookGui;
+import restaurant.anthony.RevolvingOrderList.Order;
 
 public interface Cook extends market.interfaces.DeliveryReceiver {
 
@@ -29,9 +28,9 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 
 	public abstract void msgAtHome();
 
-	public abstract void HeresTheOrder(Order order, Waiter w);
+	public abstract void HeresTheOrder(String s, int t , Waiter w);
 
-	public abstract void msgIGetOrder(Order order);
+	public abstract void msgIGetOrder(int tnumb);
 
 	public abstract void msgLeaveWork();
 
@@ -48,5 +47,8 @@ public interface Cook extends market.interfaces.DeliveryReceiver {
 	public abstract void setInventoryList(Map<String, Food> iList);
 
 	public abstract void setInfoPanel(InfoPanel infoPanel);
+
+	public abstract void setRevolvingOrders(
+			RevolvingOrderList revolvingOrderList);
 
 }

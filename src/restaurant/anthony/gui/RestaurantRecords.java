@@ -13,6 +13,8 @@ import restaurant.anthony.CookRole;
 import restaurant.anthony.CustomerRole;
 import restaurant.anthony.Food;
 import restaurant.anthony.HostRole;
+import restaurant.anthony.PCWaiterRole;
+import restaurant.anthony.RevolvingOrderList;
 import restaurant.anthony.WaiterRole;
 import restaurant.anthony.WaiterRoleBase;
 import restaurant.anthony.interfaces.Cook;
@@ -32,6 +34,7 @@ public class RestaurantRecords {
 	private CashierRole cashier;
 	
 	private RestaurantBackgroundLayoutGui restBackgroundLayout;
+	private RevolvingOrderList revolvingOrderList = new RevolvingOrderList();
 	
 	private Map<String,Double> priceList = new HashMap<String,Double>(){
 		{
@@ -96,7 +99,7 @@ public class RestaurantRecords {
     	gui.addGui(hostGui);
     	
     	//WaiterRole
-    	WaiterRoleBase waiter1 = new WaiterRole(null, building);
+    	WaiterRoleBase waiter1 = new PCWaiterRole(null, building);
     	WaiterRoleBase waiter2 = new WaiterRole(null, building);
     	WaiterRoleBase waiter3 = new WaiterRole(null, building);
     	
@@ -153,6 +156,14 @@ public class RestaurantRecords {
     	cust.setGui(custGui);
     	gui.addGui(custGui);
     	cust.setHost(host);
+    	
+    	
+    	((PCWaiterRole) waiter1).setRevolvingOrders(revolvingOrderList);
+    	//((PCWaiterRole) waiter2).setRevolvingOrders(revolvingOrderList);
+    	//((PCWaiterRole) waiter3).setRevolvingOrders(revolvingOrderList);
+    	
+		cook.setRevolvingOrders(revolvingOrderList);
+    	
     	
     	//Waiter is being added in host.AddWaiter(waiter)
     }

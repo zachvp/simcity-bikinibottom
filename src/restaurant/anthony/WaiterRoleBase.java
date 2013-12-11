@@ -6,6 +6,8 @@ import agent.WorkRole;
 import agent.interfaces.Person;
 import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.CustomerRole.AgentState;
+import restaurant.anthony.RevolvingOrderList.Order;
+import restaurant.anthony.RevolvingOrderList.OrderState;
 import restaurant.anthony.gui.WaiterGui;
 import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Cook;
@@ -313,7 +315,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 			}
 			for (int i = 0; i < MyCustomers.size(); i++) {
 				if (MyCustomers.get(i).order != null) {
-					if (MyCustomers.get(i).order.process
+					if (MyCustomers.get(i).order.state == OrderState.COOKED
 							&& MyCustomers.get(i).state == CustomerState.Ordered) {
 						DoPickUpOrder();
 						return true;
@@ -345,7 +347,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		}
 
 		if (state == AgentState.AtCook) {
-			GiveCookOrder();
+			GetOrder();
 			return true;
 		}
 		}
@@ -425,7 +427,7 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 
 	abstract protected void GoTakeOrder(MyCustomer c);
 
-	abstract protected void GiveCookOrder();
+	abstract protected void GetOrder();
 
 	protected void GiveCashierOrder() {
 		waiterGui.DoLeaveCashier();
@@ -688,32 +690,9 @@ public abstract class WaiterRoleBase extends WorkRole implements Waiter {
 		}
 	}
 
-	public class Order {
-		String name;
-		boolean process;
-		int table;
-		int stove;
-		restaurant.anthony.interfaces.Waiter Waiter;
+	
 
-		Order(String NA, int t, restaurant.anthony.interfaces.Waiter wa) {
-			name = NA;
-			table = t;
-			Waiter = wa;
-			
 
-		}
-
-		public boolean IsProcessed() {
-			if (process == false)
-				return false;
-			else
-				return true;
-		}
-
-		public void Processed() {
-			process = true;
-		}
-	}
 
 	@Override
 	public boolean isAtWork() {

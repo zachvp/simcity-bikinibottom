@@ -3,7 +3,6 @@ package restaurant.anthony.interfaces;
 import restaurant.anthony.HostRole;
 import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.WaiterRoleBase.Menu;
-import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 
 public interface Customer {
@@ -30,13 +29,15 @@ public interface Customer {
 
 	public abstract void OrderGotIt();
 
-	public abstract void HeresYourOrder(Order o);
+	public abstract void HeresYourOrder(restaurant.anthony.RevolvingOrderList.Order o);
 
 	public abstract void HeresYourCheck(Check ch);
 
 	public abstract void HereIsYourChange(double change);
 
 	public abstract void HereIsYourDebt(double de);
+	
+	public abstract void msgEpicFail();
 
 	public abstract void msgAnimationFinishedGoToSeat();
 

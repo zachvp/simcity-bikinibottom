@@ -2,7 +2,6 @@ package restaurant.anthony;
 
 import restaurant.anthony.CashierRole.Check;
 import restaurant.anthony.WaiterRoleBase.Menu;
-import restaurant.anthony.WaiterRoleBase.Order;
 import restaurant.anthony.gui.CustomerGui;
 import restaurant.anthony.interfaces.Cashier;
 import restaurant.anthony.interfaces.Customer;
@@ -163,13 +162,11 @@ public class CustomerRole extends Role implements Customer {
 	 * @see restaurant.Customer#HeresYourOrder(restaurant.WaiterAgent.Order)
 	 */
 	@Override
-	public void HeresYourOrder(Order o) {
-		if (o.process == true) {
+	public void HeresYourOrder(restaurant.anthony.RevolvingOrderList.Order o) {
 			print("Served and I am happy now");
 			state = AgentState.Eating;
 			EatFood();
 			stateChanged();
-		}
 	}
 
 	/* (non-Javadoc)
@@ -205,6 +202,13 @@ public class CustomerRole extends Role implements Customer {
 
 	public void msgGoToAssignedSpace(int x){
 		customerGui.GoToAssignedSpace(x);
+	}
+	
+	public void msgEpicFail(){
+		print ("Receive Msg from waiter that no food here");
+		state = AgentState.NowLeave;
+		event = AgentEvent.AtCashier;
+		stateChanged();
 	}
 	/* (non-Javadoc)
 	 * @see restaurant.Customer#msgAnimationFinishedGoToSeat()

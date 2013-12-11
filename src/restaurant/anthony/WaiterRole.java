@@ -2,8 +2,9 @@ package restaurant.anthony;
 
 import CommonSimpleClasses.CityBuilding;
 import agent.interfaces.Person;
+import restaurant.anthony.RevolvingOrderList.OrderState;
 import restaurant.anthony.WaiterRoleBase.MyCustomer;
-import restaurant.anthony.WaiterRoleBase.Order;
+import restaurant.anthony.RevolvingOrderList.Order;
 import restaurant.anthony.interfaces.Cook;
 import restaurant.anthony.interfaces.Waiter;
 
@@ -24,7 +25,12 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	 */
 	@Override
 	public void OrderIsReady(Order o) {
-		o.Processed();
+		o.state = OrderState.COOKED;
+		for (int i =0 ; i <MyCustomers.size();i++){
+			if (MyCustomers.get(i).t == o.table){
+				MyCustomers.get(i).order = o;
+			}
+		}
 		stateChanged();
 	}
 
@@ -51,7 +57,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 	protected void GoTakeOrder(MyCustomer c) {
 		print ("GoTakeOrder");
 		DoGoCustomer(c.c, c.t);
-		c.order = new Order(c.choice, c.t, this);
+		//c.order = new Order(c.choice, c.t, this, OrderState.PENDING);
 		for (int i=0;i<MyCustomers.size();i++){
 			if (MyCustomers.get(i) == c){
 				print ("Ordered");
@@ -72,16 +78,17 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		cook.HeresTheOrder(c.choice, c.t, this);
 	}
 
-	protected void GiveCookOrder() {
+	protected void GetOrder() {
 		waiterGui.DoLeaveCook();
 		state = AgentState.returning;
 		for (int i = 0; i < MyCustomers.size(); i++) {
 			if (MyCustomers.get(i).order != null) {
 				if (!MyCustomers.get(i).order.IsProcessed()) {
 					Do("Give Order to Cook");
-					cook.HeresTheOrder(MyCustomers.get(i).order, this);
+					cook.HeresTheOrder(MyCustomers.get(i).choice, MyCustomers.get(i).t, this);
 				}
 			}
 		}
@@ -90,7 +97,7 @@ public class WaiterRole extends WaiterRoleBase implements Waiter {
 				if (MyCustomers.get(i).order.IsProcessed()
 						&& MyCustomers.get(i).state == CustomerState.Ordered) {
 					Do("Get Order from Cook");
-					cook.msgIGetOrder(MyCustomers.get(i).order);
+					cook.msgIGetOrder(MyCustomers.get(i).t);
 					
 					state = AgentState.TakingFood;
 					DeliveOrder(MyCustomers.get(i), MyCustomers.get(i).t);

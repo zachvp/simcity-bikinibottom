@@ -203,7 +203,7 @@ public class HostRole extends WorkRole {
 					// Find The Waiter that is not on Break
 					synchronized(Waiters){
 						for (int i = 0; i < Waiters.size(); i++) {
-							if (w == null && !Waiters.get(i).IsOnBreak()) {
+							if (w == null && !Waiters.get(i).IsOnBreak() && Waiters.get(i).isAtWork()) {
 								w = Waiters.get(i);
 								// print (w.getName() + " Is selected first");
 							}

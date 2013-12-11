@@ -18,6 +18,7 @@ public class CashierGui implements Gui {
 
     private CashierRole agent = null;
 
+    String name = "";
 
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -65,13 +66,22 @@ public class CashierGui implements Gui {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(Color.MAGENTA);
+        g.setColor(Color.RED);
         g.fillRect(xPos, yPos, agentDim, agentDim);
+        
+		g.setColor(Color.black);
+		g.drawString(name, xPos, yPos + 10);
+		
+		
     }
 
     public boolean isPresent() {
         return true;
     }
+    
+	public void setName(String str){
+		name = str;
+	}
 
     public void DoBringToTable(int x, int y) {
         xDestination = x + agentDim;

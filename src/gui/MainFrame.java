@@ -295,8 +295,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	 * Adds Building GUI components to the MainFrame
 	 * @param building A Building
 	 */
-	private void construct(Building building){		
-		buildingViewPanel.addCard(building.getAnimationPanel(), building.getName());//creates card and corresponding button
+	private void construct(Building building){
+		
 		map.addBuildingToMap(building);
 		if(building.type() != LocationTypeEnum.None){
 			buildingList.addToList(building.getName());
@@ -305,7 +305,15 @@ public class MainFrame extends JFrame implements ActionListener {
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
 		if(building.type() != LocationTypeEnum.Hospital || building.type() != LocationTypeEnum.None){
+			buildingViewPanel.addCard(building.getAnimationPanel(), building.getName());//creates card and corresponding button
 			building.getAnimationPanel().setScenarioPanel(hospital.scenarioPanel);
+			map.setScenarioPanel(hospital.scenarioPanel);
+		}
+		else if(building.type() == LocationTypeEnum.Hospital){
+			buildingViewPanel.addCard(((HospitalBuilding)building).getHospitalPanel(), building.getName());
+		}
+		else if (building.type() == LocationTypeEnum.None){
+			buildingViewPanel.addCard(((MockBuilding)building).getImagePanel(), building.getName());
 		}
 		constructedBuildings.add(building);
 	}

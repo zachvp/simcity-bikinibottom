@@ -60,7 +60,7 @@ public class CookGui implements Gui {
         
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
     	// draw the agent
     	g.setColor(Color.BLUE);
         g.fillRect(xPos, yPos, WIDTH, HEIGHT);

@@ -47,7 +47,7 @@ public class HostGui implements Gui {
         */
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
     	// draw the tables
         
     	

@@ -65,7 +65,7 @@ public class CustomerGui implements Gui{
 		}
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		// draw the agent
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, width, height);

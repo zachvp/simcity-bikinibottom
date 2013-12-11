@@ -84,7 +84,7 @@ public class LayoutGui implements Gui{
 	    }
 	    
 	    @Override
-	    public void draw(Graphics2D g) {
+	    public void draw(Graphics2D g, boolean gradingView) {
 	        Graphics2D g2 = (Graphics2D)g;
 
 	        //Clear the screen by painting a rectangle the size of the frame

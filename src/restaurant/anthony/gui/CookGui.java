@@ -243,7 +243,7 @@ public class CookGui implements Gui {
     	}
     }
     
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.BLACK);
         g.fillRect(xPos, yPos, CookWidth, CookHeight);
         

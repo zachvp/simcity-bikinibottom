@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import agent.Role;
 import agent.interfaces.Person;
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 import CommonSimpleClasses.XYPos;
@@ -72,7 +73,7 @@ public class RestaurantVegaPerkBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		return gui.getAnimationPanel();
 	}
 

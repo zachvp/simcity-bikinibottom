@@ -24,7 +24,7 @@ public class LayoutGui implements Gui {
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		g.setColor(Color.lightGray);
 		g.fillRect(0, 0, WINDOWX, WINDOWY);
 		

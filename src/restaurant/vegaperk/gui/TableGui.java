@@ -15,7 +15,7 @@ public class TableGui implements Gui{
 		tableMap = map;
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		//draw the tables
     	g.setColor(Color.ORANGE);
     	for(int i = 0; i < tableMap.size(); i++){

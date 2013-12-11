@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 import housing.gui.HousingInfoPanel;
@@ -88,7 +89,7 @@ public class ResidentialBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		return complex.getGui();
 	}
 

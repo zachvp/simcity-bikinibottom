@@ -1,5 +1,6 @@
 package restaurant.strottma.gui;
 
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 
@@ -144,7 +145,7 @@ public class RestaurantStrottmaBuilding extends Building {
 	}
 	
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		// TODO initialize the animation panel
 		//JPanel animationPanel = new agent.gui.AnimationPanel();
 		return restaurantGui.getAnimationPanel();

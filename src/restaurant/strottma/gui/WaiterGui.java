@@ -84,7 +84,7 @@ public class WaiterGui implements Gui {
         
     }
 
-    public void draw(Graphics2D g) {    	
+    public void draw(Graphics2D g, boolean gradingView) {    	
     	// draw the Role
     	g.setColor(Color.MAGENTA);
         g.fillRect(xPos, yPos, WIDTH, HEIGHT);

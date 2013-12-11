@@ -1,5 +1,6 @@
 package restaurant.lucas.gui;
 
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 
@@ -181,7 +182,7 @@ public class RestaurantLucasBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		return restaurantGui.getAnimationPanel();
 	}
 

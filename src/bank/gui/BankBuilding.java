@@ -1,5 +1,6 @@
 package bank.gui;
 
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 
@@ -252,7 +253,7 @@ public class BankBuilding extends Building {
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		return bankGui.getAnimationPanel();
 	}
 

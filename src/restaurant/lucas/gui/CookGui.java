@@ -79,7 +79,7 @@ public class CookGui implements Gui{
 		}
 	
 
-	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
+	public void draw(Graphics2D g, boolean gradingView) {//abstract definition, needed for Graphics
 		
 
 		for(Grill gr : agent.getGrills()) {

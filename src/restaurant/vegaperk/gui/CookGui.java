@@ -66,7 +66,7 @@ public class CookGui implements Gui{
 		}
 	}
 
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		g.drawString("Cook", 500, 40);
 		
 		g.setColor(Color.RED);

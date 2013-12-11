@@ -49,7 +49,7 @@ public class RestaurantBackgroundLayoutGui implements Gui {
 		}
 
 		@Override
-		public void draw(Graphics2D g) {
+		public void draw(Graphics2D g, boolean gradingView) {
 
 			Graphics2D g2 = (Graphics2D)g;
 

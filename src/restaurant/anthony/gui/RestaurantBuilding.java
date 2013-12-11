@@ -110,7 +110,7 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		// TODO Auto-generated method stub
 		return animationPanel;
 	}

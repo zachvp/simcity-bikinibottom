@@ -78,7 +78,7 @@ public class CashierGui implements Gui {
     	yDestination = IdlePositionY;
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, boolean gradingView) {
         g.setColor(Color.RED);
         g.fillRect(xPos, yPos, CashierWidth, CashierHeight);
     }

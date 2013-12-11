@@ -61,7 +61,7 @@ public class CustomerGui implements Gui {
 		}
 	}
 
-	public void draw(Graphics2D g) {//abstract definition, needed for Graphics
+	public void draw(Graphics2D g, boolean gradingView) {//abstract definition, needed for Graphics
 		g.setColor(Color.RED);
 		g.fillRect(xPos, yPos, agentDim, agentDim);
 		

@@ -43,6 +43,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	BufferedImage image, hospitalImage, KrustyKrabImage, snailpoNullImage, bankImage, marketImage, houseImage;
 	ImageIcon icon;
 	InfoPanel infoPanel;
+	ScenarioPanel scenario;
 	
 	private List<Gui> guis = new ArrayList<Gui>();
 
@@ -176,7 +177,7 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 		
 		for(Gui gui : guis) {
             if (gui.isPresent()) {
-                gui.draw(g2, gradingView);
+                gui.draw(g2, scenario.gradingView());
             }
         }
 	}
@@ -253,5 +254,8 @@ public class CityMap extends JPanel implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		repaint();
 		
+	}
+	public void setScenarioPanel(ScenarioPanel p){
+		scenario = p;
 	}
 }

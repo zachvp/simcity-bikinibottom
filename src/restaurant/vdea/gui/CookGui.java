@@ -131,122 +131,122 @@ public class CookGui implements Gui {
         
         g.setColor(Color.black);
         if(cooking[0]){
-    		if(grills[0].equals("steak")){
-    			g.drawString("ST", grillX, grillY);
+    		if(grills[0].equals("Krabby Patty")){
+    			g.drawString("KP", grillX, grillY);
     		}
-    		if(grills[0].equals("chicken")){
-    			g.drawString("CH", grillX, grillY);
+    		if(grills[0].equals("Kelp Shake")){
+    			g.drawString("KS", grillX, grillY);
     		}
-    		if(grills[0].equals("salad")){
-    			g.drawString("SAL", grillX, grillY);
+    		if(grills[0].equals("Coral Bits")){
+    			g.drawString("CB", grillX, grillY);
     		}
-    		if(grills[0].equals("pizza")){
-    			g.drawString("PZ", grillX, grillY);
+    		if(grills[0].equals("Kelp Rings")){
+    			g.drawString("KR", grillX, grillY);
     		}
     	}
         if(cooking[1]){
     		int grillX1 = grillX+20;
-    		if(grills[1].equals("steak")){
-    			g.drawString("ST", grillX1, grillY);
+    		if(grills[1].equals("Krabby Patty")){
+    			g.drawString("KP", grillX1, grillY);
     		}
-    		if(grills[1].equals("chicken")){
-    			g.drawString("CH", grillX1, grillY);
+    		if(grills[1].equals("Kelp Shake")){
+    			g.drawString("KS", grillX1, grillY);
     		}
-    		if(grills[1].equals("salad")){
-    			g.drawString("SAL", grillX1, grillY);
+    		if(grills[1].equals("Coral Bits")){
+    			g.drawString("CB", grillX1, grillY);
     		}
-    		if(grills[1].equals("pizza")){
-    			g.drawString("PZ", grillX1, grillY);
+    		if(grills[1].equals("Kelp Rings")){
+    			g.drawString("KR", grillX1, grillY);
     		}
     	}
         if(cooking[2]){
     		int grillX2 = grillX+40;
-    		if(grills[2].equals("steak")){
-    			g.drawString("ST", grillX2, grillY);
+    		if(grills[2].equals("Krabby Patty")){
+    			g.drawString("KP", grillX2, grillY);
     		}
-    		if(grills[2].equals("chicken")){
-    			g.drawString("CH", grillX2, grillY);
+    		if(grills[2].equals("Kelp Shake")){
+    			g.drawString("KS", grillX2, grillY);
     		}
-    		if(grills[2].equals("salad")){
-    			g.drawString("SAL", grillX2, grillY);
+    		if(grills[2].equals("Coral Bits")){
+    			g.drawString("CB", grillX2, grillY);
     		}
-    		if(grills[2].equals("pizza")){
-    			g.drawString("PZ", grillX2, grillY);
+    		if(grills[2].equals("Kelp Rings")){
+    			g.drawString("KR", grillX2, grillY);
     		}
     	}
         if(cooking[3]){
     		int grillX3 = grillX+60;
-    		if(grills[3].equals("steak")){
-    			g.drawString("ST", grillX3, grillY);
+    		if(grills[3].equals("Krabby Patty")){
+    			g.drawString("KP", grillX3, grillY);
     		}
-    		if(grills[3].equals("chicken")){
-    			g.drawString("CH", grillX3, grillY);
+    		if(grills[3].equals("Kelp Shake")){
+    			g.drawString("KS", grillX3, grillY);
     		}
-    		if(grills[3].equals("salad")){
-    			g.drawString("SAL", grillX3, grillY);
+    		if(grills[3].equals("Coral Bits")){
+    			g.drawString("CB", grillX3, grillY);
     		}
-    		if(grills[3].equals("pizza")){
-    			g.drawString("PZ", grillX3, grillY);
+    		if(grills[3].equals("Kelp Rings")){
+    			g.drawString("KR", grillX3, grillY);
     		}
     	}
         
         if(plating[0]){
-    		if(plates[0].equals("steak")){
-    			g.drawString("ST", plateX, plateY);
+    		if(plates[0].equals("Krabby Patty")){
+    			g.drawString("KP", plateX, plateY);
     		}
-    		if(plates[0].equals("chicken")){
-    			g.drawString("CH", plateX, plateY);
+    		if(plates[0].equals("Kelp Shake")){
+    			g.drawString("KS", plateX, plateY);
     		}
-    		if(plates[0].equals("salad")){
-    			g.drawString("SAL", plateX, plateY);
+    		if(plates[0].equals("Coral Bits")){
+    			g.drawString("CB", plateX, plateY);
     		}
-    		if(plates[0].equals("pizza")){
-    			g.drawString("PZ", plateX, plateY);
+    		if(plates[0].equals("Kelp Rings")){
+    			g.drawString("KR", plateX, plateY);
     		}
     	}
         if(plating[1]){
     		int plateY1 = plateY+20;
-    		if(plates[1].equals("steak")){
-    			g.drawString("ST", plateX, plateY1);
+    		if(plates[1].equals("Krabby Patty")){
+    			g.drawString("KP", plateX, plateY1);
     		}
-    		if(plates[1].equals("chicken")){
-    			g.drawString("CH", plateX, plateY1);
+    		if(plates[1].equals("Kelp Shake")){
+    			g.drawString("KS", plateX, plateY1);
     		}
-    		if(plates[1].equals("salad")){
-    			g.drawString("SAL", plateX, plateY1);
+    		if(plates[1].equals("Coral Bits")){
+    			g.drawString("CB", plateX, plateY1);
     		}
-    		if(plates[1].equals("pizza")){
-    			g.drawString("PZ", plateX, plateY1);
+    		if(plates[1].equals("Kelp Rings")){
+    			g.drawString("KR", plateX, plateY1);
     		}
     	}
         if(plating[2]){
     		int plateY2 = plateY+40;
-    		if(plates[2].equals("steak")){
-    			g.drawString("ST", plateX, plateY2);
+    		if(plates[2].equals("Krabby Patty")){
+    			g.drawString("KP", plateX, plateY2);
     		}
-    		if(plates[2].equals("chicken")){
-    			g.drawString("CH", plateX, plateY2);
+    		if(plates[2].equals("Kelp Shake")){
+    			g.drawString("KS", plateX, plateY2);
     		}
-    		if(plates[2].equals("salad")){
-    			g.drawString("SAL", plateX, plateY2);
+    		if(plates[2].equals("Coral Bits")){
+    			g.drawString("CB", plateX, plateY2);
     		}
-    		if(plates[2].equals("pizza")){
-    			g.drawString("PZ", plateX, plateY2);
+    		if(plates[2].equals("Kelp Rings")){
+    			g.drawString("KR", plateX, plateY2);
     		}
     	}
         if(plating[3]){
     		int plateY3 = plateY+60;
-    		if(plates[3].equals("steak")){
-    			g.drawString("ST", plateX, plateY3);
+    		if(plates[3].equals("Krabby Patty")){
+    			g.drawString("KP", plateX, plateY3);
     		}
-    		if(plates[3].equals("chicken")){
-    			g.drawString("CH", plateX, plateY3);
+    		if(plates[3].equals("Kelp Shake")){
+    			g.drawString("KS", plateX, plateY3);
     		}
-    		if(plates[3].equals("salad")){
-    			g.drawString("SAL", plateX, plateY3);
+    		if(plates[3].equals("Coral Bits")){
+    			g.drawString("CB", plateX, plateY3);
     		}
-    		if(plates[3].equals("pizza")){
-    			g.drawString("PZ", plateX, plateY3);
+    		if(plates[3].equals("Kelp Rings")){
+    			g.drawString("KR", plateX, plateY3);
     		}
     	}
 

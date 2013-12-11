@@ -286,7 +286,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		speakToTeller();
 	}
 	
-	private void speakToTeller() {
+	protected void speakToTeller() {
 		Do(AlertTag.BANK, "speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 
 		
@@ -332,7 +332,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return;
 		}
 		if(this.getPerson().getWallet().getCashOnHand() < myTooLittle() && cashInAccount< ((myTooLittle() + myTooMuch())/2)) {
-//			Do("Im getting Loan");
+			Do("Im getting Loan");
 			teller.msgINeedALoan(this);
 			state= State.gettingLoan;
 			return;
@@ -357,7 +357,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		state = State.atLoanManager;
 	}
 	
-	private void leaveBank() {
+	protected void leaveBank() {
 		Do(AlertTag.BANK, "leaving bank " + accountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(getCashAdjustAmount());
@@ -499,6 +499,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void Do(String str){
+		Do(AlertTag.BANK, str);
 	}
 
 

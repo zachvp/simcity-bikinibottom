@@ -8,10 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 
-import market.interfaces.PhonePayer;
 import restaurant.strottma.interfaces.Cashier;
 import restaurant.strottma.interfaces.Customer;
-import restaurant.strottma.interfaces.Market;
 import restaurant.strottma.interfaces.Waiter;
 import restaurant.strottma.test.mock.EventLog;
 import CommonSimpleClasses.CityLocation;

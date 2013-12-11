@@ -1,5 +1,7 @@
 package restaurant.vdea;
 
+import gui.trace.AlertTag;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -197,7 +199,7 @@ public class HostRole extends WorkRole implements Host{
 	}	
 
 	public void restaurantFull(Customer c){
-		print("The restaurant is full. Would you like to wait?");
+		Do(AlertTag.RESTAURANT, "The restaurant is full. Would you like to wait?");
 		c.msgRestaurantFull();
 	}
 	
@@ -232,7 +234,7 @@ public class HostRole extends WorkRole implements Host{
 
 	public void assignWaiter(Customer customer, Table table, Waiter waiter) {
 		//state = AgentState.none;
-		print("Welcome " +customer.getName() +". Your waiter tonight will be " + waiter.getName());
+		Do(AlertTag.RESTAURANT, "Welcome " +customer.getName() +". Your waiter tonight will be " + waiter.getName());
 		table.setOccupant(customer);
 		/*try{
 			atDest.acquire(); //TODO semaphore needed?

@@ -301,6 +301,7 @@ public class HostRole extends WorkRole implements Host {
 	}
 	
 	private void goToWork() {
+		hostGui.setName(person.getName());
 		hostGui.DoGoToDesk();
 		acquireSemaphore(active);
 		atWork = true;

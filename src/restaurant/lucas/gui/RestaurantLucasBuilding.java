@@ -118,33 +118,33 @@ public class RestaurantLucasBuilding extends Building {
 			restaurantGui.getAnimationPanel().addGui(wGui);
 		}
 		
-		//Creates PCWaiterRoles
-//		for (int i = 0; i < 2; i++) {
-//			// Create the waiter and add it to the list
-//			PCWaiterRole w = new PCWaiterRole(null, this);
-//			w.setIdlePosition(i);
-//			w.setOrderWheel(orderWheel);
-//			pcWaiters.add(w);
-//			
-//			//give roles to host so host can end work day
-//			host.addRole(w);
-//			
-//			// Set references between the waiter and other roles
-//			w.setOtherRoles(host, cashier);
-////			w.setCook(cook);
-//			//TODO make setcook method for normalWaiter
-//			host.addWaiter(w);
-//			
-//			// Create and set up the waiter GUI
-//			WaiterGui wGui = new WaiterGui(w, restaurantGui);
-//			w.setGui(wGui);
-//			restaurantGui.getAnimationPanel().addGui(wGui);
-//		}
+//		Creates PCWaiterRoles
+		for (int i = 0; i < 2; i++) {
+			// Create the waiter and add it to the list
+			PCWaiterRole w = new PCWaiterRole(null, this);
+			w.setIdlePosition(i);
+			w.setOrderWheel(orderWheel);
+			pcWaiters.add(w);
+			
+			//give roles to host so host can end work day
+			host.addRole(w);
+			
+			// Set references between the waiter and other roles
+			w.setOtherRoles(host, cashier);
+//			w.setCook(cook);
+			//TODO make setcook method for normalWaiter
+			host.addWaiter(w);
+			
+			// Create and set up the waiter GUI
+			WaiterGui wGui = new WaiterGui(w, restaurantGui);
+			w.setGui(wGui);
+			restaurantGui.getAnimationPanel().addGui(wGui);
+		}
 	}
 
 	@Override
 	public XYPos entrancePos() {
-		return new XYPos(Constants.BUILDING_WIDTH/2, Constants.BUILDING_HEIGHT/2);
+		return new XYPos(Constants.BUILDING_WIDTH/2, Constants.BUILDING_HEIGHT);
 	}
 
 	@Override

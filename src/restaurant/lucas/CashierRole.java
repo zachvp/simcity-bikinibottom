@@ -328,6 +328,7 @@ public class CashierRole extends WorkRole implements Cashier {
 	}
 	
 	private void goToWork() {
+		cashierGui.setName(person.getName());
 		cashierGui.DoGoToDesk();
 		Do(AlertTag.RESTAURANT, "" +active.availablePermits());
 		acquireSemaphore(active);

@@ -44,7 +44,7 @@ import agent.interfaces.Person;
 //is proceeded as he wishes.
 public class CookRole extends WorkRole implements Cook {
 
-	private String name;
+	private String name  = " ";
 
 	public CookGui cookGui = null;
 	
@@ -178,7 +178,7 @@ public class CookRole extends WorkRole implements Cook {
 	
 	public CookRole(Person p, CityLocation c) {
 		super(p, c);
-
+		
 		atWork = false;
 		
 //		this.checkOrderWheelTimer = new Timer();
@@ -476,6 +476,7 @@ public class CookRole extends WorkRole implements Cook {
 	}
 	
 	private void goToWork() {
+		cookGui.setName(person.getName());
 		cookGui.DoGoAboveKitchen();
 		acquireSemaphore(active);
 		cookGui.DoGoToDesk();

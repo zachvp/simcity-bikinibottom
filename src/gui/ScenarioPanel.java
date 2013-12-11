@@ -44,6 +44,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 	JRadioButton scenarioA, scenarioB, scenarioC, scenarioJ; //TODO Add more scenarios here
 	JButton runScenarioButton;
 	JCheckBox gradingViewCB;
+	private boolean gradingView = false;
 	
 	public ScenarioPanel() {
 		d = new Dimension(Constants.ANIMATION_PANEL_WIDTH, Constants.ANIMATION_PANEL_HEIGHT-20);
@@ -173,6 +174,9 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		normativePanel.add(runScenarioButton);
 	}
 	
+	public boolean gradingView(){
+		return gradingView;
+	}
 	
 
 	@Override
@@ -189,12 +193,7 @@ public class ScenarioPanel extends JPanel implements ActionListener{
 		}
 		
 		if(e.getSource() == gradingViewCB){
-			if(gradingViewCB.isSelected()){
-				//TODO grading view
-			}
-			else{
-				//TODO pretty view
-			}
+			gradingView = gradingViewCB.isSelected();
 		}
 		
 	}

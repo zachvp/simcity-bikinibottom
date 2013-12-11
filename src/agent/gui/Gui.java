@@ -4,6 +4,6 @@ import java.awt.Graphics2D;
 
 public interface Gui {
     public void updatePosition();
-    public void draw(Graphics2D g);
+    public void draw(Graphics2D g, boolean gradingView);
     public boolean isPresent();
 }

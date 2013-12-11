@@ -279,6 +279,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				hospital.setRecords(citizenRecords);				
 				hospital.setName(buildingName);
 				construct(hospital);
+				
 			}
 			if(type == LocationTypeEnum.None){
 				MockBuilding mock = new MockBuilding(x, y, Constants.BUILDING_WIDTH, Constants.BUILDING_HEIGHT);
@@ -303,6 +304,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		building.setCitizenRecords(citizenRecords);
 		infoPanel.addBuildingInfoPanel(building.getInfoPanel(), building.getName());
 		infoPanel.addStaffInfoPanel(building.getStaffPanel(), building.getName());
+		if(building.type() != LocationTypeEnum.Hospital || building.type() != LocationTypeEnum.None){
+			building.getAnimationPanel().setScenarioPanel(hospital.scenarioPanel);
+		}
 		constructedBuildings.add(building);
 	}
 

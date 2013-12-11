@@ -19,7 +19,7 @@ public class HospitalBuilding extends Building{
 	ArrayList<Building> buildings;
 	JPanel panel = new JPanel();
 	PersonCreationPanel personPanel = new PersonCreationPanel();
-	ScenarioPanel scenarioPanel = new ScenarioPanel();
+	public ScenarioPanel scenarioPanel = new ScenarioPanel();
 
 	public HospitalBuilding(int x, int y, int width, int height) {
 		super(x, y, width, height);

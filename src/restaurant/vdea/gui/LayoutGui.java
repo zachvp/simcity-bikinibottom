@@ -67,7 +67,7 @@ public class LayoutGui implements Gui{
 	}
 
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(Graphics2D g, boolean gradingView) {
 		Graphics2D g2 = (Graphics2D)g;
         
         //Here is the table
@@ -92,7 +92,7 @@ public class LayoutGui implements Gui{
 
         for(Gui gui : guis) {
             if (gui.isPresent()) {
-                gui.draw(g2);
+                gui.draw(g2, gradingView);
             }
         }
 		

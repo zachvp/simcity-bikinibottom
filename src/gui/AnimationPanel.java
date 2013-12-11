@@ -22,6 +22,7 @@ public class AnimationPanel extends JPanel implements ActionListener {
     private final int WINDOWX = 600;//this.getParent().getWidth();
     private final int WINDOWY = 490;//this.getParent().getHeight();
     Timer timer;
+    ScenarioPanel scenario;
 
     /** Keeps track of all the guis in the panel */
     private List<Gui> guis = 
@@ -69,7 +70,7 @@ public class AnimationPanel extends JPanel implements ActionListener {
         synchronized (guis) {
 			for (Gui gui : guis) {
 				if (gui.isPresent()) {
-					gui.draw(g2);
+					gui.draw(g2, scenario.gradingView());
 				}
 			}
 		}
@@ -89,5 +90,9 @@ public class AnimationPanel extends JPanel implements ActionListener {
 
 	public void removeGui(Gui gui) {
 		guis.remove(gui);
+	}
+	
+	public void setScenarioPanel(ScenarioPanel p){
+		scenario = p;
 	}
 }

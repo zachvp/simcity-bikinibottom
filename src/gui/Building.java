@@ -26,7 +26,7 @@ import agent.RoleFactory;
 public abstract class Building extends Rectangle2D.Double
 						implements CityBuilding, RoleFactory {
 	String name;
-	JPanel animationPanel;	
+	AnimationPanel animationPanel;	
 	LocationTypeEnum type;
 	JPanel info;
 	StaffDisplay staff = new StaffDisplay();
@@ -61,7 +61,9 @@ public abstract class Building extends Rectangle2D.Double
 	}
 	
 	//Return your animation panel here
-	public abstract JPanel getAnimationPanel();
+	public AnimationPanel getAnimationPanel(){
+		return animationPanel;
+	}
 	
 	//Return your control panel here (null if you don't have one)
 	public abstract JPanel getInfoPanel();

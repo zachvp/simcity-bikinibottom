@@ -13,6 +13,7 @@ import CommonSimpleClasses.ScheduleTask;
 import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
+import gui.AnimationPanel;
 import gui.Building;
 import gui.StaffDisplay;
 
@@ -156,7 +157,7 @@ public class RestaurantVDeaBuilding extends Building{
 	}
 
 	@Override
-	public JPanel getAnimationPanel() {
+	public AnimationPanel getAnimationPanel() {
 		return restaurantGui.getAnimationPanel();
 	}
 

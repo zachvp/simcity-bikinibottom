@@ -495,6 +495,7 @@ public class CookRole extends WorkRole implements Cook {
 	public void activate() {
 		super.activate();
 		shouldWork = true;
+		cookGui.setPresent(true);
 		cookGui.DoGoHome();
 	}
 

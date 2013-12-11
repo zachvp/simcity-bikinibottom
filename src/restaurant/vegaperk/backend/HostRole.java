@@ -56,9 +56,6 @@ public class HostRole extends WorkRole {
 	public HostRole(Person person, CityBuilding building) {
 		super(person, building);
 		
-		System.out.println("Closing hour " + ((Building) building).getClosingHour());
-		System.out.println("Closing minute " + ((Building) building).getClosingMinute());
-		
 		// make some tables
 		synchronized(tables){
 			for (int ix = 0; ix < NTABLES; ix++) {
@@ -80,7 +77,7 @@ public class HostRole extends WorkRole {
 //		int closingHour = ((RestaurantVegaPerkBuilding) building).getOpeningHour();
 //		int closingMinute = ((RestaurantVegaPerkBuilding) building).getOpeningMinute();
 		
-		schedule.scheduleDailyTask(command, 9, 20);
+		schedule.scheduleDailyTask(command, 9, 30);
 		
 //		System.out.println("closing hour " + closingHour);
 //		System.out.println("closing minute " + closingMinute);
@@ -130,8 +127,11 @@ public class HostRole extends WorkRole {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
-		setPresent(true);
-
+		if(!shouldWork && waitingCustomers.isEmpty()) {
+			closeRestaurant();
+			return true;
+		}
+		
 		synchronized(tables){
 			
 			for (Table table : tables) {
@@ -159,11 +159,6 @@ public class HostRole extends WorkRole {
 					return true;
 				}
 			}
-		}
-		
-		if(!shouldWork && waitingCustomers.isEmpty()) {
-			closeRestaurant();
-			return true;
 		}
 		
 		return false;
@@ -352,6 +347,7 @@ public class HostRole extends WorkRole {
 	@Override
 	public void activate() {
 		super.activate();
+		gui.setPresent(true);
 		gui.DoGoHome();
 		
 		for(MyWaiter mw : waiters) {

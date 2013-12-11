@@ -44,7 +44,6 @@ public class HostRole extends WorkRole implements Host {
 	
 	private Map<Integer, Dimension> tableMap = new HashMap<Integer, Dimension>();
 
-
 	private String name;
 	
 	int waitingPositionNum = 0;
@@ -93,6 +92,7 @@ public class HostRole extends WorkRole implements Host {
 		// every day at TIME to end
 		int closeHour = ((RestaurantLucasBuilding) c).getClosingHour();
 		int closeMinute = ((RestaurantLucasBuilding) c).getClosingMinute();
+		System.out.println("Close: " + closeHour);
 		closeTask.scheduleDailyTask(command, closeHour, closeMinute);
 	
 		

@@ -3,7 +3,6 @@ package bank;
 import gui.trace.AlertTag;
 import CommonSimpleClasses.CityLocation;
 import agent.interfaces.Person;
-import bank.BankCustomerRole.State;
 import bank.gui.BankBuilding;
 import bank.interfaces.BankCustomer;
 
@@ -14,6 +13,7 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 	
 	public BusinessBankCustomerRole(Person person, CityLocation bank) {
 		super(person, bank);
+		Do(AlertTag.BANK, "BUSINESSBANKCUSTOMERLIVES");
 	}
 	
 	public void msgUpdateRestaurantMoney(double money) {//sent from CashierRole
@@ -26,9 +26,9 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 		stateChanged();
 	}
 	
-	
-	private void speakToTeller() {
-		Do(AlertTag.BANK, "speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
+	@Override
+	protected void speakToTeller() {
+		Do(AlertTag.BANK, "BUSINESS speaking to teller");//TODO check that moneyNeeded is money needed ON TOP OF money I have, not just amount of expensive item
 
 		
 		if(accountId == -1) {//have not been assigned accountID yet
@@ -67,7 +67,7 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 		if(money > 0) {
 			Do(AlertTag.BANK, "Im depositing");
 			double depositAmount = money;
-			teller.msgDepositMoney(this, accountId, money); 
+			teller.msgDepositMoney(this, accountId, depositAmount); 
 			state = State.depositing;
 			return;
 		}
@@ -80,7 +80,8 @@ public class BusinessBankCustomerRole extends BankCustomerRole implements BankCu
 		Do(AlertTag.BANK, "ERROR, no condtion met");//not good
 	}
 	
-	private void leaveBank() {
+	@Override
+	protected void leaveBank() {
 		Do(AlertTag.BANK, "leaving bank " + accountId);
 //		this.getPerson().getWallet().setCashOnHand(this.getPerson().getWallet().getCashOnHand() + getCashAdjustAmount());
 		this.getPerson().getWallet().addCash(getCashAdjustAmount());

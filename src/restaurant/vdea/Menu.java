@@ -6,10 +6,10 @@ import java.util.Random;
 
 
 public class Menu {
-	private Food kelpShake = new Food("kelpShake");
-	private Food coralBits = new Food("coralBits");
-	private Food kelpRings = new Food("kelpRings");
-	private Food krabbyPatty = new Food("krabbyPatty");
+	private Food kelpShake = new Food("Kelp Shake");
+	private Food coralBits = new Food("Coral Bits");
+	private Food kelpRings = new Food("Kelp Rings");
+	private Food krabbyPatty = new Food("Krabby Patty");
 	public List<Food> list = new ArrayList<Food>();
 	
 	Menu(){
@@ -51,16 +51,16 @@ public class Menu {
 	}
 	
 	private Food toFood(String s){
-		if(s.equals("kelpShake")){
+		if(s.equals("Kelp Shake")){
 			return kelpShake;
 		}
-		if(s.equals("krabbyPatty")){
+		if(s.equals("Krabb yPatty")){
 			return krabbyPatty;
 		}
-		if(s.equals("kelpRings")){
+		if(s.equals("Kelp Rings")){
 			return kelpRings;
 		}
-		if(s.equals("coralBits")){
+		if(s.equals("Coral Bits")){
 			return coralBits;
 		}
 		return krabbyPatty;
@@ -121,16 +121,16 @@ public class Menu {
 	}
 	
 	public double getPrice(String f){
-		if(f.equals("kelpShake")){
+		if(f.equals("Kelp Shake")){
 			return kelpShake.price;
 		}
-		if(f.equals("krabbyPatty")){
+		if(f.equals("Krabby Patty")){
 			return krabbyPatty.price;
 		}
-		if(f.equals("kelpRings")){
+		if(f.equals("Kelp Rings")){
 			return kelpRings.price;
 		}
-		if(f.equals("coralBits")){
+		if(f.equals("Coral Bits")){
 			return coralBits.price;
 		}
 		

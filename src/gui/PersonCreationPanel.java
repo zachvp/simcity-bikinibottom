@@ -481,5 +481,30 @@ ClassifiedsChangedListener{
 		}
 	}
 
+	public void populateAll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void employRestaurants() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void employMarkets() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void createUnemployedUntil50People() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void createNonWorkingPersonThatVisitsEverywhere() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

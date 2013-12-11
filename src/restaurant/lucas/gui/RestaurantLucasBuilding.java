@@ -1,6 +1,7 @@
 package restaurant.lucas.gui;
 
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 import gui.StaffDisplay;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.lucas.CashierRole;
 import restaurant.lucas.CookRole;
 import restaurant.lucas.CustomerRole;
@@ -24,7 +27,8 @@ import agent.Role;
 import agent.interfaces.Person;
 
 
-public class RestaurantLucasBuilding extends Building {
+public class RestaurantLucasBuilding extends Building
+	implements RestaurantFakeOrderInterface{
 	
 	private Map<Person, CustomerRole> existingCustomers;
 	private HostRole host;
@@ -221,6 +225,16 @@ public class RestaurantLucasBuilding extends Building {
 			if (w.isAtWork()) { return true; }
 		}
 		return false;
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
 	}
 	
 	

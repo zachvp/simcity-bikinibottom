@@ -2,6 +2,7 @@ package restaurant.vonbeck.gui;
 
 import gui.AnimationPanel;
 import gui.Building;
+import gui.RestaurantFakeOrderInterface;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import market.interfaces.DeliveryReceiver;
+import market.interfaces.PhonePayer;
 import restaurant.vonbeck.CashierRole;
 import restaurant.vonbeck.CookRole;
 import restaurant.vonbeck.CustomerRole;
@@ -19,7 +22,8 @@ import CommonSimpleClasses.XYPos;
 import agent.Role;
 import agent.interfaces.Person;
 
-public class RestaurantVonbeckBuilding extends Building {
+public class RestaurantVonbeckBuilding extends Building 
+	implements RestaurantFakeOrderInterface{
 
 	private HostRole host;
 	RestaurantGui gui;
@@ -106,6 +110,45 @@ public class RestaurantVonbeckBuilding extends Building {
 	public JPanel getInfoPanel() {
 		
 		return infoPanel;
+	}
+	
+	@Override
+	public boolean isOpen() {
+		if(thereIsNoFood() ||
+			!host.isActive() ||
+			!cashier.isActive() ||
+			!cook.isActive()) {
+			return false;
+		}
+		
+		boolean waiterAtWork = false;
+		for (WaiterRole w : host.waiters) {
+			waiterAtWork = w.isActive() || waiterAtWork;
+		}
+		
+		if(!waiterAtWork) return false;
+		
+		return super.isOpen();
+		
+	}
+
+	private boolean thereIsNoFood() {
+		return cook.thereIsNoFood();
+	}
+
+	@Override
+	public DeliveryReceiver getCook() {
+		return cook;
+	}
+
+	@Override
+	public PhonePayer getCashier() {
+		return cashier;
+	}
+
+	@Override
+	public void makeLowOnFood() {
+		cook.makeLowOnFood();
 	}
 
 }

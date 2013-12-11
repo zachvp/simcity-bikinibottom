@@ -34,7 +34,7 @@ public class HostRole extends WorkRole {
 	//with List semantics.
 	private List<CustomerRole> waitingCustomers
 	= Collections.synchronizedList(new ArrayList<CustomerRole>());
-	private List<WaiterRole> waiters = Collections.synchronizedList(new ArrayList<WaiterRole>());
+	public List<WaiterRole> waiters = Collections.synchronizedList(new ArrayList<WaiterRole>());
 	private CookRole cook;
 	private Collection<Table> tables;
 	//note that tables is typed with Collection semantics.

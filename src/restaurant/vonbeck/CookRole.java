@@ -287,6 +287,22 @@ public class CookRole extends WorkRole implements DeliveryReceiver {
 		cookGui.DoLeaveWork();
 		deactivate();
 	}
+
+	public boolean thereIsNoFood() {
+		for (Entry<String, FoodData> entry : inventory.entrySet()) {
+			if (entry.getValue().actualQty > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void makeLowOnFood() {
+		inventory.get(Constants.FOODS.get(0)).futureQty -= 
+				inventory.get(Constants.FOODS.get(0)).actualQty;
+		inventory.get(Constants.FOODS.get(0)).actualQty = 0; 
+		stateChanged();
+	}
 	
 	
 }

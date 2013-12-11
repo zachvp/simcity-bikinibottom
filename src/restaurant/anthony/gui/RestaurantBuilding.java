@@ -59,10 +59,19 @@ public class RestaurantBuilding extends gui.Building implements RoleFactory{
 		staff = super.getStaffPanel();
 		staff.addAllWorkRolesToStaffList();
 		infoPanel = new restaurant.InfoPanel(this);
-		infoPanel.setKrabbyPattyPrice("1.00");
-		infoPanel.setKelpShakePrice("1.00");
-		infoPanel.setCoralBitsPrice("1.00");
-		infoPanel.setKelpRingsPrice("1.00");
+		records.host.cook.setInfoPanel(infoPanel);
+		
+		//Setting Restaurant Price Label
+		infoPanel.setKrabbyPattyPrice("30.00");
+		infoPanel.setKelpShakePrice("20.00");
+		infoPanel.setCoralBitsPrice("50.00");
+		infoPanel.setKelpRingsPrice("10.00");
+		
+		//Setting Restaurant Initial Inventory Label
+		infoPanel.setKrabbyPattyInventory(1);
+		infoPanel.setKelpShakeInventory(1);
+		infoPanel.setCoralBitsInventory(1);
+		infoPanel.setKelpRingsInventory(1);
 	}
 
 	@Override
